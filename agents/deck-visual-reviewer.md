@@ -81,6 +81,19 @@ dus `raster-1` en `raster-2` per ronde.
 
 Noteer per slide "verdacht" of "schoon op het raster".
 
+### 2b. De vijf meetbare vloeren
+
+Deze vijf toets je hard, want ze zijn de reden dat een deck karakterloos leest en ze zijn alle
+vijf op een render vast te stellen. Rapporteer ze met het getal erbij.
+
+| toets | vloer | wat het is als hij faalt |
+|---|---|---|
+| **drager** | minstens één element van 40pt of groter in de contentzone, en minstens 2,5× de bodymaat op die slide | de geërfde titel telt niet mee; is er niets, dan is de slide een verzameling en geen argument |
+| **maatsprong** | grootste eigen maat gedeeld door kleinste, per slide | onder ongeveer 2 is er geen hiërarchie. De afgekeurde deck haalde 1,36, de referentie 3 tot 5 |
+| **twee registers** | in de hele deck minstens één bijna witte slide en minstens één echt verzadigde | ligt élke slide in hetzelfde middengrijs, dan is dat de deckbrede bevinding, niet een slidedefect |
+| **kleur in de letter** | minstens één accent als tekstkleur op wit per deck | staat alle kleur in vlakken en geen enkele in een letter, dan mist het stille register |
+| **één kaarttaal** | dezelfde hoekvorm en vullingssoort in de hele deck | afgerond náást recht, of vier verschillende hoekradii, is het defect dat het snelst opvalt |
+
 ### 3. Inzoomen, in blokken
 
 Open op vol formaat elke verdachte slide, plus elke slide waar het raster te klein is om over

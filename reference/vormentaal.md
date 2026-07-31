@@ -1,128 +1,310 @@
 # Vormentaal
 
-Dit is de maatstaf, niet de catalogus. Er staat geen patroon in dat je kunt kiezen en geen
-recept dat je kunt invullen. Er staat wat een SFNL-slide goed maakt, zodat je je eigen
-compositie eraan kunt toetsen zodra je hem op de render ziet.
+Dit is de maatstaf. Geen catalogus met patronen om uit te kiezen, en geen drempels waar een
+script op afkeurt: wat een SFNL-slide goed maakt, geordend van meeste naar minste effect, zodat
+je je eigen compositie eraan kunt toetsen.
+
+Elke regel hieronder is nagemeten. Waar er een getal staat, komt dat uit de XML of de render van
+de vijf decks die de blinde vergelijking wonnen, of uit de deck die het niet haalde. Waar een
+regel eerder verkeerd te lezen bleek, staat de verkeerde lezing er expliciet bij — dat is geen
+overbodige uitleg, dat zijn fouten die daadwerkelijk gemaakt zijn.
 
 Lees dit één keer voordat je de eerste slide bouwt, samen met de tien voorbeelden in
-`assets/maatstaf/`. Die voorbeelden komen uit echte decks die de vergelijking hebben
-gewonnen. Ze zijn er niet om na te tekenen; ze zijn er om te weten waar de lat ligt.
+`assets/maatstaf/`.
 
-## Het vlak is 13,33 bij 7,5 inch en de inhoud vult het
+---
 
-De contentzone begint op 1,93 in en loopt tot 6,93 in. Het eerste element van je compositie
-staat tegen die bovenrand aan, niet een centimeter eronder en niet een derde van de slide
-naar beneden. De onderrand is een ondergrens en geen suggestie: als je compositie op 4,5 in
-ophoudt, staat er twee en een halve inch niets onder je argument.
+## 1. Elke slide heeft één drager, en die is groot
 
-Dit is het defect dat in de meting het vaakst terugkwam en het meest opviel. Op acht van de
-twaalf slides van de afgekeurde deck begon de inhoud pas rond 2,8 in, met een band leeg wit
-tussen de oranje dash en het eerste blok. De lezer ziet dan een slide die halfleeg is,
-ongeacht hoe goed de inhoud is.
+De drager is het element dat de boodschap draagt: één getal, één verhouding, één kernbegrip,
+één zin. Al het andere ondersteunt.
 
-Heb je weinig te zeggen op een slide, dan worden de elementen groter. Niet het gat. Een getal
-dat de slide draagt mag 48pt of 60pt zijn en de hele bovenhelft nemen. Twee kolommen proza
-mogen tot de onderrand doorlopen. Wat je niet doet is drie kleine kaartjes bovenaan hangen en
-de rest wit laten.
+**De maat is de helft van het werk.** In de winnende decks staat op vijf van de tien slides
+iets tussen 44 en 56pt. In de deck die het niet haalde is het grootste element in de
+contentzone 19pt. Dat is het verschil tussen een slide met een ingang en een slide die je moet
+gaan lezen om te weten waar je moet beginnen.
 
-**"Groter" betekent grotere letters en meer inhoud, niet hogere dozen.** Dit is de val, en hij
-is bij het bouwen makkelijker in te lopen dan hij klinkt: je maakt de blokken zo hoog dat ze de
-zone vullen, laat de tekst bovenin staan, en levert vier kaarten af waarvan de onderste helft
-leeg gekleurd vlak is. Op de render leest dat als een onafgemaakte slide, en het is precies
-hetzelfde defect als een kale onderkant — alleen nu ín de blokken.
+Twee toetsen, en je doet ze tijdens het bouwen en niet pas op de render:
 
-Dus: **een gevuld blok is zo hoog als zijn inhoud**, plus marge. Vult de compositie de zone
-daarmee niet, dan is het antwoord niet een hoger blok maar een andere compositie. Vier korte
-definities vullen geen vijf inch in vier kolommen; als vier rijen over de volle breedte doen ze
-het wel. Staat er tekst in een blok dat toch ruimer is dan zijn inhoud, anker die tekst dan
-verticaal in het midden: dan is de overgebleven lucht padding en geen gat.
+- Staat er in de contentzone iets van **40pt of groter**? De geërfde titel van 24pt telt niet
+  mee: die staat op elke slide en onderscheidt dus niets.
+- Is de drager minstens **tweeënhalf keer de bodymaat** op diezelfde slide? Loopt je hele
+  slide tussen 14 en 19pt, dan is er geen hiërarchie maar een verzameling.
 
-## Kleur benoemt een categorie
+**Ook zonder getal is er een drager.** Dit is waar het in de praktijk misgaat, want de neiging
+is om te denken dat een conceptuele slide geen drager kán hebben. Dat kan wel: een kernbegrip
+van 28pt in de hue van zijn categorie, een rangnummer van 40pt, één rij die als enige een volle
+kleur draagt, of een kolomkop van 18pt SemiBold in een accentkleur op wit terwijl de rest navy
+is. Op de sterkste referentieslide zonder cijfers is de drager niet groot maar zwaar en
+gekleurd: 18pt Montserrat SemiBold in emerald tegenover 18pt in grapefruit, op wit.
 
-Dit is waar de afgekeurde deck het echt verloor, en het is subtieler dan overvloed of
-soberheid. Die deck had één vulling als default — een bleke lavendel — en gebruikte hem op
-zes van de twaalf slides voor elk blok. Alles wat de slides van elkaar had moeten
-onderscheiden, was dezelfde kleur. Dat leest niet rustig maar onverschillig.
+De kneepoefening blijft de eindtoets: klein of onscherp bekeken moet de drager overblijven.
+Blijven de pijltjes of de kadertjes over, dan is de navigatie luider dan de boodschap.
 
-De decks die wonnen, gebruiken kleur om te labelen. Twee kolommen die tegengestelde dingen
-zeggen krijgen tegengestelde hues: teal voor wat werkt, koraal voor wat knelt. Drie
-scenario's krijgen drie koppen in drie kleuren. Drie kerncijfers staan op navy, teal en
-oranje, en juist doordat ze verschillen ziet de lezer dat het drie verschillende soorten
-uitspraken zijn.
+## 2. Vier maten per deck, en niet meer
 
-De vraag is dus niet of kleur mag, maar of hij iets zegt. Zou de lezer informatie kwijtraken
-als het verschil wegviel? Dan is het verschil er terecht. Zo niet, dan is één accent genoeg
-en houd je de rest neutraal.
+Leg vóór de eerste slide vier getallen vast en gebruik overal die vier:
 
-Er is een betekenislaag die vastligt en die je aanhoudt: grapefruit is kost of waarschuwing,
-emerald is baat of positieve waarde, navy is structuur en totaal, oranje is resultaat en het
-punt waar het om gaat. Sky en royal zijn vrij voor categorieën zonder eigen lading.
+| rol | richting | waarvoor |
+|---|---|---|
+| **drager** | 40 tot 60pt | het getal of begrip dat de slide draagt |
+| **kop** | 18pt Montserrat SemiBold | kolomkop, kaartkop, rolnaam |
+| **body** | 16pt Lato Light | alles wat gelezen wordt |
+| **voetnoot** | 11pt | bron, eenheid, peildatum |
 
-Verzadigde vlakken mogen. Een volle navy kaart met een wit getal erop, een volle oranje
-accentbalk, een teal kolomkop: dat is de taal van de winnende decks. Wat niet werkt is
-verzadiging zonder onderscheid, en wat ook niet werkt is één bleke tint over alles heen.
+12pt is de dichte variant voor een kaartenrij van drie of meer of een tabelcel, en de vloer.
+14pt is het kapitaallabel. 10pt gebruik je niet meer.
 
-## Eén drager, en die is groot
+**Dezelfde rol houdt deckbreed dezelfde maat.** De afgekeurde deck had vier bodymaten en drie
+sluitregelmaten over vier slides. Los is elke slide dan correct en naast elkaar leest het als
+vier keer opnieuw beginnen. Er is géén maximum aan het aantal maten per slide — dat was een
+smaakregel — maar er is wel één maat per rol.
 
-Elke slide heeft één element dat de boodschap draagt. Eén getal, één zin, één beeld, één
-verhouding. Al het andere ondersteunt dat.
+Een kapitaallabel krijgt letterspatiëring: `spc="150"` tot en met 13pt, `spc="100"` daarboven.
+Zonder spatiëring leest caps als geschreeuw in plaats van als label.
 
-De toets: bekijk de render kleiner of met samengeknepen ogen. Het element dat overblijft moet
-de drager zijn. Springt er niets uit, dan is de slide een verzameling en geen argument.
-Springen er twee dingen uit, dan is er geen nadruk maar ruis.
+## 3. Kleur zit ook in de letter
 
-Een dragend getal is echt groot. In de winnende decks staan getallen van 48pt naast elkaar in
-een rij, en een enkel getal dat de slide draagt gaat naar 60pt. Een getal van 20pt in een
-kaartje van 12pt tekst draagt niets.
+Dit is het middel dat het meest ontbrak. In alle tien de referentieslides staat minstens één
+accent als **tekstkleur op wit**: een kolomkop van 18pt SemiBold in emerald naast een van 18pt
+in grapefruit, een getal van 44pt in oranje, een toelichtingsregel in de kleur van de rij waar
+hij bij hoort. De afgekeurde deck had 31 gevulde vlakken en nul gekleurde letters.
 
-## Variatie over de deck
+Een gekleurde letter is stiller dan een gevuld blok en zegt hetzelfde. Waar je een kopbalk van
+een halve inch zou tekenen, kan de kop zelf de kleur dragen.
 
-Twee opeenvolgende slides dragen niet dezelfde vorm, tenzij het bewust een reeks is die de
-lezer als reeks moet zien.
+Vanaf welke maat dat mag, hangt af van het contrast op wit. Uitgerekend:
 
-De afgekeurde deck had op negen van de twaalf slides dezelfde afsluiting: een navy band
-onderaan met één regel conclusie. Dat is een goed instrument en het is één keer sterk. Negen
-keer is een gewoonte, en de lezer leest hem de derde keer al niet meer.
+| kleur | op wit | mag dragen |
+|---|---|---|
+| navy | 15,3 | alles, ook een alinea |
+| royal | 5,7 | alles, ook een alinea |
+| grapefruit | 3,1 | een kop vanaf 18pt |
+| oranje | 2,6 | displaymaat, of een kop vanaf 18pt die je niet hoeft te lezen om de slide te snappen |
+| sky | 2,3 | idem |
+| emerald | 2,0 | idem |
 
-Kijk in `assets/maatstaf/` wat de breedte van het repertoire is: een rij grote getallen, twee
-kolommen met gekleurde koppen, een stroomschema over twee rijen, een genummerd raster, een
-tabel naast een native grafiek, een citaat over een foto, een adviesslide met een getinte
-band boven en een besluitband onder. Dat zijn geen tien recepten maar tien bewijzen dat er
-veel meer kan dan een kaartenrij.
+Daaronder is de tekst navy.
 
-## Proza mag de exhibit zijn
+**Op een volle vulling:** wit op navy en royal. Op de lichte accenten staat navy, want daar
+haalt wit 2,0 tot 3,1. Eén uitzondering, en die is nagemeten in de sterkste referentieslide:
+vanaf ongeveer 40pt mag wit ook op emerald, oranje en sky, want daar leest het cijfer als vorm
+en niet als tekst. Dat is een bewuste keuze die je op de render controleert, geen default.
 
-Twee goed gezette kolommen met een conclusie eronder is een compositie, geen tekstslide. Twee
-van de sterkste slides in de maatstaf zijn precies dat: kop links teal, kop rechts koraal,
-onder elke kop drie korte alinea's, onderaan één regel die het samenvat.
+**Rol naar hue, één keer en dan vasthouden.** Schrijf op welke categorie welke kleur krijgt
+zodra je die keuze de eerste keer maakt, en beslis er daarna niet meer over. Dezelfde rol die
+op slide 4 sky draagt en op slide 11 emerald, betekent dat de kleur decoratie is geworden. De
+vaste laag: grapefruit is kost of waarschuwing, emerald is baat, navy is structuur en totaal,
+oranje is het resultaat en het punt waar het om gaat. Sky en royal zijn vrij voor categorieën
+zonder eigen lading.
 
-De eis is niet dat er een diagram op staat. De eis is dat er een vorm is die het argument
-draagt. Een bulletlijst in een placeholder is dat niet; twee gezette kolommen met een
-kleurcode en een sluitregel wel.
+Twee categorieën in dezelfde set krijgen nooit dezelfde hue. En één hue voor alles is het
+defect uit de afgekeurde deck.
 
-## Typografie erft
+## 4. Een container is bijna wit
 
-Het sjabloon zet de titel op 24pt Gotham Bold in kapitalen en de subregel op 14pt Montserrat
-in kapitalen. Daar blijf je af, want dat komt uit de layout en niet van jou.
+Een lichte vulling maak je met `<a:alpha>` op de volle kleur, niet met `lumMod`. In de vijf
+winnende decks komt `lumMod` geen enkele keer voor: navy staat op alpha 6000 tot 8000, de
+accenten op 9000 tot 14000.
 
-In je eigen vormen: Montserrat voor labels, kolomkoppen en getallen, Lato Light voor alles wat
-gelezen wordt. Gotham Bold schrijf je nooit zelf. Elke run in een eigen vorm krijgt een
-expliciete `<a:latin/>`, anders staat er Calibri (zie `sjabloon.md`, Valkuilen).
+Dat is geen detail. Het recept `lumMod 20000 / lumOff 80000` levert een vlak dat één stap te
+donker is en daardoor als eigen kleur meedoet in plaats van als achtergrond. Bij navy levert
+het bovendien een blauwpaars vlak op, en daarvoor moest een apart lavendelverbod bestaan. Met
+alpha is die uitzondering niet meer nodig.
 
-Ondergrenzen: bodytekst niet onder 12pt, en 10pt alleen voor een voetnoot in themagrijs.
-Navy op verzadigd oranje pas vanaf 14pt, en niet voor een lange alinea. Wit staat op navy en
-royal; op oranje, grapefruit, sky en emerald staat navy, want die vullingen zijn te licht voor
-witte tekst.
+De neutrale container is navy op alpha 7000: koel, kleurloos, en de default zodra er niets te
+onderscheiden valt. Warmgrijs komt in geen enkele winnende deck voor; naast vol oranje leest
+dat warme taupe als een niet-ingekleurd vlak.
 
-Er is geen maximum aan het aantal tekstgroottes per slide. Er is wel een verschil tussen een
-hiërarchie en een verzameling: als je niet kunt uitleggen waarom een maat afwijkt, wijkt hij
-niet af.
+Boven ongeveer 14000 wordt een container een kleur. Dat mag, maar dan is het een vlak dat iets
+betekent en geen achtergrond meer.
+
+## 5. Een deck heeft twee registers
+
+Gemeten aandeel wit, tint en verzadigd per slide. De afgekeurde deck: 44 tot 53 procent wit, 42
+tot 54 procent tint, 1 tot 7 procent verzadigd — op élke contentslide dezelfde band. De
+referentie heeft twee registers en geen enkele slide in het midden: bijna helemaal wit (85 tot
+88 procent) óf echt verzadigd (20 tot 37 procent).
+
+Dat middengrijs is precies wat een deck karakterloos maakt. Er is nergens iets leeg en nergens
+iets vol, dus er is geen contrast tussen de slides onderling.
+
+Wijs de registers dus toe. In een deck van vijf contentslides staat er minstens één **op wit**:
+geen kaartvulling, alleen gekleurde koppen, proza en misschien een haarlijn. En minstens één is
+**echt verzadigd**: volle vlakken met de drager erin. De rest ligt ertussen.
+
+## 6. De compositie vult de zone, de blokken volgen de inhoud
+
+De contentzone loopt van 1,93 tot 6,93 in. Het eerste element staat tegen 1,93 aan en de
+onderkant van het laatste element ligt op 6,93, met een halve centimeter marge. De winnaars
+bezetten die vijf inch voor meer dan 95 procent.
+
+**En hier zit de val, want deze twee regels lijken elkaar tegen te spreken.** "De compositie
+vult de zone" en "een blok is zo hoog als zijn inhoud" zijn beide waar, en de verkeerde lezing
+is: maak de blokken hoger tot de zone vol is. Dan krijg je vier kaarten waarvan de onderste
+helft leeg gekleurd vlak is, en op de render leest dat hetzelfde als een kale slide. Die fout
+is gemaakt, op alle vier de contentslides tegelijk.
+
+De juiste volgorde:
+
+1. Reken uit hoe hoog de inhoud van elk blok is: som van de regelhoogtes plus de alineagaten
+   plus de insets, en er komt niets bovenop. Een regel is 1,12 keer de puntgrootte.
+2. Vergelijk met de zone. Blijft er ruimte over, dan is het antwoord **meer inhoud, grotere
+   letters of een andere compositie** — niet een hoger blok.
+3. Blijft er ruimte over die je bewust laat, verdeel die dan over de scheidingen en houd de
+   blokken op hun inhoud. Ruimte tussen de blokken is compositie; ruimte ónderin een blok is
+   een gat.
+4. Meet de vulgraad: teksthoogte gedeeld door blokhoogte. Onder 0,6 kijk je opnieuw, onder 0,5
+   is het fout.
+
+Vier korte definities vullen geen vijf inch in vier kolommen. In vier rijen over de volle
+breedte doen ze het wel. Dat is wat "een andere compositie" betekent.
+
+**Wat vullen niet is:** meer bullets. Wat het wél is: een blok dat de hoogte pakt omdat het
+inhoud heeft, een drager met een getal, een tweede sectie, een afwegingsregel. Weet je niets te
+bedenken, dan hoort de inhoud van deze slide bij de vorige.
+
+## 7. Uitlijning is de goedkoopste kwaliteit die er is
+
+**Naast elkaar betekent bovenaan uitgelijnd.** Staat een blok alleen, dan mag je de tekst
+verticaal centreren en is de overgebleven lucht padding. Staat het in een rij of naast een
+tweede blok, dan is de bovenkant vast: `anchor="t"` met dezelfde `tIns`, en de restlucht valt
+onderaan. Centreren in een rij zet de eerste regels van de buren millimeters uit elkaar zodra
+de een meer regels heeft dan de ander. Nagemeten gevolg van precies die fout: 0,13 in verschil
+tussen twee kolommen die naast elkaar staan, goed zichtbaar en volstrekt onnodig.
+
+**Eén linkerrand.** Alles wat onder elkaar staat begint op dezelfde x, en dan reken je de inset
+mee en niet alleen de vormrand. Een sluitregel met een andere inset dan de blokken erboven
+lijnt met niets uit. Let op: een `roundRect` snijdt de tekst extra in, dus naast een `rect`
+verschuift de linkerrand zichtbaar. Toets het op de render als één ding: staat de linkerkant
+van álle tekst op één lijn?
+
+**Een label boven of naast een getal is één regel.** Slaat het om terwijl de buurlabels één
+regel zijn, dan zakt het getal eronder mee en staat de rij niet meer op één baseline. Kort het
+label in of geef alle labels dezelfde vaste hoogte. Wil je getallen echt op één lijn, geef ze
+dan een eigen vak met voor elke kaart dezelfde y, dezelfde hoogte, dezelfde maat, `anchor="t"`
+en `tIns="0"`.
+
+**Draagt afstand informatie, dan staat hij op schaal.** Op een tijdlijn is de x-positie van een
+moment `0,48 + 12,52 × (t − t0) / (t1 − t0)`. Botsen twee labels, dan wijken de teksten uit
+naar twee rijen — nooit de posities. Vier banden onder elkaar zijn geen tijdlijn, want dan staat
+elke stap even ver van de vorige.
+
+## 8. Lijnwerk is het lichte register
+
+Een deck die alleen gevulde vlakken kent, heeft één register. De winnaars gebruiken 11 tot 39
+lijnelementen per deck.
+
+**Een lijn om een kaart heeft dezelfde hue als de vulling.** Een witte kaart met een lijn van
+1pt in emerald is een kaart; dezelfde kaart met een grijze of navy rand is een Word-tabel. Dit
+is de best gevalideerde vormregel die er is: op één referentieslide staat hij drie keer, elke
+kolom met een 1pt lijn in exact de hue van zijn eigen vulling. Een vlak van 9 procent vulling
+heeft die lijn nodig om als kaart te lezen in plaats van als vlek.
+
+**Een streep scheidt lichter dan een vlak.** Onder een label, tussen twee registers, boven een
+sluitregel.
+
+**Eén kaarttaal per deck.** De hoekvorm en de vullingssoort van je eerste kaart gelden voor
+elke kaart. Afgerond of recht is vrij; halverwege wisselen is het defect dat het snelst opvalt,
+ook als beide varianten los goed zijn. En dat is gebeurd: drie slides afgerond, de vierde recht.
+
+**Eén hoekradius, absoluut.** Een `roundRect` zonder expliciete `adj` krijgt PowerPoints default
+van 16,67 procent van de korte zijde. Dat betekent dat een blok van 1 in hoog een pil wordt en
+een blok van 2,5 in een nette kaart — vier verschillende radii in één deck zonder dat iemand er
+iets aan koos. Kies één radius in inch, ongeveer 0,08 tot 0,12, en reken de `adj` per vorm
+terug.
+
+**Elk gekleurd vlak draagt inhoud.** Een balk, streep of vlak dat alleen kleur is, gaat eruit.
+De enige uitzondering is de geërfde oranje dash, en die is merk.
+
+## 9. Zetting
+
+Een eigen vorm erft geen regelafstand en geen alinea-afstand. Zet beide, en deckbreed hetzelfde.
+
+- **Regelafstand** 112 procent op lopende tekst. De winnaars staan op 110 tot 115; Lato Light op
+  enkel wit staat te dicht. Een label of getal van één regel krijgt geen regelafstand.
+- **Alinea-afstand** 6pt in een kaart of tabelcel, waar de kaartrand het scheidingswerk al doet.
+  In een prozakolom ongeveer een hele regelhoogte, want daar is de witruimte de enige scheiding
+  tussen twee beweringen.
+- **Regellengte** maximaal ongeveer 95 tekens. Een alinea van meer dan twee regels is daarom
+  niet breder dan ongeveer 10 in; de volle 12,52 is voor één regel. De banden in de afgekeurde
+  deck liepen 111 tot 121 tekens, en dat is de belangrijkste reden dat ze lezen als tekst die
+  over was in plaats van als een uitspraak.
+- **Twee gewichten in één alinea.** Montserrat SemiBold als aanhef van twee tot vier woorden,
+  Lato Light voor de rest, op dezelfde maat. Zo haalt de referentie twee hiërarchieniveaus
+  binnen één tekstregel, zonder tweede kolom en zonder tweede vak. Gebruik dit in plaats van
+  Lato Light met `b="1"`, want dat is nepvet.
+- **Insets** 0,2 links en rechts en 0,15 boven en onder op een vak met vulling; 0 op een
+  tekstvak zonder vulling, zodat de tekst met de vakrand uitlijnt en dus met de rest van de
+  kolom.
+- **Centreren** tot ongeveer 3 in breed, daarboven links uitgelijnd. Cursief niet.
+- **`noAutofit` op elk vak dat je zelf schrijft.** Past de tekst niet, dan wordt het vak groter
+  of de tekst korter, nooit het font kleiner. Eén vak met 90 procent schaling haalt een hele rij
+  uit de lijn.
+
+## 10. Herhaling zit in de geometrie, niet in de vulling
+
+Zet achter elke slide de plattegrond in vier woorden — "drie kaarten, open onderkant", "tabel
+plus conclusie", "vier rijen" — zet die onder elkaar en tel ze. Komt één plattegrond meer dan
+twee keer voor, of staan er twee gelijke naast elkaar, dan is er een slide die opnieuw ontworpen
+moet worden. Doe dat in de outline; na het bouwen kost het een herbouw van de contentzone.
+
+**Een band van 12,52 bij 1,25 in met één regel erin is dezelfde vorm, of hij navy, oranje-tint
+of warmgrijs is.** Dat is de val waar de afgekeurde deck in liep: de bouwer dacht de herhaling
+te doorbreken door de vulling te wisselen en zette drie keer hetzelfde blok neer. Ten hoogste
+één zo'n band per vier slides. De andere slides sluiten af doordat de laatste rij zelf de
+conclusie is, doordat één cel vol gekleurd is, doordat de sluitregel op wit staat, of doordat er
+niets af te sluiten valt.
+
+Variatie zit niet in het layoutnummer. Zes contentslides op layout 19 met zes verschillende
+composities is goed. Maar kies de layout ook niet standaard: een tweeluik is layout 22, waar de
+kolomkoppen geërfde placeholders zijn die je mag herkleuren en verzwaren; doorlopende tekst is
+20; een schema over de volle hoogte zonder titel is 17. Vier contentslides op 19 achter elkaar
+is de eenvormigheid waarop de vergelijking verloren is.
+
+## 11. Een cijfer draagt zijn herkomst mee
+
+Eén regel van 11pt Lato Light in navy op 70 procent dekking, zonder vulling, insets 0, direct
+onder de doos waar hij bij hoort en over de breedte van die doos — niet onder de slide. Twee
+beelden op één slide krijgen twee bronregels.
+
+Dat is geen kleine letter en geen verplichting. Het is de reden dat de lezer het cijfer
+gelooft, en het is de plek waar de eenheid en de peildatum staan, want die hoeven niet in de
+grafiek. In de afgekeurde deck staat geen enkele bronregel; in de referentie staan ze onder elk
+cijferblok.
+
+Getalopmaak: komma voor decimalen, punt voor duizenden, euroteken met een spatie, en de eenheid
+in dezelfde run als het getal — `€ 1,04 mln` en niet `1,04` met `mln` in de toelichting. Staat
+er iets op de getalpositie, dan is het een getal met een eenheid; een maand, een naam of een
+voorwaarde gaat naar de regel eronder.
+
+## 12. Vorm volgt de inhoud, niet het raster
+
+Vraagt de inhoud om een volgorde — een proces, een route, een fasering — dan is het geen
+bulletlijst maar een schema. Vraagt hij om een verhouding, dan is het geen rij tekstvakken maar
+een verdeling. Is het een reeks over tijd of een vergelijking van meer dan zes categorieën, dan
+is het een native grafiek; handgetekende staafjes zijn dat niet. Een financiële reeks van drie
+perioden of meer maal twee grootheden of meer is een tabel, want een financiële lezer kan proza
+niet vergelijken. Draagt een deck cijfers, dan zit er minstens één grafiek, tabel, schema of
+verdeling in.
+
+**Het aantal volgt uit de inhoud.** Heb je twee items en dacht je aan drie kaarten, dan wordt
+het een rij van twee. Geen derde kaart met een verzonnen regel en geen halflege kaart. Sjabloon-
+slots zijn geen bronitems.
+
+**Proza mag de exhibit zijn.** Twee goed gezette kolommen met gekleurde koppen, aanhefruns en
+een sluitregel is een compositie, geen tekstslide. Dat is de sterkste referentieslide die er is.
+
+---
 
 ## Wat hier niet staat
 
-Geen patroonnamen om uit te kiezen. Geen verplichte afsluitband. Geen minimale vulverhouding
-per blok, geen maximale regelbreedte, geen maximum aantal tekstgroottes. Geen tabel met
-kaartbaselines.
+Geen patroonnamen. Geen verplichte afsluitband. Geen maximum aantal tekstgroottes per slide.
+Geen tabel met kaartbaselines op vaste y-waarden. Geen minimumafstand die een script afdwingt.
 
-Die regels bestonden en ze hebben de decks niet mooier gemaakt. Wat de decks mooier maakt is
-dat iemand naar de render kijkt en ziet dat het nog niet goed is.
+En geen belofte dat dit genoeg is. Twee van de tien voorbeelden in `assets/maatstaf/` dragen
+zelf een defect: op `01` en `06` staat het grote getal over zijn eigen label, en op `01` is de
+onderste helft van de vier kaarten leeg. Kijk daar naar de vier hues en naar de brede panelen
+eronder, niet naar de kaarthoogte. De lat is de compositie van die slides, niet hun uitvoering.
+
+De render blijft het enige oordeel over de vorm.

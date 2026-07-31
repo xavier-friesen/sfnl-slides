@@ -27,7 +27,10 @@ Lees drie dingen, in deze volgorde, en lees ze één keer voor de hele deck en n
 2. `assets/maatstaf/*.png` — tien slides uit decks die de vergelijking hebben gewonnen. Kijk
    ernaar. Ze zijn niet om na te tekenen maar om te weten waar de lat ligt.
 3. `reference/sjabloon.md` — de feiten: welke layout waarvoor, welke placeholder waar, de
-   kleurslots, en acht valkuilen die stil misgaan.
+   kleurslots en het alpha-recept, de volgorde binnen de XML, en negen valkuilen die stil
+   misgaan.
+4. De docstring van `scripts/shapes.py` — de primitieven waarmee je tekent, en waarom die er zo
+   uitzien.
 
 Draai daarna `python scripts/preflight.py`. Dat zegt of er een interpreter, de
 Python-afhankelijkheden, een renderer en de huisstijlfonts zijn. Is er geen renderer, lees dan
@@ -50,21 +53,80 @@ Vier vragen, en niet meer dan vier. Weet je een antwoord al uit de opdracht, sla
 
 ## Stap 2 — Outline, en de enige poort
 
-Schrijf één bestand `outline.md` met per slide:
+### Eerst vier besluiten voor de hele deck
 
-- het slidenummer en de **action title**: de bewering, niet het onderwerp. "De doorlooptijd
-  daalde met 39 dagen" en niet "Doorlooptijd".
-- de **layout** uit `sjabloon.md`, met het nummer.
-- de **boodschap** in één zin: wat moet de lezer hiervan overhouden.
-- de **tekst letterlijk zoals hij op de slide komt**, inclusief cijfers en bronvermelding.
+Deze vier staan bovenaan `outline.md` en gelden voor elke slide. Neem je ze niet vooraf, dan
+neem je ze per slide opnieuw en dan verspringt de deck zonder dat iemand kan zien waarom.
 
-Wat je *niet* in de outline zet: de compositie. Geen patroonnaam, geen skelet, geen
-kaartindeling. De vorm bepaal je tijdens het bouwen, met de render als correctie. Zet je hem
-nu vast, dan ontwerp je blind.
+1. **De vier maten.** Drager 40 tot 60pt, kop 18pt, body 16pt, voetnoot 11pt. Eén maat per rol,
+   deckbreed.
+2. **De kaarttaal.** Rechte hoeken of één absolute hoekradius, en welke vullingssoort de default
+   is: container op alpha, wit met een haarlijn in de eigen hue, of vol. Halverwege wisselen is
+   het defect dat het snelst opvalt.
+3. **Rol naar hue.** Welke categorie welke kleur krijgt. Grapefruit is kost of waarschuwing,
+   emerald is baat, navy is structuur, oranje is het punt; sky en royal zijn vrij. Twee
+   categorieën in dezelfde set krijgen nooit dezelfde hue.
+4. **De twee registers.** Wijs aan welke slide bíjna helemaal wit wordt en welke echt verzadigd.
+   Een deck waarin elke slide in het middengrijs ligt, is de deck die de vergelijking verloor.
+
+Daarboven staat de **storyline**: het hele verhaal als één doorlopende alinea, geen bullets. Als
+je dit in een minuut aan de klant moet uitleggen, wat zeg je dan? Dat is drie regels werk en het
+is de plek waar een slide sneuvelt voordat hij bestaat.
+
+### Dan per slide
+
+- **Titel** — de action title: de bewering, niet het onderwerp. "De doorlooptijd daalde met 39
+  dagen", niet "Doorlooptijd". Vier dingen die het niet zijn: een label ("POSITIEF:"), een
+  onderwerp zonder bewering, twee boodschappen in één titel, en een uitroepteken. ALL CAPS,
+  maximaal twee regels en in de praktijk één — op 24pt Gotham Bold over 12,52 in gaat er
+  ongeveer 48 tekens op een regel. Past hij niet, dan schrijf je hem korter; het font gaat nooit
+  omlaag. En houd het over de deck consistent: titels die op de ene slide één en op de andere
+  twee regels beslaan laten de contentzone per slide op een andere hoogte beginnen.
+- **Subtitel** — optioneel, en dat is geen formaliteit. Eén zin van maximaal ongeveer 120
+  tekens, het liefst één regel, twee is het maximum; drie lopen door de oranje dash op 1,72 in.
+  Wat erin hoort is de periode, de afbakening, het scenario of de bron — informatie die nergens
+  anders op de slide past. De toets: kun je de subregel vervangen door "hieronder staat het",
+  dan schrap je hem. Een subtitel die de titel herhaalt of de slide aankondigt is slechter dan
+  geen subtitel.
+- **Layout** — met het nummer, en kies niet standaard 19. Een tweeluik is 22, waar de
+  kolomkoppen geërfde placeholders zijn die je mag herkleuren. Doorlopende tekst is 20. Een
+  schema over de volle hoogte zonder titel is 17. Vier contentslides op 19 achter elkaar is de
+  eenvormigheid waarop de vergelijking verloren is.
+- **Boodschap** — in één zin: wat moet de lezer hiervan overhouden.
+- **Drager** — welk element de boodschap draagt, gekozen uit vier: een getal, de compositie
+  zelf, een kop of kernbegrip in de hue van zijn categorie, of een sluitregel. Een slide zonder
+  drager gaat niet naar de bouwstap.
+- **Plattegrond in vier woorden** — "drie kaarten, open onderkant", "tabel plus conclusie",
+  "vier rijen". Zet ze onder elkaar en tel ze: komt één plattegrond meer dan twee keer voor, of
+  staan er twee gelijke naast elkaar, dan herschik je hier. Na het bouwen kost dat een herbouw
+  van de contentzone.
+- **Vorm die de inhoud vraagt** — in één woord: getal, grafiek, tabel, proces, verdeling,
+  proza. Vraagt de brief "hoe werkt het" of "in welke stappen", dan is het geen lijst. Draagt de
+  deck cijfers, dan zit er minstens één grafiek, tabel, schema of verdeling in.
+- **Tekst** — letterlijk zoals hij op de slide komt, inclusief cijfers, eenheid en bron.
+- **Herkomst** — achter elke inhoudelijke regel `[brief]`, `[dossier]` of `[aanname]`. Een
+  aanname mag nooit als vaststelling op de slide; die gaat er alleen op als open vraag of als
+  expliciete aanname. Zet alle aannames als lijstje onder de outline.
+
+**Wat je niet in de outline zet: maten.** Geen inches, geen kolombreedtes, geen kaartindeling,
+geen patroonnaam. De plattegrond en de drager horen er wél in — dat is de reden waarom de tekst
+deze lengte heeft, en het is het enige stuk vorm dat vóór het bouwen te beoordelen is. De
+uitvoering ontdek je op de render.
+
+**Dividers.** Vanaf twee inhoudelijke hoofdstukken én zeven contentslides zijn sectiedividers
+verplicht, één per hoofdstuk, uit de fotolayouts 6 t/m 16. Bij vijf of zes contentslides met
+duidelijke blokken mag het. Onder vijf niet. Nooit twee achter elkaar en nooit als laatste
+slide. Een foto mag het onderwerp niet tegenspreken; past er voor geen enkel hoofdstuk een
+passende foto, kies dan één neutrale voor allemaal — consistentie boven variatie.
+
+**Cover en slot.** Slide 1 is layout 1, het 2×2 kleurraster met de foto en de witte logokaart.
+Past de dektitel niet op de layoutmaat, dan groeit het vak naar boven; kies niet layout 4 omdat
+de titel niet past, want dat levert de vlakkere cover op. Nooit de organisatienaam als kop. Een
+extern deck eindigt op layout 2 of 3, de oranje outro zonder tekstplaceholders. Een intern deck
+eindigt op de beslis- of adviesslide.
 
 Laat `sfnl-humanizer` over de teksten gaan vóórdat je de outline voorlegt. Tekst die ná de bouw
-verandert, betekent slides opnieuw bouwen; het is dertien wijzigingen achteraf goedkoper om het
-nu te doen.
+verandert, betekent slides opnieuw bouwen.
 
 **Leg de outline dan voor en wacht op goedkeuring.** Dit is de enige poort in deze skill. Ga
 niet bouwen omdat de outline "duidelijk genoeg" lijkt.
@@ -117,14 +179,48 @@ rechtgezet.
 Dit is het werk. De zone is `x 0.48, y 1.93, b 12.52, h 5.00`, dus rechts 13,00 en onder 6,93.
 Daarbinnen ben je vrij.
 
-Voeg je vormen toe als `<p:sp>` vóór `</p:spTree>` in de slide-XML. Een vorm heeft een
-`<a:prstGeom>` (`rect`, `roundRect`, `ellipse`, `rightArrow`, `chevron`, wat je nodig hebt),
-een `<a:xfrm>` met offset en extent in EMU, een vulling met `schemeClr`, en optioneel een
-`<p:txBody>`. Groepeer wat bij elkaar hoort met `<p:grpSp>`. Geef elke vorm een sprekende
-`name`, want `place_shapes.py` en `inspect_deck.py` werken op naam.
+**Gebruik `scripts/shapes.py`.** Dat is de primitievenlaag: vlakken, lijnen, tekstruns,
+kolomrasters en — belangrijk — een hoogtemeting. Het is géén patroonbibliotheek; er zit geen
+kaartenrij en geen stroomschema in. Wat je ermee bouwt is elke slide opnieuw jouw beslissing.
 
-Eén inch is 914400 EMU. Voor *n* elementen over de volle breedte met goot *g* is de breedte
-`(12.52 - g × (n - 1)) / n` en staat element *i* op `0.48 + i × (breedte + g)`.
+Waarom je hem gebruikt in plaats van zelf XML te typen: de eerste deck die met deze skill werd
+gebouwd had een ad-hoc bouwlaag die `<a:ln><a:noFill/>` op elke vorm hardcodeerde en zijn lichte
+vullingen met `lumMod` maakte. Daarmee waren de twee mooiste referentieslides — witte kolommen
+met een haarlijn in de eigen hue, en een verzadigde kop boven een nauwelijks getint paneel —
+structureel onbouwbaar, en de bouwer merkte dat niet.
+
+```python
+import sys; sys.path.insert(0, "<plugin>/scripts")
+from shapes import (ZONE, Deck, aanhef, cols, hoogte_van, label, para, run, streep,
+                    tekst, tekst_op, vlak, vulgraad, write)
+
+D = Deck(body=16, label=14, sluit=16, display=44)     # de vier maten, één keer
+xs, w = cols(3, 0.24)                                 # raster
+h = hoogte_van([(kop, 18, "Montserrat SemiBold"),     # hoe hoog moet dit blok zijn
+                (txt, D.body, "Lato Light")], w)
+vormen = [
+    vlak("Kop 62", xs[0], ZONE["y"], w, 1.35, vulling="emerald",
+         tekst=[para(run("62", "Montserrat SemiBold", D.display,
+                         tekst_op("emerald", D.display)), algn="ctr")], anchor="ctr"),
+    vlak("Kaart A", xs[0], 3.28, w, h, vulling="container:emerald", lijn=("emerald", 1),
+         tekst=[para(label(kop)), para(run(txt, "Lato Light", D.body), spc_voor=600)]),
+]
+write("unpacked/ppt/slides/slide3.xml", vormen)
+```
+
+Wat de laag voor je regelt: alpha in plaats van `lumMod`, de `adj` van een `roundRect` uit een
+absolute radius, een lijn in dezelfde hue als de vulling, de expliciete `<a:latin/>` op elke run,
+`noAutofit`, de juiste elementvolgorde, `lnSpc` op 112 procent, en de tekstkleur die bij een
+vulling en een puntgrootte hoort. `Deck(display=...)` weigert een drager onder 40pt.
+
+`hoogte_van` en `vulgraad` zijn er om de val uit `vormentaal.md` §6 te vermijden: eerst meten hoe
+hoog de inhoud is, dan pas beslissen hoe je de restruimte verdeelt. Ruimte tussen de blokken is
+compositie, ruimte ónderin een blok is een gat.
+
+Wil je toch met de hand schrijven: een vorm is een `<p:sp>` vóór `</p:spTree>`, met
+`<a:prstGeom>`, een `<a:xfrm>` in EMU (één inch is 914400), een vulling met `schemeClr` en
+optioneel een `<p:txBody>`. Groepeer met `<p:grpSp>`, en geef elke vorm een sprekende `name`,
+want `place_shapes.py` en `inspect_deck.py` werken op naam.
 
 **Benoem in delen wat later los moet kunnen bewegen.** Een kaart als één vorm met drie alinea's
 erin is het snelst te schrijven, maar dan overschrijft `retext_slide.py` later label, getal en
@@ -133,12 +229,10 @@ toelichting in één keer, en kun je het getal niet apart uitlijnen. Zet je ze a
 verplaatst `place_shapes.py "Kaart 1*"` de hele kaart in één aanroep. Dat is ook de enige manier
 om drie getallen naast elkaar op één baseline te houden als de labels niet even lang zijn.
 
-Vier dingen die je bij élke eigen vorm doet, en waarom staat in `sjabloon.md` onder Valkuilen:
-
-- een expliciete `<a:latin typeface="..."/>` op elke run, anders staat er Calibri
-- `schemeClr` en nooit `srgbClr`
-- een eigen `<a:p>` per lijstitem
-- insets 0,2/0,2/0,15/0,15 op een vak met vulling, insets 0 op een los label of getal
+Doe je het met de hand, dan doe je deze vijf zelf, en waarom staat in `sjabloon.md` onder
+Valkuilen: een expliciete `<a:latin/>` op elke run, `schemeClr` en nooit `srgbClr`, een eigen
+`<a:p>` per lijstitem, `<a:noAutofit/>` in elke `bodyPr`, en insets 0,2/0,2/0,15/0,15 op een vak
+met vulling tegen insets 0 op een los label of getal.
 
 Moet een rij elementen na het schrijven herverdeeld worden — drie kaarten waar er twee stonden
 — dan is dat `place_shapes.py` en niet met de hand:

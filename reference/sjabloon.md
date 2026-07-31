@@ -17,7 +17,7 @@ dus `slideLayout19.xml`.
 | 19 | Titel, subtitel | **De contentslide.** Titel, optionele subtitel, een lege contentzone die je zelf componeert. Begin hier. |
 | 20 | 1_Titel, subtitel, tekst | Één tekstplaceholder over de volle contentzone. Voor een slide waar doorlopende tekst de vorm is. |
 | 21 | Titel, subtitel, twee tekstvakken | Twee kolommen over de volle hoogte. |
-| 22 | 1_Titel, subtitel, twee tekstvakken | Twee kolommen met een eigen kop per kolom. |
+| 22 | 1_Titel, subtitel, twee tekstvakken | **De layout voor het tweeluik.** Twee kolommen met een geërfde kop per kolom. Die kop mag je herkleuren en verzwaren: 18pt Montserrat SemiBold met `spc="100"` in de hue van de kolom. Zo krijg je een gekleurde kop zonder een gevulde balk te tekenen. Alle vijf de winnende decks gebruiken deze layout. |
 | 17 | Leeg | Blanco canvas: geen placeholders, geen header, geen dash. Voor full-bleed beeld of een schema over de volle hoogte. Draagt de slide een gewone titel, dan is het 19. |
 | 1 | 1_Titelslide | Cover met het 2×2 kleurraster, foto rechtsboven, witte logokaart over het midden. |
 | 4 | 7_Titelslide | Cover met een titel over de volle breedte. |
@@ -84,12 +84,19 @@ Voor eigen vormen in de contentzone:
 
 | Kolommen | x-posities | Breedte | Goot |
 |---|---|---|---|
-| 2 | 0.48, 6.89 | 6.11 | 0.30 |
-| 3 | 0.48, 4.75, 9.02 | 3.97 | 0.30 |
-| 4 | 0.48, 3.71, 6.94, 10.17 | 2.83 | 0.40 |
+| 2, gevuld | 0.48, 6.86 | 6.14 | 0.24 |
+| 2, proza | 0.48, 6.82 | 5.91 | 0.43 |
+| 3 | 0.48, 4.65, 8.82 | 3.94 | 0.24 |
+| 4 | 0.48, 3.61, 6.74, 9.87 | 2.89 | 0.24 |
 
-Bouw je náást een placeholder van layout 21 of 22, volg dan hún raster: breedte 5,91 op
-x 0,48 en x 6,82, dus een bredere goot van 0,43.
+De goot hangt af van de vulling. Bij **gevulde** blokken doet de vulling het scheidingswerk, dus
+0,20 tot 0,24 in is genoeg — een bredere goot maakt het raster los. Bij **ongevulde**
+prozakolommen heeft de tekst die lucht wél nodig; dan is 0,43 in de maat, en dat is precies wat
+layout 21 en 22 zelf gebruiken (5,91 op x 0,48 en x 6,82). Bouw je náást een placeholder van die
+layouts, volg dan hun maat.
+
+Voor *n* elementen met goot *g*: breedte is `(12.52 - g × (n - 1)) / n` en element *i* staat op
+`0.48 + i × (breedte + g)`.
 
 Voor *n* elementen over de volle contentbreedte met een goot *g*: breedte is
 `(12.52 - g × (n - 1)) / n` en element *i* staat op `0.48 + i × (breedte + g)`.
@@ -116,26 +123,85 @@ Uitsluitend `schemeClr` met transformaties, nooit `srgbClr`. Binnen `<a:schemeCl
 | wit | `lt2` |
 | grijs (voetnoot) | `tx1` met `lumMod 65000`, `lumOff 35000` |
 
-Een lichte tint van een accent is `lumMod 20000`, `lumOff 80000`. Voor navy is de lichte tint
-`lumMod 10000`, `lumOff 90000` (dat wordt `#E2E1F6`). Warmgrijs is `accent1` met
-`satMod 25000`, `lumMod 25000`, `lumOff 75000` (`#EDE6E3`).
+### Een lichte vulling maak je met alpha
 
-**Nooit** `dk2` met `lumMod 20000` / `lumOff 80000`. Dat is `#C6C3ED`, een verzadigd lavendel
-dat naast geen van de zes merkkleuren staat. Wil je licht navy, dan is het `lumMod 10000` /
-`lumOff 90000`; wil je blauwer, dan is het royal.
+Niet met `lumMod`. In de vijf decks die de blinde vergelijking wonnen komt `lumMod` geen enkele
+keer voor: élke lichte vulling is de volle kleur met `<a:alpha>` erover.
+
+```xml
+<a:solidFill><a:schemeClr val="accent5"><a:alpha val="10000"/></a:schemeClr></a:solidFill>
+```
+
+Per hue gekalibreerd, want navy is veel donkerder dan emerald:
+
+| hue | alpha voor een container |
+|---|---|
+| navy (`dk2`) | 7000 |
+| royal, sky, emerald | 10000 |
+| grapefruit | 9000 |
+| oranje | 12000 |
+
+Navy op 7000 is de **neutrale container**: koel, kleurloos, en de default zodra er niets te
+onderscheiden valt. Boven ongeveer 14000 wordt een container een kleur in plaats van een
+achtergrond — dat mag, maar dan betekent het vlak iets.
+
+Waarom dit uitmaakt: `lumMod 20000` / `lumOff 80000` levert een vlak dat één stap te donker is
+en daardoor als eigen kleur meedoet. Bij navy komt daar `#C6C3ED` uit, een verzadigd lavendel
+dat naast geen van de zes merkkleuren staat, en daarvoor moest een apart verbod bestaan. Met
+alpha is die uitzondering niet meer nodig. Warmgrijs (`accent1` met `satMod`) komt in geen
+enkele winnende deck voor en kun je laten liggen.
 
 ### Contrast
 
-Welke tekstkleur op welke volle vulling. Dit is geen smaak maar leesbaarheid.
+**Op een volle vulling.** Dit is leesbaarheid, geen smaak.
 
 | Vulling | Tekst |
 |---|---|
 | navy vol, royal vol | wit |
-| oranje vol | navy, vanaf 14pt, en niet voor een lange alinea |
-| grapefruit, sky, emerald vol | navy |
+| oranje, grapefruit, sky, emerald vol | navy |
 
-Wit op `accent1` in een eigen vorm is verboden. Wit op `accent2`, `accent4` of `accent5` ook:
-die vullingen zijn te licht.
+Wit op de lichte accenten haalt 2,0 tot 3,1 en is dus geen default. Eén uitzondering, nagemeten
+in de sterkste referentieslide: vanaf ongeveer 40pt mag wit ook op emerald, oranje en sky, want
+daar leest het cijfer als vorm en niet als tekst. Bewuste keuze, op de render te controleren.
+
+**Als tekstkleur op wit.** Deze helft ontbrak, waardoor de tabel als verbod las en kleur alleen
+in vlakken terechtkwam. Uitgerekende verhoudingen:
+
+| kleur | op wit | mag dragen |
+|---|---|---|
+| navy | 15,3 | alles, ook een alinea |
+| royal | 5,7 | alles, ook een alinea |
+| grapefruit | 3,1 | een kop vanaf 18pt |
+| oranje | 2,6 | displaymaat, of een kop vanaf 18pt |
+| sky | 2,3 | idem |
+| emerald | 2,0 | idem |
+
+### Volgorde binnen de XML
+
+Bindend, en het schema keurt het af als je het omdraait:
+
+- in `<p:spPr>`: `xfrm` → `prstGeom` → vulling → `a:ln`
+- in `<a:pPr>`: `lnSpc` → `spcBef` → `spcAft` → de bullet-elementen
+- in `<a:rPr>`: `solidFill` vóór `a:latin`
+- in `<a:schemeClr>`: `satMod` vóór `lumMod` vóór `lumOff`; `alpha` mag achteraan
+
+### Vormen
+
+Een `roundRect` zonder expliciete `adj` krijgt PowerPoints default van 16,67 procent van de
+korte zijde. Een blok van 1 in hoog wordt dan een pil en een blok van 2,5 in een nette kaart:
+vier verschillende radii in één deck zonder dat iemand er iets aan koos. Zet de radius
+expliciet, absoluut in inch, en reken hem per vorm terug:
+
+```
+adj = 100000 × radius_in_inch / min(breedte, hoogte)
+```
+
+In de winnende decks staat de `adj` op 4000 tot 6000, wat bij die maten neerkomt op ongeveer
+0,08 tot 0,12 in. Gebruik in de hele deck dezelfde absolute radius, ook als de blokken
+verschillend hoog zijn.
+
+Een lijn om een kaart heeft **dezelfde hue als de vulling**. Een grijze of contrasterende rand
+is de Word-tabellook.
 
 ## Fonts
 
@@ -155,14 +221,19 @@ Acht dingen die stil misgaan en die je niet kunt afleiden.
    iemand het sjabloon bijwerkt.
 3. **Eén `<a:p>` per lijstitem.** Nooit twee items in één alinea met een regeleinde ertussen;
    dan werkt de alinea-afstand niet en breekt de tekst verkeerd.
-4. **`xml:space="preserve"`** op elke `<a:t>` met voor- of achterloopruimte.
-5. **Entiteiten voor de typografische aanhalingstekens** in de XML.
-6. **`idx 0` bestaat niet op elke layout.** Op de covers (1, 4) en de sectiedividers (6 t/m 16)
+4. **Géén `xml:space="preserve"` op `<a:t>`.** Dat is WordprocessingML; in DrawingML keurt het
+   schema het af en dan valideert de deck niet meer. Voor- en achterloopruimte blijft in
+   DrawingML gewoon staan. (Deze naslag schreef eerder het omgekeerde voor.)
+5. **`<a:noAutofit/>` in élke `<a:bodyPr>` die je zelf schrijft.** Zonder die keuze mag
+   PowerPoint de tekst schalen, en één vak op 90 procent haalt een hele rij uit de lijn. Past
+   de tekst niet, dan wordt het vak groter of de tekst korter — nooit het font kleiner.
+6. **Entiteiten voor de typografische aanhalingstekens** in de XML.
+7. **`idx 0` bestaat niet op elke layout.** Op de covers (1, 4) en de sectiedividers (6 t/m 16)
    is er geen titelplaceholder met idx 0; de kop is daar idx 10 of idx 14.
-7. **Idx-volgorde is geen leesvolgorde.** Op layout 21 is idx 12 de linkerkolom, maar op
+8. **Idx-volgorde is geen leesvolgorde.** Op layout 21 is idx 12 de linkerkolom, maar op
    layout 22 is idx 13 de linkerkolom en idx 12 de rechter. De twee tweekolomslayouts hebben
    de omgekeerde conventie. Controleer de doos, niet het nummer.
-8. **Een negatieve `axId` in een grafiek nooit repareren.** Dat is geldige OOXML; verander je
+9. **Een negatieve `axId` in een grafiek nooit repareren.** Dat is geldige OOXML; verander je
    hem, dan opent PowerPoint het bestand niet meer.
 
 En één procesval die geen XML is: `python-pptx` herschrijft de deck bij het opslaan, en dat
