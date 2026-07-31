@@ -173,7 +173,13 @@ def main() -> None:
     if args.list:
         listed = []
         for node in every:
-            sp_pr = node.find("./p:spPr", NS) or node.find("./p:grpSpPr", NS)
+            # Geen `or`: een leeg `<p:spPr/>` is falsy in lxml, dus dan viel dit door naar
+            # grpSpPr en werd None. Dat gaf toevallig het juiste antwoord ("geërfd"), met
+            # een FutureWarning erbij, en zou stilletjes fout gaan zodra lxml zijn
+            # truth-testing verandert.
+            sp_pr = node.find("./p:spPr", NS)
+            if sp_pr is None:
+                sp_pr = node.find("./p:grpSpPr", NS)
             xfrm = sp_pr.find("a:xfrm", NS) if sp_pr is not None else None
             if xfrm is None:
                 xfrm = node.find("./p:xfrm", NS)

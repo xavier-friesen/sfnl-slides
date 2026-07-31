@@ -25,6 +25,18 @@ dat de slide draagt mag 48pt of 60pt zijn en de hele bovenhelft nemen. Twee kolo
 mogen tot de onderrand doorlopen. Wat je niet doet is drie kleine kaartjes bovenaan hangen en
 de rest wit laten.
 
+**"Groter" betekent grotere letters en meer inhoud, niet hogere dozen.** Dit is de val, en hij
+is bij het bouwen makkelijker in te lopen dan hij klinkt: je maakt de blokken zo hoog dat ze de
+zone vullen, laat de tekst bovenin staan, en levert vier kaarten af waarvan de onderste helft
+leeg gekleurd vlak is. Op de render leest dat als een onafgemaakte slide, en het is precies
+hetzelfde defect als een kale onderkant — alleen nu ín de blokken.
+
+Dus: **een gevuld blok is zo hoog als zijn inhoud**, plus marge. Vult de compositie de zone
+daarmee niet, dan is het antwoord niet een hoger blok maar een andere compositie. Vier korte
+definities vullen geen vijf inch in vier kolommen; als vier rijen over de volle breedte doen ze
+het wel. Staat er tekst in een blok dat toch ruimer is dan zijn inhoud, anker die tekst dan
+verticaal in het midden: dan is de overgebleven lucht padding en geen gat.
+
 ## Kleur benoemt een categorie
 
 Dit is waar de afgekeurde deck het echt verloor, en het is subtieler dan overvloed of
