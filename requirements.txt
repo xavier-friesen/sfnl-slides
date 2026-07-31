@@ -1,0 +1,31 @@
+# Runtime dependencies for the sfnl-powerpoint scripts.
+#
+#   <PYEXE> -m pip install -r requirements.txt
+#
+# Resolve <PYEXE> first: try python3, then python, then py -3, and treat the Windows
+# Store stub as NOT FOUND (it prints "Python was not found" and exits non-zero).
+# scripts/preflight.py reports which of these are importable and which renderers exist.
+
+# Reads and writes the deck. Pinned to the major/minor we tested against: the
+# placeholder-inheritance behaviour add_slide.py and _deck.py rely on is not stable
+# across majors.
+python-pptx>=1.0,<2.0
+
+# All hand-editing of slide XML goes through lxml. Needed for the XSD validation in
+# office/validators too, which the stdlib ElementTree cannot do.
+lxml>=5.0
+
+# Parses untrusted XML in clean.py and the validators without the entity-expansion
+# and quadratic-blowup exposure of the stdlib parsers.
+defusedxml>=0.7
+
+# PowerPoint COM, the preferred renderer: it is the engine the client opens the deck
+# in, so Gotham, Montserrat and Lato measure exactly right. Windows only; every other
+# platform falls back to LibreOffice, or to QA-only mode when that is absent too.
+pywin32>=306; sys_platform == "win32"
+
+# Test suite only. `pytest` with no arguments runs the fast set; see pytest.ini.
+pytest>=8.0
+
+# thumbnail.py composes the labelled contact sheet from the rendered PNGs.
+pillow>=10.0

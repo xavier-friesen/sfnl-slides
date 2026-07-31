@@ -1,0 +1,20 @@
+{
+  "name": "sfnl-slides",
+  "version": "0.1.0",
+  "description": "Bouw een Social Finance NL deck uit het officiële sjabloon waarbij de compositie per slide een ontwerpbeslissing is en geen invuloefening. De header wordt geërfd uit master en layout, de contentzone componeer je zelf met eigen vormen, en de render is de enige vormbeoordeling. Geen patroonbibliotheek, geen spec-contract, geen QA die een compositie afkeurt op maat voordat iemand hem gezien heeft. Wat er wel is: de dunne laag die de OOXML-valkuilen afhandelt (content-type, MAX_PATH, fontlokalisatie, native grafieken en tabellen), een vormentaal in proza, en tien gerenderde slides als maatstaf. Naast sfnl-powerpoint te gebruiken; die plugin blijft de layout-first route met een gehandhaafd patroonbeleid.",
+  "author": {
+    "name": "Social Finance NL",
+    "email": "info@socialfinancenl.nl"
+  },
+  "license": "UNLICENSED",
+  "keywords": [
+    "powerpoint",
+    "pptx",
+    "social-finance-nl",
+    "branding",
+    "presentation",
+    "huisstijl",
+    "template",
+    "design"
+  ]
+}

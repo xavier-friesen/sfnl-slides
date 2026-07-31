@@ -1,0 +1,774 @@
+{
+  "note": "GEGENEREERD door scripts/layout_catalog.py — niet met de hand bijwerken. Alleen sjabloonfeiten; het layoutbeleid staat in LAYOUT_POLICY in scripts/_deck.py en keyt op layoutnaam.",
+  "template": "sfnl-sjabloon.potx",
+  "slide_size_in": [
+    13.333,
+    7.5
+  ],
+  "layouts": [
+    {
+      "number": 1,
+      "file": "slideLayout1.xml",
+      "name": "1_Titelslide",
+      "master": 1,
+      "text_placeholders": [
+        14,
+        13
+      ],
+      "boxes": {
+        "14": [
+          7.63,
+          5.79,
+          5.33,
+          0.56
+        ],
+        "13": [
+          7.63,
+          6.51,
+          4.88,
+          0.61
+        ]
+      },
+      "colour_block": null,
+      "has_photo": true
+    },
+    {
+      "number": 2,
+      "file": "slideLayout2.xml",
+      "name": "5_Titelslide",
+      "master": 1,
+      "text_placeholders": [],
+      "boxes": {
+        "10": [
+          8.77,
+          6.95,
+          3.0,
+          0.4
+        ],
+        "12": [
+          9.41,
+          6.95,
+          3.0,
+          0.4
+        ]
+      },
+      "colour_block": null,
+      "has_photo": false
+    },
+    {
+      "number": 3,
+      "file": "slideLayout3.xml",
+      "name": "6_Titelslide",
+      "master": 1,
+      "text_placeholders": [],
+      "boxes": {
+        "10": [
+          8.77,
+          6.95,
+          3.0,
+          0.4
+        ],
+        "12": [
+          9.41,
+          6.95,
+          3.0,
+          0.4
+        ]
+      },
+      "colour_block": null,
+      "has_photo": true
+    },
+    {
+      "number": 4,
+      "file": "slideLayout4.xml",
+      "name": "7_Titelslide",
+      "master": 1,
+      "text_placeholders": [
+        10
+      ],
+      "boxes": {
+        "10": [
+          -0.01,
+          4.22,
+          13.32,
+          0.63
+        ]
+      },
+      "colour_block": null,
+      "has_photo": true
+    },
+    {
+      "number": 5,
+      "file": "slideLayout5.xml",
+      "name": "Quote",
+      "master": 1,
+      "text_placeholders": [
+        0,
+        1
+      ],
+      "boxes": {
+        "0": [
+          0.48,
+          0.6,
+          12.52,
+          0.37
+        ],
+        "1": [
+          0.48,
+          1.04,
+          12.52,
+          0.63
+        ]
+      },
+      "colour_block": null,
+      "has_photo": true
+    },
+    {
+      "number": 6,
+      "file": "slideLayout6.xml",
+      "name": "2_sectieslide_stijl1",
+      "master": 1,
+      "text_placeholders": [
+        14,
+        11
+      ],
+      "boxes": {
+        "14": [
+          5.9,
+          1.57,
+          5.96,
+          0.56
+        ],
+        "11": [
+          5.9,
+          2.39,
+          5.96,
+          4.4
+        ]
+      },
+      "colour_block": null,
+      "has_photo": true
+    },
+    {
+      "number": 7,
+      "file": "slideLayout7.xml",
+      "name": "1_sectieslide_stijl1",
+      "master": 1,
+      "text_placeholders": [
+        14,
+        13
+      ],
+      "boxes": {
+        "14": [
+          6.07,
+          5.79,
+          5.96,
+          0.56
+        ],
+        "13": [
+          6.06,
+          6.54,
+          5.96,
+          0.61
+        ]
+      },
+      "colour_block": null,
+      "has_photo": true
+    },
+    {
+      "number": 8,
+      "file": "slideLayout8.xml",
+      "name": "3_sectieslide_stijl1",
+      "master": 1,
+      "text_placeholders": [
+        14,
+        13
+      ],
+      "boxes": {
+        "14": [
+          6.07,
+          5.79,
+          5.96,
+          0.56
+        ],
+        "13": [
+          6.06,
+          6.54,
+          5.96,
+          0.61
+        ]
+      },
+      "colour_block": null,
+      "has_photo": true
+    },
+    {
+      "number": 9,
+      "file": "slideLayout9.xml",
+      "name": "4_sectieslide_stijl1",
+      "master": 1,
+      "text_placeholders": [
+        14,
+        13
+      ],
+      "boxes": {
+        "14": [
+          6.07,
+          5.79,
+          5.96,
+          0.56
+        ],
+        "13": [
+          6.06,
+          6.54,
+          5.96,
+          0.61
+        ]
+      },
+      "colour_block": null,
+      "has_photo": true
+    },
+    {
+      "number": 10,
+      "file": "slideLayout10.xml",
+      "name": "11_sectieslide_stijl1",
+      "master": 1,
+      "text_placeholders": [
+        14,
+        13
+      ],
+      "boxes": {
+        "14": [
+          6.07,
+          5.79,
+          5.96,
+          0.56
+        ],
+        "13": [
+          6.06,
+          6.54,
+          5.96,
+          0.61
+        ]
+      },
+      "colour_block": null,
+      "has_photo": true
+    },
+    {
+      "number": 11,
+      "file": "slideLayout11.xml",
+      "name": "6_sectieslide_stijl1",
+      "master": 1,
+      "text_placeholders": [
+        14,
+        13
+      ],
+      "boxes": {
+        "14": [
+          6.07,
+          5.79,
+          5.96,
+          0.56
+        ],
+        "13": [
+          6.06,
+          6.54,
+          5.96,
+          0.61
+        ]
+      },
+      "colour_block": null,
+      "has_photo": true
+    },
+    {
+      "number": 12,
+      "file": "slideLayout12.xml",
+      "name": "7_sectieslide_stijl1",
+      "master": 1,
+      "text_placeholders": [
+        14,
+        13
+      ],
+      "boxes": {
+        "14": [
+          6.07,
+          5.79,
+          5.96,
+          0.56
+        ],
+        "13": [
+          6.06,
+          6.54,
+          5.96,
+          0.61
+        ]
+      },
+      "colour_block": null,
+      "has_photo": true
+    },
+    {
+      "number": 13,
+      "file": "slideLayout13.xml",
+      "name": "8_sectieslide_stijl1",
+      "master": 1,
+      "text_placeholders": [
+        14,
+        13
+      ],
+      "boxes": {
+        "14": [
+          6.07,
+          5.79,
+          5.96,
+          0.56
+        ],
+        "13": [
+          6.06,
+          6.54,
+          5.96,
+          0.61
+        ]
+      },
+      "colour_block": null,
+      "has_photo": true
+    },
+    {
+      "number": 14,
+      "file": "slideLayout14.xml",
+      "name": "9_sectieslide_stijl1",
+      "master": 1,
+      "text_placeholders": [
+        14,
+        13
+      ],
+      "boxes": {
+        "14": [
+          6.07,
+          5.79,
+          5.96,
+          0.56
+        ],
+        "13": [
+          6.06,
+          6.54,
+          5.96,
+          0.61
+        ]
+      },
+      "colour_block": null,
+      "has_photo": true
+    },
+    {
+      "number": 15,
+      "file": "slideLayout15.xml",
+      "name": "10_sectieslide_stijl1",
+      "master": 1,
+      "text_placeholders": [
+        14,
+        13
+      ],
+      "boxes": {
+        "14": [
+          6.07,
+          5.79,
+          5.96,
+          0.56
+        ],
+        "13": [
+          6.06,
+          6.54,
+          5.96,
+          0.61
+        ]
+      },
+      "colour_block": null,
+      "has_photo": true
+    },
+    {
+      "number": 16,
+      "file": "slideLayout16.xml",
+      "name": "12_sectieslide_stijl1",
+      "master": 1,
+      "text_placeholders": [
+        14,
+        13
+      ],
+      "boxes": {
+        "14": [
+          6.07,
+          5.79,
+          5.96,
+          0.56
+        ],
+        "13": [
+          6.06,
+          6.54,
+          5.96,
+          0.61
+        ]
+      },
+      "colour_block": null,
+      "has_photo": true
+    },
+    {
+      "number": 17,
+      "file": "slideLayout17.xml",
+      "name": "Leeg",
+      "master": 2,
+      "text_placeholders": [],
+      "boxes": {},
+      "colour_block": null,
+      "has_photo": false
+    },
+    {
+      "number": 19,
+      "file": "slideLayout19.xml",
+      "name": "Titel, subtitel",
+      "master": 2,
+      "text_placeholders": [
+        0,
+        1
+      ],
+      "boxes": {
+        "0": [
+          0.48,
+          0.6,
+          12.52,
+          0.37
+        ],
+        "1": [
+          0.48,
+          1.04,
+          12.52,
+          0.63
+        ]
+      },
+      "colour_block": null,
+      "has_photo": false
+    },
+    {
+      "number": 20,
+      "file": "slideLayout20.xml",
+      "name": "1_Titel, subtitel, tekst",
+      "master": 2,
+      "text_placeholders": [
+        0,
+        1,
+        10
+      ],
+      "boxes": {
+        "0": [
+          0.48,
+          0.6,
+          12.52,
+          0.37
+        ],
+        "1": [
+          0.48,
+          1.04,
+          12.52,
+          0.63
+        ],
+        "10": [
+          0.48,
+          1.93,
+          12.52,
+          5.0
+        ]
+      },
+      "colour_block": null,
+      "has_photo": false
+    },
+    {
+      "number": 21,
+      "file": "slideLayout21.xml",
+      "name": "Titel, subtitel, twee tekstvakken",
+      "master": 2,
+      "text_placeholders": [
+        0,
+        1,
+        12,
+        13
+      ],
+      "boxes": {
+        "0": [
+          0.48,
+          0.6,
+          12.24,
+          0.37
+        ],
+        "1": [
+          0.48,
+          1.04,
+          12.24,
+          0.63
+        ],
+        "12": [
+          0.48,
+          1.96,
+          5.91,
+          5.0
+        ],
+        "13": [
+          6.82,
+          1.96,
+          5.91,
+          5.0
+        ]
+      },
+      "colour_block": null,
+      "has_photo": false
+    },
+    {
+      "number": 22,
+      "file": "slideLayout22.xml",
+      "name": "1_Titel, subtitel, twee tekstvakken",
+      "master": 2,
+      "text_placeholders": [
+        0,
+        1,
+        13,
+        12,
+        14,
+        15
+      ],
+      "boxes": {
+        "0": [
+          0.48,
+          0.6,
+          12.24,
+          0.37
+        ],
+        "1": [
+          0.48,
+          1.04,
+          12.24,
+          0.63
+        ],
+        "13": [
+          0.48,
+          1.93,
+          5.91,
+          0.37
+        ],
+        "12": [
+          6.82,
+          1.93,
+          5.91,
+          0.37
+        ],
+        "14": [
+          0.48,
+          2.46,
+          5.91,
+          4.5
+        ],
+        "15": [
+          6.82,
+          2.46,
+          5.91,
+          4.5
+        ]
+      },
+      "colour_block": null,
+      "has_photo": false
+    },
+    {
+      "number": 25,
+      "file": "slideLayout25.xml",
+      "name": "1_sectieslide_stijl2",
+      "master": 2,
+      "text_placeholders": [
+        0,
+        1,
+        11
+      ],
+      "boxes": {
+        "0": [
+          5.25,
+          1.63,
+          7.49,
+          0.55
+        ],
+        "1": [
+          5.25,
+          2.2,
+          7.49,
+          0.37
+        ],
+        "11": [
+          5.33,
+          3.04,
+          7.41,
+          3.51
+        ]
+      },
+      "colour_block": "oranje",
+      "has_photo": false
+    },
+    {
+      "number": 26,
+      "file": "slideLayout26.xml",
+      "name": "2_sectieslide_stijl2",
+      "master": 2,
+      "text_placeholders": [
+        0,
+        1,
+        11
+      ],
+      "boxes": {
+        "0": [
+          5.25,
+          1.63,
+          7.49,
+          0.55
+        ],
+        "1": [
+          5.25,
+          2.2,
+          7.49,
+          0.37
+        ],
+        "11": [
+          5.33,
+          3.04,
+          7.41,
+          3.51
+        ]
+      },
+      "colour_block": "grapefruit",
+      "has_photo": false
+    },
+    {
+      "number": 27,
+      "file": "slideLayout27.xml",
+      "name": "3_sectieslide_stijl2",
+      "master": 2,
+      "text_placeholders": [
+        0,
+        1,
+        11
+      ],
+      "boxes": {
+        "0": [
+          5.25,
+          1.63,
+          7.49,
+          0.55
+        ],
+        "1": [
+          5.25,
+          2.2,
+          7.49,
+          0.37
+        ],
+        "11": [
+          5.33,
+          3.04,
+          7.41,
+          3.51
+        ]
+      },
+      "colour_block": "emerald",
+      "has_photo": false
+    },
+    {
+      "number": 28,
+      "file": "slideLayout28.xml",
+      "name": "4_sectieslide_stijl2",
+      "master": 2,
+      "text_placeholders": [
+        0,
+        1,
+        11
+      ],
+      "boxes": {
+        "0": [
+          5.25,
+          1.63,
+          7.49,
+          0.55
+        ],
+        "1": [
+          5.25,
+          2.2,
+          7.49,
+          0.37
+        ],
+        "11": [
+          5.33,
+          3.04,
+          7.41,
+          3.51
+        ]
+      },
+      "colour_block": "sky",
+      "has_photo": false
+    },
+    {
+      "number": 29,
+      "file": "slideLayout29.xml",
+      "name": "5_sectieslide_stijl2",
+      "master": 2,
+      "text_placeholders": [
+        0,
+        1,
+        11
+      ],
+      "boxes": {
+        "0": [
+          5.25,
+          1.63,
+          7.49,
+          0.55
+        ],
+        "1": [
+          5.25,
+          2.2,
+          7.49,
+          0.37
+        ],
+        "11": [
+          5.33,
+          3.04,
+          7.41,
+          3.51
+        ]
+      },
+      "colour_block": "royal",
+      "has_photo": false
+    },
+    {
+      "number": 30,
+      "file": "slideLayout30.xml",
+      "name": "6_sectieslide_stijl2",
+      "master": 2,
+      "text_placeholders": [
+        0,
+        1,
+        11
+      ],
+      "boxes": {
+        "0": [
+          5.25,
+          1.63,
+          7.49,
+          0.55
+        ],
+        "1": [
+          5.25,
+          2.2,
+          7.49,
+          0.37
+        ],
+        "11": [
+          5.33,
+          3.04,
+          7.41,
+          3.51
+        ]
+      },
+      "colour_block": "navy",
+      "has_photo": false
+    }
+  ]
+}
