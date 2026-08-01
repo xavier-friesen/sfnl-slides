@@ -313,7 +313,9 @@ def main() -> None:
     parser.add_argument("--out", type=Path, help="write here instead of in place")
     args = parser.parse_args()
 
-    payload = json.loads(args.data.read_text(encoding="utf-8"))
+    # utf-8-sig: op Windows schrijft PowerShells Out-File een BOM, en die is geen reden
+    # om een verder geldige tabel.json te weigeren.
+    payload = json.loads(args.data.read_text(encoding="utf-8-sig"))
     columns = parse_columns(payload["columns"])
     rows = payload["rows"]
     if not rows:

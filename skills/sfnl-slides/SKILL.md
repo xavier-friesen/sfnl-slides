@@ -21,15 +21,17 @@ toetsen, en scripts die de OOXML-valkuilen voor je afhandelen.
 
 ## Voordat je begint
 
-Lees drie dingen, in deze volgorde, en lees ze één keer voor de hele deck en niet per slide:
+Lees deze dingen, in deze volgorde, en lees ze één keer voor de hele deck en niet per slide:
 
 1. `reference/vormentaal.md` — de maatstaf. Wat een SFNL-slide goed maakt.
-2. `assets/maatstaf/*.png` — tien slides uit decks die de vergelijking hebben gewonnen. Kijk
+2. `reference/adviesvorm.md` — de laag erboven: antwoord voorop, exhibitcraft, de
+   schetsplicht en de weigerlijst. Wat een deck beslisklaar maakt.
+3. `assets/maatstaf/*.png` — tien slides uit decks die de vergelijking hebben gewonnen. Kijk
    ernaar. Ze zijn niet om na te tekenen maar om te weten waar de lat ligt.
-3. `reference/sjabloon.md` — de feiten: welke layout waarvoor, welke placeholder waar, de
+4. `reference/sjabloon.md` — de feiten: welke layout waarvoor, welke placeholder waar, de
    kleurslots en het alpha-recept, de volgorde binnen de XML, en negen valkuilen die stil
    misgaan.
-4. De docstring van `scripts/shapes.py` — de primitieven waarmee je tekent, en waarom die er zo
+5. De docstring van `scripts/shapes.py` — de primitieven waarmee je tekent, en waarom die er zo
    uitzien.
 
 Draai daarna `python scripts/preflight.py`. Dat zegt of er een interpreter, de
@@ -72,6 +74,11 @@ neem je ze per slide opnieuw en dan verspringt de deck zonder dat iemand kan zie
 Daarboven staat de **storyline**: het hele verhaal als één doorlopende alinea, geen bullets. Als
 je dit in een minuut aan de klant moet uitleggen, wat zeg je dan? Dat is drie regels werk en het
 is de plek waar een slide sneuvelt voordat hij bestaat.
+
+Ligt er een besluit op tafel, dan staat het antwoord voorop: direct na de cover de adviesslide
+met het advies, de dragende argumenten en de besluitvraag, en aan het slot dezelfde besluitvraag
+met de vervolgstappen (`adviesvorm.md` §1). Begint de titelrij met context in plaats van met het
+advies, dan is dat een bewuste keuze die je in de outline motiveert.
 
 ### Dan per slide
 
@@ -174,10 +181,19 @@ Een string wordt één alinea, een lijst van strings wordt een alinea per item. 
 subregels in kapitalen, bodytekst in normale zetting. Rechte apostrofs worden onderweg
 rechtgezet.
 
+Vul per slide in **één** aanroep. Wat je niet vult haalt `clean.py` er later uit, dus een
+tweede aanroep om iets weg te halen is nooit nodig — en `--drop-empty` verwijdert alles
+wat je in díé aanroep niet noemt, inclusief de titel die je in de eerste al vulde. Zo
+zijn hier een keer drie titels verdwenen.
+
 ### 4. Zelf componeren in de contentzone
 
 Dit is het werk. De zone is `x 0.48, y 1.93, b 12.52, h 5.00`, dus rechts 13,00 en onder 6,93.
 Daarbinnen ben je vrij.
+
+**Eerst schetsen, dan bouwen.** Per contentslide noem je twee wezenlijk verschillende
+composities voor dezelfde boodschap en kies je met een reden die over de boodschap gaat
+(`adviesvorm.md` §3). Twee regels denkwerk; het voorkomt dat elke slide de eerste inval is.
 
 **Gebruik `scripts/shapes.py`.** Dat is de primitievenlaag: vlakken, lijnen, tekstruns,
 kolomrasters en — belangrijk — een hoogtemeting. Het is géén patroonbibliotheek; er zit geen
@@ -293,6 +309,10 @@ Wat je in de eerste ronde zelf al gaat zien, en wat geen regel voor je oplost:
 - Tekst die net buiten zijn vak valt. Het vak wordt kleiner of de tekst korter, niet het
   lettertype.
 - Een compositie die op 4,5 in ophoudt. Maak de elementen groter, niet het gat.
+
+Als de loop schoon is, doe je één keer de beslistoets uit `adviesvorm.md` §5: de titelrij
+hardop, de kneep per slide, en de vraag of de ontvanger met alleen deze deck het besluit kan
+nemen. Wat daar sneuvelt is een contentfout en gaat terug naar de outline, niet naar de opmaak.
 
 ## Stap 5 — Opleveren
 

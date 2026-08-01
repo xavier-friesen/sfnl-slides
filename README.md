@@ -44,6 +44,7 @@ ze delen geen bestanden en importeren niet over de grens.
 ```
 skills/sfnl-slides/SKILL.md     de route: intake, outline, zes bouwaanroepen, de loop
 reference/vormentaal.md         de maatstaf in proza — waar de lat ligt
+reference/adviesvorm.md         de laag erboven — antwoord voorop, exhibitcraft, weigerlijst
 reference/sjabloon.md           geometrie, layouts, placeholderdozen, acht valkuilen
 reference/voice.md              de taal op de slide
 agents/deck-visual-reviewer.md  de visuele beoordeling, als subagent

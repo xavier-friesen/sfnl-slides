@@ -415,6 +415,12 @@ def hoogte_van(paras: list[tuple[str, float, str]], breedte: float, *,
     Dit is de functie die 'een blok is zo hoog als zijn inhoud' uitvoerbaar maakt. Zonder
     meten wordt het een intentie, en dan krijg je vier kaarten waarvan de onderste helft
     leeg gekleurd vlak is.
+
+    De meting is strak, en PowerPoint zet nét ruimer: de regelhoogte volgt hier 1,12 x pt,
+    terwijl PowerPoint de fontmetriek van de familie meeneemt. Nagemeten gevolg: een
+    paneel met drie alinea's op precies deze hoogte liet zijn laatste regel onder de rand
+    uitsteken. Geef een gevuld blok met meerdere alinea's daarom ~0,2 in boven de meting,
+    en laat de render oordelen.
     """
     l, r, t, b = insets
     bruikbaar = breedte - l - r

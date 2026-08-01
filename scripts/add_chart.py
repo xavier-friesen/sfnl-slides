@@ -28,6 +28,13 @@ per series with `--series-colors`, which takes the brand names:
 That realisatie-navy / prognose-oranje pairing is the house coding for a chart that
 shows realisation against a forecast; use it whenever the chart has that meaning.
 
+`--highlight <categorie>` is the focus colour from `adviesvorm.md` §2: on a
+single-series bar chart it puts that one category in orange and every other bar in
+navy, so the chart points at its own message. It refuses multi-series charts and
+non-bar types instead of colouring something ambiguous:
+
+    --highlight 2025                   de staaf van 2025 oranje, de rest navy
+
 Data labels are on by default when the chart has 8 points or fewer and off above that —
 `--labels` forces them on, `--no-labels` forces them off. Chart text is Lato Light.
 Gridlines, chart title and shadows stay off: the slide title already says what the
@@ -127,6 +134,27 @@ COLOUR_NAMES = {
 
 # Data labels help up to this many plotted points; beyond it they turn into noise.
 LABEL_POINT_LIMIT = 8
+
+# --highlight colours per-point fills, which only means something on a bar mark.
+HIGHLIGHT_TYPES = {"bar", "bar_h"}
+
+
+def apply_highlight(chart, categories: list, category: str) -> int:
+    """Focus colour: the named category orange, every other point navy."""
+    if category not in categories:
+        raise SystemExit(
+            f"--highlight {category!r} staat niet in de categorieën: "
+            + ", ".join(str(c) for c in categories)
+        )
+    focus = categories.index(category)
+    series = chart.plots[0].series[0]
+    for index, point in enumerate(series.points):
+        point.format.fill.solid()
+        point.format.fill.fore_color.theme_color = (
+            MSO_THEME_COLOR.ACCENT_1 if index == focus else MSO_THEME_COLOR.ACCENT_6
+        )
+        point.format.line.fill.background()
+    return focus
 
 BODY_FONT = "Lato Light"
 CONTENT_ZONE = (0.48, 1.93, 12.52, 5.00)
@@ -264,11 +292,17 @@ def main() -> None:
         dest="series_colors",
         help="per series, e.g. navy,oranje (realisatie, prognose)",
     )
+    parser.add_argument(
+        "--highlight",
+        help="focuskleur: deze categorie oranje, de rest navy (één reeks, bar/bar_h)",
+    )
     parser.add_argument("--legend", default="bottom", choices=["bottom", "right", "top", "none"])
     parser.add_argument("--out", type=Path, help="write here instead of in place")
     args = parser.parse_args()
 
-    payload = json.loads(args.data.read_text(encoding="utf-8"))
+    # utf-8-sig: op Windows schrijft PowerShells Out-File een BOM, en die is geen reden
+    # om een verder geldige chart.json te weigeren.
+    payload = json.loads(args.data.read_text(encoding="utf-8-sig"))
     categories = payload["categories"]
     series = payload["series"]
     number_format = payload.get("number_format")
@@ -278,6 +312,20 @@ def main() -> None:
             f"een {args.type}-diagram plot één reeks; je geeft er {len(series)} "
             f"({', '.join(series)}). Kies bar of splits de slide."
         )
+
+    if args.highlight is not None:
+        if args.type not in HIGHLIGHT_TYPES:
+            raise SystemExit(
+                f"--highlight kleurt staven en werkt niet op {args.type} — "
+                f"kies uit: {', '.join(sorted(HIGHLIGHT_TYPES))}"
+            )
+        if len(series) > 1:
+            raise SystemExit(
+                f"--highlight is de focuskleur op één reeks; je geeft er {len(series)}. "
+                "Gebruik --series-colors om reeksen te coderen."
+            )
+        if args.series_colors:
+            raise SystemExit("--highlight en --series-colors sluiten elkaar uit")
 
     series_colours = parse_series_colours(args.series_colors)
     if series_colours and len(series_colours) < len(series):
@@ -357,6 +405,8 @@ def main() -> None:
         chart_type=args.type,
         series_colours=series_colours,
     )
+    if args.highlight is not None:
+        apply_highlight(graphic_frame.chart, categories, args.highlight)
 
     out = args.out or args.deck
     presentation.save(str(out))
@@ -368,6 +418,7 @@ def main() -> None:
             "series": list(series),
             "categories": len(categories),
             "labels": labels,
+            "highlight": args.highlight,
             "placed_in": placed_in,
             "box_in": [
                 round(graphic_frame.left / EMU_PER_INCH, 3),

@@ -364,14 +364,23 @@ def process(
                 entry["height_in"] = round(box[3] / EMU_PER_INCH, 3)
 
         if mode_checked:
-            if mode == "a" and subtitle_text:
+            # Een subtitel mag in modus A — hij draagt de periode, de afbakening of het
+            # scenario (zie de outline-stap in de skill). Wat niet mag is de combinatie
+            # die elkaar raakt: een titel van twee regels groeit tot over de subtitel.
+            # Een subtitel die nog zijn {{MARKER}} draagt is niet gevuld; clean.py haalt
+            # hem weg.
+            subtitle_filled = bool(
+                subtitle_text and not re.match(r"^\{\{[^{}]+\}\}$", subtitle_text.strip())
+            )
+            if mode == "a" and subtitle_filled and entry.get("lines", 1) > 1:
                 problem(
                     position,
                     slide_path.name,
                     "mode",
-                    "modus A heeft geen subtitel, maar de subtitel-placeholder is gevuld "
-                    f"({subtitle_text!r}) — een titel van twee regels loopt eroverheen. "
-                    "Haal de subtitel weg of bouw de deck in modus B.",
+                    f"de titel loopt over {entry['lines']} regels en de "
+                    f"subtitel-placeholder is gevuld ({subtitle_text!r}) — de gegroeide "
+                    "titelbox loopt over de subtitel heen. Schrijf de titel korter of "
+                    "haal de subtitel weg.",
                 )
             if mode == "b" and entry.get("lines", 1) > 1:
                 problem(

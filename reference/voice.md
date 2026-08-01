@@ -1,6 +1,7 @@
 # Inhoud en register
 
-Wat er op de slide staat en hoe het klinkt. Vorm staat in `brand.md`.
+Wat er op de slide staat en hoe het klinkt. Vorm staat in `vormentaal.md`; wat een deck
+beslisklaar maakt in `adviesvorm.md`.
 
 ## De bindende toets: leave-behind
 
@@ -37,7 +38,7 @@ een defect, geen stijlkeuze.
 - Percentages met het teken direct achter het getal: `71%`.
 - Een verhouding die de boodschap draagt, maak je expliciet: niet "1,1 mln op 6,8 mln"
   laten staan, maar "circa 16 cent per euro schuld".
-- Een reeks van drie of meer perioden hoort in een tabel, niet in een zin (`brand.md`).
+- Een reeks van drie of meer perioden hoort in een tabel, niet in een zin (`vormentaal.md` §12).
 
 **Elk getal dat je zélf hebt uitgerekend, reken je na.** Een cijfer uit de bron is
 herleidbaar; een cijfer dat jij eruit hebt afgeleid is dat niet, en juist daar zitten de
@@ -106,9 +107,11 @@ Altijd in kapitalen. Nooit een punt. Nooit een uitroepteken.
 
 Twee modi, en je kiest er één voor de hele deck.
 
-**Modus A — titel als volle zin.** De default. De titel draagt de boodschap zelf,
-er is geen subtitel. Streef naar kort, maar de zin mag lopen. Hard maximum: twee
-tekstregels. Het lettertype wordt nooit verkleind om een titel te laten passen —
+**Modus A — titel als volle zin.** De default. De titel draagt de boodschap zelf.
+Een subtitel mag, maar alleen voor wat nergens anders past — de periode, de
+afbakening, het scenario — en alleen bij een titel van één regel: een titel van twee
+regels groeit over de subtitelpositie heen. Streef naar kort, maar de zin mag lopen.
+Hard maximum: twee tekstregels. Het lettertype wordt nooit verkleind om een titel te laten passen —
 past hij niet in twee regels, dan schrijf je hem korter.
 
 **Modus B — hoofdstuk plus subtitel.** Voor decks met duidelijke hoofdstukken, dus
@@ -134,13 +137,13 @@ De subtitel alleen is nooit de drager. Kies per slide één drager:
 | Het heldgetal | De boodschap ís een cijfer: `0,8%`, `€ 20 mln`, `41 dagen` — groot, met eenheid en periode erbij |
 | De compositie zelf | De boodschap ís de vorm: het stroomschema dat de route toont, de icoontegels die de zes partijen benoemen, de 100%-staaf die de verhouding is |
 | Een vette openingsregel in het eerste blok | De boodschap is een constatering zonder cijfer: één regel Lato Light 14pt vet bovenaan de compositie |
-| De afsluitband | De boodschap is een conclusie of een advies die er echt voordeel van heeft: navy band met vetgezette aanloop. **De laatste keuze van de vier**, niet de eerste — geen band is de default, en een band draagt per slide een reden (`brand.md`, §Afsluitband) |
+| De afsluitband | De boodschap is een conclusie of een advies die er echt voordeel van heeft: navy band met vetgezette aanloop. **De laatste keuze van de vier**, niet de eerste — geen band is de default, en een band draagt per slide een reden (`vormentaal.md` §10) |
 
 De subtitel blijft daarnaast wat hij is: één leidende zin, of hij vervalt. Wat hij niet meer
 is, is de enige plek waar staat wat de lezer moet onthouden.
 
-De outline legt dit per slide vast op de regel **Drager van de boodschap** (zie
-`sfnl-ppt-outline`). Staat daar niets, dan gaat de slide niet naar de bouwstap.
+De outline legt dit per slide vast op de regel **Drager** (zie de outline-stap in de
+skill). Staat daar niets, dan gaat de slide niet naar de bouwstap.
 
 In modus A speelt dit niet: daar draagt de titel de bewering zelf. De contentzone blijft er
 wel bewijs voor leveren — dat is de verticale logica.
@@ -265,7 +268,7 @@ Wat een dun deck wél vult, en niets ervan is verzonnen:
 
 1. **Het mechanisme.** Hoe werkt de constructie, wie betaalt wanneer, wat gebeurt er bij
    welke uitkomst. Dat weet je zonder klantcijfers, en het is precies waar een stroomschema
-   voor is (`xml-editing.md`, §Drie schema's): vier genummerde stappen met een pijl ertussen
+   voor is: vier genummerde stappen met een pijl ertussen
    vullen een slide beter dan vier bullets, en ze leggen iets uit.
 2. **De werkwijze van SFNL, generiek en feitelijk.** Hoe een haalbaarheidsonderzoek verloopt,
    wat er in een businesscase staat, welke rollen een resultaatfinanciering kent, wat SFNL in
@@ -327,8 +330,9 @@ voor aanhalingstekens. Ook in kapitalen, waar de fout het vaakst blijft staan:
 `RISICO’S` en `SCENARIO’S`, niet `RISICO'S` en `SCENARIO'S`.
 
 `set_text.py` normaliseert een rechte apostrof in een woord naar `’`, en
-`qa_typography.py` flagt rechte apostrofs en aanhalingstekens in zichtbare tekst. In
-handgeschreven XML gebruik je de entities uit `xml-editing.md`. Vertrouw niet op de
+`qa_text.py` flagt rechte apostrofs en aanhalingstekens in zichtbare tekst. In
+handgeschreven XML gebruik je entiteiten voor de typografische tekens (`sjabloon.md`,
+Valkuilen). Vertrouw niet op de
 normalisatie: een deck waarin één slide de rechte variant heeft, leest als twee decks.
 
 ## Kort en menselijk, niet uitputtend

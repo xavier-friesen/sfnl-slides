@@ -9,6 +9,8 @@ Example:
     python clean.py unpacked/
 
 This script removes:
+- Placeholder shapes on slides that are empty or still carry their {{MARKER}} prompt —
+  what you leave unfilled disappears here, so an unfilled subtitle never reaches QA
 - Orphaned slides (not in sldIdLst) and their relationships
 - [trash] directory (unreferenced files)
 - Orphaned .rels files for deleted resources
@@ -386,12 +388,55 @@ def remove_layouts(unpacked_dir: Path, doomed: set[str]) -> list[str]:
     return removed
 
 
+MARKER_RE = re.compile(r"^\{\{[^{}]+\}\}$")
+_P_NS = "http://schemas.openxmlformats.org/presentationml/2006/main"
+_A_NS = "http://schemas.openxmlformats.org/drawingml/2006/main"
+
+
+def remove_empty_placeholders(unpacked_dir: Path) -> list[str]:
+    """Verwijder placeholder-shapes zonder inhoud of met alleen hun {{MARKER}}-prompt.
+
+    Dit is de belofte "wat je leeg laat haalt clean.py eruit" uit de skill. Zonder deze
+    stap blijft een niet-gevulde subtitel als {{SUBTITEL}} op de slide staan en blokkeert
+    qa_text.py de oplevering — en de verleiding is dan een tweede set_text-aanroep met
+    --drop-empty, die alles sloopt wat je in die aanroep níét noemt (zo is hier een keer
+    de titel van drie slides verdwenen). Titels worden nooit verwijderd: een lege titel
+    is een contentfout die zichtbaar moet blijven, geen opruimwerk.
+    """
+    from lxml import etree
+
+    removed = []
+    slides_dir = unpacked_dir / "ppt" / "slides"
+    if not slides_dir.is_dir():
+        return removed
+    for slide_path in sorted(slides_dir.glob("slide*.xml")):
+        tree = etree.parse(str(slide_path))
+        changed = False
+        for sp in tree.iter(f"{{{_P_NS}}}sp"):
+            ph = sp.find(f".//{{{_P_NS}}}ph")
+            if ph is None or ph.get("type") == "title":
+                continue
+            text = "".join(t.text or "" for t in sp.iter(f"{{{_A_NS}}}t")).strip()
+            if text and not MARKER_RE.match(text):
+                continue
+            sp.getparent().remove(sp)
+            idx = ph.get("idx", "?")
+            removed.append(f"{slide_path.name}: placeholder idx {idx} ({text or 'leeg'})")
+            changed = True
+        if changed:
+            tree.write(str(slide_path), xml_declaration=True, encoding="UTF-8",
+                       standalone=True)
+    return removed
+
+
 def clean_unused_files(
     unpacked_dir: Path,
     drop_unused_layouts: bool = False,
     drop_layouts: set[str] | None = None,
 ) -> list[str]:
     all_removed = []
+
+    all_removed.extend(remove_empty_placeholders(unpacked_dir))
 
     slides_removed = remove_orphaned_slides(unpacked_dir)
     all_removed.extend(slides_removed)
