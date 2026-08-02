@@ -32,6 +32,12 @@ staat het antwoord voorop.
 en de voorfinanciering van € 400.000?" is een besluitvraag. "Graag uw reactie" is er
 geen. Een deck dat om een besluit vraagt, zegt welk besluit, van wie, en wanneer.
 
+**Ook een informatiedeck kiest één ruggengraat.** Verhalend mag, maar dan is het één
+structuur voor de hele deck — situatie, complicatie, oplossing is de gangbaarste — en
+niet per hoofdstuk een andere. Een deck dat halverwege van verhaal naar
+antwoord-eerst springt, leest als twee decks. Kies de ruggengraat in de outline, bij
+de storyline, en houd hem vol.
+
 ## 2. Eén exhibit, één boodschap, en de boodschap staat erop
 
 De exhibit — grafiek, tabel, schema of verdeling — is het bewijs van de titel. Daaruit
@@ -130,7 +136,23 @@ mooier maken.
   outro, waar het sjabloon ze zet. Een foto tussen de exhibits vult ruimte die een
   argument had moeten vullen.
 
-## 5. De beslistoets op de render
+## 5. De bijlage vangt de voorspelbare vragen
+
+Er zit een spanning tussen twee regels die allebei waar zijn: de leave-behind-toets uit
+`voice.md` wil alles expliciet op de slide, en het antwoord-voorop-principe wil een
+hoofdlijn van weinig slides. De bijlage is hoe die twee samengaan.
+
+Schrijf bij de outline op welke vragen de lezer voorspelbaar gaat stellen — wat als de
+instroom tegenvalt, hoe is het bedrag opgebouwd, waarom deze gemeenten en niet die —
+en beantwoord elke vraag die de hoofdlijn niet draagt op één bijlageslide. Dezelfde
+vormentaal, dezelfde kaarttaal, een gewone action title; een bijlage is geen dumpplek
+voor halve slides. De hoofdlijn verwijst er niet naar ("zie bijlage 3" is metatekst);
+de bijlage bestaat voor het gesprek en voor de lezer die doorklikt.
+
+De toets andersom geldt ook: staat er in de bijlage een slide waar geen voorspelbare
+vraag bij hoort, dan is het geen bijlage maar niet durven schrappen.
+
+## 6. De beslistoets op de render
 
 De visuele loop uit de skill beoordeelt de vorm. Doe daarna, één keer, deze twee dingen
 op het contactblad:
