@@ -34,8 +34,10 @@ Lees deze dingen, in deze volgorde, en lees ze één keer voor de hele deck en n
 5. De docstring van `scripts/shapes.py` — de primitieven waarmee je tekent, en waarom die er zo
    uitzien.
 
-Draai daarna `python scripts/preflight.py`. Dat zegt of er een interpreter, de
-Python-afhankelijkheden, een renderer en de huisstijlfonts zijn. Is er geen renderer, lees dan
+Draai daarna `python "${CLAUDE_PLUGIN_ROOT}/scripts/preflight.py"` — alle scriptpaden in
+deze skill zijn relatief aan de plugin-map, dus aan `${CLAUDE_PLUGIN_ROOT}`, niet aan het
+project. Preflight zegt of er een interpreter, de Python-afhankelijkheden, een renderer en
+de huisstijlfonts zijn. Is er geen renderer, lees dan
 eerst **Zonder renderer** onderaan; dat verandert hoe je bouwt en wat je bij oplevering zegt.
 
 `reference/voice.md` gaat over de taal op de slide. Lees dat wanneer je de outline schrijft.
