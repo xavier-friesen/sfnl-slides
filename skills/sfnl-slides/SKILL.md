@@ -80,10 +80,6 @@ met het advies, de dragende argumenten en de besluitvraag, en aan het slot dezel
 met de vervolgstappen (`adviesvorm.md` §1). Begint de titelrij met context in plaats van met het
 advies, dan is dat een bewuste keuze die je in de outline motiveert.
 
-Zet onder de outline ook de **voorspelbare vragen** van de lezer, en per vraag of hij de
-hoofdlijn draagt of een bijlageslide wordt (`adviesvorm.md` §5). Een bijlageslide staat in de
-outline zoals elke slide, met titel en drager.
-
 ### Dan per slide
 
 - **Titel** — de action title: de bewering, niet het onderwerp. "De doorlooptijd daalde met 39
@@ -314,7 +310,7 @@ Wat je in de eerste ronde zelf al gaat zien, en wat geen regel voor je oplost:
   lettertype.
 - Een compositie die op 4,5 in ophoudt. Maak de elementen groter, niet het gat.
 
-Als de loop schoon is, doe je één keer de beslistoets uit `adviesvorm.md` §6: de titelrij
+Als de loop schoon is, doe je één keer de beslistoets uit `adviesvorm.md` §5: de titelrij
 hardop, de kneep per slide, en de vraag of de ontvanger met alleen deze deck het besluit kan
 nemen. Wat daar sneuvelt is een contentfout en gaat terug naar de outline, niet naar de opmaak.
 
