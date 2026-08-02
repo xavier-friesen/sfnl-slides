@@ -128,7 +128,9 @@ passende foto, kies dan één neutrale voor allemaal — consistentie boven vari
 
 **Cover en slot.** Slide 1 is layout 1, het 2×2 kleurraster met de foto en de witte logokaart.
 Past de dektitel niet op de layoutmaat, dan groeit het vak naar boven; kies niet layout 4 omdat
-de titel niet past, want dat levert de vlakkere cover op. Nooit de organisatienaam als kop. Een
+de titel niet past, want dat levert de vlakkere cover op. Nooit de organisatienaam als kop. De
+klant-en-datumregel (idx 13) vul je als lijst van twee: de klant op regel één, de datum op
+regel twee — als één regel breekt hij op de smalle placeholdermaat midden in de datum. Een
 extern deck eindigt op layout 2 of 3, de oranje outro zonder tekstplaceholders. Een intern deck
 eindigt op de beslis- of adviesslide.
 
@@ -284,6 +286,11 @@ bij opslaan, en een `pack` daarna sloopt de grafieken die je net hebt toegevoegd
 
 Een echte reeks over tijd, een verdeling of een vergelijking van meer dan zes categorieën is
 een native grafiek. Handgetekende staafjes zijn dat niet.
+
+De hoogte van een tabelbox volgt uit de rijen — ongeveer 0,36 in voor de kop plus 0,45 per
+rij — en niet uit de restruimte van de zone. `add_table.py` verdeelt de gevraagde hoogte over
+de rijen, dus een te hoge box levert zwevende scheidingslijnen met lucht ertussen op: dezelfde
+fout als een blok oprekken tot de zone vol is (`vormentaal.md` §6), maar dan voor een tabel.
 
 ## Stap 4 — De visuele loop
 

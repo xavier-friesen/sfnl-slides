@@ -194,6 +194,10 @@ def run(tekst: str, font: str, pt: float, kleur="navy", *,
     b = ' b="1"' if vet else ""
     s = f' spc="{spc}"' if spc is not None else ""
     c = ' cap="all"' if caps else ""
+    # De eenheid blijft bij het getal (voice.md): een gewone spatie na het euroteken
+    # laat "€" op de vorige regel achter zodra de regel daar breekt. Vastgezet met een
+    # non-breaking space, zodat de regel dat nooit kan.
+    tekst = tekst.replace("€ ", "€ ")
     esc = (tekst.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;"))
     hue, alpha = _split(kleur)
     return (f'<a:r><a:rPr lang="nl-NL" sz="{int(round(pt * 100))}"{b}{s}{c} dirty="0">'
@@ -356,8 +360,17 @@ def groep(naam: str, x: float, y: float, w: float, h: float, kinderen: list[str]
 # ---------------------------------------------------------------- meten
 
 def regelhoogte(pt: float) -> float:
-    """Regelhoogte in inch bij 112% regelafstand: 1.12 x pt / 72."""
-    return 1.12 * pt / 72.0
+    """Regelhoogte in inch, nagemeten op de PowerPoint-render: 1.34 x pt / 72.
+
+    Niet 1.12. De 112% uit `para()` vermenigvuldigt de NATUURLIJKE regelhoogte van het
+    font, en die is bij Lato en Montserrat ongeveer 1,2 em -- samen 1,12 x 1,2 = 1,34.
+    De oude waarde 1.12 mat elke tekst ~20% te krap, en dat is de oorzaak van drie
+    afzonderlijke overloopdefecten in twee validatiedecks: een paneel waarvan de
+    laatste regel achter de bronregel verdween, een afwegingsblok dat achter een band
+    wegviel, en een kaartrij die uit de zone liep. Gemeten op de render: 16pt Lato op
+    112% zet op een pitch van 0,30 in, en 0,30 x 72 / 16 = 1,35.
+    """
+    return 1.34 * pt / 72.0
 
 
 def _meet_breedte(tekst_: str, font: str, pt: float) -> float | None:

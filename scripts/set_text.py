@@ -211,6 +211,10 @@ def write_paragraphs(
                 if repaired != text:
                     fixed += 1
                     text = repaired
+            # De eenheid blijft bij het getal (voice.md): een non-breaking space na
+            # het euroteken, anders blijft "€" op de vorige regel achter zodra de
+            # regel daar breekt.
+            text = text.replace("€ ", "€ ")
             r = etree.SubElement(node, f"{{{A}}}r")
             rpr = etree.SubElement(r, f"{{{A}}}rPr")
             rpr.set("lang", run.get("lang", "nl-NL"))
