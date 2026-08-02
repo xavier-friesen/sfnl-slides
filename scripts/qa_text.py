@@ -16,9 +16,12 @@ de render, niet van een meting. De vorige versie van dit script deed dat wel, sa
 `qa_fit.py` en `qa_typography.py`, en het resultaat was dat de bouwer regels ging vermijden
 in plaats van slides ging maken.
 
-De vier bevindingen met severity `critical` betekenen allemaal "dit mag niet naar een klant"
-en geen van de vier gaat over vormgeving. De rest is `warn`: het kan kloppen, kijk er even
-naar.
+De bevindingen met severity `critical` betekenen allemaal "dit mag niet naar een klant"
+en geen ervan gaat over vormgeving. Daar hoort ook autofit bij: een vak waarin PowerPoint
+de tekst stil mag krimpen (`normAutofit`, of een placeholder die hem uit de layout erft)
+is een defect, want het font gaat nooit omlaag om passend te worden. Liever tekst die
+zichtbaar te lang is en een mens die beslist, dan een vak dat zichzelf stilletjes
+verkleint. De rest is `warn`: het kan kloppen, kijk er even naar.
 
 Output is compacte JSON. Exit 1 zodra er een `critical` staat, of bij `--strict` ook op een
 `warn`.
@@ -115,22 +118,40 @@ def is_title(shape, layout: int | None) -> bool:
     return layout in HEADLINE_BY_IDX_LAYOUTS and fmt.idx in {10, 14}
 
 
+def walk(shapes):
+    """Alle vormen, groepen doorlopen."""
+    for shape in shapes:
+        if getattr(shape, "shape_type", None) is not None and shape.shape_type == 6:
+            yield from walk(shape.shapes)
+            continue
+        yield shape
+
+
 def runs_of(slide):
     """(shape, run) voor elke tekstrun op de slide, groepen doorlopen."""
-
-    def walk(shapes):
-        for shape in shapes:
-            if getattr(shape, "shape_type", None) is not None and shape.shape_type == 6:
-                yield from walk(shape.shapes)
-                continue
-            yield shape
-
     for shape in walk(slide.shapes):
         if not getattr(shape, "has_text_frame", False) or is_chrome(shape):
             continue
         for paragraph in shape.text_frame.paragraphs:
             for run in paragraph.runs:
                 yield shape, run
+
+
+def autofit_status(shape) -> str | None:
+    """Hoe deze vorm met autofit omgaat: 'normAutofit'/'spAutoFit' als PowerPoint de
+    tekst mag krimpen of het vak mag oprekken, 'erft' als een placeholder geen eigen
+    keuze draagt en dus de layout volgt (en dit sjabloon zet daar normAutofit), en
+    None als er een expliciete <a:noAutofit/> staat of een eigen vorm geen keuze
+    nodig heeft (zonder element doet OOXML niets)."""
+    from pptx.oxml.ns import qn
+    body_pr = shape.text_frame._txBody.find(qn("a:bodyPr"))
+    if body_pr is not None:
+        for tag in ("a:normAutofit", "a:spAutoFit"):
+            if body_pr.find(qn(tag)) is not None:
+                return tag.split(":")[1]
+        if body_pr.find(qn("a:noAutofit")) is not None:
+            return None
+    return "erft" if getattr(shape, "is_placeholder", False) else None
 
 
 def analyse(deck: Path) -> dict:
@@ -149,6 +170,25 @@ def analyse(deck: Path) -> dict:
                 charts += 1
             if getattr(shape, "has_table", False):
                 tables += 1
+
+        for shape in walk(slide.shapes):
+            if not getattr(shape, "has_text_frame", False) or is_chrome(shape):
+                continue
+            status = autofit_status(shape)
+            if status is None:
+                continue
+            naam = getattr(shape, "name", "?")
+            if status == "erft":
+                add(findings, number, "autofit",
+                    f'"{naam}" draagt geen <a:noAutofit/> en erft dus de autofit van '
+                    "de layout, en dit sjabloon zet daar normAutofit. Zet noAutofit "
+                    "expliciet.", "critical")
+            else:
+                add(findings, number, "autofit",
+                    f'"{naam}" staat op {status}: PowerPoint mag de tekst stil '
+                    "krimpen of het vak oprekken. Zet <a:noAutofit/>; past de tekst "
+                    "dan niet, dan is dat zichtbaar op de render en beslist een mens "
+                    "— korter of een groter vak, nooit een kleiner font.", "critical")
 
         for shape, run in runs_of(slide):
             text = run.text

@@ -181,6 +181,18 @@ def write_paragraphs(
         raise SystemExit("placeholder zonder txBody")
     fixed = 0
 
+    # Autofit staat nooit aan: zonder expliciete <a:noAutofit/> erft de placeholder de
+    # normAutofit uit de layout en mag PowerPoint de tekst stil krimpen. Liever tekst
+    # die zichtbaar te lang is en een mens die beslist. qa_text.py keurt het ook af.
+    body_pr = body.find("a:bodyPr", NS)
+    if body_pr is None:
+        body_pr = etree.Element(f"{{{A}}}bodyPr")
+        body.insert(0, body_pr)
+    for tag in ("a:noAutofit", "a:normAutofit", "a:spAutoFit"):
+        for el in body_pr.findall(tag, NS):
+            body_pr.remove(el)
+    etree.SubElement(body_pr, f"{{{A}}}noAutofit")
+
     for para in body.findall("a:p", NS):
         body.remove(para)
 

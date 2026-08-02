@@ -226,7 +226,12 @@ Acht dingen die stil misgaan en die je niet kunt afleiden.
    DrawingML gewoon staan. (Deze naslag schreef eerder het omgekeerde voor.)
 5. **`<a:noAutofit/>` in élke `<a:bodyPr>` die je zelf schrijft.** Zonder die keuze mag
    PowerPoint de tekst schalen, en één vak op 90 procent haalt een hele rij uit de lijn. Past
-   de tekst niet, dan wordt het vak groter of de tekst korter — nooit het font kleiner.
+   de tekst niet, dan wordt het vak groter of de tekst korter — nooit het font kleiner. Let
+   op: de láyouts van dit sjabloon zetten zelf `normAutofit` op vrijwel elke placeholder, dus
+   een placeholder zonder eigen keuze erft het krimpen. `add_slide.py` en `set_text.py`
+   zetten daarom `noAutofit` op elke placeholder die ze aanmaken of vullen, en `qa_text.py`
+   keurt elk tekstvak af waar autofit aan staat of geërfd wordt — liever tekst die zichtbaar
+   te lang is en een mens die beslist, dan een vak dat zichzelf stilletjes verkleint.
 6. **Entiteiten voor de typografische aanhalingstekens** in de XML.
 7. **`idx 0` bestaat niet op elke layout.** Op de covers (1, 4) en de sectiedividers (6 t/m 16)
    is er geen titelplaceholder met idx 0; de kop is daar idx 10 of idx 14.
