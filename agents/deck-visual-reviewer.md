@@ -146,10 +146,19 @@ Waar je per slide naar kijkt:
 - **Calibri.** Leest de tekst in een eigen vorm ineens als een andere letter dan de rest, dan
   mist die run een `<a:latin/>`. Placeholders erven hun font en gaan niet mis; eigen vormen
   vallen terug op Calibri.
-- **Kleur die niets codeert.** Zou de lezer informatie verliezen als het kleurverschil wegviel?
-  Zo niet, dan is het decoratie. Let op de twee kanten: vier kleuren waar vier keer hetzelfde
-  staat, én één set gelijkwaardige items die op slide 4 sky en op slide 11 emerald draagt.
-  Meerdere accenten op één slide zijn géén bevinding zolang ze onderscheiden.
+- **Kleur die niets codeert.** Stel per hue de vraag: wat codeert deze kleur, in één woord? Kun
+  je dat niet zeggen, dan is het decoratie en hoort er één accent te staan. Zou de lezer
+  informatie verliezen als het kleurverschil wegviel? Zo niet, dan gaat het eruit.
+  Let op de drie kanten. Vier kleuren waar vier keer hetzelfde staat. Eén set gelijkwaardige
+  items die op slide 4 sky en op slide 11 emerald draagt. En het geval dat het vaakst voorkomt:
+  twee blokken naast elkaar die samen één werkstroom of één opsomming vormen — "opslaan" en
+  "terugvinden", "stap 1" en "stap 2" — met een kop in twee verschillende hues. Daar is niets
+  tegengesteld, dus die twee kleuren beweren een tegenstelling die er niet is; één accent op
+  beide zegt hetzelfde.
+  Meerdere accenten op één slide zijn géén bevinding zodra ze werkelijk onderscheiden: kost
+  tegenover baat, wat werkt tegenover wat knelt, of een set categorieën die door de deck
+  terugkomt. `qa_text.py` zet per accent in de JSON op welke slides hij staat; een hue die op
+  één slide staat en nergens terugkomt is bijna altijd decoratie.
 - **Consistentie binnen de deck.** Kaarten en blokken zien er in de hele deck hetzelfde uit.
   Afgeronde hoeken zijn geen bevinding; afgeronde hoeken náást rechte hoeken in dezelfde deck
   wel. Krijgen twee blokken die hetzelfde niveau dragen een andere behandeling, dan is dat een

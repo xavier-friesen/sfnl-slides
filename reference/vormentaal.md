@@ -75,9 +75,13 @@ Zonder spatiëring leest caps als geschreeuw in plaats van als label.
 ## 3. Kleur zit ook in de letter
 
 Dit is het middel dat het meest ontbrak. In alle tien de referentieslides staat minstens één
-accent als **tekstkleur op wit**: een kolomkop van 18pt SemiBold in emerald naast een van 18pt
-in grapefruit, een getal van 32pt in oranje, een toelichtingsregel in de kleur van de rij waar
-hij bij hoort. De afgekeurde deck had 31 gevulde vlakken en nul gekleurde letters.
+accent als **tekstkleur op wit**: `WAT WERKT` in emerald naast `WAT KNELT` in grapefruit, een
+getal van 32pt in oranje, een toelichtingsregel in de kleur van de rij waar hij bij hoort. De
+afgekeurde deck had 31 gevulde vlakken en nul gekleurde letters.
+
+Let op waarom die twee kolomkoppen in `maatstaf/04` twee verschillende hues dragen: het is een
+tegenstelling, en de kleur zegt welke kant je leest. Dat is de reden dat er twee zijn, en niet
+dat twee kolommen twee kleuren krijgen.
 
 Een gekleurde letter is stiller dan een gevuld blok en zegt hetzelfde. Waar je een kopbalk van
 een halve inch zou tekenen, kan de kop zelf de kleur dragen.
@@ -102,15 +106,33 @@ tekst. Dat is een bewuste keuze die je op de render controleert, geen default �
 bovenkant van de dragerband, dus deze uitzondering geldt alleen voor de grootste drager in de
 deck. Staat je drager op 28 of 32pt, dan is de tekst op een volle lichte hue navy.
 
-**Rol naar hue, één keer en dan vasthouden.** Schrijf op welke categorie welke kleur krijgt
-zodra je die keuze de eerste keer maakt, en beslis er daarna niet meer over. Dezelfde rol die
+**Eén accent, tenzij kleur iets te coderen heeft.** Dit is de andere kant van hetzelfde en het
+gaat even vaak mis. Kies voor de deck één accentkleur naast navy en houd die vast; een tweede
+of derde hue komt er alleen bij wanneer er iets te onderscheiden is dat de lezer apart moet
+houden — categorieën, werkstromen, stappen in een proces, of twee kanten van een afweging.
+
+De toets is één vraag, en je stelt hem per kleur: **wat codeert deze hue, in één woord?** Kun
+je dat niet zeggen, dan gaat de kleur eruit en wordt het het accent van de deck.
+
+Waar het misgaat: twee kaarten naast elkaar die samen één werkstroom vormen — "opslaan" links
+en "terugvinden" rechts — met een emerald kop op de een en een royal kop op de ander. Er is
+niets tegengesteld aan die twee, de lezer leest ze achter elkaar en hoeft ze nooit te
+vergelijken. Twee hues suggereren daar een tegenstelling die er niet is. Één accent op beide
+koppen zegt hetzelfde en leest rustiger. Twee hues zijn wél op hun plek bij kost tegenover
+baat, nu tegenover straks, of een set van vier categorieën die door de hele deck terugkomt.
+
+**Rol naar hue, één keer en dan vasthouden.** Heb je besloten dat kleur iets codeert, schrijf
+dan op welke categorie welke kleur krijgt, en beslis er daarna niet meer over. Dezelfde rol die
 op slide 4 sky draagt en op slide 11 emerald, betekent dat de kleur decoratie is geworden. De
 vaste laag: grapefruit is kost of waarschuwing, emerald is baat, navy is structuur en totaal,
 oranje is het resultaat en het punt waar het om gaat. Sky en royal zijn vrij voor categorieën
 zonder eigen lading.
 
 Twee categorieën in dezelfde set krijgen nooit dezelfde hue. En één hue voor alles is het
-defect uit de afgekeurde deck.
+defect uit de afgekeurde deck — maar let op de verkeerde lezing daarvan: dat defect was één
+lichte tint over vier slides die vier verschillende dingen deden, niet één accent dat consequent
+één ding betekent. `qa_text.py` zet per accent in de JSON op welke slides hij staat, en een hue
+die op één slide staat en nergens terugkomt is bijna altijd decoratie.
 
 ## 4. Een container is bijna wit
 
