@@ -22,12 +22,6 @@ uit de layout, en op de slide zelf is de letter Montserrat Light of Lato Light. 
 frequentie van de drager is een `warn`: staat er op elke slide letter van 28pt of groter,
 dan trekt die maat geen aandacht meer. Beide zijn hard te tellen en geen smaakoordeel.
 
-Eén ding staat in de JSON zonder bevinding erbij: `hues`, per accentkleur de slides waar hij
-op staat. Of een kleur iets codeert is niet te tellen — dat weet alleen wie de inhoud kent —
-maar wáár een hue staat wel. Twee accenten die elk op één slide staan en nergens terugkomen
-zijn meestal decoratie; een hue die door de hele deck bij dezelfde rol hoort, is een taal.
-Lees die regel dus als een vraag: wat codeert deze kleur, in één woord?
-
 De bevindingen met severity `critical` betekenen allemaal "dit mag niet naar een klant"
 en geen ervan gaat over vormgeving. Daar hoort ook autofit bij: een vak waarin PowerPoint
 de tekst stil mag krimpen (`normAutofit`, of een placeholder die hem uit de layout erft)
@@ -52,14 +46,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from pptx import Presentation  # noqa: E402
 
 from _deck import BRAND_FONTS, emit  # noqa: E402
-from shapes import DRAGER_PLAFOND, DRAGER_VLOER, HUE, TITELFONT  # noqa: E402
-
-#: `accent1` terug naar `oranje`, zodat de huerapportage merknamen geeft. `accent6` staat er
-#: niet bij en dat is geen omissie: in dit thema is accent6 exact dezelfde kleur als dk2
-#: (201B5C, navy). Navy is structuur en nooit een kleurkeuze, dus hij hoort niet in een
-#: telling die de vraag "codeert deze kleur iets" moet helpen beantwoorden.
-SLOT_NAAR_HUE = {slot: naam for naam, slot in HUE.items() if slot.startswith("accent")}
-ACCENT_SLOT = re.compile(r'val="(accent[1-5])"')
+from shapes import DRAGER_PLAFOND, DRAGER_VLOER, TITELFONT  # noqa: E402
 
 # `{{IETS}}` uit een concept, en een niet-gesloten `{{` die de eerste niet vangt.
 MARKER = re.compile(r"\{\{[A-Z0-9 _-]{2,40}\}\}")
@@ -181,7 +168,6 @@ def analyse(deck: Path) -> dict:
     charts = tables = 0
     contentslides = 0
     slides_met_drager: list[int] = []
-    hues: dict[str, list[int]] = {}
 
     for number, slide in enumerate(presentation.slides, start=1):
         has_text = False
@@ -190,12 +176,6 @@ def analyse(deck: Path) -> dict:
         titels = {id(s) for s in walk(slide.shapes) if is_title(s, layout)}
         if layout not in HEADLINE_BY_IDX_LAYOUTS | INTENTIONALLY_BLANK_LAYOUTS:
             contentslides += 1
-            # Welke accenten staan er op deze slide, ongeacht of ze in een vulling, een
-            # lijn of een letter zitten. Geen oordeel: de vraag "codeert die kleur iets"
-            # is niet te tellen, maar wél te stellen zodra je ziet waar een hue staat.
-            for slot in set(ACCENT_SLOT.findall(slide._element.xml)):
-                naam = SLOT_NAAR_HUE.get(slot, slot)
-                hues.setdefault(naam, []).append(number)
 
         for shape in slide.shapes:
             if getattr(shape, "has_chart", False):
@@ -334,7 +314,6 @@ def analyse(deck: Path) -> dict:
         "fonts": dict(fonts.most_common()),
         "contentslides": contentslides,
         "dragers": slides_met_drager,
-        "hues": {k: hues[k] for k in sorted(hues, key=lambda n: -len(hues[n]))},
         "findings": findings,
         "counts": {"critical": counts["critical"], "warn": counts["warn"]},
         "verdict": "blocked" if counts["critical"] else "clean" if not findings else "warn",

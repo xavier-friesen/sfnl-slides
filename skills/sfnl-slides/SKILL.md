@@ -73,10 +73,11 @@ neem je ze per slide opnieuw en dan verspringt de deck zonder dat iemand kan zie
 3. **Het accent, en of er meer dan één is.** Eén accentkleur naast navy is de default, en die
    houd je de hele deck vast. Meer hues komen er alleen bij als kleur iets codeert wat de lezer
    apart moet houden: categorieën, werkstromen, processtappen, of twee kanten van een afweging.
-   Schrijf dan per hue in één woord op wat hij betekent — grapefruit is kost of waarschuwing,
-   emerald is baat, navy is structuur, oranje is het punt; sky en royal zijn vrij — en beslis er
-   daarna niet meer over. Twee categorieën in dezelfde set krijgen nooit dezelfde hue, en twee
-   blokken die samen één werkstroom vormen krijgen nooit twee verschillende.
+   Schrijf dan hier per hue in één woord op wat hij betekent — grapefruit is kost of
+   waarschuwing, emerald is baat, navy is structuur, oranje is het punt; sky en royal zijn vrij —
+   en zet bij de slides waar kleur iets doet in de outline welke rol welke hue krijgt. Daarna
+   beslis je er niet meer over. Twee categorieën in dezelfde set krijgen nooit dezelfde hue, en
+   twee blokken die samen één werkstroom vormen krijgen nooit twee verschillende.
 4. **De twee registers.** Wijs aan welke slide bíjna helemaal wit wordt en welke echt verzadigd.
    Een deck waarin elke slide in het middengrijs ligt, is de deck die de vergelijking verloor.
 5. **De titelmodus** (`voice.md`, Titels). Modus A is de default: de titel is een volle zin die

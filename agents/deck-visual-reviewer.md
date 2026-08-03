@@ -157,8 +157,7 @@ Waar je per slide naar kijkt:
   beide zegt hetzelfde.
   Meerdere accenten op één slide zijn géén bevinding zodra ze werkelijk onderscheiden: kost
   tegenover baat, wat werkt tegenover wat knelt, of een set categorieën die door de deck
-  terugkomt. `qa_text.py` zet per accent in de JSON op welke slides hij staat; een hue die op
-  één slide staat en nergens terugkomt is bijna altijd decoratie.
+  terugkomt.
 - **Consistentie binnen de deck.** Kaarten en blokken zien er in de hele deck hetzelfde uit.
   Afgeronde hoeken zijn geen bevinding; afgeronde hoeken náást rechte hoeken in dezelfde deck
   wel. Krijgen twee blokken die hetzelfde niveau dragen een andere behandeling, dan is dat een

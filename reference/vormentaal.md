@@ -131,8 +131,10 @@ zonder eigen lading.
 Twee categorieën in dezelfde set krijgen nooit dezelfde hue. En één hue voor alles is het
 defect uit de afgekeurde deck — maar let op de verkeerde lezing daarvan: dat defect was één
 lichte tint over vier slides die vier verschillende dingen deden, niet één accent dat consequent
-één ding betekent. `qa_text.py` zet per accent in de JSON op welke slides hij staat, en een hue
-die op één slide staat en nergens terugkomt is bijna altijd decoratie.
+één ding betekent.
+
+Deze keuze hoort in de outline, bij de slides waar kleur iets doet. Daar is hij te overzien en
+te herzien voordat er iets gebouwd is; op de render is hij alleen nog te repareren.
 
 ## 4. Een container is bijna wit
 
