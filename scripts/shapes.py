@@ -32,13 +32,13 @@ Dit bestand maakt die vijf dingen even makkelijk als het gevulde vlak dat nu de 
 Gebruik
 -------
     import sys; sys.path.insert(0, "<plugin>/scripts")
-    from shapes import ZONE, Deck, cols, hoogte_van, para, run, vlak, lijn, write
+    from shapes import ZONE, Deck, cols, drager, hoogte_van, para, run, vlak, lijn, write
 
-    d = Deck(body=16, label=14, display=44)        # maten per rol, één keer per deck
+    d = Deck(body=16, label=14, display=32)        # maten per rol, één keer per deck
     xs, w = cols(3, 0.24)
     vormen = [
         vlak("Kaart 1", xs[0], 1.93, w, 2.4, vulling=("emerald", 9000), hoek=0.10,
-             tekst=[para(run("62", "Montserrat SemiBold", d.display, "emerald"))]),
+             tekst=[para(drager("62", d.display, "emerald"))]),
     ]
     write("unpacked/ppt/slides/slide3.xml", vormen)
 """
@@ -110,6 +110,20 @@ OP_VOL = {"navy": "wit", "royal": "wit",
           "oranje": "navy", "grapefruit": "navy", "sky": "navy", "emerald": "navy"}
 
 DISPLAY_VLOER = 40.0
+
+#: De band waarin een drager mag staan, en dat is een huisbesluit boven de meting. De
+#: winnende decks zetten hun grote getal op 44 tot 56pt, maar met die band eronder werd de
+#: aandachtstrekker op elke slide gezet, en dan trekt hij niets meer. De drager staat nu op
+#: 28 tot 40pt, en hij is de uitzondering: ten hoogste één slide op drie draagt hem.
+DRAGER_VLOER = 28.0
+DRAGER_PLAFOND = 40.0
+
+#: Gotham Bold is de titelletter en die erf je uit de layout -- je schrijft hem nooit zelf.
+#: Op de slide zelf is de letter licht: Montserrat Light of Lato Light. De drager staat in
+#: Montserrat Light, want een groot getal in een licht gewicht is stiller dan hetzelfde
+#: getal in een vet gewicht en zegt precies hetzelfde.
+TITELFONT = "Gotham Bold"
+DRAGERFONT = "Montserrat Light"
 
 
 def tekst_op(vulling: str | tuple, pt: float = 0) -> str:
@@ -188,9 +202,19 @@ def run(tekst: str, font: str, pt: float, kleur="navy", *,
     Een kapitaallabel krijgt letterspatiëring: `spc=150` tot en met 13pt, `spc=100`
     daarboven. Zonder spatiëring leest een caps-label als geschreeuw in plaats van als
     label.
+
+    Gotham Bold weigert deze functie. Die letter staat in de titel en komt uit de layout;
+    op de slide zelf is het Montserrat Light of Lato Light, met Montserrat SemiBold voor een
+    kop, een label of een aanhef.
     """
     if cursief:
         raise ValueError("cursief is in deze huisstijl niet toegestaan")
+    if font.strip().lower() == TITELFONT.lower():
+        raise ValueError(
+            f"{TITELFONT} schrijf je nooit zelf: dat is de titelletter en die erf je uit de "
+            f"layout. Op de slide is de letter licht -- {DRAGERFONT} voor een drager of een "
+            "kop, Lato Light voor lopende tekst."
+        )
     b = ' b="1"' if vet else ""
     s = f' spc="{spc}"' if spc is not None else ""
     c = ' cap="all"' if caps else ""
@@ -212,6 +236,26 @@ def label(tekst: str, pt: float = 14, kleur: str = "navy") -> str:
     """Kapitaallabel in Montserrat SemiBold met de juiste spatiëring."""
     return run(tekst, "Montserrat SemiBold", pt, kleur,
                spc=150 if pt <= 13 else 100, caps=True)
+
+
+def drager(tekst: str, pt: float, kleur: str = "navy", *, spc: int | None = None) -> str:
+    """De drager: het getal, de verhouding of het kernbegrip dat de slide draagt.
+
+    Altijd Montserrat Light, en dat is het punt. Een getal van 32pt in een licht gewicht
+    springt er even goed uit als hetzelfde getal in een vet gewicht, maar het schreeuwt niet
+    mee met de titel erboven -- en de titel is de enige plek waar Gotham Bold staat.
+
+    De maat moet in de band vallen: onder 28pt is er geen drager, boven 40pt is hij luider
+    dan de boodschap. Gebruik dit ten hoogste op één slide op drie; op de andere slides is
+    de drager gewicht en kleur (18pt SemiBold in de hue van zijn categorie) of de compositie
+    zelf.
+    """
+    if not DRAGER_VLOER <= pt <= DRAGER_PLAFOND:
+        raise ValueError(
+            f"drager op {pt}pt valt buiten de band {DRAGER_VLOER:.0f}-{DRAGER_PLAFOND:.0f}pt. "
+            "Daaronder springt er niets uit; daarboven neemt de drager de slide over."
+        )
+    return run(tekst, DRAGERFONT, pt, kleur, spc=spc)
 
 
 def aanhef(kop: str, rest: str, pt: float, kleur: str = "navy") -> list[str]:
@@ -463,24 +507,28 @@ class Deck:
     V2-deck kreeg: vier bodymaten en drie sluitregelmaten over vier slides, waardoor de
     zetting per slide verspringt zonder dat iemand kan zien waarom.
 
-    `display` is de drager: het getal, de verhouding of het kernbegrip dat de slide draagt.
-    Onder 40pt is er geen drager -- de geërfde titel van 24pt telt niet mee, want die staat
-    op elke slide en onderscheidt dus niets.
+    `display` is de maat van de drager: het getal, de verhouding of het kernbegrip dat de
+    slide draagt. Hij staat tussen 28 en 40pt. Onder 28pt springt er niets uit -- de geërfde
+    titel van 24pt telt niet mee, want die staat op elke slide en onderscheidt dus niets.
+    Boven 40pt neemt de drager de slide over, en dat is precies waar het misging: een
+    aandachtstrekker van 40pt op elke slide is geen aandacht meer. Zet hem op ten hoogste
+    één slide op drie, in Montserrat Light, via `drager()`.
     """
 
     body: float = 16
     label: float = 14
     sluit: float = 15
-    display: float = 44
+    display: float = 32
     voetnoot: float = 11
     hoek: float | None = None          # None = rechte hoeken, deckbreed
     rol_kleur: dict = field(default_factory=dict)
 
     def __post_init__(self):
-        if self.display < DISPLAY_VLOER:
+        if not DRAGER_VLOER <= self.display <= DRAGER_PLAFOND:
             raise ValueError(
-                f"display={self.display}pt is geen drager. Vanaf {DISPLAY_VLOER:.0f}pt "
-                "springt er iets uit; daaronder heeft de slide geen ingang."
+                f"display={self.display}pt valt buiten de band {DRAGER_VLOER:.0f} tot "
+                f"{DRAGER_PLAFOND:.0f}pt. Daaronder springt er niets uit; daarboven staat er "
+                "een aandachtstrekker die de slide overneemt."
             )
 
     def kleur(self, rol: str) -> str:

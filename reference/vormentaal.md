@@ -14,29 +14,33 @@ Lees dit één keer voordat je de eerste slide bouwt, samen met de tien voorbeel
 
 ---
 
-## 1. Elke slide heeft één drager, en die is groot
+## 1. Elke slide heeft één drager, en grote letter is daarvoor de uitzondering
 
 De drager is het element dat de boodschap draagt: één getal, één verhouding, één kernbegrip,
 één zin. Al het andere ondersteunt.
 
-**De maat is de helft van het werk.** In de winnende decks staat op vijf van de tien slides
-iets tussen 44 en 56pt. In de deck die het niet haalde is het grootste element in de
-contentzone 19pt. Dat is het verschil tussen een slide met een ingang en een slide die je moet
-gaan lezen om te weten waar je moet beginnen.
+**Hiërarchie is het werk, maat is er maar één middel voor.** In de deck die het niet haalde is
+het grootste element in de contentzone 19pt, en daardoor moet je hem gaan lezen om te weten
+waar je begint. Maar de correctie daarop is doorgeschoten: toen de band 40 tot 60pt was, stond
+er op élke slide een getal van 40pt, en een aandachtstrekker op tien van de tien slides trekt
+niets meer. Grote letter werkt doordat hij zeldzaam is.
 
-Twee toetsen, en je doet ze tijdens het bouwen en niet pas op de render:
+Dus: **ten hoogste één contentslide op drie draagt letter van 28pt of groter**, en op die
+slide staat hij één keer. Kies daarvoor de slides waar de boodschap werkelijk een getal of een
+verhouding ís — het resultaat, het bedrag, de doorlooptijd. Zet hem in Montserrat Light,
+tussen 28 en 40pt, via `drager()` in `shapes.py`; Gotham Bold gebruik je nooit in de
+contentzone, want dat is de titelletter en die erf je uit de layout.
 
-- Staat er in de contentzone iets van **40pt of groter**? De geërfde titel van 24pt telt niet
-  mee: die staat op elke slide en onderscheidt dus niets.
-- Is de drager minstens **tweeënhalf keer de bodymaat** op diezelfde slide? Loopt je hele
-  slide tussen 14 en 19pt, dan is er geen hiërarchie maar een verzameling.
+**Op de andere slides is de drager niet groot maar zwaar en gekleurd.** Dit is waar het in de
+praktijk misgaat, want de neiging is om te denken dat een slide zonder groot getal geen drager
+kán hebben. Dat kan wel: een kolomkop van 18pt Montserrat SemiBold in een accentkleur op wit
+terwijl de rest navy is, één rij die als enige een volle kleur draagt, een rangnummer, of de
+compositie zelf. Op de sterkste referentieslide zonder cijfers is de drager 18pt Montserrat
+SemiBold in emerald tegenover 18pt in grapefruit, op wit — verder niets.
 
-**Ook zonder getal is er een drager.** Dit is waar het in de praktijk misgaat, want de neiging
-is om te denken dat een conceptuele slide geen drager kán hebben. Dat kan wel: een kernbegrip
-van 28pt in de hue van zijn categorie, een rangnummer van 40pt, één rij die als enige een volle
-kleur draagt, of een kolomkop van 18pt SemiBold in een accentkleur op wit terwijl de rest navy
-is. Op de sterkste referentieslide zonder cijfers is de drager niet groot maar zwaar en
-gekleurd: 18pt Montserrat SemiBold in emerald tegenover 18pt in grapefruit, op wit.
+De toets die overal geldt: is de drager minstens **tweeënhalf keer de bodymaat** op diezelfde
+slide, of onderscheidt hij zich in gewicht en kleur? Loopt je hele slide op 16pt navy, dan is
+er geen hiërarchie maar een verzameling.
 
 De kneepoefening blijft de eindtoets: klein of onscherp bekeken moet de drager overblijven.
 Blijven de pijltjes of de kadertjes over, dan is de navigatie luider dan de boodschap.
@@ -47,10 +51,15 @@ Leg vóór de eerste slide vier getallen vast en gebruik overal die vier:
 
 | rol | richting | waarvoor |
 |---|---|---|
-| **drager** | 40 tot 60pt | het getal of begrip dat de slide draagt |
+| **drager** | 28 tot 40pt Montserrat Light | het getal of begrip dat de slide draagt, op ten hoogste één slide op drie |
 | **kop** | 18pt Montserrat SemiBold | kolomkop, kaartkop, rolnaam |
 | **body** | 16pt Lato Light | alles wat gelezen wordt |
 | **voetnoot** | 11pt | bron, eenheid, peildatum |
+
+De letter op de slide is licht: Lato Light voor wat gelezen wordt, Montserrat Light voor een
+drager of een citaat, en Montserrat SemiBold voor een kop, een label of een aanhef. Gotham Bold
+staat alleen in de titel, en die schrijf je niet zelf — hij komt uit de layout. Schrijf je hem
+toch in de contentzone, dan weigert `run()` het en blokkeert `qa_text.py` de deck.
 
 12pt is de dichte variant voor een kaartenrij van drie of meer of een tabelcel, en de vloer.
 14pt is het kapitaallabel. 10pt gebruik je niet meer.
@@ -67,7 +76,7 @@ Zonder spatiëring leest caps als geschreeuw in plaats van als label.
 
 Dit is het middel dat het meest ontbrak. In alle tien de referentieslides staat minstens één
 accent als **tekstkleur op wit**: een kolomkop van 18pt SemiBold in emerald naast een van 18pt
-in grapefruit, een getal van 44pt in oranje, een toelichtingsregel in de kleur van de rij waar
+in grapefruit, een getal van 32pt in oranje, een toelichtingsregel in de kleur van de rij waar
 hij bij hoort. De afgekeurde deck had 31 gevulde vlakken en nul gekleurde letters.
 
 Een gekleurde letter is stiller dan een gevuld blok en zegt hetzelfde. Waar je een kopbalk van
@@ -88,8 +97,10 @@ Daaronder is de tekst navy.
 
 **Op een volle vulling:** wit op navy en royal. Op de lichte accenten staat navy, want daar
 haalt wit 2,0 tot 3,1. Eén uitzondering, en die is nagemeten in de sterkste referentieslide:
-vanaf ongeveer 40pt mag wit ook op emerald, oranje en sky, want daar leest het cijfer als vorm
-en niet als tekst. Dat is een bewuste keuze die je op de render controleert, geen default.
+op 40pt mag wit ook op emerald, oranje en sky, want daar leest het cijfer als vorm en niet als
+tekst. Dat is een bewuste keuze die je op de render controleert, geen default — en 40pt is de
+bovenkant van de dragerband, dus deze uitzondering geldt alleen voor de grootste drager in de
+deck. Staat je drager op 28 of 32pt, dan is de tekst op een volle lichte hue navy.
 
 **Rol naar hue, één keer en dan vasthouden.** Schrijf op welke categorie welke kleur krijgt
 zodra je die keuze de eerste keer maakt, en beslis er daarna niet meer over. Dezelfde rol die

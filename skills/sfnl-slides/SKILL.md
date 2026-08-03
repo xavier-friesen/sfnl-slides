@@ -62,8 +62,11 @@ Vier vragen, en niet meer dan vier. Weet je een antwoord al uit de opdracht, sla
 Deze vier staan bovenaan `outline.md` en gelden voor elke slide. Neem je ze niet vooraf, dan
 neem je ze per slide opnieuw en dan verspringt de deck zonder dat iemand kan zien waarom.
 
-1. **De vier maten.** Drager 40 tot 60pt, kop 18pt, body 16pt, voetnoot 11pt. Eén maat per rol,
-   deckbreed.
+1. **De vier maten.** Drager 28 tot 40pt in Montserrat Light, kop 18pt Montserrat SemiBold,
+   body 16pt Lato Light, voetnoot 11pt. Eén maat per rol, deckbreed. Gotham Bold staat alleen
+   in de titel en komt daar uit de layout; in de contentzone schrijf je hem nooit. En de grote
+   drager is de uitzondering: ten hoogste één contentslide op drie draagt hem, want een
+   aandachtstrekker op elke slide trekt niets meer.
 2. **De kaarttaal.** Rechte hoeken of één absolute hoekradius, en welke vullingssoort de default
    is: container op alpha, wit met een haarlijn in de eigen hue, of vol. Halverwege wisselen is
    het defect dat het snelst opvalt.
@@ -104,7 +107,10 @@ advies, dan is dat een bewuste keuze die je in de outline motiveert.
 - **Boodschap** — in één zin: wat moet de lezer hiervan overhouden.
 - **Drager** — welk element de boodschap draagt, gekozen uit vier: een getal, de compositie
   zelf, een kop of kernbegrip in de hue van zijn categorie, of een sluitregel. Een slide zonder
-  drager gaat niet naar de bouwstap.
+  drager gaat niet naar de bouwstap. Grote letter is daarbij de uitzondering: wijs in de outline
+  aan welke slides de dragermaat van 28 tot 40pt krijgen — ten hoogste één op drie, en dat zijn
+  de slides waar de boodschap werkelijk een getal of een verhouding is. Op de rest draagt
+  gewicht en kleur.
 - **Plattegrond in vier woorden** — "drie kaarten, open onderkant", "tabel plus conclusie",
   "vier rijen". Zet ze onder elkaar en tel ze: komt één plattegrond meer dan twee keer voor, of
   staan er twee gelijke naast elkaar, dan herschik je hier. Na het bouwen kost dat een herbouw
@@ -211,17 +217,17 @@ structureel onbouwbaar, en de bouwer merkte dat niet.
 
 ```python
 import sys; sys.path.insert(0, "<plugin>/scripts")
-from shapes import (ZONE, Deck, aanhef, cols, hoogte_van, label, para, run, streep,
+from shapes import (ZONE, Deck, aanhef, cols, drager, hoogte_van, label, para, run, streep,
                     tekst, tekst_op, vlak, vulgraad, write)
 
-D = Deck(body=16, label=14, sluit=16, display=44)     # de vier maten, één keer
+D = Deck(body=16, label=14, sluit=16, display=32)     # de vier maten, één keer
 xs, w = cols(3, 0.24)                                 # raster
 h = hoogte_van([(kop, 18, "Montserrat SemiBold"),     # hoe hoog moet dit blok zijn
                 (txt, D.body, "Lato Light")], w)
 vormen = [
     vlak("Kop 62", xs[0], ZONE["y"], w, 1.35, vulling="emerald",
-         tekst=[para(run("62", "Montserrat SemiBold", D.display,
-                         tekst_op("emerald", D.display)), algn="ctr")], anchor="ctr"),
+         tekst=[para(drager("62", D.display,           # Montserrat Light, nooit Gotham
+                            tekst_op("emerald", D.display)), algn="ctr")], anchor="ctr"),
     vlak("Kaart A", xs[0], 3.28, w, h, vulling="container:emerald", lijn=("emerald", 1),
          tekst=[para(label(kop)), para(run(txt, "Lato Light", D.body), spc_voor=600)]),
 ]
@@ -231,7 +237,8 @@ write("unpacked/ppt/slides/slide3.xml", vormen)
 Wat de laag voor je regelt: alpha in plaats van `lumMod`, de `adj` van een `roundRect` uit een
 absolute radius, een lijn in dezelfde hue als de vulling, de expliciete `<a:latin/>` op elke run,
 `noAutofit`, de juiste elementvolgorde, `lnSpc` op 112 procent, en de tekstkleur die bij een
-vulling en een puntgrootte hoort. `Deck(display=...)` weigert een drager onder 40pt.
+vulling en een puntgrootte hoort. `Deck(display=...)` weigert een drager buiten 28 tot 40pt, en
+`run()` weigert Gotham Bold: die letter staat in de titel en komt uit de layout.
 
 `hoogte_van` en `vulgraad` zijn er om de val uit `vormentaal.md` §6 te vermijden: eerst meten hoe
 hoog de inhoud is, dan pas beslissen hoe je de restruimte verdeelt. Ruimte tussen de blokken is

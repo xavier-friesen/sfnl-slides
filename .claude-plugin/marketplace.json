@@ -8,8 +8,8 @@
   "plugins": [
     {
       "name": "sfnl-slides",
-      "description": "Bouw een SFNL-deck uit het officiële sjabloon waarbij de compositie per slide een ontwerpbeslissing is en geen invuloefening. Header geërfd uit master en layout, contentzone vrij, en de render is de enige vormbeoordeling. Eén skill, één poort (de outline), één loop. Sinds 0.2.0 met de adviesvorm-laag: antwoord voorop, exhibitcraft met focuskleur, schetsplicht en weigerlijst, voor beslisklare adviesdecks.",
-      "version": "0.2.0",
+      "description": "Bouw een SFNL-deck uit het officiële sjabloon waarbij de compositie per slide een ontwerpbeslissing is en geen invuloefening. Header geërfd uit master en layout, contentzone vrij, en de render is de enige vormbeoordeling. Eén skill, één poort (de outline), één loop. Sinds 0.2.0 met de adviesvorm-laag: antwoord voorop, exhibitcraft met focuskleur, schetsplicht en weigerlijst, voor beslisklare adviesdecks. Sinds 0.3.0 is de letter op de slide licht: Gotham Bold staat alleen in de titel, de drager staat op 28 tot 40pt in Montserrat Light en op ten hoogste een derde van de contentslides.",
+      "version": "0.3.0",
       "source": "./",
       "author": {
         "name": "Social Finance NL"

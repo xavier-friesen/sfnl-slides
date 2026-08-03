@@ -81,14 +81,17 @@ dus `raster-1` en `raster-2` per ronde.
 
 Noteer per slide "verdacht" of "schoon op het raster".
 
-### 2b. De vijf meetbare vloeren
+### 2b. De zeven meetbare grenzen
 
-Deze vijf toets je hard, want ze zijn de reden dat een deck karakterloos leest en ze zijn alle
-vijf op een render vast te stellen. Rapporteer ze met het getal erbij.
+Deze zeven toets je hard, want ze zijn de reden dat een deck karakterloos of luidruchtig leest
+en ze zijn alle zeven op een render vast te stellen. Rapporteer ze met het getal erbij. Twee van
+de zeven zijn een plafond en geen vloer: de drager mag ook te vaak en te groot zijn.
 
 | toets | vloer | wat het is als hij faalt |
 |---|---|---|
-| **drager** | minstens één element van 40pt of groter in de contentzone, en minstens 2,5× de bodymaat op die slide | de geërfde titel telt niet mee; is er niets, dan is de slide een verzameling en geen argument |
+| **drager** | per slide één element dat eruit springt: 28 tot 40pt in Montserrat Light, óf 18pt SemiBold in een accentkleur waar de rest navy is | de geërfde titel telt niet mee; is er niets, dan is de slide een verzameling en geen argument |
+| **drager niet te vaak** | ten hoogste één contentslide op drie draagt letter van 28pt of groter, en geen enkele slide gaat boven 40pt | staat er op elke slide een groot getal, dan trekt die maat geen aandacht meer en leest de deck als tien keer dezelfde nadruk. Meld het deckbreed met de slidenummers |
+| **titelletter** | Gotham Bold alleen in de titel; in de contentzone Montserrat Light, Montserrat SemiBold of Lato Light | een vette displayletter in de contentzone concurreert met de kop erboven. Op de render ziet dat eruit als twee titels op één slide |
 | **maatsprong** | grootste eigen maat gedeeld door kleinste, per slide | onder ongeveer 2 is er geen hiërarchie. De afgekeurde deck haalde 1,36, de referentie 3 tot 5 |
 | **twee registers** | in de hele deck minstens één bijna witte slide en minstens één echt verzadigde | ligt élke slide in hetzelfde middengrijs, dan is dat de deckbrede bevinding, niet een slidedefect |
 | **kleur in de letter** | minstens één accent als tekstkleur op wit per deck | staat alle kleur in vlakken en geen enkele in een letter, dan mist het stille register |
@@ -125,9 +128,12 @@ Waar je per slide naar kijkt:
   ophoudt: een placeholder die tot onderaan doorloopt met drie regels erin is precies het
   defect. Benoem wat je ziet en wat eronder hoort. Covers, dividers, agendaslides en quotes
   vallen erbuiten; die zijn expres kaal.
-- **Eén drager, en is die groot.** Knijp je ogen samen: welk element blijft over? Als dat niet
-  de boodschap is, of als er niets uitspringt, is de slide een verzameling. Een getal dat de
-  slide draagt en op 20pt staat draagt niets.
+- **Eén drager, en springt die eruit.** Knijp je ogen samen: welk element blijft over? Als dat
+  niet de boodschap is, of als er niets uitspringt, is de slide een verzameling. Een getal dat
+  de slide draagt en op 20pt staat draagt niets. Maar het omgekeerde is óók een bevinding: een
+  aandachtstrekker van 40pt op een slide waar de boodschap geen getal is, of op de derde slide
+  op rij, is nadruk zonder reden. En springt de drager eruit doordat hij vet en groot is in
+  plaats van groot en licht, dan concurreert hij met de titel.
 - **Regelbreedte.** Een alinea over bijna de volle slidebreedte leest als een lap tekst en je
   oog verliest de volgende regel. Ook het omgekeerde: een kolom waarin bijna elke regel
   afbreekt is te smal.

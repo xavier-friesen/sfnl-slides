@@ -16,6 +16,12 @@ de render, niet van een meting. De vorige versie van dit script deed dat wel, sa
 `qa_fit.py` en `qa_typography.py`, en het resultaat was dat de bouwer regels ging vermijden
 in plaats van slides ging maken.
 
+Twee uitzonderingen op die grens, en die zijn er omdat ze in de praktijk misgingen. De
+titelletter in de contentzone is een `critical`: Gotham Bold hoort in de titel en komt daar
+uit de layout, en op de slide zelf is de letter Montserrat Light of Lato Light. En de
+frequentie van de drager is een `warn`: staat er op elke slide letter van 28pt of groter,
+dan trekt die maat geen aandacht meer. Beide zijn hard te tellen en geen smaakoordeel.
+
 De bevindingen met severity `critical` betekenen allemaal "dit mag niet naar een klant"
 en geen ervan gaat over vormgeving. Daar hoort ook autofit bij: een vak waarin PowerPoint
 de tekst stil mag krimpen (`normAutofit`, of een placeholder die hem uit de layout erft)
@@ -40,6 +46,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from pptx import Presentation  # noqa: E402
 
 from _deck import BRAND_FONTS, emit  # noqa: E402
+from shapes import DRAGER_PLAFOND, DRAGER_VLOER, TITELFONT  # noqa: E402
 
 # `{{IETS}}` uit een concept, en een niet-gesloten `{{` die de eerste niet vangt.
 MARKER = re.compile(r"\{\{[A-Z0-9 _-]{2,40}\}\}")
@@ -159,11 +166,16 @@ def analyse(deck: Path) -> dict:
     findings: list[dict] = []
     fonts: Counter = Counter()
     charts = tables = 0
+    contentslides = 0
+    slides_met_drager: list[int] = []
 
     for number, slide in enumerate(presentation.slides, start=1):
         has_text = False
         reported: set[tuple] = set()
         layout = layout_number(slide)
+        titels = {id(s) for s in walk(slide.shapes) if is_title(s, layout)}
+        if layout not in HEADLINE_BY_IDX_LAYOUTS | INTENTIONALLY_BLANK_LAYOUTS:
+            contentslides += 1
 
         for shape in slide.shapes:
             if getattr(shape, "has_chart", False):
@@ -214,9 +226,20 @@ def analyse(deck: Path) -> dict:
                         f'sjabloonprompt op de slide: "{text.strip()[:60]}"', "critical")
                     break
 
+            in_titel = id(shape) in titels
+            pt = run.font.size.pt if run.font.size is not None else None
+
             font = run.font.name
             if font:
                 fonts[font] += 1
+                if (font.strip().lower() == TITELFONT.lower() and not in_titel
+                        and ("titelfont", 0) not in reported):
+                    reported.add(("titelfont", 0))
+                    add(findings, number, "titelfont-in-body",
+                        f'"{getattr(shape, "name", "?")}" schrijft {TITELFONT} in de '
+                        "contentzone. Die letter hoort alleen in de titel en komt daar uit "
+                        "de layout; op de slide zelf is het Montserrat Light of Lato Light.",
+                        "critical")
                 if font not in BRAND_FONTS and ("font", font) not in reported:
                     reported.add(("font", font))
                     add(findings, number, "off-brand-font",
@@ -232,6 +255,16 @@ def analyse(deck: Path) -> dict:
                 add(findings, number, "off-brand-color",
                     f"#{rgb} is een harde hex — gebruik schemeClr, anders drijft de "
                     "kleur weg van het thema.")
+
+            if pt is not None and not in_titel and text.strip():
+                if pt >= DRAGER_VLOER and number not in slides_met_drager:
+                    slides_met_drager.append(number)
+                if pt > DRAGER_PLAFOND and ("luid", 0) not in reported:
+                    reported.add(("luid", 0))
+                    add(findings, number, "drager-te-groot",
+                        f"{pt:.0f}pt in de contentzone staat boven de band van "
+                        f"{DRAGER_VLOER:.0f} tot {DRAGER_PLAFOND:.0f}pt: dan neemt de "
+                        f'aandachtstrekker de slide over. "{text.strip()[:40]}"')
 
             if STRAIGHT_QUOTE.search(text):
                 add(findings, number, "straight-quote",
@@ -261,6 +294,17 @@ def analyse(deck: Path) -> dict:
             add(findings, number, "empty-slide",
                 "geen tekst, geen grafiek, geen tabel, geen beeld", "critical")
 
+    # Een aandachtstrekker op elke slide is geen aandacht meer. Ten hoogste één slide op
+    # drie draagt grote letter; op de andere slides is de drager gewicht en kleur, of de
+    # compositie zelf. Eén drager mag altijd, ook in een deck van twee contentslides.
+    ruimte = max(1, round(contentslides / 3)) if contentslides else 1
+    if len(slides_met_drager) > ruimte:
+        add(findings, 0, "drager-te-vaak",
+            f"{len(slides_met_drager)} van de {contentslides} contentslides dragen letter "
+            f"van {DRAGER_VLOER:.0f}pt of groter (slides {slides_met_drager}), en er is "
+            f"ruimte voor {ruimte}. Op de andere slides is de drager gewicht en kleur — "
+            "18pt SemiBold in de hue van zijn categorie — of de compositie zelf.")
+
     counts = Counter(f["severity"] for f in findings)
     return {
         "deck": str(deck),
@@ -268,6 +312,8 @@ def analyse(deck: Path) -> dict:
         "charts": charts,
         "tables": tables,
         "fonts": dict(fonts.most_common()),
+        "contentslides": contentslides,
+        "dragers": slides_met_drager,
         "findings": findings,
         "counts": {"critical": counts["critical"], "warn": counts["warn"]},
         "verdict": "blocked" if counts["critical"] else "clean" if not findings else "warn",

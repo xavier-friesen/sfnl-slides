@@ -161,8 +161,9 @@ enkele winnende deck voor en kun je laten liggen.
 | oranje, grapefruit, sky, emerald vol | navy |
 
 Wit op de lichte accenten haalt 2,0 tot 3,1 en is dus geen default. Eén uitzondering, nagemeten
-in de sterkste referentieslide: vanaf ongeveer 40pt mag wit ook op emerald, oranje en sky, want
-daar leest het cijfer als vorm en niet als tekst. Bewuste keuze, op de render te controleren.
+in de sterkste referentieslide: op 40pt mag wit ook op emerald, oranje en sky, want daar leest
+het cijfer als vorm en niet als tekst. Dat is de bovenkant van de dragerband, dus het geldt voor
+de grootste drager en niet voor een kop. Bewuste keuze, op de render te controleren.
 
 **Als tekstkleur op wit.** Deze helft ontbrak, waardoor de tabel als verbod las en kleur alleen
 in vlakken terechtkwam. Uitgerekende verhoudingen:
@@ -207,8 +208,11 @@ is de Word-tabellook.
 
 Toegestaan: Gotham Bold, Montserrat, Montserrat Light, Montserrat SemiBold, Lato Light.
 
-Gotham Bold schrijf je nooit zelf; die komt uit de layout. Montserrat voor labels,
-kolomkoppen en getallen. Lato Light voor lopende tekst. Montserrat Light voor een citaat.
+**Gotham Bold staat alleen in de titel, en die schrijf je nooit zelf: hij komt uit de layout.**
+Op de slide zelf is de letter licht. Lato Light voor lopende tekst, Montserrat Light voor een
+drager of een citaat, Montserrat SemiBold voor een label, een kolomkop of een aanhef. Schrijf je
+Gotham Bold toch in de contentzone, dan weigert `run()` in `shapes.py` het en geeft `qa_text.py`
+een `critical`.
 
 ## Valkuilen
 

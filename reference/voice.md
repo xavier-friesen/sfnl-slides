@@ -134,9 +134,9 @@ De subtitel alleen is nooit de drager. Kies per slide één drager:
 
 | Drager | Wanneer |
 |---|---|
-| Het heldgetal | De boodschap ís een cijfer: `0,8%`, `€ 20 mln`, `41 dagen` — groot, met eenheid en periode erbij |
+| Het heldgetal | De boodschap ís een cijfer: `0,8%`, `€ 20 mln`, `41 dagen` — 28 tot 40pt Montserrat Light, met eenheid en periode erbij. Dit is de zeldzame keuze: ten hoogste één contentslide op drie draagt die maat |
 | De compositie zelf | De boodschap ís de vorm: het stroomschema dat de route toont, de icoontegels die de zes partijen benoemen, de 100%-staaf die de verhouding is |
-| Een vette openingsregel in het eerste blok | De boodschap is een constatering zonder cijfer: één regel Lato Light 14pt vet bovenaan de compositie |
+| Een openingsregel in het eerste blok | De boodschap is een constatering zonder cijfer: één regel bovenaan de compositie, met de eerste twee tot vier woorden in Montserrat SemiBold en de rest in Lato Light op dezelfde maat — geen `b="1"` op Lato Light, want dat is nepvet |
 | De afsluitband | De boodschap is een conclusie of een advies die er echt voordeel van heeft: navy band met vetgezette aanloop. **De laatste keuze van de vier**, niet de eerste — geen band is de default, en een band draagt per slide een reden (`vormentaal.md` §10) |
 
 De subtitel blijft daarnaast wat hij is: één leidende zin, of hij vervalt. Wat hij niet meer
