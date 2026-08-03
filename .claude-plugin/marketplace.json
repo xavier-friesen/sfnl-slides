@@ -1,0 +1,19 @@
+{
+  "name": "sfnl-slides-dev",
+  "description": "Marketplace voor sfnl-slides, de compositie-eerst route naar een SFNL-deck. Deze repo bevat één plugin en die staat op de root, dus 'source' is './' en de marketplace werkt zowel vanuit een git-URL als vanuit een lokale checkout.",
+  "owner": {
+    "name": "Social Finance NL",
+    "email": "info@socialfinancenl.nl"
+  },
+  "plugins": [
+    {
+      "name": "sfnl-slides",
+      "description": "Bouw een SFNL-deck uit het officiële sjabloon waarbij de compositie per slide een ontwerpbeslissing is en geen invuloefening. Header geërfd uit master en layout, contentzone vrij, en de render is de enige vormbeoordeling. Eén skill, één poort (de outline), één loop. Sinds 0.2.0 met de adviesvorm-laag: antwoord voorop, exhibitcraft met focuskleur, schetsplicht en weigerlijst, voor beslisklare adviesdecks.",
+      "version": "0.2.0",
+      "source": "./",
+      "author": {
+        "name": "Social Finance NL"
+      }
+    }
+  ]
+}

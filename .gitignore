@@ -1,0 +1,43 @@
+# Deze map is ook een zelfstandige repo (github.com/xavier-friesen/sfnl-slides), gesplitst
+# uit de monorepo. Daarom staat hier een eigen negeerlijst: in de losse checkout is er geen
+# .gitignore in de root die dit werk doet.
+
+output/
+outputs/
+build*/
+dist/
+renders/
+.codex-tmp/
+*.tmp
+debug.log
+.DS_Store
+Thumbs.db
+~$*
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.venv/
+venv/
+
+# Bundels zijn afgeleide artefacten en raken meteen achter.
+*.plugin
+*.skill
+
+# Renderuitvoer van de visuele loop: PNG's uit render.py, contactsheets uit thumbnail.py
+# en de tussen-PDF van de LibreOffice-route.
+*.png
+*.jpg
+raster-*
+deck.pdf
+
+# De maatstaf is een asset, geen renderuitvoer: zonder deze uitzondering raakt hij stil
+# verloren, net als het sjabloon hieronder.
+!assets/maatstaf/*.png
+
+# Decks en sjablonen blijven buiten de repo, behalve het meegeleverde sjabloon in assets/.
+*.potx
+*.pptx
+!assets/*.potx

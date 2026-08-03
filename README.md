@@ -28,8 +28,15 @@ Deze plugin neemt de dunne laag mee en laat de vormgevingspolitie liggen.
 
 ## Installeren
 
-De marketplace in de repo-root wijst naar beide plugins met een relatief pad, dus vanuit de
-lokale checkout:
+Deze plugin woont in zijn eigen repo en staat daar op de root, dus rechtstreeks vanaf git:
+
+```
+/plugin marketplace add xavier-friesen/sfnl-slides
+/plugin install sfnl-slides
+```
+
+Werk je in de monorepo waar `sfnl-slides` naast `sfnl-powerpoint` staat, dan wijst de
+marketplace in die repo-root met een relatief pad naar beide plugins:
 
 ```
 /plugin marketplace add .
@@ -92,5 +99,7 @@ en zegt bij oplevering letterlijk dat het deck niet visueel geverifieerd is.
 
 ## Ontwerp
 
-`docs/superpowers/specs/2026-07-31-sfnl-slides-design.md` in de repo-root legt vast waarom deze
-route bestaat, wat er meegaat en wat er blijft liggen.
+Waarom deze route bestaat, wat er meegaat en wat er blijft liggen, staat vast in
+`docs/superpowers/specs/2026-07-31-sfnl-slides-design.md`. Dat document hoort bij de
+vergelijking tussen beide routes en blijft daarom in de monorepo staan; het reist niet mee met
+deze plugin-repo.
