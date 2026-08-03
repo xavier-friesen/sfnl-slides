@@ -175,6 +175,16 @@ naar `scripts/`.
 `C:/w/<naam>` en zet het eindbestand daarna op zijn plek. `prepare_template.py` rekent dit
 vooraf na en zegt het als het niet past.
 
+**Zet de bouw meteen in één herbouwbaar script, niet in losse aanroepen.** Eerste regel van dat
+script gooit de builddir weg en begint bij `prepare_template.py`; daarna alle slides. Dit is
+stap één en niet stap drie, want `write()` uit `shapes.py` voegt vormen tóe vóór `</p:spTree>`
+en `add_slide.py` hangt een slide achteraan: een tweede run op een bestaande builddir verdubbelt
+alles wat er al staat. Nagemeten gevolg: een deck waarvan de bouw pas na de eerste visuele ronde
+herbouwbaar werd gemaakt, en dat tot die tijd niet opnieuw gebouwd kón worden zonder de map met
+de hand op te ruimen. De visuele loop in stap 4 is per definitie meerdere ronden, dus je hébt
+een script dat je onbeperkt kunt herhalen — anders repareer je met de hand in XML wat je had
+kunnen herbouwen.
+
 ### 1. Sjabloon klaarzetten
 
 ```bash
@@ -235,8 +245,8 @@ structureel onbouwbaar, en de bouwer merkte dat niet.
 
 ```python
 import sys; sys.path.insert(0, "<plugin>/scripts")
-from shapes import (ZONE, Deck, aanhef, cols, drager, hoogte_van, label, para, run, streep,
-                    tekst, tekst_op, vlak, vulgraad, write)
+from shapes import (ZONE, Deck, aanhef, cols, drager, gat_onder, hoogte_van, label, para,
+                    run, streep, tekst, tekst_op, vlak, vulgraad, write)
 
 D = Deck(body=16, label=14, sluit=16, display=32)     # de vier maten, één keer
 xs, w = cols(3, 0.24)                                 # raster
@@ -261,6 +271,13 @@ vulling en een puntgrootte hoort. `Deck(display=...)` weigert een drager buiten 
 `hoogte_van` en `vulgraad` zijn er om de val uit `vormentaal.md` §6 te vermijden: eerst meten hoe
 hoog de inhoud is, dan pas beslissen hoe je de restruimte verdeelt. Ruimte tussen de blokken is
 compositie, ruimte ónderin een blok is een gat.
+
+**De norm voor `vulgraad` is 0,9, en `gat_onder` blijft onder 0,25 in.** Die twee samen, want
+een verhouding is schaalblind. De meting rekent strakker dan de renderer zet, dus een blok dat
+0,78 meet staat op de render mét een gat — dat is nagemeten en het is de reden dat de drempel
+hier hoog ligt. Haalt een blok de norm niet, dan is het antwoord meer inhoud, grotere letters,
+een andere compositie, of het blok inkorten en de slide met een ander element afsluiten. Nooit
+een hoger blok, en nooit het getal als bewijs: ook boven 0,9 kijk je naar de render.
 
 Wil je toch met de hand schrijven: een vorm is een `<p:sp>` vóór `</p:spTree>`, met
 `<a:prstGeom>`, een `<a:xfrm>` in EMU (één inch is 914400), een vulling met `schemeClr` en
@@ -340,6 +357,15 @@ Kijk eerst naar het contactblad. Open op volle grootte alleen wat er verkeerd ui
 daarna de `deck-visual-reviewer` op de renders; die kijkt met een frisse blik naar overloop,
 overlap, uitlijning, halflege zones, kleur die niets zegt, en eenvormigheid over de deck.
 
+**Render naar een pad waar de reviewer bij kan, en controleer dat vóór je hem stuurt.** Een
+subagent leest alleen binnen de aangesloten mappen; renders die in een sandbox- of tempmap van de
+shell staan, zijn voor hem onzichtbaar. Nagemeten gevolg: een reviewer die geen enkele slide kon
+openen, in plaats daarvan de bouwcode las, en een ronde kostte waarna de visuele beoordeling
+alsnog met de hand moest. Zet de PNG's dus in de projectmap, noem dat pad expliciet in de
+opdracht, en laat hem beginnen met de bevestiging dat hij het contactblad ziet. Zegt hij dat hij
+geen beeld heeft, dan is de uitkomst geen visuele review — hoe bruikbaar zijn structurele
+opmerkingen ook zijn.
+
 Repareer alle bevindingen van een ronde in één keer en render opnieuw met een nieuw prefix
 (`raster-2`). Doorgaan tot er niets meer te melden is.
 
@@ -351,6 +377,16 @@ Wat je in de eerste ronde zelf al gaat zien, en wat geen regel voor je oplost:
 - Tekst die net buiten zijn vak valt. Het vak wordt kleiner of de tekst korter, niet het
   lettertype.
 - Een compositie die op 4,5 in ophoudt. Maak de elementen groter, niet het gat.
+- Een blok met lucht onderin, ook als `vulgraad` een net getal gaf. De meting is strakker dan
+  de renderer, dus onder 0,9 is het een bevinding en niet een grensgeval. Wat je op de render
+  ziet weegt zwaarder dan wat de functie zei.
+
+**Vertrouw de render niet voor regelafbreking als de huisstijlfonts ontbreken.** Meldt
+`preflight.py` geen Gotham of Montserrat, dan substitueert de renderer bredere letters en vallen
+titels en koppen in echte PowerPoint rúimer uit dan je ziet. Compositie, wit, overlap en
+uitlijning beoordeel je gewoon; regelafbreking en dus vakhoogte niet. Rek in dat geval geen
+tekstvak met de hand op om een afbreking te repareren — dat vak staat dan in de echte weergave te
+ruim. De cover is de gevoeligste plek, want daar groeit het titelvak naar boven.
 
 Als de loop schoon is, doe je één keer de beslistoets uit `adviesvorm.md` §5: de titelrij
 hardop, de kneep per slide, en de vraag of de ontvanger met alleen deze deck het besluit kan
@@ -365,6 +401,12 @@ python $S/qa_text.py deck.pptx
 ```
 
 `critical` blokkeert de oplevering. `warn` is een aanwijzing: kijk ernaar en beslis.
+
+Zijn de huisstijlfonts gesubstitueerd, zeg dat dan bij de oplevering en noem waar het uitmaakt:
+vraag de gebruiker het deck één keer in echte PowerPoint te openen en vooral naar de cover te
+kijken. Somt de bouw handmatige hoogtecorrecties op tekstvakken, noem die met naam — dat zijn de
+plekken die in de echte weergave te ruim kunnen staan. Laat dit geen algemene disclaimer worden;
+één concrete plek waar hij moet kijken is meer waard dan een voorbehoud over de hele deck.
 
 Geef het bestand een naam zonder apostrofs of andere tekens die een browser bij downloaden
 verhaspelt.

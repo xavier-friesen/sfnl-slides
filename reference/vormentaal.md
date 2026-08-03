@@ -189,8 +189,17 @@ De juiste volgorde:
 3. Blijft er ruimte over die je bewust laat, verdeel die dan over de scheidingen en houd de
    blokken op hun inhoud. Ruimte tussen de blokken is compositie; ruimte ónderin een blok is
    een gat.
-4. Meet de vulgraad: teksthoogte gedeeld door blokhoogte. Onder 0,6 kijk je opnieuw, onder 0,5
-   is het fout.
+4. Meet de vulgraad: teksthoogte gedeeld door blokhoogte. **De norm is 0,9, en het restgat
+   onderin het blok blijft onder 0,25 in.** Haalt een blok dat niet, dan kort je het in en
+   sluit je de slide met een ánder element af.
+
+**De meting rekent strakker dan de renderer zet, en dat maakt een middelmatig getal
+verraderlijk.** `vulgraad` telt kale regelhoogtes; PowerPoint telt fontmetriek, alinearuimte
+en de descender van de laatste regel mee. Wat gemeten 0,78 is, staat op de render dus met een
+zichtbaar gat onderin — precies dat is nagemeten op een kolomblok dat op het getal was
+goedgekeurd. Lees 0,78 niet als voldoende. En kijk boven 0,9 nog steeds naar de render: een
+verhouding is schaalblind, 20 procent lucht in een kolom van vijf inch is een vol centimeter
+dood gekleurd vlak en 20 procent in een blok van 1,2 in ziet niemand.
 
 Vier korte definities vullen geen vijf inch in vier kolommen. In vier rijen over de volle
 breedte doen ze het wel. Dat is wat "een andere compositie" betekent.

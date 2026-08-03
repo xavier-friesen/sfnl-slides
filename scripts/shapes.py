@@ -473,11 +473,14 @@ def hoogte_van(paras: list[tuple[str, float, str]], breedte: float, *,
     meten wordt het een intentie, en dan krijg je vier kaarten waarvan de onderste helft
     leeg gekleurd vlak is.
 
-    De meting is strak, en PowerPoint zet nét ruimer: de regelhoogte volgt hier 1,12 x pt,
-    terwijl PowerPoint de fontmetriek van de familie meeneemt. Nagemeten gevolg: een
-    paneel met drie alinea's op precies deze hoogte liet zijn laatste regel onder de rand
-    uitsteken. Geef een gevuld blok met meerdere alinea's daarom ~0,2 in boven de meting,
-    en laat de render oordelen.
+    De meting is strak en PowerPoint zet nét ruimer, ook met de gecorrigeerde regelhoogte van
+    `regelhoogte()`: alinearuimte en de descender van de laatste regel zitten er niet in.
+    Nagemeten gevolg: een paneel met drie alinea's op precies deze hoogte liet zijn laatste
+    regel onder de rand uitsteken. Geef een gevuld blok met meerdere alinea's daarom ~0,2 in
+    boven de meting, en laat de render oordelen.
+
+    Diezelfde strakheid werkt de andere kant op bij `vulgraad()`: de uitkomst ziet er voller
+    uit dan het getal zegt, dus een middelmatige vulgraad is een gat. Lees de norm daar.
     """
     l, r, t, b = insets
     bruikbaar = breedte - l - r
@@ -489,11 +492,40 @@ def hoogte_van(paras: list[tuple[str, float, str]], breedte: float, *,
     return round(totaal, 3)
 
 
+def gat_onder(paras: list[tuple[str, float, str]], breedte: float, hoogte: float,
+              *, insets=INSETS_GEVULD) -> float:
+    """De restruimte onder de tekst in INCH. Dit is het getal dat de kijker ziet.
+
+    Een verhouding is schaalblind: 0,80 op een blok van 1,2 in is 0,24 in lucht en valt niet
+    op, 0,80 op een kolom van 5 in is een vol centimeter dood gekleurd vlak. Meet daarom
+    altijd ook absoluut, en houd het gat onder 0,25 in.
+    """
+    return round(hoogte - hoogte_van(paras, breedte, insets=insets), 3) if hoogte else 0.0
+
+
 def vulgraad(paras: list[tuple[str, float, str]], breedte: float, hoogte: float,
              *, insets=INSETS_GEVULD) -> float:
-    """Welk deel van het vak de tekst werkelijk vult. Onder ongeveer 0,5 leest de onderkant
-    als leeg gekleurd vlak, en dan is het antwoord een andere compositie of een ander blok
-    -- niet een lager blok met een gat eronder."""
+    """Welk deel van het vak de tekst werkelijk vult.
+
+    **De norm is 0,9, niet 0,5.** Deze meting rekent strakker dan de renderer zet -- ze telt
+    kale regelhoogtes, terwijl PowerPoint fontmetriek, alinearuimte en de descender van de
+    laatste regel meeneemt. De uitkomst leest dus altijd voller dan het getal suggereert, en
+    de val is om een middelmatig getal als voldoende te lezen. Nagemeten: een kolomblok dat
+    hier 0,78 gaf, liet op de render een duidelijk gat onderin zien.
+
+    De grens is tweeledig, want een verhouding alleen is schaalblind:
+
+    * vulgraad >= 0,9, EN
+    * `gat_onder(...)` <= 0,25 in
+
+    Zakt een van de twee, dan is het antwoord niet een iets lager blok met een gat eronder,
+    en ook niet een hoger blok. Het is: meer inhoud, grotere letters, een andere compositie,
+    of het blok inkorten en de slide met een ander element afsluiten -- een drager met een
+    getal, een afwegingsregel, een tweede sectie. Ruimte tussen de blokken is compositie,
+    ruimte ónderin een blok is een gat.
+
+    Het getal is een ondergrens, geen bewijs. Boven 0,9 kijk je nog steeds naar de render.
+    """
     return round(hoogte_van(paras, breedte, insets=insets) / hoogte, 3) if hoogte else 0.0
 
 
