@@ -57,9 +57,9 @@ Vier vragen, en niet meer dan vier. Weet je een antwoord al uit de opdracht, sla
 
 ## Stap 2 — Outline, en de enige poort
 
-### Eerst vier besluiten voor de hele deck
+### Eerst vijf besluiten voor de hele deck
 
-Deze vier staan bovenaan `outline.md` en gelden voor elke slide. Neem je ze niet vooraf, dan
+Deze vijf staan bovenaan `outline.md` en gelden voor elke slide. Neem je ze niet vooraf, dan
 neem je ze per slide opnieuw en dan verspringt de deck zonder dat iemand kan zien waarom.
 
 1. **De vier maten.** Drager 28 tot 40pt in Montserrat Light, kop 18pt Montserrat SemiBold,
@@ -75,6 +75,12 @@ neem je ze per slide opnieuw en dan verspringt de deck zonder dat iemand kan zie
    categorieën in dezelfde set krijgen nooit dezelfde hue.
 4. **De twee registers.** Wijs aan welke slide bíjna helemaal wit wordt en welke echt verzadigd.
    Een deck waarin elke slide in het middengrijs ligt, is de deck die de vergelijking verloor.
+5. **De titelmodus** (`voice.md`, Titels). Modus A is de default: de titel is een volle zin die
+   de boodschap draagt, en er komt géén subtitel — idx 1 blijft leeg. Modus B kies je alleen
+   wanneer de deck echte hoofdstukken heeft die de lezer moet kunnen terugvinden: dan is de
+   titel de hoofdstuknaam, blijft hij binnen dat hoofdstuk letterlijk gelijk, hoort er bij elk
+   hoofdstuk een divider, en draagt de subtitel de leidende zin van de slide. De subtitel is
+   dus vooral een modus-B-instrument. Bij twijfel modus A, en schrijf op waarom.
 
 Daarboven staat de **storyline**: het hele verhaal als één doorlopende alinea, geen bullets. Als
 je dit in een minuut aan de klant moet uitleggen, wat zeg je dan? Dat is drie regels werk en het
@@ -93,13 +99,20 @@ advies, dan is dat een bewuste keuze die je in de outline motiveert.
   maximaal twee regels en in de praktijk één — op 24pt Gotham Bold over 12,52 in gaat er
   ongeveer 48 tekens op een regel. Past hij niet, dan schrijf je hem korter; het font gaat nooit
   omlaag. En houd het over de deck consistent: titels die op de ene slide één en op de andere
-  twee regels beslaan laten de contentzone per slide op een andere hoogte beginnen.
-- **Subtitel** — optioneel, en dat is geen formaliteit. Eén zin van maximaal ongeveer 120
-  tekens, het liefst één regel, twee is het maximum; drie lopen door de oranje dash op 1,72 in.
-  Wat erin hoort is de periode, de afbakening, het scenario of de bron — informatie die nergens
-  anders op de slide past. De toets: kun je de subregel vervangen door "hieronder staat het",
-  dan schrap je hem. Een subtitel die de titel herhaalt of de slide aankondigt is slechter dan
-  geen subtitel.
+  twee regels beslaan laten de contentzone per slide op een andere hoogte beginnen. In modus B
+  is de titel geen bewering maar de hoofdstuknaam, staat hij op één regel, en is hij letterlijk
+  gelijk op elke slide van dat hoofdstuk én op de divider ervoor — de bewering verhuist dan naar
+  de subtitel en naar de drager in de contentzone.
+- **Subtitel** — in modus A schrijf je er geen. Dat is de regel, niet een voorkeur: de titel
+  zegt het al, en een tweede regel eronder herhaalt hem of kondigt de slide aan. De ene
+  uitzondering is een feit dat nergens anders op de slide past — de periode, de afbakening,
+  het scenario, de bron — en dan alleen bij een titel van één regel. In modus B is de subtitel
+  het instrument dat de leidende zin draagt, en ook daar per slide optioneel: is er geen
+  leidende zin, dan blijft de hoofdstuktitel alleen staan.
+  Schrijf je er een, dan is het één zin van maximaal ongeveer 120 tekens, het liefst op één
+  regel; twee is het maximum en drie lopen door de oranje dash op 1,72 in. De toets: kun je de
+  subregel vervangen door "hieronder staat het", dan schrap je hem. Een ontbrekende subtitel is
+  nooit een bevinding — niet in de QA en niet in een review.
 - **Layout** — met het nummer, en kies niet standaard 19. Een tweeluik is 22, waar de
   kolomkoppen geërfde placeholders zijn die je mag herkleuren. Doorlopende tekst is 20. Een
   schema over de volle hoogte zonder titel is 17. Vier contentslides op 19 achter elkaar is de
@@ -271,9 +284,17 @@ python $S/place_shapes.py unpacked/ppt/slides/slide7.xml --json '{"Kaart 2*": {"
 ### 5. Opruimen en inpakken
 
 ```bash
+python $S/fit_title.py unpacked --mode a          # of --mode b, naar besluit 5
 python $S/clean.py unpacked
 python $S/office/pack.py unpacked deck.pptx --original <plugin>/assets/sfnl-sjabloon.potx
 ```
+
+`fit_title.py` meet de titels met het echte Gotham Bold, laat de titelbox naar boven groeien
+waar hij twee regels nodig heeft, en toetst de titelmodus die je in besluit 5 koos: titels in
+onderkast, in modus B een titel over twee regels, en in modus A een gevulde subtitel. Die
+laatste is een `critical` zodra de titel twee regels beslaat — de gegroeide titelbox loopt er
+dan over — en verder een `warn`, want in modus A schrijf je geen subtitel tenzij er een feit
+staat dat nergens anders past. Een lége subtitel is nooit een melding.
 
 `clean.py` haalt lege placeholders eruit en normaliseert de XML. `pack.py` valideert tegen de
 OOXML-schema's; komt daar iets uit, dan repareer je dat vóór je verder gaat.
@@ -361,8 +382,10 @@ dat je niet hebt kunnen verifiëren noem je expliciet.
 
 ## Wat blokkeert
 
-Vier dingen, allemaal van de soort "het bestand is stuk". Geen van de vier gaat over
-vormgeving.
+Vijf dingen. De eerste drie zijn van de soort "het bestand is stuk". De twee daarna gaan over
+de letter, en ze staan hier alleen omdat ze te tellen zijn: Gotham Bold hoort niet in de
+contentzone, en een titel die over de subtitel heen groeit laat tekst verdwijnen. Verder blokkeert
+er niets op vormgeving; dat oordeel komt van de render.
 
 1. Het content-type staat niet op `presentation.main`. PowerPoint opent de deck dan in
    sjabloonmodus.
@@ -370,7 +393,9 @@ vormgeving.
 3. De grafieken zijn verdwenen na de laatste `pack`. Vergelijk `charts` in de JSON van
    `qa_text.py` met wat je hebt toegevoegd.
 4. `qa_text.py` meldt een `critical`: een restplaceholder, een `{{MARKER}}` uit het concept,
-   een sjabloonprompt, of een slide zonder inhoud.
+   een sjabloonprompt, een slide zonder inhoud, of Gotham Bold in de contentzone.
+5. `fit_title.py` meldt een `critical`: een titel van twee regels boven een gevulde subtitel,
+   waar de gegroeide titelbox over de subregel heen loopt.
 
 ## Zonder renderer
 

@@ -207,8 +207,11 @@ staan.
   werkt, niet of hij in een patroon past. Een slide die iets doet wat niet in de maatstaf staat
   en die goed leest, is precies de bedoeling.
 - Je meldt de bekende sjabloonartefacten niet: geen titel op cover-, divider- en
-  canvaslayouts, een ontbrekende subtitel (die is optioneel), en twee masters in één deck
-  (master 1 voor covers, quote en fotodividers, master 2 voor content).
+  canvaslayouts, een ontbrekende subtitel, en twee masters in één deck (master 1 voor covers,
+  quote en fotodividers, master 2 voor content). Een lége subtitelband is dus nooit een
+  bevinding: buiten de hoofdstukmodus hoort daar niets te staan. Een gevulde subtitel die de
+  titel herhaalt of de slide aankondigt is er wel een, en zo ook een titel die binnen één
+  hoofdstuk van string verschilt terwijl de deck op hoofdstuktitels werkt.
 
 ## Rapportvorm
 

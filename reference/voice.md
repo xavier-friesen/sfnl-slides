@@ -107,19 +107,30 @@ Altijd in kapitalen. Nooit een punt. Nooit een uitroepteken.
 
 Twee modi, en je kiest er één voor de hele deck.
 
-**Modus A — titel als volle zin.** De default. De titel draagt de boodschap zelf.
-Een subtitel mag, maar alleen voor wat nergens anders past — de periode, de
-afbakening, het scenario — en alleen bij een titel van één regel: een titel van twee
-regels groeit over de subtitelpositie heen. Streef naar kort, maar de zin mag lopen.
-Hard maximum: twee tekstregels. Het lettertype wordt nooit verkleind om een titel te laten passen —
-past hij niet in twee regels, dan schrijf je hem korter.
+**Modus A — titel als volle zin.** De default, en de modus waarin de meeste decks staan.
+De titel draagt de boodschap zelf, en **je schrijft geen subtitel**: idx 1 van de
+contentlayouts blijft leeg en `clean.py` haalt de placeholder eruit. Streef naar kort,
+maar de zin mag lopen. Hard maximum: twee tekstregels. Het lettertype wordt nooit
+verkleind om een titel te laten passen — past hij niet in twee regels, dan schrijf je
+hem korter.
 
-**Modus B — hoofdstuk plus subtitel.** Voor decks met duidelijke hoofdstukken, dus
-voor decks met sectiedividers. De titel is de hoofdstuknaam en blijft letterlijk gelijk
-over alle slides van dat hoofdstuk: drie conclusieslides dragen alle drie `CONCLUSIE`,
-en de divider van dat hoofdstuk draagt dezelfde string. De leidende zin van de slide
-staat dan in de subtitel — wanneer die zin er is. De titel blijft in modus B op één
-regel.
+Waarom geen subtitel: de titel zegt het al. Een tweede regel eronder herhaalt hem, kondigt
+de slide aan, of duwt bij een titel van twee regels tegen de oranje dash. Heb je toch een
+feit dat nergens anders past — de periode, de afbakening, het scenario, de bron — dan mag
+hij, op één voorwaarde: de titel staat op één regel. Dat is de uitzondering en niet de
+gewoonte; twee of drie subtitels in een deck van twaalf slides is normaal, twaalf is een
+signaal dat de titels hun werk niet doen.
+
+**Modus B — hoofdstuk plus subtitel.** Hier woont de subtitel. Voor decks met duidelijke
+hoofdstukken, dus voor decks met sectiedividers. De titel is de hoofdstuknaam en blijft
+letterlijk gelijk over alle slides van dat hoofdstuk: drie conclusieslides dragen alle drie
+`CONCLUSIE`, en de divider van dat hoofdstuk draagt dezelfde string. Omdat de titel dan een
+label is en geen bewering, draagt de subtitel de leidende zin van de slide — wanneer die
+zin er is. De titel blijft in modus B op één regel.
+
+Bij twijfel modus A, en zeg in de outline waarom. Modus B kies je niet omdat de deck lang
+is maar omdat er hoofdstukken zijn die de lezer moet kunnen terugvinden, en dan hoort er bij
+elk hoofdstuk een divider.
 
 ### In modus B draagt de contentzone de boodschap mee
 
@@ -152,9 +163,15 @@ wel bewijs voor leveren — dat is de verticale logica.
 
 Je vult de subtitel-placeholder (idx 1) **alleen wanneer er werkelijk een passende
 leidende zin is**. Is die er niet, dan blijft de subtitel weg en wordt de placeholder
-gedropt (`--drop-empty`).
+gedropt (`--drop-empty`). In modus A is dat de regel en niet de mogelijkheid: daar blijft
+idx 1 leeg tenzij er een feit is dat nergens anders past.
 
-Dat geldt ook binnen modus B. De hoofdstuktitel blijft daar op elke slide staan, maar de
+**Dit gaat alleen over de contentlayouts 19 t/m 22.** De ondersteunende regel onder een
+agendakop (25 t/m 30, idx 1) en de regel onder een dividerkop (6 t/m 16, idx 13) horen bij
+die layouts en niet bij de titelmodus. Die mag je in modus A net zo goed schrijven — of
+weglaten omdat er niets te zeggen is.
+
+Binnen modus B is de subtitel optioneel per slide. De hoofdstuktitel blijft daar op elke slide staan, maar de
 subtitelregel mag per slide vervallen: één slide van het hoofdstuk heeft een leidende zin
 en de volgende niet, en dat is geen inconsistentie. Wat consistent moet zijn is de titel,
 niet de aanwezigheid van de subtitel.

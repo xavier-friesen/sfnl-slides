@@ -93,8 +93,14 @@ TITLE_PH_TYPES = {"title", "ctrTitle"}
 # A MISSING or dropped subtitle is NEVER a finding, in either mode: idx 1 is filled only
 # when there is genuinely a leading sentence that fits, and in mode B the chapter title
 # stays while the subtitle line may simply be absent. Filling it to be consistent is the
-# defect, not leaving it out. The only subtitle rule here is the reverse case — a FILLED
-# subtitle in mode A, where a two-line title would run over it.
+# defect, not leaving it out.
+#
+# The subtitle rules run the other way round. Mode B is where the subtitle belongs; mode A
+# writes none, because the title already carries the message (voice.md, Titels). So a FILLED
+# subtitle in mode A is reported twice over: critical when the title runs to two lines,
+# because the grown title box then covers it, and a warning even on a one-line title, so
+# somebody confirms that what stands there is a fact that fits nowhere else — the period,
+# the scope, the scenario, the source — and not a restatement of the title.
 MODE_CHECK_LAYOUTS = CONTENT_LAYOUTS
 
 
@@ -364,9 +370,12 @@ def process(
                 entry["height_in"] = round(box[3] / EMU_PER_INCH, 3)
 
         if mode_checked:
-            # Een subtitel mag in modus A — hij draagt de periode, de afbakening of het
-            # scenario (zie de outline-stap in de skill). Wat niet mag is de combinatie
-            # die elkaar raakt: een titel van twee regels groeit tot over de subtitel.
+            # In modus A schrijf je geen subtitel: de titel draagt de boodschap al. De ene
+            # uitzondering is een feit dat nergens anders past — de periode, de afbakening,
+            # het scenario, de bron — en dan alleen bij een titel van één regel. Vandaar
+            # twee meldingen: kritiek bij een titel van twee regels, want de gegroeide
+            # titelbox loopt dan over de subtitel, en een waarschuwing bij één regel, zodat
+            # iemand nakijkt of die zin er werkelijk hoort te staan.
             # Een subtitel die nog zijn {{MARKER}} draagt is niet gevuld; clean.py haalt
             # hem weg.
             subtitle_filled = bool(
@@ -381,6 +390,18 @@ def process(
                     f"subtitel-placeholder is gevuld ({subtitle_text!r}) — de gegroeide "
                     "titelbox loopt over de subtitel heen. Schrijf de titel korter of "
                     "haal de subtitel weg.",
+                )
+            elif mode == "a" and subtitle_filled:
+                problem(
+                    position,
+                    slide_path.name,
+                    "mode",
+                    f"modus A schrijft geen subtitel, en hier staat er een "
+                    f"({subtitle_text!r}). Dat mag als er een feit staat dat nergens "
+                    "anders op de slide past — de periode, de afbakening, het scenario, "
+                    "de bron. Herhaalt hij de titel of kondigt hij de slide aan, dan gaat "
+                    "hij eruit.",
+                    "warn",
                 )
             if mode == "b" and entry.get("lines", 1) > 1:
                 problem(
