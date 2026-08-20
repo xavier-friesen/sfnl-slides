@@ -67,6 +67,16 @@ neem je ze per slide opnieuw en dan verspringt de deck zonder dat iemand kan zie
    in de titel en komt daar uit de layout; in de contentzone schrijf je hem nooit. En de grote
    drager is de uitzondering: ten hoogste één contentslide op drie draagt hem, want een
    aandachtstrekker op elke slide trekt niets meer.
+
+   **Eén familie per regel.** Montserrat SemiBold is voor wat lósstaat en op zijn eigen regel
+   begint: een kop, een kapitaallabel, een rolnaam, een kolomkop. Een aanhef bínnen een
+   doorlopende Lato-regel is `Lato Semibold` — een echt zwaarder gewicht in dezelfde familie,
+   niet `b="1"` op Lato Light. `aanhef()` doet dat, en `para()` weigert een alinea die
+   Montserrat en Lato door elkaar zet (`vormentaal.md` §9).
+
+   **En geen hoge punt als scheiding binnen een regel.** `tekst tekst · meer tekst` is twee
+   feiten die op één regel geperst zijn. Twee feiten zijn twee regels, twee cellen of twee
+   elementen — in de contentzone, in een label en in een bronregel.
 2. **De kaarttaal.** Rechte hoeken of één absolute hoekradius, en welke vullingssoort de default
    is: container op alpha, wit met een haarlijn in de eigen hue, of vol. Halverwege wisselen is
    het defect dat het snelst opvalt.
@@ -258,6 +268,9 @@ vormen = [
                             tekst_op("emerald", D.display)), algn="ctr")], anchor="ctr"),
     vlak("Kaart A", xs[0], 3.28, w, h, vulling="container:emerald", lijn=("emerald", 1),
          tekst=[para(label(kop)), para(run(txt, "Lato Light", D.body), spc_voor=600)]),
+    tekst("Regel", xs[1], 3.28, w, 0.9,
+          [para(*aanhef("Twee loketten.",                # Lato Semibold + Lato Light
+                        "De doorlooptijd blijft op 41 dagen steken.", D.body))]),
 ]
 write("unpacked/ppt/slides/slide3.xml", vormen)
 ```
@@ -267,6 +280,11 @@ absolute radius, een lijn in dezelfde hue als de vulling, de expliciete `<a:lati
 `noAutofit`, de juiste elementvolgorde, `lnSpc` op 112 procent, en de tekstkleur die bij een
 vulling en een puntgrootte hoort. `Deck(display=...)` weigert een drager buiten 28 tot 40pt, en
 `run()` weigert Gotham Bold: die letter staat in de titel en komt uit de layout.
+
+`Deck(display=...)`, `run()` en `para()` zijn de drie plekken waar de laag nee zegt: een drager
+buiten 28 tot 40pt, Gotham Bold in de contentzone, en een alinea met een Montserrat- én een
+Lato-run. Die laatste is de regel 'één familie per regel': is het een kop of een label, zet het
+dan op zijn eigen regel met `label()`; is het een aanhef binnen de regel, gebruik `aanhef()`.
 
 `hoogte_van` en `vulgraad` zijn er om de val uit `vormentaal.md` §6 te vermijden: eerst meten hoe
 hoog de inhoud is, dan pas beslissen hoe je de restruimte verdeelt. Ruimte tussen de blokken is

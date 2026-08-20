@@ -10,7 +10,8 @@ regel eerder verkeerd te lezen bleek, staat de verkeerde lezing er expliciet bij
 overbodige uitleg, dat zijn fouten die daadwerkelijk gemaakt zijn.
 
 Lees dit één keer voordat je de eerste slide bouwt, samen met de tien voorbeelden in
-`assets/maatstaf/`.
+`assets/maatstaf/`. Die tien zijn niet foutloos: `assets/maatstaf/LEESMIJ.md` zegt per slide
+waarvoor hij de lat is en waarvoor niet.
 
 ---
 
@@ -57,7 +58,9 @@ Leg vóór de eerste slide vier getallen vast en gebruik overal die vier:
 | **voetnoot** | 11pt | bron, eenheid, peildatum |
 
 De letter op de slide is licht: Lato Light voor wat gelezen wordt, Montserrat Light voor een
-drager of een citaat, en Montserrat SemiBold voor een kop, een label of een aanhef. Gotham Bold
+drager of een citaat, en Montserrat SemiBold voor een kop, een label, een rolnaam of een
+kolomkop — dus voor wat lósstaat en op zijn eigen regel begint. Een aanhef bínnen een
+doorlopende regel is `Lato Semibold`, want één regel is één familie (§9). Gotham Bold
 staat alleen in de titel, en die schrijf je niet zelf — hij komt uit de layout. Schrijf je hem
 toch in de contentzone, dan weigert `run()` het en blokkeert `qa_text.py` de deck.
 
@@ -274,10 +277,41 @@ Een eigen vorm erft geen regelafstand en geen alinea-afstand. Zet beide, en deck
   niet breder dan ongeveer 10 in; de volle 12,52 is voor één regel. De banden in de afgekeurde
   deck liepen 111 tot 121 tekens, en dat is de belangrijkste reden dat ze lezen als tekst die
   over was in plaats van als een uitspraak.
-- **Twee gewichten in één alinea.** Montserrat SemiBold als aanhef van twee tot vier woorden,
-  Lato Light voor de rest, op dezelfde maat. Zo haalt de referentie twee hiërarchieniveaus
-  binnen één tekstregel, zonder tweede kolom en zonder tweede vak. Gebruik dit in plaats van
-  Lato Light met `b="1"`, want dat is nepvet.
+- **Eén familie per regel, en twee gewichten binnen die familie.** Een aanhef van twee tot
+  vier woorden haalt twee hiërarchieniveaus binnen één tekstregel, zonder tweede kolom en
+  zonder tweede vak. Staat die aanhef binnen een doorlopende regel, dan is hij **Lato
+  Semibold** op een rest in Lato Light, op dezelfde maat. Niet Lato Light met `b="1"`, want
+  dat is nepvet en de renderer kiest zelf wat hij ervan maakt; `Lato Semibold` bestaat als
+  eigen familienaam in de fontlijst en is een echt gewicht. Nagemeten op de render, dezelfde
+  zin op 16pt met elk Lato-gewicht als aanhef naast Lato Light: `Lato` regular en `Lato
+  Medium` zetten een verschil dat je pas ziet als je het weet, `Lato Heavy` gaat met de kop
+  erboven concurreren, `Lato Semibold` zet de sprong die je wil. `aanhef()` in `shapes.py`
+  doet dit; `para()` weigert een alinea met een Montserrat- én een Lato-run.
+  Montserrat SemiBold blijft voor wat **lósstaat en op zijn eigen regel begint**: een kop, een
+  kapitaallabel, een rolnaam, een kolomkop. Montserrat Light is de dragerletter en staat
+  altijd alleen.
+
+  **De verkeerde lezing, en die kwam uit dit document.** Hier stond tot nu toe dat de aanhef
+  Montserrat SemiBold moest zijn, en `shapes.py` beriep zich daarvoor op een meting in
+  `maatstaf/04`. Die meting is nagerekend en ze is juist — `04` zet werkelijk Montserrat
+  SemiBold in een Lato Light-alinea. Op de PNG van die slide, 1920 px bij 144 dpi: `Vaste` in
+  de aanhef is 92 px breed bij een kapitaalhoogte van 23 px, verhouding 4,00, en dat is exact
+  Montserrat SemiBold (Lato Semibold zet 3,35); `noemen` in de rest is 106 px bij een
+  x-hoogte van 17 px, verhouding 6,2, en dat is Lato Light (Montserrat Light zet 8,0). De
+  regel hierboven overruled dus een gemeten patroon uit een winnende deck, en niet een
+  verkeerde meting. De reden is dat twee families binnen één tekstregel twee letterbouwen en
+  twee x-hoogtes op dezelfde maat naast elkaar zetten, en dat leest als een zetfout in plaats
+  van als hiërarchie. **Voor dít aspect is `assets/maatstaf/04` geen lat meer.** Voor de rest
+  van die slide blijft hij dat wel: twee hues voor een tegenstelling, proza als exhibit, de
+  bronregel per kolom. Dat staat ook in `assets/maatstaf/LEESMIJ.md`, want wie de PNG's
+  bekijkt leest dit document niet noodzakelijk.
+
+- **Geen hoge punt als scheiding binnen een regel.** `tekst tekst · meer tekst` is de vorm
+  die ontstaat als twee feiten op één regel worden geperst. Twee feiten zijn twee regels,
+  twee cellen of twee elementen. Dit geldt in de contentzone, in een label en in een
+  bronregel. Het middenpunt is geen scheidingsteken maar een noodgreep om iets dat niet paste
+  alsnog te laten passen, en de lezer moet het uit elkaar halen. Een bronregel met een bron,
+  een eenheid en een peildatum is drie feiten: zet ze onder elkaar, of laat er twee weg.
 - **Insets** 0,2 links en rechts en 0,15 boven en onder op een vak met vulling; 0 op een
   tekstvak zonder vulling, zodat de tekst met de vakrand uitlijnt en dus met de rest van de
   kolom.
@@ -311,6 +345,9 @@ is de eenvormigheid waarop de vergelijking verloren is.
 Eén regel van 11pt Lato Light in navy op 70 procent dekking, zonder vulling, insets 0, direct
 onder de doos waar hij bij hoort en over de breedte van die doos — niet onder de slide. Twee
 beelden op één slide krijgen twee bronregels.
+
+**Ook hier geen hoge punt.** `Bron: monitor 2024 · n = 118 · peildatum 1 juli` is drie feiten
+op één regel; dat is twee regels of het is er één met minder erin (§9).
 
 Dat is geen kleine letter en geen verplichting. Het is de reden dat de lezer het cijfer
 gelooft, en het is de plek waar de eenheid en de peildatum staan, want die hoeven niet in de
@@ -346,9 +383,12 @@ een sluitregel is een compositie, geen tekstslide. Dat is de sterkste referentie
 Geen patroonnamen. Geen verplichte afsluitband. Geen maximum aantal tekstgroottes per slide.
 Geen tabel met kaartbaselines op vaste y-waarden. Geen minimumafstand die een script afdwingt.
 
-En geen belofte dat dit genoeg is. Twee van de tien voorbeelden in `assets/maatstaf/` dragen
+En geen belofte dat dit genoeg is. Drie van de tien voorbeelden in `assets/maatstaf/` dragen
 zelf een defect: op `01` en `06` staat het grote getal over zijn eigen label, en op `01` is de
 onderste helft van de vier kaarten leeg. Kijk daar naar de vier hues en naar de brede panelen
-eronder, niet naar de kaarthoogte. De lat is de compositie van die slides, niet hun uitvoering.
+eronder, niet naar de kaarthoogte. En op `04` staan Montserrat SemiBold en Lato Light in
+dezelfde alinea — nagemeten, zie §9 — wat sinds die paragraaf niet meer mag. Kijk op `04` naar
+de twee hues voor een tegenstelling, naar proza als exhibit en naar de bronregel per kolom, niet
+naar de letter van de aanhef. De lat is de compositie van die slides, niet hun uitvoering.
 
 De render blijft het enige oordeel over de vorm.

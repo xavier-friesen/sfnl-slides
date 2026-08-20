@@ -89,17 +89,19 @@ dus `raster-1` en `raster-2` per ronde.
 
 Noteer per slide "verdacht" of "schoon op het raster".
 
-### 2b. De zeven meetbare grenzen
+### 2b. De negen meetbare grenzen
 
-Deze zeven toets je hard, want ze zijn de reden dat een deck karakterloos of luidruchtig leest
-en ze zijn alle zeven op een render vast te stellen. Rapporteer ze met het getal erbij. Twee van
-de zeven zijn een plafond en geen vloer: de drager mag ook te vaak en te groot zijn.
+Deze negen toets je hard, want ze zijn de reden dat een deck karakterloos of luidruchtig leest
+en ze zijn alle negen op een render vast te stellen. Rapporteer ze met het getal erbij. Twee van
+de negen zijn een plafond en geen vloer: de drager mag ook te vaak en te groot zijn.
 
 | toets | vloer | wat het is als hij faalt |
 |---|---|---|
 | **drager** | per slide één element dat eruit springt: 28 tot 40pt in Montserrat Light, óf 18pt SemiBold in een accentkleur waar de rest navy is | de geërfde titel telt niet mee; is er niets, dan is de slide een verzameling en geen argument |
 | **drager niet te vaak** | ten hoogste één contentslide op drie draagt letter van 28pt of groter, en geen enkele slide gaat boven 40pt | staat er op elke slide een groot getal, dan trekt die maat geen aandacht meer en leest de deck als tien keer dezelfde nadruk. Meld het deckbreed met de slidenummers |
 | **titelletter** | Gotham Bold alleen in de titel; in de contentzone Montserrat Light, Montserrat SemiBold of Lato Light | een vette displayletter in de contentzone concurreert met de kop erboven. Op de render ziet dat eruit als twee titels op één slide |
+| **één familie per regel** | binnen één alinea één letterfamilie; een aanhef midden in een Lato Light-regel staat in `Lato Semibold`, Montserrat SemiBold alleen op wat lósstaat en op zijn eigen regel begint | Montserrat SemiBold als aanhef midden in een Lato-alinea zet twee letterbouwen en twee x-hoogtes op dezelfde maat naast elkaar; op de render is de aanhef merkbaar breder en ronder dan de rest van de regel, en dat leest als een zetfout in plaats van als hiërarchie. Wijs dit nooit goed door naar `assets/maatstaf/04` te verwijzen: die slide zet het zo, nagemeten, en is voor dít aspect geen lat meer (`vormentaal.md` §9) |
+| **geen hoge punt binnen een regel** | geen `·` als scheiding tussen twee feiten op één regel, ook niet in een label of een bronregel | twee feiten op één regel is de vorm die ontstaat als er geen tweede regel voor genomen is. De fix is twee regels, twee cellen of twee elementen — niet een mooier scheidingsteken |
 | **maatsprong** | grootste eigen maat gedeeld door kleinste, per slide | onder ongeveer 2 is er geen hiërarchie. De afgekeurde deck haalde 1,36, de referentie 3 tot 5 |
 | **twee registers** | in de hele deck minstens één bijna witte slide en minstens één echt verzadigde | ligt élke slide in hetzelfde middengrijs, dan is dat de deckbrede bevinding, niet een slidedefect |
 | **kleur in de letter** | minstens één accent als tekstkleur op wit per deck | staat alle kleur in vlakken en geen enkele in een letter, dan mist het stille register |
@@ -161,6 +163,14 @@ Waar je per slide naar kijkt:
 - **Calibri.** Leest de tekst in een eigen vorm ineens als een andere letter dan de rest, dan
   mist die run een `<a:latin/>`. Placeholders erven hun font en gaan niet mis; eigen vormen
   vallen terug op Calibri.
+- **Twee families binnen één regel.** Kijk naar de vetgezette aanhef midden in een alinea. Is
+  hij merkbaar breder, ronder en met een grotere x-hoogte dan de woorden erachter, dan staat er
+  Montserrat in een Lato-regel. Dat is een bevinding, ook al ziet het er los best uit. Zo ziet
+  het goede eruit: dezelfde letterbouw, alleen zwaarder — `Lato Semibold` op Lato Light. Let ook
+  op nepvet: een aanhef die alleen wat donkerder is zonder echt zwaarder te worden is `b="1"` op
+  een light gewicht.
+- **De hoge punt.** Zoek `·` in de contentzone, in labels en in bronregels. Elke vondst is een
+  bevinding met de fix erbij: twee regels, twee cellen of twee elementen.
 - **Kleur die niets codeert.** Stel per hue de vraag: wat codeert deze kleur, in één woord? Kun
   je dat niet zeggen, dan is het decoratie en hoort er één accent te staan. Zou de lezer
   informatie verliezen als het kleurverschil wegviel? Zo niet, dan gaat het eruit.

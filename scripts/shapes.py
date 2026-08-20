@@ -45,6 +45,7 @@ Gebruik
 
 from __future__ import annotations
 
+import re
 import sys
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -125,6 +126,20 @@ DRAGER_PLAFOND = 40.0
 TITELFONT = "Gotham Bold"
 DRAGERFONT = "Montserrat Light"
 
+#: De aanhef binnen een doorlopende regel. Eén familie per regel: staat de aanhef midden in
+#: een alinea Lato Light, dan is de aanhef een zwaarder Lato en niet Montserrat SemiBold.
+#: `Lato Semibold` bestaat als eigen familienaam in de fontlijst -- geen `b="1"`-nepvet.
+#: Nagemeten op de render (LibreOffice 24.2.7.2, fonts-lato 2.015-1), dezelfde zin op 16pt
+#: met elk Lato-gewicht als aanhef naast Lato Light als rest: `Lato` regular en `Lato Medium`
+#: zetten een verschil dat je pas ziet als je het weet, `Lato Heavy` gaat met de kop erboven
+#: concurreren. `Lato Semibold` zet dezelfde gewichtssprong als Montserrat SemiBold deed,
+#: binnen dezelfde letterbouw en dezelfde x-hoogte.
+AANHEFFONT = "Lato Semibold"
+
+#: De families die niet in dezelfde alinea mogen staan. Zie `para()`.
+_MONTSERRAT = "montserrat"
+_LATO = "lato"
+
 
 def tekst_op(vulling: str | tuple, pt: float = 0) -> str:
     """Welke tekstkleur hoort op deze vulling, gegeven de puntgrootte."""
@@ -204,8 +219,23 @@ def run(tekst: str, font: str, pt: float, kleur="navy", *,
     label.
 
     Gotham Bold weigert deze functie. Die letter staat in de titel en komt uit de layout;
-    op de slide zelf is het Montserrat Light of Lato Light, met Montserrat SemiBold voor een
-    kop, een label of een aanhef.
+    op de slide zelf is het Montserrat Light of Lato Light, met Montserrat SemiBold voor wat
+    lósstaat en op zijn eigen regel begint: een kop, een kapitaallabel, een rolnaam, een
+    kolomkop. Een aanhef binnen een doorlopende regel is dus géén Montserrat: die zet je met
+    `aanhef()`, in `Lato Semibold` op een Lato Light-alinea. `para()` weigert een alinea die
+    beide families bevat.
+
+    `vet=True` is er voor het geval dat een echt gewicht niet bestaat. Zet het niet op een
+    Lato Light- of Montserrat Light-run om nadruk te maken: dat is nepvet, en de renderer
+    kiest zelf wat hij ervan maakt. Er is een echt gewicht: `Lato Semibold`,
+    `Montserrat SemiBold`.
+
+    **Geen hoge punt als scheiding binnen een regel.** `tekst tekst · meer tekst` is de vorm
+    die ontstaat als twee feiten op één regel worden geperst -- en twee feiten zijn twee
+    regels, twee cellen of twee elementen. Dit geldt in de contentzone, in een label en in
+    een bronregel. Deze functie blokkeert het niet, want een middelpunt kan een legitiem
+    teken zijn; het is een regel die je zelf aanhoudt (`vormentaal.md` §9,
+    `adviesvorm.md` §4).
     """
     if cursief:
         raise ValueError("cursief is in deze huisstijl niet toegestaan")
@@ -259,15 +289,69 @@ def drager(tekst: str, pt: float, kleur: str = "navy", *, spc: int | None = None
 
 
 def aanhef(kop: str, rest: str, pt: float, kleur: str = "navy") -> list[str]:
-    """Twee runs in één alinea: Montserrat SemiBold als aanhef, Lato Light voor de rest.
+    """Twee runs in één alinea: `Lato Semibold` als aanhef, Lato Light voor de rest.
 
-    Dit is het middel waarmee de winnende deck twee hiërarchieniveaus binnen één tekstregel
-    haalt, zonder een tweede kolom en zonder een tweede vak. Gemeten in `maatstaf/04`: acht
-    alinea's, elk met een SemiBold aanhef van twee tot vier woorden op dezelfde 16pt als de
-    rest. Gebruik dit in plaats van Lato Light met `b="1"` -- dat is een nepvet.
+    Dit is het middel waarmee je twee hiërarchieniveaus binnen één tekstregel haalt, zonder
+    een tweede kolom en zonder een tweede vak. **Eén familie per regel**: de aanhef staat
+    binnen een doorlopende Lato-alinea, dus is hij Lato -- in een echt zwaarder gewicht, niet
+    met `b="1"` erop. Montserrat SemiBold blijft voor wat lósstaat en op zijn eigen regel
+    begint: een kop, een kapitaallabel (`label()`), een rolnaam, een kolomkop.
+
+    Wat hier eerder stond, en waarom het is omgezet
+    -----------------------------------------------
+    Deze docstring beriep zich op een meting: "Gemeten in `maatstaf/04`: acht alinea's, elk
+    met een SemiBold aanhef van twee tot vier woorden op dezelfde 16pt". Die meting is
+    nagerekend en ze is juist -- `04` zet werkelijk Montserrat SemiBold in een Lato
+    Light-alinea. Nagemeten op de PNG van `assets/maatstaf/04`, op 1920 px (144 dpi):
+
+    * `Vaste` in de aanhef is 92 px breed bij een kapitaalhoogte van 23 px, verhouding 4,00.
+      Montserrat SemiBold zet die verhouding op 4,00; Lato Semibold op 3,35.
+    * `noemen` in de rest is 106 px breed bij een x-hoogte van 17 px, verhouding 6,2.
+      Lato Light zet 6,8; Montserrat Light 8,0.
+    * De hele regel nagebouwd op 16pt in Montserrat SemiBold + Lato Light valt op de
+      pixel over de originele regel; in Lato Semibold + Lato Light is de aanhef ruim 14 procent
+      korter en breekt de regel elders.
+
+    De regel hier overruled dus een gemeten patroon uit een winnende deck, en niet een
+    verkeerde meting. Dat is een besluit: twee families binnen één tekstregel zetten twee
+    letterbouwen en twee x-hoogtes naast elkaar op dezelfde maat, en dat leest als een
+    zetfout in plaats van als hiërarchie. `assets/maatstaf/04` is voor dít aspect geen lat
+    meer; voor de rest van die slide -- twee hues voor een tegenstelling, proza als exhibit
+    -- blijft hij dat wel. Zie `reference/vormentaal.md` §9.
     """
-    return [run(kop.rstrip() + " ", "Montserrat SemiBold", pt, kleur),
+    return [run(kop.rstrip() + " ", AANHEFFONT, pt, kleur),
             run(rest, "Lato Light", pt, kleur)]
+
+
+_LATIN = re.compile(r'<a:latin typeface="([^"]*)"')
+
+
+def _een_familie(runs: tuple[str, ...]) -> None:
+    """Weiger een alinea die Montserrat en Lato door elkaar zet.
+
+    Dit is de guard die 'één familie per regel' onmogelijk te vergeten maakt. Hij staat hier
+    en niet in `run()`, want een run kent zijn buren niet: de fout bestaat pas op het niveau
+    van de alinea. En hij staat niet in `vlak()` of `tekst()`, want dan zou een alinea die
+    los wordt doorgegeven aan een tabelcel of aan `retext_slide.py` er langs glippen.
+    """
+    families = set()
+    for r in runs:
+        for naam in _LATIN.findall(r or ""):
+            kleine = naam.strip().lower()
+            if kleine.startswith(_MONTSERRAT):
+                families.add("Montserrat")
+            elif kleine.startswith(_LATO):
+                families.add("Lato")
+    if len(families) > 1:
+        raise ValueError(
+            "Montserrat en Lato in dezelfde alinea: één alinea is één doorlopende regel, en "
+            "twee families op dezelfde maat zetten daar twee letterbouwen en twee x-hoogtes "
+            "naast elkaar. Twee wegen eruit: (1) is het een kop, een kapitaallabel, een "
+            "rolnaam of een kolomkop, zet hem dan als eigen alinea of eigen vak in "
+            f"Montserrat SemiBold -- `label()` doet dat; (2) is het een aanhef binnen de "
+            f"regel, gebruik dan `aanhef()`, die zet hem in {AANHEFFONT} met Lato Light "
+            "voor de rest."
+        )
 
 
 def para(*runs: str, algn: str | None = None, spc_voor: int | None = None,
@@ -281,7 +365,14 @@ def para(*runs: str, algn: str | None = None, spc_voor: int | None = None,
     `spc_voor` in honderdsten van een punt: 600 (6pt) tussen alinea's in een kaart of
     tabelcel, ongeveer een hele regelhoogte in een prozakolom -- daar is de witruimte de
     enige scheiding tussen twee beweringen.
+
+    **Eén familie per alinea.** Deze functie weigert een alinea die zowel een Montserrat- als
+    een Lato-run bevat. Eén alinea is één doorlopende regel, en twee families op dezelfde
+    maat zetten daar twee letterbouwen en twee x-hoogtes naast elkaar. Een alinea met alleen
+    Montserrat (een kop, een label, een drager) en een alinea met alleen Lato (body) gaan
+    gewoon door.
     """
+    _een_familie(runs)
     bits = f' algn="{algn}"' if algn else ""
     # Volgorde in CT_TextParagraphProperties is bindend: lnSpc, dan spcBef, dan spcAft, dan
     # de bullet-elementen. Andersom keurt het schema het af.

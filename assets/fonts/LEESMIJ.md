@@ -10,7 +10,7 @@ De map is nu leeg, en dat is een keuze, niet een vergissing:
 |---|---|---|
 | Gotham Bold | commercieel (Hoefler&Co) | **nee** — nooit meeleveren |
 | Montserrat, Montserrat Light, Montserrat SemiBold | SIL Open Font License 1.1 | ja, met de OFL-tekst erbij |
-| Lato, Lato Light | SIL Open Font License 1.1 | ja, met de OFL-tekst erbij |
+| Lato, Lato Light, Lato Semibold | SIL Open Font License 1.1 | ja, met de OFL-tekst erbij |
 
 Wil je de meting echt maken in plaats van geschat: zet de `.ttf`/`.otf`-bestanden van
 Montserrat en Lato hier neer, met hun `OFL.txt` ernaast. De scripts pakken ze op zonder

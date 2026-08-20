@@ -206,11 +206,15 @@ is de Word-tabellook.
 
 ## Fonts
 
-Toegestaan: Gotham Bold, Montserrat, Montserrat Light, Montserrat SemiBold, Lato Light.
+Toegestaan: Gotham Bold, Montserrat, Montserrat Light, Montserrat SemiBold, Lato Light,
+Lato Semibold.
 
 **Gotham Bold staat alleen in de titel, en die schrijf je nooit zelf: hij komt uit de layout.**
 Op de slide zelf is de letter licht. Lato Light voor lopende tekst, Montserrat Light voor een
-drager of een citaat, Montserrat SemiBold voor een label, een kolomkop of een aanhef. Schrijf je
+drager of een citaat, Montserrat SemiBold voor een label, een rolnaam of een kolomkop — dus voor
+wat lósstaat en op zijn eigen regel begint. Een aanhef bínnen een doorlopende regel is
+`Lato Semibold`: één regel is één familie, en `para()` in `shapes.py` weigert een alinea met een
+Montserrat- én een Lato-run (`vormentaal.md` §9). Schrijf je
 Gotham Bold toch in de contentzone, dan weigert `run()` in `shapes.py` het en geeft `qa_text.py`
 een `critical`.
 

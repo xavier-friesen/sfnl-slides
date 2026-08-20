@@ -44,8 +44,11 @@ EMU_PER_INCH = 914400
 FALLBACK_SIZE_PT = 18.0
 NEUTRAL_HEX = {"FFFFFF", "FEFFFF", "000000"}
 
+# `Lato Semibold` staat erbij sinds de aanhef binnen een doorlopende regel Lato is en niet
+# Montserrat (`vormentaal.md` §9): één familie per regel, en dan hoort er een echt zwaarder
+# Lato-gewicht te bestaan in plaats van `b="1"` op Lato Light.
 BRAND_FONTS = {"Gotham Bold", "Montserrat", "Montserrat Light", "Montserrat SemiBold",
-               "Montserrat Bold", "Lato Light", "Lato", "Lato Bold"}
+               "Montserrat Bold", "Lato Light", "Lato", "Lato Semibold", "Lato Bold"}
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 

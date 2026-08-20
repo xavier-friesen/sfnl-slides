@@ -136,9 +136,9 @@ OPTIONAL = {
 RASTER_TOOLS = ("pdftoppm", "pdftocairo", "mutool")
 
 # De families die de meting nodig heeft. Titelmaten hangen aan Gotham Bold, body aan Lato
-# Light, KPI's aan Montserrat SemiBold.
+# Light, KPI's aan Montserrat SemiBold, de aanhef binnen een regel aan Lato Semibold.
 MEASURED_FAMILIES = ("Gotham Bold", "Montserrat", "Montserrat SemiBold",
-                     "Montserrat Light", "Lato Light")
+                     "Montserrat Light", "Lato Light", "Lato Semibold")
 
 FONTCONFIG_SNIPPET = (
     "~/.config/fontconfig/fonts.conf met een <alias> per merkfont "

@@ -135,6 +135,17 @@ mooier maken.
 - **Stockfoto-sfeer in de contentzone.** Foto's horen op de cover, de dividers en de
   outro, waar het sjabloon ze zet. Een foto tussen de exhibits vult ruimte die een
   argument had moeten vullen.
+- **De hoge punt als scheiding binnen een regel.** `tekst tekst · meer tekst` is geen
+  opmaak maar een noodgreep: twee feiten die op één regel geperst zijn omdat er geen
+  tweede regel voor genomen is. Twee feiten zijn twee regels, twee cellen of twee
+  elementen. Dit geldt in de contentzone, in een label en in een bronregel — `Bron:
+  monitor 2024 · n = 118 · peildatum 1 juli` is drie feiten en dus geen bronregel. Het
+  middenpunt is het teken waar de lezer het werk moet doen dat de bouwer heeft
+  overgeslagen (`vormentaal.md` §9).
+- **Twee letterfamilies in één tekstregel.** Montserrat SemiBold als aanhef midden in een
+  Lato Light-alinea zet twee letterbouwen en twee x-hoogtes op dezelfde maat naast elkaar.
+  Eén regel is één familie: de aanhef in `Lato Semibold`, of het label op zijn eigen regel
+  in Montserrat SemiBold (`vormentaal.md` §9). `para()` in `shapes.py` weigert de mix.
 
 ## 5. De beslistoets op de render
 
