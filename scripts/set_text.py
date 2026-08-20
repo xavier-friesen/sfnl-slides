@@ -49,8 +49,8 @@ underline is allowed for an inline label only (V6, see below).
 
 Straight apostrophes inside a word are rewritten to the typographic ’ (`risico's` →
 `risico’s`); `--keep-apostrophes` switches that off. A straight quotation mark around a
-quote is left alone — turning it into ’ would be wrong — and `qa_typography.py` reports
-it so it can be fixed by hand.
+quote is left alone — turning it into ’ would be wrong — and `qa_text.py` reports it as
+`straight-quote` so it can be fixed by hand.
 
 `--drop-empty` removes placeholder shapes that got no text, so no unfilled prompt is
 left on the slide.

@@ -14,7 +14,8 @@ Output:
     {
       "python":    {"executable": "...", "version": "3.12.x", "platform": "win32"},
       "deps":      {"pptx": true, "lxml": true, "defusedxml": true, ...},
-      "renderers": {"powerpoint_com": true, "soffice": null, "pdf_to_png": null},
+      "renderers": {"powerpoint_com": true, "soffice": null, "soffice_probe": {...},
+                    "pdf_to_png": null},
       "verdict":   "full" | "qa-only",
       "missing":   [...],
       "remediation": [...]
@@ -23,11 +24,20 @@ Output:
 `verdict` is the whole point:
 
 * **full** — a renderer works. Build, render, look at the slides, fix what you see.
-* **qa-only** — no renderer. You may still build, but you cannot see the result, so
-  qa_fit.py, qa_text.py and qa_typography.py become the gate instead of your eyes, the
-  reviewer does a structural XML review rather than a visual one, and the delivery says
-  in so many words that the deck was not visually verified. Building blind WITHOUT
-  saying so is the defect this flag exists to prevent.
+* **qa-only** — no renderer. You may still build, but you cannot see the result, and
+  dan is er geen vormbeoordeling. Dat is het punt van deze vlag, en er komt geen script
+  dat het gat vult: wat er nog wél is, is `qa_text.py` voor de hygiëne (restplaceholders,
+  Calibri, harde hex, autofit) en `qa_tellingen.py` voor de tellingen (maten per rol,
+  bandfrequentie, exhibits bij cijfers, maatsprong, twee families in één alinea, de hoge
+  punt). Die twee zien geen overlap, geen contrast, geen dood wit en geen baseline.
+  `deck-visual-reviewer` doet dan een structurele XML-review en zegt dat expliciet, en de
+  oplevering zegt in zoveel woorden dat de deck niet visueel geverifieerd is. Blind bouwen
+  ZONDER dat te zeggen is het defect waarvoor deze vlag bestaat.
+
+Waarom hier geen `qa_fit.py` en `qa_typography.py` staan: die zijn er nooit geweest.
+Vijf scripts haalden ze aan als "de poort in QA-only-modus" en de bouwer ging op een
+poort vertrouwen die niet bestond. De repo zet zelf "Poorten: één: de outline", dus ze
+zijn opgeruimd in plaats van geschreven.
 
 Exit code is ALWAYS 0, including when everything is missing: the JSON is the answer, and
 "no renderer" is a valid answer that the caller has to read and act on, not a crash. Do
@@ -144,8 +154,8 @@ FONTCONFIG_SNIPPET = (
     "~/.config/fontconfig/fonts.conf met een <alias> per merkfont "
     "(Gotham Bold -> Montserrat SemiBold, Montserrat -> een geïnstalleerde sans, "
     "Lato Light -> Lato of Open Sans), daarna `fc-cache -f`. Dat maakt de "
-    "LibreOffice-render dichter bij het echte deck; de meting van qa_fit blijft een "
-    "schatting zolang de échte bestanden ontbreken."
+    "LibreOffice-render dichter bij het echte deck; de meting van fit_title.py blijft "
+    "een schatting zolang de échte bestanden ontbreken."
 )
 
 
@@ -187,6 +197,95 @@ def check_soffice() -> str | None:
         return None
 
 
+# ---------------------------------------------------------------------------
+# De renderermelding was ÉÉN KEER fout, en dat is de gevaarlijkste fout die dit script
+# kan maken: de bouwer denkt dan visueel te verifiëren terwijl er niets rendert.
+#
+# Wat er gebeurde: in de meetomgeving stond alleen `libreoffice-core` en niet
+# `libreoffice-impress`. `soffice` bestaat dan, staat op PATH, en `shutil.which` vindt
+# hem — dus preflight meldde een renderer. Maar zonder Impress is er geen importfilter
+# voor een pptx, en `soffice --convert-to pdf` antwoordde `Error: source file could not
+# be loaded`, met exitcode 0. Op de aanwezigheid van het binary kun je dus niets bouwen.
+#
+# Daarom de echte proef, dezelfde soort proef die `render.py` doet met `com_available()`:
+# een lege pptx wegschrijven en hem laten omzetten. De uitkomst is niet de exitcode maar
+# de vraag of er een pdf staat. Kost hier 1,9 seconde, één keer per sessie.
+# ---------------------------------------------------------------------------
+
+PROBE_TIMEOUT = 120
+
+# Wat soffice zegt als er geen importfilter is. Alleen voor de melding: het oordeel hangt
+# aan de pdf, niet aan deze tekst.
+NO_FILTER_HINT = "source file could not be loaded"
+
+
+def probe_soffice() -> dict:
+    """Laat LibreOffice écht een pptx omzetten. `{"ran", "ok", "detail"}`.
+
+    `ran: False` betekent dat er niet geprobeerd kon worden — geen python-pptx om een
+    proefdeck te schrijven, of soffice niet gevonden. Dat is niet hetzelfde als
+    `ok: False`, en de JSON houdt die twee gescheiden: "niet geprobeerd" mag nooit lezen
+    als "werkt", en ook niet als "werkt niet".
+    """
+    import glob
+    import tempfile
+
+    sys.path.insert(0, str(Path(__file__).resolve().parent / "office"))
+    try:
+        from pptx import Presentation
+    except ImportError:
+        return {"ran": False, "ok": None,
+                "detail": "niet geprobeerd: zonder python-pptx is er geen proefdeck om "
+                          "om te zetten. Het binary is gevonden, maar of het een pptx "
+                          "kán openen is hiermee niet vastgesteld."}
+    try:
+        from soffice import run_soffice
+    except ImportError as fout:
+        return {"ran": False, "ok": None,
+                "detail": f"niet geprobeerd: {fout}"}
+
+    with tempfile.TemporaryDirectory(prefix="preflight_probe_") as tmp:
+        deck = Path(tmp) / "probe.pptx"
+        try:
+            Presentation().save(str(deck))
+        except Exception as fout:  # noqa: BLE001 - elk falen is hier "niet geprobeerd"
+            return {"ran": False, "ok": None,
+                    "detail": f"niet geprobeerd: proefdeck schrijven mislukte ({fout})"}
+        try:
+            result = run_soffice(
+                ["--headless", "--convert-to", "pdf", "--outdir", tmp, str(deck)],
+                timeout=PROBE_TIMEOUT, capture_output=True,
+            )
+        except Exception as fout:  # noqa: BLE001
+            return {"ran": True, "ok": False,
+                    "detail": f"soffice liep niet af: {fout}"}
+
+        if glob.glob(str(Path(tmp) / "*.pdf")):
+            return {"ran": True, "ok": True, "detail": "een lege pptx werd een pdf"}
+
+        melding = " ".join(
+            stream.decode("utf-8", "replace").strip()
+            for stream in (result.stdout or b"", result.stderr or b"")
+        ).strip()
+        geen_filter = NO_FILTER_HINT in melding.lower()
+        return {
+            "ran": True,
+            "ok": False,
+            "geen_importfilter": geen_filter,
+            "returncode": result.returncode,
+            "detail": (
+                "soffice zette de proef-pptx niet om en er staat geen pdf. "
+                + ("De melding is 'source file could not be loaded': er is geen "
+                   "importfilter voor pptx, en dat betekent vrijwel altijd dat "
+                   "libreoffice-impress ontbreekt naast libreoffice-core. "
+                   if geen_filter else "")
+                + f"Exitcode was {result.returncode} — die zegt hier niets, soffice "
+                  "geeft ook 0 als hij het bestand niet kon laden. "
+                  f'Melding: "{melding[:200]}"'
+            ),
+        }
+
+
 def check_raster() -> str | None:
     for name in RASTER_TOOLS:
         if shutil.which(name):
@@ -212,9 +311,16 @@ def main() -> None:
     soffice = check_soffice()
     raster = check_raster()
 
+    # Het binary vinden is niet hetzelfde als kunnen renderen: zie `probe_soffice`. Bij
+    # `ran: False` is er niet geprobeerd, en dan blijft de aanwezigheid van het binary
+    # het enige dat we weten — dat staat zo in de JSON en in de remediatie.
+    probe = probe_soffice() if soffice else {
+        "ran": False, "ok": None, "detail": "geen soffice gevonden om te proberen"}
+    soffice_opent_pptx = probe["ok"] is not False
+
     # LibreOffice on its own renders nothing: it produces a PDF, and something has to
     # turn that into PNG.
-    libreoffice_usable = bool(soffice and raster)
+    libreoffice_usable = bool(soffice and raster and soffice_opent_pptx)
     can_render = com or libreoffice_usable
 
     missing: list[str] = []
@@ -236,7 +342,16 @@ def main() -> None:
 
     if not can_render:
         missing.append("renderer")
-        if soffice and not raster:
+        if soffice and probe["ok"] is False:
+            remediation.append(
+                "LibreOffice staat er, maar hij kan geen pptx openen: de proefconversie "
+                "leverde geen pdf. " + probe["detail"] + " Remedie: installeer "
+                "libreoffice-impress naast libreoffice-core (apt: "
+                "`apt-get install -y libreoffice-impress`), en voor de png-stap "
+                "poppler-utils (pdftoppm) of mupdf-tools (mutool). Meld tot dan dat het "
+                "deck niet visueel geverifieerd is — een gevonden binary is geen renderer."
+            )
+        elif soffice and not raster:
             remediation.append(
                 "LibreOffice staat er, maar geen pdf->png-omzetter: installeer "
                 "poppler-utils (pdftoppm) of mupdf-tools (mutool)"
@@ -251,8 +366,17 @@ def main() -> None:
                 "geen renderer: installeer LibreOffice plus poppler-utils"
             )
         remediation.append(
-            "tot dan geldt de QA-only-modus: qa_fit/qa_text/qa_typography zijn de "
-            "poort, en de oplevering meldt dat het deck niet visueel is geverifieerd"
+            "tot dan geldt de QA-only-modus, en die heeft GEEN vormbeoordeling: "
+            "qa_text.py toetst de hygiëne en qa_tellingen.py de tellingen, en geen van "
+            "de twee ziet overlap, contrast, dood wit of een baseline. Bouw "
+            "conservatiever, laat deck-visual-reviewer een structurele XML-review doen, "
+            "en meld bij de oplevering dat het deck niet visueel is geverifieerd"
+        )
+
+    if soffice and probe["ran"] is False and not com:
+        remediation.append(
+            "de proefconversie is niet gedraaid, dus van deze LibreOffice is alleen "
+            "bekend dát hij bestaat: " + probe["detail"]
         )
 
     fonts = font_report(MEASURED_FAMILIES)
@@ -287,6 +411,9 @@ def main() -> None:
             "renderers": {
                 "powerpoint_com": com,
                 "soffice": soffice,
+                # Niet "is er een soffice" maar "opent deze soffice een pptx". Dat
+                # verschil is één keer een foutieve melding "er is een renderer" geweest.
+                "soffice_probe": probe,
                 "pdf_to_png": raster,
                 "preferred": "powerpoint"
                 if com

@@ -315,7 +315,21 @@ Een eigen vorm erft geen regelafstand en geen alinea-afstand. Zet beide, en deck
 - **Insets** 0,2 links en rechts en 0,15 boven en onder op een vak met vulling; 0 op een
   tekstvak zonder vulling, zodat de tekst met de vakrand uitlijnt en dus met de rest van de
   kolom.
-- **Centreren** tot ongeveer 3 in breed, daarboven links uitgelijnd. Cursief niet.
+- **Centreren** tot ongeveer 3 in breed, daarboven links uitgelijnd.
+- **Cursief mag, en alleen op een korte, niet-lopende regel**: een datum, een eenheid, een
+  bron, een scenario-aanduiding. Eén regel, ten hoogste 48 tekens, en niet als alinea. Voor
+  lopende tekst en voor alles van meer dan één regel blijft cursief verboden — een cursieve
+  alinea leest langzamer en er is een goedkoper middel voor nadruk, namelijk kleur (§3).
+  `run(..., cursief=True)` in `shapes.py` laat precies die korte regel door en weigert de
+  rest.
+
+  **Hier stond eerder alleen "Cursief niet", en dat was te absoluut.** Het origineel van
+  `maatstaf/11` zet per fasekaart een cursieve datumregel in de hue van de kaart, en die
+  regel werkt daar juist doordat hij niet gelezen maar herkend wordt: hij zegt "dit is
+  wanneer", niet "lees mij". Met het verbod zoals het er stond was die slide niet met de
+  eigen laag te bouwen — de reconstructie schreef er een eigen run omheen, en dan is de
+  regel geen regel meer maar een obstakel. Het verbod gold dus voor lopende tekst en is nu
+  ook zo opgeschreven. Dit is een besluit, niet een meting.
 - **`noAutofit` op elk vak dat je zelf schrijft.** Past de tekst niet, dan wordt het vak groter
   of de tekst korter, nooit het font kleiner. Eén vak met 90 procent schaling haalt een hele rij
   uit de lijn.
@@ -375,6 +389,50 @@ slots zijn geen bronitems.
 
 **Proza mag de exhibit zijn.** Twee goed gezette kolommen met gekleurde koppen, aanhefruns en
 een sluitregel is een compositie, geen tekstslide. Dat is de sterkste referentieslide die er is.
+
+### Wanneer een vorm een zin vervangt
+
+De toets is één vraag: **staat er in de zin een verhouding, een tijdstip of een afstand?** Dan
+hoort dat getal in de geometrie en niet in de tekst, want een positie lees je in één blik en een
+zin moet je uit elkaar halen.
+
+Drie voorbeelden, alle drie nagemeten in `assets/maatstaf/`:
+
+- **Een afstand.** `13` zet vijf projecttypes op een as van 1 tot 4, met per type twee punten en
+  de lijn ertussen. De zin die dat vervangt luidde: "bij zorgprocesprojecten wordt gemiddeld
+  doel 2 benoemd terwijl er tot doel 3,5 wordt gerapporteerd". Vijf van die zinnen naast elkaar
+  is niet te vergelijken; vijf lijnstukken op dezelfde as is één blik. Het gat tússen de twee
+  punten is de boodschap, en dat gat bestaat alleen als de posities op schaal staan.
+- **Een verhouding.** `12` zet naast elk rijlabel een puntenmeter van drie punten, waarvan er
+  twee vol zijn en één half. Dat vervangt "zwaar, maar iets minder zwaar dan sturen" — een
+  bewering die in proza een vergelijking vraagt die de lezer zelf moet maken.
+- **Een tijdstip.** `11` zet vier fasen als vier kaarten met een datumregel per kaart. Daar is
+  de vorm bewust géén tijdlijn: de fasen zijn even lang en volgen elkaar op, dus er is geen
+  afstand te coderen. Vier kaarten is dan eerlijker dan een as, want een as zou een verschil
+  in tijd suggereren dat er niet is.
+
+**Positie op schaal is de kern, en het is de enige plek waar het oog de fout niet repareert.**
+Draagt afstand informatie, dan staat hij op schaal (§7): de x van een moment is
+`0,48 + 12,52 × (t − t0) / (t1 − t0)`, en `schaal()` in `shapes.py` geeft die functie. Alles
+wat op een slide misstaat kun je op de render zien en verschuiven — behalve een punt dat op de
+verkeerde plek staat, want dat ziet er precies zo goed uit als een punt dat goed staat. Vier
+banden onder elkaar met "2024", "2025", "2026" en "2029" erin lezen als een tijdlijn en zijn
+het niet.
+
+**De verkeerde lezing, en die is voorgekomen.** "Positie draagt de informatie" werd gelezen als
+"dus zet de labels waar ze passen". Op de reconstructie van `13` liep het aslabel `4 SYSTEEM`
+1,2 in buiten de slide, en de eerste reflex was om de tik naar links te schuiven zodat het
+label paste. Dan is de as niet lineair meer en is het beeld een leugen. De regel is andersom:
+het punt staat op schaal en blijft daar, het label wijkt — het schuift binnen de zone
+(`binnen()`), het lijnt rechts uit, of het gaat naar een tweede regel. Botsen twee labels, dan
+wijken de teksten en nooit de posities.
+
+**Een merkteken is geen versiering.** Een punt, een meter, een pijl, een streep: elk codeert
+één ding, en de toets is dezelfde als bij kleur (§3) — wat codeert dit teken, in één woord? Is
+het antwoord "de volgorde" of "het gewicht", dan staat het er goed. Is het antwoord "het maakt
+de slide levendiger", dan gaat het eruit, net als elk gekleurd vlak dat alleen kleur is (§8).
+Blijven bij de kneepoefening de pijltjes over in plaats van de boodschap, dan was het
+navigatie.
 
 ---
 

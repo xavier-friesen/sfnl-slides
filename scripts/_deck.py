@@ -322,8 +322,9 @@ NORM_LAYOUT_NAME = "Titel, subtitel"
 CONTENT_LAYOUT_NAMES = _names_with_verdict("norm", "toegestaan")
 
 #: Het bewuste blanco canvas. Heeft GEEN titelplaceholder, dus geen enkel script mag
-#: erover klagen dat de titel ontbreekt, en de zone-checks van `qa_fit.py` gelden er niet:
-#: er is geen contentzone, er is een heel canvas.
+#: erover klagen dat de titel ontbreekt, en de contentzone geldt er niet: er is geen
+#: contentzone, er is een heel canvas. `deck-visual-reviewer` weet dat ook — daar is een
+#: nagetekende header juist de bevinding.
 BLANK_CANVAS_NAME = "Leeg"
 
 COVER_LAYOUT_NAMES = _names_with_verdict("cover")
@@ -524,8 +525,8 @@ def _cloud_font_dirs() -> list[Path]:
 
 
 # Every place a brand font can live, Windows and Linux alike. One constant, imported by
-# fit_title.py and qa_fit.py, so the two cannot measure with different fonts and then
-# disagree about the same title. `assets/fonts` is first: a font shipped with the plugin
+# fit_title.py en gebruikt door `preflight.py` voor zijn fontmeting, zodat die twee niet
+# met verschillende fonts kunnen meten en dan over dezelfde titel van mening verschillen. `assets/fonts` is first: a font shipped with the plugin
 # is the same on every machine.
 FONT_DIRS: tuple[Path, ...] = tuple(
     [
@@ -1074,7 +1075,8 @@ def open_deck(path: str | Path):
 # A straight apostrophe between two word characters: `risico's`, `'s-Hertogenbosch`
 # never gets here because the leading one has no word character in front of it. Only
 # the unambiguous case is rewritten; a straight quote used as a quotation mark is left
-# alone and reported by qa_typography.py, because turning it into ’ would be wrong.
+# alone, because turning it into ’ would be wrong; `qa_text.py` meldt hem als
+# `straight-quote` zodat een mens beslist.
 IN_WORD_APOSTROPHE = re.compile(r"(?<=[^\W_])'(?=[^\W_])", re.UNICODE)
 STRAIGHT_QUOTES = re.compile(r"['\"]")
 

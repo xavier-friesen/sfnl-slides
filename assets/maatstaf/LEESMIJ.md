@@ -20,9 +20,9 @@ Kijk naar de compositie van deze slides, niet naar hun uitvoering.
 | `04-twee-kolommen-teal-tegen-koraal` | twee hues voor een tegenstelling, proza als exhibit, een bronregel per kolom | de aanhef staat in Montserrat SemiBold binnen een Lato Light-alinea — twee families in één tekstregel, en dat mag sinds `vormentaal.md` §9 niet meer |
 | `06-stroomschema-twee-rijen` | het schema zelf, de twee rijen | het grote getal staat over zijn eigen label |
 | `08-tabel-naast-grafiek` | de tabelzetting naast een native grafiek | dezelfde omzetreeks staat twee keer op één slide (`adviesvorm.md` §2) |
-| `11-vier-fasekaarten-tweede-uitgelicht` | de cirkelbadge in de hue van de kaart, de gestreepte oranje nadruk om één kaart, vier hues die vier fasen coderen, de afsluitband die één keer voorkomt | de body staat op 13pt in plaats van 16 (vier kaarten van 2,95 in laten niet meer toe), en de cursieve datumregel omzeilt het cursiefverbod uit §9 — zie hieronder |
+| `11-vier-fasekaarten-tweede-uitgelicht` | de cirkelbadge in de hue van de kaart, de gestreepte oranje nadruk om één kaart, vier hues die vier fasen coderen, de afsluitband die één keer voorkomt | de body staat op 13pt in plaats van 16 (vier kaarten van 2,95 in laten niet meer toe) |
 | `12-tabel-verzadigde-rijlabels-puntenmeter` | het volle rijlabel tegen het nauwelijks getinte paneel, de puntenmeter als merkteken voor gewicht, kolomkoppen in grijs | de kapitaallabels staan op 12pt omdat `VERANTWOORDEN` op 14pt niet in de cel past; dat is een gevolg van de kolombreedte, geen model |
-| `13-dumbbell-plot-op-schaal` | positie draagt de informatie, twee hues voor twee meetmomenten, het lichte register: alleen lijnen en punten op wit | `TYPE PROJECT` staat in navy en de kolomkoppen op `12` in grijs, terwijl het dezelfde rol is — dat verschil is een renderomweg en geen keuze |
+| `13-dumbbell-plot-op-schaal` | positie draagt de informatie, twee hues voor twee meetmomenten, het lichte register: alleen lijnen en punten op wit, en een aslabel dat binnen de zone blijft terwijl de tik op schaal staat | — |
 | `14-postitwand-drie-stappen` | het schema in abstracte vorm zonder tekst, het grote cijfer met de kaplabel op één baseline en een lijn eronder, de pijl die een volgorde draagt | tussen het schema en de drie kolommen staat 0,58 in wit en onderaan nog 0,67 in; de slide leest luchtiger dan het origineel |
 
 ## De meting bij `04`
@@ -45,18 +45,36 @@ leest als een zetfout in plaats van als hiërarchie. De aanhef staat sindsdien i
 `Lato Semibold`, en `para()` in `scripts/shapes.py` weigert de mix.
 
 
-## Twee dingen die in `11` tot `14` openstaan
+## Twee dingen die in `11` tot `14` openstonden, en hoe ze beslecht zijn
 
-**Cursief.** `vormentaal.md` §9 zegt "Cursief niet", en `run()` in `scripts/shapes.py` weigert
-het. Het origineel van `11` heeft per kaart een cursieve datumregel, en die is in de
-reconstructie met een eigen run omheen gebouwd. Zo staat het er nu: de maatstaf en de
-primitievenlaag spreken elkaar tegen op deze ene plek. Dat is een besluit dat genomen moet
-worden — cursief toestaan voor een korte, niet-lopende regel (datum, eenheid, bron), of de regel
-bevestigen en de datumregel in het origineel als defect van het origineel benoemen.
+**Cursief: toegestaan, beperkt.** `vormentaal.md` §9 zei "Cursief niet", en `run()` in
+`scripts/shapes.py` weigerde het; het origineel van `11` heeft per kaart een cursieve
+datumregel, en in de eerste reconstructie is daar een eigen run omheen gebouwd. Het besluit is
+dat cursief mag voor een **korte, niet-lopende regel** — een datum, een eenheid, een bron, een
+scenario-aanduiding — van één regel en ten hoogste 48 tekens, en verboden blijft voor lopende
+tekst en voor alles van meer dan één regel. `run(..., cursief=True)` laat precies die regel door
+en weigert de rest met een foutmelding die zegt wat je in plaats daarvan doet. §9 is
+bijgeschreven; de datumregel op `11` is dus geen omzeiling meer maar de vorm zelf.
 
-**Grijs met letterspatiëring.** Het huisrecept voor een grijs kapitaallabel — `label()` met
-navy op alpha — laat in de LibreOffice-render de laatste letter van de run weg (`MEETDOEL`
-wordt `MEETDOE`). De oorzaak is alpha op de tekstkleur samen met `spc`; elk van de twee apart
-rendert goed. `12` en `13` gebruiken daarom het voetnootgrijs uit `sjabloon.md` (`tx1` met
-lumMod/lumOff) in plaats van alpha. Of echte PowerPoint dezelfde glyph laat vallen is hier niet
-te toetsen; de omweg volgt hoe dan ook de kleur die `sjabloon.md` als het grijs documenteert.
+Eén meting die daarbij hoort, want ze kostte een ronde: een cursieve run zonder `i="1"` ziet er
+op de render bijna hetzelfde uit als een rechte run in een licht gewicht op 11pt. De
+tussenversie waarin het attribuut ontbrak is naast het origineel gelegd en pas op de derde blik
+als niet-cursief herkend. Toets cursief dus in de XML en niet met het oog.
+
+**Grijs met letterspatiëring: opgelost in de kleurtabel.** Het huisrecept voor een grijs
+kapitaallabel — `label()` met navy op alpha — laat in de LibreOffice-render de laatste letter
+van de run weg (`MEETDOEL` wordt `MEETDOE`, `GEWICHT` wordt `GEWICH`). De oorzaak is alpha op de
+tekstkleur samen met `spc`; elk van de twee apart rendert goed. Dat is een **renderobservatie op
+LibreOffice 24.2.7.2** en geen OOXML-feit: of echte PowerPoint dezelfde glyph laat vallen is
+hier niet te toetsen.
+
+`shapes.py` kent nu de kleur `"grijs"`: het voetnootgrijs dat `sjabloon.md` onder Kleur al als
+hét grijs documenteert, `tx1` met `lumMod 65000` / `lumOff 35000`. Daarmee is een grijs
+kapitaallabel één argument (`label("MEETDOEL", 11, "grijs")`) in plaats van een eigen run, en
+`label()` weigert een alphakleur met de reden erbij. Het `GRIJS`-recept blijft geldig waar het
+altijd goed was: op een gewone regel zonder spatiëring, de bronregel van §11.
+
+Twee gevolgen voor de rij hierboven. Op `13` staat `TYPE PROJECT` in navy terwijl de aslabels
+grijs zijn — dat verschil was een renderomweg en geen keuze, en het is nu met één kleur op te
+lossen. En het aslabel dat buiten de zone liep is nu `binnen()` in `shapes.py`: het label wijkt,
+de positie van het punt niet.

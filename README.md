@@ -22,7 +22,7 @@ Deze plugin neemt de dunne laag mee en laat de vormgevingspolitie liggen.
 |---|---|---|
 | Vorm per slide | gekozen uit tien patronen, vastgelegd in een spec | zelf gecomponeerd tijdens het bouwen |
 | Poorten | outline, spec, QA-drempels | één: de outline |
-| Vormbeoordeling | `qa_fit.py` en `qa_typography.py` meten, daarna de render | alleen de render |
+| Vormbeoordeling | `qa_fit.py` en `qa_typography.py` meten, daarna de render | de render, met tellingen als hygiëne ernaast |
 | Scripts | ± 18.100 regels | ± 7.400 regels |
 | Skills | vijf | één |
 
@@ -79,6 +79,7 @@ keer in- en uitpakt, waar de huisstijlfonts staan.
 | `add_chart.py`, `add_table.py` | native grafiek en tabel, ná het inpakken |
 | `render.py`, `thumbnail.py` | slides naar PNG en een contactblad |
 | `qa_text.py` | hygiëne: restplaceholders, Calibri, harde hex, rechte apostrof |
+| `qa_tellingen.py` | tellingen: maten per rol, bandfrequentie, exhibits bij cijfers, maatsprong, letterfamilies, hoge punt — plus woorden, registers en plattegrond als cijfer zonder oordeel |
 | `fit_title.py` | past een titel op één regel, gemeten met het echte font |
 | `inspect_deck.py` | wat staat er werkelijk op de slide |
 | `duplicate_slide.py`, `retext_slide.py` | een bestaand deck uitbreiden |

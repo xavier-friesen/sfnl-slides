@@ -46,8 +46,9 @@ explicit box in inches (`x,y,w,h`), otherwise across the content zone.
 De hoogte wordt altijd ingekort tot de onderrand van de contentzone (6.93 in). Dat is
 geen smaakkwestie: neem je de doosmaat van een layout-21/22-placeholder over, dan loopt
 die zelf tot 6.96 in en staat de grafiek 0.03 in onder de zone, tegen de geërfde chrome
-aan. De JSON meldt `clamped_to_zone` en de werkelijke `box_in`; `qa_fit.py` toetst het
-met de check `zone-overrun`.
+aan. De JSON meldt `clamped_to_zone` en de werkelijke `box_in`; er is geen script dat dat
+narekent — de zone-overtreding zie je op de render, en `deck-visual-reviewer` noemt hem
+onder overloop.
 
 `c:axId` and `c:crossAx`: python-pptx writes these axis identifiers as NEGATIVE 32-bit
 values. This script never touches them and neither should you. "Repairing" them to

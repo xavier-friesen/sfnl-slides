@@ -105,7 +105,7 @@ MODE_CHECK_LAYOUTS = CONTENT_LAYOUTS
 
 
 def find_gotham_bold() -> Path | None:
-    """The installed Gotham Bold, or None. Same search as qa_fit.py (see _deck.py)."""
+    """The installed Gotham Bold, or None. Same search as preflight.py's font report (see FONT_DIRS in _deck.py)."""
     return find_font_file("Gotham Bold")
 
 

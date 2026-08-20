@@ -11,10 +11,12 @@ hardgecodeerde hex in plaats van `schemeClr`. Een rechte apostrof. Een titel in
 onderkast.
 
 Wat dit script NIET doet: beoordelen of de slide mooi is, of de vakken vol genoeg staan,
-hoeveel tekstgroottes er op een slide staan, of de compositie klopt. Dat oordeel komt van
-de render, niet van een meting. De vorige versie van dit script deed dat wel, samen met
-`qa_fit.py` en `qa_typography.py`, en het resultaat was dat de bouwer regels ging vermijden
-in plaats van slides ging maken.
+of de compositie klopt. Dat oordeel komt van de render, niet van een meting. Een eerdere
+route mat dat wel, met `qa_fit.py` en `qa_typography.py` erbij, en het resultaat was dat de
+bouwer regels ging vermijden in plaats van slides ging maken. Die twee scripts hebben in
+deze repo nooit bestaan en komen er ook niet: de poort is de outline (README), de hygiëne
+staat hier, de tellingen staan in `qa_tellingen.py`, en de vorm wordt op de render
+beoordeeld door `deck-visual-reviewer`.
 
 Twee uitzonderingen op die grens, en die zijn er omdat ze in de praktijk misgingen. De
 titelletter in de contentzone is een `critical`: Gotham Bold hoort in de titel en komt daar
@@ -125,6 +127,21 @@ def is_title(shape, layout: int | None) -> bool:
     return layout in HEADLINE_BY_IDX_LAYOUTS and fmt.idx in {10, 14}
 
 
+def shape_key(shape) -> int | str:
+    """Een sleutel die één vorm binnen één slide vasthoudt.
+
+    NIET `id(shape)`. python-pptx maakt bij elke `walk()` nieuwe proxy-objecten en de
+    oude worden opgeruimd, dus een tweede walk kan hetzelfde geheugenadres opnieuw
+    uitdelen. Dat is hier echt gebeurd: op slide 5 van het gemeten spreekdeck kreeg de
+    bronregel exact het `id()` van de titelproxy, werd hij als titel gezien, en verdween
+    de voetnootmaat uit de meting. `shape_id` komt uit de XML en is per slide uniek.
+    """
+    try:
+        return shape.shape_id
+    except (AttributeError, ValueError):
+        return f"naam:{getattr(shape, 'name', '?')}"
+
+
 def walk(shapes):
     """Alle vormen, groepen doorlopen."""
     for shape in shapes:
@@ -173,7 +190,7 @@ def analyse(deck: Path) -> dict:
         has_text = False
         reported: set[tuple] = set()
         layout = layout_number(slide)
-        titels = {id(s) for s in walk(slide.shapes) if is_title(s, layout)}
+        titels = {shape_key(s) for s in walk(slide.shapes) if is_title(s, layout)}
         if layout not in HEADLINE_BY_IDX_LAYOUTS | INTENTIONALLY_BLANK_LAYOUTS:
             contentslides += 1
 
@@ -226,7 +243,7 @@ def analyse(deck: Path) -> dict:
                         f'sjabloonprompt op de slide: "{text.strip()[:60]}"', "critical")
                     break
 
-            in_titel = id(shape) in titels
+            in_titel = shape_key(shape) in titels
             pt = run.font.size.pt if run.font.size is not None else None
 
             font = run.font.name

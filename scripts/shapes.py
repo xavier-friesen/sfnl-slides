@@ -5,10 +5,33 @@ geen band. Wat er wel in zit: de dingen die je nodig hebt om zélf een compositi
 correct en zonder de valkuilen, plus rekenwerk om te weten hoe hoog een blok moet zijn
 vóórdat je het rendert.
 
-De grens is: dit bestand levert een `vlak`, een `lijn`, een `run`, een `raster` en een
-`hoogte`. Wat je daarmee bouwt is jouw beslissing, elke slide opnieuw. Zodra hier een functie
-zou staan die drie kaarten op vaste baselines neerzet, is het compose.py geworden en dan gaat
-de vormgeving weer op de automaat.
+De grens is: dit bestand levert een `vlak`, een `lijn`, een `run`, een `raster`, een `hoogte`,
+een handvol merktekens die élk één ding tekenen (`punt`, `meter`, `pijl`, `streep`), en het
+gereedschap om zelf te componeren (`adj`, `contour`, `verbind`, `anker`, `groep`, `schaal`).
+Wat je daarmee bouwt is jouw beslissing, elke slide opnieuw. Zodra hier een functie zou staan
+die drie kaarten op vaste baselines neerzet, is het compose.py geworden en dan gaat de
+vormgeving weer op de automaat. Er komt dus geen `kaartenrij()`, geen `stroomschema()` en geen
+`tijdlijn()`: bij twijfel generieker in plaats van specifieker.
+
+Een eigen vorm even makkelijk als een vlak
+------------------------------------------
+Drie wegen, in deze volgorde:
+
+1. **Een presetvorm met zijn handvatten.** `vlak(prst=..., adj=...)`. `PRESET_ADJ` in dit
+   bestand zegt per vorm wat `adj1` en `adj2` doen -- een halve punt is
+   `prst="pie", adj={"adj1": 5400000, "adj2": 16200000}`, een stap in een volgorde is
+   `prst="chevron", adj={"adj": 25000}`. Zonder die tabel was élke preset behalve rechthoek en
+   cirkel onbruikbaar, want een leeg `<a:avLst/>` geeft je PowerPoints defaults en die zijn op
+   deze maten fout.
+2. **Een merkteken.** `punt`, `meter`, `pijl`, `streep`, `verbind`. Elk tekent één ding, elk
+   houdt zich aan de kleur- en contrastregels, en elk komt in `assets/maatstaf/11` tot `14`
+   voor.
+3. **Een eigen contour.** `contour()` neemt punten in inch en schrijft het `custGeom`. Dat is
+   een vorm die het sjabloon niet kent, zonder XML te typen.
+
+De discipline geldt op alle drie: alpha in plaats van `lumMod` voor een container, absolute
+hoekradius, lijn in de hue van de vulling, expliciete `<a:latin/>`, `noAutofit`, de bindende
+elementvolgorde, `lnSpc` 112%, en de contrastregels. Een eigen vorm is geen achterdeur.
 
 Waarom dit bestaat
 ------------------
@@ -87,8 +110,21 @@ PROZA_2 = ([0.48, 6.82], 5.91)
 HUE = {
     "navy": "dk2", "oranje": "accent1", "grapefruit": "accent2",
     "royal": "accent3", "sky": "accent4", "emerald": "accent5",
-    "wit": "lt2", "zwartblauw": "dk1",
+    "wit": "lt2", "zwartblauw": "dk1", "grijs": "tx1",
 }
+
+#: De hues die als lichtheidstrap geschreven worden in plaats van met alpha, met hun
+#: `(lumMod, lumOff)`. Er is er één, en dat is het voetnootgrijs dat `sjabloon.md` onder
+#: Kleur als hét grijs documenteert: `tx1` met `lumMod 65000` / `lumOff 35000`.
+#:
+#: Waarom dit naast de alpharegel bestaat, en waarom het die regel niet ondermijnt: §4 van
+#: `vormentaal.md` gaat over een lichte VULLING -- een container, en die is altijd alpha op
+#: de volle kleur. Grijs is hier geen container maar een TEKSTKLEUR: de bronregel, de
+#: eenheid, de kolomkop boven een tabel. Voor die rol werkt alpha in de praktijk niet, want
+#: alpha op de tekstkleur samen met `spc` (letterspatiëring) laat de LibreOffice-render de
+#: laatste glyph van de run weg -- zie de waarschuwing in `run()`. `vulling_xml()` weigert
+#: `"grijs"` daarom als vulling.
+LUM = {"grijs": (65000, 35000)}
 
 #: Alphawaarde die van een hue een container maakt in plaats van een kleur. Per hue
 #: gekalibreerd, want navy is veel donkerder dan emerald: gemeten uit de vijf winnende
@@ -165,8 +201,15 @@ def _split(v):
 
 
 def _clr(hue: str, alpha: int | None = None) -> str:
+    """Eén `<a:schemeClr>`. Volgorde binnen het element is bindend: `lumMod`, dan `lumOff`,
+    dan `alpha` (`sjabloon.md`, Volgorde binnen de XML)."""
     slot = HUE.get(hue, hue)
-    inner = f'<a:alpha val="{int(alpha)}"/>' if alpha else ""
+    inner = ""
+    if hue in LUM:
+        mod, off = LUM[hue]
+        inner += f'<a:lumMod val="{mod}"/><a:lumOff val="{off}"/>'
+    if alpha:
+        inner += f'<a:alpha val="{int(alpha)}"/>'
     return f'<a:schemeClr val="{slot}">{inner}</a:schemeClr>' if inner else \
            f'<a:schemeClr val="{slot}"/>'
 
@@ -178,31 +221,90 @@ def vulling_xml(v) -> str:
         return "<a:noFill/>"
     if isinstance(v, str) and v.startswith("container:"):
         hue = v.split(":", 1)[1]
+        _geen_grijs_vlak(hue)
         return f"<a:solidFill>{_clr(hue, CONTAINER_ALPHA.get(hue, 10000))}</a:solidFill>"
     hue, alpha = _split(v)
+    _geen_grijs_vlak(hue)
     return f"<a:solidFill>{_clr(hue, alpha)}</a:solidFill>"
+
+
+def _geen_grijs_vlak(hue) -> None:
+    """`"grijs"` is een tekstkleur, geen vulling en geen kaartlijn.
+
+    Een grijs vlak of een grijze rand om een gekleurde kaart is de Word-tabellook uit §8, en
+    het is precies de achterdeur die een nieuwe kleur in de laag zou openzetten. De lichte
+    vulling is alpha op de volle kleur (§4); de neutrale container is `("navy", 7000)`.
+    """
+    if hue in LUM:
+        raise ValueError(
+            f'"{hue}" is in deze laag een TEKSTkleur -- de bronregel, de eenheid, de '
+            "kolomkop -- en geen vulling of kaartlijn. Een grijs vlak of een grijze rand om "
+            "een gekleurde kaart is de Word-tabellook (vormentaal.md §8). Wil je een licht "
+            'vlak: dat is alpha op de volle kleur, `("navy", 7000)` voor de neutrale '
+            'container of `"container:<hue>"` voor de gekalibreerde tint. Wil je een lijn: '
+            "geef hem de hue van de vulling."
+        )
+
+
+#: De streepvormen die een lijn mag dragen. Meer bestaat er in OOXML, maar op de render zijn
+#: dit de drie die van elkaar te onderscheiden zijn op 0,75 tot 2pt.
+DASH = ("solid", "dash", "sysDash", "dashDot", "lgDash", "dot", "sysDot")
 
 
 def lijn_xml(l) -> str:
     """`("emerald", 1)` is een haarlijn van 1pt in emerald. `None` is geen lijn.
 
+    Drie vormen, en de derde is de nadruk:
+
+    * `("emerald", 1)` -- doorlopend, 1pt, emerald
+    * `(("navy", 25000), 0.75)` -- hetzelfde kleurtupel als `vulling` en `run()`: hue met
+      alpha, dus een haarlijn in het lichte register van §8
+    * `("oranje", 2, "dash")` -- gestreept. Dit is de nadrukomlijning: een `roundRect` zonder
+      vulling met een streepjeslijn eromheen, zoals de tweede kaart op `maatstaf/11`. Zonder
+      deze parameter kostte die ene omlijning 18 regels ruwe XML.
+
     De lijn heeft dezelfde hue als de vulling. Een lijn in een ándere hue -- grijs om wit,
     navy om een getint vlak -- is de Word-tabellook, en dat is het enige wat hier verboden
     is. In de winnende deck staat drie keer op één slide een 1pt lijn in exact de hue van
     de vulling; dat is wat een vlak van 9% nog als kaart laat lezen in plaats van als vlek.
+    De uitzondering waarvoor de dash bestaat: een gestreepte lijn in een ándere hue om een
+    kaart heen is geen rand maar een aanwijzing -- ze omcirkelt iets, ze omlijnt het niet.
+
+    Volgorde binnen `<a:ln>` is bindend: eerst de vulling, dan `prstDash`. Andersom keurt
+    het schema het af.
     """
     if l is None:
         return "<a:ln><a:noFill/></a:ln>"
-    hue, pt = (list(l) + [1])[:2]
+    delen = list(l)
+    kleur = delen[0]
+    pt = delen[1] if len(delen) > 1 else 1
+    dash = delen[2] if len(delen) > 2 else None
+    hue, alpha = _split(kleur)
+    _geen_grijs_vlak(hue)
+    if dash and dash not in DASH:
+        raise ValueError(
+            f'streepvorm "{dash}" kent deze laag niet. Kies uit {", ".join(DASH)} -- '
+            '"dash" is de nadrukomlijning uit `maatstaf/11`.'
+        )
+    streepjes = f'<a:prstDash val="{dash}"/>' if dash and dash != "solid" else ""
     return (f'<a:ln w="{int(round(pt * 12700))}" cap="flat">'
-            f"<a:solidFill>{_clr(hue)}</a:solidFill></a:ln>")
+            f"<a:solidFill>{_clr(hue, alpha)}</a:solidFill>{streepjes}</a:ln>")
 
 
 # ---------------------------------------------------------------- tekst
 
-#: De grijze regel voor een bron of een eenheid: navy op 70% dekking. Simpeler dan het
-#: lumMod-grijs van V1 en het is wat de winnende decks gebruiken.
+#: De grijze regel voor een bron of een eenheid: navy op 70% dekking. Het is wat de
+#: winnende decks gebruiken, en het blijft geldig -- maar alleen op een run ZONDER `spc`.
+#: Alpha op de tekstkleur samen met letterspatiëring laat de LibreOffice-render de laatste
+#: glyph van de run weg (nagemeten: `MEETDOEL` wordt `MEETDOE`). Voor een grijs kapitaallabel
+#: is de kleur daarom `"grijs"`, het voetnootgrijs uit `sjabloon.md`. Zie `run()`.
 GRIJS = ("navy", 70000)
+
+#: De bovengrens voor een cursieve run. Cursief is toegestaan voor een korte, niet-lopende
+#: regel -- een datum, een eenheid, een bron, een scenario-aanduiding -- en verboden voor
+#: lopende tekst en voor alles van meer dan één regel. 48 tekens is ruim genoeg voor
+#: `Aug/september 2026` of `Bron: monitor 2024`, en te krap voor een bewering.
+CURSIEF_MAX = 48
 
 
 def run(tekst: str, font: str, pt: float, kleur="navy", *,
@@ -217,6 +319,28 @@ def run(tekst: str, font: str, pt: float, kleur="navy", *,
     Een kapitaallabel krijgt letterspatiëring: `spc=150` tot en met 13pt, `spc=100`
     daarboven. Zonder spatiëring leest een caps-label als geschreeuw in plaats van als
     label.
+
+    **Alpha op de tekstkleur en `spc` gaan niet samen -- renderobservatie.** Een run met
+    zowel een alphakleur (`("navy", 70000)`, `GRIJS`) als `spc` mist in de LibreOffice-render
+    de laatste glyph: `MEETDOEL` komt eruit als `MEETDOE`, `GEWICHT` als `GEWICH`. Nagemeten
+    met een testslide van zeven varianten op LibreOffice 24.2.7.2: elk van de twee apart
+    rendert goed, alleen samen valt de laatste letter weg. Of echte PowerPoint dezelfde glyph
+    laat vallen is hier niet te toetsen -- dit is dus een observatie op deze renderer en geen
+    OOXML-feit. Deze functie weigert de combinatie daarom niet, maar `label()` wel, want die
+    zet `spc` altijd. Wil je grijze kapitalen: gebruik de kleur `"grijs"` (het voetnootgrijs
+    `tx1` met lumMod/lumOff uit `sjabloon.md`). Wil je grijs op een gewone regel -- een bron,
+    een eenheid -- dan is `GRIJS` zonder `spc` gewoon goed.
+
+    De val die dit kostte, en waarom hij hier staat: de vorige bouwer zocht de ontbrekende
+    letter eerst in de vakbreedte en heeft twee ronden aan een te smal tekstvak gerekend dat
+    niet te smal was.
+
+    **Cursief mag, beperkt.** `cursief=True` is toegestaan voor een korte, niet-lopende
+    regel: een datum, een eenheid, een bron, een scenario-aanduiding. Eén regel, ten hoogste
+    48 tekens (`CURSIEF_MAX`), en geen tweede zin erin. Het origineel van `maatstaf/11` zet de
+    datumregel per kaart zo, en dat werkt daar omdat de regel niet gelezen maar herkend
+    wordt. Voor lopende tekst blijft cursief verboden (`vormentaal.md` §9): een cursieve
+    alinea leest langzamer en er is een goedkoper middel voor nadruk, namelijk kleur.
 
     Gotham Bold weigert deze functie. Die letter staat in de titel en komt uit de layout;
     op de slide zelf is het Montserrat Light of Lato Light, met Montserrat SemiBold voor wat
@@ -238,7 +362,17 @@ def run(tekst: str, font: str, pt: float, kleur="navy", *,
     `adviesvorm.md` §4).
     """
     if cursief:
-        raise ValueError("cursief is in deze huisstijl niet toegestaan")
+        kort = tekst.strip()
+        if len(kort) > CURSIEF_MAX or ". " in kort:
+            raise ValueError(
+                f"cursief mag alleen op een korte, niet-lopende regel: een datum, een "
+                f"eenheid, een bron, een scenario-aanduiding, van één regel en ten hoogste "
+                f"{CURSIEF_MAX} tekens. Deze run is {len(kort)} tekens"
+                + (" en bevat meer dan één zin" if ". " in kort else "")
+                + ". Voor lopende tekst is cursief verboden (vormentaal.md §9); nadruk in "
+                "een alinea doe je met kleur, of met `aanhef()` voor twee niveaus binnen "
+                "één regel."
+            )
     if font.strip().lower() == TITELFONT.lower():
         raise ValueError(
             f"{TITELFONT} schrijf je nooit zelf: dat is de titelletter en die erf je uit de "
@@ -246,6 +380,7 @@ def run(tekst: str, font: str, pt: float, kleur="navy", *,
             "kop, Lato Light voor lopende tekst."
         )
     b = ' b="1"' if vet else ""
+    i = ' i="1"' if cursief else ""
     s = f' spc="{spc}"' if spc is not None else ""
     c = ' cap="all"' if caps else ""
     # De eenheid blijft bij het getal (voice.md): een gewone spatie na het euroteken
@@ -254,7 +389,7 @@ def run(tekst: str, font: str, pt: float, kleur="navy", *,
     tekst = tekst.replace("€ ", "€ ")
     esc = (tekst.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;"))
     hue, alpha = _split(kleur)
-    return (f'<a:r><a:rPr lang="nl-NL" sz="{int(round(pt * 100))}"{b}{s}{c} dirty="0">'
+    return (f'<a:r><a:rPr lang="nl-NL" sz="{int(round(pt * 100))}"{b}{i}{s}{c} dirty="0">'
             f'<a:solidFill>{_clr(hue, alpha)}</a:solidFill>'
             f'<a:latin typeface="{font}"/></a:rPr>'
             f'<a:t>{esc}</a:t></a:r>')
@@ -262,10 +397,39 @@ def run(tekst: str, font: str, pt: float, kleur="navy", *,
     # keurt het schema het af. Voor- en achterloopruimte blijft in DrawingML gewoon staan.
 
 
-def label(tekst: str, pt: float = 14, kleur: str = "navy") -> str:
-    """Kapitaallabel in Montserrat SemiBold met de juiste spatiëring."""
-    return run(tekst, "Montserrat SemiBold", pt, kleur,
-               spc=150 if pt <= 13 else 100, caps=True)
+def label(tekst: str, pt: float = 14, kleur="navy", *,
+          spc: int | float | None = -1) -> str:
+    """Kapitaallabel in Montserrat SemiBold met de juiste spatiëring.
+
+    Wil je het label grijs -- een kolomkop boven een tabel, een rolnaam die de rij niet moet
+    overstemmen -- dan is de kleur `"grijs"`: het voetnootgrijs `tx1` met lumMod/lumOff dat
+    `sjabloon.md` onder Kleur als hét grijs documenteert. **Niet `GRIJS`**, want dat is navy
+    op alpha, en alpha samen met de `spc` die deze functie altijd zet laat de
+    LibreOffice-render de laatste letter weg: `MEETDOEL` wordt `MEETDOE`, `GEWICHT` wordt
+    `GEWICH`. Nagemeten met zeven varianten; elk van de twee apart rendert goed. Of echte
+    PowerPoint dezelfde glyph laat vallen is hier niet te toetsen -- renderobservatie, geen
+    OOXML-feit. Deze functie weigert de combinatie daarom, met de kleur `"grijs"` als weg
+    eruit; het `GRIJS`-recept blijft geldig op een run zonder spatiëring, en dat is de
+    bronregel van §11.
+
+    `spc=None` zet de spatiëring uit. Dat is de ontsnappingsklep waarmee een alphakleur
+    alsnog kan, en dan is het jouw keuze: een caps-label zonder spatiëring leest als
+    geschreeuw in plaats van als label (§2), dus doe het alleen als de render je overtuigt.
+    """
+    if spc == -1:
+        spc = 150 if pt <= 13 else 100
+    _, alpha = _split(kleur)
+    if alpha and spc is not None:
+        raise ValueError(
+            "een kapitaallabel met een alphakleur mist in de render zijn laatste letter: "
+            "alpha op de tekstkleur samen met `spc` laat LibreOffice de laatste glyph weg "
+            "(MEETDOEL -> MEETDOE). Twee wegen eruit: (1) gebruik de kleur \"grijs\" -- het "
+            "voetnootgrijs tx1 met lumMod/lumOff uit sjabloon.md, en dat is precies de kleur "
+            "die daar als het grijs staat; (2) `label(..., spc=None)` als je de spatiëring "
+            "wilt opgeven, maar dan leest caps als geschreeuw. Op een gewone regel zonder "
+            "spatiëring -- een bronregel, een eenheid -- is `GRIJS` gewoon goed."
+        )
+    return run(tekst, "Montserrat SemiBold", pt, kleur, spc=spc, caps=True)
 
 
 def drager(tekst: str, pt: float, kleur: str = "navy", *, spc: int | None = None) -> str:
@@ -279,6 +443,24 @@ def drager(tekst: str, pt: float, kleur: str = "navy", *, spc: int | None = None
     dan de boodschap. Gebruik dit ten hoogste op één slide op drie; op de andere slides is
     de drager gewicht en kleur (18pt SemiBold in de hue van zijn categorie) of de compositie
     zelf.
+
+    Een cijfer en een label op dezelfde baseline
+    --------------------------------------------
+    Twee runs in ÉÉN alinea, met `anchor="b"` op het vak:
+
+        tekst("Kolom 1 kop", x, y, w, 0.62,
+              [para(drager("1  ", D.display, "oranje"),
+                    label("ZELF OPSCHRIJVEN", D.label, "navy"), regelafstand=None)],
+              anchor="b")
+
+    Dat zet een cijfer van 32pt en een label van 14pt op één baseline zonder twee vakken en
+    zonder ze met de hand uit te lijnen -- de rangnummerkop van `maatstaf/14`. Twee
+    Montserrat-gewichten, dus `para()` laat het door: dit is geen familiemix. De twee spaties
+    achter het cijfer zijn de tussenruimte; op displaymaat is één spatie te smal.
+
+    Dit patroon neemt de plek in van het verboden recept met een Montserrat-aanhef in een
+    Lato-alinea (§9). Het verschil is dat de twee runs hier niet één doorlopende regel vormen
+    maar twee elementen zijn die op één lijn staan.
     """
     if not DRAGER_VLOER <= pt <= DRAGER_PLAFOND:
         raise ValueError(
@@ -416,33 +598,156 @@ def tekstvak(paras: list[str], *, insets=INSETS_GEVULD, anchor: str = "t") -> st
 _ids = [200]
 
 
+def adj_van(hoek: float, w: float, h: float) -> int:
+    """De `adj` van een `roundRect` uit een ABSOLUTE hoekradius in inch.
+
+    `adj = 100000 x radius / min(breedte, hoogte)`, geklemd op 0 tot 50000. Dit staat los van
+    `vlak()` omdat de berekening buiten een vorm net zo vaak nodig is: een gestreepte
+    nadrukomlijning die 0,14 in buiten een kaart valt, moet dezelfde absolute radius houden
+    en dus een andere `adj`. Dat handmatig terugrekenen was op `maatstaf/11` de helft van de
+    18 regels die die ene omlijning kostte.
+
+    Waarom absoluut en niet in procenten: `sjabloon.md`, Vormen. Een `roundRect` zonder
+    expliciete `adj` krijgt 16,67% van de korte zijde, en dan is een blok van 1 in hoog een
+    pil en een blok van 2,5 in een nette kaart -- vier radii in één deck zonder dat iemand er
+    iets aan koos.
+    """
+    return max(0, min(50000, int(round(100000 * hoek / min(w, h)))))
+
+
+#: Wat de `adj`-handvatten van de presetvormen doen die op een SFNL-slide voorkomen. Dit is
+#: de tabel die nergens te vinden was, en daardoor was élke presetvorm behalve rechthoek en
+#: cirkel onbruikbaar: `vlak()` schreef een leeg `<a:avLst/>` en je kreeg PowerPoints
+#: defaults. `ss` is de korte zijde, `min(breedte, hoogte)`.
+#:
+#: ==================  ==========================================================
+#: `roundRect`         `adj` = hoekradius als 1/100000 van `ss`. Gebruik `hoek=` of
+#:                     `adj_van()`; default 16667 is de val uit §8.
+#: `round1Rect`        idem, maar alleen de rechterbovenhoek.
+#: `ellipse`           geen handvat. Cirkel: geef `w == h`.
+#: `pie`               `adj1` = starthoek, `adj2` = eindhoek, in 1/60000 graad,
+#:                     rechtsom vanaf 3 uur. Halve punt (links gevuld):
+#:                     `adj1=5400000` (90°), `adj2=16200000` (270°). Kwart:
+#:                     `adj1=16200000`, `adj2=0`. Default 0 tot 16200000 is
+#:                     driekwart en leest als een pacman.
+#: `arc`, `chord`      dezelfde twee hoeken; `arc` is alleen de boog (geef hem een
+#:                     `lijn` en geen vulling), `chord` sluit met een koorde.
+#: `donut`             `adj` = ringdikte als 1/100000 van `ss`; 12500 is een dunne
+#:                     ring, default 25000 een dikke.
+#: `blockArc`          `adj1`/`adj2` = start- en eindhoek (1/60000 graad),
+#:                     `adj3` = ringdikte als 1/100000 van `ss`. Dit is de boog
+#:                     voor een aandeel: 0 tot 21600000 x aandeel.
+#: `rightArrow`        `adj1` = schachtdikte als 1/100000 van `ss` (100000 is de
+#:                     volle hoogte), `adj2` = koplengte als 1/100000 van `ss`.
+#:                     Beide default 50000, en dáár gaat het mis: op een pijl van
+#:                     0,24 in hoog is de kop dan 0,12 in en leest het geheel als
+#:                     een driehoekje. Zie `pijl()`.
+#: `leftArrow`,        idem, gespiegeld respectievelijk gedraaid.
+#: `upArrow`,
+#: `downArrow`
+#: `leftRightArrow`    `adj1` = schachtdikte, `adj2` = koplengte per kant.
+#: `chevron`,          `adj` = puntlengte als 1/100000 van `ss`. Een rij chevrons met
+#: `homePlate`         `adj=25000` leest als een volgorde; default 50000 maakt van
+#:                     elke stap een pijlpunt en dan is de navigatie luider dan de
+#:                     boodschap (§1).
+#: `triangle`          `adj` = x van de top, 0 is linksonder, 50000 gelijkbenig.
+#: `trapezoid`         `adj` = inspringing van de bovenzijde per kant.
+#: `plaqueTabs`,       `adj` = hoekmaat als 1/100000 van `ss`.
+#: `snip1Rect`,
+#: `bevel`
+#: `stripedRightArrow` `adj1` = schachtdikte, `adj2` = koplengte.
+#: ==================  ==========================================================
+#:
+#: De volledige lijst met formules staat in ECMA-376 deel 1, bijlage met de
+#: presetShapeDefinitions; wat hierboven staat is wat op deze slides werkelijk voorkwam,
+#: nagemeten op de render.
+PRESET_ADJ = {
+    "roundRect": ("adj",),
+    "round1Rect": ("adj",),
+    "pie": ("adj1", "adj2"),
+    "arc": ("adj1", "adj2"),
+    "chord": ("adj1", "adj2"),
+    "donut": ("adj",),
+    "blockArc": ("adj1", "adj2", "adj3"),
+    "rightArrow": ("adj1", "adj2"),
+    "leftArrow": ("adj1", "adj2"),
+    "upArrow": ("adj1", "adj2"),
+    "downArrow": ("adj1", "adj2"),
+    "leftRightArrow": ("adj1", "adj2"),
+    "stripedRightArrow": ("adj1", "adj2"),
+    "chevron": ("adj",),
+    "homePlate": ("adj",),
+    "triangle": ("adj",),
+    "trapezoid": ("adj",),
+    "snip1Rect": ("adj",),
+    "bevel": ("adj",),
+}
+
+
+def _avlst(adj: dict | None) -> str:
+    """`<a:avLst>` uit een dict van handvatnaam naar waarde."""
+    if not adj:
+        return "<a:avLst/>"
+    binnen = "".join(f'<a:gd name="{n}" fmla="val {int(v)}"/>' for n, v in adj.items())
+    return f"<a:avLst>{binnen}</a:avLst>"
+
+
 def vlak(naam: str, x: float, y: float, w: float, h: float, *,
          prst: str = "rect", vulling=None, lijn=None, hoek: float | None = None,
+         adj: dict | None = None, rot: float | None = None,
          tekst: list[str] | None = None, insets=None, anchor: str = "t") -> str:
-    """Eén `<p:sp>`.
+    """Eén `<p:sp>`. Met `prst` en `adj` is dit de weg naar élke presetvorm.
 
-    `hoek` is de hoekradius in INCH, niet in procenten. Zonder deze parameter krijgt een
-    `roundRect` PowerPoints default van 16,67% van de korte zijde, en dan wordt een blok van
-    1 in hoog een pil terwijl een blok van 2,5 in een nette kaart is -- vier verschillende
-    radii in één deck zonder dat iemand er iets aan koos. Geef je `hoek`, dan wordt `prst`
-    automatisch `roundRect` en rekent dit de `adj` per vorm terug naar diezelfde absolute
-    radius. In de winnende decks staat de adj op 4000 tot 6000, wat bij die maten neerkomt
-    op ongeveer 0,08 tot 0,12 in.
+    `prst` is de vrije parameter en de belangrijkste ontsnappingsklep die deze laag heeft:
+    `prst="ellipse"` met `w == h` is de cirkelbadge, `prst="pie"` een halve punt,
+    `prst="chevron"` een stap in een volgorde. Wat je niet met een preset kunt tekenen, gaat
+    via `contour()`.
+
+    `adj` zet de handvatten van die preset: één dict die letterlijk
+    `<a:gd name=... fmla="val ..."/>` uitschrijft. Zonder deze parameter kreeg élke vorm
+    behalve rechthoek en cirkel PowerPoints defaults, en dan is de halve punt een pacman en
+    de pijl een driehoekje. `PRESET_ADJ` hierboven zegt per vorm wat de waarden doen:
+
+        vlak("Halve punt", x, y, d, d, prst="pie", vulling="oranje",
+             adj={"adj1": 5400000, "adj2": 16200000})
+
+    `hoek` is de hoekradius in INCH en de bestaande snelweg voor een `roundRect`: geef je
+    hem, dan wordt `prst` automatisch `roundRect` en rekent `adj_van()` de handvatwaarde per
+    vorm terug naar diezelfde absolute radius. `hoek` en `adj` samen is een fout, want dan
+    zeggen twee parameters iets over hetzelfde handvat.
+
+    `rot` is een rotatie in graden, voor het geval een preset alleen in één richting bestaat.
+    Gebruik hem spaarzaam: gedraaide tekst is in dit sjabloon nooit goed, en een gedraaid
+    vlak lijnt met niets uit (§7).
     """
     _ids[0] += 1
+    if hoek and adj:
+        raise ValueError(
+            "`hoek` en `adj` samen: beide zetten het handvat van een roundRect. Gebruik "
+            "`hoek` (absolute radius in inch, de huisregel uit §8), of `adj` als je een "
+            "andere presetvorm zet."
+        )
     if hoek:
         prst = "roundRect"
-        adj = max(0, min(50000, int(round(100000 * hoek / min(w, h)))))
-        geom = (f'<a:prstGeom prst="roundRect"><a:avLst>'
-                f'<a:gd name="adj" fmla="val {adj}"/></a:avLst></a:prstGeom>')
+        geom = (f'<a:prstGeom prst="roundRect">'
+                f'{_avlst({"adj": adj_van(hoek, w, h)})}</a:prstGeom>')
     else:
-        geom = f'<a:prstGeom prst="{prst}"><a:avLst/></a:prstGeom>'
+        if adj:
+            bekend = PRESET_ADJ.get(prst)
+            if bekend and not set(adj) <= set(bekend):
+                raise ValueError(
+                    f'prst="{prst}" kent de handvatten {", ".join(bekend)}; je geeft '
+                    f'{", ".join(sorted(set(adj) - set(bekend)))}. Zie `PRESET_ADJ` in '
+                    "shapes.py voor wat elk handvat doet."
+                )
+        geom = f'<a:prstGeom prst="{prst}">{_avlst(adj)}</a:prstGeom>'
     if insets is None:
         insets = INSETS_GEVULD if vulling is not None else INSETS_KAAL
     body = tekstvak(tekst, insets=insets, anchor=anchor) if tekst else ""
+    draai = f' rot="{int(round(rot * 60000)) % 21600000}"' if rot else ""
     return (f'<p:sp><p:nvSpPr><p:cNvPr id="{_ids[0]}" name="{naam}"/>'
             f'<p:cNvSpPr/><p:nvPr/></p:nvSpPr><p:spPr>'
-            f'<a:xfrm><a:off x="{emu(x)}" y="{emu(y)}"/>'
+            f'<a:xfrm{draai}><a:off x="{emu(x)}" y="{emu(y)}"/>'
             f'<a:ext cx="{emu(w)}" cy="{emu(h)}"/></a:xfrm>{geom}'
             f'{vulling_xml(vulling)}{lijn_xml(lijn)}</p:spPr>{body}</p:sp>')
 
@@ -460,18 +765,63 @@ def tekst(naam: str, x: float, y: float, w: float, h: float, paras: list[str], *
             f'{tekstvak(paras, insets=insets, anchor=anchor)}</p:sp>')
 
 
-def streep(naam: str, x: float, y: float, w: float, hue: str = "navy",
-           pt: float = 1.0) -> str:
-    """Een horizontale lijn. Een streep onder een label of tussen twee blokken scheidt
-    lichter dan een gevuld vlak, en dat register ontbreekt zodra je alleen vlakken hebt."""
+def streep(naam: str, x: float, y: float, lengte: float, kleur="navy",
+           pt: float = 1.0, *, richting: str = "h", dash: str | None = None) -> str:
+    """Eén rechte lijn, horizontaal (`richting="h"`) of verticaal (`richting="v"`).
+
+    Een streep scheidt lichter dan een gevuld vlak: onder een label, tussen twee registers,
+    boven een sluitregel, als rasterlijn in een verdeling. Dat lichte register (§8) ontbreekt
+    zodra je alleen vlakken hebt.
+
+    `kleur` neemt hetzelfde tupel als `vulling` en `run()`: `"navy"` is vol, `("navy", 25000)`
+    is een haarlijn die er nauwelijks is -- precies wat een rasterlijn achter een plot moet
+    zijn. Twee dingen die deze functie eerder niet kon, en die elk een eigen hulpfunctie in
+    een los bestand kostten: verticaal (`cy` stond hard op 0) en alpha (het kleurargument ging
+    zonder alpha naar `_clr()`). Het ontdekken kostte een render, want de fout was stil.
+
+    `dash="dash"` maakt hem gestreept. Voor een verbinding tussen twee punten die niet op één
+    as liggen: `verbind()`.
+    """
+    if richting not in ("h", "v"):
+        raise ValueError(
+            f'richting="{richting}" bestaat niet: "h" is horizontaal, "v" is verticaal. Een '
+            "schuine lijn tussen twee punten is `verbind()`."
+        )
+    dx, dy = (lengte, 0.0) if richting == "h" else (0.0, lengte)
+    return verbind(naam, (x, y), (x + dx, y + dy), kleur, pt, dash=dash)
+
+
+def verbind(naam: str, van: tuple[float, float], naar: tuple[float, float],
+            kleur="navy", pt: float = 1.0, *, dash: str | None = None) -> str:
+    """Een rechte verbinding tussen twee punten in inch. `streep()` is de rechte variant.
+
+    Dit is hoe je twee vormen verbindt zonder te rekenen met `flipH`/`flipV`: geef de twee
+    punten, deze functie zet de `xfrm` en de spiegeling. Gebruik `anker()` om een punt op de
+    rand van een vorm te vinden, dan raakt de lijn de vorm en niet zijn hoek.
+
+    Een verbinding is een lijn en dus het lichte register: geef hem alpha
+    (`("navy", 25000)`) tenzij de verbinding zelf informatie draagt -- de balk tussen de twee
+    punten van een dumbbell dóet dat, en die staat op de hue van de reeks.
+    """
+    (x0, y0), (x1, y1) = van, naar
+    hue, alpha = _split(kleur)
+    _geen_grijs_vlak(hue)
+    if dash and dash not in DASH:
+        raise ValueError(f'streepvorm "{dash}" kent deze laag niet: kies uit {", ".join(DASH)}.')
+    flip = ""
+    if x1 < x0:
+        flip += ' flipH="1"'
+    if y1 < y0:
+        flip += ' flipV="1"'
     _ids[0] += 1
+    streepjes = f'<a:prstDash val="{dash}"/>' if dash and dash != "solid" else ""
     return (f'<p:cxnSp><p:nvCxnSpPr><p:cNvPr id="{_ids[0]}" name="{naam}"/>'
             f'<p:cNvCxnSpPr/><p:nvPr/></p:nvCxnSpPr><p:spPr>'
-            f'<a:xfrm><a:off x="{emu(x)}" y="{emu(y)}"/>'
-            f'<a:ext cx="{emu(w)}" cy="0"/></a:xfrm>'
+            f'<a:xfrm{flip}><a:off x="{emu(min(x0, x1))}" y="{emu(min(y0, y1))}"/>'
+            f'<a:ext cx="{emu(abs(x1 - x0))}" cy="{emu(abs(y1 - y0))}"/></a:xfrm>'
             f'<a:prstGeom prst="line"><a:avLst/></a:prstGeom>'
             f'<a:ln w="{int(round(pt * 12700))}" cap="flat">'
-            f'<a:solidFill>{_clr(hue)}</a:solidFill></a:ln></p:spPr>'
+            f'<a:solidFill>{_clr(hue, alpha)}</a:solidFill>{streepjes}</a:ln></p:spPr>'
             f'<p:style><a:lnRef idx="1"><a:schemeClr val="dk2"/></a:lnRef>'
             f'<a:fillRef idx="0"><a:schemeClr val="dk2"/></a:fillRef>'
             f'<a:effectRef idx="0"><a:schemeClr val="dk2"/></a:effectRef>'
@@ -479,17 +829,263 @@ def streep(naam: str, x: float, y: float, w: float, hue: str = "navy",
             f'</p:cxnSp>')
 
 
-def groep(naam: str, x: float, y: float, w: float, h: float, kinderen: list[str]) -> str:
-    """Groepeer verwante vormen. `chOff` gelijk aan `off` en `chExt` gelijk aan `ext`, dan
-    is er niets te schalen en blijf je in slidecoördinaten rekenen."""
+#: De negen ankerpunten van een doos, voor `anker()`.
+KANTEN = ("l", "r", "b", "o", "lb", "rb", "lo", "ro", "m")
+
+
+def anker(doos: tuple[float, float, float, float], kant: str = "m") -> tuple[float, float]:
+    """Een punt op de rand of in het midden van een doos `(x, y, w, h)`, in inch.
+
+    `"l"` en `"r"` zijn links- en rechtsmidden, `"b"` en `"o"` boven- en ondermidden, `"lb"`
+    tot `"ro"` de vier hoeken, `"m"` het midden. Hiermee zet je een vorm op de rand van een
+    andere en laat je `verbind()` twee vormen raken in plaats van hun hoeken.
+    """
+    x, y, w, h = doos
+    if kant not in KANTEN:
+        raise ValueError(f'kant "{kant}" bestaat niet: kies uit {", ".join(KANTEN)}.')
+    px = {"l": x, "lb": x, "lo": x, "r": x + w, "rb": x + w, "ro": x + w}.get(kant, x + w / 2)
+    py = {"b": y, "lb": y, "rb": y, "o": y + h, "lo": y + h, "ro": y + h}.get(kant, y + h / 2)
+    return round(px, 4), round(py, 4)
+
+
+#: De lichte punt van een meter: navy op alpha 25000. Geen `"grijs"`, want dit is een VULLING
+#: en die is alpha op de volle kleur (§4).
+LEEG = ("navy", 25000)
+
+
+def punt(naam: str, x: float, y: float, d: float, hue="navy", *,
+         tekst: str | None = None, pt: float = 16, kleur=None,
+         font: str = "Montserrat SemiBold", deel: float = 1.0, leeg=LEEG) -> str:
+    """Eén ronde punt van `d` inch, met een optioneel gecentreerd cijfer erin.
+
+    Wat dit codeert: één ding uit een reeks. De genummerde badge in de hue van zijn kaart
+    (`maatstaf/11`), een bolletje in een legenda, een punt op een as, een punt van een
+    puntenmeter (`maatstaf/12`, zie `meter()`). Het is het goedkoopste merkteken dat er is en
+    het vervangt een genummerde bulletlijst.
+
+    Waarom dit een eigen functie is en niet `vlak(prst="ellipse")`: een cirkel met een cijfer
+    erin heeft `insets=(0,0,0,0)`, `anchor="ctr"` en `algn="ctr"` nodig, en `vlak()` geeft een
+    gevulde vorm terecht `INSETS_GEVULD`. Dat zelf onthouden was op zes plekken handwerk, en
+    vergeet je het, dan staat het cijfer niet in het midden -- op de render zichtbaar als een
+    badge waarvan het getal naar rechtsonder is gezakt.
+
+    `deel` is hoeveel van de punt gevuld is: 1.0 vol, 0.0 leeg (in `leeg`), en daartussen een
+    gevulde `pie` over een lege punt -- 0.5 is de halve punt die op `maatstaf/12` gewicht
+    codeert. Die tussenvorm komt terug als één groep, dus als één vorm in je lijst.
+
+    `kleur` is de kleur van het cijfer; zonder hem kiest `tekst_op()` en dan staat er navy op
+    een lichte hue, want wit haalt daar 2,0 tot 3,1 (§3). `maatstaf/11` zet het badgecijfer
+    wél wit op sky, emerald en oranje: op een badge van 0,50 in leest één cijfer als vorm en
+    niet als tekst, net als de drageruitzondering op 40pt. Dat is een bewuste keuze die je op
+    de render controleert -- `kleur="wit"` -- en geen default.
+
+    Misplaatst als: de punten iets meten dat een getal is. Drie van de drie punten is geen
+    69 procent; een puntenmeter codeert een grofheid (zwaar, licht, niet) en juist dat is zijn
+    waarde. Wil je een precieze verhouding, dan is dat een balk of een grafiek (§12).
+    """
+    if not 0.0 <= deel <= 1.0:
+        raise ValueError(f"deel={deel} valt buiten 0.0 tot 1.0: het is een fractie van de punt.")
+    paras = None
+    if tekst is not None:
+        paras = [para(run(tekst, font, pt, tekst_op(hue, pt) if kleur is None else kleur),
+                      algn="ctr", regelafstand=None)]
+    if deel >= 1.0:
+        return vlak(naam, x, y, d, d, prst="ellipse", vulling=hue, tekst=paras,
+                    insets=(0, 0, 0, 0), anchor="ctr")
+    onder = vlak(f"{naam} leeg", x, y, d, d, prst="ellipse", vulling=leeg, tekst=paras,
+                 insets=(0, 0, 0, 0), anchor="ctr")
+    if deel <= 0.0:
+        return onder
+    # Een `pie` rechtsom vanaf 3 uur, in 1/60000 graad. Voor een halve punt begint hij op
+    # 90 graden en eindigt op 270: dan is de LINKERhelft gevuld, en dat is de leesrichting.
+    start = 5400000
+    eind = int(round(start + 21600000 * deel)) % 21600000
+    boven = vlak(f"{naam} deel", x, y, d, d, prst="pie", vulling=hue,
+                 adj={"adj1": start, "adj2": eind})
+    return groep(naam, x, y, d, d, [onder, boven])
+
+
+def meter(naam: str, x: float, y: float, waarden, hue="navy", *,
+          d: float = 0.16, pitch: float = 0.22, leeg=LEEG) -> str:
+    """Een puntenmeter: een rij punten waarvan de eerste `n` gevuld zijn.
+
+    `waarden` is een reeks fracties -- `(1, 1, 0.5)` is twee volle punten en een halve, en
+    dat is hoe `maatstaf/12` "zwaar" van "licht" onderscheidt zonder een getal te noemen. De
+    hele meter komt terug als één groep, dus als één vorm.
+
+    Wat het codeert: een grofheid op een schaal van drie of vier stappen, naast een label dat
+    hetzelfde in een woord zegt. De punten zijn er om de rij te kunnen aflezen zonder de
+    woorden te vergelijken.
+
+    Misplaatst als: er meer dan vijf punten nodig zijn (dan wordt het tellen en is het een
+    balk), of als de waarde precies is (dan is het een getal of een grafiek, §12).
+    """
+    waarden = list(waarden)
+    if len(waarden) > 5:
+        raise ValueError(
+            f"{len(waarden)} punten is een meter die je moet tellen in plaats van aflezen. "
+            "Boven vijf punten is de vorm een balk of een getal (vormentaal.md §12)."
+        )
+    breedte = (len(waarden) - 1) * pitch + d
+    kinderen = [punt(f"{naam} {i + 1}", x + i * pitch, y, d, hue, deel=float(v), leeg=leeg)
+                for i, v in enumerate(waarden)]
+    return groep(naam, x, y, breedte, d, kinderen)
+
+
+def pijl(naam: str, x: float, y: float, w: float, h: float, hue="oranje", *,
+         richting: str = "r", dikte: float = 0.45, kop: float | None = None) -> str:
+    """Een pijl die een volgorde draagt: van hier naar daar, en niet als versiering.
+
+    `dikte` is de schachtdikte als fractie van de hoogte, `kop` de koplengte in INCH. De
+    defaults van PowerPoint zijn hier onbruikbaar: `adj1` en `adj2` staan beide op 50000, en
+    op een pijl van 0,24 in hoog is de kop dan 0,12 in -- het geheel leest als een
+    driehoekje in plaats van als een pijl. Nagemeten op `maatstaf/14`, waar drie van deze
+    pijlen de drie stappen verbinden.
+
+    Misplaatst als: de pijl navigatie is in plaats van inhoud. Blijven bij de kneepoefening
+    (§1) de pijltjes over en niet de boodschap, dan is de pijl te zwaar of overbodig. En een
+    gekleurd vlak dat alleen kleur is, gaat eruit (§8) -- dat geldt ook voor een pijl.
+    """
+    prst = {"r": "rightArrow", "l": "leftArrow", "b": "upArrow", "o": "downArrow"}.get(richting)
+    if not prst:
+        raise ValueError(
+            f'richting="{richting}" bestaat niet: "r" rechts, "l" links, "b" boven, '
+            '"o" onder.'
+        )
+    ss = min(w, h)
+    # Default: een kop van 45 graden, dus zo lang als de vorm hoog is -- en nooit meer dan
+    # de helft van de pijl, want dan is de schacht weg en leest het als een driehoekje.
+    kop = min(ss, w / 2) if kop is None else min(kop, w)
+    return vlak(naam, x, y, w, h, prst=prst, vulling=hue,
+                adj={"adj1": max(0, min(100000, int(round(dikte * 100000)))),
+                     "adj2": max(0, min(100000, int(round(kop / ss * 100000))))})
+
+
+def contour(naam: str, x: float, y: float, punten, *, vulling=None, lijn=None,
+            sluit: bool = True) -> str:
+    """Een eigen vorm (`custGeom`) uit een reeks punten in INCH, zonder XML te typen.
+
+    `punten` zijn absolute inch-coördinaten op de slide, net als bij elke andere functie
+    hier; deze functie rekent zelf de omhullende doos en de padcoördinaten uit. Drie punten
+    is een driehoek, vijf een gebogen band, en met `sluit=False` en een `lijn` is het een
+    open lijnstuk -- een accolade, een knik in een verbinding, een haaks aftakkende leider.
+
+    Dit is de weg naar een vorm die het sjabloon niet kent. Alle discipline geldt onverkort:
+    de vulling gaat door `vulling_xml()` en is dus alpha op een volle hue, de lijn door
+    `lijn_xml()` en is dus in de hue van de vulling.
+
+    Misplaatst als er een preset is die het al doet: een `pie`, een `chevron`, een `donut` en
+    een `blockArc` zijn met `vlak(prst=..., adj=...)` één regel, en een preset schaalt netter
+    dan een polygoon die je met de hand hebt uitgezet. Zie `PRESET_ADJ`.
+    """
+    punten = [(float(a), float(b)) for a, b in punten]
+    if len(punten) < 2:
+        raise ValueError(
+            "een contour heeft minstens twee punten. Eén punt is geen vorm; een rechte lijn "
+            "tussen twee punten is `verbind()`, een rechthoek is `vlak()`."
+        )
+    xs = [p[0] for p in punten]
+    ys = [p[1] for p in punten]
+    x0, y0 = min(xs), min(ys)
+    w = max(max(xs) - x0, 1e-4)
+    h = max(max(ys) - y0, 1e-4)
+    stappen = "".join(
+        f'<a:{"moveTo" if i == 0 else "lnTo"}><a:pt x="{emu(px - x0)}" '
+        f'y="{emu(py - y0)}"/></a:{"moveTo" if i == 0 else "lnTo"}>'
+        for i, (px, py) in enumerate(punten)
+    )
+    if sluit:
+        stappen += "<a:close/>"
+    geom = (f'<a:custGeom><a:avLst/><a:gdLst/><a:ahLst/><a:cxnLst/>'
+            f'<a:rect l="0" t="0" r="r" b="b"/>'
+            f'<a:pathLst><a:path w="{emu(w)}" h="{emu(h)}">{stappen}</a:path>'
+            f'</a:pathLst></a:custGeom>')
     _ids[0] += 1
+    return (f'<p:sp><p:nvSpPr><p:cNvPr id="{_ids[0]}" name="{naam}"/>'
+            f'<p:cNvSpPr/><p:nvPr/></p:nvSpPr><p:spPr>'
+            f'<a:xfrm><a:off x="{emu(x0 + x)}" y="{emu(y0 + y)}"/>'
+            f'<a:ext cx="{emu(w)}" cy="{emu(h)}"/></a:xfrm>{geom}'
+            f'{vulling_xml(vulling)}{lijn_xml(lijn)}</p:spPr></p:sp>')
+
+
+def groep(naam: str, x: float, y: float, w: float, h: float, kinderen: list[str], *,
+          van: tuple[float, float, float, float] | None = None) -> str:
+    """Groepeer verwante vormen, en verplaats of schaal ze als één.
+
+    Zonder `van` zijn `chOff`/`chExt` gelijk aan `off`/`ext`: er is niets te schalen en je
+    blijft in slidecoördinaten rekenen. Dat is de default en meestal wat je wil.
+
+    Met `van=(x, y, w, h)` zeg je in welke doos de kinderen getekend ZIJN, terwijl
+    `x, y, w, h` zegt waar de groep terecht KOMT. Verschilt de positie, dan schuift de groep;
+    verschilt de maat, dan schaalt hij -- en dan schaalt de tekst erin niet mee, dus doe dat
+    alleen met een schema van vormen en lijnen. Waarvoor het bestaat: een merkteken één keer
+    op zijn eigen maat uitrekenen en het daarna neerzetten waar de compositie het wil, zonder
+    elke coördinaat opnieuw te rekenen.
+    """
+    _ids[0] += 1
+    kx, ky, kw, kh = van if van else (x, y, w, h)
     return (f'<p:grpSp><p:nvGrpSpPr><p:cNvPr id="{_ids[0]}" name="{naam}"/>'
             f'<p:cNvGrpSpPr/><p:nvPr/></p:nvGrpSpPr><p:grpSpPr>'
             f'<a:xfrm><a:off x="{emu(x)}" y="{emu(y)}"/>'
             f'<a:ext cx="{emu(w)}" cy="{emu(h)}"/>'
-            f'<a:chOff x="{emu(x)}" y="{emu(y)}"/>'
-            f'<a:chExt cx="{emu(w)}" cy="{emu(h)}"/></a:xfrm></p:grpSpPr>'
+            f'<a:chOff x="{emu(kx)}" y="{emu(ky)}"/>'
+            f'<a:chExt cx="{emu(kw)}" cy="{emu(kh)}"/></a:xfrm></p:grpSpPr>'
             f'{"".join(kinderen)}</p:grpSp>')
+
+
+# ---------------------------------------------------------------- op schaal
+
+def schaal(x: float, w: float, lo: float, hi: float):
+    """Een schaal: geeft een functie terug die een waarde omzet naar een x (of y) in inch.
+
+    Dit is de formule uit §7 -- `0,48 + 12,52 x (t - t0) / (t1 - t0)` -- als functie, en dat
+    is het enige rekenwerk in deze laag waar het oog de fout niet kan repareren. Draagt
+    afstand informatie, dan staat hij op schaal: een tijdlijn, een as, een verdeling, de twee
+    punten van een dumbbell. Vier banden onder elkaar zijn geen tijdlijn, want dan staat elke
+    stap even ver van de vorige.
+
+        px = schaal(ZONE["x"], ZONE["w"], 2024, 2027)
+        px(2025.5)          # -> inch
+
+    Werkt ook verticaal: geef `y` en `h` in plaats van `x` en `w`. En omgekeerd, met `hi < lo`
+    of een negatieve `w`, loopt de schaal andersom -- dat is hoe een y-as van boven naar
+    beneden telt.
+
+    Buiten `lo`..`hi` extrapoleert hij gewoon door; dat is bewust, want een punt dat net
+    buiten de as valt moet je op de render zien en niet stil op de rand vinden. Wat je
+    daarvoor gebruikt is `binnen()`.
+    """
+    if hi == lo:
+        raise ValueError(
+            "een schaal met lo == hi heeft geen bereik: elke waarde zou op dezelfde plek "
+            "staan. Geef het werkelijke bereik van je as, ook als er maar één waarde in valt."
+        )
+    return lambda v: round(x + w * (float(v) - lo) / (hi - lo), 4)
+
+
+def binnen(x: float, w: float, *, links: float | None = None,
+           rechts: float | None = None) -> float:
+    """Schuif een blok van `w` breed zó dat het binnen de zone blijft, en geef zijn x.
+
+    Waarvoor dit bestaat: op alle vier de reconstructies zat het echte werk niet in de posities
+    maar in de aslabels. Een label van 2,3 in dat bij zijn tik op 11,90 begint, loopt 1,2 in
+    buiten de slide -- op de render zichtbaar als een afgekapt woord, en dat kostte twee
+    ronden. Deze functie klemt de x, en dan hoort de tekst rechts uitgelijnd (`algn="r"`),
+    zodat hij nog steeds bij zijn tik eindigt.
+
+    Klemmen verandert de POSITIE VAN HET LABEL en nooit de positie van het punt waar het bij
+    hoort: dat punt staat op schaal en blijft daar (§7). Botsen twee labels, dan wijken de
+    teksten uit naar twee rijen -- nooit de posities.
+    """
+    links = ZONE["x"] if links is None else links
+    rechts = ZONE["right"] if rechts is None else rechts
+    if w > rechts - links:
+        raise ValueError(
+            f"een blok van {w} in past niet in een zone van {round(rechts - links, 2)} in: "
+            "klemmen lost dat niet op. Kort het label in, zet het op twee regels, of geef het "
+            "een kleinere maat."
+        )
+    return round(min(max(x, links), rechts - w), 4)
 
 
 # ---------------------------------------------------------------- meten

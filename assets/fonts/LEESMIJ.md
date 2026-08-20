@@ -1,7 +1,7 @@
 # assets/fonts/ — fontbestanden voor de MÉTING
 
 Deze map is de eerste plek waar `find_font_file()` in `scripts/_deck.py` zoekt. Wat hier
-staat, kunnen `qa_fit.py`, `qa_text.py` en `fit_title.py` echt meten in plaats van te
+staat, kunnen `qa_text.py`, `fit_title.py` en de fontmeting van `preflight.py` echt meten in plaats van te
 schatten — op elke machine, ook in een Linux-sandbox of Cowork.
 
 De map is nu leeg, en dat is een keuze, niet een vergissing:

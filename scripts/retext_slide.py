@@ -79,8 +79,8 @@ def write_preserving(sp: etree._Element, paragraphs: list[dict]) -> None:
     oude alinea 1, nieuwe alinea 2 die van oude alinea 2, en wie er meer schrijft dan er
     stonden erft van de laatste. Dat laatste is geen detail. In dit sjabloon draagt de
     eerste alinea van een kaartvak vaak de kop en de tweede de lopende tekst mét
-    `spcBef` — kopieer je overal de eerste, dan plakken alle vervolgalinea's tegen elkaar
-    en meldt `qa_fit.py` terecht `para-gap`.
+    `spcBef` — kopieer je overal de eerste, dan plakken alle vervolgalinea's tegen elkaar:
+    zichtbaar op de render, door geen enkel script gemeten.
 
     Staat er geen `rPr` (een placeholder die zijn opmaak uit de layout erft), dan wordt er
     ook geen geschreven: dan gedraagt dit script zich als `set_text.py` en blijft de

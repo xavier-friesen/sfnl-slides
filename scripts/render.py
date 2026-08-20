@@ -406,13 +406,29 @@ def main() -> None:
         com = com_available()
         soffice = soffice_binary()
         raster = pdf_to_png_tool()
+        # Het binary vinden is niet hetzelfde als kunnen renderen. Een installatie met
+        # alleen `libreoffice-core`, zonder `libreoffice-impress`, heeft geen importfilter
+        # voor pptx: soffice start, zegt "Error: source file could not be loaded" en geeft
+        # exit 0. Deze check meldde dan `mode: full` terwijl er niets rendert, en dat is de
+        # gevaarlijkste melding die dit script kan geven -- de bouwer denkt visueel te
+        # verifieren. Dus dezelfde proefconversie als in `preflight.py`.
+        probe = {"ran": False, "ok": None, "detail": "niet geprobeerd: geen soffice"}
+        if soffice and not com:
+            try:
+                from preflight import probe_soffice
+                probe = probe_soffice()
+            except Exception as fout:                          # noqa: BLE001
+                probe = {"ran": False, "ok": None,
+                         "detail": f"niet geprobeerd: {fout}"}
+        soffice_werkt = soffice and probe.get("ok") is not False
+
         # LibreOffice alleen is niet genoeg voor PNG's, maar wel voor een pdf: dat is de
         # derde trap van de render-ladder, geen QA-only.
         if com:
             renderer, mode = "powerpoint", "full"
-        elif soffice and raster:
+        elif soffice_werkt and raster:
             renderer, mode = "libreoffice", "full"
-        elif soffice:
+        elif soffice_werkt:
             renderer, mode = "libreoffice-pdf", "pdf"
         else:
             renderer, mode = None, "qa-only"
@@ -424,6 +440,13 @@ def main() -> None:
                 "LibreOffice staat er wel, maar er is geen pdf->png-omzetter — je krijgt "
                 "een pdf en leest de pagina's daarvan. Wil je PNG's en een contactsheet: "
                 "installeer poppler-utils (pdftoppm) of mupdf-tools (mutool)"
+            )
+        elif soffice and probe.get("ok") is False:
+            remediation = (
+                "soffice staat er, maar kan geen pptx openen: er is geen importfilter, "
+                "dus vrijwel zeker is alleen libreoffice-core geinstalleerd. Installeer "
+                "libreoffice-impress ernaast (apt-get install -y libreoffice-impress), en "
+                "voor de png-stap poppler-utils (pdftoppm) of mupdf-tools (mutool)"
             )
         else:
             remediation = (

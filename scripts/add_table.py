@@ -282,8 +282,8 @@ def row_heights(total_in: float, rows: int) -> tuple[float, float, bool]:
     PowerPoint behandelt de rijhoogte als een MINIMUM en negeert de hoogte van de
     `graphicFrame`: met vaste rijhoogtes van 0.32 in rendert een tabel van drie rijen
     ~1.3 in hoog, ook als je 3.70 in vraagt. Dan staat er tot de conclusieband op 6.93 in
-    ruim twee inch wit, en geen enkele check ziet het — `qa_fit.py` leest de opgegeven
-    framehoogte, niet de gerenderde.
+    ruim twee inch wit, en geen enkele check ziet het: een meting leest de opgegeven
+    framehoogte en niet de gerenderde. Alleen de render laat dat gat zien.
 
     Dus verdelen we de gevraagde hoogte over de rijen. Past de inhoud niet in de
     gevraagde hoogte (minder dan de minimummaten), dan is de gevraagde hoogte

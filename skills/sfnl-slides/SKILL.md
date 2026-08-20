@@ -244,8 +244,10 @@ composities voor dezelfde boodschap en kies je met een reden die over de boodsch
 (`adviesvorm.md` §3). Twee regels denkwerk; het voorkomt dat elke slide de eerste inval is.
 
 **Gebruik `scripts/shapes.py`.** Dat is de primitievenlaag: vlakken, lijnen, tekstruns,
-kolomrasters en — belangrijk — een hoogtemeting. Het is géén patroonbibliotheek; er zit geen
-kaartenrij en geen stroomschema in. Wat je ermee bouwt is elke slide opnieuw jouw beslissing.
+kolomrasters, een hoogtemeting, een handvol merktekens die élk één ding tekenen (punt, meter,
+pijl, streep) en het gereedschap om een eigen vorm te maken (`adj`, `contour`, `verbind`,
+`schaal`). Het is géén patroonbibliotheek; er zit geen kaartenrij en geen stroomschema in. Wat
+je ermee bouwt is elke slide opnieuw jouw beslissing.
 
 Waarom je hem gebruikt in plaats van zelf XML te typen: de eerste deck die met deze skill werd
 gebouwd had een ad-hoc bouwlaag die `<a:ln><a:noFill/>` op elke vorm hardcodeerde en zijn lichte
@@ -255,8 +257,9 @@ structureel onbouwbaar, en de bouwer merkte dat niet.
 
 ```python
 import sys; sys.path.insert(0, "<plugin>/scripts")
-from shapes import (ZONE, Deck, aanhef, cols, drager, gat_onder, hoogte_van, label, para,
-                    run, streep, tekst, tekst_op, vlak, vulgraad, write)
+from shapes import (ZONE, Deck, aanhef, binnen, cols, contour, drager, gat_onder,
+                    hoogte_van, label, meter, para, pijl, punt, run, schaal, streep,
+                    tekst, tekst_op, verbind, vlak, vulgraad, write)
 
 D = Deck(body=16, label=14, sluit=16, display=32)     # de vier maten, één keer
 xs, w = cols(3, 0.24)                                 # raster
@@ -271,9 +274,45 @@ vormen = [
     tekst("Regel", xs[1], 3.28, w, 0.9,
           [para(*aanhef("Twee loketten.",                # Lato Semibold + Lato Light
                         "De doorlooptijd blijft op 41 dagen steken.", D.body))]),
+    punt("Badge 1", xs[2], 3.28, 0.50, "emerald", tekst="1"),   # merkteken, geen XML
+    vlak("Halve punt", xs[2] + 0.7, 3.28, 0.16, 0.16,           # élke preset via adj
+         prst="pie", vulling="emerald", adj={"adj1": 5400000, "adj2": 16200000}),
 ]
 write("unpacked/ppt/slides/slide3.xml", vormen)
 ```
+
+**Een eigen vorm, in drie wegen.** Dit is waar de laag het meest oplevert, want een ontbrekend
+merkteken is een slide die tekst blijft.
+
+1. **Een presetvorm met zijn handvatten** — `vlak(prst=..., adj=...)`. `prst` is elke
+   PowerPoint-presetvorm; `adj` zet zijn `adj1`/`adj2`. De tabel `PRESET_ADJ` in `shapes.py`
+   zegt per vorm wat die waarden doen: een halve punt is `pie` met `adj1=5400000, adj2=16200000`,
+   een dunne ring is `donut` met `adj=12500`, een stap in een volgorde is `chevron` met
+   `adj=25000`. Zonder `adj` krijg je PowerPoints defaults, en die zijn op deze maten fout — een
+   `pie` wordt een pacman en een pijl van 0,24 in hoog een driehoekje.
+2. **Een merkteken** — `punt()` (met een gecentreerd cijfer, of half gevuld), `meter()` (een rij
+   punten die een grofheid codeert), `pijl()` (met een kop die niet de helft van de hoogte is),
+   `streep()` (horizontaal én verticaal, met alpha voor een haarlijn), `verbind()` met `anker()`
+   (twee vormen op hun rand verbinden). Elk tekent één ding en houdt zich aan de kleurregels.
+3. **Een eigen contour** — `contour("Wig", 0, 0, [(0.48, 4.2), (2.0, 3.6), (2.0, 4.8)],
+   vulling=("grapefruit", 20000))`. Punten in inch, en de laag schrijft het `custGeom`. Met
+   `sluit=False` en een `lijn` is het een open lijnstuk: een accolade, een knik.
+
+**Draagt afstand informatie, dan staat hij op schaal.** `px = schaal(ZONE["x"], ZONE["w"], 2024,
+2028)` geeft een functie die een waarde naar een x in inch omzet — de formule uit
+`vormentaal.md` §7. Dat is het enige rekenwerk waar het oog de fout niet kan repareren: een punt
+op de verkeerde plek ziet er precies zo goed uit als een punt dat goed staat. Het label bij een
+tik houd je binnen de zone met `binnen()`; het punt zelf verschuift nooit.
+
+Nog steeds géén patroonbibliotheek: er is geen `kaartenrij()`, geen `stroomschema()` en geen
+`tijdlijn()`. De merktekens tekenen één ding, de compositie is elke slide opnieuw jouw
+beslissing.
+
+Wat er extra nee zegt zodra je een eigen vorm maakt: `"grijs"` als vulling of als kaartlijn (dat
+is de Word-tabellook — een lichte vulling is alpha op de volle kleur), `hoek` en `adj` samen, een
+`adj`-handvat dat de preset niet heeft, een `label()` met een alphakleur (die mist in de render
+zijn laatste letter — gebruik de kleur `"grijs"`), een cursieve run die langer is dan één korte
+regel, en een meter van meer dan vijf punten.
 
 Wat de laag voor je regelt: alpha in plaats van `lumMod`, de `adj` van een `roundRect` uit een
 absolute radius, een lijn in dezelfde hue als de vulling, de expliciete `<a:latin/>` op elke run,
@@ -406,19 +445,55 @@ uitlijning beoordeel je gewoon; regelafbreking en dus vakhoogte niet. Rek in dat
 tekstvak met de hand op om een afbreking te repareren — dat vak staat dan in de echte weergave te
 ruim. De cover is de gevoeligste plek, want daar groeit het titelvak naar boven.
 
+### Escalatie naar `sfnl-infographic`
+
+Er is een tweede skill die één beeld op maat bouwt. Die kost een aparte ronde en een aparte
+agent, dus je zet hem nooit ongevraagd in en er is geen bovengrens per deck.
+
+De aanleiding komt van het oog, niet van een telling. Concreet: `deck-visual-reviewer` wijst een
+slide aan als tekstwand of als slide die met een vorm beter af was, en jouw herontwerp met het
+repertoire uit `shapes.py` haalt het in één ronde niet — de bevinding staat er in de hercheck
+nog, of dezelfde slide komt voor de tweede keer terug.
+
+De slidegebonden tellingen uit `qa_tellingen.py` — maatsprong, twee letterfamilies, de hoge
+punt — zijn hierbij aanvullend en nooit op zichzelf genoeg. Een lage maatsprong is een
+compositiefout, geen infographic-vraag: die los je op met maat, gewicht en kleur. De drie
+deckbrede tellingen kunnen per definitie niet naar één slide wijzen en spelen hier geen rol.
+
+Is het zover, dan meld je wat er aan de hand is — welke slide, waarom het herontwerp het niet
+haalde, en wat het beeld zou moeten doen — stel je de escalatie voor met de kosten erbij (een
+extra ronde en een aparte agent per beeld), en wacht je op ja of nee. Bij nee herontwerp je de
+slide zelf met het repertoire, en zeg je bij oplevering dat die slide de zwakste is gebleven.
+
 Als de loop schoon is, doe je één keer de beslistoets uit `adviesvorm.md` §5: de titelrij
 hardop, de kneep per slide, en de vraag of de ontvanger met alleen deze deck het besluit kan
 nemen. Wat daar sneuvelt is een contentfout en gaat terug naar de outline, niet naar de opmaak.
 
 ## Stap 5 — Opleveren
 
-Controleer de hygiëne:
+Controleer de hygiëne en de tellingen:
 
 ```bash
 python $S/qa_text.py deck.pptx
+python $S/qa_tellingen.py deck.pptx --renders png
 ```
 
 `critical` blokkeert de oplevering. `warn` is een aanwijzing: kijk ernaar en beslis.
+
+`qa_tellingen.py` is geen tweede poort — de poort is de outline. Het telt zes dingen die
+mechanisch vast te stellen zijn en die afwijken van besluiten die je zelf hebt genomen: meer
+dan één maat per rol, een band vaker dan één per vier slides, nul grafieken en tabellen in een
+deck met cijfers, een maatsprong onder 2 op een slide, Montserrat en Lato in dezelfde alinea,
+en de hoge punt binnen een regel. Alleen de laatste drie categorieën blokkeren — maten per rol,
+letterfamilies en de hoge punt — en dat zijn precies de drie waar geen interpretatie aan te pas
+komt.
+
+Vier getallen komen zonder oordeel mee: woorden per slide en per element, de registerverdeling
+(alleen met `--renders`), en de herhaalde plattegrond. Daar staat bewust geen drempel op. Een
+`critical` op woorden per slide leert je tekst versnipperen in plaats van reduceren, en dat is
+het defect zelf: het gemeten deck stond op gemiddeld 180 woorden per contentslide met een piek
+van 255, en tien slides van negentig woorden zijn geen verbetering. Lees die cijfers, weeg ze
+tegen het dichtheidsbesluit, en laat de render en `deck-visual-reviewer` erover oordelen.
 
 Zijn de huisstijlfonts gesubstitueerd, zeg dat dan bij de oplevering en noem waar het uitmaakt:
 vraag de gebruiker het deck één keer in echte PowerPoint te openen en vooral naar de cover te
@@ -447,7 +522,7 @@ dat je niet hebt kunnen verifiëren noem je expliciet.
 
 ## Wat blokkeert
 
-Vijf dingen. De eerste drie zijn van de soort "het bestand is stuk". De twee daarna gaan over
+Zes dingen. De eerste drie zijn van de soort "het bestand is stuk". De twee daarna gaan over
 de letter, en ze staan hier alleen omdat ze te tellen zijn: Gotham Bold hoort niet in de
 contentzone, en een titel die over de subtitel heen groeit laat tekst verdwijnen. Verder blokkeert
 er niets op vormgeving; dat oordeel komt van de render.
@@ -461,6 +536,9 @@ er niets op vormgeving; dat oordeel komt van de render.
    een sjabloonprompt, een slide zonder inhoud, of Gotham Bold in de contentzone.
 5. `fit_title.py` meldt een `critical`: een titel van twee regels boven een gevulde subtitel,
    waar de gegroeide titelbox over de subregel heen loopt.
+6. `qa_tellingen.py` meldt een `critical`: dezelfde rol op twee maten, Montserrat en Lato in
+   dezelfde alinea, of een hoge punt als scheiding binnen een regel. Alle drie zijn afwijkingen
+   van een besluit uit de outline, niet oordelen over je compositie.
 
 ## Zonder renderer
 
@@ -472,7 +550,12 @@ in tot ruim binnen zijn vak in plaats van precies. Meet wat je kunt meten:
 ```bash
 python $S/fit_title.py unpacked       # passen de titels op één regel, met het echte font
 python $S/inspect_deck.py deck.pptx   # wat staat er werkelijk op elke slide
+python $S/qa_tellingen.py deck.pptx   # zonder --renders: geen registerverdeling
 ```
+
+En zeg wat je zó niet hebt gezien. `qa_text.py` en `qa_tellingen.py` zien geen overlap, geen
+contrast, geen dood wit en geen baseline; ze meten wat in de XML staat. Blind bouwen betekent
+dus: geen vormbeoordeling, en dat zeg je bij oplevering met zoveel woorden.
 
 En zeg het bij oplevering, met zoveel woorden: dit deck is niet visueel geverifieerd. Dat is
 geen formaliteit — het is het verschil tussen een deck dat gecontroleerd is en een deck waarvan
@@ -499,4 +582,16 @@ verwijdert een vorm; dat is de derde kaart in een rij waar de nieuwe slide er tw
 Verandert daardoor het aantal elementen, herverdeel dan met `place_shapes.py`, anders blijft er
 een gat aan de rechterkant staan.
 
-Renderen en beoordelen doe je daarna net zo goed als bij een nieuwe deck.
+Renderen en beoordelen doe je daarna net zo goed als bij een nieuwe deck. De tellingen scope je
+wel:
+
+```bash
+python $S/qa_tellingen.py uit.pptx --nieuw 12,13
+```
+
+Een deck dat vóór de huidige regels is gebouwd heeft op vrijwel elke slide een gemengde alinea —
+op het eerste gemeten deck 71 stuks. Zonder `--nieuw` blokkeren die het toevoegen van twee slides
+op tachtig bevindingen in tekst waar je niet aan hebt gezeten. Ze verdwijnen niet, ze komen onder
+`overgeerfd` te staan: waar, en iemand mag besluiten het oude deck door te trekken. De deckbrede
+tellingen blijven wel gewoon staan, want een tweede maat per rol introduceer je juist zelf zodra
+je een slide toevoegt die niet bij de deck past.
