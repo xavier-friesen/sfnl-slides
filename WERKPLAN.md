@@ -1,7 +1,8 @@
 # Werkplan — sfnl-slides visueel aantrekkelijker maken
 
 Status: **wacht op go van Xavier.** Dit plan is vastgelegd voor review; er is nog niets aan de
-skill gewijzigd. De volledige prompt waaruit dit plan volgt staat onderaan samengevat.
+skill gewijzigd. Het plan staat op zichzelf: de opdracht, de meting eronder en de keuzes staan
+hieronder, niet in een los promptdocument.
 
 ## Doel
 
@@ -45,6 +46,22 @@ omgeving terwijl `preflight.py` meldde dat de renderer er wél was — `soffice`
 Renders en metingen van de twee decks-zoals-ze-zijn als vertrekpunt bewaren, zodat elke ronde
 tegen hetzelfde vertrekpunt vergelijkt. Raakt geen skillbestanden.
 
+De renderomgeving hoort bij de fixture, want `preflight.py` heeft hier al één keer gemeld dat de
+renderer er was terwijl er niets rendde. Zonder deze regels is de voor/na-vergelijking niet
+reproduceerbaar:
+
+| onderdeel | versie |
+|---|---|
+| LibreOffice | 24.2.7.2 420 (`libreoffice-impress` moest apart geïnstalleerd worden) |
+| pdftoppm (poppler) | 24.02.0 |
+| fonts-lato | 2.015-1 |
+| fonts-montserrat | 7.222-2 |
+| python / python-pptx | 3.11.15 / 1.0.2 |
+
+Gotham Bold is niet geïnstalleerd en zal dat vrijwel nooit zijn: titelregels worden dus
+gesubstitueerd. Compositie-oordelen blijven geldig, regelafbrekingen in titels niet. Elke ronde
+draait op deze omgeving, of noteert waarin hij afwijkt.
+
 ### 1. Werklijn F — de twee typografieregels
 Het goedkoopst en volledig mechanisch, dus eerst.
 
@@ -55,8 +72,27 @@ Het goedkoopst en volledig mechanisch, dus eerst.
 - **Geen hoge punt als scheiding binnen een regel.** Twee feiten zijn twee regels, twee cellen of
   twee elementen. Geldt in de contentzone, in labels en in bronregels.
 
-Raakt: `scripts/shapes.py` (`aanhef()` bakt de oude regel nu actief in, `run()` krijgt de guard),
-`reference/vormentaal.md` §9 (waar de oude regel expliciet staat aanbevolen),
+**De bewijsclaim gaat mee, en dat is het zwaarste deel van deze werklijn.** De docstring van
+`aanhef()` verkoopt de oude regel niet als voorkeur maar als meting: "Gemeten in `maatstaf/04`:
+acht alinea's, elk met een SemiBold aanhef van twee tot vier woorden op dezelfde 16pt". De nieuwe
+regel verklaart dat gemeten patroon dus fout. Dat kan niet blijven staan: dan wijst de reviewer
+straks naar 04 als voorbeeld van wat we net verboden hebben.
+
+Er is eerst een feitenvraag te beslechten. Bij het bekijken van `maatstaf/04` lijken de
+vetgezette aanhefjes in x-hoogte en letterbouw op de Lato-body eronder en niet op een
+Montserrat-run — mogelijk is de meting in de docstring onjuist en gebruikte de winnende slide al
+een Lato-gewicht. Beslissende test: dezelfde zin in beide varianten renderen en tegen 04 leggen.
+
+- Blijkt 04 werkelijk Lato: dan corrigeert de nieuwe regel een verkeerde meting in plaats van dat
+  hij bewijs overrulet, en dat schrijf ik zo op.
+- Blijkt 04 werkelijk Montserrat: dan overruled Xaviers besluit een gemeten patroon uit een
+  winnende deck. Dat mag, maar dan wordt 04 als lat voor dit aspect geschrapt of geherannoteerd,
+  en staat er expliciet bij dat de rest van die slide (twee hues voor een tegenstelling, proza als
+  exhibit) wél de lat blijft.
+
+Raakt: `scripts/shapes.py` (`aanhef()` bakt de oude regel in, docstring inclusief de
+maatstaf-meting; `run()` krijgt de guard), `reference/vormentaal.md` §9 (waar de oude regel
+expliciet staat aanbevolen), de annotatie bij `assets/maatstaf/04`,
 `reference/adviesvorm.md` §4, `agents/deck-visual-reviewer.md`, `skills/sfnl-slides/SKILL.md`.
 Beide patronen worden repobreed opgezocht: een regel die op één plek verandert en op drie andere
 blijft staan, komt terug.
@@ -110,28 +146,59 @@ Raakt: `skills/sfnl-slides/SKILL.md` stap 1 en 2.
 Veel van wat deze decks lelijk maakt is niet in een drempel te vatten, dus geen poort die doet
 alsof dat wel zo is.
 
-**Wél tellen** (mechanisch, zonder interpretatie): meer dan één maat per rol deckbreed;
-maatsprong per slide onder ~2; bandfrequentie boven één per vier slides; nul exhibits in een deck
-met cijfers; Montserrat en Lato in dezelfde alinea; de hoge punt binnen een regel.
+**Wél tellen** (mechanisch, zonder interpretatie), met per telling het niveau waarop hij vuurt:
+
+| telling | niveau |
+|---|---|
+| meer dan één maat per rol | deck |
+| bandfrequentie boven één per vier slides | deck |
+| nul exhibits in een deck met cijfers | deck |
+| maatsprong onder ~2 | slide |
+| Montserrat en Lato in dezelfde alinea | slide |
+| de hoge punt binnen een regel | slide |
+
+Dat onderscheid is niet cosmetisch: drie van de zes tellingen kunnen per definitie niet naar één
+slide wijzen, en dat bepaalt wat de escalatie in stap 6 wel en niet kan zien.
 
 **Niet in een drempel**: tekstlast, registerverdeling, herhaalde plattegrond, aantrekkelijkheid.
 Die worden gerapporteerd als getal zónder oordeel. Een `critical` op woorden per slide zou de
 bouwer leren tekst te versnipperen in plaats van te reduceren — precies het defect waar we
 vandaan komen.
 
-Daarnaast: de verwijzingen naar `qa_fit.py` en `qa_typography.py` opruimen — implementeren, of
-weghalen en in `SKILL.md` en `preflight.py` zeggen wat de poort werkelijk is. En de kant die wél
-oordeelt versterken: `deck-visual-reviewer` scherper op tekstwanden, op slides die met een vorm
+**`qa_fit.py` en `qa_typography.py` gaan eruit, niet erin.** De keuze is nu gemaakt in plaats van
+opengelaten: de repo zet zelf "Poorten: één: de outline" (README) en implementeren zou de
+vormgevingspolitie herbouwen die deze plugin bewust weglaat. De dangling verwijzingen in
+`preflight.py`, `_deck.py`, `add_chart.py`, `add_table.py` en `qa_text.py` worden dus opgeruimd en
+`SKILL.md` en `preflight.py` zeggen wat de poort werkelijk is.
+
+Dat maakt het nieuwe telscript wél een verantwoording waard, en die luidt: het is een
+hygiënerapport in dezelfde categorie als `qa_text.py`, geen tweede poort. Alleen wat mechanisch en
+zonder interpretatie vast te stellen is blokkeert, en dat zijn afwijkingen van besluiten die de
+bouwer zelf in de outline heeft genomen — niet oordelen over zijn compositie.
+
+En de kant die wél oordeelt versterken: `deck-visual-reviewer` scherper op tekstwanden, op slides die met een vorm
 beter af waren, en op "ziet dit er aantrekkelijk uit" in plaats van alleen "is dit correct".
 
 Raakt: een nieuw QA-script in `scripts/`, `scripts/preflight.py` (inclusief de foutieve
 renderermelding), `agents/deck-visual-reviewer.md`, `skills/sfnl-slides/SKILL.md` stap 5.
 
 ### 6. Werklijn E — escalatie naar `sfnl-infographic`
-Geen bovengrens per deck, nooit ongevraagd. Aanleiding: een slide die **drie of meer
-waarschuwingen** uit de poort oplevert — die is niet met een kleinere letter te repareren. De
-skill meldt wat er aan de hand is, stelt de escalatie voor met de kosten erbij, en wacht op ja of
-nee. Bij nee herontwerpt hij de slide zelf met het repertoire uit stap 2.
+Geen bovengrens per deck, nooit ongevraagd.
+
+**De aanleiding komt primair van het oog, niet van de telling.** De eerdere formulering — drie of
+meer poortwaarschuwingen op één slide — kan structureel niet vuren op de slides waar het om gaat:
+tekstlast, registerverdeling en aantrekkelijkheid houdt stap 5 bewust buiten de poort, en drie van
+de zes tellingen zijn deckbreed. Een klassieke tekstwand haalt dus makkelijk nul
+poortwaarschuwingen. Dus:
+
+- **Aanleiding 1, leidend:** `deck-visual-reviewer` wijst een slide aan als tekstwand of als slide
+  die met een vorm beter af was, en het herontwerp met het eigen repertoire haalt het in één ronde
+  niet.
+- **Aanleiding 2, aanvullend:** de slidegebonden tellingen uit stap 5 vuren samen met zo'n
+  bevinding. Nooit op zichzelf: een lage maatsprong is een compositiefout, geen infographic-vraag.
+
+De skill meldt dan wat er aan de hand is, stelt de escalatie voor met de kosten erbij, en wacht op
+ja of nee. Bij nee herontwerpt hij de slide zelf met het repertoire uit stap 2.
 
 Raakt: `skills/sfnl-slides/SKILL.md`.
 
@@ -141,8 +208,12 @@ Raakt: `skills/sfnl-slides/SKILL.md`.
 2. Bouw beide registers: dezelfde inhoud één keer als spreekdeck en één keer als leave-behind.
    Het bijgeleverde paar is precies dat, en of het dichtheidsbesluit werkt blijkt alleen als de
    twee uitkomsten werkelijk verschillen.
-3. Blinde vergelijking: oude en nieuwe render naast de vier goede voorbeelden, `deck-visual-reviewer`
-   zonder uitleg, met één vraag erbij — welke van deze slides zou je aan een klant laten zien.
+3. Blinde vergelijking, met **twee jurylieden**: de aangescherpte `deck-visual-reviewer` én de
+   ongewijzigde versie van vóór stap 5, uit `main`. Rechter en verdachte tegelijk veranderen maakt
+   "verbetering" niet te onderscheiden van "de lat is verschoven"; de oude reviewer is de vaste
+   maat. Beide krijgen de oude en de nieuwe render naast de vier goede voorbeelden, zonder uitleg,
+   met één vraag erbij — welke van deze slides zou je aan een klant laten zien. Wijken de twee van
+   elkaar af, dan is dat zelf een bevinding over de aanscherping.
 4. Twee tot drie ronden, per ronde één wijziging met een reden. Stopt de verbetering, dan stop ik ook.
 
 ## Ontwerpkeuzes en hun alternatieven
@@ -153,7 +224,8 @@ Raakt: `skills/sfnl-slides/SKILL.md`.
 | Tekstlast rapporteren zonder oordeel | een harde `critical` op woorden per slide | dan leert de bouwer versnipperen in plaats van reduceren, en dat is het defect zelf |
 | Tekstlast koppelen aan het register | één deckbreed maximum | veel tekst is niet altijd fout: op een leave-behind mag een slide dicht zijn, op een spreekdeck nooit |
 | Aanhef binnen een regel in Lato Semibold | Lato Light met `b="1"` | nepvet; `Lato Semibold` bestaat als eigen familienaam en is een echt gewicht |
-| Escalatie op verzoek, met aanleiding uit de poort | automatisch escaleren voor de mooiste slides | quotakosten, en het repertoire uit stap 2 moet het overgrote deel zelf afhandelen |
+| Escalatie op verzoek, met de aanleiding uit het oog van de reviewer | aanleiding uit de mechanische poort; of automatisch escaleren voor de mooiste slides | de poort ziet tekstwanden per definitie niet, en automatisch escaleren kost quota terwijl het repertoire uit stap 2 het overgrote deel zelf moet afhandelen |
+| `qa_fit.py` en `qa_typography.py` opruimen | ze alsnog implementeren | de repo zet zelf "Poorten: één: de outline"; implementeren herbouwt de vormgevingspolitie die deze plugin bewust weglaat |
 | Geen nieuwe widget | invulwidget met live voorbeeldslide | Xavier heeft dit expliciet zo gekozen: de intake en de vijf besluiten zijn de plek |
 
 ## Definitie van klaar
@@ -165,8 +237,10 @@ bestaande testsuite lopen schoon.
 Voor het geheel, in deze volgorde van gewicht:
 
 1. De nieuwe renders zijn in de blinde vergelijking aan te wijzen als de betere.
-2. Slide 6 — de vier kolommen van 255 woorden — is een schema, een tabel of twee slides geworden,
-   zonder dat er inhoud is verdwenen die op de oude slide stond.
+2. Slide 6 — de vier kolommen van 255 woorden — is een schema, een tabel of twee slides geworden.
+   Reductie mag en is meestal het punt: wat eruit gaat, gaat eruit met een reden die op te schrijven
+   is. De toets is dat geen bewering ongemerkt verdwijnt, niet dat alle 255 woorden ergens
+   terugkomen — dat laatste zou versnipperen belonen, precies het defect uit stap 5.
 3. De tellingen uit werklijn C staan schoon.
 
 Staat 3 schoon terwijl 1 niet lukt, dan zijn de verkeerde dingen gemeten en gaat dat terug in de
@@ -189,5 +263,6 @@ Op te leveren: de diff, de contactbladen van vóór en ná, de meting op beide, 
 - **De vier goede voorbeeldslides zijn alleen als afbeelding in het gesprek beschikbaar**, niet
   als bestand. Ze zijn de feitelijke lat voor werklijn A en de blinde vergelijking, en ze horen
   eigenlijk in `assets/maatstaf/` naast de tien bestaande. Daarvoor zijn de PNG-bestanden nodig.
-- Of `qa_fit.py` en `qa_typography.py` alsnog geïmplementeerd worden of dat de verwijzingen eruit
-  gaan, is een keuze die in werklijn C valt en die in de commit wordt gemotiveerd.
+- De feitenvraag uit stap 1: gebruikt `maatstaf/04` werkelijk Montserrat SemiBold als aanhef, of
+  al een Lato-gewicht? Daarvan hangt af of de nieuwe typografieregel een verkeerde meting
+  corrigeert of een gemeten patroon overrulet. Beslist met een render, niet met een mening.
