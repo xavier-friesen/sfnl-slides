@@ -4,14 +4,16 @@ Dit is de maatstaf. Geen catalogus met patronen om uit te kiezen, en geen drempe
 script op afkeurt: wat een SFNL-slide goed maakt, geordend van meeste naar minste effect, zodat
 je je eigen compositie eraan kunt toetsen.
 
-Elke regel hieronder is nagemeten. Waar er een getal staat, komt dat uit de XML of de render van
-de vijf decks die de blinde vergelijking wonnen, of uit de deck die het niet haalde. Waar een
-regel eerder verkeerd te lezen bleek, staat de verkeerde lezing er expliciet bij — dat is geen
-overbodige uitleg, dat zijn fouten die daadwerkelijk gemaakt zijn.
+Elke regel hieronder is nagemeten. Waar er een getal staat, komt dat uit de XML of de render
+van de vijf decks die de blinde vergelijking wonnen, uit de deck die het niet haalde, of uit
+de nulmeting van twee later gemeten decks — een werkdeck van 23 en een spreekdeck van 19
+slides — en de vier reconstructies `11` tot `14` in `assets/maatstaf/`. Waar een regel eerder
+verkeerd te lezen bleek, staat de verkeerde lezing er expliciet bij — dat is geen overbodige
+uitleg, dat zijn fouten die daadwerkelijk gemaakt zijn.
 
-Lees dit één keer voordat je de eerste slide bouwt, samen met de tien voorbeelden in
-`assets/maatstaf/`. Die tien zijn niet foutloos: `assets/maatstaf/LEESMIJ.md` zegt per slide
-waarvoor hij de lat is en waarvoor niet.
+Lees dit één keer voordat je de eerste slide bouwt, samen met de veertien voorbeelden in
+`assets/maatstaf/`. Die veertien zijn niet foutloos: `assets/maatstaf/LEESMIJ.md` zegt per
+slide waarvoor hij de lat is en waarvoor niet.
 
 ---
 
@@ -344,9 +346,27 @@ moet worden. Doe dat in de outline; na het bouwen kost het een herbouw van de co
 **Een band van 12,52 bij 1,25 in met één regel erin is dezelfde vorm, of hij navy, oranje-tint
 of warmgrijs is.** Dat is de val waar de afgekeurde deck in liep: de bouwer dacht de herhaling
 te doorbreken door de vulling te wisselen en zette drie keer hetzelfde blok neer. Ten hoogste
-één zo'n band per vier slides. De andere slides sluiten af doordat de laatste rij zelf de
-conclusie is, doordat één cel vol gekleurd is, doordat de sluitregel op wit staat, of doordat er
-niets af te sluiten valt.
+één zo'n band per vier slides — en dat maximum alléén is aantoonbaar niet genoeg: een later
+gemeten deck zette veertien banden op achttien contentslides, één band per 1,2 slide, terwijl
+deze regel er toen al stond. De regel werd gelezen en niet gevolgd, omdat er op elke slide iets
+moest afsluiten en de band het enige afsluitmiddel was dat de bouwer paraat had. Daarom staan
+de vier andere afsluiters hier uitgeschreven, want dit is de plek waar je er een nodig hebt:
+
+- **De laatste rij is zelf de conclusie.** In een tabel of een rij blokken is de onderste rij
+  de uitkomst — het totaal, het advies, de laatste stap. Dan sluit de inhoud de slide af en
+  hoeft er niets onder.
+- **Eén cel of kaart draagt de volle kleur.** In een rij gelijke elementen krijgt het element
+  waar het om gaat de volle vulling of de gestreepte nadruk (`maatstaf/11`); het oog eindigt
+  daar en de conclusie staat al op de slide.
+- **De sluitregel op wit.** Eén regel zonder vulling, aanhef in Lato Semibold, hooguit een
+  streep erboven (§8). Zegt precies wat de band zegt, zonder het vlak.
+- **Er valt niets af te sluiten.** In titelmodus A draagt de titel de bewering al; een slide
+  die zijn boodschap boven heeft staan hoeft haar onderaan niet te herhalen. De compositie
+  eindigt waar de inhoud eindigt en vult de zone met inhoud (§6), niet met een band.
+
+De band die dan overblijft is de slide waar de conclusie werkelijk een eigen zin is die nergens
+anders op de slide staat — op `maatstaf/11` komt hij precies één keer voor, onder het
+beslismoment.
 
 Variatie zit niet in het layoutnummer. Zes contentslides op layout 19 met zes verschillende
 composities is goed. Maar kies de layout ook niet standaard: een tweeluik is layout 22, waar de
@@ -434,6 +454,45 @@ de slide levendiger", dan gaat het eruit, net als elk gekleurd vlak dat alleen k
 Blijven bij de kneepoefening de pijltjes over in plaats van de boodschap, dan was het
 navigatie.
 
+## 13. Tekstlast volgt de dichtheid, en het defect is tekst waar een vorm had gemoeten
+
+Er is geen deckbreed maximum aan woorden per slide. `qa_tellingen.py` telt de woorden en
+rapporteert ze bewust zonder oordeel, en deze paragraaf draait dat niet stilletjes om in een
+norm: de getallen hieronder zijn richtwaarden met de meting eronder, geen drempels. Wat er wél
+is: één dichtheidsbesluit per deck, en één toets per slide.
+
+**Het dichtheidsbesluit: spreekdeck of leave-behind.** Dit is een ander onderscheid dan de
+twee registers van §5 — dat gaat over kleurbezetting per slide, dit over woorden per deck —
+en het is het eerste deckbrede besluit in de outline (skill, stap 2).
+
+- **Spreekdeck** — de slide is de achtergrond bij iemand die praat. Wat de spreker zegt hoort
+  niet op de slide; daar staat alleen wat het verhaal draagt, en de toelichting gaat naar de
+  presentatornotities. Dit is het strakke eind. Gemeten: de twee lichtste maatstafslides,
+  `13` en `14`, staan op 50 en 59 woorden inclusief titel — een plot op schaal en een schema,
+  en beide vullen de zone (§6), want weinig woorden is geen lege slide. Het gemeten
+  spreekdeck zat op gemiddeld 85 woorden per contentslide met een piek van 101, en dat is
+  voor deze dichtheid nog steeds te dicht: daar stond uitgeschreven wat de spreker zou
+  zeggen.
+- **Leave-behind** — de slide moet zonder spreker te lezen zijn (`voice.md`, de bindende
+  toets), en mag dus dicht zijn. Een prozaslide met twee goed gezette kolommen is hier een
+  volwaardige exhibit; `maatstaf/04` is precies dat. Gemeten: `12` en `11` staan op 99 en 141
+  woorden inclusief titel, en `11` — vier fasekaarten van ongeveer dertig woorden elk — is
+  van de vier reconstructies de sterkste. 141 woorden is dus geen defect.
+
+**De toets per slide is niet "hoeveel woorden" maar "staat hier tekst waar een vorm had
+gemoeten".** De hoogste meting, 255 woorden op één slide, was vier kolommen met per kolom
+dezelfde twee vetgezette labels — acht keer `Hoe het gaat` en `Wat er nu gemeten wordt`.
+Repeteert dezelfde aanhef op elke kolom, dan zijn die labels een rijkop en is de vorm een
+tabel (§12): dáár zit het defect van die slide, niet in het aantal woorden. Dezelfde toets van
+de andere kant: `11` haalt zijn 141 woorden doordat elk woord in een vorm staat — per fase een
+kaart met een badge, een datumregel en één alinea.
+
+**De verkeerde lezing ligt voor de hand: "minder woorden".** Wie uit de meting van 255 tien
+slides van negentig woorden maakt, heeft het defect verplaatst en niet opgelost — versnipperen
+is precies de reden dat er op deze telling geen drempel staat. De reductie die wél telt is de
+vorm herzien: een tabel, een schema, of twee slides met elk één boodschap, met per geschrapte
+bewering een reden die op te schrijven is.
+
 ---
 
 ## Wat hier niet staat
@@ -441,8 +500,8 @@ navigatie.
 Geen patroonnamen. Geen verplichte afsluitband. Geen maximum aantal tekstgroottes per slide.
 Geen tabel met kaartbaselines op vaste y-waarden. Geen minimumafstand die een script afdwingt.
 
-En geen belofte dat dit genoeg is. Drie van de tien voorbeelden in `assets/maatstaf/` dragen
-zelf een defect: op `01` en `06` staat het grote getal over zijn eigen label, en op `01` is de
+En geen belofte dat dit genoeg is. Meerdere van de veertien voorbeelden in `assets/maatstaf/`
+dragen zelf een defect — `LEESMIJ.md` somt ze per slide op. De drie oudste gevallen: op `01` en `06` staat het grote getal over zijn eigen label, en op `01` is de
 onderste helft van de vier kaarten leeg. Kijk daar naar de vier hues en naar de brede panelen
 eronder, niet naar de kaarthoogte. En op `04` staan Montserrat SemiBold en Lato Light in
 dezelfde alinea — nagemeten, zie §9 — wat sinds die paragraaf niet meer mag. Kijk op `04` naar

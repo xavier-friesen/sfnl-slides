@@ -99,6 +99,10 @@ verschillende composities voor dezelfde boodschap, in één regel elk, en kies m
 reden die over de boodschap gaat. Wezenlijk verschillend betekent een andere leesroute
 of een ander zwaartepunt — niet dezelfde drie kaarten met een andere vulling.
 
+De outline heeft dan al het beeldbesluit genomen — wát beeld wordt, wat tekst blijft, en
+waarom het niet visueler kon (skill, stap 2). De schets herhaalt dat besluit niet maar
+voert het uit: twee manieren waarop dát beeld op de slide kan staan.
+
     Slide 4 — "de route wordt 20 dagen korter"
     a. twee stroomschema's onder elkaar, nu en straks, dagen als heldgetal links
     b. één tijdlijn op schaal met de knip gemarkeerd, delta als focusregel rechts

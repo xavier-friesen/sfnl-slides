@@ -27,7 +27,7 @@ Daarom staat de grens hier hard:
 
 Waarom die laatste categorie bestaat, en waarom dat zo moet blijven: een `critical` op
 woorden per slide leert de bouwer tekst versnipperen in plaats van reduceren, en dat is
-precies het defect waar deze werklijn vandaan komt (het gemeten deck: gemiddeld 180
+precies het defect waar deze werklijn vandaan komt (het gemeten deck: gemiddeld 177
 woorden per contentslide, piek 255, vier kolommen met elk zeventig woorden). Wie deze
 telling later tot drempel promoveert, krijgt tien slides van negentig woorden terug in
 plaats van vijf slides met een schema. Hetzelfde geldt voor de registerverdeling en de
@@ -552,7 +552,7 @@ def analyse(deck: Path, renders: Path | None = None) -> dict:
                 "ijkpunt": "gemeten op bestaande decks: de voorbeelden 11 tot 14 in "
                            "assets/maatstaf/ staan op 141, 99, 50 en 59 woorden inclusief "
                            "titel, een spreekdeck op gemiddeld 85, en de hoogste meting is "
-                           "180 gemiddeld met een piek van 255. Het dichtste voorbeeld is "
+                           "177 gemiddeld met een piek van 255. Het dichtste voorbeeld is "
                            "tegelijk de sterkste van de vier, dus dit getal is geen "
                            "drempel en ook geen richting — zie de docstring.",
             },

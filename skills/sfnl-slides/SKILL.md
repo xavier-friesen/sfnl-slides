@@ -26,7 +26,8 @@ Lees deze dingen, in deze volgorde, en lees ze één keer voor de hele deck en n
 1. `reference/vormentaal.md` — de maatstaf. Wat een SFNL-slide goed maakt.
 2. `reference/adviesvorm.md` — de laag erboven: antwoord voorop, exhibitcraft, de
    schetsplicht en de weigerlijst. Wat een deck beslisklaar maakt.
-3. `assets/maatstaf/*.png` — tien slides uit decks die de vergelijking hebben gewonnen. Kijk
+3. `assets/maatstaf/*.png` — veertien voorbeelden: tien uit decks die de vergelijking hebben
+   gewonnen, en vier reconstructies van slides die als de mooiste uit deze skill kwamen. Kijk
    ernaar. Ze zijn niet om na te tekenen maar om te weten waar de lat ligt.
 4. `reference/sjabloon.md` — de feiten: welke layout waarvoor, welke placeholder waar, de
    kleurslots en het alpha-recept, de volgorde binnen de XML, en negen valkuilen die stil
@@ -48,7 +49,9 @@ Vier vragen, en niet meer dan vier. Weet je een antwoord al uit de opdracht, sla
 
 - **Wie leest dit, en wat moet die erna kunnen besluiten?** Dit bepaalt alles. Een deck voor
   een wethouder die moet besluiten is een ander deck dan een deck voor een projectgroep die
-  moet meedenken.
+  moet meedenken. Vraag hierbij ook of er straks iemand bij praat of dat het deck op zichzelf
+  gelezen wordt — dat antwoord is het dichtheidsbesluit in stap 2. Het is geen vijfde vraag
+  maar de tweede helft van deze.
 - **Hoeveel slides, ongeveer?**
 - **Heb je een deck of een document dat als voorbeeld dient?** Vraag dit actief. Krijg je er
   een, dan is dát de maatstaf: render het, kijk ernaar, en volg de vormentaal ervan in plaats
@@ -57,13 +60,30 @@ Vier vragen, en niet meer dan vier. Weet je een antwoord al uit de opdracht, sla
 
 ## Stap 2 — Outline, en de enige poort
 
-### Eerst vijf besluiten voor de hele deck
+### Eerst zes besluiten voor de hele deck
 
-Deze vijf staan bovenaan `outline.md` en gelden voor elke slide. Neem je ze niet vooraf, dan
-neem je ze per slide opnieuw en dan verspringt de deck zonder dat iemand kan zien waarom.
+Deze zes staan bovenaan `outline.md` en gelden voor elke slide. Elk besluit heeft een default:
+volg je die, dan hoef je niets te motiveren; wijk je af, dan staat de reden erbij — zo is
+afwijken een keuze en geen bijproduct van hoeveel tekst er toevallig in de outline stond. Neem
+je ze niet vooraf, dan neem je ze per slide opnieuw en dan verspringt de deck zonder dat
+iemand kan zien waarom. De volgorde is niet willekeurig: de dichtheid staat voorop omdat hij
+de tekstlast van elke slide bepaalt en daarmee doorweegt in de vijf besluiten erna.
 
-1. **De vier maten.** Drager 28 tot 40pt in Montserrat Light, kop 18pt Montserrat SemiBold,
-   body 16pt Lato Light, voetnoot 11pt. Eén maat per rol, deckbreed. Gotham Bold staat alleen
+1. **De dichtheid: spreekdeck of leave-behind.** Default: leave-behind, want SFNL-decks
+   worden nagestuurd (`voice.md`, de bindende toets). Een leave-behind moet zonder spreker te
+   lezen zijn en mag dus dicht zijn — een prozaslide met twee goed gezette kolommen is daar
+   een volwaardige exhibit (`maatstaf/04`). Een spreekdeck kies je alleen wanneer er werkelijk
+   iemand bij praat én het deck niet wordt nagestuurd: dan is de slide de achtergrond bij het
+   verhaal, hoort wat de spreker zegt níét op de slide, en gaat de toelichting naar de
+   presentatornotities. De richtwaarden per dichtheid, met de meting eronder, staan in
+   `vormentaal.md` §13. Wat ook op een spreekdeck blijft staan: elk getal draagt zijn eenheid
+   en periode op de slide zelf (`voice.md`).
+2. **De vier maten.** Drager 28 tot 40pt in Montserrat Light, kop 18pt Montserrat SemiBold,
+   body 16pt Lato Light, voetnoot 11pt. Eén maat per rol, deckbreed. Dat is de default; 12pt
+   is de dichte variant voor een kaartenrij van drie of meer of een tabelcel
+   (`vormentaal.md` §2), en elke andere afwijking is deckbreed en met reden. Het gemeten
+   werkdeck zakte naar 14pt over de hele deck omdat de tekst er eerst was en de maat volgde —
+   precies de volgorde die het dichtheidsbesluit hierboven omdraait. Gotham Bold staat alleen
    in de titel en komt daar uit de layout; in de contentzone schrijf je hem nooit. En de grote
    drager is de uitzondering: ten hoogste één contentslide op drie draagt hem, want een
    aandachtstrekker op elke slide trekt niets meer.
@@ -77,10 +97,14 @@ neem je ze per slide opnieuw en dan verspringt de deck zonder dat iemand kan zie
    **En geen hoge punt als scheiding binnen een regel.** `tekst tekst · meer tekst` is twee
    feiten die op één regel geperst zijn. Twee feiten zijn twee regels, twee cellen of twee
    elementen — in de contentzone, in een label en in een bronregel.
-2. **De kaarttaal.** Rechte hoeken of één absolute hoekradius, en welke vullingssoort de default
-   is: container op alpha, wit met een haarlijn in de eigen hue, of vol. Halverwege wisselen is
-   het defect dat het snelst opvalt.
-3. **Het accent, en of er meer dan één is.** Eén accentkleur naast navy is de default, en die
+3. **De kaarttaal.** Rechte hoeken of één absolute hoekradius, en welke vullingssoort de
+   standaard is: container op alpha, wit met een haarlijn in de eigen hue, of vol. Default:
+   rechte hoeken, en op elk licht vlak een 1pt-haarlijn in de eigen hue. Recht omdat een
+   `roundRect` zonder expliciet gekozen radius nagemeten vier verschillende radii in één deck
+   oplevert, de haarlijn omdat een licht vlak hem nodig heeft om als kaart te lezen in plaats
+   van als vlek (`vormentaal.md` §8). Kies je afgerond, dan één absolute radius deckbreed.
+   Halverwege wisselen is het defect dat het snelst opvalt.
+4. **Het accent, en of er meer dan één is.** Eén accentkleur naast navy is de default, en die
    houd je de hele deck vast. Meer hues komen er alleen bij als kleur iets codeert wat de lezer
    apart moet houden: categorieën, werkstromen, processtappen, of twee kanten van een afweging.
    Schrijf dan hier per hue in één woord op wat hij betekent — grapefruit is kost of
@@ -88,14 +112,22 @@ neem je ze per slide opnieuw en dan verspringt de deck zonder dat iemand kan zie
    en zet bij de slides waar kleur iets doet in de outline welke rol welke hue krijgt. Daarna
    beslis je er niet meer over. Twee categorieën in dezelfde set krijgen nooit dezelfde hue, en
    twee blokken die samen één werkstroom vormen krijgen nooit twee verschillende.
-4. **De twee registers.** Wijs aan welke slide bíjna helemaal wit wordt en welke echt verzadigd.
-   Een deck waarin elke slide in het middengrijs ligt, is de deck die de vergelijking verloor.
-5. **De titelmodus** (`voice.md`, Titels). Modus A is de default: de titel is een volle zin die
+5. **De twee registers.** Wijs aan welke slide bíjna helemaal wit wordt en welke echt
+   verzadigd. Default: de slide waarvan de boodschap een getal of het besluit is wordt de
+   verzadigde, een proza- of vragenslide de witte. Een deck waarin elke slide in het
+   middengrijs ligt, is de deck die de vergelijking verloor — en één register deckbreed is
+   hetzelfde defect van de andere kant: het gemeten spreekdeck stond op 83 tot 88 procent wit
+   op élke contentslide en had nergens een verzadigde.
+6. **De titelmodus** (`voice.md`, Titels). Modus A is de default: de titel is een volle zin die
    de boodschap draagt, en er komt géén subtitel — idx 1 blijft leeg. Modus B kies je alleen
    wanneer de deck echte hoofdstukken heeft die de lezer moet kunnen terugvinden: dan is de
    titel de hoofdstuknaam, blijft hij binnen dat hoofdstuk letterlijk gelijk, hoort er bij elk
    hoofdstuk een divider, en draagt de subtitel de leidende zin van de slide. De subtitel is
    dus vooral een modus-B-instrument. Bij twijfel modus A, en schrijf op waarom.
+
+De zes gaan als één blok bovenaan de outline mee naar de goedkeuring: per besluit de gekozen
+waarde, en alleen bij een afwijking van de default de reden. Zes regels die in één keer te
+beoordelen zijn — de poort blijft de outline, dit is geen aparte ronde.
 
 Daarboven staat de **storyline**: het hele verhaal als één doorlopende alinea, geen bullets. Als
 je dit in een minuut aan de klant moet uitleggen, wat zeg je dan? Dat is drie regels werk en het
@@ -124,10 +156,9 @@ advies, dan is dat een bewuste keuze die je in de outline motiveert.
   het scenario, de bron — en dan alleen bij een titel van één regel. In modus B is de subtitel
   het instrument dat de leidende zin draagt, en ook daar per slide optioneel: is er geen
   leidende zin, dan blijft de hoofdstuktitel alleen staan.
-  Schrijf je er een, dan is het één zin van maximaal ongeveer 120 tekens, het liefst op één
-  regel; twee is het maximum en drie lopen door de oranje dash op 1,72 in. De toets: kun je de
-  subregel vervangen door "hieronder staat het", dan schrap je hem. Een ontbrekende subtitel is
-  nooit een bevinding — niet in de QA en niet in een review.
+  Schrijf je er een, dan geldt het budget uit `voice.md`: één zin, hooguit twee regels. De
+  toets: kun je de subregel vervangen door "hieronder staat het", dan schrap je hem. Een
+  ontbrekende subtitel is nooit een bevinding — niet in de QA en niet in een review.
 - **Layout** — met het nummer, en kies niet standaard 19. Een tweeluik is 22, waar de
   kolomkoppen geërfde placeholders zijn die je mag herkleuren. Doorlopende tekst is 20. Een
   schema over de volle hoogte zonder titel is 17. Vier contentslides op 19 achter elkaar is de
@@ -135,26 +166,36 @@ advies, dan is dat een bewuste keuze die je in de outline motiveert.
 - **Boodschap** — in één zin: wat moet de lezer hiervan overhouden.
 - **Drager** — welk element de boodschap draagt, gekozen uit vier: een getal, de compositie
   zelf, een kop of kernbegrip in de hue van zijn categorie, of een sluitregel. Een slide zonder
-  drager gaat niet naar de bouwstap. Grote letter is daarbij de uitzondering: wijs in de outline
-  aan welke slides de dragermaat van 28 tot 40pt krijgen — ten hoogste één op drie, en dat zijn
-  de slides waar de boodschap werkelijk een getal of een verhouding is. Op de rest draagt
-  gewicht en kleur.
+  drager gaat niet naar de bouwstap. Wijs hier ook aan welke slides de dragermaat van 28 tot
+  40pt krijgen; de grens van één op drie staat in besluit 2, en het zijn de slides waar de
+  boodschap werkelijk een getal of een verhouding is.
 - **Plattegrond in vier woorden** — "drie kaarten, open onderkant", "tabel plus conclusie",
   "vier rijen". Zet ze onder elkaar en tel ze: komt één plattegrond meer dan twee keer voor, of
   staan er twee gelijke naast elkaar, dan herschik je hier. Na het bouwen kost dat een herbouw
   van de contentzone.
-- **Vorm die de inhoud vraagt** — in één woord: getal, grafiek, tabel, proces, verdeling,
-  proza. Vraagt de brief "hoe werkt het" of "in welke stappen", dan is het geen lijst. Draagt de
-  deck cijfers, dan zit er minstens één grafiek, tabel, schema of verdeling in.
+- **Vorm die de inhoud vraagt — het beeldbesluit.** Dit veld was één woord en is nu één
+  regel, geschreven vóór de tekst: eerst het woord (getal, grafiek, tabel, proces, verdeling,
+  proza), dan wat beeld wordt, wat tekst blijft, en **waarom het niet visueler kon**. Die
+  laatste helft is het werk, en de reden gaat over de inhoud — zoals de keuzeregel bij de
+  schets (`adviesvorm.md` §3). "De fasen zijn even lang, dus een as zou een verschil
+  suggereren dat er niet is" is een reden; "n.v.t." en "past niet" zijn dat niet, want een
+  reden die op elke slide past beslist niets. Proza is een volwaardig antwoord
+  (`maatstaf/04`), mits de reden zegt waarom er in de boodschap geen verhouding, tijdstip of
+  afstand zit (`vormentaal.md` §12). En één toets hoort er standaard bij: staat op elke kolom
+  dezelfde vetgezette aanhef, dan zijn die labels een rijkop en is het antwoord tabel — de
+  gemeten slide van 255 woorden was precies dat, vier kaarten met acht keer dezelfde twee
+  labels (`vormentaal.md` §13). Vraagt de brief "hoe werkt het" of "in welke stappen", dan is
+  het geen lijst; draagt de deck cijfers, dan zit er minstens één grafiek, tabel, schema of
+  verdeling in.
 - **Tekst** — letterlijk zoals hij op de slide komt, inclusief cijfers, eenheid en bron.
 - **Herkomst** — achter elke inhoudelijke regel `[brief]`, `[dossier]` of `[aanname]`. Een
   aanname mag nooit als vaststelling op de slide; die gaat er alleen op als open vraag of als
   expliciete aanname. Zet alle aannames als lijstje onder de outline.
 
 **Wat je niet in de outline zet: maten.** Geen inches, geen kolombreedtes, geen kaartindeling,
-geen patroonnaam. De plattegrond en de drager horen er wél in — dat is de reden waarom de tekst
-deze lengte heeft, en het is het enige stuk vorm dat vóór het bouwen te beoordelen is. De
-uitvoering ontdek je op de render.
+geen patroonnaam. De plattegrond, de drager en het beeldbesluit horen er wél in — dat is de
+reden waarom de tekst deze lengte heeft, en het is het enige stuk vorm dat vóór het bouwen te
+beoordelen is. De uitvoering ontdek je op de render.
 
 **Dividers.** Vanaf twee inhoudelijke hoofdstukken én zeven contentslides zijn sectiedividers
 verplicht, één per hoofdstuk, uit de fotolayouts 6 t/m 16. Bij vijf of zes contentslides met
@@ -363,13 +404,13 @@ python $S/place_shapes.py unpacked/ppt/slides/slide7.xml --json '{"Kaart 2*": {"
 ### 5. Opruimen en inpakken
 
 ```bash
-python $S/fit_title.py unpacked --mode a          # of --mode b, naar besluit 5
+python $S/fit_title.py unpacked --mode a          # of --mode b, naar besluit 6
 python $S/clean.py unpacked
 python $S/office/pack.py unpacked deck.pptx --original <plugin>/assets/sfnl-sjabloon.potx
 ```
 
 `fit_title.py` meet de titels met het echte Gotham Bold, laat de titelbox naar boven groeien
-waar hij twee regels nodig heeft, en toetst de titelmodus die je in besluit 5 koos: titels in
+waar hij twee regels nodig heeft, en toetst de titelmodus die je in besluit 6 koos: titels in
 onderkast, in modus B een titel over twee regels, en in modus A een gevulde subtitel. Die
 laatste is een `critical` zodra de titel twee regels beslaat — de gegroeide titelbox loopt er
 dan over — en verder een `warn`, want in modus A schrijf je geen subtitel tenzij er een feit
@@ -491,7 +532,7 @@ komt.
 Vier getallen komen zonder oordeel mee: woorden per slide en per element, de registerverdeling
 (alleen met `--renders`), en de herhaalde plattegrond. Daar staat bewust geen drempel op. Een
 `critical` op woorden per slide leert je tekst versnipperen in plaats van reduceren, en dat is
-het defect zelf: het gemeten deck stond op gemiddeld 180 woorden per contentslide met een piek
+het defect zelf: het gemeten deck stond op gemiddeld 177 woorden per contentslide met een piek
 van 255, en tien slides van negentig woorden zijn geen verbetering. Lees die cijfers, weeg ze
 tegen het dichtheidsbesluit, en laat de render en `deck-visual-reviewer` erover oordelen.
 

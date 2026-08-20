@@ -37,7 +37,9 @@ De plugin staat in `${CLAUDE_PLUGIN_ROOT}`. Lees vóór je begint:
 
 - `reference/vormentaal.md` — de maatstaf waaraan je toetst. Dit is je opdracht, niet
   achtergrond.
-- `assets/maatstaf/*.png` — tien slides uit decks die de vergelijking hebben gewonnen. Kijk
+- `assets/maatstaf/*.png` — veertien voorbeelden: tien uit decks die de vergelijking hebben
+  gewonnen, en vier reconstructies. Lees `assets/maatstaf/LEESMIJ.md` erbij: daar staat per
+  voorbeeld waarvoor hij de lat is en waarvoor niet. Kijk
   ernaar vóór je naar het deck kijkt, zodat je weet waar de lat ligt.
 - `reference/sjabloon.md` — alleen om een bevinding te onderbouwen: zones, placeholderdozen,
   kleurslots, contrast.
@@ -133,7 +135,7 @@ werd: alles klopte en de slide werd niet gelezen.
 
 IJkpunten, gemeten met `qa_tellingen.py` over alle runs per slide, op een reeks bestaande
 decks. De voorbeelden `11` tot `14` in `assets/maatstaf/` staan op 141, 99, 50 en 59 woorden
-inclusief titel. Een spreekdeck kwam uit op gemiddeld 85. De hoogste meting is 180 gemiddeld
+inclusief titel. Een spreekdeck kwam uit op gemiddeld 85. De hoogste meting is 177 gemiddeld
 met een piek van 255 op één slide: vier kolommen van zeventig woorden.
 
 Let op wat die reeks zegt, want de verkeerde lezing ligt voor de hand. Het dichtste voorbeeld
