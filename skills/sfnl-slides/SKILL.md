@@ -21,7 +21,12 @@ toetsen, en scripts die de OOXML-valkuilen voor je afhandelen.
 
 ## Voordat je begint
 
-Lees deze dingen, in deze volgorde, en lees ze één keer voor de hele deck en niet per slide:
+Lees deze dingen, in deze volgorde, en lees ze één keer voor de hele deck en niet per slide.
+**Alle paden in dit document staan vanaf de plugin-map**, dus `${CLAUDE_PLUGIN_ROOT}` — niet vanaf
+de map waarin dit bestand staat en niet vanaf het project. `reference/vormentaal.md` is dus
+`${CLAUDE_PLUGIN_ROOT}/reference/vormentaal.md`. Dat geldt niet alleen voor de scripts: een
+bouwer die de leeslijst vanaf `skills/sfnl-slides/` probeerde te openen, vond geen van de vier
+documenten en moest de repo doorzoeken voordat hij aan stap 1 kon beginnen.
 
 1. `reference/vormentaal.md` — de maatstaf. Wat een SFNL-slide goed maakt.
 2. `reference/adviesvorm.md` — de laag erboven: antwoord voorop, exhibitcraft, de
@@ -75,7 +80,11 @@ de tekstlast van elke slide bepaalt en daarmee doorweegt in de vijf besluiten er
    een volwaardige exhibit (`maatstaf/04`). Een spreekdeck kies je alleen wanneer er werkelijk
    iemand bij praat én het deck niet wordt nagestuurd: dan is de slide de achtergrond bij het
    verhaal, hoort wat de spreker zegt níét op de slide, en gaat de toelichting naar de
-   presentatornotities. De richtwaarden per dichtheid, met de meting eronder, staan in
+   presentatornotities (`add_notes.py`). En dichtheid is geen telegramstijl: `sfnl-humanizer`
+   verbiedt de vorm "Kosten: hoger. Doorlooptijd: onveranderd", dus elke regel blijft een
+   leesbare zin of een label met een getal. Die twee regels duwen tegen elkaar en de eerste
+   bouwer die dit register gebruikte moest die grens zelf formuleren; hier staat hij.
+   De richtwaarden per dichtheid, met de meting eronder, staan in
    `vormentaal.md` §13. Wat ook op een spreekdeck blijft staan: elk getal draagt zijn eenheid
    en periode op de slide zelf (`voice.md`).
 2. **De vier maten.** Drager 28 tot 40pt in Montserrat Light, kop 18pt Montserrat SemiBold,
@@ -196,6 +205,12 @@ advies, dan is dat een bewuste keuze die je in de outline motiveert.
 geen patroonnaam. De plattegrond, de drager en het beeldbesluit horen er wél in — dat is de
 reden waarom de tekst deze lengte heeft, en het is het enige stuk vorm dat vóór het bouwen te
 beoordelen is. De uitvoering ontdek je op de render.
+
+**Wat een contentslide is.** Elke slide die niet de cover, een divider of de outro is. De
+dividerregel hieronder en het bandbudget uit `vormentaal.md` §10 hangen er beide aan, en
+`qa_tellingen.py` telt zo — een deck van 23 slides met een cover, vier dividers en een outro
+heeft dus 17 contentslides. Wie de dividers meetelt houdt vier slides meer over en dus een hele
+band meer budget, en dat is precies waar de telling en de bouwer een keer uit elkaar liepen.
 
 **Dividers.** Vanaf twee inhoudelijke hoofdstukken én zeven contentslides zijn sectiedividers
 verplicht, één per hoofdstuk, uit de fotolayouts 6 t/m 16. Bij vijf of zes contentslides met

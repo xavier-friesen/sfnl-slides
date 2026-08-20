@@ -173,6 +173,20 @@ Wijs de registers dus toe. In een deck van vijf contentslides staat er minstens 
 geen kaartvulling, alleen gekleurde koppen, proza en misschien een haarlijn. En minstens één is
 **echt verzadigd**: volle vlakken met de drager erin. De rest ligt ertussen.
 
+**En reken na hoeveel "verzadigd" is, want de schatting zit er structureel naast.** Dit besluit
+neem je vóór het bouwen en het is het enige van de zes dat je tijdens het bouwen niet ziet. Op
+een deck dat net met deze skill is gebouwd waren twee slides als verzadigd aangewezen en maten
+ze 7 en 12 procent: één emerald blok van 3,94 bij 1,15 in, en vier rijlabels van 3,00 in breed.
+Beide voelden tijdens het bouwen als "die slide is de volle". Een slide is 13,33 bij 7,5 in, dus
+100 vierkante inch, en de band van 20 tot 37 procent betekent dat er 20 tot 37 vierkante inch
+vol moet staan — een blok van 8 bij 2,5 in, of vier rijen over de volle breedte. Toen slide 12
+in dat deck volledig verzadigd werd gemaakt, kwam hij op 23 procent.
+
+Meet het dus, in dezelfde ronde als de render: `qa_tellingen.py --renders` geeft het aandeel
+wit, tint en verzadigd per slide. Zonder die meting blijft besluit 5 een intentie, en dat is
+nagemeten: het middengrijs uit de afgekeurde deck ontstond niet doordat iemand besloot dat elke
+slide in het midden mocht liggen.
+
 ## 6. De compositie vult de zone, de blokken volgen de inhoud
 
 De contentzone loopt van 1,93 tot 6,93 in. Het eerste element staat tegen 1,93 aan en de
