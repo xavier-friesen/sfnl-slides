@@ -34,8 +34,10 @@ raster-*
 deck.pdf
 
 # De maatstaf is een asset, geen renderuitvoer: zonder deze uitzondering raakt hij stil
-# verloren, net als het sjabloon hieronder.
+# verloren, net als het sjabloon hieronder. Hetzelfde geldt voor de proeven: dat zijn de
+# renders waar een meting in vormentaal.md aan hangt, en die moeten na te kijken blijven.
 !assets/maatstaf/*.png
+!assets/proeven/*.png
 
 # Decks en sjablonen blijven buiten de repo, behalve het meegeleverde sjabloon in assets/.
 *.potx

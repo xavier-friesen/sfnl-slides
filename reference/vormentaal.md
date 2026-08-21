@@ -122,6 +122,14 @@ displaymaat, of een kop vanaf 18pt die je niet hoeft te lezen om de slide te sna
 werkelijk gelezen wordt blijft navy. Heb je een accent nodig dat óók een alinea draagt, dan is
 dat royal (5,7) — een afwijking met een reden, en geen tweede default.
 
+**En daaruit volgt een regel die op de render is nagemeten: nadruk zet je niet in de letterkleur.**
+Zet je op een witte slide twee van de vier koppen in oranje en laat je de andere twee navy staan,
+dan lezen de navy koppen sterker — 15,3 tegen 2,6 — en wijst de kleur precies de verkeerde twee
+aan. Dat is gebouwd en gemeten: `proeven/01`. De vorm die het oplost staat ernaast in
+`proeven/03`: alle koppen navy, en het element dat nadruk krijgt draagt een volle oranje chip met
+navy tekst erin. Kleur in de letter blijft dus voor codering waar élk lid van de set een hue
+krijgt (`maatstaf/04`); zodra een deel van de set navy blijft, hoort de nadruk in een vlak.
+
 **Per slide mag er één tweede hue bij, en alleen als die iets codeert.** Twee kanten van een
 afweging, kost tegenover baat, nu tegenover straks: `maatstaf/04` is precies dat, twee kolomkoppen
 in twee hues omdat de kleur zegt welke kant je leest. De toets is één vraag, en je stelt hem per
@@ -139,7 +147,25 @@ slide mogen. Wie een set per slide opnieuw verzint, krijgt dezelfde rol in twee 
 op welke categorie welke kleur krijgt, en beslis er daarna niet meer over. Dezelfde rol die op
 slide 4 sky draagt en op slide 11 emerald, betekent dat de kleur decoratie is geworden. De vaste
 laag: grapefruit is kost of waarschuwing, emerald is baat, navy is structuur en totaal. Sky en
-royal zijn vrij voor categorieën zonder eigen lading. Oranje codeert buiten een set niets — daar
+royal zijn vrij voor categorieën zonder eigen lading.
+
+**En het grijs is geen grijs.** Het huisrecept voor een stil label — `tx1` met `lumMod 65000` —
+rendert als `#5176A7`: contrast 4,67 op wit en 51 procent verzadiging, dus een vijfde blauw dat
+naast sky en royal als lid van de set meedoet (`proeven/05`, met de vier trappen van datzelfde
+slot in `proeven/LEESMIJ.md`). Er is ook geen trap die het oplost: `tx1` is `#233348` en elke
+verlichting houdt de blauwzweem, van 27 procent verzadiging op lumMod 40 tot 52 op lumMod 80. Het
+palet heeft dus geen neutraal grijs, en dat is een feit om mee te rekenen in plaats van te
+omzeilen.
+
+Wat een stil label dan is, in deze volgorde:
+
+- **Navy op alpha 70** (`#625E8C`, contrast 6,0, verzadiging 33 procent). Dit voegt geen hue toe:
+  het is dezelfde navy, lichter. Dit is de default. De prijs staat in §9: op deze renderer klipt
+  letterspatiëring samen met een alphakleur de laatste glyph, dus dit label staat zonder `spc`.
+- **`tx1` lumMod 65 mét spatiëring**, maar alleen in een deck waarin sky en royal niet meedoen.
+  Doet er wél een set hues mee, dan is dit een vijfde kleur en gaat het niet op.
+- **Navy 100 procent** wanneer het label mag meedoen in de hiërarchie. Op 14pt naast een kop van
+  18pt leest dat als een tweede kop, dus dit is de uitzondering en niet de weg eruit. Oranje codeert buiten een set niets — daar
 ís hij het accent; binnen een deckbrede set is hij één van de hues en codeert hij wat de set hem
 toewijst (`maatstaf/11`, `12`).
 
@@ -203,6 +229,28 @@ Beide voelden tijdens het bouwen als "die slide is de volle". Een slide is 13,33
 100 vierkante inch, en de band van 20 tot 37 procent betekent dat er 20 tot 37 vierkante inch
 vol moet staan — een blok van 8 bij 2,5 in, of vier rijen over de volle breedte. Toen slide 12
 in dat deck volledig verzadigd werd gemaakt, kwam hij op 23 procent.
+
+**Vier composities, nagemeten, zodat je verzadigd kunt begroten in plaats van schatten**
+(`assets/proeven/`, LibreOffice-renders van 1921 px):
+
+| compositie | vol oppervlak | gemeten verzadigd |
+|---|---|---|
+| één blok van 8,00 bij 2,50 in | 20,0 vierkante inch | 21 procent |
+| één band van 12,52 bij 1,90 in | 23,8 | 25 procent |
+| vier rijlabels van 3,40 bij 0,98 in | 13,3 | 14 procent |
+| alleen lichte containers, geen vol vlak | 0 | 1 tot 2 procent |
+
+Twee dingen volgen daaruit. De vuistregel klopt: één procent verzadigd is ongeveer één vierkante
+inch, dus de band van 20 tot 37 procent is 20 tot 37 vierkante inch vol. En **een kolom volle
+rijlabels is niet verzadigd** — `proeven/02` voelt vol en meet 14 procent, want vier labels van
+3,40 in breed halen samen de helft van wat een band over de volle breedte haalt. Wil je die slide
+in het verzadigde register, dan moet de volle kleur de breedte over of moet er een blok bij.
+
+Aan de andere kant van de schaal: een slide met alléén lichte containers komt uit op 65 tot 69
+procent wit met 30 tot 34 procent tint. Dat haalt de gemeten middenband van de afgekeurde deck
+(44 tot 53) niet, maar het is ook geen van de twee registers — het is de tussenzone waar de
+referentie geen enkele slide heeft. Een tintslide is dus een keuze om te verantwoorden, geen
+default.
 
 Meet het dus, in dezelfde ronde als de render: `qa_tellingen.py --renders` geeft het aandeel
 wit, tint en verzadigd per slide. Zonder die meting blijft besluit 5 een intentie, en dat is

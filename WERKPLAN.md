@@ -305,6 +305,34 @@ Wat deze ronde niet heeft: een render. De omgeving had `python-pptx` niet, dus d
 doctrine en geen gemeten uitkomst. De drie dichtheden zijn nog nooit als drie decks naast elkaar
 gebouwd, en dat is de test die hierbij hoort.
 
+## Ronde 3 — de kleur- en gevuldheidsproef
+
+De twee besluiten die na ronde 2 nog op doctrine stonden zonder render, zijn gebouwd: zes
+varianten van dezelfde inhoud (drie gevuldheden maal twee kleurschema's) plus drie gerichte
+proeven erna. De renders en de metingen staan in `assets/proeven/`, de opzet erbij zodat ze te
+herhalen zijn. Vier dingen kwamen eruit, en alle vier zijn in de doctrine gezet:
+
+- **Nadruk in de letterkleur draait de hiërarchie om.** Twee van vier koppen oranje, twee navy:
+  de navy koppen lezen sterker (15,3 tegen 2,6). Dat is de keerzijde van "oranje is het accent"
+  die op papier niet te zien was. De vorm die het oplost is een volle oranje chip met navy
+  tekst, met alle koppen navy.
+- **Het grijs is geen grijs.** `tx1` lumMod 65 rendert als `#5176A7`, 51 procent verzadigd — een
+  vijfde blauw naast sky en royal. Geen enkele lichtheidstrap van dat slot is neutraal, want
+  `tx1` is zelf `#233348`. Het stille label is daarom navy op alpha 70 zonder spatiëring, en het
+  lumMod-recept is beperkt tot decks zonder set hues.
+- **De alpha-en-spatiëringsbug is een klipping en heeft geen veilige ondergrens.** Niet
+  aan-of-uit: het tekort loopt op met de spatiëring maal het aantal tekens, dus `spc=60` klipt al
+  en `VERANTWOORDEN` verliest bij 100 de hele N. Een spatie erachter helpt niet en een breder vak
+  ook niet.
+- **Verzadigd is te begroten, en vier rijlabels halen het niet.** Eén procent is ongeveer één
+  vierkante inch: een blok van 8 bij 2,5 in meet 21 procent, een band over de volle breedte 25,
+  en vier rijlabels van 3,40 in samen 14 — terwijl die slide vol voelt. Verzadigd lukt ook met
+  alleen oranje, dus daar is geen set hues voor nodig.
+
+Bijvangst: de renderomgeving is in deze sessie opnieuw opgebouwd (`libreoffice-impress`,
+`fonts-lato`, `fonts-montserrat`, `poppler-utils`), en met alleen `libreoffice-core` meldt
+`preflight.py` nu correct dat er geen importfilter voor pptx is.
+
 ## Openstaand
 
 - **De blinde vergelijking met twee juryleden is niet gedraaid.** Beide juryagents zijn

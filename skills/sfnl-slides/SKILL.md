@@ -31,13 +31,16 @@ documenten en moest de repo doorzoeken voordat hij aan stap 1 kon beginnen.
 1. `reference/vormentaal.md` — de maatstaf. Wat een SFNL-slide goed maakt.
 2. `reference/adviesvorm.md` — de laag erboven: antwoord voorop, exhibitcraft, de
    schetsplicht en de weigerlijst. Wat een deck beslisklaar maakt.
-3. `assets/maatstaf/*.png` — veertien voorbeelden: tien uit decks die de vergelijking hebben
+3. `assets/proeven/LEESMIJ.md` — de kleur- en gevuldheidsproef: zes renders met de metingen
+   eronder die de kleurregels van §3 en de oppervlakken van §5 onderbouwen. Geen lat, wel het
+   bewijs. Lees deze wanneer je besluit 4 of 5 neemt.
+4. `assets/maatstaf/*.png` — veertien voorbeelden: tien uit decks die de vergelijking hebben
    gewonnen, en vier reconstructies van slides die als de mooiste uit deze skill kwamen. Kijk
    ernaar. Ze zijn niet om na te tekenen maar om te weten waar de lat ligt.
-4. `reference/sjabloon.md` — de feiten: welke layout waarvoor, welke placeholder waar, de
+5. `reference/sjabloon.md` — de feiten: welke layout waarvoor, welke placeholder waar, de
    kleurslots en het alpha-recept, de volgorde binnen de XML, en negen valkuilen die stil
    misgaan.
-5. De docstring van `scripts/shapes.py` — de primitieven waarmee je tekent, en waarom die er zo
+6. De docstring van `scripts/shapes.py` — de primitieven waarmee je tekent, en waarom die er zo
    uitzien.
 
 Draai daarna `python "${CLAUDE_PLUGIN_ROOT}/scripts/preflight.py"` — alle scriptpaden in
@@ -186,6 +189,13 @@ slide bepaalt en daarmee doorweegt in de vijf besluiten erna.
    Heb je een accent nodig dat ook een alinea draagt, dan is dat royal (5,7), en dat is een
    afwijking met een reden.
 
+   **Nadruk zet je niet in de letterkleur, en dat is nagemeten.** Twee van de vier koppen
+   oranje en de andere twee navy laten de navy koppen sterker lezen (15,3 tegen 2,6), dus de
+   kleur wijst de verkeerde twee aan — `proeven/01`. De vorm die het oplost staat in
+   `proeven/03`: alle koppen navy, en het element met nadruk draagt een volle oranje chip met
+   navy tekst. Kleur in de letter is dus voor codering waarin élk lid van de set een hue krijgt;
+   blijft een deel navy, dan hoort de nadruk in een vlak.
+
    Wat hier wél gekozen wordt, is wat kleur codeert. Per slide mag er één tweede hue bij als die
    iets onderscheidt dat de lezer apart moet houden — twee kanten van een afweging
    (`maatstaf/04`), kost tegenover baat, nu tegenover straks. Schrijf per hue in één woord op wat
@@ -204,8 +214,12 @@ slide bepaalt en daarmee doorweegt in de vijf besluiten erna.
    vergissing. Een deck waarin elke slide in het middengrijs ligt, is de deck die de vergelijking
    verloor — en één register deckbreed is hetzelfde defect van de andere kant: het gemeten
    spreekdeck stond op 83 tot 88 procent wit op élke contentslide en had nergens een verzadigde.
-   Verzadigd is nagemeten 20 tot 37 vierkante inch van de 100, dus een blok van 8 bij 2,5 in of
-   vier rijen over de volle breedte; de schatting zit er structureel naast, dus meet het met
+   Verzadigd is nagemeten 20 tot 37 vierkante inch van de 100, en één procent is ongeveer één
+   vierkante inch: een blok van 8 bij 2,5 in meet 21 procent, een band van 12,52 bij 1,90 in
+   meet 25. Let op één val die de proef opleverde: **vier volle rijlabels zijn niet verzadigd.**
+   Vier labels van 3,40 bij 0,98 in zijn samen 13,3 vierkante inch en de slide meet 14 procent,
+   terwijl hij vol voelt (`proeven/02`). En verzadigd kan met één accent: `proeven/04` haalt 25
+   procent met alleen oranje. De schatting zit er structureel naast, dus meet het met
    `qa_tellingen.py --renders` (`vormentaal.md` §5).
 6. **De titelmodus** (`voice.md`, Titels). Modus A is de default: de titel is een volle zin die
    de boodschap draagt, en er komt géén subtitel — idx 1 blijft leeg. Modus B kies je alleen

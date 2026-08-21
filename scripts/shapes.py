@@ -117,6 +117,13 @@ HUE = {
 #: `(lumMod, lumOff)`. Er is er één, en dat is het voetnootgrijs dat `sjabloon.md` onder
 #: Kleur als hét grijs documenteert: `tx1` met `lumMod 65000` / `lumOff 35000`.
 #:
+#: Het heet grijs en het is het niet: op de render is dit `#5176A7`, contrast 4,67 op wit en
+#: 51 procent verzadiging -- een staalblauw dat in een deck met sky of royal als vijfde lid
+#: van de set meedoet. Geen enkele trap van dit slot is neutraal (27 tot 52 procent
+#: verzadiging over lumMod 40 tot 80), want `tx1` is zelf `#233348`. Zie
+#: `assets/proeven/LEESMIJ.md` voor de vier metingen en `vormentaal.md` §3 voor wanneer je
+#: hem wel gebruikt: alleen als het label spatiëring nodig heeft en er geen set hues meedoet.
+#:
 #: Waarom dit naast de alpharegel bestaat, en waarom het die regel niet ondermijnt: §4 van
 #: `vormentaal.md` gaat over een lichte VULLING -- een container, en die is altijd alpha op
 #: de volle kleur. Grijs is hier geen container maar een TEKSTKLEUR: de bronregel, de
@@ -321,15 +328,27 @@ def run(tekst: str, font: str, pt: float, kleur="navy", *,
     label.
 
     **Alpha op de tekstkleur en `spc` gaan niet samen -- renderobservatie.** Een run met
-    zowel een alphakleur (`("navy", 70000)`, `GRIJS`) als `spc` mist in de LibreOffice-render
-    de laatste glyph: `MEETDOEL` komt eruit als `MEETDOE`, `GEWICHT` als `GEWICH`. Nagemeten
-    met een testslide van zeven varianten op LibreOffice 24.2.7.2: elk van de twee apart
-    rendert goed, alleen samen valt de laatste letter weg. Of echte PowerPoint dezelfde glyph
-    laat vallen is hier niet te toetsen -- dit is dus een observatie op deze renderer en geen
-    OOXML-feit. Deze functie weigert de combinatie daarom niet, maar `label()` wel, want die
-    zet `spc` altijd. Wil je grijze kapitalen: gebruik de kleur `"grijs"` (het voetnootgrijs
-    `tx1` met lumMod/lumOff uit `sjabloon.md`). Wil je grijs op een gewone regel -- een bron,
-    een eenheid -- dan is `GRIJS` zonder `spc` gewoon goed.
+    zowel een alphakleur (`("navy", 70000)`, `GRIJS`) als `spc` verliest in de
+    LibreOffice-render zijn laatste glyph: `MEETDOEL` komt eruit als `MEETDOE`, `GEWICHT` als
+    `GEWICH`. Nagemeten op LibreOffice 24.2.7.2. Of echte PowerPoint hetzelfde doet is hier
+    niet te toetsen -- observatie op deze renderer, geen OOXML-feit.
+
+    Nagemeten in `assets/proeven/06`, en dat verandert wat je ertegen kunt doen: de glyph valt
+    niet weg maar wordt GEKLIPT, en het is geen aan-of-uit. Bij `spc=60` staat de L van
+    `MEETDOEL` er half, bij `spc=100` vrijwel niet, en `VERANTWOORDEN` verliest bij `spc=100`
+    de hele N -- het tekort loopt op met de spatiëring maal het aantal tekens. Een spatie
+    achter het woord repareert het dus niet (geprobeerd, variant 2 van die proef) en een breder
+    tekstvak ook niet, want het klipt op de run en niet op de doos. Er is geen veilige
+    ondergrens: bij alpha zet je géén `spc`.
+
+    Deze functie weigert de combinatie daarom niet, maar `label()` wel, want die zet `spc`
+    altijd. Wil je een STIL label: dat is navy op alpha 70 zonder `spc` (`#625E8C`, contrast
+    6,0) -- dezelfde hue als navy, alleen lichter, dus geen extra kleur in de deck. Wil je
+    spatiëring op dat label, dan is de kleur `"grijs"` (`tx1` met lumMod/lumOff), maar let op
+    wat dat werkelijk is: `#5176A7`, 51 procent verzadigd, dus een vijfde blauw dat naast sky
+    en royal meedoet in een set (`vormentaal.md` §3, met de vier lichtheidstrappen in
+    `assets/proeven/LEESMIJ.md`). Op een gewone regel zonder spatiëring -- een bron, een
+    eenheid -- is `GRIJS` gewoon goed.
 
     De val die dit kostte, en waarom hij hier staat: de vorige bouwer zocht de ontbrekende
     letter eerst in de vakbreedte en heeft twee ronden aan een te smal tekstvak gerekend dat
@@ -411,6 +430,12 @@ def label(tekst: str, pt: float = 14, kleur="navy", *,
     OOXML-feit. Deze functie weigert de combinatie daarom, met de kleur `"grijs"` als weg
     eruit; het `GRIJS`-recept blijft geldig op een run zonder spatiëring, en dat is de
     bronregel van §11.
+
+    Sinds de kleurproef in `assets/proeven/` is dát juist de gewone weg en niet de
+    ontsnappingsklep: `label("MEETDOEL", 14, GRIJS, spc=None)` is het stille label van §3,
+    want `#625E8C` is dezelfde navy in het licht en voegt geen kleur toe, terwijl `"grijs"`
+    op de render `#5176A7` is -- 51 procent verzadigd, een vijfde blauw naast sky en royal.
+    Kies `"grijs"` mét spatiëring alleen wanneer er geen set hues in de deck meedoet.
 
     `spc=None` zet de spatiëring uit. Dat is de ontsnappingsklep waarmee een alphakleur
     alsnog kan, en dan is het jouw keuze: een caps-label zonder spatiëring leest als

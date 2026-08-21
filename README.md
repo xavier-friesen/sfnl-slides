@@ -57,6 +57,7 @@ reference/voice.md              de taal op de slide
 agents/deck-visual-reviewer.md  de visuele beoordeling, als subagent
 assets/sfnl-sjabloon.potx       het geprunde sjabloon, 5,8 MB
 assets/maatstaf/                veertien slides: tien uit winnende decks, vier reconstructies
+assets/proeven/                 de kleur- en gevuldheidsproef, met de metingen eronder
 scripts/                        de dunne laag
 ```
 
