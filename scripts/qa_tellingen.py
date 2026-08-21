@@ -113,18 +113,49 @@ CIJFER = re.compile(
 VOETNOOT_PLAFOND = 11.5
 DICHT_PLAFOND = 12.5
 
+#: Hetzelfde plafond, maar voor de Montserrat SemiBold-kant. Dit stond er niet en dat was
+#: een fout: de drie maatbanden hierboven golden alleen voor Lato, en élke Montserrat
+#: SemiBold tot en met 14pt viel in één rol `label`. Nagemeten op `werk-b/build/maatstaf`,
+#: de vier voorbeeldslides uit `assets/maatstaf/11`-`14`: daar staat een kapitaallabel van
+#: 11pt boven een tabelkolom (`Kolomkop 1..3` op `12`, `Askop links` en `As 1..4` op `13`),
+#: een rijkop en een kaartlabel van 12pt (`Rij 1 rol` op `12`, `Kaart 1 label` op `11`) en
+#: een kapitaallabel van 14pt (`Kolom 1 kop` op `14`). Met één rol `label` meldde dit
+#: script daarop `critical: de rol 'label' staat op 3 maten` — op de lat zelf, en de bouwer
+#: heeft daarop besluit 2 teruggebracht naar één labelmaat van 12pt. Dat besluit nam het
+#: telscript en niet de bouwer, en dat is precies wat dit script niet mag doen.
+#:
+#: §2 geeft de drie maten elk hun eigen werk: "12pt is de dichte variant voor een
+#: kaartenrij van drie of meer of een tabelcel, en de vloer. 14pt is het kapitaallabel", en
+#: §11 schrijft de bronregel op 11pt voor. Drie maten, drie rollen. Wat overblijft is de
+#: toets die wél moet vuren: dezelfde rol op twee maten bínnen dezelfde band — in het
+#: afgekeurde deck staat het kapitaallabel op 13 én 14pt, en dat is één rol op twee maten.
+LABEL_PLAFOND = 14.5
+
 #: De bodymaat die §2 voorschrijft. Afwijken mag, maar dan is het een besluit: in beide
 #: gemeten decks zakte de body ongemerkt naar 14pt zonder dat iemand dat koos.
 BODY_NORM = 16.0
 
-#: Een afsluitband: over vrijwel de volle zonebreedte, laag, en tegen de onderkant. §10
-#: meet hem als 12,52 bij 1,25 in met één regel erin. Een haarlijn (< 0,06 in hoog) is
-#: lijnwerk en geen band.
+#: Een afsluitband: een gevuld vlak over vrijwel de volle zonebreedte, laag, en tegen de
+#: onderkant. §10 meet hem als 12,52 bij 1,25 in met één regel erin. De hoogtevloer van
+#: 0,30 in houdt lijnwerk en haarlijnen erbuiten: die zijn geen band.
 BAND_BREEDTE_MIN = 10.0
 BAND_HOOGTE_MAX = 1.75
-BAND_HOOGTE_MIN = 0.06
 BAND_ONDERKANT_MIN = 5.60
 BAND_GEVULD_HOOGTE_MIN = 0.30
+
+#: Een badge: een kleine ronde vorm met alleen een kort getal erin. `punt()` in `shapes.py`
+#: schrijft precies dat — `prst="ellipse"` (of een `pie` over een lege punt), vierkant,
+#: `insets=(0,0,0,0)`, `anchor="ctr"`, en als tekst één gecentreerde run. Dat geeft een
+#: aangrijpingspunt dat niet te misbruiken is: de vorm moet rond zijn, vierkant, klein, en
+#: er mag niets anders in staan dan één tot drie cijfers. "Alles wat kort is" zou hier de
+#: verkeerde regel zijn — een kolomkop van twee letters is nog steeds een kop.
+#:
+#: Gemeten: `assets/maatstaf/11` zet de badge op 0,50 in, `leavebehind` op 0,44 in, en
+#: `maatstaf/12` gebruikt dezelfde vorm van 0,16 in als puntenmeter zonder tekst.
+BADGE_ZIJDE_MAX = 0.80
+BADGE_VERHOUDING = (0.75, 1.33)
+BADGE_PRESETS = {"ellipse", "pie", "circle"}
+BADGE_TEKST = re.compile(r"^\d{1,3}[.)]?$")
 
 #: De rollen die per definitie een BAND hebben en dus geen enkele maat: §2 zet de drager
 #: op 28 tot 40pt, en Montserrat Light onder die vloer is een citaat. Een deck dat één
@@ -190,6 +221,78 @@ def schemeclr(run) -> str | None:
     return scheme.get("val") if scheme is not None else "hex"
 
 
+def vol_vlak_met_tekst(shape) -> bool:
+    """Draagt deze vorm een volle vulling met tekst erin?
+
+    Dit is de tweede helft van de OF-toets uit §1. Hiërarchie mag uit maat komen, of uit
+    gewicht en kleur — en "kleur" is niet alleen een gekleurde letter. Een verzadigd
+    rijlabel met wit erin doet hetzelfde werk, en dat is precies wat de sterkste
+    voorbeeldslide van de veertien doet (`assets/maatstaf/12`: vier volle rijlabels tegen
+    een nauwelijks getint paneel). Zonder deze uitweg meldt dit script die compositie als
+    "geen hiërarchie", en dat is het omgekeerde van wat er staat.
+
+    Een lichte container telt niet mee: die is achtergrond, geen drager. §4 zet containers
+    op alpha 6000 tot 14000, dus alles onder de helft is tint en geen volle vulling.
+    """
+    try:
+        if shape.fill.type != 1:
+            return False
+    except (AttributeError, TypeError, ValueError):
+        return False
+    if not (getattr(shape, "has_text_frame", False) and shape.text_frame.text.strip()):
+        return False
+    sppr = shape._element.find(qn("p:spPr"))
+    fill = sppr.find(qn("a:solidFill")) if sppr is not None else None
+    if fill is None:
+        return False
+    for kleur in fill:
+        alpha = kleur.find(qn("a:alpha"))
+        if alpha is not None:
+            try:
+                return int(alpha.get("val", "100000")) >= 50000
+            except (TypeError, ValueError):
+                return True
+    return True
+
+
+def is_badge(shape) -> bool:
+    """Is deze vorm een genummerde badge, en dus een merkteken in plaats van een tekstrol?
+
+    `punt()` in `shapes.py` schrijft precies één vorm: rond (`prst="ellipse"`, of een
+    `pie` over een lege punt voor de halve variant), vierkant, klein, insets nul,
+    `anchor="ctr"`, en als inhoud één gecentreerde run. Die vijf kenmerken samen zijn een
+    aangrijpingspunt dat niet te misbruiken is. "Alles wat kort is" zou de verkeerde regel
+    zijn: een kolomkop van twee letters is nog steeds een kop.
+
+    Waarom dit nodig is: `rol_van()` zag Montserrat SemiBold op 16pt in een badge en telde
+    hem als tweede koprol naast de koppen van 18pt. De bouwer van een testdeck heeft
+    daarop álle badges naar 18pt gezet om de telling te halen — op een badge van 0,44 in
+    is dat aan de grote kant. Een badge codeert een rangnummer en leest als vorm, niet als
+    tekst; hij hoort dus niet in de rollentelling.
+
+    Gemeten: `assets/maatstaf/11` zet de badge op 0,50 in, de testdeck op 0,44 in.
+    """
+    geo = inches(shape)
+    if not geo:
+        return False
+    _, _, w, h = geo
+    if max(w, h) > BADGE_ZIJDE_MAX or not h:
+        return False
+    if not BADGE_VERHOUDING[0] <= w / h <= BADGE_VERHOUDING[1]:
+        return False
+    prst = None
+    sppr = shape._element.find(qn("p:spPr"))
+    geom = sppr.find(qn("a:prstGeom")) if sppr is not None else None
+    if geom is not None:
+        prst = geom.get("prst")
+    if prst not in BADGE_PRESETS:
+        return False
+    if not getattr(shape, "has_text_frame", False):
+        return False
+    tekst = shape.text_frame.text.strip()
+    return bool(tekst) and bool(BADGE_TEKST.match(tekst))
+
+
 def rol_van(font: str | None, pt: float | None, in_tabel: bool) -> str | None:
     """De rol waar deze run in valt, of None als er niets over te zeggen is.
 
@@ -202,6 +305,20 @@ def rol_van(font: str | None, pt: float | None, in_tabel: bool) -> str | None:
     Tabelcellen en de dichte 12pt-variant krijgen hun eigen rol. Zonder die splitsing
     meldt dit script een kaartenrij van drie op 12pt naast een prozakolom op 16pt als
     "twee bodymaten", en dat is precies wat §2 toestaat.
+
+    **En de Montserrat-kant krijgt dezelfde drie banden als de Lato-kant, want dat stond
+    er niet en het heeft een ontwerpbesluit gekost.** Élke Montserrat SemiBold tot en met
+    14pt viel in één rol `label`, terwijl §2 en §11 die maten elk hun eigen werk geven:
+    11pt is de bronregel, 12pt is de dichte variant voor een kaartenrij van drie of meer
+    en voor een tabelcel, 14pt is het kapitaallabel. Op de lat zelf — de vier
+    voorbeeldslides uit `assets/maatstaf/11`-`14` — staan alle drie naast elkaar, en dit
+    script meldde daarop `critical: de rol 'label' staat op 3 maten`. De bouwer van de
+    testdeck heeft daarop besluit 2 teruggebracht naar één labelmaat van 12pt. Dat besluit
+    nam het telscript en niet de bouwer.
+
+    Wat overblijft is de toets die wél moet vuren: dezelfde rol op twee maten bínnen
+    dezelfde band. In het afgekeurde deck staat het kapitaallabel op 13 én 14pt, en dat
+    is één rol op twee maten.
     """
     if not font or pt is None:
         return None
@@ -211,7 +328,13 @@ def rol_van(font: str | None, pt: float | None, in_tabel: bool) -> str | None:
     if familie.startswith("montserrat"):
         if "light" in familie:
             return "drager" if pt >= DRAGER_VLOER else "citaat"
-        return "label" if pt <= 14.0 else "kop"
+        if pt > LABEL_PLAFOND:
+            return "kop"
+        if pt <= VOETNOOT_PLAFOND:
+            return "labelvoetnoot"
+        if pt <= DICHT_PLAFOND:
+            return "labeldicht"
+        return "label"
     if familie.startswith("lato"):
         if pt <= VOETNOOT_PLAFOND:
             return "voetnoot"
@@ -222,27 +345,39 @@ def rol_van(font: str | None, pt: float | None, in_tabel: bool) -> str | None:
 
 
 def band_shapes(slide) -> list[str]:
-    """Namen van de afsluitbanden op deze slide.
+    """Namen van de afsluitbanden op deze slide: alleen de gevulde vorm.
 
-    Een band is een gevuld vlak over vrijwel de volle zonebreedte tegen de onderkant,
-    óf een tekstblok van dezelfde maat met een volle-breedte lijn er direct boven. Die
-    tweede vorm hoort erbij omdat hij hetzelfde leest: in het gemeten deck staan negen
-    gevulde banden en vijf `KORTOM`-regels onder een haarlijn, en de lezer ziet daar
-    veertien keer dezelfde afsluiter.
+    Een band is een **gevuld** vlak over vrijwel de volle zonebreedte tegen de onderkant.
+    §10 meet hem als 12,52 bij 1,25 in met één regel erin, en het is de vulling die hem
+    luid maakt: "een band van 12,52 bij 1,25 in met één regel erin is dezelfde vorm, of
+    hij navy, oranje-tint of warmgrijs is".
 
-    Wat hier bewust NIET onder valt: de sluitregel op wit zonder lijn. Dat is juist het
-    alternatief dat §10 aanbeveelt, en die als band tellen zou de fix afkeuren.
+    **Hier stond eerst een tweede vorm bij, en dat was een fout die het ontwerp heeft
+    aangestuurd.** De eerdere versie telde ook "een tekstblok met een volle-breedte lijn
+    er direct boven", op de gedachte dat dat hetzelfde leest. Maar §10 biedt juist dát
+    aan als uitweg uit de band: "de sluitregel op wit: één regel zonder vulling, aanhef
+    in Lato Semibold, hooguit een streep erboven". Het aanbevolen alternatief was dus
+    zelf een band volgens de teller. Nagemeten gevolg op een deck dat net met deze skill
+    was gebouwd: 12 van de 17 contentslides "sloten af met een band" terwijl er drie
+    gevulde banden op stonden, en de bouwer heeft daarop een merkstreepje van 12,52 naar
+    1,60 in ingekort om de teller tevreden te stellen. Dat is een vormbesluit dat door een
+    telling is ingegeven en niet door de render, en dat is precies wat dit script niet mag
+    doen.
+
+    Wat deze telling daardoor niet meer ziet: een deck dat de band vervangt door tien keer
+    dezelfde sluitregel onder dezelfde streep. Dat is eenvormigheid, en die hoort ook thuis
+    waar de rest van de eenvormigheid ligt — bij de plattegrond in de outline en bij het
+    oog van `deck-visual-reviewer`, die er expliciet op let. Een teller die het verschil
+    tussen een afsluiter en de aanbevolen uitweg niet kan zien, hoort het niet te tellen.
     """
     vormen = [(shape, inches(shape)) for shape in walk(slide.shapes)]
     vormen = [(shape, geo) for shape, geo in vormen if geo]
-    lijnen = [geo[1] for _, geo in vormen
-              if geo[2] >= BAND_BREEDTE_MIN and geo[3] <= BAND_HOOGTE_MIN]
 
     banden = []
     for shape, (x, y, w, h) in vormen:
         if is_chrome(shape):
             continue
-        if not (w >= BAND_BREEDTE_MIN and BAND_HOOGTE_MIN < h <= BAND_HOOGTE_MAX):
+        if not (w >= BAND_BREEDTE_MIN and BAND_GEVULD_HOOGTE_MIN <= h <= BAND_HOOGTE_MAX):
             continue
         if y + h < BAND_ONDERKANT_MIN:
             continue
@@ -250,11 +385,7 @@ def band_shapes(slide) -> list[str]:
             gevuld = shape.fill.type == 1
         except (AttributeError, TypeError, ValueError):
             gevuld = False
-        heeft_tekst = bool(
-            getattr(shape, "has_text_frame", False) and shape.text_frame.text.strip()
-        )
-        lijn_boven = any(y - 0.45 <= ly <= y + 0.05 for ly in lijnen)
-        if (gevuld and h >= BAND_GEVULD_HOOGTE_MIN) or (heeft_tekst and lijn_boven):
+        if gevuld:
             banden.append(getattr(shape, "name", "?"))
     return banden
 
@@ -384,6 +515,7 @@ def analyse(deck: Path, renders: Path | None = None) -> dict:
 
         eigen_maten: list[float] = []
         accent_in_letter = False
+        vol_vlak = False
         woorden = 0
 
         for shape in walk(slide.shapes):
@@ -391,6 +523,8 @@ def analyse(deck: Path, renders: Path | None = None) -> dict:
                 charts += 1
             if getattr(shape, "has_table", False):
                 tables += 1
+            if not is_chrome(shape) and vol_vlak_met_tekst(shape):
+                vol_vlak = True
 
         for shape in walk(slide.shapes):
             in_tabel = False
@@ -404,6 +538,7 @@ def analyse(deck: Path, renders: Path | None = None) -> dict:
                 continue
 
             in_titel = shape_key(shape) in titels
+            badge = is_badge(shape)
             element_woorden = 0
 
             for frame in frames:
@@ -423,7 +558,7 @@ def analyse(deck: Path, renders: Path | None = None) -> dict:
                                 accent_in_letter = True
                             cijfers += len(CIJFER.findall(tekst))
                             rol = rol_van(font, pt, in_tabel)
-                            if rol and tekst.strip():
+                            if rol and tekst.strip() and not badge:
                                 maten_per_rol[rol][pt].append(nummer)
                             if pt is not None and tekst.strip():
                                 eigen_maten.append(pt)
@@ -465,19 +600,42 @@ def analyse(deck: Path, renders: Path | None = None) -> dict:
                     "klein": min(eigen_maten),
                     "groot": max(eigen_maten),
                     "accent_in_letter": accent_in_letter,
+                    "vol_vlak_met_tekst": vol_vlak,
                 }
-                if sprong < MAATSPRONG_VLOER:
+                # §1 stelt één toets met een OF erin: is de drager minstens tweeënhalf
+                # keer de bodymaat, óf onderscheidt hij zich in gewicht en kleur? Deze
+                # check las daar een EN van, en dat maakte hem onhaalbaar met de vier
+                # maten die §2 zelf voorschrijft. Nagemeten op twee decks die net met de
+                # skill waren gebouwd: 23 warns, en dat waren álle warns die er waren.
+                # Zonder drager van 28pt of meer is de grootste eigen maat de kop van
+                # 18pt en de kleinste de voetnoot van 11pt, dus de sprong is 1,64 en
+                # lager — en tegelijk mag ten hoogste één slide op drie een drager van
+                # 28pt of groter dragen (§1). De check eiste dus op twee derde van de
+                # slides precies wat §1 daar verbiedt.
+                #
+                # Wat overblijft is het defect dat hij bedoelde te vinden: een slide
+                # zonder maatsprong én zonder kleur in de letter. Dat is de afgekeurde
+                # deck, letterlijk — maatsprong 1,36, "31 gevulde vlakken en nul
+                # gekleurde letters" (§3). Staat er wel een accent in de letter, dan
+                # draagt dat de hiërarchie en is er niets te melden.
+                # `vol_vlak` staat wél in de JSON maar is géén uitweg, en dat is
+                # nagemeten: het afgekeurde deck uit §3 had "31 gevulde vlakken en nul
+                # gekleurde letters" en maatsprong 1,36. Een volle vulling als excuus
+                # laat juist dát deck ongemoeid — geprobeerd, en toen viel de melding op
+                # het afgekeurde deck naar nul terwijl twee net gebouwde decks er negen
+                # kregen. Precies verkeerd om. Een volle vulling die de drager draagt en
+                # een volle vulling als behang zijn mechanisch niet te scheiden, dus
+                # meldt dit script het en weegt de bouwer het op de render.
+                if sprong < MAATSPRONG_VLOER and not accent_in_letter:
                     add(findings, nummer, "maatsprong",
                         f"maatsprong {sprong:.2f}: de grootste eigen maat is "
                         f"{max(eigen_maten):.0f}pt en de kleinste {min(eigen_maten):.0f}pt "
                         f"(vloer {MAATSPRONG_VLOER:.0f}, vormentaal §1; de afgekeurde deck "
-                        "haalde 1,36, de referentie 3 tot 5). Dit is een aanwijzing en "
-                        "geen afkeuring: hiërarchie mag ook uit gewicht en kleur komen, en "
-                        + ("er staat een accent in de letter op deze slide, dus weeg dit "
-                           "op de render." if accent_in_letter else
-                           "er staat géén accent in de letter, dus draagt hier de vulling "
-                           "of de compositie de hiërarchie — kijk op de render of dat "
-                           "werkt."))
+                        "haalde 1,36, de referentie 3 tot 5), én er staat géén accent in "
+                        "de letter. Hiërarchie mag uit gewicht en kleur komen in plaats "
+                        "van uit de maat, maar hier doet geen van beide het werk: draagt "
+                        "de vulling of de compositie het, kijk dan op de render of dat "
+                        "werkt, en zo niet, dan loopt deze slide op één maat.")
 
     # --- deckbrede tellingen ------------------------------------------------
     rollen_uit = {}

@@ -80,7 +80,7 @@ de tekstlast van elke slide bepaalt en daarmee doorweegt in de vijf besluiten er
    een volwaardige exhibit (`maatstaf/04`). Een spreekdeck kies je alleen wanneer er werkelijk
    iemand bij praat én het deck niet wordt nagestuurd: dan is de slide de achtergrond bij het
    verhaal, hoort wat de spreker zegt níét op de slide, en gaat de toelichting naar de
-   presentatornotities (`add_notes.py`). En dichtheid is geen telegramstijl: `sfnl-humanizer`
+   presentatornotities (`set_notes.py`, stap 3.5). En dichtheid is geen telegramstijl: `sfnl-humanizer`
    verbiedt de vorm "Kosten: hoger. Doorlooptijd: onveranderd", dus elke regel blijft een
    leesbare zin of een label met een getal. Die twee regels duwen tegen elkaar en de eerste
    bouwer die dit register gebruikte moest die grens zelf formuleren; hier staat hij.
@@ -234,7 +234,7 @@ niet bouwen omdat de outline "duidelijk genoeg" lijkt.
 
 ## Stap 3 — Bouwen
 
-Zes aanroepen. Alle paden hieronder zijn relatief aan de plugin-map; `$S` staat voor het pad
+Zeven aanroepen. Alle paden hieronder zijn relatief aan de plugin-map; `$S` staat voor het pad
 naar `scripts/`.
 
 **Windows: houd de builddir kort.** De uitgepakte boom gaat 53 tekens diep, dus werk in
@@ -416,7 +416,19 @@ Moet een rij elementen na het schrijven herverdeeld worden — drie kaarten waar
 python $S/place_shapes.py unpacked/ppt/slides/slide7.xml --json '{"Kaart 2*": {"dx": -2.1}}'
 ```
 
-### 5. Opruimen en inpakken
+### 5. Presentatornotities, als het een spreekdeck is
+
+```bash
+python $S/set_notes.py unpacked --json '{"3": "Wat je hier vertelt.", "4": ["Alinea.", "Alinea."]}'
+```
+
+De sleutel is de deckpositie — het nummer dat de lezer ziet, hetzelfde nummer dat
+`fit_title.py` en `qa_tellingen.py` in hun bevindingen zetten. Dit is de andere helft van
+besluit 1: bij een spreekdeck haal je de toelichting van de slide af, en hier bewaar je hem
+in het bestand in plaats van in de outline. Doe het op de builddir, dan overleven de
+notities `clean.py` en `pack.py`; een tweede aanroep overschrijft en verdubbelt niet.
+
+### 6. Opruimen en inpakken
 
 ```bash
 python $S/fit_title.py unpacked --mode a          # of --mode b, naar besluit 6
@@ -434,7 +446,7 @@ staat dat nergens anders past. Een lége subtitel is nooit een melding.
 `clean.py` haalt lege placeholders eruit en normaliseert de XML. `pack.py` valideert tegen de
 OOXML-schema's; komt daar iets uit, dan repareer je dat vóór je verder gaat.
 
-### 6. Grafieken en tabellen, ná het inpakken
+### 7. Grafieken en tabellen, ná het inpakken
 
 ```bash
 python $S/add_chart.py deck.pptx --slide 4 --data chart4.json
