@@ -509,17 +509,23 @@ onderscheid dan de twee registers van §5 — dat gaat over kleurbezetting per s
 woorden per deck — en het is het eerste deckbrede besluit in het vragenvuur (skill, stap 1).
 
 Drie waarden, met per waarde de meting eronder. De getallen zijn woorden per contentslide
-inclusief titel, en het zijn richtwaarden en geen drempels.
+inclusief titel, en het zijn indicaties: ze zeggen welk register je hebt gekozen en niet hoeveel
+woorden er op een slide moeten staan. Ze werken dus twee kanten op. Past het verhaal in minder,
+dan is het minder — onder de band zitten is geen dunne slide maar een slide die klaar is, en
+opvullen tot de band gehaald is, is het defect uit §6 in tekstvorm. Vraagt het verhaal meer, dan
+is het meer: een bewering schrappen om onder een richtwaarde te blijven levert het argument in
+voor de telling. De toets staat verderop in deze paragraaf en gaat over de vorm, niet over het
+aantal.
 
-| dichtheid | richtwaarde | gemeten aan |
+| dichtheid | indicatie | gemeten aan |
 |---|---|---|
 | spreekdeck | 50 tot 60 | `maatstaf/13` (50) en `14` (59) |
 | licht leave-behind | 90 tot 110 | `maatstaf/12` (99) |
 | leave-behind | 120 tot 145 | `maatstaf/11` (141), `04` (proza in twee kolommen) |
 
 - **Spreekdeck** — er praat iemand bij en het deck gaat daarna niet mee, dus de slide is de
-  achtergrond bij dat verhaal. Wat de spreker zegt hoort niet op de slide; daar staat alleen wat het verhaal draagt, en de toelichting gaat naar de
-  presentatornotities. Dit is het strakke eind. `13` en `14` zijn een plot op schaal en een
+  achtergrond bij dat verhaal. Wat de spreker zegt hoort niet op de slide; daar staat alleen wat
+  het verhaal draagt, en de toelichting gaat naar de presentatornotities. Dit is het strakke eind. `13` en `14` zijn een plot op schaal en een
   schema, en beide vullen de zone (§6), want weinig woorden is geen lege slide.
 - **Licht leave-behind** — leesbaar zonder spreker, maar met één boodschap per slide en zonder
   uitgeschreven spreektekst. Dit register is er bijgekomen omdat de meting het aanwees: het

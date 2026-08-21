@@ -143,6 +143,12 @@ met een piek van 255 op één slide: vier kolommen van zeventig woorden.
 Lees de tekstlast dus tegen de dichtheid die bovenaan de outline staat, en niet tegen één
 getal. Staat die er niet bij, meld dat als bevinding op de outline en niet op de slide.
 
+**En buiten de band vallen is op zichzelf geen bevinding**, in geen van beide richtingen. Een
+slide met veertig woorden in een licht leave-behind is klaar, geen lege slide; een slide die de
+band overschrijdt omdat het verhaal daar meer nodig heeft, is een slide met een reden. De
+bevinding is tekst die staat waar een vorm had gemoeten, en die stel je vast door te kijken —
+niet door te tellen.
+
 Let op wat die reeks zegt, want de verkeerde lezing ligt voor de hand. Het dichtste voorbeeld
 staat op 141 woorden en is tegelijk de sterkste van de vier: vier fasekaarten van ongeveer
 dertig woorden, elk met een genummerde badge, een datum in de hue van de kaart en één kaart

@@ -102,11 +102,21 @@ slide bepaalt en daarmee doorweegt in de vijf besluiten erna.
 1. **De dichtheid: spreekdeck, licht leave-behind of leave-behind.** Eén vraag beslist hem:
    praat er iemand bij, en gaat het deck daarna de mail in?
 
-   | situatie | dichtheid | richtwaarde | referentie |
+   | situatie | dichtheid | indicatie | referentie |
    |---|---|---|---|
-   | iemand praat, het deck gaat niet mee | spreekdeck | 50 tot 60 woorden per contentslide | `maatstaf/13`, `14` |
+   | iemand praat, het deck gaat niet mee | spreekdeck | 50 tot 60 woorden per slide | `maatstaf/13`, `14` |
    | iemand praat én het deck gaat mee | licht leave-behind | 90 tot 110 | `maatstaf/12` |
    | geen spreker, het deck staat alleen | leave-behind | 120 tot 145 | `maatstaf/11`, `04` |
+
+   **De getallen zijn een indicatie en werken twee kanten op.** Ze zeggen welk register je hebt
+   gekozen, niet hoeveel woorden er op de slide moeten. Past het verhaal in minder, dan is het
+   minder — een slide die op 40 woorden staat terwijl de band 90 tot 110 zegt is geen dunne
+   slide maar een slide die klaar is. En vraagt het verhaal meer, dan is het meer: een bewering
+   schrappen om onder een richtwaarde te blijven is de verkeerde reductie, want dan levert de
+   telling het argument in. De twee verkeerde bewegingen zijn dus opvullen tot de band gehaald
+   is, en snijden tot de band gehaald is. `qa_tellingen.py` telt de woorden daarom zonder
+   oordeel en er staat geen drempel op. De toets die wél geldt is die van `vormentaal.md` §13:
+   staat hier tekst waar een vorm had gemoeten?
 
    Default: **licht leave-behind**, want dat is de gewone SFNL-situatie — er wordt bij gepraat en
    het deck wordt nagestuurd. Dit register is er bijgekomen omdat de meting het aanwees: het
