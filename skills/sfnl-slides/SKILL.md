@@ -150,9 +150,10 @@ verderop kan nooit een besluit eerder in de rij terugdraaien.
    zonder naam.
 
    De uitkomst per keuze, want daar is dit besluit op te beoordelen. Op een **spreekdeck** hoort
-   wat de spreker zegt níét op de slide en gaat de toelichting naar de presentatornotities
-   (`set_notes.py`, stap 3.5) — lees je hem later zonder de spreker terug, dan mist er iets, en
-   dat is de bedoeling. Op een **leave-behind** mag een slide dicht zijn: een prozaslide met twee
+   wat de spreker zegt níét op de slide, en het gaat ook nergens anders in het bestand staan:
+   het blijft bij de spreker. Lees je zo'n deck later zonder hem terug, dan mist er iets, en dat
+   is de bedoeling — precies daarom is dit de dichtheid die je alleen kiest als het deck niet
+   wordt nagestuurd. Op een **leave-behind** mag een slide dicht zijn: een prozaslide met twee
    goed gezette kolommen is daar een volwaardige exhibit (`maatstaf/04`), en 141 woorden is geen
    defect. **Licht leave-behind** zit ertussen: leesbaar zonder spreker, één boodschap per slide,
    geen uitgeschreven spreektekst.
@@ -344,7 +345,7 @@ niet bouwen omdat de outline "duidelijk genoeg" lijkt.
 
 ## Stap 3 — Bouwen
 
-Zeven aanroepen. Alle paden hieronder zijn relatief aan de plugin-map; `$S` staat voor het pad
+Zes stappen. Alle paden hieronder zijn relatief aan de plugin-map; `$S` staat voor het pad
 naar `scripts/`.
 
 **Windows: houd de builddir kort.** De uitgepakte boom gaat 53 tekens diep, dus werk in
@@ -549,19 +550,7 @@ Moet een rij elementen na het schrijven herverdeeld worden — drie kaarten waar
 python $S/place_shapes.py unpacked/ppt/slides/slide7.xml --json '{"Kaart 2*": {"dx": -2.1}}'
 ```
 
-### 5. Presentatornotities, als het een spreekdeck is
-
-```bash
-python $S/set_notes.py unpacked --json '{"3": "Wat je hier vertelt.", "4": ["Alinea.", "Alinea."]}'
-```
-
-De sleutel is de deckpositie — het nummer dat de lezer ziet, hetzelfde nummer dat
-`fit_title.py` en `qa_tellingen.py` in hun bevindingen zetten. Dit is de andere helft van
-besluit 1: bij een spreekdeck haal je de toelichting van de slide af, en hier bewaar je hem
-in het bestand in plaats van in de outline. Doe het op de builddir, dan overleven de
-notities `clean.py` en `pack.py`; een tweede aanroep overschrijft en verdubbelt niet.
-
-### 6. Opruimen en inpakken
+### 5. Opruimen en inpakken
 
 ```bash
 python $S/fit_title.py unpacked --mode a          # of --mode b, naar besluit 4
@@ -579,7 +568,7 @@ staat dat nergens anders past. Een lége subtitel is nooit een melding.
 `clean.py` haalt lege placeholders eruit en normaliseert de XML. `pack.py` valideert tegen de
 OOXML-schema's; komt daar iets uit, dan repareer je dat vóór je verder gaat.
 
-### 7. Grafieken en tabellen, ná het inpakken
+### 6. Grafieken en tabellen, ná het inpakken
 
 ```bash
 python $S/add_chart.py deck.pptx --slide 4 --data chart4.json

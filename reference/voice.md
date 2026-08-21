@@ -17,15 +17,16 @@ niet minder informatie.
 
 **Eén uitzondering, en die is een besluit en geen vrijheid.** Kiest de gebruiker in het
 vragenvuur voor een spreekdeck (skill, stap 1, besluit 1), dan gaat het deck níét de mail
-in en vervalt deze toets voor de slide. Hij vervalt niet voor de deck: wat de lezer zonder
-spreker nodig heeft, gaat dan naar de presentatornotities. Op de twee andere dichtheden —
-licht leave-behind en leave-behind — geldt de toets onverkort.
+in en vervalt deze toets. Wat de lezer zonder spreker nodig zou hebben, blijft dan bij de
+spreker: het komt niet op de slide en het krijgt ook geen tweede plek in het bestand. Dat is
+de prijs van deze dichtheid, en de reden dat je hem alleen kiest als het deck werkelijk niet
+wordt nagestuurd. Op de twee andere dichtheden — licht leave-behind en leave-behind — geldt
+de toets onverkort.
 
 ### De poort, per slide af te vinken
 
 1. **Elk getal draagt een eenheid en een periode op de slide zelf.** Niet in de
-   notities, niet in de mondelinge toelichting, niet impliciet uit de titel van een
-   andere slide. "1,04" is geen cijfer, "€ 1,04 mln in 2025" is er een.
+   mondelinge toelichting, en niet impliciet uit de titel van een andere slide. "1,04" is geen cijfer, "€ 1,04 mln in 2025" is er een.
 2. **Elke grafiek heeft een aslabel met eenheid en een jaartal of periode.**
 3. **De doelgroep en het gebied staan op de slide**, niet alleen in het hoofd van de
    spreker: "jongeren die langer dan drie maanden thuiszitten, vier gemeenten Twente".
@@ -254,9 +255,10 @@ manieren wél op de slide:
 Zonder een van die drie vormen gaat de regel eruit. Een aanname die als vaststelling op
 de slide staat, is de duurste fout die dit deck kan maken.
 
-De bronvermelding zelf gaat niet op de slide: die gaat naar de presentatornotities of
-naar `bronnen.md` bij de oplevering, volgens de bouwskill. Laat een bron nooit stil
-verdwijnen.
+De bronregel zelf hoort op de slide, onder de doos waar het cijfer bij hoort
+(`vormentaal.md` §11): de bron, en daar staan ook de eenheid en de peildatum. Past de volledige
+verantwoording daar niet in — een vindplaats, een tabelnummer, een berekening — dan gaat die bij
+de oplevering mee als aparte opgave. Laat een bron nooit stil verdwijnen.
 
 ### Dunne input: het onderzoeksvragen-patroon
 

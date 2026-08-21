@@ -2,7 +2,8 @@
 
 Status: **in uitvoering, go gegeven.** Stap 0 tot en met 6 zijn uitgevoerd (commits `25f099e`
 tot `313dc1b`), inclusief de vier reconstructies in `assets/maatstaf/`, het nieuwe
-`qa_tellingen.py`, `set_notes.py`, en één volledige testronde in twee dichtheden. Wat nog open
+`qa_tellingen.py`, en één volledige testronde in twee dichtheden. (`set_notes.py` is er in
+die ronde bij gekomen en later weer uit: presentatornotities zijn nooit nodig.) Wat nog open
 staat, staat onderaan bij **Openstaand**. Het plan staat op zichzelf: de opdracht, de meting eronder en de keuzes staan
 hieronder, niet in een los promptdocument.
 

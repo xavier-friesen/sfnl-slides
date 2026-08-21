@@ -82,7 +82,6 @@ keer in- en uitpakt, waar de huisstijlfonts staan.
 | `add_chart.py`, `add_table.py` | native grafiek en tabel, ná het inpakken |
 | `render.py`, `thumbnail.py` | slides naar PNG en een contactblad |
 | `qa_text.py` | hygiëne: restplaceholders, Calibri, harde hex, rechte apostrof |
-| `set_notes.py` | presentatornotities per deckpositie: de andere helft van het dichtheidsbesluit |
 | `keuzekaart.py` | onderhoud: bouwt de keuzekaart voor het vragenvuur uit de renders in `assets/` |
 | `qa_tellingen.py` | tellingen: maten per rol, bandfrequentie, exhibits bij cijfers, maatsprong, letterfamilies, hoge punt — plus woorden, registers en plattegrond als cijfer zonder oordeel |
 | `fit_title.py` | past een titel op één regel, gemeten met het echte font |
