@@ -117,6 +117,13 @@ HUE = {
 #: `(lumMod, lumOff)`. Er is er één, en dat is het voetnootgrijs dat `sjabloon.md` onder
 #: Kleur als hét grijs documenteert: `tx1` met `lumMod 65000` / `lumOff 35000`.
 #:
+#: Het heet grijs en het is het niet: op de render is dit `#5176A7`, contrast 4,67 op wit en
+#: 51 procent verzadiging -- een staalblauw dat in een deck met sky of royal als vijfde lid
+#: van de set meedoet. Geen enkele trap van dit slot is neutraal (27 tot 52 procent
+#: verzadiging over lumMod 40 tot 80), want `tx1` is zelf `#233348`. Zie
+#: `assets/proeven/LEESMIJ.md` voor de vier metingen en `vormentaal.md` §3 voor wanneer je
+#: hem wel gebruikt: alleen als het label spatiëring nodig heeft en er geen set hues meedoet.
+#:
 #: Waarom dit naast de alpharegel bestaat, en waarom het die regel niet ondermijnt: §4 van
 #: `vormentaal.md` gaat over een lichte VULLING -- een container, en die is altijd alpha op
 #: de volle kleur. Grijs is hier geen container maar een TEKSTKLEUR: de bronregel, de
@@ -321,15 +328,27 @@ def run(tekst: str, font: str, pt: float, kleur="navy", *,
     label.
 
     **Alpha op de tekstkleur en `spc` gaan niet samen -- renderobservatie.** Een run met
-    zowel een alphakleur (`("navy", 70000)`, `GRIJS`) als `spc` mist in de LibreOffice-render
-    de laatste glyph: `MEETDOEL` komt eruit als `MEETDOE`, `GEWICHT` als `GEWICH`. Nagemeten
-    met een testslide van zeven varianten op LibreOffice 24.2.7.2: elk van de twee apart
-    rendert goed, alleen samen valt de laatste letter weg. Of echte PowerPoint dezelfde glyph
-    laat vallen is hier niet te toetsen -- dit is dus een observatie op deze renderer en geen
-    OOXML-feit. Deze functie weigert de combinatie daarom niet, maar `label()` wel, want die
-    zet `spc` altijd. Wil je grijze kapitalen: gebruik de kleur `"grijs"` (het voetnootgrijs
-    `tx1` met lumMod/lumOff uit `sjabloon.md`). Wil je grijs op een gewone regel -- een bron,
-    een eenheid -- dan is `GRIJS` zonder `spc` gewoon goed.
+    zowel een alphakleur (`("navy", 70000)`, `GRIJS`) als `spc` verliest in de
+    LibreOffice-render zijn laatste glyph: `MEETDOEL` komt eruit als `MEETDOE`, `GEWICHT` als
+    `GEWICH`. Nagemeten op LibreOffice 24.2.7.2. Of echte PowerPoint hetzelfde doet is hier
+    niet te toetsen -- observatie op deze renderer, geen OOXML-feit.
+
+    Nagemeten in `assets/proeven/06`, en dat verandert wat je ertegen kunt doen: de glyph valt
+    niet weg maar wordt GEKLIPT, en het is geen aan-of-uit. Bij `spc=60` staat de L van
+    `MEETDOEL` er half, bij `spc=100` vrijwel niet, en `VERANTWOORDEN` verliest bij `spc=100`
+    de hele N -- het tekort loopt op met de spatiëring maal het aantal tekens. Een spatie
+    achter het woord repareert het dus niet (geprobeerd, variant 2 van die proef) en een breder
+    tekstvak ook niet, want het klipt op de run en niet op de doos. Er is geen veilige
+    ondergrens: bij alpha zet je géén `spc`.
+
+    Deze functie weigert de combinatie daarom niet, maar `label()` wel, want die zet `spc`
+    altijd. Wil je een STIL label: dat is navy op alpha 70 zonder `spc` (`#625E8C`, contrast
+    6,0) -- dezelfde hue als navy, alleen lichter, dus geen extra kleur in de deck. Wil je
+    spatiëring op dat label, dan is de kleur `"grijs"` (`tx1` met lumMod/lumOff), maar let op
+    wat dat werkelijk is: `#5176A7`, 51 procent verzadigd, dus een vijfde blauw dat naast sky
+    en royal meedoet in een set (`vormentaal.md` §3, met de vier lichtheidstrappen in
+    `assets/proeven/LEESMIJ.md`). Op een gewone regel zonder spatiëring -- een bron, een
+    eenheid -- is `GRIJS` gewoon goed.
 
     De val die dit kostte, en waarom hij hier staat: de vorige bouwer zocht de ontbrekende
     letter eerst in de vakbreedte en heeft twee ronden aan een te smal tekstvak gerekend dat
@@ -411,6 +430,12 @@ def label(tekst: str, pt: float = 14, kleur="navy", *,
     OOXML-feit. Deze functie weigert de combinatie daarom, met de kleur `"grijs"` als weg
     eruit; het `GRIJS`-recept blijft geldig op een run zonder spatiëring, en dat is de
     bronregel van §11.
+
+    Sinds de kleurproef in `assets/proeven/` is dát juist de gewone weg en niet de
+    ontsnappingsklep: `label("MEETDOEL", 14, GRIJS, spc=None)` is het stille label van §3,
+    want `#625E8C` is dezelfde navy in het licht en voegt geen kleur toe, terwijl `"grijs"`
+    op de render `#5176A7` is -- 51 procent verzadigd, een vijfde blauw naast sky en royal.
+    Kies `"grijs"` mét spatiëring alleen wanneer er geen set hues in de deck meedoet.
 
     `spc=None` zet de spatiëring uit. Dat is de ontsnappingsklep waarmee een alphakleur
     alsnog kan, en dan is het jouw keuze: een caps-label zonder spatiëring leest als
@@ -963,6 +988,139 @@ def pijl(naam: str, x: float, y: float, w: float, h: float, hue="oranje", *,
     return vlak(naam, x, y, w, h, prst=prst, vulling=hue,
                 adj={"adj1": max(0, min(100000, int(round(dikte * 100000)))),
                      "adj2": max(0, min(100000, int(round(kop / ss * 100000))))})
+
+
+#: Het raster waarop een icoon getekend wordt. 24 eenheden, zoals elk lijnpictogram dat
+#: bestaat, want dan liggen de halve en de derde maat op een hele eenheid: 12 is het midden,
+#: 8 en 16 zijn de derden, en 4 is de marge die het icoon van zijn buur vrijhoudt.
+ICOON_RASTER = 24
+
+#: De schachtdikte van een icoon in punten, en de reden dat er één is: twee diktes in één
+#: icoon leest als een tekenfout, en twee diktes tussen twee iconen naast elkaar laat het ene
+#: zwaarder wegen dan het andere terwijl ze hetzelfde niveau dragen. Gemeten op de render bij
+#: een icoon van 0,72 in -- zie `assets/proeven/09`.
+ICOON_PT = 1.5
+
+#: De ondergrens van een icoon in inch. Daaronder lopen de lijnen van 1,5pt in elkaar en is
+#: het een vlekje; dan is de streep of het kapitaallabel het betere merkteken.
+ICOON_MIN = 0.44
+
+#: Boven dit aantal onderdelen is het geen icoon meer maar een tekening, en dan hoort het in
+#: `sfnl-infographic` en niet op een slide naast een kop van 18pt.
+ICOON_MAX_DELEN = 12
+
+
+def _ln_icoon(hue, pt: float) -> str:
+    """`<a:ln>` met ronde uiteinden en ronde hoeken -- de zetting van een lijnicoon.
+
+    `lijn_xml()` zet `cap="flat"`, en dat is goed voor een kaartrand en een aslijn: die
+    eindigt tegen iets aan. Een icoonlijn eindigt in de lucht, en een vlakke kop maakt daar
+    een afgesneden steel van. Vandaar een eigen `<a:ln>` in plaats van een parameter op
+    `lijn_xml()`: de rand van een kaart hoort niet rond te worden omdat een icoon dat nodig
+    heeft.
+    """
+    kleur, alpha = _split(hue)
+    _geen_grijs_vlak(kleur)
+    return (f'<a:ln w="{int(round(pt * 12700))}" cap="rnd">'
+            f'<a:solidFill>{_clr(kleur, alpha)}</a:solidFill><a:round/></a:ln>')
+
+
+def icoon(naam: str, x: float, y: float, d: float, delen, *,
+          hue="navy", pt: float = ICOON_PT, raster: int = ICOON_RASTER) -> str:
+    """Eén zelf getekend lijnicoon, als groep, op een raster van 24 bij 24 eenheden.
+
+    **Dit is geen iconenbibliotheek en die komt er ook niet.** Je geeft de geometrie, deze
+    functie geeft de discipline: één schachtdikte, één hue, geen vulling, ronde uiteinden,
+    alles binnen het vierkant, en één groep zodat het icoon als één vorm verschuift. Wat je
+    tekent bedenk je per icoon, net als bij `contour()` -- een catalogus zou hier hetzelfde
+    doen wat een patroonbibliotheek met de compositie doet.
+
+    `delen` is een lijst van tuples in RASTEREENHEDEN (0 tot 24, y naar beneden):
+
+        ("lijn", x1, y1, x2, y2)                 een rechte lijn
+        ("pad", [(x, y), ...])                   een open polylijn
+        ("vorm", [(x, y), ...])                  een gesloten omtrek, alleen lijn
+        ("cirkel", cx, cy, r)                    een open cirkel
+        ("stip", cx, cy, r)                      de enige gevulde vorm die mag
+        ("boog", cx, cy, r, vanaf, tot)          graden, 0 is rechts, met de klok mee
+        ("rechthoek", x, y, w, h)                 en optioneel een zevende: hoek in eenheden
+
+    Een documenticoon is dus:
+
+        icoon("Doc", 1.0, 3.0, 0.72, [
+            ("vorm", [(6, 2), (15, 2), (18, 5), (18, 22), (6, 22)]),
+            ("lijn", 15, 2, 15, 5), ("lijn", 15, 5, 18, 5),
+            ("lijn", 9, 10, 15, 10), ("lijn", 9, 14, 15, 14), ("lijn", 9, 18, 13, 18),
+        ])
+
+    Drie grenzen, en ze weigeren met een reden:
+
+    * onder `ICOON_MIN` (0,44 in) lopen de lijnen in elkaar; dan is een streep of een
+      kapitaallabel het betere merkteken
+    * boven `ICOON_MAX_DELEN` (12) is het een tekening, en die hoort in `sfnl-infographic`
+    * een gevulde vorm anders dan `("stip", ...)` bestaat hier niet: een icoon is lijnwerk
+      (§8), en een gevuld icoon concurreert met de dragers op de slide
+
+    Wanneer een icoon zijn plek verdient staat in `vormentaal.md` §14, en dat is de vraag die
+    vóór deze functie komt: draagt het icoon informatie die de tekst niet al draagt? Een
+    icoon naast elk kopje is decoratie, en decoratie valt onder dezelfde regel als een
+    gekleurd vlak dat alleen kleur is -- die gaat eruit (§8).
+    """
+    if d < ICOON_MIN:
+        raise ValueError(
+            f"een icoon van {d:.2f} in is te klein: onder {ICOON_MIN} in lopen de lijnen van "
+            f"{pt}pt in elkaar en leest het als een vlekje. Maak hem groter, of gebruik een "
+            "streep, een punt of een kapitaallabel."
+        )
+    if len(delen) > ICOON_MAX_DELEN:
+        raise ValueError(
+            f"{len(delen)} onderdelen is geen icoon meer maar een tekening (max "
+            f"{ICOON_MAX_DELEN}). Laat weg wat de betekenis niet draagt, of bouw het als "
+            "losse infographic met `sfnl-infographic`."
+        )
+    u = d / raster                       # inch per rastereenheid
+    def px(gx):
+        return x + gx * u
+    def py(gy):
+        return y + gy * u
+    ln = _ln_icoon(hue, pt)
+    kinderen: list[str] = []
+    for deel in delen:
+        soort = deel[0]
+        if soort == "lijn":
+            _, x1, y1, x2, y2 = deel
+            kinderen.append(verbind(f"{naam} lijn", (px(x1), py(y1)), (px(x2), py(y2)),
+                                    hue, pt).replace(lijn_xml((hue, pt)), ln))
+        elif soort in ("pad", "vorm"):
+            punten = [(px(a), py(b)) for a, b in deel[1]]
+            pad = contour(f"{naam} {soort}", 0, 0, punten, sluit=(soort == "vorm"))
+            kinderen.append(pad.replace("<a:ln><a:noFill/></a:ln>", ln))
+        elif soort in ("cirkel", "stip"):
+            _, cx, cy, r = deel
+            vulling = hue if soort == "stip" else None
+            vorm = vlak(f"{naam} {soort}", px(cx - r), py(cy - r), 2 * r * u, 2 * r * u,
+                        prst="ellipse", vulling=vulling)
+            kinderen.append(vorm if soort == "stip"
+                            else vorm.replace("<a:ln><a:noFill/></a:ln>", ln))
+        elif soort == "boog":
+            _, cx, cy, r, vanaf, tot = deel
+            kinderen.append(
+                vlak(f"{naam} boog", px(cx - r), py(cy - r), 2 * r * u, 2 * r * u,
+                     prst="arc", adj={"adj1": int(round(vanaf * 60000)),
+                                      "adj2": int(round(tot * 60000))})
+                .replace("<a:ln><a:noFill/></a:ln>", ln))
+        elif soort == "rechthoek":
+            _, gx, gy, gw, gh = deel[:5]
+            hoek = deel[5] * u if len(deel) > 5 else None
+            kinderen.append(
+                vlak(f"{naam} vlak", px(gx), py(gy), gw * u, gh * u, hoek=hoek)
+                .replace("<a:ln><a:noFill/></a:ln>", ln))
+        else:
+            raise ValueError(
+                f'onderdeel "{soort}" bestaat niet in een icoon. Kies uit lijn, pad, vorm, '
+                "cirkel, stip, boog, rechthoek -- zie de docstring."
+            )
+    return groep(f"Icoon {naam}", x, y, d, d, kinderen)
 
 
 def contour(naam: str, x: float, y: float, punten, *, vulling=None, lijn=None,

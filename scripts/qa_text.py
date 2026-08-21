@@ -14,7 +14,8 @@ Wat dit script NIET doet: beoordelen of de slide mooi is, of de vakken vol genoe
 of de compositie klopt. Dat oordeel komt van de render, niet van een meting. Een eerdere
 route mat dat wel, met `qa_fit.py` en `qa_typography.py` erbij, en het resultaat was dat de
 bouwer regels ging vermijden in plaats van slides ging maken. Die twee scripts hebben in
-deze repo nooit bestaan en komen er ook niet: de poort is de outline (README), de hygiëne
+deze repo nooit bestaan en komen er ook niet: de poorten zijn het vragenvuur en de outline
+(README), de hygiëne
 staat hier, de tellingen staan in `qa_tellingen.py`, en de vorm wordt op de render
 beoordeeld door `deck-visual-reviewer`.
 

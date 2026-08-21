@@ -15,6 +15,12 @@ mooier oogt en een slide die zonder spreker begrepen wordt, kies je de tweede.
 Bondigheid is daarna het middel: minder woorden om hetzelfde expliciet te maken,
 niet minder informatie.
 
+**Eén uitzondering, en die is een besluit en geen vrijheid.** Kiest de gebruiker in het
+vragenvuur voor een spreekdeck (skill, stap 1, besluit 1), dan gaat het deck níét de mail
+in en vervalt deze toets voor de slide. Hij vervalt niet voor de deck: wat de lezer zonder
+spreker nodig heeft, gaat dan naar de presentatornotities. Op de twee andere dichtheden —
+licht leave-behind en leave-behind — geldt de toets onverkort.
+
 ### De poort, per slide af te vinken
 
 1. **Elk getal draagt een eenheid en een periode op de slide zelf.** Niet in de

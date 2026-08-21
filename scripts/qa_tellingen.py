@@ -6,9 +6,10 @@ Usage:
     python qa_tellingen.py <deck.pptx> --strict          # ook een warn geeft exit 1
 
 Dit is een hygiënerapport in dezelfde categorie als `qa_text.py`, en **geen tweede
-poort.** De poort van deze plugin is de outline; daarna beslist de render, met
-`deck-visual-reviewer` als het oog. Dat staat zo in de README ("Poorten: één: de
-outline") en dit script verandert dat niet. De verantwoording hoort hier te staan omdat
+poort.** De poorten van deze plugin zijn het vragenvuur en de outline, en beide zijn
+een mens die ja zegt; daarna beslist de render, met `deck-visual-reviewer` als het oog.
+Dat staat zo in de README ("Poorten: twee, en beide zijn een mens") en dit script
+verandert dat niet. De verantwoording hoort hier te staan omdat
 dit precies de plek is waar deze plugin anders de vormgevingspolitie herbouwt die hij
 bewust weglaat: een script dat compositie telt, groeit uit zichzelf naar een script dat
 compositie afkeurt, en dan vermijdt de bouwer regels in plaats van slides te maken.
@@ -121,7 +122,7 @@ DICHT_PLAFOND = 12.5
 #: een rijkop en een kaartlabel van 12pt (`Rij 1 rol` op `12`, `Kaart 1 label` op `11`) en
 #: een kapitaallabel van 14pt (`Kolom 1 kop` op `14`). Met één rol `label` meldde dit
 #: script daarop `critical: de rol 'label' staat op 3 maten` — op de lat zelf, en de bouwer
-#: heeft daarop besluit 2 teruggebracht naar één labelmaat van 12pt. Dat besluit nam het
+#: heeft daarop de vier maten teruggebracht naar één labelmaat van 12pt. Dat besluit nam het
 #: telscript en niet de bouwer, en dat is precies wat dit script niet mag doen.
 #:
 #: §2 geeft de drie maten elk hun eigen werk: "12pt is de dichte variant voor een
@@ -313,7 +314,7 @@ def rol_van(font: str | None, pt: float | None, in_tabel: bool) -> str | None:
     en voor een tabelcel, 14pt is het kapitaallabel. Op de lat zelf — de vier
     voorbeeldslides uit `assets/maatstaf/11`-`14` — staan alle drie naast elkaar, en dit
     script meldde daarop `critical: de rol 'label' staat op 3 maten`. De bouwer van de
-    testdeck heeft daarop besluit 2 teruggebracht naar één labelmaat van 12pt. Dat besluit
+    testdeck heeft daarop de vier maten teruggebracht naar één labelmaat van 12pt. Dat besluit
     nam het telscript en niet de bouwer.
 
     Wat overblijft is de toets die wél moet vuren: dezelfde rol op twee maten bínnen
@@ -483,10 +484,14 @@ def registers(map_pad: Path) -> dict:
         "methode": "wit s<6% v>93% / verzadigd s>25% of v<55%, op 240 px breed",
         "bandbreedte": {"wit": [witten[0], witten[-1]],
                         "verzadigd": [vollen[0], vollen[-1]]},
-        "ijkpunt": "§5 meet de referentie op bijna helemaal wit (85 tot 88 procent) OF "
-                   "echt verzadigd (20 tot 37 procent), en geen enkele slide in het "
-                   "midden; de afgekeurde deck lag met 44 tot 53 procent wit over de hele "
-                   "lengte in dezelfde middenband. De geërfde fotodividers (80 procent "
+        "ijkpunt": "§5 kent drie gevuldheden, elk met een gerenderde referentie: weinig "
+                   "accent 92/3 (assets/proeven/03, de default), kaal 94/1 (proeven/01) en "
+                   "met kleur 80/14 (proeven/02). Wat deze reeks moet laten zien is "
+                   "VERSCHIL tussen de slides, niet een hoog getal: de afgekeurde deck lag "
+                   "met 44 tot 53 procent wit over de hele lengte in dezelfde middenband. "
+                   "De band van 20 tot 37 procent verzadigd is de meting van de winnende "
+                   "decks en géén doel — een vol vlak van een kwart slide (proeven/04, 25 "
+                   "procent) is op de render afgekeurd. De geërfde fotodividers (80 procent "
                    "verzadigd) en de oranje outro (99 procent) zeggen niets over de "
                    "compositie — lees deze reeks op de contentslides.",
         "per_slide": per_slide,
@@ -709,10 +714,13 @@ def analyse(deck: Path, renders: Path | None = None) -> dict:
                 "piek": max(contentwoorden) if contentwoorden else 0,
                 "ijkpunt": "gemeten op bestaande decks: de voorbeelden 11 tot 14 in "
                            "assets/maatstaf/ staan op 141, 99, 50 en 59 woorden inclusief "
-                           "titel, een spreekdeck op gemiddeld 85, en de hoogste meting is "
-                           "177 gemiddeld met een piek van 255. Het dichtste voorbeeld is "
-                           "tegelijk de sterkste van de vier, dus dit getal is geen "
-                           "drempel en ook geen richting — zie de docstring.",
+                           "titel, en dat zijn de drie dichtheden uit besluit 1 — 11 is "
+                           "leave-behind, 12 licht leave-behind, 13 en 14 spreekdeck. Het "
+                           "gemeten deck op gemiddeld 85 was geen mislukt spreekdeck maar "
+                           "een licht leave-behind; de hoogste meting is 177 gemiddeld met "
+                           "een piek van 255. Het dichtste voorbeeld is tegelijk de "
+                           "sterkste van de vier, dus dit getal is geen drempel en ook "
+                           "geen richting — zie de docstring.",
             },
             "woorden_per_element": {
                 "elementen": len(woorden_per_element),

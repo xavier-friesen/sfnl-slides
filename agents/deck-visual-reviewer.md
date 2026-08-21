@@ -122,8 +122,10 @@ de negen zijn een plafond en geen vloer: de drager mag ook te vaak en te groot z
 | **één familie per regel** | binnen één alinea één letterfamilie; een aanhef midden in een Lato Light-regel staat in `Lato Semibold`, Montserrat SemiBold alleen op wat lósstaat en op zijn eigen regel begint | Montserrat SemiBold als aanhef midden in een Lato-alinea zet twee letterbouwen en twee x-hoogtes op dezelfde maat naast elkaar; op de render is de aanhef merkbaar breder en ronder dan de rest van de regel, en dat leest als een zetfout in plaats van als hiërarchie. Wijs dit nooit goed door naar `assets/maatstaf/04` te verwijzen: die slide zet het zo, nagemeten, en is voor dít aspect geen lat meer (`vormentaal.md` §9) |
 | **geen hoge punt binnen een regel** | geen `·` als scheiding tussen twee feiten op één regel, ook niet in een label of een bronregel | twee feiten op één regel is de vorm die ontstaat als er geen tweede regel voor genomen is. De fix is twee regels, twee cellen of twee elementen — niet een mooier scheidingsteken |
 | **maatsprong** | grootste eigen maat gedeeld door kleinste, per slide | onder ongeveer 2 is er geen hiërarchie. De afgekeurde deck haalde 1,36, de referentie 3 tot 5 |
-| **twee registers** | in de hele deck minstens één bijna witte slide en minstens één echt verzadigde | ligt élke slide in hetzelfde middengrijs, dan is dat de deckbrede bevinding, niet een slidedefect |
-| **kleur in de letter** | minstens één accent als tekstkleur op wit per deck | staat alle kleur in vlakken en geen enkele in een letter, dan mist het stille register |
+| **drie gevuldheden** | de deck wisselt van gevuldheid: weinig accent als grondtoon (`proeven/03`, 92/3), kaal waar de inhoud erom vraagt (`proeven/01`, 94/1), met kleur waar een set categorieën apart moet blijven (`proeven/02`, 80/14) | ligt élke slide in hetzelfde middengrijs, dan is dat de deckbrede bevinding, niet een slidedefect. Let op de andere kant: één gevuldheid over de hele deck is hetzelfde defect, en "er staat nergens veel kleur" is géén bevinding |
+| **een vol vlak draagt iets** | een volle vulling groter dan ongeveer tien vierkante inch draagt een drager of een besluit, niet vier woorden | `proeven/04` is op de render afgekeurd: een band van 23,8 vierkante inch met vier woorden erin maakt de vulling het luidste element van de slide. Meld dit als bevinding, met de vorm uit `proeven/03` als alternatief — nadruk in een chip, niet in een band |
+| **kleur in de letter** | minstens één accent als tekstkleur op wit per deck, en nadruk niet in de letterkleur | staat alle kleur in vlakken en geen enkele in een letter, dan mist het stille register. Andersom: twee van vier koppen oranje en de andere twee navy is een bevinding, want navy haalt 15,3 en oranje 2,6 — de kleur wijst dan de verkeerde twee aan (`proeven/01` tegenover `proeven/03`) |
+| **een icoon draagt iets** | een icoon codeert een soort die vergeleken wordt, markeert iets dat terugkomt, of vervangt een zin in een schema; anders staat er geen | een icoon naast een kop die het al zegt is decoratie, en dat is een bevinding (`proeven/10` zet dezelfde rijen met en zonder elkaar naast). Let ook op de zetting: één schachtdikte in de hele deck, en een icoonlijn in oranje op wit haalt 2,6 en leest als een suggestie |
 | **één kaarttaal** | dezelfde hoekvorm en vullingssoort in de hele deck | afgerond náást recht, of vier verschillende hoekradii, is het defect dat het snelst opvalt |
 
 ### 2c. Tekstwanden
@@ -135,8 +137,19 @@ werd: alles klopte en de slide werd niet gelezen.
 
 IJkpunten, gemeten met `qa_tellingen.py` over alle runs per slide, op een reeks bestaande
 decks. De voorbeelden `11` tot `14` in `assets/maatstaf/` staan op 141, 99, 50 en 59 woorden
-inclusief titel. Een spreekdeck kwam uit op gemiddeld 85. De hoogste meting is 177 gemiddeld
+inclusief titel, en dat zijn de drie dichtheden uit besluit 1: `11` is een leave-behind, `12`
+een licht leave-behind, `13` en `14` een spreekdeck. Het gemeten deck op gemiddeld 85 was geen
+mislukt spreekdeck maar een licht leave-behind zonder naam. De hoogste meting is 177 gemiddeld
 met een piek van 255 op één slide: vier kolommen van zeventig woorden.
+
+Lees de tekstlast dus tegen de dichtheid die bovenaan de outline staat, en niet tegen één
+getal. Staat die er niet bij, meld dat als bevinding op de outline en niet op de slide.
+
+**En buiten de band vallen is op zichzelf geen bevinding**, in geen van beide richtingen. Een
+slide met veertig woorden in een licht leave-behind is klaar, geen lege slide; een slide die de
+band overschrijdt omdat het verhaal daar meer nodig heeft, is een slide met een reden. De
+bevinding is tekst die staat waar een vorm had gemoeten, en die stel je vast door te kijken —
+niet door te tellen.
 
 Let op wat die reeks zegt, want de verkeerde lezing ligt voor de hand. Het dichtste voorbeeld
 staat op 141 woorden en is tegelijk de sterkste van de vier: vier fasekaarten van ongeveer
@@ -228,7 +241,10 @@ Waar je per slide naar kijkt:
 - **De hoge punt.** Zoek `·` in de contentzone, in labels en in bronregels. Elke vondst is een
   bevinding met de fix erbij: twee regels, twee cellen of twee elementen.
 - **Kleur die niets codeert.** Stel per hue de vraag: wat codeert deze kleur, in één woord? Kun
-  je dat niet zeggen, dan is het decoratie en hoort er één accent te staan. Zou de lezer
+  je dat niet zeggen, dan is het decoratie en hoort er oranje te staan — dat is het accent van
+  de deck, vast en deckbreed (`vormentaal.md` §3). Per slide mag er één tweede hue bij die iets
+  codeert; een sét van drie of vier hues is een deckbreed besluit en moet dus in de hele deck
+  hetzelfde betekenen. Zou de lezer
   informatie verliezen als het kleurverschil wegviel? Zo niet, dan gaat het eruit.
   Let op de drie kanten. Vier kleuren waar vier keer hetzelfde staat. Eén set gelijkwaardige
   items die op slide 4 sky en op slide 11 emerald draagt. En het geval dat het vaakst voorkomt:

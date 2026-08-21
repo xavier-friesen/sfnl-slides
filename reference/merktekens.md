@@ -226,10 +226,9 @@ Baanbrekers-kickoff slide 11: vier grote ronde badges met een icoon
 pijl uit de eerste drie volgt. De hue doet het werk: drie in dezelfde kleur zijn de middelen, de
 vierde in een andere kleur is het doel.
 
-**Bouwbaar** op de badge na: de iconen zijn plaatjes. Zonder icoonbibliotheek wordt het een
-cirkel met een kort woord erin, en dat werkt (§3 zegt dat een kop in zijn hue de categorie
-sneller draagt dan een pictogram) — maar dan is het merkteken de kleurwissel op de laatste, niet
-het icoon.
+**Bouwbaar** sinds `icoon()`: vier zelf getekende lijniconen in een `punt()`. Let op de toets uit
+§14 — vier iconen die alleen versieren maken de kleurwissel op de laatste juist onzichtbaar, en
+die kleurwissel is hier het merkteken.
 
 ## 17. Het vraagkader
 
@@ -367,8 +366,11 @@ gegenereerd deck. Hier is het geen default: elke tegel is een andere stakeholder
 codeert een categorie die de lezer moet kunnen onthouden. Dat is precies de uitzondering die de
 weigerlijst toestaat, en het is de moeite waard om te zien hoe hij eruitziet.
 
-**Bouwbaar** sinds `foto()`: het icoon is een afbeelding in een vorm. Zonder icoonbestand draagt
-het gekleurde vlak met het label de categorie net zo goed (§3).
+**Bouwbaar, en niet met een afbeelding.** Sinds `icoon()` teken je een lijnicoon zelf op een
+raster van 24 bij 24, en `vormentaal.md` §14 stelt eerst de vraag die vóór het tekenen komt:
+draagt het icoon iets wat de tekst niet al draagt? Bij zes stakeholders is het antwoord ja, bij
+drie processtappen nee. `foto()` is voor foto's, logo's en een verkleind eindproduct — niet voor
+iconen.
 
 ## 28. De genummerde meetmomentkaart met sublijst
 
@@ -411,7 +413,7 @@ standaardvorm.
 | item | status |
 |---|---|
 | Een accolade die zijn punt op de doelvorm legt (1) | **gebouwd** — `accolade()` in `shapes.py`; `punt_y` neemt de absolute y van het midden van de doelvorm en rekent het handvat `adj2` terug. Zonder eigen waarde staat de punt op 50 procent van de eigen hoogte, en dus zelden bij het doel. Een punt buiten de haak weigert hij, met de reden erbij |
-| Een weg naar een afbeelding (4) | **gebouwd** — `media()`, `beeld()`, `uitsnede_vullend()` en `foto()` in `shapes.py`. `foto(slide, naam, x, y, w, h, bestand, prst="ellipse")` is het ronde portret in één aanroep; de uitsnede voorkomt dat een liggende foto in een cirkel wordt platgedrukt. Een tweede aanroep met hetzelfde bestand hergebruikt het beeld, dus de bouw blijft herhaalbaar |
+| Een weg naar een afbeelding (4) | **gebouwd** — `media()`, `beeld()`, `uitsnede_vullend()` en `foto()` in `shapes.py`. Voor iconen is dit níet de weg: die teken je met `icoon()` (§14), en `foto()` is voor foto's, logo's en een verkleind eindproduct. `foto(slide, naam, x, y, w, h, bestand, prst="ellipse")` is het ronde portret in één aanroep; de uitsnede voorkomt dat een liggende foto in een cirkel wordt platgedrukt. Een tweede aanroep met hetzelfde bestand hergebruikt het beeld, dus de bouw blijft herhaalbaar |
 | Een sectiekoprij in `add_table.py` (5) | **gebouwd** — `{"sectie": "FASE 1"}` tussen de rijen. De rij voegt zijn cellen samen, draagt de kopvulling, en de zebra telt alleen de gewone rijen door zodat de tint na een sectie niet omslaat |
 | Een regel over meter tegen chip (3) | **gebouwd** — `vormentaal.md` §12: kan het meer of minder zijn (meter), of is het dit of dat (chip) |
 | Een regel over bedoelde tegen toevallige herhaling (6) | **gebouwd** — `vormentaal.md` §10: verschuift er één element terwijl de rest letterlijk gelijk blijft, dan is de herhaling het middel; verschilt de inhoud terwijl de plattegrond gelijk blijft, dan is de plattegrond de luiheid |

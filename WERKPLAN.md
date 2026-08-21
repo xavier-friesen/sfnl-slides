@@ -259,6 +259,145 @@ Op te leveren: de diff, de contactbladen van vóór en ná, de meting op beide, 
 - De referentiedocumenten hebben een eigen register: nagemeten, met de verkeerde lezing erbij waar
   die is voorgekomen. Schrijven in dat register of niet schrijven.
 
+## Ronde 2 — het vragenvuur als poort, en een referentie per antwoord
+
+Deze ronde gaat over de andere kant van dezelfde opdracht: niet of de bouwer visueel denkt, maar
+of de gebruiker de vorm werkelijk kan kiezen. De zes besluiten hingen bij de outline, dus er lag
+al tekst wanneer er voor het eerst iets te kiezen was, en vijf van de zes hadden een default met
+een reden maar geen beeld en geen uitkomst. Wat er is gedaan:
+
+- **De zes zijn stap 1 geworden, samen met de vier intakevragen, en het is een poort.** Tien
+  vragen in één blok, en er wordt niets geschreven voordat ze beantwoord zijn — geen storyline,
+  geen outline, geen slide. Overslaan bij een bekend antwoord mag niet meer: dan vul je het in
+  als voorstel en de gebruiker bevestigt het. De skill heeft daarmee twee poorten en beide zijn
+  een mens; de README, `preflight.py`, `qa_text.py` en `qa_tellingen.py` citeerden "Poorten: één:
+  de outline" en zijn meegegaan.
+- **Elk besluit heeft nu een referentie én een uitkomst.** Bij besluit 1 en 3 wijst de maatstaf
+  het aan: `13`/`14`, `12` en `11` zijn de drie dichtheden, en `11` (afgerond, haarlijn in de
+  eigen hue) tegenover `12` (recht, geen haarlijn) zijn de twee kaarttalen. Dat stond nergens,
+  terwijl de beelden er al waren. `LEESMIJ.md` noemt het nu per slide.
+- **Een derde dichtheid: licht leave-behind.** De meting wees hem al aan en niemand had hem
+  benoemd — het gemeten "spreekdeck" op gemiddeld 85 woorden was te dicht voor een spreekdeck en
+  te dun voor een leave-behind. Dat was geen mislukt deck maar een register zonder naam, en het
+  is de gewone SFNL-situatie: er wordt bij gepraat én het deck gaat mee. Daarmee is het de
+  default. De drie hangen aan één vraag (praat er iemand bij, en gaat het deck de mail in?) en
+  elk aan een gemeten voorbeeld.
+- **Oranje is het accent, vast.** Besluit 4 was "één accentkleur naast navy" zonder te zeggen
+  welke, en dat is geen besluit maar een lege plek: geen van de veertien voorbeelden is een
+  deck-met-één-accent, dus de default had ook geen beeld. Nu staat oranje er, met de uitkomst
+  erbij die je erbij koopt — oranje haalt 2,6 op wit, dus het accent kan nooit een gelezen regel
+  dragen en alles wat gelezen wordt blijft navy. Per slide mag één tweede hue erbij als die iets
+  codeert; een sét van drie of vier hues (`11`, `12`) is een deckbreed besluit en geen
+  slidekeuze. In `vormentaal.md` §3 is de vaste laag daarop bijgesteld: oranje codeert buiten een
+  set niets, want daar ís hij het accent.
+- **Wie wat mag kiezen, staat in één tabel.** "Kies jij maar" is een geldig antwoord per besluit.
+  Kaarttaal mag de skill altijd zelf nemen, ook afwijkend, met een reden. Dichtheid en accent per
+  slide laten verschillen mag alleen met expliciete toestemming. De titelmodus varieert nooit per
+  slide. Dat is de grens tussen "de skill kiest" en het gemeten defect dat het besluit per slide
+  opnieuw neemt.
+- **Twee onscherpe plekken gedicht.** Besluit 3 vroeg ook naar de vullingssoort en dat overlapte
+  met besluit 5: een deck waarvan de default "vol" is, kan geen slide op wit meer hebben. De
+  vulling hoort bij de registers en is daar nu ondergebracht. En "de rest ligt ertussen" in §5
+  gaf de middenband vrij die diezelfde paragraaf als het defect meet; die zin heeft nu een vloer,
+  namelijk de gemeten 44 tot 53 procent wit met 42 tot 54 procent tint.
+
+Wat deze ronde niet heeft: een render. De omgeving had `python-pptx` niet, dus de wijzigingen zijn
+doctrine en geen gemeten uitkomst. De drie dichtheden zijn nog nooit als drie decks naast elkaar
+gebouwd, en dat is de test die hierbij hoort.
+
+## Ronde 3 — de kleur- en gevuldheidsproef
+
+De twee besluiten die na ronde 2 nog op doctrine stonden zonder render, zijn gebouwd: zes
+varianten van dezelfde inhoud (drie gevuldheden maal twee kleurschema's) plus drie gerichte
+proeven erna. De renders en de metingen staan in `assets/proeven/`, de opzet erbij zodat ze te
+herhalen zijn. Vier dingen kwamen eruit, en alle vier zijn in de doctrine gezet:
+
+- **Nadruk in de letterkleur draait de hiërarchie om.** Twee van vier koppen oranje, twee navy:
+  de navy koppen lezen sterker (15,3 tegen 2,6). Dat is de keerzijde van "oranje is het accent"
+  die op papier niet te zien was. De vorm die het oplost is een volle oranje chip met navy
+  tekst, met alle koppen navy.
+- **Het grijs is geen grijs.** `tx1` lumMod 65 rendert als `#5176A7`, 51 procent verzadigd — een
+  vijfde blauw naast sky en royal. Geen enkele lichtheidstrap van dat slot is neutraal, want
+  `tx1` is zelf `#233348`. Het stille label is daarom navy op alpha 70 zonder spatiëring, en het
+  lumMod-recept is beperkt tot decks zonder set hues.
+- **De alpha-en-spatiëringsbug is een klipping en heeft geen veilige ondergrens.** Niet
+  aan-of-uit: het tekort loopt op met de spatiëring maal het aantal tekens, dus `spc=60` klipt al
+  en `VERANTWOORDEN` verliest bij 100 de hele N. Een spatie erachter helpt niet en een breder vak
+  ook niet.
+- **Verzadigd is te begroten, en vier rijlabels halen het niet.** Eén procent is ongeveer één
+  vierkante inch: een blok van 8 bij 2,5 in meet 21 procent, een band over de volle breedte 25,
+  en vier rijlabels van 3,40 in samen 14 — terwijl die slide vol voelt. Verzadigd lukt ook met
+  alleen oranje, dus daar is geen set hues voor nodig.
+
+Bijvangst: de renderomgeving is in deze sessie opnieuw opgebouwd (`libreoffice-impress`,
+`fonts-lato`, `fonts-montserrat`, `poppler-utils`), en met alleen `libreoffice-core` meldt
+`preflight.py` nu correct dat er geen importfilter voor pptx is.
+
+## Ronde 4 — besluit 5 herschreven op de renders
+
+Xavier heeft de zes varianten bekeken en de keuze gemaakt, en die keuze verandert besluit 5 van
+"twee registers" naar drie gevuldheden:
+
+- **`proeven/03` is de default** — weinig accent: geen kaartvullingen, navy koppen op wit, een
+  haarlijn per rij, en één vol oranje vlak precies waar de nadruk zit (92 procent wit, 3 procent
+  verzadigd).
+- **`proeven/01` is kaal** en **`proeven/02` is met kleur**; beide mogen in dezelfde deck naast de
+  grondtoon staan, waar de inhoud erom vraagt. Dat wisselen ís het contrast tussen de slides.
+- **`proeven/04` valt af.** Hij haalt 25 procent verzadigd en zit dus binnen de band die de
+  winnende decks laten zien, en hij wordt toch niet aangemoedigd: het oppervlak is groot en
+  draagt vier woorden. Daarmee is de band van 20 tot 37 procent in §5 een meting geworden in
+  plaats van een doel — een wijziging in de doctrine die alleen op een render te nemen was.
+
+Gevolgen die zijn meegenomen: de vullingssoort staat nu bij de gevuldheid in plaats van bij de
+kaarttaal (besluit 3 vroeg er ook naar), `deck-visual-reviewer` heeft twee nieuwe rijen (wisselt
+de gevuldheid, en draagt een groot vol vlak wel iets), en het ijkpunt in `qa_tellingen.py` zegt
+niet langer dat de reeks naar 20 tot 37 procent toe moet.
+
+## Ronde 5 — het vragenvuur ingedeeld, met een kaart erbij
+
+Twee wijzigingen, beide op verzoek van Xavier.
+
+**Van zes vormbesluiten naar vier, in de volgorde grof naar fijn:** dichtheid, gevuldheid, wat
+kleur codeert, titelmodus. De vier maten en de kaarttaal worden niet meer gevraagd — de maten zijn
+een regel met één tweesprong (body 12pt bij een kaartenrij van drie of meer), en de kaarttaal
+kiest de skill zelf met de reden in de outline. Ze staan nog wél in stap 1, als het blok "twee
+dingen worden niet gevraagd", want de bouwer moet weten wat er dan geldt. Het vragenvuur is
+daarmee acht vragen: vier over de opdracht, vier over de vorm.
+
+**Een keuzekaart bij de vier vormvragen.** `assets/keuzekaarten/vragenvuur.png`: per besluit de
+opties naast elkaar als detailuitsnede uit een echte render, met de meting eronder. De skill
+stuurt het bestand en leest het niet, dus het kost geen tokens en geen render — dat was de eis.
+`scripts/keuzekaart.py` bouwt hem opnieuw uit de renders die in de repo staan; het is
+onderhoudsgereedschap en geen bouwstap.
+
+Daarvoor moest één gat gedicht worden: titelmodus B had geen render. Die is er nu
+(`proeven/07`, `08`) — een divider uit fotolayout 6 met de hoofdstuknaam, en een contentslide met
+diezelfde naam als titel en de bewering in de subtitel. Bijvangst voor de doctrine: de subtitel
+duwt de contentzone omlaag, dus in modus B begint elke slide van dat hoofdstuk lager.
+
+## Ronde 6 — iconen, getekend en niet geleend
+
+De skill kon geen icoon maken. `contour()` kon een eigen vorm, maar niets zei hoe een icoon in
+deze huisstijl gezet wordt, dus kwam er geen. Nu:
+
+- **`icoon()` in `shapes.py`**, een raster van 24 bij 24 waarop je de geometrie zelf opgeeft —
+  lijn, pad, vorm, cirkel, stip, boog, rechthoek — en de functie de discipline afdwingt: één
+  schachtdikte, één hue, geen vulling, ronde uiteinden, één groep. Expliciet géén bibliotheek en
+  ook niet de iconengalerij van PowerPoint: dat was de eis, en het is dezelfde keuze als bij de
+  patroonbibliotheek die deze plugin niet heeft.
+- **`vormentaal.md` §14** met de vraag die vóór het tekenen komt (draagt het icoon iets wat de
+  tekst niet al draagt) en de gemeten zetting: 1,5pt, 0,72 in naast een kop van 18pt, 0,44 in als
+  ondergrens, ten hoogste twaalf onderdelen, navy tenzij de hue codeert.
+- **Twee renders als bewijs**: `proeven/09` (zes iconen, drie diktes, drie maten, zes hues, één in
+  wit op vol) en `proeven/10` (dezelfde drie rijen met en zonder icoon). Die tweede is de
+  belangrijkste, want hij laat zien dat de versie zónder iconen de rustigere is zodra de kop het
+  al zegt — daar komt de regel uit.
+
+Twee metingen die eruit vielen. Een icoonlijn van 1,5pt in oranje haalt 2,6 op wit en leest
+lichter dan zijn eigen kop ernaast, dus navy is de default en een hue alleen als hij codeert. En
+een pijlkop op een boog moet uitgerekend worden: de eerste kringloop had een kop op geschatte
+coördinaten en die zweefde los van de boog — in de code onzichtbaar, op de render meteen.
+
 ## Openstaand
 
 - **De blinde vergelijking met twee juryleden is niet gedraaid.** Beide juryagents zijn
@@ -277,6 +416,14 @@ Op te leveren: de diff, de contactbladen van vóór en ná, de meting op beide, 
 - **De vier goede voorbeeldslides zijn alleen als afbeelding in het gesprek beschikbaar**, niet
   als bestand. Ze zijn de feitelijke lat voor werklijn A en de blinde vergelijking, en ze horen
   eigenlijk in `assets/maatstaf/` naast de tien bestaande. Daarvoor zijn de PNG-bestanden nodig.
+- **Twee referenties ontbreken nog steeds als A/B op dezelfde inhoud:** recht tegen afgerond
+  (kaarttaal) en 16 tegen 12pt body. Beide zijn nu besluiten van de skill zelf, dus ze staan niet
+  op de keuzekaart — maar de bouwer kiest ze wel blind.
+- **De drie dichtheden zijn niet naast elkaar gebouwd.** Testronde 2 uit het plan hierboven ging
+  over twee registers; er zijn er nu drie, en of licht leave-behind werkelijk iets anders
+  oplevert dan de twee andere is niet gemeten.
+- **Het vragenvuur is niet in een echte bouw gebruikt.** Dat de poort werkt — tien antwoorden
+  vóór de eerste regel tekst — is doctrine tot een bouwer het een keer heeft doorlopen.
 - De feitenvraag uit stap 1: gebruikt `maatstaf/04` werkelijk Montserrat SemiBold als aanhef, of
   al een Lato-gewicht? Daarvan hangt af of de nieuwe typografieregel een verkeerde meting
   corrigeert of een gemeten patroon overrulet. Beslist met een render, niet met een mening.

@@ -116,35 +116,77 @@ tekst. Dat is een bewuste keuze die je op de render controleert, geen default �
 bovenkant van de dragerband, dus deze uitzondering geldt alleen voor de grootste drager in de
 deck. Staat je drager op 28 of 32pt, dan is de tekst op een volle lichte hue navy.
 
-**Eén accent, tenzij kleur iets te coderen heeft.** Dit is de andere kant van hetzelfde en het
-gaat even vaak mis. Kies voor de deck één accentkleur naast navy en houd die vast; een tweede
-of derde hue komt er alleen bij wanneer er iets te onderscheiden is dat de lezer apart moet
-houden — categorieën, werkstromen, stappen in een proces, of twee kanten van een afweging.
+**Oranje is het accent, en een tweede hue is een keuze per slide.** Dit is de andere kant van
+hetzelfde en het gaat even vaak mis. Het accent naast navy is oranje: de huiskleur, en de enige
+hue in het palet die als merk leest in plaats van als categorie. Dat staat vast en wordt niet
+per deck opnieuw gekozen.
 
-De toets is één vraag, en je stelt hem per kleur: **wat codeert deze hue, in één woord?** Kun
-je dat niet zeggen, dan gaat de kleur eruit en wordt het het accent van de deck.
+Wat je daarmee opgeeft, want dáár is dit besluit op te beoordelen: oranje haalt 2,6 op wit (de
+tabel hierboven). Het accent kan dus nooit een gelezen regel dragen. Een accent in de letter is
+displaymaat, of een kop vanaf 18pt die je niet hoeft te lezen om de slide te snappen; alles wat
+werkelijk gelezen wordt blijft navy. Heb je een accent nodig dat óók een alinea draagt, dan is
+dat royal (5,7) — een afwijking met een reden, en geen tweede default.
 
-Waar het misgaat: twee kaarten naast elkaar die samen één werkstroom vormen — "opslaan" links
-en "terugvinden" rechts — met een emerald kop op de een en een royal kop op de ander. Er is
-niets tegengesteld aan die twee, de lezer leest ze achter elkaar en hoeft ze nooit te
-vergelijken. Twee hues suggereren daar een tegenstelling die er niet is. Één accent op beide
-koppen zegt hetzelfde en leest rustiger. Twee hues zijn wél op hun plek bij kost tegenover
-baat, nu tegenover straks, of een set van vier categorieën die door de hele deck terugkomt.
+**En daaruit volgt een regel die op de render is nagemeten: nadruk zet je niet in de letterkleur.**
+Zet je op een witte slide twee van de vier koppen in oranje en laat je de andere twee navy staan,
+dan lezen de navy koppen sterker — 15,3 tegen 2,6 — en wijst de kleur precies de verkeerde twee
+aan. Dat is gebouwd en gemeten: `proeven/01`. De vorm die het oplost staat ernaast in
+`proeven/03`: alle koppen navy, en het element dat nadruk krijgt draagt een volle oranje chip met
+navy tekst erin. Kleur in de letter blijft dus voor codering waar élk lid van de set een hue
+krijgt (`maatstaf/04`); zodra een deel van de set navy blijft, hoort de nadruk in een vlak.
 
-**Rol naar hue, één keer en dan vasthouden.** Heb je besloten dat kleur iets codeert, schrijf
-dan op welke categorie welke kleur krijgt, en beslis er daarna niet meer over. Dezelfde rol die
-op slide 4 sky draagt en op slide 11 emerald, betekent dat de kleur decoratie is geworden. De
-vaste laag: grapefruit is kost of waarschuwing, emerald is baat, navy is structuur en totaal,
-oranje is het resultaat en het punt waar het om gaat. Sky en royal zijn vrij voor categorieën
-zonder eigen lading.
+**Per slide mag er één tweede hue bij, en alleen als die iets codeert.** Twee kanten van een
+afweging, kost tegenover baat, nu tegenover straks: `maatstaf/04` is precies dat, twee kolomkoppen
+in twee hues omdat de kleur zegt welke kant je leest. De toets is één vraag, en je stelt hem per
+kleur: **wat codeert deze hue, in één woord?** Kun je dat niet zeggen, dan gaat de kleur eruit en
+blijft het oranje.
 
-Twee categorieën in dezelfde set krijgen nooit dezelfde hue. En één hue voor alles is het
-defect uit de afgekeurde deck — maar let op de verkeerde lezing daarvan: dat defect was één
-lichte tint over vier slides die vier verschillende dingen deden, niet één accent dat consequent
-één ding betekent.
+**Een sét hues is geen slidekeuze maar een deckbesluit.** Vier fasen, vier rijen, vier
+categorieën die door de hele deck terugkomen: dan dragen drie of vier hues tegelijk informatie,
+en dat neem je één keer voor de hele deck (skill, stap 1, besluit 3), met per hue in één woord
+wat hij codeert. `maatstaf/11` en `12` zijn beide zo'n set — vier fasekaarten en vier
+tabelrijen in royal, oranje, sky en emerald — en ze zijn dus geen bewijs dat vier hues per
+slide mogen. Wie een set per slide opnieuw verzint, krijgt dezelfde rol in twee kleuren.
 
-Deze keuze hoort in de outline, bij de slides waar kleur iets doet. Daar is hij te overzien en
-te herzien voordat er iets gebouwd is; op de render is hij alleen nog te repareren.
+**Rol naar hue, één keer en dan vasthouden.** Heb je besloten dat kleur iets codeert, schrijf dan
+op welke categorie welke kleur krijgt, en beslis er daarna niet meer over. Dezelfde rol die op
+slide 4 sky draagt en op slide 11 emerald, betekent dat de kleur decoratie is geworden. De vaste
+laag: grapefruit is kost of waarschuwing, emerald is baat, navy is structuur en totaal. Sky en
+royal zijn vrij voor categorieën zonder eigen lading. Oranje codeert buiten een set niets — daar
+ís hij het accent; binnen een deckbrede set is hij één van de hues en codeert hij wat de set hem
+toewijst (`maatstaf/11`, `12`).
+
+**En het grijs is geen grijs.** Het huisrecept voor een stil label — `tx1` met `lumMod 65000` —
+rendert als `#5176A7`: contrast 4,67 op wit en 51 procent verzadiging, dus een vijfde blauw dat
+naast sky en royal als lid van de set meedoet (`proeven/05`, met de vier trappen van datzelfde
+slot in `proeven/LEESMIJ.md`). Er is ook geen trap die het oplost: `tx1` is `#233348` en elke
+verlichting houdt de blauwzweem, van 27 procent verzadiging op lumMod 40 tot 52 op lumMod 80. Het
+palet heeft dus geen neutraal grijs, en dat is een feit om mee te rekenen in plaats van te
+omzeilen.
+
+Wat een stil label dan is, in deze volgorde:
+
+- **Navy op alpha 70** (`#625E8C`, contrast 6,0, verzadiging 33 procent). Dit voegt geen hue toe:
+  het is dezelfde navy, lichter. Dit is de default. De prijs staat in §9: op deze renderer klipt
+  letterspatiëring samen met een alphakleur de laatste glyph, dus dit label staat zonder `spc`.
+- **`tx1` lumMod 65 mét spatiëring**, maar alleen in een deck waarin sky en royal niet meedoen.
+  Doet er wél een set hues mee, dan is dit een vijfde kleur en gaat het niet op.
+- **Navy 100 procent** wanneer het label mag meedoen in de hiërarchie. Op 14pt naast een kop van
+  18pt leest dat als een tweede kop, dus dit is de uitzondering en niet de weg eruit.
+
+Twee categorieën in dezelfde set krijgen nooit dezelfde hue. En één hue voor alles is het defect
+uit de afgekeurde deck — maar let op de verkeerde lezing daarvan: dat defect was één lichte tint
+over vier slides die vier verschillende dingen deden, niet één accent dat consequent één ding
+betekent.
+
+Waar het misgaat: twee kaarten naast elkaar die samen één werkstroom vormen — "opslaan" links en
+"terugvinden" rechts — met een emerald kop op de een en een royal kop op de ander. Er is niets
+tegengesteld aan die twee, de lezer leest ze achter elkaar en hoeft ze nooit te vergelijken. Twee
+hues suggereren daar een tegenstelling die er niet is. Eén accent op beide koppen zegt hetzelfde
+en leest rustiger.
+
+De tweede hue per slide hoort in de outline, bij de slides waar kleur iets doet. Daar is hij te
+overzien en te herzien voordat er iets gebouwd is; op de render is hij alleen nog te repareren.
 
 ## 4. Een container is bijna wit
 
@@ -164,41 +206,85 @@ dat warme taupe als een niet-ingekleurd vlak.
 Boven ongeveer 14000 wordt een container een kleur. Dat mag, maar dan is het een vlak dat iets
 betekent en geen achtergrond meer.
 
-## 5. Een deck heeft twee registers
+## 5. Drie gevuldheden, en het contrast zit tussen de slides
 
 Gemeten aandeel wit, tint en verzadigd per slide. De afgekeurde deck: 44 tot 53 procent wit, 42
-tot 54 procent tint, 1 tot 7 procent verzadigd — op élke contentslide dezelfde band. De
-referentie heeft twee registers en geen enkele slide in het midden: bijna helemaal wit (85 tot
-88 procent) óf echt verzadigd (20 tot 37 procent).
+tot 54 procent tint, 1 tot 7 procent verzadigd — op élke contentslide dezelfde band. Dat
+middengrijs is precies wat een deck karakterloos maakt: nergens is iets leeg en nergens is iets
+vol, dus er is geen contrast tussen de slides onderling. Dát is wat dit besluit moet voorkomen,
+en niet "er moet ergens veel kleur staan".
 
-Dat middengrijs is precies wat een deck karakterloos maakt. Er is nergens iets leeg en nergens
-iets vol, dus er is geen contrast tussen de slides onderling.
+**Drie gevuldheden, met de render en de meting eronder** (`assets/proeven/`, LibreOffice, 1921
+px):
 
-Wijs de registers dus toe. In een deck van vijf contentslides staat er minstens één **op wit**:
-geen kaartvulling, alleen gekleurde koppen, proza en misschien een haarlijn. En minstens één is
-**echt verzadigd**: volle vlakken met de drager erin. De rest ligt ertussen.
+| gevuldheid | wat er staat | gemeten wit / verzadigd | referentie |
+|---|---|---|---|
+| **weinig accent** — de default | geen kaartvullingen: navy koppen op wit, een haarlijn per rij, en één vol oranje vlak precies waar de nadruk zit | 92 / 3 | `proeven/03` |
+| **kaal** | ook dat vlak niet: alleen haarlijnen, kapitaallabels en kleur in de letter | 94 / 1 | `proeven/01` |
+| **met kleur** | een set hues codeert de categorieën, in volle rijlabels of vier kaarten | 80 / 14 | `proeven/02` |
 
-**En reken na hoeveel "verzadigd" is, want de schatting zit er structureel naast.** Dit besluit
-neem je vóór het bouwen en het is het enige van de zes dat je tijdens het bouwen niet ziet. Op
-een deck dat net met deze skill is gebouwd waren twee slides als verzadigd aangewezen en maten
-ze 7 en 12 procent: één emerald blok van 3,94 bij 1,15 in, en vier rijlabels van 3,00 in breed.
-Beide voelden tijdens het bouwen als "die slide is de volle". Een slide is 13,33 bij 7,5 in, dus
-100 vierkante inch, en de band van 20 tot 37 procent betekent dat er 20 tot 37 vierkante inch
-vol moet staan — een blok van 8 bij 2,5 in, of vier rijen over de volle breedte. Toen slide 12
-in dat deck volledig verzadigd werd gemaakt, kwam hij op 23 procent.
+De default is **weinig accent**, en dat is een besluit van Xavier op de zes gerenderde varianten:
+van de drie is dit de vorm die het beste leest, en de andere twee zijn er voor de slide die er
+werkelijk om vraagt. Een deck is dus niet één gevuldheid — het is deze grondtoon met soms een
+kale slide (een vraag, proza) en soms een gekleurde (een set categorieën die de lezer apart moet
+houden). Een deck dat volledig in één gevuldheid staat is het middengrijs van de andere kant: het
+gemeten spreekdeck stond op 83 tot 88 procent wit op élke contentslide en had nergens iets anders.
 
-**De goedkoopste verzadigde slide is de uitspraakslide.** Eén vraag of één bewering,
-gecentreerd op een vol vlak over de hele slide, verder niets — geen titel, geen kaart, geen
-toelichting. Geoogst uit de kick-off Aidsfonds, waar hij midden in de deck staat: een volledig
-oranje slide met één vraag tussen aanhalingstekens. Hij haalt de bovenkant van de verzadigde
-band zonder rekenwerk, hij kost nul woorden, en op een spreekdeck is hij de plek waar de spreker
-een minuut stil kan vallen. Bouw hem op een layout zonder titel (17) met één `drager()`, en let
-op de contrastregel uit §3: op oranje is de tekst navy tenzij hij op 40pt staat.
 
-Meet het dus, in dezelfde ronde als de render: `qa_tellingen.py --renders` geeft het aandeel
-wit, tint en verzadigd per slide. Zonder die meting blijft besluit 5 een intentie, en dat is
-nagemeten: het middengrijs uit de afgekeurde deck ontstond niet doordat iemand besloot dat elke
-slide in het midden mocht liggen.
+**Wat er níét meer wordt aangemoedigd: een vol vlak dat een kwart van de slide beslaat.**
+`proeven/04` is precies dat — een oranje band van 12,52 bij 1,90 in, gemeten 25 procent
+verzadigd, dus binnen de band die de referentiedecks laten zien — en hij is afgekeurd op de
+render. De reden is dat het oppervlak groot is en bijna niets draagt: de vulling wordt het
+luidste element op de slide terwijl de boodschap vier woorden is. De band van 20 tot 37 procent
+blijft dus staan als méting van wat de winnende decks deden, maar hij is geen doel. Het contrast
+tussen slides haal je door van gevuldheid te wisselen (92/3 tegenover 80/14), niet door een vlak
+groter te maken.
+
+**Reken vol oppervlak wel na, want de schatting zit er structureel naast.** Dit is het enige
+besluit dat je tijdens het bouwen niet ziet. Op een deck dat met deze skill is gebouwd waren twee
+slides als verzadigd aangewezen en maten ze 7 en 12 procent, en beide voelden tijdens het bouwen
+als "die slide is de volle". Een slide is 13,33 bij 7,5 in, dus 100 vierkante inch, en één
+procent verzadigd is ongeveer één vierkante inch vol:
+
+| compositie | vol oppervlak | gemeten verzadigd |
+|---|---|---|
+| één band van 12,52 bij 1,90 in | 23,8 vierkante inch | 25 procent (`proeven/04`, afgekeurd) |
+| één blok van 8,00 bij 2,50 in | 20,0 | 21 procent |
+| vier rijlabels van 3,40 bij 0,98 in | 13,3 | 14 procent (`proeven/02`) |
+| één chip van 1,50 bij 0,46 in per nadrukrij | 1,4 | 3 procent (`proeven/03`) |
+| alleen lichte containers, geen vol vlak | 0 | 1 tot 2 procent |
+
+De vullingssoort hoort hier en niet bij de kaarttaal (§8): welke vulling de standaard is, volgt
+uit de gevuldheid die je hier kiest. Bij weinig accent is dat geen vulling plus één vol vlak, bij
+kaal geen vulling, en bij met kleur de volle hue voor het label en de gekalibreerde tint voor het
+paneel (§4).
+
+Twee dingen om vast te houden. **Een kolom volle rijlabels voelt vol en is het niet**:
+`proeven/02` meet 14 procent, want vier labels van 3,40 in halen samen de helft van wat een band
+over de volle breedte haalt — dus verwacht daar geen verzadigde slide, en ga hem ook niet
+opvullen tot hij er een is. En **een slide met alléén lichte containers** komt uit op 65 tot 69
+procent wit met 30 tot 34 procent tint: dat is geen van de drie gevuldheden hierboven, en het is
+de zone waar de referentie geen enkele slide heeft. Tint over de hele slide is dus een keuze om
+te verantwoorden, geen default.
+
+Meet het in dezelfde ronde als de render: `qa_tellingen.py --renders` geeft het aandeel wit, tint
+en verzadigd per slide. Zonder die meting blijft dit besluit een intentie, en dat is nagemeten:
+het middengrijs uit de afgekeurde deck ontstond niet doordat iemand besloot dat elke slide in het
+midden mocht liggen.
+
+**De uitzondering op dat alles is de uitspraakslide, en die is geen groot vlak op een gewone
+slide.** Eén vraag of één bewering, gecentreerd op een vol vlak over de héle slide, verder niets:
+geen titel, geen kaart, geen toelichting. Geoogst uit de kick-off Aidsfonds, waar hij midden in de
+deck staat als een volledig oranje slide met één vraag tussen aanhalingstekens. Hij valt buiten de
+regel hierboven omdat het bezwaar daar is dat een groot vlak bijna niets draagt terwijl er tekst
+naast staat die het aandacht afneemt — hier is er niets naast, en de vulling ís de slide, net als
+bij de divider en de outro die het sjabloon al heeft. Op een spreekdeck is dit de plek waar de
+spreker een minuut stil kan vallen, en het kost nul woorden.
+
+Bouw hem op een layout zonder titel (17) met één `drager()`, en let op §3: op oranje is de tekst
+navy tenzij hij op 40pt staat. Wat hij níét is: een oplossing voor een slide waar je geen vorm
+voor kon vinden. Eén per deck, en alleen voor de vraag waar het werkelijk om gaat.
+
 
 ## 6. De compositie vult de zone, de blokken volgen de inhoud
 
@@ -277,12 +363,19 @@ is de best gevalideerde vormregel die er is: op één referentieslide staat hij 
 kolom met een 1pt lijn in exact de hue van zijn eigen vulling. Een vlak van 9 procent vulling
 heeft die lijn nodig om als kaart te lezen in plaats van als vlek.
 
-**Een streep scheidt lichter dan een vlak.** Onder een label, tussen twee registers, boven een
+**Een streep scheidt lichter dan een vlak.** Onder een label, tussen twee blokken, boven een
 sluitregel.
 
-**Eén kaarttaal per deck.** De hoekvorm en de vullingssoort van je eerste kaart gelden voor
-elke kaart. Afgerond of recht is vrij; halverwege wisselen is het defect dat het snelst opvalt,
-ook als beide varianten los goed zijn. En dat is gebeurd: drie slides afgerond, de vierde recht.
+**Eén kaarttaal per deck.** De hoekvorm van je eerste kaart geldt voor elke kaart. Afgerond of
+recht is vrij; halverwege wisselen is het defect dat het snelst opvalt, ook als beide varianten
+los goed zijn. En dat is gebeurd: drie slides afgerond, de vierde recht.
+
+Beide varianten staan uitgewerkt in de maatstaf, dus dit besluit heeft een beeld aan elke kant.
+`maatstaf/11` is afgerond met per kaart een 1pt-haarlijn in de eigen hue — vier losstaande
+kaarten die elk een fase dragen. `maatstaf/12` is recht en zónder haarlijn: vier tabelrijen,
+waar het volle rijlabel de rij al begrenst. Dat is de nuance die het onderscheid draagt: de
+haarlijn hoort bij een kaart die los op wit staat, niet bij een rij in een tabelband. Kies je
+recht en staan er losse kaarten op wit, dan komt de haarlijn er dus alsnog bij.
 
 **Eén hoekradius, absoluut.** Een `roundRect` zonder expliciete `adj` krijgt PowerPoints default
 van 16,67 procent van de korte zijde. Dat betekent dat een blok van 1 in hoog een pil wordt en
@@ -512,23 +605,48 @@ rapporteert ze bewust zonder oordeel, en deze paragraaf draait dat niet stilletj
 norm: de getallen hieronder zijn richtwaarden met de meting eronder, geen drempels. Wat er wél
 is: één dichtheidsbesluit per deck, en één toets per slide.
 
-**Het dichtheidsbesluit: spreekdeck of leave-behind.** Dit is een ander onderscheid dan de
-twee registers van §5 — dat gaat over kleurbezetting per slide, dit over woorden per deck —
-en het is het eerste deckbrede besluit in de outline (skill, stap 2).
+**Het dichtheidsbesluit: spreekdeck, licht leave-behind of leave-behind.** Dit is een ander
+onderscheid dan de drie gevuldheden van §5 — dat gaat over kleurbezetting per slide, dit over
+woorden per deck — en het is het eerste deckbrede besluit in het vragenvuur (skill, stap 1).
 
-- **Spreekdeck** — de slide is de achtergrond bij iemand die praat. Wat de spreker zegt hoort
-  niet op de slide; daar staat alleen wat het verhaal draagt, en de toelichting gaat naar de
-  presentatornotities. Dit is het strakke eind. Gemeten: de twee lichtste maatstafslides,
-  `13` en `14`, staan op 50 en 59 woorden inclusief titel — een plot op schaal en een schema,
-  en beide vullen de zone (§6), want weinig woorden is geen lege slide. Het gemeten
-  spreekdeck zat op gemiddeld 85 woorden per contentslide met een piek van 101, en dat is
-  voor deze dichtheid nog steeds te dicht: daar stond uitgeschreven wat de spreker zou
-  zeggen.
+Drie waarden, met per waarde de meting eronder. De getallen zijn woorden per contentslide
+inclusief titel, en het zijn indicaties: ze zeggen welk register je hebt gekozen en niet hoeveel
+woorden er op een slide moeten staan. Ze werken dus twee kanten op. Past het verhaal in minder,
+dan is het minder — onder de band zitten is geen dunne slide maar een slide die klaar is, en
+opvullen tot de band gehaald is, is het defect uit §6 in tekstvorm. Vraagt het verhaal meer, dan
+is het meer: een bewering schrappen om onder een richtwaarde te blijven levert het argument in
+voor de telling. De toets staat verderop in deze paragraaf en gaat over de vorm, niet over het
+aantal.
+
+| dichtheid | indicatie | gemeten aan |
+|---|---|---|
+| spreekdeck | 50 tot 60 | `maatstaf/13` (50) en `14` (59) |
+| licht leave-behind | 90 tot 110 | `maatstaf/12` (99) |
+| leave-behind | 120 tot 145 | `maatstaf/11` (141), `04` (proza in twee kolommen) |
+
+- **Spreekdeck** — er praat iemand bij en het deck gaat daarna niet mee, dus de slide is de
+  achtergrond bij dat verhaal. Wat de spreker zegt hoort niet op de slide; daar staat alleen wat
+  het verhaal draagt, en de toelichting gaat naar de presentatornotities. Dit is het strakke
+  eind. `13` en `14` zijn een plot op schaal en een schema, en beide vullen de zone (§6), want
+  weinig woorden is geen lege slide.
+- **Licht leave-behind** — leesbaar zonder spreker, maar met één boodschap per slide en zonder
+  uitgeschreven spreektekst. Dit register is er bijgekomen omdat de meting het aanwees: het
+  gemeten spreekdeck zat op gemiddeld 85 woorden per contentslide met een piek van 101, en dat
+  is voor een spreekdeck te dicht terwijl het voor een leave-behind te dun is. Het was geen
+  mislukt spreekdeck maar een register zonder naam. `12` is de vorm die erbij hoort — een tabel
+  met verzadigde rijlabels, waar elk woord in een cel staat en de toelichting per rij één regel
+  is. Bij twijfel tussen de twee andere is dit de keuze.
 - **Leave-behind** — de slide moet zonder spreker te lezen zijn (`voice.md`, de bindende
   toets), en mag dus dicht zijn. Een prozaslide met twee goed gezette kolommen is hier een
-  volwaardige exhibit; `maatstaf/04` is precies dat. Gemeten: `12` en `11` staan op 99 en 141
-  woorden inclusief titel, en `11` — vier fasekaarten van ongeveer dertig woorden elk — is
-  van de vier reconstructies de sterkste. 141 woorden is dus geen defect.
+  volwaardige exhibit; `maatstaf/04` is precies dat. `11` — vier fasekaarten van ongeveer
+  dertig woorden elk — is van de vier reconstructies de sterkste. 141 woorden is dus geen
+  defect.
+
+**De dichtheid geldt deckbreed, en een slide die ervan afwijkt heeft toestemming nodig.** Eén
+slide dichter of dunner dan de rest is geen vormfout op zichzelf — een tabel is nu eenmaal
+dichter dan een plot — maar het besluit per slide opnieuw nemen is precies waar de gemeten deck
+op stukliep. Wijkt een slide bewust af, dan staat dat in de outline bij die slide, en het mag
+alleen als de gebruiker in het vragenvuur heeft gezegd dat dit mag (skill, stap 1).
 
 **De toets per slide is niet "hoeveel woorden" maar "staat hier tekst waar een vorm had
 gemoeten".** De hoogste meting, 255 woorden op één slide, was vier kolommen met per kolom
@@ -543,6 +661,57 @@ slides van negentig woorden maakt, heeft het defect verplaatst en niet opgelost 
 is precies de reden dat er op deze telling geen drempel staat. De reductie die wél telt is de
 vorm herzien: een tabel, een schema, of twee slides met elk één boodschap, met per geschrapte
 bewering een reden die op te schrijven is.
+
+---
+
+## 14. Een icoon teken je zelf, en het draagt iets
+
+Er is geen iconenbibliotheek in deze plugin en die komt er niet. Geen gedownloade set, en ook
+niet de iconengalerij van PowerPoint: die staat niet in het sjabloon en sleept een andere
+lijnentaal mee dan de merktekens uit §12. Wat er wél is: `icoon()` in `shapes.py`, dat een eigen
+icoon tekent op een raster van 24 bij 24 eenheden en de discipline afdwingt — één schachtdikte,
+één hue, geen vulling, ronde uiteinden, alles binnen het vierkant, en het geheel als één groep.
+De zes in `proeven/09` zijn zo getekend: document, mensen, kringloop, euro, doel, klok.
+
+**Eerst de vraag die vóór het tekenen komt: draagt het icoon iets wat de tekst niet al draagt?**
+`proeven/10` zet dezelfde drie stappen twee keer neer, boven met een icoon per rij en onder
+zonder, en de onderste helft is de rustigere van de twee: naast een kop die `VERZAMELEN` zegt
+voegt een poppetje niets toe. Een icoon verdient zijn plek in drie gevallen:
+
+- **het codeert een soort** die de lezer moet vergelijken — geld tegenover tijd tegenover mensen,
+  in een set waar dat onderscheid het punt is
+- **het markeert iets dat terugkomt** over meerdere slides, zodat de lezer het herkent zonder de
+  kop te lezen
+- **het vervangt een zin in een schema**, waar een woord de vorm zou breken
+
+Buiten die drie is het decoratie, en decoratie valt onder de regel van §8: een gekleurd vlak dat
+alleen kleur is gaat eruit, en dat geldt net zo voor een lijntekeningetje. De kneepoefening van §1
+is ook hier de toets — blijven de icoontjes over in plaats van de boodschap, dan waren ze
+navigatie.
+
+**De zetting, nagemeten in `proeven/09`:**
+
+| wat | waarde |
+|---|---|
+| raster | 24 bij 24 eenheden; 12 is het midden, 8 en 16 de derden, 4 de marge |
+| schachtdikte | 1,5pt. 1,0 leest als een schets, 2,0 gaat met de kop van 18pt concurreren |
+| maat naast een kop van 18pt | 0,72 in; in een rij 0,60; als drager van de slide 1,10 |
+| ondergrens | 0,44 in — daaronder lopen de lijnen in elkaar en is een streep of een label beter |
+| bovengrens onderdelen | 12; daarboven is het een tekening en hoort het in `sfnl-infographic` |
+| vulling | geen, met één uitzondering: één gevulde stip als het centrum iets betekent |
+
+**De hue: navy, tenzij de kleur iets codeert.** Een icoonlijn van 1,5pt in oranje haalt 2,6 op wit
+(§3) en leest daardoor als een suggestie in plaats van als een teken; op `proeven/10` staan de
+drie iconen in oranje en ze zijn merkbaar lichter dan hun eigen kop ernaast. Draagt de rij een
+hue, dan mag het icoon die hue hebben — dan is het één element in dezelfde codering. Op een
+volle navy of royal vulling is het icoon wit.
+
+**Eén meting die een ronde kostte, en die generiek is voor gebogen vormen:** een boog met een
+pijlkop erop moet je uitrekenen, niet op het oog plaatsen. Het eindpunt van een boog om
+`(cx, cy)` met radius `r` op hoek `graden` is `(cx + r·cos, cy + r·sin)` — met de klok mee, nul
+naar rechts, y naar beneden — en de kop staat op de tangens, 90 graden terug. De eerste
+kringloop had zijn kop op geschatte coördinaten en die zweefde los van de boog: op de render
+duidelijk te zien, in de code niet.
 
 ---
 

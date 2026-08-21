@@ -14,15 +14,22 @@ dan het origineel staat hieronder.
 
 Kijk naar de compositie van deze slides, niet naar hun uitvoering.
 
+**Vier van de veertien zijn ook het antwoord op een vraag uit het vragenvuur** (skill, stap 1),
+en dat is de reden dat ze hier met een getal in de tabel staan. De drie dichtheden hangen elk aan
+een slide — `13` en `14` zijn een spreekdeck (50 en 59 woorden inclusief titel), `12` is een licht
+leave-behind (99), `11` een leave-behind (141) — en de twee kaarttalen staan naast elkaar: `11` is
+afgerond met per kaart een 1pt-haarlijn in de eigen hue, `12` is recht en zonder haarlijn. Zo
+heeft elk antwoord in dat blok een beeld, in plaats van alleen een default met een reden.
+
 | slide | blijft de lat voor | is de lat NIET voor |
 |---|---|---|
 | `01-getallenrij-vier-hues` | de vier hues, de brede panelen eronder | het grote getal staat over zijn eigen label; de onderste helft van de vier kaarten is leeg |
 | `04-twee-kolommen-teal-tegen-koraal` | twee hues voor een tegenstelling, proza als exhibit, een bronregel per kolom | de aanhef staat in Montserrat SemiBold binnen een Lato Light-alinea — twee families in één tekstregel, en dat mag sinds `vormentaal.md` §9 niet meer |
 | `06-stroomschema-twee-rijen` | het schema zelf, de twee rijen | het grote getal staat over zijn eigen label |
 | `08-tabel-naast-grafiek` | de tabelzetting naast een native grafiek | dezelfde omzetreeks staat twee keer op één slide (`adviesvorm.md` §2) |
-| `11-vier-fasekaarten-tweede-uitgelicht` | de cirkelbadge in de hue van de kaart, de gestreepte oranje nadruk om één kaart, vier hues die vier fasen coderen, de afsluitband die één keer voorkomt | de body staat op 13pt in plaats van 16 (vier kaarten van 2,95 in laten niet meer toe) |
-| `12-tabel-verzadigde-rijlabels-puntenmeter` | het volle rijlabel tegen het nauwelijks getinte paneel, de puntenmeter als merkteken voor gewicht, kolomkoppen in grijs | de kapitaallabels staan op 12pt omdat `VERANTWOORDEN` op 14pt niet in de cel past; dat is een gevolg van de kolombreedte, geen model |
-| `13-dumbbell-plot-op-schaal` | positie draagt de informatie, twee hues voor twee meetmomenten, het lichte register: alleen lijnen en punten op wit, en een aslabel dat binnen de zone blijft terwijl de tik op schaal staat | — |
+| `11-vier-fasekaarten-tweede-uitgelicht` | de cirkelbadge in de hue van de kaart, de gestreepte oranje nadruk om één kaart, vier hues die vier fasen coderen, de afsluitband die één keer voorkomt; en als antwoord in het vragenvuur: kaarttaal afgerond met een haarlijn in de eigen hue, dichtheid leave-behind (141 woorden) | de body staat op 13pt in plaats van 16 (vier kaarten van 2,95 in laten niet meer toe) |
+| `12-tabel-verzadigde-rijlabels-puntenmeter` | het volle rijlabel tegen het nauwelijks getinte paneel, de puntenmeter als merkteken voor gewicht, kolomkoppen in grijs; en als antwoord in het vragenvuur: kaarttaal recht zónder haarlijn — het volle rijlabel begrenst de rij al — en dichtheid licht leave-behind (99 woorden) | de kapitaallabels staan op 12pt omdat `VERANTWOORDEN` op 14pt niet in de cel past; dat is een gevolg van de kolombreedte, geen model |
+| `13-dumbbell-plot-op-schaal` | positie draagt de informatie, twee hues voor twee meetmomenten, het lichte register: alleen lijnen en punten op wit, en een aslabel dat binnen de zone blijft terwijl de tik op schaal staat; en als antwoord in het vragenvuur: dichtheid spreekdeck (50 woorden) | — |
 | `14-postitwand-drie-stappen` | het schema in abstracte vorm zonder tekst, het grote cijfer met de kaplabel op één baseline en een lijn eronder, de pijl die een volgorde draagt | tussen het schema en de drie kolommen staat 0,58 in wit en onderaan nog 0,67 in; de slide leest luchtiger dan het origineel |
 
 ## De meting bij `04`
