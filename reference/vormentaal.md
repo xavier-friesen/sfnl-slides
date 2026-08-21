@@ -132,8 +132,8 @@ blijft het oranje.
 categorieën die door de hele deck terugkomen: dan dragen drie of vier hues tegelijk informatie,
 en dat neem je één keer voor de hele deck (skill, stap 1, besluit 4), met per hue in één woord
 wat hij codeert. `maatstaf/11` en `12` zijn beide zo'n set — vier fasekaarten en vier
-tabelrijen in royal, oranje, sky en emerald — en ze zijn dus geen bewijs dat vier hues per slide mogen. Wie een
-set per slide opnieuw verzint, krijgt dezelfde rol in twee kleuren.
+tabelrijen in royal, oranje, sky en emerald — en ze zijn dus geen bewijs dat vier hues per
+slide mogen. Wie een set per slide opnieuw verzint, krijgt dezelfde rol in twee kleuren.
 
 **Rol naar hue, één keer en dan vasthouden.** Heb je besloten dat kleur iets codeert, schrijf dan
 op welke categorie welke kleur krijgt, en beslis er daarna niet meer over. Dezelfde rol die op
