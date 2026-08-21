@@ -5,7 +5,7 @@ Usage:
     python qa_tellingen.py <deck.pptx> --renders <map>   # ook de registerverdeling
     python qa_tellingen.py <deck.pptx> --strict          # ook een warn geeft exit 1
 
-Dit is een hygiënerapport in dezelfde categorie als `qa_text.py`, en **geen tweede
+Dit is een hygiënerapport in dezelfde categorie als `qa_text.py`, en **geen derde
 poort.** De poorten van deze plugin zijn het vragenvuur en de outline, en beide zijn
 een mens die ja zegt; daarna beslist de render, met `deck-visual-reviewer` als het oog.
 Dat staat zo in de README ("Poorten: twee, en beide zijn een mens") en dit script

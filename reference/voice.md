@@ -141,8 +141,8 @@ elk hoofdstuk een divider.
 
 ### In modus B draagt de contentzone de boodschap mee
 
-De subtitel is 14pt Montserrat Light, grijs en gespatieerd. Dat is het lichtste element van
-de slide. Zet je de bewering van de slide daar en alleen daar, dan is de zwaarste regel het
+De subtitel is 14pt Montserrat Light met `spc="150"`, in `tx1` — dus geen grijs, maar door zijn
+maat en gewicht wel het lichtste element van de slide, onder een titel van 24pt Gotham Bold. Zet je de bewering van de slide daar en alleen daar, dan is de zwaarste regel het
 hoofdstuklabel — `2. RESULTAAT` — en dat zegt niets. Zo kwamen alle ronde-3-decks in modus B
 eruit: de hiërarchie omgekeerd, en op papier stond de boodschap in het slechtst leesbare
 element.
@@ -191,7 +191,7 @@ en de QA klagen er niet over, en jij ook niet bij een review.
 **Het budget blijft staan** voor de subtitels die je wél schrijft. Eén zin, **maximaal
 ± 120 tekens**, en het liefst op één regel. Twee regels is het maximum; drie regels lopen
 door de oranje dash op 1.72 in en over de bovenkant van de contentzone. Op 14pt Montserrat
-Light over 12.24 in gaat er fysiek ongeveer 90 tekens op een regel, dus 120 tekens is een
+Light over de 12,32 in die na de insets overblijft gaan er fysiek ongeveer 90 tekens op een regel, dus 120 tekens is een
 marge, geen limiet die je opzoekt. Geen script meet dit betrouwbaar: het is een
 schrijfbudget dat je bij het schrijven aftelt. Past de zin er niet in, dan is korter
 schrijven de eerste optie en de subtitel weglaten de tweede — nooit de derde regel.

@@ -24,7 +24,8 @@ defusedxml>=0.7
 # platform falls back to LibreOffice, or to QA-only mode when that is absent too.
 pywin32>=306; sys_platform == "win32"
 
-# Test suite only. `pytest` with no arguments runs the fast set; see pytest.ini.
+# Alleen als je zelf tests schrijft. Deze plugin-repo draagt geen testsuite en geen
+# pytest.ini; de scripts documenteren hun eigen metingen in de docstring.
 pytest>=8.0
 
 # thumbnail.py composes the labelled contact sheet from the rendered PNGs.

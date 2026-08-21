@@ -32,8 +32,10 @@ documenten en moest de repo doorzoeken voordat hij aan stap 1 kon beginnen.
 2. `reference/adviesvorm.md` — de laag erboven: antwoord voorop, exhibitcraft, de
    schetsplicht en de weigerlijst. Wat een deck beslisklaar maakt.
 3. `assets/proeven/LEESMIJ.md` — de kleur- en gevuldheidsproef: zes renders met de metingen
-   eronder die de kleurregels van §3 en de oppervlakken van §5 onderbouwen. Geen lat, wel het
-   bewijs. Lees deze wanneer je besluit 2 of 3 neemt.
+   eronder die de kleurregels van §3 en de oppervlakken van §5 onderbouwen, plus vier die er
+   later bij kwamen — `07` en `08` zijn titelmodus B, `09` en `10` de icoonproef. Geen lat, wel
+   het bewijs. Lees deze wanneer je besluit 2, 3 of 4 neemt, en opnieuw wanneer je een icoon
+   overweegt.
 4. `assets/maatstaf/*.png` — veertien voorbeelden: tien uit decks die de vergelijking hebben
    gewonnen, en vier reconstructies van slides die als de mooiste uit deze skill kwamen. Kijk
    ernaar. Ze zijn niet om na te tekenen maar om te weten waar de lat ligt.
@@ -89,8 +91,10 @@ kiest:
 
 **Twee dingen worden niet gevraagd, want ze zijn geen keuze van de lezer.** De vier maten zijn
 een regel (`vormentaal.md` §2) met één tweesprong: de body mag naar 12pt bij een kaartenrij van
-drie of meer of een tabelcel, en dat volgt uit de compositie en niet uit een voorkeur — de prijs
-is te zien op `maatstaf/11`, waar vier kaarten van 2,95 in de body op 13pt duwen. En de kaarttaal
+drie of meer of een tabelcel, en dat volgt uit de compositie en niet uit een voorkeur. De prijs
+staat op `maatstaf/11`: vier kaarten van 2,95 in laten 16pt niet toe, en de reconstructie is daar
+op 13pt uitgekomen — een maat die §2 niet kent, en `maatstaf/LEESMIJ.md` noemt hem dan ook als
+defect van die slide. De uitweg is 12pt, niet een eigen tussenmaat. En de kaarttaal
 kiest de skill zelf: recht of afgerond, deckbreed, met een 1pt-haarlijn in de eigen hue op elk
 licht vlak dat los op wit staat. Beide varianten zijn uitgewerkt — `maatstaf/12` is recht zonder
 haarlijn omdat het volle rijlabel de rij al begrenst, `maatstaf/11` is afgerond met haarlijn — en
@@ -224,8 +228,12 @@ verderop kan nooit een besluit eerder in de rij terugdraaien.
 
    Modus B is gebouwd, dus je kunt hem laten zien: `proeven/08` is de contentslide met de
    hoofdstuknaam als titel en de bewering in de subtitel, en `proeven/07` is de divider die
-   ervoor hoort. Let op wat de subtitel kost: hij duwt de contentzone omlaag, dus in modus B
-   begint elke slide van dat hoofdstuk lager dan in modus A.
+   ervoor hoort. Let op wát de subtitel kost, want het is niet ruimte: hij staat in de geërfde
+   header (`0.48, 1.04 · 12.52 × 0.63`, boven de dash op 1,72) en de contentzone begint in beide
+   modi op 1,93. Wat hij kost is hiërarchie — 14pt Montserrat Light onder een titel van 24pt
+   Gotham Bold is het lichtste element van de slide, dus de bewering die daar staat moet in de
+   contentzone een drager krijgen (`voice.md`, In modus B draagt de contentzone de boodschap
+   mee).
 
    Dit besluit varieert nooit per slide en wordt ook nooit per slide aan de skill gelaten: de
    modus is precies de afspraak die de titelrij van de hele deck leesbaar houdt. Half A en half B
@@ -271,10 +279,14 @@ advies, dan is dat een bewuste keuze die je in de outline motiveert.
   het instrument dat de leidende zin draagt, en ook daar per slide optioneel: is er geen
   leidende zin, dan blijft de hoofdstuktitel alleen staan.
   Schrijf je er een, dan geldt het budget uit `voice.md`: één zin, hooguit twee regels. De
-  toets: kun je de subregel vervangen door "hieronder staat het", dan schrap je hem. Een
-  ontbrekende subtitel is nooit een bevinding — niet in de QA en niet in een review.
+  toets: kun je de subregel vervangen door "hieronder staat het", dan schrap je hem. Twee of
+  drie subtitels in een deck van twaalf slides is dus normaal en twaalf is een signaal dat de
+  titels hun werk niet doen (`voice.md`, Titels). Een ontbrekende subtitel is nooit een
+  bevinding — niet in de QA en niet in een review.
 - **Layout** — met het nummer, en kies niet standaard 19. Een tweeluik is 22, waar de
-  kolomkoppen geërfde placeholders zijn die je mag herkleuren. Doorlopende tekst is 20. Een
+  kolomkoppen geërfde placeholders zijn: die geven je de doos en de zetting, maar `set_text.py`
+  kent geen kleur, dus wil je de kop in de hue van zijn kolom, dan laat je de placeholder leeg
+  en zet je hem zelf met `label()` in dezelfde doos. Doorlopende tekst is 20. Een
   schema over de volle hoogte zonder titel is 17. Vier contentslides op 19 achter elkaar is de
   eenvormigheid waarop de vergelijking verloren is.
 - **Boodschap** — in één zin: wat moet de lezer hiervan overhouden.
@@ -328,9 +340,18 @@ duidelijke blokken mag het. Onder vijf niet. Nooit twee achter elkaar en nooit a
 slide. Een foto mag het onderwerp niet tegenspreken; past er voor geen enkel hoofdstuk een
 passende foto, kies dan één neutrale voor allemaal — consistentie boven variatie.
 
+**De uitspraakslide, als de deck er een heeft.** Eén vraag of één bewering, gecentreerd op een
+vol vlak over de hele slide, verder niets: geen titel, geen kaart, geen toelichting. Dat is de
+enige plek waar een groot vol vlak los van de gevuldheidsregel staat, want er staat niets naast
+dat de aandacht moet delen (`vormentaal.md` §5). Bouw hem op layout 17 met één `drager()` — niet
+op layout 5, dat is het citaat over een foto met de oranje band eronder. Eén per deck, en alleen
+voor de vraag waar het werkelijk om gaat.
+
 **Cover en slot.** Slide 1 is layout 1, het 2×2 kleurraster met de foto en de witte logokaart.
-Past de dektitel niet op de layoutmaat, dan groeit het vak naar boven; kies niet layout 4 omdat
-de titel niet past, want dat levert de vlakkere cover op. Nooit de organisatienaam als kop. De
+Past de dektitel niet op de layoutmaat (`7.63, 5.79 · 5.33 × 0.56`, één regel), dan groei je dat
+vak zelf naar boven — daar is ruimte, en onder het vak zit de klant-en-datumregel al. `fit_title.py`
+doet dat niet voor je: dat script raakt alleen de contentlayouts 19 t/m 22. Kies dus ook niet
+layout 4 omdat de titel niet past, want dat levert de vlakkere cover op. Nooit de organisatienaam als kop. De
 klant-en-datumregel (idx 13) vul je als lijst van twee: de klant op regel één, de datum op
 regel twee — als één regel breekt hij op de smalle placeholdermaat midden in de datum. Een
 extern deck eindigt op layout 2 of 3, de oranje outro zonder tekstplaceholders. Een intern deck
@@ -345,8 +366,9 @@ niet bouwen omdat de outline "duidelijk genoeg" lijkt.
 
 ## Stap 3 — Bouwen
 
-Zes stappen. Alle paden hieronder zijn relatief aan de plugin-map; `$S` staat voor het pad
-naar `scripts/`.
+Zes stappen. Alle paden hieronder zijn relatief aan de plugin-map; `$S` is `${CLAUDE_PLUGIN_ROOT}/scripts`
+en `<plugin>` hieronder is `${CLAUDE_PLUGIN_ROOT}` zelf — dezelfde map, drie schrijfwijzen,
+en er is er maar één.
 
 **Windows: houd de builddir kort.** De uitgepakte boom gaat 53 tekens diep, dus werk in
 `C:/w/<naam>` en zet het eindbestand daarna op zijn plek. `prepare_template.py` rekent dit
@@ -427,7 +449,7 @@ decks bij zijn gekomen, en die je anders zelf gaat namaken:
   rij pakt de volle breedte en draagt een volle vulling, en scheidt twee delen van dezelfde
   tabel zonder een tweede kop.
 
-`reference/merktekens.md` heeft er nog zesentwintig, met per stuk wat het codeert en of de laag
+`reference/merktekens.md` heeft er nog zevenentwintig, met per stuk wat het codeert en of de laag
 het al kan. Lees dat wanneer je merkt dat je een kaart met tekst aan het maken bent.
 
 **Gebruik `scripts/shapes.py`.** Dat is de primitievenlaag: vlakken, lijnen, tekstruns,
@@ -558,8 +580,9 @@ python $S/clean.py unpacked
 python $S/office/pack.py unpacked deck.pptx --original <plugin>/assets/sfnl-sjabloon.potx
 ```
 
-`fit_title.py` meet de titels met het echte Gotham Bold, laat de titelbox naar boven groeien
-waar hij twee regels nodig heeft, en toetst de titelmodus die je in besluit 4 koos: titels in
+`fit_title.py` meet de titels met het echte Gotham Bold en laat de titelbox omlaag groeien waar
+hij twee regels nodig heeft — de bovenkant blijft staan, de onderkant zakt de subtitelband in, en
+dat gebeurt uitsluitend op de contentlayouts 19 t/m 22, en toetst de titelmodus die je in besluit 4 koos: titels in
 onderkast, in modus B een titel over twee regels, en in modus A een gevulde subtitel. Die
 laatste is een `critical` zodra de titel twee regels beslaat — de gegroeide titelbox loopt er
 dan over — en verder een `warn`, want in modus A schrijf je geen subtitel tenzij er een feit
@@ -638,7 +661,8 @@ Wat je in de eerste ronde zelf al gaat zien, en wat geen regel voor je oplost:
 titels en koppen in echte PowerPoint rúimer uit dan je ziet. Compositie, wit, overlap en
 uitlijning beoordeel je gewoon; regelafbreking en dus vakhoogte niet. Rek in dat geval geen
 tekstvak met de hand op om een afbreking te repareren — dat vak staat dan in de echte weergave te
-ruim. De cover is de gevoeligste plek, want daar groeit het titelvak naar boven.
+ruim. De cover is de gevoeligste plek, want daar staat de dektitel op één regel in een vak van
+5,33 in dat je zelf op maat hebt gezet, en geen script rekent hem na.
 
 ### Escalatie naar `sfnl-infographic`
 
@@ -680,9 +704,10 @@ zijn een mens die ja zegt. Het telt zes dingen die
 mechanisch vast te stellen zijn en die afwijken van besluiten die je zelf hebt genomen: meer
 dan één maat per rol, een band vaker dan één per vier slides, nul grafieken en tabellen in een
 deck met cijfers, een maatsprong onder 2 op een slide, Montserrat en Lato in dezelfde alinea,
-en de hoge punt binnen een regel. Alleen de laatste drie categorieën blokkeren — maten per rol,
-letterfamilies en de hoge punt — en dat zijn precies de drie waar geen interpretatie aan te pas
-komt.
+en de hoge punt binnen een regel. Drie daarvan blokkeren: maten per rol, letterfamilies en de
+hoge punt. Dat zijn precies de drie waar geen interpretatie aan te pas komt. De andere drie —
+bandfrequentie, nul exhibits bij cijfers, en een maatsprong onder 2 — zijn een `warn`, want geen
+van de drie is zonder de render te beoordelen.
 
 Vier getallen komen zonder oordeel mee: woorden per slide en per element, de registerverdeling
 (alleen met `--renders`), en de herhaalde plattegrond. Daar staat bewust geen drempel op. Een
@@ -718,10 +743,12 @@ dat je niet hebt kunnen verifiëren noem je expliciet.
 
 ## Wat blokkeert
 
-Zes dingen. De eerste drie zijn van de soort "het bestand is stuk". De twee daarna gaan over
-de letter, en ze staan hier alleen omdat ze te tellen zijn: Gotham Bold hoort niet in de
-contentzone, en een titel die over de subtitel heen groeit laat tekst verdwijnen. Verder blokkeert
-er niets op vormgeving; dat oordeel komt van de render.
+Zes dingen. De eerste drie zijn van de soort "het bestand is stuk", en 4 tot 6 zijn een
+`critical` uit een script. Wat daarin over vorm gaat, staat er alleen omdat het te tellen is
+zonder interpretatie: Gotham Bold hoort niet in de contentzone, dezelfde rol staat niet op twee
+maten, een alinea draagt één letterfamilie, de hoge punt scheidt niets, en een titel die over de
+subtitel heen groeit laat tekst verdwijnen. Verder blokkeert er niets op vormgeving; dat oordeel
+komt van de render.
 
 1. Het content-type staat niet op `presentation.main`. PowerPoint opent de deck dan in
    sjabloonmodus.
@@ -744,7 +771,7 @@ Bouw conservatiever: minder elementen per slide, ruimere marges tussen vormen, e
 in tot ruim binnen zijn vak in plaats van precies. Meet wat je kunt meten:
 
 ```bash
-python $S/fit_title.py unpacked       # passen de titels op één regel, met het echte font
+python $S/fit_title.py unpacked --check   # passen de titels, met het echte font, zonder te schrijven
 python $S/inspect_deck.py deck.pptx   # wat staat er werkelijk op elke slide
 python $S/qa_tellingen.py deck.pptx   # zonder --renders: geen registerverdeling
 ```

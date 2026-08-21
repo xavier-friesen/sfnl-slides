@@ -17,11 +17,11 @@ dus `slideLayout19.xml`.
 | 19 | Titel, subtitel | **De contentslide.** Titel, optionele subtitel, een lege contentzone die je zelf componeert. Begin hier. |
 | 20 | 1_Titel, subtitel, tekst | Één tekstplaceholder over de volle contentzone. Voor een slide waar doorlopende tekst de vorm is. |
 | 21 | Titel, subtitel, twee tekstvakken | Twee kolommen over de volle hoogte. |
-| 22 | 1_Titel, subtitel, twee tekstvakken | **De layout voor het tweeluik.** Twee kolommen met een geërfde kop per kolom. Die kop mag je herkleuren en verzwaren: 18pt Montserrat SemiBold met `spc="100"` in de hue van de kolom. Zo krijg je een gekleurde kop zonder een gevulde balk te tekenen. Alle vijf de winnende decks gebruiken deze layout. |
+| 22 | 1_Titel, subtitel, twee tekstvakken | **De layout voor het tweeluik.** Twee kolommen met een geërfde kop per kolom. Die kop hoort er als 18pt Montserrat SemiBold met `spc="100"` in de hue van de kolom te staan — een gekleurde kop zonder een gevulde balk — maar `set_text.py` kan geen kleur zetten. Wil je de hue, laat de placeholder dan leeg en zet de kop zelf met `label()` in dezelfde doos. Alle vijf de winnende decks gebruiken deze layout. |
 | 17 | Leeg | Blanco canvas: geen placeholders, geen header, geen dash. Voor full-bleed beeld of een schema over de volle hoogte. Draagt de slide een gewone titel, dan is het 19. |
 | 1 | 1_Titelslide | Cover met het 2×2 kleurraster, foto rechtsboven, witte logokaart over het midden. |
 | 4 | 7_Titelslide | Cover met een titel over de volle breedte. |
-| 5 | Quote | Citaat over een foto, met de oranje band van de layout eronder. |
+| 5 | Quote | Citaat over een foto, met de oranje band van de layout eronder. Niet te verwarren met de uitspraakslide van `vormentaal.md` §5: die is één vol vlak zonder foto en staat op 17. |
 | 2, 3 | 5_ en 6_Titelslide | Oranje outro met logo. Afsluiter van een extern deck. |
 | 6 t/m 16 | *_sectieslide_stijl1 | Sectiedividers met foto. Elf varianten die alleen in fotokeuze en compositie verschillen. |
 | 25 t/m 30 | *_sectieslide_stijl2 | Agenda's en opsommingen; de lijst zit in idx 11. |
@@ -86,17 +86,18 @@ Voor eigen vormen in de contentzone:
 |---|---|---|---|
 | 2, gevuld | 0.48, 6.86 | 6.14 | 0.24 |
 | 2, proza | 0.48, 6.82 | 5.91 | 0.43 |
-| 3 | 0.48, 4.65, 8.82 | 3.94 | 0.24 |
-| 4 | 0.48, 3.61, 6.74, 9.87 | 2.89 | 0.24 |
+| 3 | 0.48, 4.73, 8.99 | 4.01 | 0.24 |
+| 4 | 0.48, 3.67, 6.86, 10.05 | 2.95 | 0.24 |
+
+Alle vier lopen door tot de rechterrand 13,00; `cols(n, goot)` in `shapes.py` rekent ze zo uit.
+De rij "2, proza" is de eigen maat van layout 21 en 22 en niet die van de formule — daar staat
+`PROZA_2` voor.
 
 De goot hangt af van de vulling. Bij **gevulde** blokken doet de vulling het scheidingswerk, dus
 0,20 tot 0,24 in is genoeg — een bredere goot maakt het raster los. Bij **ongevulde**
 prozakolommen heeft de tekst die lucht wél nodig; dan is 0,43 in de maat, en dat is precies wat
 layout 21 en 22 zelf gebruiken (5,91 op x 0,48 en x 6,82). Bouw je náást een placeholder van die
 layouts, volg dan hun maat.
-
-Voor *n* elementen met goot *g*: breedte is `(12.52 - g × (n - 1)) / n` en element *i* staat op
-`0.48 + i × (breedte + g)`.
 
 Voor *n* elementen over de volle contentbreedte met een goot *g*: breedte is
 `(12.52 - g × (n - 1)) / n` en element *i* staat op `0.48 + i × (breedte + g)`.
@@ -220,7 +221,7 @@ een `critical`.
 
 ## Valkuilen
 
-Acht dingen die stil misgaan en die je niet kunt afleiden.
+Negen dingen die stil misgaan en die je niet kunt afleiden, plus één procesval onderaan.
 
 1. **Calibri.** Een eigen vorm erft `otherStyle`, en dat is 18pt `+mn-lt` = Calibri. Élke run
    in een eigen vorm draagt dus een expliciete `<a:latin typeface="..."/>`. Vergeet je dat,

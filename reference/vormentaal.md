@@ -11,7 +11,7 @@ slides — en de vier reconstructies `11` tot `14` in `assets/maatstaf/`. Waar e
 verkeerd te lezen bleek, staat de verkeerde lezing er expliciet bij — dat is geen overbodige
 uitleg, dat zijn fouten die daadwerkelijk gemaakt zijn.
 
-`merktekens.md` staat ernaast: tien merktekens uit bestaande SFNL-decks, met per stuk wat het
+`merktekens.md` staat ernaast: dertig merktekens uit elf bestaande SFNL-decks, met per stuk wat het
 codeert en of de laag het al kan. Dat is geen catalogus om uit te kiezen maar het antwoord op de
 vraag "wat kan ik eigenlijk tekenen" — de vraag die de bouwer stelt op het moment dat hij anders
 een kaart met tekst maakt.
@@ -71,8 +71,10 @@ doorlopende regel is `Lato Semibold`, want één regel is één familie (§9). G
 staat alleen in de titel, en die schrijf je niet zelf — hij komt uit de layout. Schrijf je hem
 toch in de contentzone, dan weigert `run()` het en blokkeert `qa_text.py` de deck.
 
-12pt is de dichte variant voor een kaartenrij van drie of meer of een tabelcel, en de vloer.
-14pt is het kapitaallabel. 10pt gebruik je niet meer.
+12pt is de dichte variant voor een kaartenrij van drie of meer of een tabelcel, en het is de
+vloer voor alles wat gelezen wordt. De voetnoot van 11pt valt daarbuiten: dat is een eigen rol
+met een eigen maat, geen kleinere body. 14pt is het kapitaallabel. 10pt gebruik je niet meer, en
+13 of 15pt bestaan niet — een tussenmaat is altijd een rol die zijn eigen maat verloor.
 
 **Dezelfde rol houdt deckbreed dezelfde maat.** De afgekeurde deck had vier bodymaten en drie
 sluitregelmaten over vier slides. Los is elke slide dan correct en naast elkaar leest het als
@@ -281,7 +283,8 @@ naast staat die het aandacht afneemt — hier is er niets naast, en de vulling �
 bij de divider en de outro die het sjabloon al heeft. Op een spreekdeck is dit de plek waar de
 spreker een minuut stil kan vallen, en het kost nul woorden.
 
-Bouw hem op een layout zonder titel (17) met één `drager()`, en let op §3: op oranje is de tekst
+Bouw hem op een layout zonder titel (17) met één `drager()` — niet op layout 5, dat is het
+citaat over een foto — en let op §3: op oranje is de tekst
 navy tenzij hij op 40pt staat. Wat hij níét is: een oplossing voor een slide waar je geen vorm
 voor kon vinden. Eén per deck, en alleen voor de vraag waar het werkelijk om gaat.
 
@@ -505,7 +508,8 @@ identiek zijn en niet bijna.
 
 Variatie zit niet in het layoutnummer. Zes contentslides op layout 19 met zes verschillende
 composities is goed. Maar kies de layout ook niet standaard: een tweeluik is layout 22, waar de
-kolomkoppen geërfde placeholders zijn die je mag herkleuren en verzwaren; doorlopende tekst is
+kolomkoppen geërfde placeholders zijn waarvan je de doos overneemt en de kop zelf zet, want
+`set_text.py` kent geen kleur (`sjabloon.md`, Welke layout waarvoor); doorlopende tekst is
 20; een schema over de volle hoogte zonder titel is 17. Vier contentslides op 19 achter elkaar
 is de eenvormigheid waarop de vergelijking verloren is.
 

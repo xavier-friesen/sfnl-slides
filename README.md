@@ -23,7 +23,7 @@ Deze plugin neemt de dunne laag mee en laat de vormgevingspolitie liggen.
 | Vorm per slide | gekozen uit tien patronen, vastgelegd in een spec | zelf gecomponeerd tijdens het bouwen |
 | Poorten | outline, spec, QA-drempels | twee, en beide zijn een mens: het vragenvuur en de outline |
 | Vormbeoordeling | `qa_fit.py` en `qa_typography.py` meten, daarna de render | de render, met tellingen als hygiëne ernaast |
-| Scripts | ± 18.100 regels | ± 7.400 regels |
+| Scripts | ± 18.100 regels | ± 13.600 regels |
 | Skills | vijf | één |
 
 ## Installeren
@@ -49,13 +49,15 @@ ze delen geen bestanden en importeren niet over de grens.
 ## Wat er in zit
 
 ```
-skills/sfnl-slides/SKILL.md     de route: vragenvuur, outline, zes bouwaanroepen, de loop
+skills/sfnl-slides/SKILL.md     de route: vragenvuur, outline, zes bouwstappen, de loop
 reference/vormentaal.md         de maatstaf in proza — waar de lat ligt
 reference/adviesvorm.md         de laag erboven — antwoord voorop, exhibitcraft, weigerlijst
-reference/sjabloon.md           geometrie, layouts, placeholderdozen, acht valkuilen
+reference/sjabloon.md           geometrie, layouts, placeholderdozen, negen valkuilen
+reference/merktekens.md         dertig merktekens uit elf decks, met wat elk codeert
 reference/voice.md              de taal op de slide
+reference/layouts.json          de sjabloonfeiten per layout, waar de scripts op keyen
 agents/deck-visual-reviewer.md  de visuele beoordeling, als subagent
-assets/sfnl-sjabloon.potx       het geprunde sjabloon, 5,8 MB
+assets/sfnl-sjabloon.potx       het geprunde sjabloon, 5,5 MB
 assets/maatstaf/                veertien slides: tien uit winnende decks, vier reconstructies
 assets/proeven/                 de kleur- en gevuldheidsproef, met de metingen eronder
 assets/keuzekaarten/            de keuzekaart die bij het vragenvuur meegaat
@@ -64,7 +66,8 @@ scripts/                        de dunne laag
 
 ## De dunne laag
 
-Zestien scripts plus `office/`, samen ongeveer 7.400 regels. Ze dragen de kennis uit vijf
+Twintig scripts plus `office/`, samen ongeveer 13.600 regels — 10.400 in `scripts/` en 3.200
+in `office/`. Ze dragen de kennis uit vijf
 QA-rondes: dat een `.potx` zijn content-type naar `presentation.main` moet, dat LibreOffice op
 Windows over `MAX_PATH` valt, dat `python-pptx` grafieken sloopt als je na `add_chart` nog een
 keer in- en uitpakt, waar de huisstijlfonts staan.
@@ -95,9 +98,12 @@ patroonbibliotheek, spec-contract en meting-op-maat.
 
 ## Wat blokkeert
 
-Vier dingen, allemaal "het bestand is stuk", geen van de vier over vormgeving: het content-type
-staat niet op `presentation.main`, `pack.py` meldt een schemafout, de grafieken zijn verdwenen
-na de laatste `pack`, of `qa_text.py` meldt een `critical`.
+Zes dingen. Drie van de soort "het bestand is stuk" — het content-type staat niet op
+`presentation.main`, `pack.py` meldt een schemafout, de grafieken zijn verdwenen na de laatste
+`pack` — en drie `critical`s uit een script: `qa_text.py`, `fit_title.py` en `qa_tellingen.py`.
+Wat daarin over vorm gaat is te tellen zonder interpretatie: de titelletter, één maat per rol,
+één letterfamilie per alinea, de hoge punt, en een titel die over zijn subtitel heen groeit.
+`SKILL.md` somt ze op onder "Wat blokkeert".
 
 De vorm wordt beoordeeld op de render. Is er geen renderer, dan bouwt de skill conservatiever
 en zegt bij oplevering letterlijk dat het deck niet visueel geverifieerd is.

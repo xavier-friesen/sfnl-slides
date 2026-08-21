@@ -373,8 +373,10 @@ onderhoudsgereedschap en geen bouwstap.
 
 Daarvoor moest één gat gedicht worden: titelmodus B had geen render. Die is er nu
 (`proeven/07`, `08`) — een divider uit fotolayout 6 met de hoofdstuknaam, en een contentslide met
-diezelfde naam als titel en de bewering in de subtitel. Bijvangst voor de doctrine: de subtitel
-duwt de contentzone omlaag, dus in modus B begint elke slide van dat hoofdstuk lager.
+diezelfde naam als titel en de bewering in de subtitel. De bijvangst die hier stond — "de
+subtitel duwt de contentzone omlaag" — is later nagemeten en onjuist: de subtitel staat op
+`1.04 · 0.63`, dus boven de dash op 1,72, en de zone begint in beide modi op 1,93. Wat modus B
+werkelijk kost is hiërarchie, niet ruimte.
 
 ## Ronde 6 — iconen, getekend en niet geleend
 
@@ -414,17 +416,18 @@ coördinaten en die zweefde los van de boog — in de code onzichtbaar, op de re
 - **Een tweede testronde ná de tellerreparaties** is niet gedraaid. De vier reparaties in
   `qa_tellingen.py` maken drie ontwerpbesluiten weer vrij die de bouwer onder dwang van de
   teller had genomen (labelmaat naar 12pt, badges naar 18pt, merkstreepje naar 1,60 in).
-- **De vier goede voorbeeldslides zijn alleen als afbeelding in het gesprek beschikbaar**, niet
-  als bestand. Ze zijn de feitelijke lat voor werklijn A en de blinde vergelijking, en ze horen
-  eigenlijk in `assets/maatstaf/` naast de tien bestaande. Daarvoor zijn de PNG-bestanden nodig.
+- ~~De vier goede voorbeeldslides zijn alleen als afbeelding beschikbaar, niet als bestand.~~
+  **Gedaan.** Ze staan als `11` tot `14` in `assets/maatstaf/`, met per slide in `LEESMIJ.md`
+  waarvoor ze de lat zijn en waarvoor niet.
 - **Twee referenties ontbreken nog steeds als A/B op dezelfde inhoud:** recht tegen afgerond
   (kaarttaal) en 16 tegen 12pt body. Beide zijn nu besluiten van de skill zelf, dus ze staan niet
   op de keuzekaart — maar de bouwer kiest ze wel blind.
 - **De drie dichtheden zijn niet naast elkaar gebouwd.** Testronde 2 uit het plan hierboven ging
   over twee registers; er zijn er nu drie, en of licht leave-behind werkelijk iets anders
   oplevert dan de twee andere is niet gemeten.
-- **Het vragenvuur is niet in een echte bouw gebruikt.** Dat de poort werkt — tien antwoorden
+- **Het vragenvuur is niet in een echte bouw gebruikt.** Dat de poort werkt — acht antwoorden
   vóór de eerste regel tekst — is doctrine tot een bouwer het een keer heeft doorlopen.
-- De feitenvraag uit stap 1: gebruikt `maatstaf/04` werkelijk Montserrat SemiBold als aanhef, of
-  al een Lato-gewicht? Daarvan hangt af of de nieuwe typografieregel een verkeerde meting
-  corrigeert of een gemeten patroon overrulet. Beslist met een render, niet met een mening.
+- ~~De feitenvraag uit stap 1: gebruikt `maatstaf/04` werkelijk Montserrat SemiBold als
+  aanhef?~~ **Beslecht.** Nagemeten op de PNG: het is werkelijk Montserrat SemiBold, dus de
+  typografieregel overrulet een gemeten patroon en corrigeert geen verkeerde meting. Zie
+  `vormentaal.md` §9 en `assets/maatstaf/LEESMIJ.md`.

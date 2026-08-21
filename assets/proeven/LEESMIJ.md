@@ -1,8 +1,8 @@
 # assets/proeven/ — de kleur- en gevuldheidsproef
 
-Zes renders uit één proef, gebouwd om twee besluiten uit het vragenvuur te toetsen: het accent
-(besluit 4) en de gevuldheid (besluit 5). Drie ervan zijn sinds die proef de drie waarden van
-besluit 5 — `03` is de default (weinig accent), `01` is kaal, `02` is met kleur — en `04` is
+Zes renders uit één proef, gebouwd om twee besluiten uit het vragenvuur te toetsen: de gevuldheid
+(besluit 2) en wat kleur codeert (besluit 3). Drie ervan zijn sinds die proef de drie waarden van
+besluit 2 — `03` is de default (weinig accent), `01` is kaal, `02` is met kleur — en `04` is
 expliciet afgekeurd. Ze zijn géén lat. `assets/maatstaf/` is de lat; dit zijn
 de metingen die de regels in `vormentaal.md` §3 en §5 onderbouwen, met de opzet erbij zodat ze
 te herhalen zijn.
@@ -41,7 +41,7 @@ alpha zet en het lumMod-recept beperkt tot een deck waarin sky en royal niet mee
 
 ## Het besluit dat hierop is genomen
 
-Op deze zes renders is besluit 5 herschreven van "twee registers" naar drie gevuldheden, met
+Op deze zes renders is besluit 2 herschreven van "twee registers" naar drie gevuldheden, met
 `03` als default: een deck staat in weinig accent, met soms een kale slide en soms een gekleurde.
 `04` valt af. Dat is een keuze van Xavier op de renders, 21 augustus 2026, en de reden staat
 erbij: het oppervlak van een grote vulling moet iets dragen, en in `04` draagt het vier woorden.

@@ -140,7 +140,7 @@ REQUIRED = {
 
 OPTIONAL = {
     "PIL": ("pillow", "thumbnail.py (contactsheet van de renders)"),
-    "pytest": ("pytest", "de testsuite"),
+    "pytest": ("pytest", "eigen tests; deze repo draagt zelf geen testsuite"),
 }
 
 # pdf->png ladder, same order render.py uses.

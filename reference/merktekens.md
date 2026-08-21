@@ -1,7 +1,7 @@
 # Merktekens uit bestaande SFNL-decks
 
 Geen patroonbibliotheek. Dit is een lijst **merktekens** — elementen die één ding tekenen en
-één ding coderen — geoogst uit vijf decks die met de hand of met eerdere versies van deze skill
+één ding coderen — geoogst uit elf decks die met de hand of met eerdere versies van deze skill
 zijn gemaakt. Per merkteken staat er wat het codeert, waar het vandaan komt, en of de
 primitievenlaag het al kan.
 
@@ -10,9 +10,10 @@ dat heeft bouwt kaarten met tekst. `shapes.py` is inmiddels ruimer, maar het wet
 tekenen liep achter op het kunnen. Dit is die lijst. Gebruik hem zoals `assets/maatstaf/`:
 niet om na te tekenen, maar om te weten wat er bestaat.
 
-Bronnen, alle vijf SFNL-decks: `Eindrapport MBC MDT Maatjesprojecten` (67 slides),
+Bronnen. De eerste oogst, vijf decks: `Eindrapport MBC MDT Maatjesprojecten` (67 slides),
 `Handleiding 2 — Je eerste dashboard bouwen` (34), `Werksessie 1 impactmeten RO/RS` (23),
-`Check-in 1` (12) en `Check-in 2` (13).
+`Check-in 1` (12) en `Check-in 2` (13). Daarna zes erbij, opgesomd bij de tweede en de derde
+oogst onderaan dit document — vandaar dat de nummers vanaf 11 naar elf decks verwijzen.
 
 ---
 
@@ -197,9 +198,9 @@ Aidsfonds slide 8 en handleiding slide 17: een tabel waarin `Phase 1` en `Phase 
 gekleurde rij over de volle breedte tussen de gewone rijen staan. Twee tabellen worden zo één
 tabel, zonder een tweede kop en zonder een tweede blok.
 
-**Bouwbaar:** `add_table.py` kent dit niet — het verdeelt rijen gelijk en kent geen rij die zijn
-cellen samenvoegt. Werkbaar alternatief: twee tabellen met een gevulde band ertussen, wat er
-vrijwel hetzelfde uitziet.
+**Bouwbaar sinds de oogst:** `{"sectie": "FASE 1"}` tussen de rijen in `add_table.py`. De rij
+voegt zijn cellen samen en draagt de kopvulling; zie ook 30, waar hij op zes slides in één deck
+terugkomt.
 
 ## 15. De pijltabketen, en de tweede rij eronder
 
@@ -408,7 +409,7 @@ standaardvorm.
 
 ## Wat hiervan nog code vraagt
 
-**Vier van de zes zijn gebouwd**, in dezelfde ronde als deze oogst:
+**Vijf van de zes zijn gebouwd**, in dezelfde ronde als deze oogst:
 
 | item | status |
 |---|---|

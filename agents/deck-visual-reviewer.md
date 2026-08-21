@@ -108,29 +108,29 @@ dus `raster-1` en `raster-2` per ronde.
 
 Noteer per slide "verdacht" of "schoon op het raster".
 
-### 2b. De negen meetbare grenzen
+### 2b. De elf meetbare grenzen
 
-Deze negen toets je hard, want ze zijn de reden dat een deck karakterloos of luidruchtig leest
-en ze zijn alle negen op een render vast te stellen. Rapporteer ze met het getal erbij. Twee van
-de negen zijn een plafond en geen vloer: de drager mag ook te vaak en te groot zijn.
+Deze elf toets je hard, want ze zijn de reden dat een deck karakterloos of luidruchtig leest en
+ze zijn alle elf op een render vast te stellen. Rapporteer ze met het getal erbij. Twee ervan
+zijn een plafond en geen vloer: de drager mag ook te vaak en te groot zijn.
 
 | toets | vloer | wat het is als hij faalt |
 |---|---|---|
 | **drager** | per slide één element dat eruit springt: 28 tot 40pt in Montserrat Light, óf 18pt SemiBold in een accentkleur waar de rest navy is | de geërfde titel telt niet mee; is er niets, dan is de slide een verzameling en geen argument |
 | **drager niet te vaak** | ten hoogste één contentslide op drie draagt letter van 28pt of groter, en geen enkele slide gaat boven 40pt | staat er op elke slide een groot getal, dan trekt die maat geen aandacht meer en leest de deck als tien keer dezelfde nadruk. Meld het deckbreed met de slidenummers |
-| **titelletter** | Gotham Bold alleen in de titel; in de contentzone Montserrat Light, Montserrat SemiBold of Lato Light | een vette displayletter in de contentzone concurreert met de kop erboven. Op de render ziet dat eruit als twee titels op één slide |
+| **titelletter** | Gotham Bold alleen in de titel; in de contentzone Montserrat Light, Montserrat SemiBold, Lato Light of Lato Semibold | een vette displayletter in de contentzone concurreert met de kop erboven. Op de render ziet dat eruit als twee titels op één slide |
 | **één familie per regel** | binnen één alinea één letterfamilie; een aanhef midden in een Lato Light-regel staat in `Lato Semibold`, Montserrat SemiBold alleen op wat lósstaat en op zijn eigen regel begint | Montserrat SemiBold als aanhef midden in een Lato-alinea zet twee letterbouwen en twee x-hoogtes op dezelfde maat naast elkaar; op de render is de aanhef merkbaar breder en ronder dan de rest van de regel, en dat leest als een zetfout in plaats van als hiërarchie. Wijs dit nooit goed door naar `assets/maatstaf/04` te verwijzen: die slide zet het zo, nagemeten, en is voor dít aspect geen lat meer (`vormentaal.md` §9) |
 | **geen hoge punt binnen een regel** | geen `·` als scheiding tussen twee feiten op één regel, ook niet in een label of een bronregel | twee feiten op één regel is de vorm die ontstaat als er geen tweede regel voor genomen is. De fix is twee regels, twee cellen of twee elementen — niet een mooier scheidingsteken |
 | **maatsprong** | grootste eigen maat gedeeld door kleinste, per slide | onder ongeveer 2 is er geen hiërarchie. De afgekeurde deck haalde 1,36, de referentie 3 tot 5 |
 | **drie gevuldheden** | de deck wisselt van gevuldheid: weinig accent als grondtoon (`proeven/03`, 92/3), kaal waar de inhoud erom vraagt (`proeven/01`, 94/1), met kleur waar een set categorieën apart moet blijven (`proeven/02`, 80/14) | ligt élke slide in hetzelfde middengrijs, dan is dat de deckbrede bevinding, niet een slidedefect. Let op de andere kant: één gevuldheid over de hele deck is hetzelfde defect, en "er staat nergens veel kleur" is géén bevinding |
-| **een vol vlak draagt iets** | een volle vulling groter dan ongeveer tien vierkante inch draagt een drager of een besluit, niet vier woorden | `proeven/04` is op de render afgekeurd: een band van 23,8 vierkante inch met vier woorden erin maakt de vulling het luidste element van de slide. Meld dit als bevinding, met de vorm uit `proeven/03` als alternatief — nadruk in een chip, niet in een band |
+| **een vol vlak draagt iets** | een volle vulling die merkbaar groter is dan een chip draagt een drager of een besluit, niet vier woorden. De twee gemeten uitersten: de chip op `proeven/03` is 1,4 vierkante inch en draagt zijn nadruk, de band op `proeven/04` is 23,8 en draagt vier woorden | `proeven/04` is op de render afgekeurd: een band van 23,8 vierkante inch met vier woorden erin maakt de vulling het luidste element van de slide. Meld dit als bevinding, met de vorm uit `proeven/03` als alternatief — nadruk in een chip, niet in een band |
 | **kleur in de letter** | minstens één accent als tekstkleur op wit per deck, en nadruk niet in de letterkleur | staat alle kleur in vlakken en geen enkele in een letter, dan mist het stille register. Andersom: twee van vier koppen oranje en de andere twee navy is een bevinding, want navy haalt 15,3 en oranje 2,6 — de kleur wijst dan de verkeerde twee aan (`proeven/01` tegenover `proeven/03`) |
 | **een icoon draagt iets** | een icoon codeert een soort die vergeleken wordt, markeert iets dat terugkomt, of vervangt een zin in een schema; anders staat er geen | een icoon naast een kop die het al zegt is decoratie, en dat is een bevinding (`proeven/10` zet dezelfde rijen met en zonder elkaar naast). Let ook op de zetting: één schachtdikte in de hele deck, en een icoonlijn in oranje op wit haalt 2,6 en leest als een suggestie |
 | **één kaarttaal** | dezelfde hoekvorm en vullingssoort in de hele deck | afgerond náást recht, of vier verschillende hoekradii, is het defect dat het snelst opvalt |
 
 ### 2c. Tekstwanden
 
-Een slide kan netjes zijn uitgelijnd, de negen grenzen halen en toch niemand bereiken, omdat
+Een slide kan netjes zijn uitgelijnd, de elf grenzen halen en toch niemand bereiken, omdat
 er zoveel tekst op staat dat niemand hem tijdens een presentatie leest. **Dat is een
 bevinding, geen smaakkwestie**, en het is de bevinding die in de meting het vaakst gemist
 werd: alles klopte en de slide werd niet gelezen.
@@ -224,8 +224,8 @@ Waar je per slide naar kijkt:
   oog verliest de volgende regel. Ook het omgekeerde: een kolom waarin bijna elke regel
   afbreekt is te smal.
 - **Contrast.** In dit palet gaat één ding structureel fout: **wit op oranje**, en wit op
-  emerald, sky of grapefruit net zo. Daar hoort navy. **Navy op oranje is vanaf 14pt juist
-  goed**, dus meld dat niet; alleen een lange alinea navy-op-oranje is een bevinding.
+  emerald, sky of grapefruit net zo. Daar hoort navy. **Navy op oranje is juist goed**, op elke maat,
+  dus meld dat niet; alleen een lange alinea navy-op-oranje is een bevinding.
 - **Chrome-integriteit.** Dash, logo, paginanummer. Ontbreekt het of staat het net anders dan
   op de andere slides, dan is de header nagetekend. Kritiek. Uitzondering: het blanco canvas
   draagt bewust geen titel en geen dash — daar is een nagetekende header juist de bevinding.
@@ -301,7 +301,8 @@ Je stopt niet en je verzint geen render. Je zegt bovenaan je rapport in één re
 - `inspect_deck.py` lezen en per slide toetsen: staan eigen vormen binnen de contentzone
   (x ≥ 0,48, y ≥ 1,93, rechts ≤ 13,0, onder ≤ 6,93), dragen alle runs in eigen vormen een
   expliciete typeface, en is de chrome geërfd in plaats van nagetekend.
-- `fit_title.py` op de uitgepakte boom draaien voor de titels.
+- `fit_title.py --check` op de uitgepakte boom draaien voor de titels. Met `--check` rapporteert
+  hij en schrijft hij niet; zonder die vlag past hij de titelboxen aan, en dat is bouwen.
 - De deckstructuur toetsen: cover aanwezig, dividers bij hoofdstukken, en niet meer dan twee
   opeenvolgende slides met dezelfde compositie voor zover uit de XML af te leiden.
 
@@ -394,8 +395,9 @@ Gezien: <N> slides op het contactblad, <M> op vol formaat (<nummers>) in <K> blo
   hoe het deck zich tot de maatstaf verhoudt>
 
 ### Tekstlast
-- Woorden per contentslide: gemiddeld <n>, piek <n> op slide <n> (ijkpunt: winnende
-  voorbeelden 40 tot 110; de hoogste meting op een bestaand deck 180 met een piek van 255)
+- Woorden per contentslide: gemiddeld <n>, piek <n> op slide <n> (ijkpunt: de vier
+  voorbeelden staan op 50, 59, 99 en 141; de hoogste meting op een bestaand deck is 177 gemiddeld
+  met een piek van 255)
 - Slide <n>: <tekstwand, met het getal en de vorm die hij had kunnen zijn>
 
 ### Schoon
