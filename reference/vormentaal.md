@@ -214,7 +214,7 @@ en leest rustiger.
 De tweede hue per slide hoort in de outline, bij de slides waar kleur iets doet. Daar is hij te
 overzien en te herzien voordat er iets gebouwd is; op de render is hij alleen nog te repareren.
 
-## 4. Een container is bijna wit
+## 4. Kleur is vol of hij is er niet
 
 Een lichte vulling maak je met `<a:alpha>` op de volle kleur, niet met `lumMod`. In de vijf
 winnende decks komt `lumMod` geen enkele keer voor: navy staat op alpha 6000 tot 8000, de
@@ -225,14 +225,40 @@ donker is en daardoor als eigen kleur meedoet in plaats van als achtergrond. Bij
 het bovendien een blauwpaars vlak op, en daarvoor moest een apart lavendelverbod bestaan. Met
 alpha is die uitzondering niet meer nodig.
 
-De neutrale container is navy op alpha 7000: koel, kleurloos, en de default zodra er niets te
-onderscheiden valt. Warmgrijs komt in geen enkele winnende deck voor; naast vol oranje leest
+**De neutrale container is navy op alpha 7000**: koel, kleurloos, en de default zodra er niets
+te onderscheiden valt. Warmgrijs komt in geen enkele winnende deck voor; naast vol oranje leest
 dat warme taupe als een niet-ingekleurd vlak.
+
+**Maar een ACCENT op 9000 tot 14000 is geen default, en dat is de correctie van 21 augustus
+2026.** Die tint hoort bij het ingetogen kleurregister (§5) en niet bij de hoofdstijl. In de
+hoofdstijl is kleur vol of hij is er niet: de hue staat vol in een rijlabel, een chip, een
+badge, een getal of een letter, en het vlak eronder is wit met een haarlijn in die hue, of navy
+op 7000. Een pastelpaneel in de hue van zijn eigen label is er niet.
+
+Waar dat op staat, want het is gemeten en niet bedacht. Een deck van 26 slides dat met deze skill
+is gebouwd (`260821_Procesanalyse_ZK`) deed dat op 12 van zijn 20 contentslides: een volle hue als
+label, en datzelfde accent op containersterkte als paneel eronder — 13 keer grapefruit op 9000, 7
+keer oranje op 12000, royal, sky en emerald op 10000, en 36 keer navy op 7000 ernaast. De
+gebruiker had "met kleur" gekozen. Wat eruit kwam is lichtgroen, lichtrood en lichtblauw over de
+hele deck, en het is op de render afgekeurd met één zin: dit hoort te poppen.
+
+De reden dat dit een vormfout is en geen smaakverschil: de tint is per hue gekalibreerd om
+áchtergrond te zijn, en dat werkt zolang hij één keer op een slide staat. Zet je vier van die
+tints naast elkaar en geef je elk een vol label in dezelfde hue, dan is de tint niet langer de
+achtergrond maar het grootste gekleurde oppervlak van de slide — en de volle hue ernaast heeft
+niets meer om tegen af te zetten, want hij staat op zijn eigen verdunning. Dat is het
+middengrijs van §5, nu in pastel: nergens wit, nergens vol.
 
 Boven ongeveer 14000 wordt een container een kleur. Dat mag, maar dan is het een vlak dat iets
 betekent en geen achtergrond meer.
 
-## 5. Drie gevuldheden, en het contrast zit tussen de slides
+`shapes.py` dwingt dit af in plaats van het aan te bevelen, want de vorige versie van deze
+paragraaf beval het al aan en de deck werd toch zo gebouwd: `vulling_xml()` weigert een accent
+op alpha 14000 of lager en noemt de drie uitwegen (volle hue, wit met haarlijn, navy 7000).
+Kiest de gebruiker het ingetogen kleurregister, dan zet het bouwscript bovenaan
+`register("ingetogen")` en is de tint weer beschikbaar.
+
+## 5. Twee kleurregisters, en het contrast zit tussen de slides
 
 Gemeten aandeel wit, tint en verzadigd per slide. De afgekeurde deck: 44 tot 53 procent wit, 42
 tot 54 procent tint, 1 tot 7 procent verzadigd — op élke contentslide dezelfde band. Dat
@@ -240,21 +266,57 @@ middengrijs is precies wat een deck karakterloos maakt: nergens is iets leeg en 
 vol, dus er is geen contrast tussen de slides onderling. Dát is wat dit besluit moet voorkomen,
 en niet "er moet ergens veel kleur staan".
 
-**Drie gevuldheden, met de render en de meting eronder** (`assets/proeven/`, LibreOffice, 1921
-px):
+**Eerst het kleurregister, en de hoofdstijl popt.** Twee waarden, en dit is het besluit dat vóór
+de gevuldheid komt:
+
+| kleurregister | wat het is | waar de kleur zit |
+|---|---|---|
+| **poppend** — de default | kleur is vol of hij is er niet | volle hues in rijlabels, chips, badges, getallen en letters, op wit of op navy 7000 |
+| **ingetogen** | de stille variant, alleen na een expliciete vraag van de gebruiker | dezelfde composities, maar met de accenttint van §4 als paneel en minder vol oppervlak |
+
+**Poppend is de default en ingetogen is een keuze van de gebruiker, niet van de bouwer.** Dit is
+de correctie van 21 augustus 2026 op de deck `260821_Procesanalyse_ZK`, en de zin waarmee hij
+werd afgekeurd is de regel: dit hoort te poppen, en pastel gebeurt alleen als iemand er expliciet
+om vraagt. Wat daar stond waren lichtgroene, lichtrode en lichtblauwe panelen op elke kleurslide
+(§4 heeft de meting), en de gebruiker had "met kleur" gekozen. Zolang de gebruiker niets over
+ingetogen zegt, staat de deck dus in poppend — ook wanneer hij het vormbesluit aan de skill laat.
+
+**En let op de verkeerde lezing, want die is één regel verderop al gemaakt: poppend is niet méér
+oppervlak.** `proeven/04` is afgekeurd en blijft afgekeurd (hieronder), en de band van 20 tot 37
+procent blijft een meting en geen doel. Poppend gaat over de vólheid van de kleur die er toch al
+staat: hetzelfde rijlabel, dezelfde chip, hetzelfde getal, maar vol in plaats van verdund, en met
+wit ernaast in plaats van pastel. Het vol oppervlak verandert daar niet van, het contrast eronder
+wel.
+
+Nagemeten op twee renders van dezelfde compositie (`proeven/11` tegen `proeven/02`): 76 procent
+wit, 9 procent tint en 15 procent verzadigd, tegen 80 / 6 / 14. Op één slide is dat verschil dus
+klein — de tint van `02` is zo licht dat hij als wit meet. Het loopt op zodra het getinte paneel
+het grootste vlak van de compositie is: ZK slide 6 zet vier volle labels van een derde breedte
+naast vier pastelpanelen van twee derde, en staat op 58 procent wit met 30 procent tint. Daarom
+hangt §4 aan de vulling en niet aan een percentage: wie per rij een paneel tint, ziet tijdens het
+bouwen niet dat hij bij de dertig procent uitkomt.
+
+**Daarbinnen de drie gevuldheden, met de render en de meting eronder** (`assets/proeven/`,
+LibreOffice, 1921 px):
 
 | gevuldheid | wat er staat | gemeten wit / verzadigd | referentie |
 |---|---|---|---|
-| **weinig accent** — de default | geen kaartvullingen: navy koppen op wit, een haarlijn per rij, en één vol oranje vlak precies waar de nadruk zit | 92 / 3 | `proeven/03` |
+| **met kleur** — de default | een set hues codeert de categorieën, in volle rijlabels of vier kaarten | 76 / 15 | `proeven/11` |
+| **weinig accent** | geen kaartvullingen: navy koppen op wit, een haarlijn per rij, en één vol oranje vlak precies waar de nadruk zit | 92 / 3 | `proeven/03` |
 | **kaal** | ook dat vlak niet: alleen haarlijnen, kapitaallabels en kleur in de letter | 94 / 1 | `proeven/01` |
-| **met kleur** | een set hues codeert de categorieën, in volle rijlabels of vier kaarten | 80 / 14 | `proeven/02` |
 
-De default is **weinig accent**, en dat is een besluit van Xavier op de zes gerenderde varianten:
-van de drie is dit de vorm die het beste leest, en de andere twee zijn er voor de slide die er
-werkelijk om vraagt. Een deck is dus niet één gevuldheid — het is deze grondtoon met soms een
-kale slide (een vraag, proza) en soms een gekleurde (een set categorieën die de lezer apart moet
-houden). Een deck dat volledig in één gevuldheid staat is het middengrijs van de andere kant: het
-gemeten spreekdeck stond op 83 tot 88 procent wit op élke contentslide en had nergens iets anders.
+De default is **met kleur**, en dat is de tweede helft van dezelfde correctie: op de zes
+gerenderde varianten was in eerste instantie weinig accent als grondtoon gekozen, en op een echt
+deck van 26 slides bleek dat de vorm te zijn die vraagt om opvulling met tint — want een deck dat
+nergens vol is, wordt onderweg zacht ingekleurd. Met kleur als grondtoon zegt hetzelfde besluit
+van de andere kant: de hues zijn er, ze staan vol, en de slide die geen set categorieën heeft valt
+terug op weinig accent of kaal. In het ingetogen kleurregister blijft **weinig accent** de
+default; dat is wat ingetogen betekent.
+
+Een deck is dus niet één gevuldheid — het is deze grondtoon met soms een kale slide (een vraag,
+proza) en soms een slide zonder set die op weinig accent uitkomt. Een deck dat volledig in één
+gevuldheid staat is het middengrijs van de andere kant: het gemeten spreekdeck stond op 83 tot 88
+procent wit op élke contentslide en had nergens iets anders.
 
 
 **Wat er níét meer wordt aangemoedigd: een vol vlak dat een kwart van de slide beslaat.**
@@ -281,9 +343,11 @@ procent verzadigd is ongeveer één vierkante inch vol:
 | alleen lichte containers, geen vol vlak | 0 | 1 tot 2 procent |
 
 De vullingssoort hoort hier en niet bij de kaarttaal (§8): welke vulling de standaard is, volgt
-uit de gevuldheid die je hier kiest. Bij weinig accent is dat geen vulling plus één vol vlak, bij
-kaal geen vulling, en bij met kleur de volle hue voor het label en de gekalibreerde tint voor het
-paneel (§4).
+uit het kleurregister en de gevuldheid die je hier kiest. Bij weinig accent is dat geen vulling plus
+één vol vlak, bij kaal geen vulling, en bij met kleur de volle hue voor het label met een wit
+paneel eronder dat een haarlijn in die hue draagt, of navy op 7000 als het paneel niets hoeft te
+onderscheiden. De gekalibreerde accenttint als paneel (§4) hoort bij het ingetogen kleurregister en
+komt er alleen wanneer de gebruiker daar expliciet om heeft gevraagd.
 
 Twee dingen om vast te houden. **Een kolom volle rijlabels voelt vol en is het niet**:
 `proeven/02` meet 14 procent, want vier labels van 3,40 in halen samen de helft van wat een band
@@ -291,7 +355,9 @@ over de volle breedte haalt — dus verwacht daar geen verzadigde slide, en ga h
 opvullen tot hij er een is. En **een slide met alléén lichte containers** komt uit op 65 tot 69
 procent wit met 30 tot 34 procent tint: dat is geen van de drie gevuldheden hierboven, en het is
 de zone waar de referentie geen enkele slide heeft. Tint over de hele slide is dus een keuze om
-te verantwoorden, geen default.
+te verantwoorden, geen default — en in het poppende register bestaat die keuze niet met een
+accent erin (§4). Dit is precies de meting waarmee de pastelversie te herkennen is: een slide in
+de dertig procent tint is de deck die zichzelf heeft ingekleurd.
 
 Meet het in dezelfde ronde als de render: `qa_tellingen.py --renders` geeft het aandeel wit, tint
 en verzadigd per slide. Zonder die meting blijft dit besluit een intentie, en dat is nagemeten:

@@ -35,17 +35,23 @@ RIJEN = [
         ("licht leave-behind  ·  default", "90-110", "assets/maatstaf/12-tabel-verzadigde-rijlabels-puntenmeter.png", (0.0, 0.04, 1.0, 0.94)),
         ("leave-behind", "120-145", "assets/maatstaf/11-vier-fasekaarten-tweede-uitgelicht.png", (0.0, 0.04, 1.0, 0.94)),
     ]),
-    ("2  GEVULDHEID", [
-        ("weinig accent  ·  default", "92% wit, 3% vol", "assets/proeven/03-nadruk-in-een-chip.png", (0.02, 0.26, 0.58, 0.56)),
-        ("kaal", "94% wit, 1% vol", "assets/proeven/01-wit-oranje-koppen-inversie.png", (0.02, 0.24, 0.58, 0.54)),
-        ("met kleur", "80% wit, 14% vol", "assets/proeven/02-vier-hues-volle-rijlabels-14procent.png", (0.02, 0.24, 0.58, 0.54)),
+    ("2  KLEURREGISTER", [
+        ("poppend  ·  default", "vol label, wit paneel: 76% wit, 9% tint",
+         "assets/proeven/11-poppend-vol-label-wit-paneel.png", (0.02, 0.24, 0.58, 0.54)),
+        ("ingetogen  ·  vraag ernaar", "de hue verdund als paneel: 80% wit, 6% tint",
+         "assets/proeven/02-vier-hues-volle-rijlabels-14procent.png", (0.02, 0.24, 0.58, 0.54)),
     ]),
-    ("3  WAT KLEUR CODEERT", [
+    ("3  GEVULDHEID", [
+        ("met kleur  ·  default", "76% wit, 15% vol", "assets/proeven/11-poppend-vol-label-wit-paneel.png", (0.02, 0.24, 0.58, 0.54)),
+        ("weinig accent", "92% wit, 3% vol", "assets/proeven/03-nadruk-in-een-chip.png", (0.02, 0.26, 0.58, 0.56)),
+        ("kaal", "94% wit, 1% vol", "assets/proeven/01-wit-oranje-koppen-inversie.png", (0.02, 0.24, 0.58, 0.54)),
+    ]),
+    ("4  WAT KLEUR CODEERT", [
         ("alleen oranje  ·  default", "nadruk in een vlak", "assets/proeven/03-nadruk-in-een-chip.png", (0.24, 0.28, 0.76, 0.58)),
         ("een tweede hue", "twee kanten van een afweging", "assets/maatstaf/04-twee-kolommen-teal-tegen-koraal.png", (0.02, 0.24, 0.62, 0.52)),
         ("een set van vier", "vier categorieen deckbreed", "assets/proeven/02-vier-hues-volle-rijlabels-14procent.png", (0.02, 0.24, 0.42, 0.80)),
     ]),
-    ("4  TITELMODUS", [
+    ("5  TITELMODUS", [
         ("A  de titel is de bewering  ·  default", "geen subtitel", "assets/proeven/03-nadruk-in-een-chip.png", (0.02, 0.05, 0.98, 0.26)),
         ("B  de titel is het hoofdstuk", "subtitel draagt de bewering", "assets/proeven/08-modus-b-hoofdstuktitel.png", (0.02, 0.05, 0.98, 0.26)),
         ("B vraagt een divider per hoofdstuk", "uit de fotolayouts 6 t/m 16", "assets/proeven/07-modus-b-divider.png", (0.0, 0.04, 1.0, 0.94)),

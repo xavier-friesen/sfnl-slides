@@ -446,6 +446,43 @@ ontbrekende glyph", geen precisiecijfer. En de test die het meeste zou zeggen �
 verse deck dingen die de bouwer zelf op het contactblad miste — vraagt een omgeving met
 `python-pptx` en een pdf-naar-png-omzetter, en die was er niet.
 
+## Ronde 8 — het kleurregister, en de default popt
+
+Een echte bouw met deze skill leverde `260821_Procesanalyse_ZK` op: 26 slides, gebruiker koos "met
+kleur", en op 12 van de 20 contentslides staat een volle hue als rijlabel met datzelfde accent op
+containersterkte als paneel eronder. Afgekeurd door Xavier op de render, met één zin: dit hoort te
+poppen, en die lichtgroene, lichtrode en lichtblauwe vlakken horen alleen in een deck waar iemand
+expliciet om een ingetogen stijl vraagt. Nagemeten met `qa_tellingen.py --renders`: slide 6 staat op
+58 procent wit met 30 procent tint en 12 procent verzadigd, en de contentslides liggen bijna
+allemaal onder de zeven procent verzadigd. De kleur zat er dus in, maar alleen verdund.
+
+Wat er is veranderd:
+
+- **Besluit 2 heeft een kleurregister gekregen, vóór de gevuldheid.** Poppend is de default,
+  ingetogen kiest alleen de gebruiker. "Kies jij maar" is daar expliciet geen vrijbrief voor
+  pastel — dat was de route waarlangs dit deck ontstond.
+- **De default gevuldheid is in het poppende register `met kleur`** in plaats van weinig accent.
+  Weinig accent blijft de default in het ingetogen register. De omkering is de tweede helft van
+  dezelfde afkeuring: een grondtoon die nergens vol is, wordt onderweg zacht ingekleurd.
+- **§4 heet nu "Kleur is vol of hij is er niet".** De accenttint van 9000 tot 14000 is het
+  instrument van het ingetogen register; navy op 7000 blijft de neutrale container en mag overal.
+- **`shapes.py` weigert de accenttint buiten het ingetogen register.** `register("ingetogen")` zet
+  hem aan, één keer bovenaan het bouwscript. Dit staat in de bouwlaag en niet alleen in de tekst,
+  want de tekst raadde het al af en de deck werd toch zo gebouwd.
+- **`qa_tellingen.py` telt de accenttinten per slide** en geeft een `warn` zodra ze voorkomen, met
+  de uitweg erin: is de deck ingetogen, dan is de melding onjuist. Geen `critical`, want dat is
+  precies het onderscheid dat een script niet kan maken.
+- **Eén render erbij: `proeven/11-poppend-vol-label-wit-paneel`** — dezelfde vier meetdoelen als
+  `02`, maar met een wit paneel en een haarlijn in de hue van de rij. Gemeten 76 / 9 / 15 tegen
+  80 / 6 / 14. Op één slide is dat verschil klein; het loopt op zodra het getinte paneel het
+  grootste vlak van de compositie is, en dat is wat ZK slide 6 laat zien.
+- De keuzekaart is herbouwd: vijf rijen nu, met poppend en ingetogen als A/B op dezelfde
+  compositie. `deck-visual-reviewer` heeft er een rij bij gekregen en zijn gevuldheidsrij is
+  omgezet.
+
+Wat deze ronde niet heeft: een deck dat na de wijziging opnieuw is gebouwd. De regel is gemeten op
+één slide en op de afgekeurde deck, niet op een nieuwe bouw van 26 slides.
+
 ## Openstaand
 
 - **De blinde vergelijking met twee juryleden is niet gedraaid.** Beide juryagents zijn

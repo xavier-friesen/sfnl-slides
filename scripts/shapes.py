@@ -33,6 +33,16 @@ De discipline geldt op alle drie: alpha in plaats van `lumMod` voor een containe
 hoekradius, lijn in de hue van de vulling, expliciete `<a:latin/>`, `noAutofit`, de bindende
 elementvolgorde, `lnSpc` 112%, en de contrastregels. Een eigen vorm is geen achterdeur.
 
+Twee kleurregisters, en de default popt
+---------------------------------------
+De hoofdstijl is `"poppend"`: kleur is vol of hij is er niet. Een licht vlak is dan navy op
+alpha 7000 -- koel en kleurloos -- of wit met een haarlijn in de hue; de hue zelf staat vol,
+in een rijlabel, een chip, een badge, een getal of een letter. `"ingetogen"` is de stille
+variant, met de accenttint van 9000 tot 14000 als paneel, en die zet je alleen aan wanneer de
+gebruiker er in het vragenvuur expliciet om vraagt: `register("ingetogen")`, één keer
+bovenaan het bouwscript. `vulling_xml()` weigert een accent op containersterkte zolang dat
+niet gebeurd is -- zie `register()` voor de meting waarop die weigering staat.
+
 Waarom dit bestaat
 ------------------
 De eerste deck die met sfnl-slides gebouwd werd, had op vier contentslides 31 gevulde
@@ -60,7 +70,7 @@ Gebruik
     d = Deck(body=14, kop=18, label=14, display=32)   # maten per rol, één keer per deck
     xs, w = cols(3, 0.24)
     vormen = [
-        vlak("Kaart 1", xs[0], 1.93, w, 2.4, vulling=("emerald", 9000), hoek=0.10,
+        vlak("Kaart 1", xs[0], 1.93, w, 2.4, vulling=None, lijn=("emerald", 1), hoek=0.10,
              tekst=[para(drager("62", d.display, "emerald"))]),
     ]
     write("unpacked/ppt/slides/slide3.xml", vormen)
@@ -138,10 +148,82 @@ LUM = {"grijs": (65000, 35000)}
 #: Alphawaarde die van een hue een container maakt in plaats van een kleur. Per hue
 #: gekalibreerd, want navy is veel donkerder dan emerald: gemeten uit de vijf winnende
 #: decks, waar navy op 6000-8000 staat en de accenten op 9000-14000.
+#:
+#: Alleen de eerste regel is een default. Navy op 7000 is de neutrale container en die mag
+#: overal; een ACCENT op 9000 tot 14000 is het instrument van het ingetogen kleurregister en niet
+#: van de hoofdstijl (`vormentaal.md` §4). Zie `register()` hieronder voor waarom dat
+#: onderscheid in deze laag staat en niet alleen in de tekst.
 CONTAINER_ALPHA = {
     "navy": 7000, "royal": 10000, "sky": 10000,
     "emerald": 10000, "grapefruit": 9000, "oranje": 12000,
 }
+
+#: Boven deze alpha is een vulling een kleur en geen container meer. Dat is de grens die §4
+#: zelf trekt -- "boven ongeveer 14000 wordt een container een kleur, en dan is het een vlak
+#: dat iets betekent" -- en dus de grens waarop de accenttint geweigerd wordt. Een vlak dat
+#: bewust een kleur is (`("grapefruit", 20000)` onder een contour) blijft dus mogelijk; de
+#: pastels van 9000 tot 14000 zijn wat eruit gaat.
+TINT_PLAFOND = 14000
+
+#: Het kleurregister van de deck. `"poppend"` is de hoofdstijl en de default: kleur is vol of
+#: hij is er niet, en een licht vlak is navy op 7000 of wit met een haarlijn in de hue.
+#: `"ingetogen"` is de stille variant, en die kies je niet zelf -- de gebruiker vraagt er in
+#: het vragenvuur expliciet om (skill, stap 1, besluit 2).
+#:
+#: Waarom deze schakelaar in de bouwlaag staat: de tekst zei het al en het gebeurde toch. Een
+#: deck van 26 slides dat met deze skill gebouwd is (`260821_Procesanalyse_ZK`) zette op 12 van
+#: zijn 20 contentslides een volle hue als label met datzelfde accent op 9000 tot 12000 als paneel
+#: eronder -- 13 keer grapefruit op 9000, 7 keer oranje op 12000, accent3, 4 en 5 op 10000 --
+#: en de gebruiker had "met kleur" gekozen. Wat daar uitkomt is lichtgroen, lichtrood en
+#: lichtblauw over de hele deck: de tint is dan geen achtergrond meer maar de kleur die je
+#: ziet, en de volle hue ernaast heeft niets meer om tegen af te zetten. Dat is precies het
+#: middengrijs uit §5, nu in pastel.
+_REGISTER = "poppend"
+
+
+def register(naam: str | None = None) -> str:
+    """Zet het kleurregister van de deck, of vraag op welk kleurregister er staat.
+
+    `register("ingetogen")` zet de accenttint aan, en dat doe je één keer bovenaan het
+    bouwscript, alleen wanneer de gebruiker in het vragenvuur voor ingetogen heeft gekozen.
+    Deckbreed, want half poppend en half ingetogen is geen register maar een deck dat
+    verspringt.
+    """
+    global _REGISTER
+    if naam is None:
+        return _REGISTER
+    if naam not in ("poppend", "ingetogen"):
+        raise ValueError(
+            f'register: "{naam}" bestaat niet. Er zijn twee registers: "poppend" (de '
+            'hoofdstijl, default) en "ingetogen" (alleen na een expliciete keuze van de '
+            "gebruiker in het vragenvuur)."
+        )
+    _REGISTER = naam
+    return _REGISTER
+
+
+def _geen_accenttint(hue, alpha) -> None:
+    """Een accent op containersterkte bestaat alleen in het ingetogen kleurregister.
+
+    De hoofdstijl popt, en dat is één regel: kleur is vol of hij is er niet (§4). Een hue op
+    9000 tot 14000 is geen kleur en geen wit -- hij is de pastelversie van zichzelf, en vier
+    van die pastels naast elkaar zijn de lichtgroene, lichtrode en lichtblauwe vlakken waar
+    dit register op is afgekeurd. Navy op 7000 blijft wel toegestaan: dat is de neutrale
+    container, koel en kleurloos, en hij voegt geen hue toe.
+    """
+    if _REGISTER == "ingetogen" or hue in (None, "wit", "navy"):
+        return
+    if alpha is None or int(alpha) > TINT_PLAFOND:
+        return
+    raise ValueError(
+        f'"{hue}" op alpha {int(alpha)} is een accenttint, en die bestaat alleen in het '
+        "ingetogen kleurregister (vormentaal.md §4). In de hoofdstijl is kleur vol of hij is er "
+        f'niet: geef het vlak de volle hue ("{hue}") en zet er navy tekst in, of laat het '
+        f'vlak wit met `lijn=("{hue}", 1)` als haarlijn, of gebruik de neutrale container '
+        '`("navy", 7000)`. Heeft de gebruiker in het vragenvuur expliciet om een ingetogen '
+        'deck gevraagd, zet dan bovenaan het bouwscript `register("ingetogen")`.'
+    )
+
 
 #: Contrast op wit, echt uitgerekend (WCAG-verhouding).
 #: navy 15.30 | royal 5.67 | grapefruit 3.10 | oranje 2.58 | sky 2.32 | emerald 2.02
@@ -225,15 +307,22 @@ def _clr(hue: str, alpha: int | None = None) -> str:
 
 def vulling_xml(v) -> str:
     """`"emerald"` is vol, `("emerald", 9000)` is een container, `"container:emerald"`
-    pakt de gekalibreerde alpha, `None` is geen vulling."""
+    pakt de gekalibreerde alpha, `None` is geen vulling.
+
+    Een accent op containersterkte komt hier alleen door in het ingetogen kleurregister
+    (`register()`); in de hoofdstijl is kleur vol of hij is er niet.
+    """
     if v is None:
         return "<a:noFill/>"
     if isinstance(v, str) and v.startswith("container:"):
         hue = v.split(":", 1)[1]
         _geen_grijs_vlak(hue)
-        return f"<a:solidFill>{_clr(hue, CONTAINER_ALPHA.get(hue, 10000))}</a:solidFill>"
+        alpha = CONTAINER_ALPHA.get(hue, 10000)
+        _geen_accenttint(hue, alpha)
+        return f"<a:solidFill>{_clr(hue, alpha)}</a:solidFill>"
     hue, alpha = _split(v)
     _geen_grijs_vlak(hue)
+    _geen_accenttint(hue, alpha)
     return f"<a:solidFill>{_clr(hue, alpha)}</a:solidFill>"
 
 
@@ -250,8 +339,8 @@ def _geen_grijs_vlak(hue) -> None:
             "kolomkop -- en geen vulling of kaartlijn. Een grijs vlak of een grijze rand om "
             "een gekleurde kaart is de Word-tabellook (vormentaal.md §8). Wil je een licht "
             'vlak: dat is alpha op de volle kleur, `("navy", 7000)` voor de neutrale '
-            'container of `"container:<hue>"` voor de gekalibreerde tint. Wil je een lijn: '
-            "geef hem de hue van de vulling."
+            'container, of de volle hue met navy tekst erin. Wil je een lijn: geef hem de '
+            "hue van de vulling."
         )
 
 

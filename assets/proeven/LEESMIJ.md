@@ -21,6 +21,7 @@ hieronder zijn dat wel.
 | `03-nadruk-in-een-chip` | Dezelfde nadruk, maar in een volle oranje chip met navy tekst en alle koppen navy. Nu leest de nadruk als nadruk. Dit is de vorm die de inversie uit `01` oplost. |
 | `04-alleen-oranje-25procent` | **Afgekeurd, en daarom bewaard.** Eén volle oranje band van 12,52 bij 1,90 in (23,8 vierkante inch) plus vier kaarten: gemeten 25 procent verzadigd, dus binnen de band van 20 tot 37 die de winnende decks laten zien. En toch is dit de vorm die niet meer wordt aangemoedigd — het oppervlak is groot en draagt vier woorden, dus de vulling wordt het luidste element van de slide. Dat is de reden dat die band in §5 een meting is en geen doel. |
 | `05-label-in-vier-behandelingen` | Hetzelfde kapitaallabel in vier kleuren, met de kern van de letter uitgemeten: `tx1` lumMod 65 (het huidige "grijs") is `#5176A7`, contrast 4,67, verzadiging 51 procent — een vijfde blauw. Navy 100 procent is `#201B5C` / 15,3 / 71. Navy op alpha 70 is `#625E8C` / 6,0 / 33. Oranje is `#F87F4F` / 2,58 / 68. |
+| `11-poppend-vol-label-wit-paneel` | Dezelfde vier meetdoelen als `02`, maar met een wit paneel en een haarlijn in de hue van de rij in plaats van de accenttint. Gemeten: 76 procent wit, 9 procent tint, 15 procent verzadigd. Dit is het poppende register, en sinds 21 augustus 2026 de default. |
 | `06-spc-bij-alpha-klipt` | De laatste glyph van een alpharun met `spc` valt niet weg maar wordt geklipt, en het is geen aan-of-uit: bij `spc="60"` staat de L van `MEETDOEL` er half, bij 100 vrijwel niet, en `VERANTWOORDEN` verliest bij 100 de hele N. Een spatie achter het woord repareert het niet. Zonder `spc` rendert elke lengte volledig. |
 
 ## De lichtheidstrap van tx1, apart gemeten
@@ -45,6 +46,52 @@ Op deze zes renders is besluit 2 herschreven van "twee registers" naar drie gevu
 `03` als default: een deck staat in weinig accent, met soms een kale slide en soms een gekleurde.
 `04` valt af. Dat is een keuze van Xavier op de renders, 21 augustus 2026, en de reden staat
 erbij: het oppervlak van een grote vulling moet iets dragen, en in `04` draagt het vier woorden.
+
+**En diezelfde dag is de default teruggedraaid, op een echt deck in plaats van op deze proef.**
+`260821_Procesanalyse_ZK`, 26 slides, gebouwd met deze skill en met "met kleur" als keuze van de
+gebruiker: op 12 van de 20 contentslides een volle hue als label met datzelfde accent op
+containersterkte als paneel eronder — 13 keer grapefruit op 9000, 7 keer oranje op 12000, royal,
+sky en emerald op 10000. Afgekeurd op de render, met één zin: dit hoort te poppen, en die
+lichtgroene, lichtrode en lichtblauwe vlakken horen alleen in een deck waar iemand expliciet om
+een ingetogen stijl heeft gevraagd.
+
+**En daar is één render bij gekomen, want een register dat je niet kunt zien is een intentie.**
+`11-poppend-vol-label-wit-paneel` is dezelfde vier meetdoelen als `02`, in dezelfde maten en met
+dezelfde hues, maar in het poppende register: het rijlabel staat vol, het paneel ernaast is wit met
+een haarlijn van 1pt in de hue van de rij, en het gewichtslabel draagt die hue in de letter. Naast
+elkaar zijn dit de twee kleurregisters, en op de keuzekaart staan ze dan ook als de twee opties van
+besluit 2.
+
+De meting van de twee, in dezelfde ronde als de render (LibreOffice 24.2.7.2, 1921 px):
+
+| render | register | wit | tint | verzadigd |
+|---|---|---|---|---|
+| `11-poppend-vol-label-wit-paneel` | poppend | 76 | 9 | 15 |
+| `02-vier-hues-volle-rijlabels-14procent` | ingetogen | 80 | 6 | 14 |
+| `260821_Procesanalyse_ZK` slide 6 | ingetogen, over de hele slide | 58 | 30 | 12 |
+
+Wat die drie regels samen zeggen, en het is niet wat je zou verwachten: op één slide zijn de twee
+registers in de meting bijna niet te onderscheiden — 76/9/15 tegen 80/6/14. De tint van `02` is zó
+licht dat hij als wit meet. Het verschil ontstaat op de slide waar het paneel het grootste vlak van
+de compositie is, en dat is ZK slide 6: vier volle labels van een derde breedte met vier
+pastelpanelen van twee derde ernaast, en dan staat de deck op 58 procent wit met 30 procent tint. De
+regel uit §4 hangt dus niet aan de alpha alleen maar aan het oppervlak dat hem draagt, en dat is
+precies de reden dat de weigering in `shapes.py` op de vulling zit en niet op een percentage: wie
+per rij een paneel tint, weet tijdens het bouwen niet dat hij bij de dertig procent uitkomt.
+
+Wat er daarop is veranderd, en het is meer dan een default:
+
+- Besluit 2 heeft nu eerst een **kleurregister** — poppend (default) of ingetogen — en alleen de
+  gebruiker kiest ingetogen. "Kies jij maar" is daar geen vrijbrief voor pastel.
+- In het poppende register is de default gevuldheid **met kleur** in plaats van weinig accent.
+  Weinig accent bleef de default in het ingetogen register.
+- De accenttint van 9000 tot 14000 is het instrument van het ingetogen register geworden, en
+  `shapes.py` weigert hem daarbuiten. Navy op 7000 blijft de neutrale container en mag overal.
+
+Wat deze zes renders daar niet over zeggen: ze zijn gebouwd met één slide inhoud, en de
+pastelstapeling die de deck afkeurde ontstaat pas over 26 slides. Dat is de les die de proef zelf
+niet kon geven — een gevuldheid die op één slide het beste leest, is niet dezelfde als de
+grondtoon die een deck heel houdt.
 
 ## Wat deze proef niet zegt
 

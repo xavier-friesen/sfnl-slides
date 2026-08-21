@@ -20,9 +20,11 @@ Daarom staat de grens hier hard:
   drie: meer dan één maat per rol (de vier maten uit de outline, `vormentaal.md` §2),
   twee letterfamilies in dezelfde alinea (§9) en de hoge punt binnen een regel (§9).
 * **`warn` is een aanwijzing**, geen afkeuring: bandfrequentie, nul exhibits in een deck
-  met cijfers, en de maatsprong per slide. Alle drie zijn ze te meten, maar geen van de
-  drie is zonder de render te beoordelen — een prozaslide met een gekleurde kop haalt
-  een lage maatsprong en kan de sterkste slide van de deck zijn.
+  met cijfers, de accenttint buiten het ingetogen kleurregister, en de maatsprong per
+  slide. Alle vier zijn ze te meten, maar geen van de vier is zonder de render of zonder
+  het vormbesluit van de gebruiker te beoordelen — een prozaslide met een gekleurde kop
+  haalt een lage maatsprong en kan de sterkste slide van de deck zijn, en een deck vol
+  accenttinten is precies goed als de gebruiker om een ingetogen deck vroeg.
 * **Cijfers zonder oordeel**: woorden per slide en per element, de registerverdeling en
   de herhaalde plattegrond. Die krijgen geen severity, ook niet als ze slecht uitvallen.
 
@@ -49,6 +51,7 @@ getallen die al in `vormentaal.md` staan:
 | bandfrequentie | deck | ten hoogste één per vier slides (§10) | 14 van de 17 en 12 van de 13 contentslides, tegen een ruimte van 4 en 3 |
 | exhibits bij cijfers | deck | minstens één grafiek, tabel, schema of verdeling (§12) | nul grafieken en nul tabellen bij 162 en 85 cijferfeiten |
 | maatsprong | slide | grootste eigen maat / kleinste >= 2 (§1) | 1,00 tot 2,91 (13 van 17 slides eronder) en 1,15 tot 3,64 (9 van 13); de afgekeurde deck uit §1 haalde 1,36, de referentie 3 tot 5 |
+| accenttint buiten ingetogen | deck | nul in de hoofdstijl (§4) | 12 van de 20 contentslides in `260821_Procesanalyse_ZK`, waarvan slide 6 op 58 procent wit met 30 procent tint |
 | twee families in één alinea | slide | nul (§9) | 71 en 40 alinea's |
 | hoge punt binnen een regel | slide | nul (§9) | 8 en 3 regels |
 
@@ -76,7 +79,7 @@ from pptx import Presentation  # noqa: E402
 from pptx.oxml.ns import qn  # noqa: E402
 
 from _deck import emit  # noqa: E402
-from shapes import DRAGER_VLOER, HUE  # noqa: E402
+from shapes import DRAGER_VLOER, HUE, TINT_PLAFOND  # noqa: E402
 
 # Eén definitie voor "wat is chrome", "wat is een titel" en "op welke layouts". Deze
 # komen uit `qa_text.py` in plaats van hier opnieuw te staan: twee QA-scripts die het
@@ -255,6 +258,41 @@ def vol_vlak_met_tekst(shape) -> bool:
             except (TypeError, ValueError):
                 return True
     return True
+
+
+def accenttint(shape) -> tuple[str, int] | None:
+    """De hue en de alpha als deze vorm een ACCENT op containersterkte draagt, anders None.
+
+    Dit is de vulling waar `vormentaal.md` §4 sinds 21 augustus 2026 nee tegen zegt buiten
+    het ingetogen kleurregister: een accent op alpha 14000 of lager is geen kleur en geen
+    wit, maar de pastelversie van zichzelf. Navy telt niet mee — navy op 7000 is de neutrale
+    container en die mag overal.
+
+    Waarom dit hier staat naast de weigering in `shapes.py`: die weigering geldt op de
+    bouwlaag, en dit script leest ook decks die met de hand of door een oudere versie van de
+    skill zijn gebouwd. De meting die de regel opleverde: `260821_Procesanalyse_ZK` had ze op
+    12 van de 20 contentslides, en slide 6 stond daardoor op 58 procent wit met 30 procent
+    tint.
+    """
+    sppr = shape._element.find(qn("p:spPr"))
+    fill = sppr.find(qn("a:solidFill")) if sppr is not None else None
+    if fill is None:
+        return None
+    for kleur in fill:
+        slot = kleur.get("val")
+        alpha = kleur.find(qn("a:alpha"))
+        if slot is None or alpha is None:
+            continue
+        hue = next((naam for naam, s in HUE.items() if s == slot), None)
+        if hue in (None, "navy", "wit", "zwartblauw", "grijs"):
+            continue
+        try:
+            waarde = int(alpha.get("val", "100000"))
+        except (TypeError, ValueError):
+            continue
+        if waarde <= TINT_PLAFOND:
+            return hue, waarde
+    return None
 
 
 def is_badge(shape) -> bool:
@@ -485,9 +523,12 @@ def registers(map_pad: Path) -> dict:
         "methode": "wit s<6% v>93% / verzadigd s>25% of v<55%, op 240 px breed",
         "bandbreedte": {"wit": [witten[0], witten[-1]],
                         "verzadigd": [vollen[0], vollen[-1]]},
-        "ijkpunt": "§5 kent drie gevuldheden, elk met een gerenderde referentie: weinig "
-                   "accent 92/3 (assets/proeven/03, de default), kaal 94/1 (proeven/01) en "
-                   "met kleur 80/14 (proeven/02). Wat deze reeks moet laten zien is "
+        "ijkpunt": "§5 kent drie gevuldheden, elk met een gerenderde referentie: met kleur "
+                   "76/15 (assets/proeven/11, de default in de hoofdstijl), weinig accent "
+                   "92/3 (proeven/03, de default in het ingetogen kleurregister) en kaal "
+                   "94/1 (proeven/01). Let daarnaast op de tint: een contentslide boven de "
+                   "twintig procent tint is de pastelvorm van §4 — ZK slide 6 staat op 58 "
+                   "wit / 30 tint / 12 verzadigd. Wat deze reeks moet laten zien is "
                    "VERSCHIL tussen de slides, niet een hoog getal: de afgekeurde deck lag "
                    "met 44 tot 53 procent wit over de hele lengte in dezelfde middenband. "
                    "De band van 20 tot 37 procent verzadigd is de meting van de winnende "
@@ -511,6 +552,7 @@ def analyse(deck: Path, renders: Path | None = None) -> dict:
     plattegronden: Counter = Counter()
     plattegrond_slides: dict[str, list[int]] = defaultdict(list)
     sprongen: dict[int, dict] = {}
+    tinten: dict[int, list[str]] = {}
     charts = tables = cijfers = contentslides = 0
 
     for nummer, slide in enumerate(presentatie.slides, start=1):
@@ -531,6 +573,10 @@ def analyse(deck: Path, renders: Path | None = None) -> dict:
                 tables += 1
             if not is_chrome(shape) and vol_vlak_met_tekst(shape):
                 vol_vlak = True
+            if content and not is_chrome(shape):
+                tint = accenttint(shape)
+                if tint:
+                    tinten.setdefault(nummer, []).append(f"{tint[0]}/{tint[1]}")
 
         for shape in walk(slide.shapes):
             in_tabel = False
@@ -690,6 +736,19 @@ def analyse(deck: Path, renders: Path | None = None) -> dict:
             "ziet alleen de render. Staat er zo'n exhibit, dan is deze melding onjuist; "
             "staan er vier kolommen tekst, dan is hij de kern van de zaak.")
 
+    if tinten:
+        add(findings, 0, "accenttint-buiten-ingetogen",
+            f"accenttinten op {len(tinten)} van de {contentslides} contentslides "
+            f"(slides {sorted(tinten)}): een accent op alpha {TINT_PLAFOND} of lager, dus "
+            "de pastelversie van zijn eigen hue. In de hoofdstijl is kleur vol of hij is er "
+            "niet (vormentaal §4): het label vol met navy erin, en het paneel eronder wit "
+            "met een haarlijn in die hue, of navy op 7000. Dit is een warn en geen blokkade "
+            "om één reden: heeft de gebruiker in het vragenvuur om een ingetogen deck "
+            "gevraagd, dan is dit precies de vorm die hij koos en is deze melding onjuist. "
+            "Heeft hij dat niet, dan is dit de pastelfout waarop het register is ingevoerd — "
+            "een deck van 26 slides dat zo gebouwd werd, stond op 58 procent wit met 30 "
+            "procent tint op zijn kleurslides.")
+
     tellingen = Counter(f["severity"] for f in findings)
     contentwoorden = list(woorden_per_slide.values())
 
@@ -734,6 +793,13 @@ def analyse(deck: Path, renders: Path | None = None) -> dict:
                  "slides": plattegrond_slides[sleutel]}
                 for sleutel, aantal in plattegronden.most_common()
             ],
+            "accenttinten": {
+                "per_slide": {str(k): v for k, v in sorted(tinten.items())},
+                "slides": len(tinten),
+                "ijkpunt": "de accenttint hoort bij het ingetogen kleurregister (§4). Nul "
+                           "is het getal in de hoofdstijl; is de deck ingetogen, dan zegt "
+                           "dit getal niets.",
+            },
             "registers": registers(renders) if renders else {
                 "gemeten": False,
                 "hint": "niet gemeten: de registerverdeling komt uit de render, niet uit "

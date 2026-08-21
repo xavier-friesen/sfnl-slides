@@ -85,7 +85,7 @@ kiest:
 | besluit | wie kiest | mag per slide verschillen |
 |---|---|---|
 | 1 dichtheid | gebruiker, of de skill op verzoek | alleen met expliciete toestemming |
-| 2 gevuldheid | gebruiker, of de skill op verzoek | ja — de grondtoon is deckbreed, een enkele slide mag kaal of met kleur zijn |
+| 2 kleurregister en gevuldheid | kleurregister: alléén de gebruiker, en zonder antwoord is het poppend. Gevuldheid: gebruiker, of de skill op verzoek | kleurregister: nooit. Gevuldheid: ja — de grondtoon is deckbreed, een enkele slide mag kaal of weinig accent zijn |
 | 3 wat kleur codeert | oranje staat vast; de tweede hue en de set zijn een gebruikerskeuze | tweede hue per slide: ja, als hij codeert. Een ánder accent: alleen met toestemming |
 | 4 titelmodus | gebruiker | nooit |
 
@@ -169,18 +169,40 @@ verderop kan nooit een besluit eerder in de rij terugdraaien.
    grens zelf formuleren; hier staat hij. De metingen eronder staan in `vormentaal.md` §13. Wat
    op elke dichtheid blijft staan: elk getal draagt zijn eenheid en periode op de slide zelf
    (`voice.md`).
-2. **De gevuldheid: weinig accent, kaal of met kleur.** Drie waarden, elk met een gerenderde
-   referentie in `assets/proeven/` en de meting eronder (aandeel wit / verzadigd):
+2. **Het kleurregister en de gevuldheid, en de hoofdstijl popt.** Twee vragen in één besluit,
+   en de eerste is de belangrijkste: **poppend of ingetogen?**
+
+   | kleurregister | wat het is | waar de kleur zit |
+   |---|---|---|
+   | **poppend** — default | kleur is vol of hij is er niet | volle hues in rijlabels, chips, badges, getallen en letters, op wit of op navy 7000 (`proeven/11`, 76 / 9 / 15) |
+   | **ingetogen** | de stille variant | dezelfde composities, maar met de accenttint van `vormentaal.md` §4 als paneel (`proeven/02`, 80 / 6 / 14) |
+
+   **Ingetogen is een keuze van de gebruiker en nooit van de bouwer.** Zegt hij er niets over,
+   dan is de deck poppend — ook wanneer hij dit besluit aan de skill laat. Vraag het dus
+   expliciet, en neem "kies jij maar" hier níét als een vrijbrief voor pastel. Dit is de
+   correctie van 21 augustus 2026 op `260821_Procesanalyse_ZK`: die deck zette op 12 van zijn 20
+   contentslides een volle hue als label met datzelfde accent op 9000 tot 12000 als paneel
+   eronder, de gebruiker had "met kleur" gekozen, en wat eruit kwam waren lichtgroene, lichtrode
+   en lichtblauwe vlakken — slide 6 meet 58 procent wit met 30 procent tint. `shapes.py` weigert
+   die tint nu ook: `vulling_xml()` laat een accent op alpha 14000 of lager alleen door na
+   `register("ingetogen")` bovenaan het bouwscript.
+
+   En let op de verkeerde lezing: poppend is niet méér oppervlak. `proeven/04` blijft afgekeurd.
+   Het gaat om de vólheid van de kleur die er toch al staat — hetzelfde rijlabel vol in plaats
+   van verdund, met wit ernaast in plaats van pastel.
+
+   Daarbinnen de **gevuldheid**, drie waarden met een gerenderde referentie in `assets/proeven/`
+   en de meting eronder (aandeel wit / verzadigd):
 
    | gevuldheid | wat er staat | gemeten | referentie |
    |---|---|---|---|
-   | **weinig accent** — default | geen kaartvullingen: navy koppen op wit, een haarlijn per rij, en één vol oranje vlak precies waar de nadruk zit | 92 / 3 | `proeven/03` |
+   | **met kleur** — default | een set hues codeert de categorieën, in volle rijlabels of vier kaarten | 76 / 15 | `proeven/11` |
+   | **weinig accent** | geen kaartvullingen: navy koppen op wit, een haarlijn per rij, en één vol oranje vlak precies waar de nadruk zit | 92 / 3 | `proeven/03` |
    | **kaal** | ook dat vlak niet: haarlijnen, kapitaallabels en kleur in de letter | 94 / 1 | `proeven/01` |
-   | **met kleur** | een set hues codeert de categorieën, in volle rijlabels of vier kaarten | 80 / 14 | `proeven/02` |
 
-   Default is **weinig accent**, gekozen op de zes gerenderde varianten van dezelfde inhoud. Dit
-   is de grondtoon van de deck en geen keuze per deck-en-klaar: kaal is de slide die er om vraagt
-   (een vraag, proza), met kleur is de slide waar een set categorieën uit elkaar moet blijven. Ze
+   Default is **met kleur** in het poppende kleurregister en **weinig accent** in het ingetogen
+   kleurregister. Dit is de grondtoon van de deck en geen keuze per deck-en-klaar: kaal is de slide
+   die er om vraagt (een vraag, proza), weinig accent is de slide zonder set categorieën. Ze
    mogen dus in één deck naast elkaar staan — dat is precies wat het contrast tussen de slides
    maakt.
 
@@ -474,10 +496,11 @@ structureel onbouwbaar, en de bouwer merkte dat niet.
 ```python
 import sys; sys.path.insert(0, "<plugin>/scripts")
 from shapes import (ZONE, Deck, aanhef, binnen, cols, contour, drager, gat_onder,
-                    hoogte_van, label, meter, para, pijl, punt, run, schaal, streep,
-                    tekst, tekst_op, verbind, vlak, vulgraad, write)
+                    hoogte_van, label, meter, para, pijl, punt, register, run, schaal,
+                    streep, tekst, tekst_op, verbind, vlak, vulgraad, write)
 
 D = Deck(body=14, kop=18, label=14, display=32)       # de vier maten, één keer
+# register("ingetogen")                               # alléén als de gebruiker erom vroeg
 xs, w = cols(3, 0.24)                                 # raster
 h = hoogte_van([(kop, D.kop, "Montserrat SemiBold"),  # hoe hoog moet dit blok zijn
                 (txt, D.body, "Lato Light")], w)
@@ -485,7 +508,10 @@ vormen = [
     vlak("Kop 62", xs[0], ZONE["y"], w, 1.35, vulling="emerald",
          tekst=[para(drager("62", D.display,           # Montserrat Light, nooit Gotham
                             tekst_op("emerald", D.display)), algn="ctr")], anchor="ctr"),
-    vlak("Kaart A", xs[0], 3.28, w, h, vulling="container:emerald", lijn=("emerald", 1),
+    vlak("Kaart A", xs[0], 3.28, w, h, vulling=None, lijn=("emerald", 1),   # wit + haarlijn:
+         tekst=[para(label(kop)), para(run(txt, "Lato Light", D.body), spc_voor=600)]),
+    #    de accenttint eronder is ingetogen (§4), en `vulling_xml()` weigert hem hier
+    vlak("Kaart B", xs[1], 3.28, w, h, vulling=("navy", 7000), lijn=("emerald", 1),
          tekst=[para(label(kop)), para(run(txt, "Lato Light", D.body), spc_voor=600)]),
     tekst("Regel", xs[1], 3.28, w, 0.9,
           [para(*aanhef("Twee loketten.",                # Lato Semibold + Lato Light
@@ -527,13 +553,17 @@ Nog steeds géén patroonbibliotheek: er is geen `kaartenrij()`, geen `stroomsch
 `tijdlijn()`. De merktekens tekenen één ding, de compositie is elke slide opnieuw jouw
 beslissing.
 
-Wat er extra nee zegt zodra je een eigen vorm maakt: `"grijs"` als vulling of als kaartlijn (dat
+Wat er extra nee zegt zodra je een eigen vorm maakt: een accent op alpha 14000 of lager buiten
+het ingetogen kleurregister (dat is de pastelfout van §4 — geef het vlak de volle hue, of wit met een
+haarlijn, of navy op 7000), `"grijs"` als vulling of als kaartlijn (dat
 is de Word-tabellook — een lichte vulling is alpha op de volle kleur), `hoek` en `adj` samen, een
 `adj`-handvat dat de preset niet heeft, een `label()` met een alphakleur (die mist in de render
 zijn laatste letter — gebruik de kleur `"grijs"`), een cursieve run die langer is dan één korte
 regel, en een meter van meer dan vijf punten.
 
-Wat de laag voor je regelt: alpha in plaats van `lumMod`, de `adj` van een `roundRect` uit een
+Wat de laag voor je regelt: het kleurregister (een accenttint komt er in de hoofdstijl niet
+door),
+alpha in plaats van `lumMod`, de `adj` van een `roundRect` uit een
 absolute radius, een lijn in dezelfde hue als de vulling, de expliciete `<a:latin/>` op elke run,
 `noAutofit`, de juiste elementvolgorde, `lnSpc` op 112 procent, en de tekstkleur die bij een
 vulling en een puntgrootte hoort. `Deck(display=...)` weigert een drager buiten 28 tot 40pt, en

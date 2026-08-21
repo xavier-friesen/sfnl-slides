@@ -293,7 +293,9 @@ Gouda slide 9: vier genummerde tint-kaarten op een rij (`1 BETERE REGISTRATIE`,
 bedrag erin. De rij en de conclusie staan op één lijn, dus je leest ze in één beweging.
 
 **Bouwbaar:** ja, en dit is een goede vervanger voor de afsluitband: de conclusie staat ín de rij
-in plaats van eronder. §10 noemt dit als alternatief ("doordat de laatste rij zelf de conclusie
+in plaats van eronder. Let op de tint-kaarten: dat is de vorm zoals hij in Gouda staat, en in de
+hoofdstijl zijn het witte kaarten met een haarlijn in de hue (`vormentaal.md` §4) — de verzadigde
+conclusiekaart blijft precies wat ze is. §10 noemt dit als alternatief ("doordat de laatste rij zelf de conclusie
 is"); hier staat hoe dat eruitziet.
 
 ## 22. De fasenstapel met sleutelparen

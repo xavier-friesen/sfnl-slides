@@ -135,16 +135,26 @@ keer voor: élke lichte vulling is de volle kleur met `<a:alpha>` erover.
 
 Per hue gekalibreerd, want navy is veel donkerder dan emerald:
 
-| hue | alpha voor een container |
-|---|---|
-| navy (`dk2`) | 7000 |
-| royal, sky, emerald | 10000 |
-| grapefruit | 9000 |
-| oranje | 12000 |
+| hue | alpha voor een container | waar hij mag |
+|---|---|---|
+| navy (`dk2`) | 7000 | overal |
+| royal, sky, emerald | 10000 | alleen in het ingetogen kleurregister |
+| grapefruit | 9000 | alleen in het ingetogen kleurregister |
+| oranje | 12000 | alleen in het ingetogen kleurregister |
 
 Navy op 7000 is de **neutrale container**: koel, kleurloos, en de default zodra er niets te
 onderscheiden valt. Boven ongeveer 14000 wordt een container een kleur in plaats van een
 achtergrond — dat mag, maar dan betekent het vlak iets.
+
+**De accenttinten zijn geen default, en dat is de kolom rechts.** In de hoofdstijl is kleur vol
+of hij is er niet (`vormentaal.md` §4): de hue staat vol in een rijlabel, een chip, een badge, een
+getal of een letter, en het vlak eronder is wit met een haarlijn in die hue, of navy op 7000. Een
+accent op containersterkte komt er alleen wanneer de gebruiker in het vragenvuur expliciet om een
+ingetogen deck heeft gevraagd, en `shapes.py` weigert hem tot dat in het bouwscript staat
+(`register("ingetogen")`). Waar dat op staat: een deck van 26 slides zette op 12 van zijn 20
+contentslides een volle hue als label met datzelfde accent op 9000 tot 12000 als paneel eronder,
+en dat rendert als lichtgroene, lichtrode en lichtblauwe vlakken — die slides meten tot 30 procent
+tint.
 
 Waarom dit uitmaakt: `lumMod 20000` / `lumOff 80000` levert een vlak dat één stap te donker is
 en daardoor als eigen kleur meedoet. Bij navy komt daar `#C6C3ED` uit, een verzadigd lavendel
