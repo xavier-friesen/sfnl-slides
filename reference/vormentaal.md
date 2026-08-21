@@ -11,6 +11,11 @@ slides — en de vier reconstructies `11` tot `14` in `assets/maatstaf/`. Waar e
 verkeerd te lezen bleek, staat de verkeerde lezing er expliciet bij — dat is geen overbodige
 uitleg, dat zijn fouten die daadwerkelijk gemaakt zijn.
 
+`merktekens.md` staat ernaast: tien merktekens uit bestaande SFNL-decks, met per stuk wat het
+codeert en of de laag het al kan. Dat is geen catalogus om uit te kiezen maar het antwoord op de
+vraag "wat kan ik eigenlijk tekenen" — de vraag die de bouwer stelt op het moment dat hij anders
+een kaart met tekst maakt.
+
 Lees dit één keer voordat je de eerste slide bouwt, samen met de veertien voorbeelden in
 `assets/maatstaf/`. Die veertien zijn niet foutloos: `assets/maatstaf/LEESMIJ.md` zegt per
 slide waarvoor hij de lat is en waarvoor niet.
