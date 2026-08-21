@@ -188,8 +188,8 @@ verderop kan nooit een besluit eerder in de rij terugdraaien.
    zit er structureel naast, dus meet het met `qa_tellingen.py --renders`. Let op de val dat vier
    volle rijlabels vol vóelen en 14 procent meten, en dat een slide met alléén lichte containers
    op 65 tot 69 procent wit uitkomt — dat is geen van de drie en vraagt dus een reden.
-3. **Wat kleur codeert: oranje staat vast, de tweede hue is de keuze.** Oranje is het accent naast navy, vast en
-   deckbreed. Dat wordt niet per deck opnieuw gekozen: het is de huiskleur en de enige hue in het
+3. **Wat kleur codeert: oranje staat vast, de tweede hue is de keuze.** Oranje is het accent
+   naast navy, vast en deckbreed. Dat wordt niet per deck opnieuw gekozen: het is de huiskleur en de enige hue in het
    palet die als merk leest in plaats van als categorie.
 
    De uitkomst die je erbij koopt, en die hoort hier expliciet te staan: oranje haalt 2,6 op wit
