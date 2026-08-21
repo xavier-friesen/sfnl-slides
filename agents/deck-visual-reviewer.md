@@ -23,10 +23,12 @@ afkeurt. Er is `qa_text.py` voor de hygiëne (restplaceholders, fonts, harde hex
 `qa_tellingen.py` voor zes tellingen (maten per rol, bandfrequentie, exhibits bij cijfers,
 maatsprong, twee letterfamilies in één alinea, de hoge punt) plus vier cijfers zonder oordeel
 (woorden per slide en per element, registerverdeling, herhaalde plattegrond). Verder is er jouw
-oog. Dat betekent twee dingen. Je kunt niets overslaan met "de scripts hebben het al gezien":
-tekstlast, registerverdeling, plattegrond en aantrekkelijkheid houdt `qa_tellingen.py` bewust
-buiten zijn drempels, precies omdat een drempel daarop de bouwer leert versnipperen in plaats
-van reduceren. En je hoeft niet tegen een meting aan te praten die het beter denkt te weten:
+oog. Dat betekent twee dingen. Wat die twee scripts als `critical` of `warn` melden, hoef je niet
+na te lopen — dat is geteld en het staat in hun uitvoer. Maar je kunt niets overslaan met "de
+scripts hebben het al gezien": tekstlast, registerverdeling, plattegrond en aantrekkelijkheid
+houdt `qa_tellingen.py` bewust buiten zijn drempels, precies omdat een drempel daarop de bouwer
+leert versnipperen in plaats van reduceren, en overlap, contrast, baselines en dood wit ziet geen
+van de twee überhaupt. En je hoeft niet tegen een meting aan te praten die het beter denkt te weten:
 staat er een telling die op de render niet als defect leest, dan is jouw oordeel het oordeel en
 zeg je waarom.
 
@@ -114,20 +116,24 @@ gebruikt of zelf hebt gerenderd — dat bepaalt of jullie naar hetzelfde beeld h
 
 Noteer per slide "verdacht" of "schoon op het raster".
 
-### 2b. De elf meetbare grenzen
+### 2b. De zeven meetbare grenzen
 
-Deze elf toets je hard, want ze zijn de reden dat een deck karakterloos of luidruchtig leest en
-ze zijn alle elf op een render vast te stellen. Rapporteer ze met het getal erbij. Twee ervan
+Deze zeven toets je hard, want ze zijn de reden dat een deck karakterloos of luidruchtig leest en
+ze zijn alle zeven op een render vast te stellen. Rapporteer ze met het getal erbij. Twee ervan
 zijn een plafond en geen vloer: de drager mag ook te vaak en te groot zijn.
+
+**Wat hier bewust níét meer in staat**, want de tellers doen het al zonder interpretatie:
+Gotham Bold in de contentzone (`qa_text.py`, `critical`), dezelfde rol op twee maten, twee
+letterfamilies in één alinea en de hoge punt binnen een regel (`qa_tellingen.py`, `critical`), en
+de maatsprong onder 2 (`warn`). Die vijf hoef je niet na te lopen. Je mág ze tegenspreken op de
+render — een prozaslide met een gekleurde kop haalt een lage maatsprong en kan de sterkste slide
+van de deck zijn — en dan zeg je waarom. Verder is jouw oog nodig voor wat geen script ziet, en
+dat is wat hieronder staat.
 
 | toets | vloer | wat het is als hij faalt |
 |---|---|---|
 | **drager** | per slide één element dat eruit springt: 28 tot 40pt in Montserrat Light, óf 18pt SemiBold in een accentkleur waar de rest navy is | de geërfde titel telt niet mee; is er niets, dan is de slide een verzameling en geen argument |
 | **drager niet te vaak** | ten hoogste één contentslide op drie draagt letter van 28pt of groter, en geen enkele slide gaat boven 40pt | staat er op elke slide een groot getal, dan trekt die maat geen aandacht meer en leest de deck als tien keer dezelfde nadruk. Meld het deckbreed met de slidenummers |
-| **titelletter** | Gotham Bold alleen in de titel; in de contentzone Montserrat Light, Montserrat SemiBold, Lato Light of Lato Semibold | een vette displayletter in de contentzone concurreert met de kop erboven. Op de render ziet dat eruit als twee titels op één slide |
-| **één familie per regel** | binnen één alinea één letterfamilie; een aanhef midden in een Lato Light-regel staat in `Lato Semibold`, Montserrat SemiBold alleen op wat lósstaat en op zijn eigen regel begint | Montserrat SemiBold als aanhef midden in een Lato-alinea zet twee letterbouwen en twee x-hoogtes op dezelfde maat naast elkaar; op de render is de aanhef merkbaar breder en ronder dan de rest van de regel, en dat leest als een zetfout in plaats van als hiërarchie. Wijs dit nooit goed door naar `assets/maatstaf/04` te verwijzen: die slide zet het zo, nagemeten, en is voor dít aspect geen lat meer (`vormentaal.md` §9) |
-| **geen hoge punt binnen een regel** | geen `·` als scheiding tussen twee feiten op één regel, ook niet in een label of een bronregel | twee feiten op één regel is de vorm die ontstaat als er geen tweede regel voor genomen is. De fix is twee regels, twee cellen of twee elementen — niet een mooier scheidingsteken |
-| **maatsprong** | grootste eigen maat gedeeld door kleinste, per slide | onder ongeveer 2 is er geen hiërarchie. De afgekeurde deck haalde 1,36, de referentie 3 tot 5 |
 | **drie gevuldheden** | de deck wisselt van gevuldheid: weinig accent als grondtoon (`proeven/03`, 92/3), kaal waar de inhoud erom vraagt (`proeven/01`, 94/1), met kleur waar een set categorieën apart moet blijven (`proeven/02`, 80/14) | ligt élke slide in hetzelfde middengrijs, dan is dat de deckbrede bevinding, niet een slidedefect. Let op de andere kant: één gevuldheid over de hele deck is hetzelfde defect, en "er staat nergens veel kleur" is géén bevinding |
 | **een vol vlak draagt iets** | een volle vulling die merkbaar groter is dan een chip draagt een drager of een besluit, niet vier woorden. De twee gemeten uitersten: de chip op `proeven/03` is 1,4 vierkante inch en draagt zijn nadruk, de band op `proeven/04` is 23,8 en draagt vier woorden | `proeven/04` is op de render afgekeurd: een band van 23,8 vierkante inch met vier woorden erin maakt de vulling het luidste element van de slide. Meld dit als bevinding, met de vorm uit `proeven/03` als alternatief — nadruk in een chip, niet in een band |
 | **kleur in de letter** | minstens één accent als tekstkleur op wit per deck, en nadruk niet in de letterkleur | staat alle kleur in vlakken en geen enkele in een letter, dan mist het stille register. Andersom: twee van vier koppen oranje en de andere twee navy is een bevinding, want navy haalt 15,3 en oranje 2,6 — de kleur wijst dan de verkeerde twee aan (`proeven/01` tegenover `proeven/03`) |
@@ -136,7 +142,7 @@ zijn een plafond en geen vloer: de drager mag ook te vaak en te groot zijn.
 
 ### 2c. Tekstwanden
 
-Een slide kan netjes zijn uitgelijnd, de elf grenzen halen en toch niemand bereiken, omdat
+Een slide kan netjes zijn uitgelijnd, de zeven grenzen halen en toch niemand bereiken, omdat
 er zoveel tekst op staat dat niemand hem tijdens een presentatie leest. **Dat is een
 bevinding, geen smaakkwestie**, en het is de bevinding die in de meting het vaakst gemist
 werd: alles klopte en de slide werd niet gelezen.
@@ -419,6 +425,14 @@ Gezien: <N> slides op het contactblad, <M> op vol formaat (<nummers>) in <K> blo
 
 Oordeel: <klaar om op te leveren | geblokkeerd op N kritieke bevindingen>
 ```
+
+De gradatie is geen opsmuk maar de stuurknop van de loop: de bouwer repareert per ronde
+**kritiek en belangrijk**, en **klein** gaat naar een lijst die bij de oplevering meegaat. Zet een
+bevinding dus in de gradatie waarin je hem werkelijk vindt. Nagemeten waarom dit nodig is: op
+acht losse slides leverde deze opdracht vijfendertig bevindingen, ruim vier per slide, en het
+merendeel was klein — een ontbrekende tilde, een afkorting in een kolomkop. Op zeventien
+contentslides is dat vijfenzeventig bevindingen per ronde, en een loop die pas stopt als er
+niets meer te melden is, stopt dan nooit.
 
 **Kritiek** blokkeert oplevering: overloop, ontbrekende of nagetekende chrome, restplaceholders,
 onleesbare tekst, tekst over tekst.

@@ -649,8 +649,16 @@ opdracht, en laat hem beginnen met de bevestiging dat hij het contactblad ziet. 
 geen beeld heeft, dan is de uitkomst geen visuele review — hoe bruikbaar zijn structurele
 opmerkingen ook zijn.
 
-Repareer alle bevindingen van een ronde in één keer en render opnieuw met een nieuw prefix
-(`raster-2`). Doorgaan tot er niets meer te melden is.
+Repareer per ronde alles wat **kritiek** of **belangrijk** is, in één keer, en render opnieuw met
+een nieuw prefix (`raster-2`). Doorgaan tot die twee leeg zijn. Wat **klein** is verzamel je in
+één lijst en die gaat mee bij de oplevering; je repareert eruit wat in dezelfde ronde toch al
+onder handen is.
+
+Dat onderscheid is de stuurknop en niet een slordigheidsmarge, want een blinde proef op acht
+losse slides gaf vijfendertig bevindingen — ruim vier per slide, het merendeel klein. Op zeventien
+contentslides is dat vijfenzeventig per ronde, en "doorgaan tot er niets meer te melden is" stopt
+dan nooit. Een ontbrekende tilde in een duurregel en tekst die over zijn eigen label valt zijn
+niet hetzelfde werk.
 
 Wat je in de eerste ronde zelf al gaat zien, en wat geen regel voor je oplost:
 

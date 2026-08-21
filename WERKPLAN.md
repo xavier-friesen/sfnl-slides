@@ -401,6 +401,51 @@ lichter dan zijn eigen kop ernaast, dus navy is de default en een hue alleen als
 een pijlkop op een boog moet uitgerekend worden: de eerste kringloop had een kop op geschatte
 coördinaten en die zweefde los van de boog — in de code onzichtbaar, op de render meteen.
 
+## Ronde 7 — is de visuele reviewer zijn ronde waard?
+
+De vraag kwam van Xavier: die agent doet elf harde grenzen, twee zoekopdrachten, een
+aantrekkelijkheidsvraag en een escalatievoorstel in één ronde, en de duurste bevindingen komen
+terug als de slide al gebouwd is. Eruit halen, laten staan, of een tweede pass op de outline?
+
+**Opzet.** De repo blijkt per ongeluk een testset te zijn: 24 renders in `assets/`, met per
+slide in de twee `LEESMIJ.md`'s opgeschreven wat eraan mankeert. Dus: acht beelden, de agent
+blind erop (zonder die twee bestanden, want die bevatten de antwoorden), en scoren tegen een
+scoreblad dat vóór zijn rapport is vastgelegd. Vier bevindingen die hij moest vinden, twee
+beelden waarop hij niets mocht vinden, en één vergelijking waar een menselijk besluit op schrift
+staat (`proeven/03` tegen `04`, afgekeurd op 21-08-2026).
+
+**Uitkomst.**
+
+| toets | resultaat |
+|---|---|
+| geklipte glyph op `proeven/06` | gevonden, tot de gradatie per rij (`MEETDOEI`, `VERANTWOORDE`) |
+| getal over zijn label op `maatstaf/01` | gevonden, alle vier de labels |
+| lege kaarthelften op `01` | gevonden, 1,2 in restgat gemeten |
+| dubbele omzetreeks op `08` | gevonden, staven nagerekend tegen de tabelkolom |
+| 0,58 in wit tussen de blokken op `14` | half: de kale onderkant (0,7 in) wel, de tussenruimte niet — daar zag hij een rastermismatch van 1,2 in, die na controle echt is |
+| valse positief op `11` (141 woorden, de sterkste van de vier) | geen: "voor het overige schoon", geen tekstwandclaim |
+| valse positief op `13` (aslabel binnen de zone) | geen: hij verschoof tik noch label |
+| `03` tegen `04` | koos `04` af, met dezelfde reden als Xavier, plus zelfstandig de inversie uit `proeven/01` |
+| vijf claims buiten het scoreblad, nagekeken | alle vijf waar |
+
+**Twee besluiten.** Hij blijft (a en c vallen af). Van zijn ongeveer 35 bevindingen waren er zes
+in de outline te zien, dus minder dan een vijfde — een aparte outline-agent betaalt twee keer
+voor werk dat deze pass toch doet, en het voorstel daarvoor is ingetrokken. Wat wel veranderde:
+vijf van zijn elf grenzen waren al een `critical` of `warn` in de tellers en zijn uit zijn tabel
+gehaald (daar dreven zijn eigen getallen ook uit de maatstaf weg), en de loop werkt nu op de
+gradatie in plaats van op leegte — vier bevindingen per slide maal zeventien contentslides is
+vijfenzeventig per ronde, en "doorgaan tot er niets meer te melden is" stopt dan nooit.
+
+**Bijvangst.** `maatstaf/13` stond in `LEESMIJ.md` als foutloos en is het niet: de as mist zijn
+ijklijn bij 1, de getallen achter de rijlabels zeggen niet wát ze zijn, en de legenda staat in
+omgekeerde leesrichting. Dat staat nu in de kolom rechts, met de waarschuwing dat een lege cel
+in die kolom geen bewijs van schoon is.
+
+**Wat deze proef niet zegt.** n is acht en hij is niet deterministisch, dus dit is "ziet hij een
+ontbrekende glyph", geen precisiecijfer. En de test die het meeste zou zeggen — vindt hij op een
+verse deck dingen die de bouwer zelf op het contactblad miste — vraagt een omgeving met
+`python-pptx` en een pdf-naar-png-omzetter, en die was er niet.
+
 ## Openstaand
 
 - **De blinde vergelijking met twee juryleden is niet gedraaid.** Beide juryagents zijn

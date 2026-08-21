@@ -14,6 +14,11 @@ dan het origineel staat hieronder.
 
 Kijk naar de compositie van deze slides, niet naar hun uitvoering.
 
+**En de kolom rechts is niet af.** Op 21 augustus 2026 is `deck-visual-reviewer` blind op acht van
+deze beelden gezet — zonder dit bestand, want dat bevat de antwoorden — en hij vond op `13` drie
+dingen die hier niet stonden, waarvan één een echt defect in een slide die hier als lat gold. Wat
+er in deze kolom níét staat, is dus geen bewijs dat een slide schoon is.
+
 **Vier van de veertien zijn ook het antwoord op een vraag uit het vragenvuur** (skill, stap 1),
 en dat is de reden dat ze hier met een getal in de tabel staan. De drie dichtheden hangen elk aan
 een slide — `13` en `14` zijn een spreekdeck (50 en 59 woorden inclusief titel), `12` is een licht
@@ -29,7 +34,7 @@ heeft elk antwoord in dat blok een beeld, in plaats van alleen een default met e
 | `08-tabel-naast-grafiek` | de tabelzetting naast een native grafiek | dezelfde omzetreeks staat twee keer op één slide (`adviesvorm.md` §2) |
 | `11-vier-fasekaarten-tweede-uitgelicht` | de cirkelbadge in de hue van de kaart, de gestreepte oranje nadruk om één kaart, vier hues die vier fasen coderen, de afsluitband die één keer voorkomt; en als antwoord in het vragenvuur: kaarttaal afgerond met een haarlijn in de eigen hue, dichtheid leave-behind (141 woorden) | de body staat op 13pt, en dat is een eigen tussenmaat: 16 paste niet in vier kaarten van 2,95 in, en de norm van §2 staat inmiddels op 14 |
 | `12-tabel-verzadigde-rijlabels-puntenmeter` | het volle rijlabel tegen het nauwelijks getinte paneel, de puntenmeter als merkteken voor gewicht, kolomkoppen in grijs; en als antwoord in het vragenvuur: kaarttaal recht zónder haarlijn — het volle rijlabel begrenst de rij al — en dichtheid licht leave-behind (99 woorden) | de kapitaallabels staan op 12pt omdat `VERANTWOORDEN` op 14pt niet in de cel past; dat is een gevolg van de kolombreedte, geen model |
-| `13-dumbbell-plot-op-schaal` | positie draagt de informatie, twee hues voor twee meetmomenten, het lichte register: alleen lijnen en punten op wit, en een aslabel dat binnen de zone blijft terwijl de tik op schaal staat; en als antwoord in het vragenvuur: dichtheid spreekdeck (50 woorden) | — |
+| `13-dumbbell-plot-op-schaal` | positie draagt de informatie, twee hues voor twee meetmomenten, het lichte register: alleen lijnen en punten op wit, en een aslabel dat binnen de zone blijft terwijl de tik op schaal staat; en als antwoord in het vragenvuur: dichtheid spreekdeck (50 woorden) | de as mist zijn ijklijn bij 1: er staan gridlijnen bij 2, 3 en 4, en alle oranje punten liggen links van de eerste lijn, dus juist de kant waar de boodschap zit is niet af te lezen. Ook: de getallen achter de rijlabels — (8), (4), (8), (6), (14) — zeggen nergens wát ze zijn, en er is geen bronregel. De legenda staat in omgekeerde leesrichting (navy eerst, oranje eerst op de rij) |
 | `14-postitwand-drie-stappen` | het schema in abstracte vorm zonder tekst, het grote cijfer met de kaplabel op één baseline en een lijn eronder, de pijl die een volgorde draagt | tussen het schema en de drie kolommen staat 0,58 in wit en onderaan nog 0,67 in; de slide leest luchtiger dan het origineel |
 
 ## De meting bij `04`
