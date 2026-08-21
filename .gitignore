@@ -38,6 +38,7 @@ deck.pdf
 # renders waar een meting in vormentaal.md aan hangt, en die moeten na te kijken blijven.
 !assets/maatstaf/*.png
 !assets/proeven/*.png
+!assets/keuzekaarten/*.png
 
 # Decks en sjablonen blijven buiten de repo, behalve het meegeleverde sjabloon in assets/.
 *.potx

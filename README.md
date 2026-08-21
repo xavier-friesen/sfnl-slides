@@ -58,6 +58,7 @@ agents/deck-visual-reviewer.md  de visuele beoordeling, als subagent
 assets/sfnl-sjabloon.potx       het geprunde sjabloon, 5,8 MB
 assets/maatstaf/                veertien slides: tien uit winnende decks, vier reconstructies
 assets/proeven/                 de kleur- en gevuldheidsproef, met de metingen eronder
+assets/keuzekaarten/            de keuzekaart die bij het vragenvuur meegaat
 scripts/                        de dunne laag
 ```
 

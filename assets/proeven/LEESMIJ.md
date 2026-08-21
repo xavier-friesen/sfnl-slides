@@ -51,3 +51,18 @@ erbij: het oppervlak van een grote vulling moet iets dragen, en in `04` draagt h
 Niets over echte PowerPoint: de klipping in `06` is een observatie op LibreOffice 24.2.7.2. En
 niets over aantrekkelijkheid — welke van de zes vormen de mooiste is, beslist het oog op de
 render en niet deze tabel. Wat hier staat zijn de getallen eronder.
+
+## Twee renders die er later bij kwamen
+
+`07-modus-b-divider` en `08-modus-b-hoofdstuktitel` zijn geen proef maar een gat dat gedicht is:
+titelmodus B stond alleen in `voice.md` en was nergens te zien. Dit is de vorm — een sectiedivider
+uit fotolayout 6 met de hoofdstuknaam, en daarachter een contentslide met diezelfde hoofdstuknaam
+als titel en de bewering in de subtitel. Kijk hier naar de titelzone, niet naar de compositie
+eronder: die is uit `03` overgenomen om alleen de titelrij te laten verschillen.
+
+## De keuzekaart
+
+`assets/keuzekaarten/vragenvuur.png` is uit deze renders samengesteld: per besluit de opties naast
+elkaar als detailuitsnede, met de meting eronder. Die kaart gaat bij het vragenvuur naar de
+gebruiker en wordt door de skill niet gelezen, dus hij kost geen tokens. Verandert er een optie,
+dan bouwt `python scripts/keuzekaart.py` hem opnieuw uit de renders die dan in de repo staan.

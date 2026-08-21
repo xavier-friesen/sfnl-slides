@@ -122,7 +122,7 @@ DICHT_PLAFOND = 12.5
 #: een rijkop en een kaartlabel van 12pt (`Rij 1 rol` op `12`, `Kaart 1 label` op `11`) en
 #: een kapitaallabel van 14pt (`Kolom 1 kop` op `14`). Met één rol `label` meldde dit
 #: script daarop `critical: de rol 'label' staat op 3 maten` — op de lat zelf, en de bouwer
-#: heeft daarop besluit 2 teruggebracht naar één labelmaat van 12pt. Dat besluit nam het
+#: heeft daarop de vier maten teruggebracht naar één labelmaat van 12pt. Dat besluit nam het
 #: telscript en niet de bouwer, en dat is precies wat dit script niet mag doen.
 #:
 #: §2 geeft de drie maten elk hun eigen werk: "12pt is de dichte variant voor een
@@ -314,7 +314,7 @@ def rol_van(font: str | None, pt: float | None, in_tabel: bool) -> str | None:
     en voor een tabelcel, 14pt is het kapitaallabel. Op de lat zelf — de vier
     voorbeeldslides uit `assets/maatstaf/11`-`14` — staan alle drie naast elkaar, en dit
     script meldde daarop `critical: de rol 'label' staat op 3 maten`. De bouwer van de
-    testdeck heeft daarop besluit 2 teruggebracht naar één labelmaat van 12pt. Dat besluit
+    testdeck heeft daarop de vier maten teruggebracht naar één labelmaat van 12pt. Dat besluit
     nam het telscript en niet de bouwer.
 
     Wat overblijft is de toets die wél moet vuren: dezelfde rol op twee maten bínnen

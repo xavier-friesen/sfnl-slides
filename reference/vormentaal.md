@@ -138,7 +138,7 @@ blijft het oranje.
 
 **Een sét hues is geen slidekeuze maar een deckbesluit.** Vier fasen, vier rijen, vier
 categorieën die door de hele deck terugkomen: dan dragen drie of vier hues tegelijk informatie,
-en dat neem je één keer voor de hele deck (skill, stap 1, besluit 4), met per hue in één woord
+en dat neem je één keer voor de hele deck (skill, stap 1, besluit 3), met per hue in één woord
 wat hij codeert. `maatstaf/11` en `12` zijn beide zo'n set — vier fasekaarten en vier
 tabelrijen in royal, oranje, sky en emerald — en ze zijn dus geen bewijs dat vier hues per
 slide mogen. Wie een set per slide opnieuw verzint, krijgt dezelfde rol in twee kleuren.

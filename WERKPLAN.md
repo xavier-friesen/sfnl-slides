@@ -353,6 +353,28 @@ kaarttaal (besluit 3 vroeg er ook naar), `deck-visual-reviewer` heeft twee nieuw
 de gevuldheid, en draagt een groot vol vlak wel iets), en het ijkpunt in `qa_tellingen.py` zegt
 niet langer dat de reeks naar 20 tot 37 procent toe moet.
 
+## Ronde 5 — het vragenvuur ingedeeld, met een kaart erbij
+
+Twee wijzigingen, beide op verzoek van Xavier.
+
+**Van zes vormbesluiten naar vier, in de volgorde grof naar fijn:** dichtheid, gevuldheid, wat
+kleur codeert, titelmodus. De vier maten en de kaarttaal worden niet meer gevraagd — de maten zijn
+een regel met één tweesprong (body 12pt bij een kaartenrij van drie of meer), en de kaarttaal
+kiest de skill zelf met de reden in de outline. Ze staan nog wél in stap 1, als het blok "twee
+dingen worden niet gevraagd", want de bouwer moet weten wat er dan geldt. Het vragenvuur is
+daarmee acht vragen: vier over de opdracht, vier over de vorm.
+
+**Een keuzekaart bij de vier vormvragen.** `assets/keuzekaarten/vragenvuur.png`: per besluit de
+opties naast elkaar als detailuitsnede uit een echte render, met de meting eronder. De skill
+stuurt het bestand en leest het niet, dus het kost geen tokens en geen render — dat was de eis.
+`scripts/keuzekaart.py` bouwt hem opnieuw uit de renders die in de repo staan; het is
+onderhoudsgereedschap en geen bouwstap.
+
+Daarvoor moest één gat gedicht worden: titelmodus B had geen render. Die is er nu
+(`proeven/07`, `08`) — een divider uit fotolayout 6 met de hoofdstuknaam, en een contentslide met
+diezelfde naam als titel en de bewering in de subtitel. Bijvangst voor de doctrine: de subtitel
+duwt de contentzone omlaag, dus in modus B begint elke slide van dat hoofdstuk lager.
+
 ## Openstaand
 
 - **De blinde vergelijking met twee juryleden is niet gedraaid.** Beide juryagents zijn
@@ -371,6 +393,9 @@ niet langer dat de reeks naar 20 tot 37 procent toe moet.
 - **De vier goede voorbeeldslides zijn alleen als afbeelding in het gesprek beschikbaar**, niet
   als bestand. Ze zijn de feitelijke lat voor werklijn A en de blinde vergelijking, en ze horen
   eigenlijk in `assets/maatstaf/` naast de tien bestaande. Daarvoor zijn de PNG-bestanden nodig.
+- **Twee referenties ontbreken nog steeds als A/B op dezelfde inhoud:** recht tegen afgerond
+  (kaarttaal) en 16 tegen 12pt body. Beide zijn nu besluiten van de skill zelf, dus ze staan niet
+  op de keuzekaart — maar de bouwer kiest ze wel blind.
 - **De drie dichtheden zijn niet naast elkaar gebouwd.** Testronde 2 uit het plan hierboven ging
   over twee registers; er zijn er nu drie, en of licht leave-behind werkelijk iets anders
   oplevert dan de twee andere is niet gemeten.
