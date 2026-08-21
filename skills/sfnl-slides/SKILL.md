@@ -294,7 +294,12 @@ advies, dan is dat een bewuste keuze die je in de outline motiveert.
   suggereren dat er niet is" is een reden; "n.v.t." en "past niet" zijn dat niet, want een
   reden die op elke slide past beslist niets. Proza is een volwaardig antwoord
   (`maatstaf/04`), mits de reden zegt waarom er in de boodschap geen verhouding, tijdstip of
-  afstand zit (`vormentaal.md` §12). En één toets hoort er standaard bij: staat op elke kolom
+  afstand zit (`vormentaal.md` §12). En een **icoon** is hier een middel en geen opsmuk: je
+  tekent het zelf met `icoon()` op het 24-raster (`vormentaal.md` §14, `proeven/09`), er is geen
+  bibliotheek, en het mag alleen mee als het een soort codeert die de lezer moet vergelijken,
+  iets markeert dat over meerdere slides terugkomt, of een zin in een schema vervangt. Naast een
+  kop die het al zegt is het decoratie — `proeven/10` zet dezelfde drie rijen met en zonder
+  iconen naast elkaar, en zonder is de rustigere. En één toets hoort er standaard bij: staat op elke kolom
   dezelfde vetgezette aanhef, dan zijn die labels een rijkop en is het antwoord tabel — de
   gemeten slide van 255 woorden was precies dat, vier kaarten met acht keer dezelfde twee
   labels (`vormentaal.md` §13). Vraagt de brief "hoe werkt het" of "in welke stappen", dan is
@@ -455,6 +460,9 @@ merkteken is een slide die tekst blijft.
    punten die een grofheid codeert), `pijl()` (met een kop die niet de helft van de hoogte is),
    `streep()` (horizontaal én verticaal, met alpha voor een haarlijn), `verbind()` met `anker()`
    (twee vormen op hun rand verbinden). Elk tekent één ding en houdt zich aan de kleurregels.
+   En `icoon()`, dat een zelfgetekend lijnicoon op een raster van 24 zet: je geeft de geometrie
+   in rastereenheden, de functie geeft de dikte, de hue, de ronde uiteinden en de groep
+   (`vormentaal.md` §14). Er is geen iconenbibliotheek en die komt er niet.
 3. **Een eigen contour** — `contour("Wig", 0, 0, [(0.48, 4.2), (2.0, 3.6), (2.0, 4.8)],
    vulling=("grapefruit", 20000))`. Punten in inch, en de laag schrijft het `custGeom`. Met
    `sluit=False` en een `lijn` is het een open lijnstuk: een accolade, een knik.

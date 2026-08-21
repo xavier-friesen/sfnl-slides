@@ -75,6 +75,7 @@ keer in- en uitpakt, waar de huisstijlfonts staan.
 | `prepare_template.py` | sjabloon uitpakken en het content-type omzetten |
 | `add_slide.py` | een layout instantiëren; hiermee erft de slide zijn header |
 | `set_text.py` | geërfde placeholders vullen |
+| `shapes.py` | de primitieven: vlak, lijn, tekstrun, raster, hoogtemeting, merktekens, `contour()` voor een eigen vorm en `icoon()` voor een zelfgetekend lijnicoon |
 | `place_shapes.py` | vormen op naam verschuiven of herschalen, in inch |
 | `clean.py` | lege placeholders eruit, XML normaliseren, ongebruikte layouts weg |
 | `office/pack.py`, `unpack.py`, `validate.py` | in- en uitpakken met schemavalidatie |
@@ -82,6 +83,7 @@ keer in- en uitpakt, waar de huisstijlfonts staan.
 | `render.py`, `thumbnail.py` | slides naar PNG en een contactblad |
 | `qa_text.py` | hygiëne: restplaceholders, Calibri, harde hex, rechte apostrof |
 | `set_notes.py` | presentatornotities per deckpositie: de andere helft van het dichtheidsbesluit |
+| `keuzekaart.py` | onderhoud: bouwt de keuzekaart voor het vragenvuur uit de renders in `assets/` |
 | `qa_tellingen.py` | tellingen: maten per rol, bandfrequentie, exhibits bij cijfers, maatsprong, letterfamilies, hoge punt — plus woorden, registers en plattegrond als cijfer zonder oordeel |
 | `fit_title.py` | past een titel op één regel, gemeten met het echte font |
 | `inspect_deck.py` | wat staat er werkelijk op de slide |

@@ -375,6 +375,29 @@ Daarvoor moest één gat gedicht worden: titelmodus B had geen render. Die is er
 diezelfde naam als titel en de bewering in de subtitel. Bijvangst voor de doctrine: de subtitel
 duwt de contentzone omlaag, dus in modus B begint elke slide van dat hoofdstuk lager.
 
+## Ronde 6 — iconen, getekend en niet geleend
+
+De skill kon geen icoon maken. `contour()` kon een eigen vorm, maar niets zei hoe een icoon in
+deze huisstijl gezet wordt, dus kwam er geen. Nu:
+
+- **`icoon()` in `shapes.py`**, een raster van 24 bij 24 waarop je de geometrie zelf opgeeft —
+  lijn, pad, vorm, cirkel, stip, boog, rechthoek — en de functie de discipline afdwingt: één
+  schachtdikte, één hue, geen vulling, ronde uiteinden, één groep. Expliciet géén bibliotheek en
+  ook niet de iconengalerij van PowerPoint: dat was de eis, en het is dezelfde keuze als bij de
+  patroonbibliotheek die deze plugin niet heeft.
+- **`vormentaal.md` §14** met de vraag die vóór het tekenen komt (draagt het icoon iets wat de
+  tekst niet al draagt) en de gemeten zetting: 1,5pt, 0,72 in naast een kop van 18pt, 0,44 in als
+  ondergrens, ten hoogste twaalf onderdelen, navy tenzij de hue codeert.
+- **Twee renders als bewijs**: `proeven/09` (zes iconen, drie diktes, drie maten, zes hues, één in
+  wit op vol) en `proeven/10` (dezelfde drie rijen met en zonder icoon). Die tweede is de
+  belangrijkste, want hij laat zien dat de versie zónder iconen de rustigere is zodra de kop het
+  al zegt — daar komt de regel uit.
+
+Twee metingen die eruit vielen. Een icoonlijn van 1,5pt in oranje haalt 2,6 op wit en leest
+lichter dan zijn eigen kop ernaast, dus navy is de default en een hue alleen als hij codeert. En
+een pijlkop op een boog moet uitgerekend worden: de eerste kringloop had een kop op geschatte
+coördinaten en die zweefde los van de boog — in de code onzichtbaar, op de render meteen.
+
 ## Openstaand
 
 - **De blinde vergelijking met twee juryleden is niet gedraaid.** Beide juryagents zijn

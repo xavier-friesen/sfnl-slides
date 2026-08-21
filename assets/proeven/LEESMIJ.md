@@ -66,3 +66,24 @@ eronder: die is uit `03` overgenomen om alleen de titelrij te laten verschillen.
 elkaar als detailuitsnede, met de meting eronder. Die kaart gaat bij het vragenvuur naar de
 gebruiker en wordt door de skill niet gelezen, dus hij kost geen tokens. Verandert er een optie,
 dan bouwt `python scripts/keuzekaart.py` hem opnieuw uit de renders die dan in de repo staan.
+
+## De icoonproef
+
+`09-iconen-getekend` en `10-iconen-met-en-zonder` horen bij `vormentaal.md` §14 en bij `icoon()`
+in `shapes.py`. Op `09` staan zes zelfgetekende iconen op 0,72 in — document, mensen, kringloop,
+euro, doel, klok — met ernaast dezelfde twee op 1,0 / 1,5 / 2,0pt en hetzelfde icoon op 0,44 /
+0,72 / 1,10 in, plus de zes hues en één in wit op een vol vlak. Daaruit komen de waarden in §14:
+1,5pt is de dikte (1,0 leest als een schets, 2,0 concurreert met de kop), en 0,44 in is de
+ondergrens omdat de lijnen daaronder in elkaar lopen.
+
+`10` is de vraag of het icoon iets doet: dezelfde drie stappen boven met een icoon per rij en
+onder zonder. De onderste helft is de rustigere — naast een kop die `VERZAMELEN` zegt voegt een
+poppetje niets toe — en daar komt de regel uit dat een icoon een soort moet coderen, iets moet
+markeren dat terugkomt, of een zin in een schema moet vervangen. Op deze slide staan de iconen
+in oranje, en dat is meteen het contrastpunt: een lijn van 1,5pt in oranje (2,6 op wit) leest
+lichter dan zijn eigen kop ernaast.
+
+Eén ronde ging verloren aan de kringloop: de pijlkop stond op geschatte coördinaten en zweefde
+los van de boog. Het eindpunt van een boog is uit te rekenen (`cx + r·cos`, `cy + r·sin`, met de
+klok mee, y naar beneden) en de kop staat op de tangens, 90 graden terug. In de code was dat niet
+te zien, op de render meteen.

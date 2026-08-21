@@ -986,6 +986,139 @@ def pijl(naam: str, x: float, y: float, w: float, h: float, hue="oranje", *,
                      "adj2": max(0, min(100000, int(round(kop / ss * 100000))))})
 
 
+#: Het raster waarop een icoon getekend wordt. 24 eenheden, zoals elk lijnpictogram dat
+#: bestaat, want dan liggen de halve en de derde maat op een hele eenheid: 12 is het midden,
+#: 8 en 16 zijn de derden, en 4 is de marge die het icoon van zijn buur vrijhoudt.
+ICOON_RASTER = 24
+
+#: De schachtdikte van een icoon in punten, en de reden dat er één is: twee diktes in één
+#: icoon leest als een tekenfout, en twee diktes tussen twee iconen naast elkaar laat het ene
+#: zwaarder wegen dan het andere terwijl ze hetzelfde niveau dragen. Gemeten op de render bij
+#: een icoon van 0,72 in -- zie `assets/proeven/09`.
+ICOON_PT = 1.5
+
+#: De ondergrens van een icoon in inch. Daaronder lopen de lijnen van 1,5pt in elkaar en is
+#: het een vlekje; dan is de streep of het kapitaallabel het betere merkteken.
+ICOON_MIN = 0.44
+
+#: Boven dit aantal onderdelen is het geen icoon meer maar een tekening, en dan hoort het in
+#: `sfnl-infographic` en niet op een slide naast een kop van 18pt.
+ICOON_MAX_DELEN = 12
+
+
+def _ln_icoon(hue, pt: float) -> str:
+    """`<a:ln>` met ronde uiteinden en ronde hoeken -- de zetting van een lijnicoon.
+
+    `lijn_xml()` zet `cap="flat"`, en dat is goed voor een kaartrand en een aslijn: die
+    eindigt tegen iets aan. Een icoonlijn eindigt in de lucht, en een vlakke kop maakt daar
+    een afgesneden steel van. Vandaar een eigen `<a:ln>` in plaats van een parameter op
+    `lijn_xml()`: de rand van een kaart hoort niet rond te worden omdat een icoon dat nodig
+    heeft.
+    """
+    kleur, alpha = _split(hue)
+    _geen_grijs_vlak(kleur)
+    return (f'<a:ln w="{int(round(pt * 12700))}" cap="rnd">'
+            f'<a:solidFill>{_clr(kleur, alpha)}</a:solidFill><a:round/></a:ln>')
+
+
+def icoon(naam: str, x: float, y: float, d: float, delen, *,
+          hue="navy", pt: float = ICOON_PT, raster: int = ICOON_RASTER) -> str:
+    """Eén zelf getekend lijnicoon, als groep, op een raster van 24 bij 24 eenheden.
+
+    **Dit is geen iconenbibliotheek en die komt er ook niet.** Je geeft de geometrie, deze
+    functie geeft de discipline: één schachtdikte, één hue, geen vulling, ronde uiteinden,
+    alles binnen het vierkant, en één groep zodat het icoon als één vorm verschuift. Wat je
+    tekent bedenk je per icoon, net als bij `contour()` -- een catalogus zou hier hetzelfde
+    doen wat een patroonbibliotheek met de compositie doet.
+
+    `delen` is een lijst van tuples in RASTEREENHEDEN (0 tot 24, y naar beneden):
+
+        ("lijn", x1, y1, x2, y2)                 een rechte lijn
+        ("pad", [(x, y), ...])                   een open polylijn
+        ("vorm", [(x, y), ...])                  een gesloten omtrek, alleen lijn
+        ("cirkel", cx, cy, r)                    een open cirkel
+        ("stip", cx, cy, r)                      de enige gevulde vorm die mag
+        ("boog", cx, cy, r, vanaf, tot)          graden, 0 is rechts, met de klok mee
+        ("rechthoek", x, y, w, h)                 en optioneel een zevende: hoek in eenheden
+
+    Een documenticoon is dus:
+
+        icoon("Doc", 1.0, 3.0, 0.72, [
+            ("vorm", [(6, 2), (15, 2), (18, 5), (18, 22), (6, 22)]),
+            ("lijn", 15, 2, 15, 5), ("lijn", 15, 5, 18, 5),
+            ("lijn", 9, 10, 15, 10), ("lijn", 9, 14, 15, 14), ("lijn", 9, 18, 13, 18),
+        ])
+
+    Drie grenzen, en ze weigeren met een reden:
+
+    * onder `ICOON_MIN` (0,44 in) lopen de lijnen in elkaar; dan is een streep of een
+      kapitaallabel het betere merkteken
+    * boven `ICOON_MAX_DELEN` (12) is het een tekening, en die hoort in `sfnl-infographic`
+    * een gevulde vorm anders dan `("stip", ...)` bestaat hier niet: een icoon is lijnwerk
+      (§8), en een gevuld icoon concurreert met de dragers op de slide
+
+    Wanneer een icoon zijn plek verdient staat in `vormentaal.md` §14, en dat is de vraag die
+    vóór deze functie komt: draagt het icoon informatie die de tekst niet al draagt? Een
+    icoon naast elk kopje is decoratie, en decoratie valt onder dezelfde regel als een
+    gekleurd vlak dat alleen kleur is -- die gaat eruit (§8).
+    """
+    if d < ICOON_MIN:
+        raise ValueError(
+            f"een icoon van {d:.2f} in is te klein: onder {ICOON_MIN} in lopen de lijnen van "
+            f"{pt}pt in elkaar en leest het als een vlekje. Maak hem groter, of gebruik een "
+            "streep, een punt of een kapitaallabel."
+        )
+    if len(delen) > ICOON_MAX_DELEN:
+        raise ValueError(
+            f"{len(delen)} onderdelen is geen icoon meer maar een tekening (max "
+            f"{ICOON_MAX_DELEN}). Laat weg wat de betekenis niet draagt, of bouw het als "
+            "losse infographic met `sfnl-infographic`."
+        )
+    u = d / raster                       # inch per rastereenheid
+    def px(gx):
+        return x + gx * u
+    def py(gy):
+        return y + gy * u
+    ln = _ln_icoon(hue, pt)
+    kinderen: list[str] = []
+    for deel in delen:
+        soort = deel[0]
+        if soort == "lijn":
+            _, x1, y1, x2, y2 = deel
+            kinderen.append(verbind(f"{naam} lijn", (px(x1), py(y1)), (px(x2), py(y2)),
+                                    hue, pt).replace(lijn_xml((hue, pt)), ln))
+        elif soort in ("pad", "vorm"):
+            punten = [(px(a), py(b)) for a, b in deel[1]]
+            kinderen.append(contour(f"{naam} {soort}", 0, 0, punten,
+                                    sluit=(soort == "vorm")).replace("<a:ln><a:noFill/></a:ln>", ln))
+        elif soort in ("cirkel", "stip"):
+            _, cx, cy, r = deel
+            vulling = hue if soort == "stip" else None
+            vorm = vlak(f"{naam} {soort}", px(cx - r), py(cy - r), 2 * r * u, 2 * r * u,
+                        prst="ellipse", vulling=vulling)
+            kinderen.append(vorm if soort == "stip"
+                            else vorm.replace("<a:ln><a:noFill/></a:ln>", ln))
+        elif soort == "boog":
+            _, cx, cy, r, vanaf, tot = deel
+            kinderen.append(
+                vlak(f"{naam} boog", px(cx - r), py(cy - r), 2 * r * u, 2 * r * u,
+                     prst="arc", adj={"adj1": int(round(vanaf * 60000)),
+                                      "adj2": int(round(tot * 60000))})
+                .replace("<a:ln><a:noFill/></a:ln>", ln))
+        elif soort == "rechthoek":
+            _, gx, gy, gw, gh = deel[:5]
+            hoek = deel[5] * u if len(deel) > 5 else None
+            kinderen.append(
+                vlak(f"{naam} vlak", px(gx), py(gy), gw * u, gh * u, hoek=hoek)
+                .replace("<a:ln><a:noFill/></a:ln>", ln))
+        else:
+            raise ValueError(
+                f'onderdeel "{soort}" bestaat niet in een icoon. Kies uit lijn, pad, vorm, '
+                "cirkel, stip, boog, rechthoek -- zie de docstring."
+            )
+    return groep(f"Icoon {naam}", x, y, d, d, kinderen)
+
+
 def contour(naam: str, x: float, y: float, punten, *, vulling=None, lijn=None,
             sluit: bool = True) -> str:
     """Een eigen vorm (`custGeom`) uit een reeks punten in INCH, zonder XML te typen.

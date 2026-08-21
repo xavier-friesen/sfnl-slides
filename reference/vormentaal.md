@@ -620,6 +620,57 @@ bewering een reden die op te schrijven is.
 
 ---
 
+## 14. Een icoon teken je zelf, en het draagt iets
+
+Er is geen iconenbibliotheek in deze plugin en die komt er niet. Geen gedownloade set, en ook
+niet de iconengalerij van PowerPoint: die staat niet in het sjabloon en sleept een andere
+lijnentaal mee dan de merktekens uit §12. Wat er wél is: `icoon()` in `shapes.py`, dat een eigen
+icoon tekent op een raster van 24 bij 24 eenheden en de discipline afdwingt — één schachtdikte,
+één hue, geen vulling, ronde uiteinden, alles binnen het vierkant, en het geheel als één groep.
+De zes in `proeven/09` zijn zo getekend: document, mensen, kringloop, euro, doel, klok.
+
+**Eerst de vraag die vóór het tekenen komt: draagt het icoon iets wat de tekst niet al draagt?**
+`proeven/10` zet dezelfde drie stappen twee keer neer, boven met een icoon per rij en onder
+zonder, en de onderste helft is de rustigere van de twee: naast een kop die `VERZAMELEN` zegt
+voegt een poppetje niets toe. Een icoon verdient zijn plek in drie gevallen:
+
+- **het codeert een soort** die de lezer moet vergelijken — geld tegenover tijd tegenover mensen,
+  in een set waar dat onderscheid het punt is
+- **het markeert iets dat terugkomt** over meerdere slides, zodat de lezer het herkent zonder de
+  kop te lezen
+- **het vervangt een zin in een schema**, waar een woord de vorm zou breken
+
+Buiten die drie is het decoratie, en decoratie valt onder de regel van §8: een gekleurd vlak dat
+alleen kleur is gaat eruit, en dat geldt net zo voor een lijntekeningetje. De kneepoefening van §1
+is ook hier de toets — blijven de icoontjes over in plaats van de boodschap, dan waren ze
+navigatie.
+
+**De zetting, nagemeten in `proeven/09`:**
+
+| wat | waarde |
+|---|---|
+| raster | 24 bij 24 eenheden; 12 is het midden, 8 en 16 de derden, 4 de marge |
+| schachtdikte | 1,5pt. 1,0 leest als een schets, 2,0 gaat met de kop van 18pt concurreren |
+| maat naast een kop van 18pt | 0,72 in; in een rij 0,60; als drager van de slide 1,10 |
+| ondergrens | 0,44 in — daaronder lopen de lijnen in elkaar en is een streep of een label beter |
+| bovengrens onderdelen | 12; daarboven is het een tekening en hoort het in `sfnl-infographic` |
+| vulling | geen, met één uitzondering: één gevulde stip als het centrum iets betekent |
+
+**De hue: navy, tenzij de kleur iets codeert.** Een icoonlijn van 1,5pt in oranje haalt 2,6 op wit
+(§3) en leest daardoor als een suggestie in plaats van als een teken; op `proeven/10` staan de
+drie iconen in oranje en ze zijn merkbaar lichter dan hun eigen kop ernaast. Draagt de rij een
+hue, dan mag het icoon die hue hebben — dan is het één element in dezelfde codering. Op een
+volle navy of royal vulling is het icoon wit.
+
+**Eén meting die een ronde kostte, en die generiek is voor gebogen vormen:** een boog met een
+pijlkop erop moet je uitrekenen, niet op het oog plaatsen. Het eindpunt van een boog om
+`(cx, cy)` met radius `r` op hoek `graden` is `(cx + r·cos, cy + r·sin)` — met de klok mee, nul
+naar rechts, y naar beneden — en de kop staat op de tangens, 90 graden terug. De eerste
+kringloop had zijn kop op geschatte coördinaten en die zweefde los van de boog: op de render
+duidelijk te zien, in de code niet.
+
+---
+
 ## Wat hier niet staat
 
 Geen patroonnamen. Geen verplichte afsluitband. Geen maximum aantal tekstgroottes per slide.
