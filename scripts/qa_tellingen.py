@@ -108,7 +108,7 @@ CIJFER = re.compile(
 )
 
 #: Grens tussen bodymaat en voetnootmaat, en tussen body en de dichte variant. §2 zet
-#: 16pt Lato Light als body, 12pt als de dichte variant voor een kaartenrij van drie of
+#: 14pt Lato Light als body, 12pt als de dichte variant voor een kaartenrij van drie of
 #: meer of een tabelcel, en 11pt als voetnoot. Die drie zijn dus eigen rollen en geen
 #: drie maten voor dezelfde rol — anders meldt dit script een kaartenrij als defect.
 VOETNOOT_PLAFOND = 11.5
@@ -132,9 +132,10 @@ DICHT_PLAFOND = 12.5
 #: afgekeurde deck staat het kapitaallabel op 13 én 14pt, en dat is één rol op twee maten.
 LABEL_PLAFOND = 14.5
 
-#: De bodymaat die §2 voorschrijft. Afwijken mag, maar dan is het een besluit: in beide
-#: gemeten decks zakte de body ongemerkt naar 14pt zonder dat iemand dat koos.
-BODY_NORM = 16.0
+#: De bodymaat die §2 voorschrijft. Afwijken mag, maar dan is het een besluit. Dit stond op
+#: 16 terwijl beide gemeten decks ongemerkt op 14 uitkwamen; §2 zet nu 14 als norm, met de
+#: reden erbij, dus die stille afwijking is een besluit geworden in plaats van een bevinding.
+BODY_NORM = 14.0
 
 #: Een afsluitband: een gevuld vlak over vrijwel de volle zonebreedte, laag, en tegen de
 #: onderkant. §10 meet hem als 12,52 bij 1,25 in met één regel erin. De hoogtevloer van
@@ -299,12 +300,12 @@ def rol_van(font: str | None, pt: float | None, in_tabel: bool) -> str | None:
 
     De rol volgt uit familie plus maat, want dat is wat §2 vastlegt: drager in
     Montserrat Light van 28 tot 40pt, kop in Montserrat SemiBold op 18pt, body in Lato
-    Light op 16pt, voetnoot op 11pt. Erft de run zijn font of zijn maat, dan staat er
+    Light op 14pt, voetnoot op 11pt. Erft de run zijn font of zijn maat, dan staat er
     niets in de XML en wordt er niets geteld — een geërfde placeholderrun is geen
     besluit van de bouwer.
 
     Tabelcellen en de dichte 12pt-variant krijgen hun eigen rol. Zonder die splitsing
-    meldt dit script een kaartenrij van drie op 12pt naast een prozakolom op 16pt als
+    meldt dit script een kaartenrij van drie op 12pt naast een prozakolom op 14pt als
     "twee bodymaten", en dat is precies wat §2 toestaat.
 
     **En de Montserrat-kant krijgt dezelfde drie banden als de Lato-kant, want dat stond

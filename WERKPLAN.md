@@ -26,7 +26,7 @@ gerenderd via LibreOffice met Montserrat en Lato geïnstalleerd):
 | bevinding | gemeten | wat de maatstaf zegt |
 |---|---|---|
 | tekstlast per contentslide | werksessie gem. 177 woorden, piek 255 (slide 6); spreekdeck gem. 85 | staat nergens |
-| bodymaat | deckbreed 14pt; spreekdeck gebruikt 12/13/14/15/16 door elkaar | 16pt, één maat per rol (`vormentaal` §2) |
+| bodymaat | deckbreed 14pt; spreekdeck gebruikt 12/13/14/15/16 door elkaar | destijds 16pt, één maat per rol (`vormentaal` §2). De 14 die hier gemeten werd is later de norm geworden; het defect was de vijf maten door elkaar, niet de 14 |
 | drager 28–40pt | 4 van 17 contentslides (5, 7, 8, 15); de andere 13 volledig op 14pt navy | max 1 op 3, rest via gewicht en kleur (§1) |
 | samenvattingsband | 14 van 17 contentslides, dus één per 1,2 slide | max 1 per 4 slides (§10) |
 | grafieken / tabellen | 0 / 0, in een deck met 26 doelen, 65%, 42 documenten, 8 thema's | minstens één bij cijfers (§12) |
@@ -420,7 +420,7 @@ coördinaten en die zweefde los van de boog — in de code onzichtbaar, op de re
   **Gedaan.** Ze staan als `11` tot `14` in `assets/maatstaf/`, met per slide in `LEESMIJ.md`
   waarvoor ze de lat zijn en waarvoor niet.
 - **Twee referenties ontbreken nog steeds als A/B op dezelfde inhoud:** recht tegen afgerond
-  (kaarttaal) en 16 tegen 12pt body. Beide zijn nu besluiten van de skill zelf, dus ze staan niet
+  (kaarttaal) en 14 tegen 12pt body. Beide zijn nu besluiten van de skill zelf, dus ze staan niet
   op de keuzekaart — maar de bouwer kiest ze wel blind.
 - **De drie dichtheden zijn niet naast elkaar gebouwd.** Testronde 2 uit het plan hierboven ging
   over twee registers; er zijn er nu drie, en of licht leave-behind werkelijk iets anders

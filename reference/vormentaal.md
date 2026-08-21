@@ -36,7 +36,11 @@ niets meer. Grote letter werkt doordat hij zeldzaam is.
 Dus: **ten hoogste één contentslide op drie draagt letter van 28pt of groter**, en op die
 slide staat hij één keer. Kies daarvoor de slides waar de boodschap werkelijk een getal of een
 verhouding ís — het resultaat, het bedrag, de doorlooptijd. Zet hem in Montserrat Light,
-tussen 28 en 40pt, via `drager()` in `shapes.py`; Gotham Bold gebruik je nooit in de
+tussen 28 en 40pt, via `drager()` in `shapes.py`. **Op wit is die drager navy**: dat is de
+huiskeuze, en de reden is te zien zodra je ze naast elkaar zet — een getal van 32pt in oranje
+haalt 2,6 op wit en leest daardoor lichter dan de kop eronder, terwijl navy op 15,3 staat en het
+gewicht draagt dat de maat belooft. Een accenthue op een drager is dus een besluit met een reden,
+niet de gewone weg; op een volle vulling geldt §3 en kiest `tekst_op()`. Gotham Bold gebruik je nooit in de
 contentzone, want dat is de titelletter en die erf je uit de layout.
 
 **Op de andere slides is de drager niet groot maar zwaar en gekleurd.** Dit is waar het in de
@@ -47,7 +51,8 @@ compositie zelf. Op de sterkste referentieslide zonder cijfers is de drager 18pt
 SemiBold in emerald tegenover 18pt in grapefruit, op wit — verder niets.
 
 De toets die overal geldt: is de drager minstens **tweeënhalf keer de bodymaat** op diezelfde
-slide, of onderscheidt hij zich in gewicht en kleur? Loopt je hele slide op 16pt navy, dan is
+slide, of onderscheidt hij zich in gewicht en kleur? Op een body van 14pt is dat 35pt, dus
+midden in de dragerband. Loopt je hele slide op 14pt navy, dan is
 er geen hiërarchie maar een verzameling.
 
 De kneepoefening blijft de eindtoets: klein of onscherp bekeken moet de drager overblijven.
@@ -61,7 +66,7 @@ Leg vóór de eerste slide vier getallen vast en gebruik overal die vier:
 |---|---|---|
 | **drager** | 28 tot 40pt Montserrat Light | het getal of begrip dat de slide draagt, op ten hoogste één slide op drie |
 | **kop** | 18pt Montserrat SemiBold | kolomkop, kaartkop, rolnaam |
-| **body** | 16pt Lato Light | alles wat gelezen wordt |
+| **body** | 14pt Lato Light | alles wat gelezen wordt, en de sluitregel |
 | **voetnoot** | 11pt | bron, eenheid, peildatum |
 
 De letter op de slide is licht: Lato Light voor wat gelezen wordt, Montserrat Light voor een
@@ -71,9 +76,19 @@ doorlopende regel is `Lato Semibold`, want één regel is één familie (§9). G
 staat alleen in de titel, en die schrijf je niet zelf — hij komt uit de layout. Schrijf je hem
 toch in de contentzone, dan weigert `run()` het en blokkeert `qa_text.py` de deck.
 
-12pt is de dichte variant voor een kaartenrij van drie of meer of een tabelcel, en het is de
-vloer voor alles wat gelezen wordt. De voetnoot van 11pt valt daarbuiten: dat is een eigen rol
-met een eigen maat, geen kleinere body. 14pt is het kapitaallabel. 10pt gebruik je niet meer.
+**Vier is het aantal, en de rest is afgeleid en geen keuze.** 12pt is de dichte variant voor
+een kaartenrij van drie of meer of een tabelcel, en het is de vloer voor alles wat gelezen wordt.
+De voetnoot van 11pt valt daarbuiten: dat is een eigen rol met een eigen maat, geen kleinere body.
+14pt is het kapitaallabel — dezelfde maat als de body, maar in Montserrat SemiBold en in
+kapitalen, dus een andere rol en geen tweede bodymaat. En een sluitregel is bodymaat: een eigen
+maat voor de laatste regel is precies het defect uit de afgekeurde deck, die drie
+sluitregelmaten over vier slides had. 10pt gebruik je niet meer.
+
+De body stond hier eerst op 16pt. Twee dingen wezen naar 14: de decks die werkelijk gemaakt zijn
+zakten er ongemerkt allemaal naartoe, en op 16 vraagt de toets uit §1 — de drager is
+tweeënhalf keer de body — een drager van 40pt, en dat is precies het plafond van de band. Op 14
+valt die toets op 35pt en dus binnen de band. 14 is dus een besluit en geen concessie; wie er
+16 van maakt, doet dat deckbreed en schrijft de reden erbij.
 
 **Dezelfde rol houdt deckbreed dezelfde maat.** De afgekeurde deck had vier bodymaten en drie
 sluitregelmaten over vier slides. Los is elke slide dan correct en naast elkaar leest het als
@@ -165,15 +180,25 @@ verlichting houdt de blauwzweem, van 27 procent verzadiging op lumMod 40 tot 52 
 palet heeft dus geen neutraal grijs, en dat is een feit om mee te rekenen in plaats van te
 omzeilen.
 
-Wat een stil label dan is, in deze volgorde:
+Wat een stil label dan is, en het hangt aan één vraag: staat de tekst in kapitalen?
 
-- **Navy op alpha 70** (`#625E8C`, contrast 6,0, verzadiging 33 procent). Dit voegt geen hue toe:
-  het is dezelfde navy, lichter. Dit is de default. De prijs staat in §9: op deze renderer klipt
-  letterspatiëring samen met een alphakleur de laatste glyph, dus dit label staat zonder `spc`.
-- **`tx1` lumMod 65 mét spatiëring**, maar alleen in een deck waarin sky en royal niet meedoen.
-  Doet er wél een set hues mee, dan is dit een vijfde kleur en gaat het niet op.
+- **Een kapitaallabel is `tx1` lumMod 65**, de kleur die `shapes.py` `"grijs"` noemt en die
+  `sjabloon.md` onder Kleur als hét grijs documenteert. Caps krijgen spatiëring (§2), en
+  spatiëring gaat op deze renderer niet samen met een alphakleur (§9), dus dit is de enige kleur
+  die overblijft — en daarmee is het de default en niet de uitwijkplaats. Ja, het is een
+  staalblauw en niet grijs; in een deck met sky of royal is het dus een vijfde blauw, en die prijs
+  betalen we, want het alternatief is caps zonder spatiëring. `label()` zet hem met één argument:
+  `label("MEETDOEL", 14, "grijs")`.
+- **Een stille regel zonder kapitalen is navy op alpha 70** (`#625E8C`, contrast 6,0, verzadiging
+  33 procent). Dit voegt geen hue toe: het is dezelfde navy, lichter. Daar staat geen `spc` op en
+  dus is er geen klipping. Dit is de bronregel van §11, de eenheid, de peildatum.
 - **Navy 100 procent** wanneer het label mag meedoen in de hiërarchie. Op 14pt naast een kop van
   18pt leest dat als een tweede kop, dus dit is de uitzondering en niet de weg eruit.
+
+**Eén ding om te herzien zodra iemand ernaar kijkt.** De klipping is nagemeten op LibreOffice
+24.2.7.2 (`proeven/06`) en niemand heeft het in echte PowerPoint getoetst. Klipt het daar niet,
+dan is navy op alpha 70 mét spatiëring de betere default en vervalt het staalblauw voor labels.
+Dat is één proef van vijf minuten in PowerPoint, en tot die er is, staat het hierboven.
 
 Twee categorieën in dezelfde set krijgen nooit dezelfde hue. En één hue voor alles is het defect
 uit de afgekeurde deck — maar let op de verkeerde lezing daarvan: dat defect was één lichte tint

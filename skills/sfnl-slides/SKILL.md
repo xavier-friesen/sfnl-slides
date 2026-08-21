@@ -92,9 +92,10 @@ kiest:
 **Twee dingen worden niet gevraagd, want ze zijn geen keuze van de lezer.** De vier maten zijn
 een regel (`vormentaal.md` §2) met één tweesprong: de body mag naar 12pt bij een kaartenrij van
 drie of meer of een tabelcel, en dat volgt uit de compositie en niet uit een voorkeur. De prijs
-staat op `maatstaf/11`: vier kaarten van 2,95 in laten 16pt niet toe, en de reconstructie is daar
-op 13pt uitgekomen — een maat die §2 niet kent, en `maatstaf/LEESMIJ.md` noemt hem dan ook als
-defect van die slide. De uitweg is 12pt, niet een eigen tussenmaat. En de kaarttaal
+staat op `maatstaf/11`: vier kaarten van 2,95 in laten de oude body van 16pt niet toe, en de
+reconstructie is daar op 13pt uitgekomen — een maat die §2 niet kent, en `maatstaf/LEESMIJ.md`
+noemt hem dan ook als defect van die slide. Sinds de body op 14 staat is dat verschil één punt,
+maar of 14 daar past is niet nagemeten. De uitweg blijft 12pt en niet een eigen tussenmaat. En de kaarttaal
 kiest de skill zelf: recht of afgerond, deckbreed, met een 1pt-haarlijn in de eigen hue op elk
 licht vlak dat los op wit staat. Beide varianten zijn uitgewerkt — `maatstaf/12` is recht zonder
 haarlijn omdat het volle rijlabel de rij al begrenst, `maatstaf/11` is afgerond met haarlijn — en
@@ -226,6 +227,11 @@ verderop kan nooit een besluit eerder in de rij terugdraaien.
    hoofdstuk een divider, en draagt de subtitel de leidende zin van de slide. De subtitel is
    dus vooral een modus-B-instrument. Bij twijfel modus A, en schrijf op waarom.
 
+   **Daaruit volgt een ondergrens, want de divider is niet optioneel in deze modus.** Dividers
+   mogen pas vanaf vijf contentslides (zie Dividers, hieronder), dus onder vijf bestaat modus B
+   niet: daar is het modus A. Dat is geen formaliteit — modus B is er om hoofdstukken
+   terugvindbaar te maken, en in een deck van vier slides is er niets terug te vinden.
+
    Modus B is gebouwd, dus je kunt hem laten zien: `proeven/08` is de contentslide met de
    hoofdstuknaam als titel en de bewering in de subtitel, en `proeven/07` is de divider die
    ervoor hoort. Let op wát de subtitel kost, want het is niet ruimte: hij staat in de geërfde
@@ -336,7 +342,8 @@ band meer budget, en dat is precies waar de telling en de bouwer een keer uit el
 
 **Dividers.** Vanaf twee inhoudelijke hoofdstukken én zeven contentslides zijn sectiedividers
 verplicht, één per hoofdstuk, uit de fotolayouts 6 t/m 16. Bij vijf of zes contentslides met
-duidelijke blokken mag het. Onder vijf niet. Nooit twee achter elkaar en nooit als laatste
+duidelijke blokken mag het. Onder vijf niet, en dus bestaat titelmodus B daar ook niet
+(besluit 4). Nooit twee achter elkaar en nooit als laatste
 slide. Een foto mag het onderwerp niet tegenspreken; past er voor geen enkel hoofdstuk een
 passende foto, kies dan één neutrale voor allemaal — consistentie boven variatie.
 
@@ -470,9 +477,9 @@ from shapes import (ZONE, Deck, aanhef, binnen, cols, contour, drager, gat_onder
                     hoogte_van, label, meter, para, pijl, punt, run, schaal, streep,
                     tekst, tekst_op, verbind, vlak, vulgraad, write)
 
-D = Deck(body=16, label=14, sluit=16, display=32)     # de vier maten, één keer
+D = Deck(body=14, kop=18, label=14, display=32)       # de vier maten, één keer
 xs, w = cols(3, 0.24)                                 # raster
-h = hoogte_van([(kop, 18, "Montserrat SemiBold"),     # hoe hoog moet dit blok zijn
+h = hoogte_van([(kop, D.kop, "Montserrat SemiBold"),  # hoe hoog moet dit blok zijn
                 (txt, D.body, "Lato Light")], w)
 vormen = [
     vlak("Kop 62", xs[0], ZONE["y"], w, 1.35, vulling="emerald",
@@ -628,8 +635,9 @@ python $S/render.py deck.pptx png
 python $S/thumbnail.py png raster-1 --cols 4
 ```
 
-Kijk eerst naar het contactblad. Open op volle grootte alleen wat er verkeerd uitziet. Zet
-daarna de `deck-visual-reviewer` op de renders; die kijkt met een frisse blik naar overloop,
+Kijk eerst zelf naar het contactblad — de render is je enige vormbeoordeling, dus die kijk je
+niet uit. Open op volle grootte alleen wat er verkeerd uitziet. Zet daarna de
+`deck-visual-reviewer` op diezelfde renders, met het pad erbij zodat hij niet opnieuw rendert; die kijkt met een frisse blik naar overloop,
 overlap, uitlijning, halflege zones, kleur die niets zegt, en eenvormigheid over de deck.
 
 **Render naar een pad waar de reviewer bij kan, en controleer dat vóór je hem stuurt.** Een

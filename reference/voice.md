@@ -137,7 +137,9 @@ zin er is. De titel blijft in modus B op één regel.
 
 Bij twijfel modus A, en zeg in de outline waarom. Modus B kies je niet omdat de deck lang
 is maar omdat er hoofdstukken zijn die de lezer moet kunnen terugvinden, en dan hoort er bij
-elk hoofdstuk een divider.
+elk hoofdstuk een divider. Dat is ook de ondergrens van deze modus: een deck onder vijf
+contentslides mag geen dividers dragen (skill, stap 2, Dividers), dus daar is modus B geen
+optie — in vier slides is er niets terug te vinden.
 
 ### In modus B draagt de contentzone de boodschap mee
 

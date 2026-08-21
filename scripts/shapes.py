@@ -57,7 +57,7 @@ Gebruik
     import sys; sys.path.insert(0, "<plugin>/scripts")
     from shapes import ZONE, Deck, cols, drager, hoogte_van, para, run, vlak, lijn, write
 
-    d = Deck(body=16, label=14, display=32)        # maten per rol, één keer per deck
+    d = Deck(body=14, kop=18, label=14, display=32)   # maten per rol, één keer per deck
     xs, w = cols(3, 0.24)
     vormen = [
         vlak("Kaart 1", xs[0], 1.93, w, 2.4, vulling=("emerald", 9000), hoek=0.10,
@@ -121,8 +121,10 @@ HUE = {
 #: 51 procent verzadiging -- een staalblauw dat in een deck met sky of royal als vijfde lid
 #: van de set meedoet. Geen enkele trap van dit slot is neutraal (27 tot 52 procent
 #: verzadiging over lumMod 40 tot 80), want `tx1` is zelf `#233348`. Zie
-#: `assets/proeven/LEESMIJ.md` voor de vier metingen en `vormentaal.md` §3 voor wanneer je
-#: hem wel gebruikt: alleen als het label spatiëring nodig heeft en er geen set hues meedoet.
+#: `assets/proeven/LEESMIJ.md` voor de vier metingen. §3 van `vormentaal.md` maakt hem sinds
+#: die proef de default voor een KAPITAALlabel, ook in een deck met een set hues: caps krijgen
+#: spatiëring (§2), spatiëring gaat niet samen met alpha (zie `run()`), en dan blijft dit de
+#: enige kleur over. Voor een stille regel zonder kapitalen is navy op alpha 70 de kleur.
 #:
 #: Waarom dit naast de alpharegel bestaat, en waarom het die regel niet ondermijnt: §4 van
 #: `vormentaal.md` gaat over een lichte VULLING -- een container, en die is altijd alpha op
@@ -431,11 +433,12 @@ def label(tekst: str, pt: float = 14, kleur="navy", *,
     eruit; het `GRIJS`-recept blijft geldig op een run zonder spatiëring, en dat is de
     bronregel van §11.
 
-    Sinds de kleurproef in `assets/proeven/` is dát juist de gewone weg en niet de
-    ontsnappingsklep: `label("MEETDOEL", 14, GRIJS, spc=None)` is het stille label van §3,
-    want `#625E8C` is dezelfde navy in het licht en voegt geen kleur toe, terwijl `"grijs"`
-    op de render `#5176A7` is -- 51 procent verzadigd, een vijfde blauw naast sky en royal.
-    Kies `"grijs"` mét spatiëring alleen wanneer er geen set hues in de deck meedoet.
+    En dat is de gewone weg, ook in een deck met een set hues: §3 kiest voor een kapitaallabel
+    `"grijs"` mét spatiëring boven navy-op-alpha zónder, omdat caps zonder spatiëring als
+    geschreeuw lezen (§2). Dat het `#5176A7` is en dus een vijfde blauw naast sky en royal, is de
+    prijs en staat in §3 opgeschreven. `label("MEETDOEL", 14, GRIJS, spc=None)` blijft mogelijk
+    en is dan jouw besluit; navy op alpha is de kleur voor een stille regel zónder kapitalen,
+    zoals de bronregel van §11.
 
     `spc=None` zet de spatiëring uit. Dat is de ontsnappingsklep waarmee een alphakleur
     alsnog kan, en dan is het jouw keuze: een caps-label zonder spatiëring leest als
@@ -1593,9 +1596,14 @@ def vulgraad(paras: list[tuple[str, float, str]], breedte: float, hoogte: float,
 class Deck:
     """De maten per rol, één keer per deck vastgelegd.
 
-    Vier getallen, en elke slide gebruikt die vier. Zonder dit krijg je wat de eerste
-    V2-deck kreeg: vier bodymaten en drie sluitregelmaten over vier slides, waardoor de
-    zetting per slide verspringt zonder dat iemand kan zien waarom.
+    Vier getallen — drager, kop, body, voetnoot — en elke slide gebruikt die vier. Zonder dit
+    krijg je wat de eerste V2-deck kreeg: vier bodymaten en drie sluitregelmaten over vier
+    slides, waardoor de zetting per slide verspringt zonder dat iemand kan zien waarom.
+
+    `label` is de vijfde en is geen keuze: 14pt is het kapitaallabel (§2), dezelfde maat als de
+    body maar in Montserrat SemiBold en in kapitalen. Er is geen veld voor een sluitregel, en
+    dat is opzet: een sluitregel staat op bodymaat, want een eigen maat voor de laatste regel is
+    het defect waar dit vak tegen bestaat.
 
     `display` is de maat van de drager: het getal, de verhouding of het kernbegrip dat de
     slide draagt. Hij staat tussen 28 en 40pt. Onder 28pt springt er niets uit -- de geërfde
@@ -1605,9 +1613,9 @@ class Deck:
     één slide op drie, in Montserrat Light, via `drager()`.
     """
 
-    body: float = 16
+    body: float = 14
+    kop: float = 18
     label: float = 14
-    sluit: float = 15
     display: float = 32
     voetnoot: float = 11
     hoek: float | None = None          # None = rechte hoeken, deckbreed
