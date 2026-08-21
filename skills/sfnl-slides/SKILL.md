@@ -48,54 +48,100 @@ eerst **Zonder renderer** onderaan; dat verandert hoe je bouwt en wat je bij opl
 
 `reference/voice.md` gaat over de taal op de slide. Lees dat wanneer je de outline schrijft.
 
-## Stap 1 — Intake
+Daarna is het vragenvuur van stap 1 het eerste wat je doet, en dat is een poort: zonder die tien
+antwoorden schrijf je niets.
 
-Vier vragen, en niet meer dan vier. Weet je een antwoord al uit de opdracht, sla hem over.
+## Stap 1 — Het vragenvuur, en dit is de eerste poort
+
+Tien vragen in één blok: vier over de opdracht, zes over de vorm. **Leg ze in één keer voor en
+wacht op de antwoorden.** Er wordt niets geschreven voordat ze er zijn — geen storyline, geen
+outline, geen slide. Dat is een poort en het was er geen: de skill had de zes vormbesluiten
+bij de outline hangen, en dan lag er al tekst wanneer de gebruiker voor het eerst iets kon
+kiezen. Wie de tekst eerst schrijft, kiest de vorm al.
+
+Weet je een antwoord uit de opdracht, dan vul je het in als voorstel en zet je erbij waar je het
+vandaan haalt. Het staat dus nog steeds in het blok en de gebruiker bevestigt of wijzigt het.
+Overslaan is geen antwoord.
+
+**"Kies jij maar" is een geldig antwoord.** Laat de gebruiker een besluit aan de skill, dan neemt
+de skill het deckbreed, één keer, met de reden erbij bovenaan de outline. Wat er daarna niet
+gebeurt is het besluit per slide opnieuw nemen: dat is het gemeten defect waar de hele
+vormentaal tegen duwt. Deze tabel bakent dat af, en hij geldt ook wanneer de gebruiker zelf
+kiest:
+
+| besluit | wie kiest | mag per slide verschillen |
+|---|---|---|
+| 1 dichtheid | gebruiker, of de skill op verzoek | alleen met expliciete toestemming |
+| 2 maten | vaste regel; de dichte body is de enige tweesprong | nee — 12pt volgt de compositie, niet de slide |
+| 3 kaarttaal | de skill mag deze zelf kiezen, ook afwijkend, met een reden | nee, deckbreed |
+| 4 accent | oranje staat vast; de set hues is een gebruikerskeuze | tweede hue per slide: ja, als hij codeert. Een ánder accent: alleen met toestemming |
+| 5 registers | gebruiker, of de skill op verzoek | ja — per slide toewijzen ís het besluit |
+| 6 titelmodus | gebruiker | nooit |
+
+### De vier over de opdracht
 
 - **Wie leest dit, en wat moet die erna kunnen besluiten?** Dit bepaalt alles. Een deck voor
   een wethouder die moet besluiten is een ander deck dan een deck voor een projectgroep die
-  moet meedenken. Vraag hierbij ook of er straks iemand bij praat of dat het deck op zichzelf
-  gelezen wordt — dat antwoord is het dichtheidsbesluit in stap 2. Het is geen vijfde vraag
-  maar de tweede helft van deze.
+  moet meedenken. Vraag hierbij ook of er straks iemand bij praat én of het deck daarna wordt
+  nagestuurd — die twee antwoorden samen zijn besluit 1. Het is geen vijfde vraag maar de
+  tweede helft van deze.
 - **Hoeveel slides, ongeveer?**
 - **Heb je een deck of een document dat als voorbeeld dient?** Vraag dit actief. Krijg je er
   een, dan is dát de maatstaf: render het, kijk ernaar, en volg de vormentaal ervan in plaats
   van `assets/maatstaf/`.
 - **Zijn er eigen foto's, cijfers of bronnen?**
 
-## Stap 2 — Outline, en de enige poort
+### De zes over de vorm
 
-### Eerst zes besluiten voor de hele deck
+Elk besluit heeft een default, een referentie waar de uitkomst te zíen is, en een uitkomst die je
+erbij koopt. Volg je de default, dan hoef je niets te motiveren; wijk je af, dan staat de reden
+erbij — zo is afwijken een keuze en geen bijproduct van hoeveel tekst er toevallig in de outline
+stond. De volgorde is niet willekeurig: de dichtheid staat voorop omdat hij de tekstlast van elke
+slide bepaalt en daarmee doorweegt in de vijf besluiten erna.
 
-Deze zes staan bovenaan `outline.md` en gelden voor elke slide. Elk besluit heeft een default:
-volg je die, dan hoef je niets te motiveren; wijk je af, dan staat de reden erbij — zo is
-afwijken een keuze en geen bijproduct van hoeveel tekst er toevallig in de outline stond. Neem
-je ze niet vooraf, dan neem je ze per slide opnieuw en dan verspringt de deck zonder dat
-iemand kan zien waarom. De volgorde is niet willekeurig: de dichtheid staat voorop omdat hij
-de tekstlast van elke slide bepaalt en daarmee doorweegt in de vijf besluiten erna.
+1. **De dichtheid: spreekdeck, licht leave-behind of leave-behind.** Eén vraag beslist hem:
+   praat er iemand bij, en gaat het deck daarna de mail in?
 
-1. **De dichtheid: spreekdeck of leave-behind.** Default: leave-behind, want SFNL-decks
-   worden nagestuurd (`voice.md`, de bindende toets). Een leave-behind moet zonder spreker te
-   lezen zijn en mag dus dicht zijn — een prozaslide met twee goed gezette kolommen is daar
-   een volwaardige exhibit (`maatstaf/04`). Een spreekdeck kies je alleen wanneer er werkelijk
-   iemand bij praat én het deck niet wordt nagestuurd: dan is de slide de achtergrond bij het
-   verhaal, hoort wat de spreker zegt níét op de slide, en gaat de toelichting naar de
-   presentatornotities (`set_notes.py`, stap 3.5). En dichtheid is geen telegramstijl: `sfnl-humanizer`
-   verbiedt de vorm "Kosten: hoger. Doorlooptijd: onveranderd", dus elke regel blijft een
-   leesbare zin of een label met een getal. Die twee regels duwen tegen elkaar en de eerste
-   bouwer die dit register gebruikte moest die grens zelf formuleren; hier staat hij.
-   De richtwaarden per dichtheid, met de meting eronder, staan in
-   `vormentaal.md` §13. Wat ook op een spreekdeck blijft staan: elk getal draagt zijn eenheid
-   en periode op de slide zelf (`voice.md`).
+   | situatie | dichtheid | richtwaarde | referentie |
+   |---|---|---|---|
+   | iemand praat, het deck gaat niet mee | spreekdeck | 50 tot 60 woorden per contentslide | `maatstaf/13`, `14` |
+   | iemand praat én het deck gaat mee | licht leave-behind | 90 tot 110 | `maatstaf/12` |
+   | geen spreker, het deck staat alleen | leave-behind | 120 tot 145 | `maatstaf/11`, `04` |
+
+   Default: **licht leave-behind**, want dat is de gewone SFNL-situatie — er wordt bij gepraat en
+   het deck wordt nagestuurd. Dit register is er bijgekomen omdat de meting het aanwees: het
+   gemeten spreekdeck zat op gemiddeld 85 woorden met een piek van 101, te dicht voor een
+   spreekdeck en te dun voor een leave-behind. Het was geen mislukt spreekdeck maar een register
+   zonder naam.
+
+   De uitkomst per keuze, want daar is dit besluit op te beoordelen. Op een **spreekdeck** hoort
+   wat de spreker zegt níét op de slide en gaat de toelichting naar de presentatornotities
+   (`set_notes.py`, stap 3.5) — lees je hem later zonder de spreker terug, dan mist er iets, en
+   dat is de bedoeling. Op een **leave-behind** mag een slide dicht zijn: een prozaslide met twee
+   goed gezette kolommen is daar een volwaardige exhibit (`maatstaf/04`), en 141 woorden is geen
+   defect. **Licht leave-behind** zit ertussen: leesbaar zonder spreker, één boodschap per slide,
+   geen uitgeschreven spreektekst.
+
+   En dichtheid is geen telegramstijl: `sfnl-humanizer` verbiedt de vorm "Kosten: hoger.
+   Doorlooptijd: onveranderd", dus elke regel blijft een leesbare zin of een label met een getal.
+   Die twee regels duwen tegen elkaar en de eerste bouwer die dit register gebruikte moest die
+   grens zelf formuleren; hier staat hij. De metingen eronder staan in `vormentaal.md` §13. Wat
+   op elke dichtheid blijft staan: elk getal draagt zijn eenheid en periode op de slide zelf
+   (`voice.md`).
 2. **De vier maten.** Drager 28 tot 40pt in Montserrat Light, kop 18pt Montserrat SemiBold,
-   body 16pt Lato Light, voetnoot 11pt. Eén maat per rol, deckbreed. Dat is de default; 12pt
-   is de dichte variant voor een kaartenrij van drie of meer of een tabelcel
-   (`vormentaal.md` §2), en elke andere afwijking is deckbreed en met reden. Het gemeten
-   werkdeck zakte naar 14pt over de hele deck omdat de tekst er eerst was en de maat volgde —
-   precies de volgorde die het dichtheidsbesluit hierboven omdraait. Gotham Bold staat alleen
-   in de titel en komt daar uit de layout; in de contentzone schrijf je hem nooit. En de grote
-   drager is de uitzondering: ten hoogste één contentslide op drie draagt hem, want een
-   aandachtstrekker op elke slide trekt niets meer.
+   body 16pt Lato Light, voetnoot 11pt. Eén maat per rol, deckbreed. Dit is het enige besluit
+   zonder alternatief — er is niets te kiezen behalve één tweesprong: **mag de body naar 12pt
+   wanneer de compositie het vraagt?** Default: ja, maar alleen bij een kaartenrij van drie of
+   meer, of een tabelcel (`vormentaal.md` §2), en dan deckbreed voor die rol. De uitkomst is te zien op
+   `maatstaf/11`: vier kaarten van 2,95 in laten 16pt niet toe, dus daar staat de body op 13pt,
+   en dat is de prijs van vier kaarten naast elkaar. Wil je 16pt hard houden, dan zijn het drie
+   kaarten of twee slides.
+
+   Het gemeten werkdeck zakte naar 14pt over de hele deck omdat de tekst er eerst was en de maat
+   volgde — precies de volgorde die het vragenvuur omdraait. Gotham Bold staat alleen in de titel
+   en komt daar uit de layout; in de contentzone schrijf je hem nooit. En de grote drager is de
+   uitzondering: ten hoogste één contentslide op drie draagt hem, want een aandachtstrekker op
+   elke slide trekt niets meer.
 
    **Eén familie per regel.** Montserrat SemiBold is voor wat lósstaat en op zijn eigen regel
    begint: een kop, een kapitaallabel, een rolnaam, een kolomkop. Een aanhef bínnen een
@@ -106,27 +152,51 @@ de tekstlast van elke slide bepaalt en daarmee doorweegt in de vijf besluiten er
    **En geen hoge punt als scheiding binnen een regel.** `tekst tekst · meer tekst` is twee
    feiten die op één regel geperst zijn. Twee feiten zijn twee regels, twee cellen of twee
    elementen — in de contentzone, in een label en in een bronregel.
-3. **De kaarttaal.** Rechte hoeken of één absolute hoekradius, en welke vullingssoort de
-   standaard is: container op alpha, wit met een haarlijn in de eigen hue, of vol. Default:
-   rechte hoeken, en op elk licht vlak een 1pt-haarlijn in de eigen hue. Recht omdat een
-   `roundRect` zonder expliciet gekozen radius nagemeten vier verschillende radii in één deck
-   oplevert, de haarlijn omdat een licht vlak hem nodig heeft om als kaart te lezen in plaats
-   van als vlek (`vormentaal.md` §8). Kies je afgerond, dan één absolute radius deckbreed.
-   Halverwege wisselen is het defect dat het snelst opvalt.
-4. **Het accent, en of er meer dan één is.** Eén accentkleur naast navy is de default, en die
-   houd je de hele deck vast. Meer hues komen er alleen bij als kleur iets codeert wat de lezer
-   apart moet houden: categorieën, werkstromen, processtappen, of twee kanten van een afweging.
-   Schrijf dan hier per hue in één woord op wat hij betekent — grapefruit is kost of
-   waarschuwing, emerald is baat, navy is structuur, oranje is het punt; sky en royal zijn vrij —
-   en zet bij de slides waar kleur iets doet in de outline welke rol welke hue krijgt. Daarna
-   beslis je er niet meer over. Twee categorieën in dezelfde set krijgen nooit dezelfde hue, en
-   twee blokken die samen één werkstroom vormen krijgen nooit twee verschillende.
-5. **De twee registers.** Wijs aan welke slide bíjna helemaal wit wordt en welke echt
-   verzadigd. Default: de slide waarvan de boodschap een getal of het besluit is wordt de
-   verzadigde, een proza- of vragenslide de witte. Een deck waarin elke slide in het
-   middengrijs ligt, is de deck die de vergelijking verloor — en één register deckbreed is
-   hetzelfde defect van de andere kant: het gemeten spreekdeck stond op 83 tot 88 procent wit
-   op élke contentslide en had nergens een verzadigde.
+3. **De kaarttaal: recht of afgerond.** Default: recht, en op elk licht vlak dat lós op wit
+   staat een 1pt-haarlijn in de eigen hue. Beide varianten zijn uitgewerkt, dus dit besluit heeft
+   een beeld aan elke kant: `maatstaf/12` is recht en zonder haarlijn — vier tabelrijen waar het
+   volle rijlabel de rij al begrenst — en `maatstaf/11` is afgerond met per kaart een haarlijn in
+   de eigen hue. Afgerond leest vriendelijker, recht leest als rapport en als tabel. Kies je
+   afgerond, dan één absolute radius deckbreed (0,08 tot 0,12 in), want een `roundRect` zonder
+   expliciet gekozen radius levert nagemeten vier verschillende radii in één deck
+   (`vormentaal.md` §8). Halverwege wisselen is het defect dat het snelst opvalt.
+
+   Dit is het besluit dat de skill zelf mag nemen, ook afwijkend van de default, mits de reden in
+   de outline staat — de keuze raakt geen inhoud, alleen de toon van de vorm. Wat er níét bij
+   hoort: welke vullingssoort de standaard is. Dat was hier een tweede vraag en die overlapte met
+   besluit 5, want een deck waarvan de default "vol" is, kan geen slide op wit meer hebben. De
+   vulling per slide hoort dus bij de registers.
+4. **Het accent: oranje, en wat de tweede hue codeert.** Oranje is het accent naast navy, vast en
+   deckbreed. Dat wordt niet per deck opnieuw gekozen: het is de huiskleur en de enige hue in het
+   palet die als merk leest in plaats van als categorie.
+
+   De uitkomst die je erbij koopt, en die hoort hier expliciet te staan: oranje haalt 2,6 op wit
+   (`vormentaal.md` §3). Het accent kan dus nooit een gelezen regel dragen. Een accent in de
+   letter is displaymaat of een kop vanaf 18pt; alles wat werkelijk gelezen wordt blijft navy.
+   Heb je een accent nodig dat ook een alinea draagt, dan is dat royal (5,7), en dat is een
+   afwijking met een reden.
+
+   Wat hier wél gekozen wordt, is wat kleur codeert. Per slide mag er één tweede hue bij als die
+   iets onderscheidt dat de lezer apart moet houden — twee kanten van een afweging
+   (`maatstaf/04`), kost tegenover baat, nu tegenover straks. Schrijf per hue in één woord op wat
+   hij betekent: grapefruit is kost of waarschuwing, emerald is baat, navy is structuur, sky en
+   royal zijn vrij. Vraagt de deck een **sét** van drie of vier hues — vier fasen, vier
+   tabelrijen, vier categorieën die terugkomen — dan is dat één deckbreed besluit dat je hier neemt en niet
+   per slide (`maatstaf/11`, `12` zijn beide zo'n set). Daarna beslis je er niet meer over. Twee
+   categorieën in dezelfde set krijgen nooit dezelfde hue, en twee blokken die samen één
+   werkstroom vormen krijgen nooit twee verschillende.
+5. **De twee registers.** Wijs aan welke slide bíjna helemaal wit wordt en welke echt verzadigd.
+   Default: de slide waarvan de boodschap een getal of het besluit is wordt de verzadigde, een
+   proza- of vragenslide de witte. Dit is het besluit dat per slide wordt toegewezen — dat is de
+   bedoeling, en niet hetzelfde als het per slide opnieuw nemen.
+
+   De uitkomst: er staat straks een slide in de deck die bijna leeg lijkt, en dat is geen
+   vergissing. Een deck waarin elke slide in het middengrijs ligt, is de deck die de vergelijking
+   verloor — en één register deckbreed is hetzelfde defect van de andere kant: het gemeten
+   spreekdeck stond op 83 tot 88 procent wit op élke contentslide en had nergens een verzadigde.
+   Verzadigd is nagemeten 20 tot 37 vierkante inch van de 100, dus een blok van 8 bij 2,5 in of
+   vier rijen over de volle breedte; de schatting zit er structureel naast, dus meet het met
+   `qa_tellingen.py --renders` (`vormentaal.md` §5).
 6. **De titelmodus** (`voice.md`, Titels). Modus A is de default: de titel is een volle zin die
    de boodschap draagt, en er komt géén subtitel — idx 1 blijft leeg. Modus B kies je alleen
    wanneer de deck echte hoofdstukken heeft die de lezer moet kunnen terugvinden: dan is de
@@ -134,9 +204,20 @@ de tekstlast van elke slide bepaalt en daarmee doorweegt in de vijf besluiten er
    hoofdstuk een divider, en draagt de subtitel de leidende zin van de slide. De subtitel is
    dus vooral een modus-B-instrument. Bij twijfel modus A, en schrijf op waarom.
 
-De zes gaan als één blok bovenaan de outline mee naar de goedkeuring: per besluit de gekozen
-waarde, en alleen bij een afwijking van de default de reden. Zes regels die in één keer te
-beoordelen zijn — de poort blijft de outline, dit is geen aparte ronde.
+   Dit besluit varieert nooit per slide en wordt ook nooit per slide aan de skill gelaten: de
+   modus is precies de afspraak die de titelrij van de hele deck leesbaar houdt. Half A en half B
+   levert een deck waarin de lezer niet weet of een titel een bewering of een hoofdstuk is.
+
+**Wat je na dit blok hebt** is een vormbesluit per rij, en dat gaat als eerste blok bovenaan de
+outline mee: per besluit de gekozen waarde, en alleen bij een afwijking van de default de reden.
+Zes regels die in één keer te herlezen zijn.
+
+## Stap 2 — Outline, en de tweede poort
+
+De zes besluiten uit stap 1 staan bovenaan `outline.md` en gelden voor elke slide. Neem je ze daar
+niet over, dan neem je ze per slide opnieuw en dan verspringt de deck zonder dat iemand kan zien
+waarom.
+
 
 Daarboven staat de **storyline**: het hele verhaal als één doorlopende alinea, geen bullets. Als
 je dit in een minuut aan de klant moet uitleggen, wat zeg je dan? Dat is drie regels werk en het
@@ -229,7 +310,8 @@ eindigt op de beslis- of adviesslide.
 Laat `sfnl-humanizer` over de teksten gaan vóórdat je de outline voorlegt. Tekst die ná de bouw
 verandert, betekent slides opnieuw bouwen.
 
-**Leg de outline dan voor en wacht op goedkeuring.** Dit is de enige poort in deze skill. Ga
+**Leg de outline dan voor en wacht op goedkeuring.** Dit is de tweede en laatste poort, en de
+eerste stond in stap 1. Ga
 niet bouwen omdat de outline "duidelijk genoeg" lijkt.
 
 ## Stap 3 — Bouwen
@@ -548,7 +630,8 @@ python $S/qa_tellingen.py deck.pptx --renders png
 
 `critical` blokkeert de oplevering. `warn` is een aanwijzing: kijk ernaar en beslis.
 
-`qa_tellingen.py` is geen tweede poort — de poort is de outline. Het telt zes dingen die
+`qa_tellingen.py` is geen derde poort — de poorten zijn het vragenvuur en de outline, en beide
+zijn een mens die ja zegt. Het telt zes dingen die
 mechanisch vast te stellen zijn en die afwijken van besluiten die je zelf hebt genomen: meer
 dan één maat per rol, een band vaker dan één per vier slides, nul grafieken en tabellen in een
 deck met cijfers, een maatsprong onder 2 op een slide, Montserrat en Lato in dezelfde alinea,

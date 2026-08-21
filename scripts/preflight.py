@@ -36,7 +36,8 @@ Output:
 
 Waarom hier geen `qa_fit.py` en `qa_typography.py` staan: die zijn er nooit geweest.
 Vijf scripts haalden ze aan als "de poort in QA-only-modus" en de bouwer ging op een
-poort vertrouwen die niet bestond. De repo zet zelf "Poorten: één: de outline", dus ze
+poort vertrouwen die niet bestond. De repo zet zelf "Poorten: twee, en beide zijn een
+mens" — het vragenvuur en de outline, geen mechanische poort — dus ze
 zijn opgeruimd in plaats van geschreven.
 
 Exit code is ALWAYS 0, including when everything is missing: the JSON is the answer, and

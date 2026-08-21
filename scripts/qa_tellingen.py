@@ -6,9 +6,10 @@ Usage:
     python qa_tellingen.py <deck.pptx> --strict          # ook een warn geeft exit 1
 
 Dit is een hygiënerapport in dezelfde categorie als `qa_text.py`, en **geen tweede
-poort.** De poort van deze plugin is de outline; daarna beslist de render, met
-`deck-visual-reviewer` als het oog. Dat staat zo in de README ("Poorten: één: de
-outline") en dit script verandert dat niet. De verantwoording hoort hier te staan omdat
+poort.** De poorten van deze plugin zijn het vragenvuur en de outline, en beide zijn
+een mens die ja zegt; daarna beslist de render, met `deck-visual-reviewer` als het oog.
+Dat staat zo in de README ("Poorten: twee, en beide zijn een mens") en dit script
+verandert dat niet. De verantwoording hoort hier te staan omdat
 dit precies de plek is waar deze plugin anders de vormgevingspolitie herbouwt die hij
 bewust weglaat: een script dat compositie telt, groeit uit zichzelf naar een script dat
 compositie afkeurt, en dan vermijdt de bouwer regels in plaats van slides te maken.
@@ -709,10 +710,13 @@ def analyse(deck: Path, renders: Path | None = None) -> dict:
                 "piek": max(contentwoorden) if contentwoorden else 0,
                 "ijkpunt": "gemeten op bestaande decks: de voorbeelden 11 tot 14 in "
                            "assets/maatstaf/ staan op 141, 99, 50 en 59 woorden inclusief "
-                           "titel, een spreekdeck op gemiddeld 85, en de hoogste meting is "
-                           "177 gemiddeld met een piek van 255. Het dichtste voorbeeld is "
-                           "tegelijk de sterkste van de vier, dus dit getal is geen "
-                           "drempel en ook geen richting — zie de docstring.",
+                           "titel, en dat zijn de drie dichtheden uit besluit 1 — 11 is "
+                           "leave-behind, 12 licht leave-behind, 13 en 14 spreekdeck. Het "
+                           "gemeten deck op gemiddeld 85 was geen mislukt spreekdeck maar "
+                           "een licht leave-behind; de hoogste meting is 177 gemiddeld met "
+                           "een piek van 255. Het dichtste voorbeeld is tegelijk de "
+                           "sterkste van de vier, dus dit getal is geen drempel en ook "
+                           "geen richting — zie de docstring.",
             },
             "woorden_per_element": {
                 "elementen": len(woorden_per_element),

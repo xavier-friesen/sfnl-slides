@@ -9,7 +9,7 @@ Usage:
 
 Waarom dit script bestaat
 -------------------------
-Het dichtheidsbesluit (SKILL.md, stap 2, besluit 1) zegt bij een spreekdeck dat wat de
+Het dichtheidsbesluit (SKILL.md, stap 1, besluit 1) zegt bij een spreekdeck dat wat de
 spreker zegt níét op de slide hoort en dat de toelichting naar de presentatornotities
 gaat. Tot nu toe schreef geen enkel script een notesSlide, dus was dat besluit half
 uitvoerbaar: je kon de toelichting van de slide halen maar niet in het bestand bewaren,

@@ -259,6 +259,52 @@ Op te leveren: de diff, de contactbladen van vóór en ná, de meting op beide, 
 - De referentiedocumenten hebben een eigen register: nagemeten, met de verkeerde lezing erbij waar
   die is voorgekomen. Schrijven in dat register of niet schrijven.
 
+## Ronde 2 — het vragenvuur als poort, en een referentie per antwoord
+
+Deze ronde gaat over de andere kant van dezelfde opdracht: niet of de bouwer visueel denkt, maar
+of de gebruiker de vorm werkelijk kan kiezen. De zes besluiten hingen bij de outline, dus er lag
+al tekst wanneer er voor het eerst iets te kiezen was, en vijf van de zes hadden een default met
+een reden maar geen beeld en geen uitkomst. Wat er is gedaan:
+
+- **De zes zijn stap 1 geworden, samen met de vier intakevragen, en het is een poort.** Tien
+  vragen in één blok, en er wordt niets geschreven voordat ze beantwoord zijn — geen storyline,
+  geen outline, geen slide. Overslaan bij een bekend antwoord mag niet meer: dan vul je het in
+  als voorstel en de gebruiker bevestigt het. De skill heeft daarmee twee poorten en beide zijn
+  een mens; de README, `preflight.py`, `qa_text.py` en `qa_tellingen.py` citeerden "Poorten: één:
+  de outline" en zijn meegegaan.
+- **Elk besluit heeft nu een referentie én een uitkomst.** Bij besluit 1 en 3 wijst de maatstaf
+  het aan: `13`/`14`, `12` en `11` zijn de drie dichtheden, en `11` (afgerond, haarlijn in de
+  eigen hue) tegenover `12` (recht, geen haarlijn) zijn de twee kaarttalen. Dat stond nergens,
+  terwijl de beelden er al waren. `LEESMIJ.md` noemt het nu per slide.
+- **Een derde dichtheid: licht leave-behind.** De meting wees hem al aan en niemand had hem
+  benoemd — het gemeten "spreekdeck" op gemiddeld 85 woorden was te dicht voor een spreekdeck en
+  te dun voor een leave-behind. Dat was geen mislukt deck maar een register zonder naam, en het
+  is de gewone SFNL-situatie: er wordt bij gepraat én het deck gaat mee. Daarmee is het de
+  default. De drie hangen aan één vraag (praat er iemand bij, en gaat het deck de mail in?) en
+  elk aan een gemeten voorbeeld.
+- **Oranje is het accent, vast.** Besluit 4 was "één accentkleur naast navy" zonder te zeggen
+  welke, en dat is geen besluit maar een lege plek: geen van de veertien voorbeelden is een
+  deck-met-één-accent, dus de default had ook geen beeld. Nu staat oranje er, met de uitkomst
+  erbij die je erbij koopt — oranje haalt 2,6 op wit, dus het accent kan nooit een gelezen regel
+  dragen en alles wat gelezen wordt blijft navy. Per slide mag één tweede hue erbij als die iets
+  codeert; een sét van drie of vier hues (`11`, `12`) is een deckbreed besluit en geen
+  slidekeuze. In `vormentaal.md` §3 is de vaste laag daarop bijgesteld: oranje codeert buiten een
+  set niets, want daar ís hij het accent.
+- **Wie wat mag kiezen, staat in één tabel.** "Kies jij maar" is een geldig antwoord per besluit.
+  Kaarttaal mag de skill altijd zelf nemen, ook afwijkend, met een reden. Dichtheid en accent per
+  slide laten verschillen mag alleen met expliciete toestemming. De titelmodus varieert nooit per
+  slide. Dat is de grens tussen "de skill kiest" en het gemeten defect dat het besluit per slide
+  opnieuw neemt.
+- **Twee onscherpe plekken gedicht.** Besluit 3 vroeg ook naar de vullingssoort en dat overlapte
+  met besluit 5: een deck waarvan de default "vol" is, kan geen slide op wit meer hebben. De
+  vulling hoort bij de registers en is daar nu ondergebracht. En "de rest ligt ertussen" in §5
+  gaf de middenband vrij die diezelfde paragraaf als het defect meet; die zin heeft nu een vloer,
+  namelijk de gemeten 44 tot 53 procent wit met 42 tot 54 procent tint.
+
+Wat deze ronde niet heeft: een render. De omgeving had `python-pptx` niet, dus de wijzigingen zijn
+doctrine en geen gemeten uitkomst. De drie dichtheden zijn nog nooit als drie decks naast elkaar
+gebouwd, en dat is de test die hierbij hoort.
+
 ## Openstaand
 
 - **De blinde vergelijking met twee juryleden is niet gedraaid.** Beide juryagents zijn
@@ -277,6 +323,11 @@ Op te leveren: de diff, de contactbladen van vóór en ná, de meting op beide, 
 - **De vier goede voorbeeldslides zijn alleen als afbeelding in het gesprek beschikbaar**, niet
   als bestand. Ze zijn de feitelijke lat voor werklijn A en de blinde vergelijking, en ze horen
   eigenlijk in `assets/maatstaf/` naast de tien bestaande. Daarvoor zijn de PNG-bestanden nodig.
+- **De drie dichtheden zijn niet naast elkaar gebouwd.** Testronde 2 uit het plan hierboven ging
+  over twee registers; er zijn er nu drie, en of licht leave-behind werkelijk iets anders
+  oplevert dan de twee andere is niet gemeten.
+- **Het vragenvuur is niet in een echte bouw gebruikt.** Dat de poort werkt — tien antwoorden
+  vóór de eerste regel tekst — is doctrine tot een bouwer het een keer heeft doorlopen.
 - De feitenvraag uit stap 1: gebruikt `maatstaf/04` werkelijk Montserrat SemiBold als aanhef, of
   al een Lato-gewicht? Daarvan hangt af of de nieuwe typografieregel een verkeerde meting
   corrigeert of een gemeten patroon overrulet. Beslist met een render, niet met een mening.

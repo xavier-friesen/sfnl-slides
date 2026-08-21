@@ -135,8 +135,13 @@ werd: alles klopte en de slide werd niet gelezen.
 
 IJkpunten, gemeten met `qa_tellingen.py` over alle runs per slide, op een reeks bestaande
 decks. De voorbeelden `11` tot `14` in `assets/maatstaf/` staan op 141, 99, 50 en 59 woorden
-inclusief titel. Een spreekdeck kwam uit op gemiddeld 85. De hoogste meting is 177 gemiddeld
+inclusief titel, en dat zijn de drie dichtheden uit besluit 1: `11` is een leave-behind, `12`
+een licht leave-behind, `13` en `14` een spreekdeck. Het gemeten deck op gemiddeld 85 was geen
+mislukt spreekdeck maar een licht leave-behind zonder naam. De hoogste meting is 177 gemiddeld
 met een piek van 255 op één slide: vier kolommen van zeventig woorden.
+
+Lees de tekstlast dus tegen de dichtheid die bovenaan de outline staat, en niet tegen één
+getal. Staat die er niet bij, meld dat als bevinding op de outline en niet op de slide.
 
 Let op wat die reeks zegt, want de verkeerde lezing ligt voor de hand. Het dichtste voorbeeld
 staat op 141 woorden en is tegelijk de sterkste van de vier: vier fasekaarten van ongeveer
@@ -228,7 +233,10 @@ Waar je per slide naar kijkt:
 - **De hoge punt.** Zoek `·` in de contentzone, in labels en in bronregels. Elke vondst is een
   bevinding met de fix erbij: twee regels, twee cellen of twee elementen.
 - **Kleur die niets codeert.** Stel per hue de vraag: wat codeert deze kleur, in één woord? Kun
-  je dat niet zeggen, dan is het decoratie en hoort er één accent te staan. Zou de lezer
+  je dat niet zeggen, dan is het decoratie en hoort er oranje te staan — dat is het accent van
+  de deck, vast en deckbreed (`vormentaal.md` §3). Per slide mag er één tweede hue bij die iets
+  codeert; een sét van drie of vier hues is een deckbreed besluit en moet dus in de hele deck
+  hetzelfde betekenen. Zou de lezer
   informatie verliezen als het kleurverschil wegviel? Zo niet, dan gaat het eruit.
   Let op de drie kanten. Vier kleuren waar vier keer hetzelfde staat. Eén set gelijkwaardige
   items die op slide 4 sky en op slide 11 emerald draagt. En het geval dat het vaakst voorkomt:

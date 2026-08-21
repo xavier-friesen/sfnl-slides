@@ -21,7 +21,7 @@ Deze plugin neemt de dunne laag mee en laat de vormgevingspolitie liggen.
 | | `sfnl-powerpoint` | `sfnl-slides` |
 |---|---|---|
 | Vorm per slide | gekozen uit tien patronen, vastgelegd in een spec | zelf gecomponeerd tijdens het bouwen |
-| Poorten | outline, spec, QA-drempels | één: de outline |
+| Poorten | outline, spec, QA-drempels | twee, en beide zijn een mens: het vragenvuur en de outline |
 | Vormbeoordeling | `qa_fit.py` en `qa_typography.py` meten, daarna de render | de render, met tellingen als hygiëne ernaast |
 | Scripts | ± 18.100 regels | ± 7.400 regels |
 | Skills | vijf | één |
@@ -49,14 +49,14 @@ ze delen geen bestanden en importeren niet over de grens.
 ## Wat er in zit
 
 ```
-skills/sfnl-slides/SKILL.md     de route: intake, outline, zes bouwaanroepen, de loop
+skills/sfnl-slides/SKILL.md     de route: vragenvuur, outline, zes bouwaanroepen, de loop
 reference/vormentaal.md         de maatstaf in proza — waar de lat ligt
 reference/adviesvorm.md         de laag erboven — antwoord voorop, exhibitcraft, weigerlijst
 reference/sjabloon.md           geometrie, layouts, placeholderdozen, acht valkuilen
 reference/voice.md              de taal op de slide
 agents/deck-visual-reviewer.md  de visuele beoordeling, als subagent
 assets/sfnl-sjabloon.potx       het geprunde sjabloon, 5,8 MB
-assets/maatstaf/                tien gerenderde slides uit decks die de vergelijking wonnen
+assets/maatstaf/                veertien slides: tien uit winnende decks, vier reconstructies
 scripts/                        de dunne laag
 ```
 
