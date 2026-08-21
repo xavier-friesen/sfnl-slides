@@ -333,6 +333,26 @@ Bijvangst: de renderomgeving is in deze sessie opnieuw opgebouwd (`libreoffice-i
 `fonts-lato`, `fonts-montserrat`, `poppler-utils`), en met alleen `libreoffice-core` meldt
 `preflight.py` nu correct dat er geen importfilter voor pptx is.
 
+## Ronde 4 — besluit 5 herschreven op de renders
+
+Xavier heeft de zes varianten bekeken en de keuze gemaakt, en die keuze verandert besluit 5 van
+"twee registers" naar drie gevuldheden:
+
+- **`proeven/03` is de default** — weinig accent: geen kaartvullingen, navy koppen op wit, een
+  haarlijn per rij, en één vol oranje vlak precies waar de nadruk zit (92 procent wit, 3 procent
+  verzadigd).
+- **`proeven/01` is kaal** en **`proeven/02` is met kleur**; beide mogen in dezelfde deck naast de
+  grondtoon staan, waar de inhoud erom vraagt. Dat wisselen ís het contrast tussen de slides.
+- **`proeven/04` valt af.** Hij haalt 25 procent verzadigd en zit dus binnen de band die de
+  winnende decks laten zien, en hij wordt toch niet aangemoedigd: het oppervlak is groot en
+  draagt vier woorden. Daarmee is de band van 20 tot 37 procent in §5 een meting geworden in
+  plaats van een doel — een wijziging in de doctrine die alleen op een render te nemen was.
+
+Gevolgen die zijn meegenomen: de vullingssoort staat nu bij de gevuldheid in plaats van bij de
+kaarttaal (besluit 3 vroeg er ook naar), `deck-visual-reviewer` heeft twee nieuwe rijen (wisselt
+de gevuldheid, en draagt een groot vol vlak wel iets), en het ijkpunt in `qa_tellingen.py` zegt
+niet langer dat de reeks naar 20 tot 37 procent toe moet.
+
 ## Openstaand
 
 - **De blinde vergelijking met twee juryleden is niet gedraaid.** Beide juryagents zijn

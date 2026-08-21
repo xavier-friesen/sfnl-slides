@@ -201,61 +201,70 @@ dat warme taupe als een niet-ingekleurd vlak.
 Boven ongeveer 14000 wordt een container een kleur. Dat mag, maar dan is het een vlak dat iets
 betekent en geen achtergrond meer.
 
-## 5. Een deck heeft twee registers
+## 5. Drie gevuldheden, en het contrast zit tussen de slides
 
 Gemeten aandeel wit, tint en verzadigd per slide. De afgekeurde deck: 44 tot 53 procent wit, 42
-tot 54 procent tint, 1 tot 7 procent verzadigd — op élke contentslide dezelfde band. De
-referentie heeft twee registers en geen enkele slide in het midden: bijna helemaal wit (85 tot
-88 procent) óf echt verzadigd (20 tot 37 procent).
+tot 54 procent tint, 1 tot 7 procent verzadigd — op élke contentslide dezelfde band. Dat
+middengrijs is precies wat een deck karakterloos maakt: nergens is iets leeg en nergens is iets
+vol, dus er is geen contrast tussen de slides onderling. Dát is wat dit besluit moet voorkomen,
+en niet "er moet ergens veel kleur staan".
 
-Dat middengrijs is precies wat een deck karakterloos maakt. Er is nergens iets leeg en nergens
-iets vol, dus er is geen contrast tussen de slides onderling.
+**Drie gevuldheden, met de render en de meting eronder** (`assets/proeven/`, LibreOffice, 1921
+px):
 
-Wijs de registers dus toe. In een deck van vijf contentslides staat er minstens één **op wit**:
-geen kaartvulling, alleen gekleurde koppen, proza en misschien een haarlijn. En minstens één is
-**echt verzadigd**: volle vlakken met de drager erin.
+| gevuldheid | wat er staat | gemeten wit / verzadigd | referentie |
+|---|---|---|---|
+| **weinig accent** — de default | geen kaartvullingen: navy koppen op wit, een haarlijn per rij, en één vol oranje vlak precies waar de nadruk zit | 92 / 3 | `proeven/03` |
+| **kaal** | ook dat vlak niet: alleen haarlijnen, kapitaallabels en kleur in de letter | 94 / 1 | `proeven/01` |
+| **met kleur** | een set hues codeert de categorieën, in volle rijlabels of vier kaarten | 80 / 14 | `proeven/02` |
 
-**En "de rest ligt ertussen" is geen vrije band.** Dat is de verkeerde lezing die hier voor de
-hand ligt, want de referentiedecks hebben géén slide in het midden: elke slide zit tegen wit aan
-of is werkelijk vol. Wijs dus elke slide toe aan het register waar hij naartoe leunt, en houd
-hem uit de gemeten middenband van de afgekeurde deck — 44 tot 53 procent wit met 42 tot 54
-procent tint. Een slide die daarin belandt is niet "ertussen", die is het middengrijs zelf.
+De default is **weinig accent**, en dat is een besluit van Xavier op de zes gerenderde varianten:
+van de drie is dit de vorm die het beste leest, en de andere twee zijn er voor de slide die er
+werkelijk om vraagt. Een deck is dus niet één gevuldheid — het is deze grondtoon met soms een
+kale slide (een vraag, proza) en soms een gekleurde (een set categorieën die de lezer apart moet
+houden). Een deck dat volledig in één gevuldheid staat is het middengrijs van de andere kant: het
+gemeten spreekdeck stond op 83 tot 88 procent wit op élke contentslide en had nergens iets anders.
 
-**En reken na hoeveel "verzadigd" is, want de schatting zit er structureel naast.** Dit besluit
-neem je vóór het bouwen en het is het enige van de zes dat je tijdens het bouwen niet ziet. Op
-een deck dat net met deze skill is gebouwd waren twee slides als verzadigd aangewezen en maten
-ze 7 en 12 procent: één emerald blok van 3,94 bij 1,15 in, en vier rijlabels van 3,00 in breed.
-Beide voelden tijdens het bouwen als "die slide is de volle". Een slide is 13,33 bij 7,5 in, dus
-100 vierkante inch, en de band van 20 tot 37 procent betekent dat er 20 tot 37 vierkante inch
-vol moet staan — een blok van 8 bij 2,5 in, of vier rijen over de volle breedte. Toen slide 12
-in dat deck volledig verzadigd werd gemaakt, kwam hij op 23 procent.
+**Wat er níét meer wordt aangemoedigd: een vol vlak dat een kwart van de slide beslaat.**
+`proeven/04` is precies dat — een oranje band van 12,52 bij 1,90 in, gemeten 25 procent
+verzadigd, dus binnen de band die de referentiedecks laten zien — en hij is afgekeurd op de
+render. De reden is dat het oppervlak groot is en bijna niets draagt: de vulling wordt het
+luidste element op de slide terwijl de boodschap vier woorden is. De band van 20 tot 37 procent
+blijft dus staan als méting van wat de winnende decks deden, maar hij is geen doel. Het contrast
+tussen slides haal je door van gevuldheid te wisselen (92/3 tegenover 80/14), niet door een vlak
+groter te maken.
 
-**Vier composities, nagemeten, zodat je verzadigd kunt begroten in plaats van schatten**
-(`assets/proeven/`, LibreOffice-renders van 1921 px):
+**Reken vol oppervlak wel na, want de schatting zit er structureel naast.** Dit is het enige
+besluit dat je tijdens het bouwen niet ziet. Op een deck dat met deze skill is gebouwd waren twee
+slides als verzadigd aangewezen en maten ze 7 en 12 procent, en beide voelden tijdens het bouwen
+als "die slide is de volle". Een slide is 13,33 bij 7,5 in, dus 100 vierkante inch, en één
+procent verzadigd is ongeveer één vierkante inch vol:
 
 | compositie | vol oppervlak | gemeten verzadigd |
 |---|---|---|
-| één blok van 8,00 bij 2,50 in | 20,0 vierkante inch | 21 procent |
-| één band van 12,52 bij 1,90 in | 23,8 | 25 procent |
-| vier rijlabels van 3,40 bij 0,98 in | 13,3 | 14 procent |
+| één band van 12,52 bij 1,90 in | 23,8 vierkante inch | 25 procent (`proeven/04`, afgekeurd) |
+| één blok van 8,00 bij 2,50 in | 20,0 | 21 procent |
+| vier rijlabels van 3,40 bij 0,98 in | 13,3 | 14 procent (`proeven/02`) |
+| één chip van 1,50 bij 0,46 in per nadrukrij | 1,4 | 3 procent (`proeven/03`) |
 | alleen lichte containers, geen vol vlak | 0 | 1 tot 2 procent |
 
-Twee dingen volgen daaruit. De vuistregel klopt: één procent verzadigd is ongeveer één vierkante
-inch, dus de band van 20 tot 37 procent is 20 tot 37 vierkante inch vol. En **een kolom volle
-rijlabels is niet verzadigd** — `proeven/02` voelt vol en meet 14 procent, want vier labels van
-3,40 in breed halen samen de helft van wat een band over de volle breedte haalt. Wil je die slide
-in het verzadigde register, dan moet de volle kleur de breedte over of moet er een blok bij.
+De vullingssoort hoort hier en niet bij de kaarttaal (§8): welke vulling de standaard is, volgt
+uit de gevuldheid die je hier kiest. Bij weinig accent is dat geen vulling plus één vol vlak, bij
+kaal geen vulling, en bij met kleur de volle hue voor het label en de gekalibreerde tint voor het
+paneel (§4).
 
-Aan de andere kant van de schaal: een slide met alléén lichte containers komt uit op 65 tot 69
-procent wit met 30 tot 34 procent tint. Dat haalt de gemeten middenband van de afgekeurde deck
-(44 tot 53) niet, maar het is ook geen van de twee registers — het is de tussenzone waar de
-referentie geen enkele slide heeft. Een tintslide is dus een keuze om te verantwoorden, geen
-default.
+Twee dingen om vast te houden. **Een kolom volle rijlabels voelt vol en is het niet**:
+`proeven/02` meet 14 procent, want vier labels van 3,40 in halen samen de helft van wat een band
+over de volle breedte haalt — dus verwacht daar geen verzadigde slide, en ga hem ook niet
+opvullen tot hij er een is. En **een slide met alléén lichte containers** komt uit op 65 tot 69
+procent wit met 30 tot 34 procent tint: dat is geen van de drie gevuldheden hierboven, en het is
+de zone waar de referentie geen enkele slide heeft. Tint over de hele slide is dus een keuze om
+te verantwoorden, geen default.
 
-Meet het dus, in dezelfde ronde als de render: `qa_tellingen.py --renders` geeft het aandeel
-wit, tint en verzadigd per slide. Zonder die meting blijft besluit 5 een intentie, en dat is
-nagemeten: het middengrijs uit de afgekeurde deck ontstond niet doordat iemand besloot dat elke
-slide in het midden mocht liggen.
+Meet het in dezelfde ronde als de render: `qa_tellingen.py --renders` geeft het aandeel wit, tint
+en verzadigd per slide. Zonder die meting blijft dit besluit een intentie, en dat is nagemeten:
+het middengrijs uit de afgekeurde deck ontstond niet doordat iemand besloot dat elke slide in het
+midden mocht liggen.
 
 ## 6. De compositie vult de zone, de blokken volgen de inhoud
 
@@ -334,7 +343,7 @@ is de best gevalideerde vormregel die er is: op één referentieslide staat hij 
 kolom met een 1pt lijn in exact de hue van zijn eigen vulling. Een vlak van 9 procent vulling
 heeft die lijn nodig om als kaart te lezen in plaats van als vlek.
 
-**Een streep scheidt lichter dan een vlak.** Onder een label, tussen twee registers, boven een
+**Een streep scheidt lichter dan een vlak.** Onder een label, tussen twee blokken, boven een
 sluitregel.
 
 **Eén kaarttaal per deck.** De hoekvorm van je eerste kaart geldt voor elke kaart. Afgerond of
@@ -553,7 +562,7 @@ norm: de getallen hieronder zijn richtwaarden met de meting eronder, geen drempe
 is: één dichtheidsbesluit per deck, en één toets per slide.
 
 **Het dichtheidsbesluit: spreekdeck, licht leave-behind of leave-behind.** Dit is een ander
-onderscheid dan de twee registers van §5 — dat gaat over kleurbezetting per slide, dit over
+onderscheid dan de drie gevuldheden van §5 — dat gaat over kleurbezetting per slide, dit over
 woorden per deck — en het is het eerste deckbrede besluit in het vragenvuur (skill, stap 1).
 
 Drie waarden, met per waarde de meting eronder. De getallen zijn woorden per contentslide

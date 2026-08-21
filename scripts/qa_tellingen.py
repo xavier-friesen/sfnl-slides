@@ -484,10 +484,14 @@ def registers(map_pad: Path) -> dict:
         "methode": "wit s<6% v>93% / verzadigd s>25% of v<55%, op 240 px breed",
         "bandbreedte": {"wit": [witten[0], witten[-1]],
                         "verzadigd": [vollen[0], vollen[-1]]},
-        "ijkpunt": "§5 meet de referentie op bijna helemaal wit (85 tot 88 procent) OF "
-                   "echt verzadigd (20 tot 37 procent), en geen enkele slide in het "
-                   "midden; de afgekeurde deck lag met 44 tot 53 procent wit over de hele "
-                   "lengte in dezelfde middenband. De geërfde fotodividers (80 procent "
+        "ijkpunt": "§5 kent drie gevuldheden, elk met een gerenderde referentie: weinig "
+                   "accent 92/3 (assets/proeven/03, de default), kaal 94/1 (proeven/01) en "
+                   "met kleur 80/14 (proeven/02). Wat deze reeks moet laten zien is "
+                   "VERSCHIL tussen de slides, niet een hoog getal: de afgekeurde deck lag "
+                   "met 44 tot 53 procent wit over de hele lengte in dezelfde middenband. "
+                   "De band van 20 tot 37 procent verzadigd is de meting van de winnende "
+                   "decks en géén doel — een vol vlak van een kwart slide (proeven/04, 25 "
+                   "procent) is op de render afgekeurd. De geërfde fotodividers (80 procent "
                    "verzadigd) en de oranje outro (99 procent) zeggen niets over de "
                    "compositie — lees deze reeks op de contentslides.",
         "per_slide": per_slide,

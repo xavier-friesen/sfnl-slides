@@ -78,7 +78,7 @@ kiest:
 | 2 maten | vaste regel; de dichte body is de enige tweesprong | nee — 12pt volgt de compositie, niet de slide |
 | 3 kaarttaal | de skill mag deze zelf kiezen, ook afwijkend, met een reden | nee, deckbreed |
 | 4 accent | oranje staat vast; de set hues is een gebruikerskeuze | tweede hue per slide: ja, als hij codeert. Een ánder accent: alleen met toestemming |
-| 5 registers | gebruiker, of de skill op verzoek | ja — per slide toewijzen ís het besluit |
+| 5 gevuldheid | gebruiker, of de skill op verzoek | ja — de grondtoon is deckbreed, een enkele slide mag kaal of met kleur zijn |
 | 6 titelmodus | gebruiker | nooit |
 
 ### De vier over de opdracht
@@ -178,7 +178,7 @@ slide bepaalt en daarmee doorweegt in de vijf besluiten erna.
    de outline staat — de keuze raakt geen inhoud, alleen de toon van de vorm. Wat er níét bij
    hoort: welke vullingssoort de standaard is. Dat was hier een tweede vraag en die overlapte met
    besluit 5, want een deck waarvan de default "vol" is, kan geen slide op wit meer hebben. De
-   vulling per slide hoort dus bij de registers.
+   vullingssoort volgt nu uit de gevuldheid van besluit 5 (`vormentaal.md` §5).
 4. **Het accent: oranje, en wat de tweede hue codeert.** Oranje is het accent naast navy, vast en
    deckbreed. Dat wordt niet per deck opnieuw gekozen: het is de huiskleur en de enige hue in het
    palet die als merk leest in plaats van als categorie.
@@ -205,22 +205,31 @@ slide bepaalt en daarmee doorweegt in de vijf besluiten erna.
    neemt en niet per slide (`maatstaf/11`, `12` zijn beide zo'n set). Daarna beslis je er niet
    meer over. Twee categorieën in dezelfde set krijgen nooit dezelfde hue, en twee blokken die
    samen één werkstroom vormen krijgen nooit twee verschillende.
-5. **De twee registers.** Wijs aan welke slide bíjna helemaal wit wordt en welke echt verzadigd.
-   Default: de slide waarvan de boodschap een getal of het besluit is wordt de verzadigde, een
-   proza- of vragenslide de witte. Dit is het besluit dat per slide wordt toegewezen — dat is de
-   bedoeling, en niet hetzelfde als het per slide opnieuw nemen.
+5. **De gevuldheid: weinig accent, kaal of met kleur.** Drie waarden, elk met een gerenderde
+   referentie in `assets/proeven/` en de meting eronder (aandeel wit / verzadigd):
 
-   De uitkomst: er staat straks een slide in de deck die bijna leeg lijkt, en dat is geen
-   vergissing. Een deck waarin elke slide in het middengrijs ligt, is de deck die de vergelijking
-   verloor — en één register deckbreed is hetzelfde defect van de andere kant: het gemeten
-   spreekdeck stond op 83 tot 88 procent wit op élke contentslide en had nergens een verzadigde.
-   Verzadigd is nagemeten 20 tot 37 vierkante inch van de 100, en één procent is ongeveer één
-   vierkante inch: een blok van 8 bij 2,5 in meet 21 procent, een band van 12,52 bij 1,90 in
-   meet 25. Let op één val die de proef opleverde: **vier volle rijlabels zijn niet verzadigd.**
-   Vier labels van 3,40 bij 0,98 in zijn samen 13,3 vierkante inch en de slide meet 14 procent,
-   terwijl hij vol voelt (`proeven/02`). En verzadigd kan met één accent: `proeven/04` haalt 25
-   procent met alleen oranje. De schatting zit er structureel naast, dus meet het met
-   `qa_tellingen.py --renders` (`vormentaal.md` §5).
+   | gevuldheid | wat er staat | gemeten | referentie |
+   |---|---|---|---|
+   | **weinig accent** — default | geen kaartvullingen: navy koppen op wit, een haarlijn per rij, en één vol oranje vlak precies waar de nadruk zit | 92 / 3 | `proeven/03` |
+   | **kaal** | ook dat vlak niet: haarlijnen, kapitaallabels en kleur in de letter | 94 / 1 | `proeven/01` |
+   | **met kleur** | een set hues codeert de categorieën, in volle rijlabels of vier kaarten | 80 / 14 | `proeven/02` |
+
+   Default is **weinig accent**, gekozen op de zes gerenderde varianten van dezelfde inhoud. Dit
+   is de grondtoon van de deck en geen keuze per deck-en-klaar: kaal is de slide die er om vraagt
+   (een vraag, proza), met kleur is de slide waar een set categorieën uit elkaar moet blijven. Ze
+   mogen dus in één deck naast elkaar staan — dat is precies wat het contrast tussen de slides
+   maakt.
+
+   **Wat hier níét meer bij hoort: een vol vlak dat een kwart van de slide beslaat.** Dat is
+   `proeven/04`, gemeten 25 procent verzadigd, en hij is op de render afgekeurd: het oppervlak is
+   groot en draagt bijna niets, dus de vulling wordt het luidste element terwijl de boodschap vier
+   woorden is. De band van 20 tot 37 procent uit `vormentaal.md` §5 blijft de meting van de
+   winnende decks, maar hij is geen doel — het contrast haal je door van gevuldheid te wisselen.
+
+   De rest van de uitkomst: één procent verzadigd is ongeveer één vierkante inch, en de schatting
+   zit er structureel naast, dus meet het met `qa_tellingen.py --renders`. Let op de val dat vier
+   volle rijlabels vol vóelen en 14 procent meten, en dat een slide met alléén lichte containers
+   op 65 tot 69 procent wit uitkomt — dat is geen van de drie en vraagt dus een reden.
 6. **De titelmodus** (`voice.md`, Titels). Modus A is de default: de titel is een volle zin die
    de boodschap draagt, en er komt géén subtitel — idx 1 blijft leeg. Modus B kies je alleen
    wanneer de deck echte hoofdstukken heeft die de lezer moet kunnen terugvinden: dan is de
