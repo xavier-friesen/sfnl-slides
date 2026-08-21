@@ -1,6 +1,6 @@
 {
-  "name": "sfnl-slides-dev",
-  "description": "Marketplace voor sfnl-slides, de compositie-eerst route naar een SFNL-deck. Deze repo bevat één plugin en die staat op de root, dus 'source' is './' en de marketplace werkt zowel vanuit een git-URL als vanuit een lokale checkout.",
+  "name": "sfnl",
+  "description": "De pluginmarketplace van Social Finance NL. Nu met één plugin, sfnl-slides, de compositie-eerst route naar een SFNL-deck; de naam is de organisatie en niet de plugin, zodat er later meer bij kan. Deze repo bevat die ene plugin en die staat op de root, dus 'source' is './' en de marketplace werkt zowel vanuit een git-URL als vanuit een lokale checkout. Installeren: sfnl-slides@sfnl.",
   "owner": {
     "name": "Social Finance NL",
     "email": "info@socialfinancenl.nl"

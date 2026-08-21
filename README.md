@@ -32,16 +32,29 @@ Deze plugin woont in zijn eigen repo en staat daar op de root, dus rechtstreeks 
 
 ```
 /plugin marketplace add xavier-friesen/sfnl-slides
-/plugin install sfnl-slides
+/plugin install sfnl-slides@sfnl
 ```
 
-Werk je in de monorepo waar `sfnl-slides` naast `sfnl-powerpoint` staat, dan wijst de
-marketplace in die repo-root met een relatief pad naar beide plugins:
+De marketplace heet `sfnl` — de organisatie, niet de plugin — dus de plugin heet overal
+`sfnl-slides@sfnl`. Werk je in de monorepo waar `sfnl-slides` naast `sfnl-powerpoint` staat, dan
+wijst de marketplace in die repo-root met een relatief pad naar beide plugins:
 
 ```
 /plugin marketplace add .
 /plugin install sfnl-slides
 ```
+
+**Bijwerken naar een nieuwe versie gaat niet vanzelf.** Auto-update staat voor een eigen
+marketplace standaard uit, dus een geïnstalleerde kopie blijft op zijn versie staan:
+
+```
+/plugin marketplace update sfnl
+/plugin install sfnl-slides@sfnl
+/reload-plugins
+```
+
+Zet auto-update aan via `/plugin` → Marketplaces → Enable auto-update, of org-breed met
+`"autoUpdate": true` op de `extraKnownMarketplaces`-regel in managed settings.
 
 Daarna is `/sfnl-slides` het commando. Beide plugins kunnen naast elkaar geïnstalleerd staan;
 ze delen geen bestanden en importeren niet over de grens.
