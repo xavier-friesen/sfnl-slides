@@ -1,7 +1,9 @@
 # Werkplan — sfnl-slides visueel aantrekkelijker maken
 
-Status: **wacht op go van Xavier.** Dit plan is vastgelegd voor review; er is nog niets aan de
-skill gewijzigd. Het plan staat op zichzelf: de opdracht, de meting eronder en de keuzes staan
+Status: **in uitvoering, go gegeven.** Stap 0 tot en met 6 zijn uitgevoerd (commits `25f099e`
+tot `313dc1b`), inclusief de vier reconstructies in `assets/maatstaf/`, het nieuwe
+`qa_tellingen.py`, `set_notes.py`, en één volledige testronde in twee dichtheden. Wat nog open
+staat, staat onderaan bij **Openstaand**. Het plan staat op zichzelf: de opdracht, de meting eronder en de keuzes staan
 hieronder, niet in een los promptdocument.
 
 ## Doel
@@ -259,7 +261,19 @@ Op te leveren: de diff, de contactbladen van vóór en ná, de meting op beide, 
 
 ## Openstaand
 
-- **Go van Xavier** op de prompt. Tot dan verandert er niets aan de skill.
+- **De blinde vergelijking met twee juryleden is niet gedraaid.** Beide juryagents zijn
+  afgebroken op een spend limit, halverwege deck A en deck B. De decks en renders staan klaar in
+  `/home/user/werk-jury/` (A = nieuw leave-behind, B = het oude werksessie-deck, C = nieuw
+  spreekdeck) en de ongewijzigde reviewer staat in
+  `/home/user/werk-nulmeting/deck-visual-reviewer-ONGEWIJZIGD.md`. Dit is punt 1 van de
+  definitie van klaar, dus die is nog niet gehaald.
+- **Twee gaten uit de testronde zijn niet gedicht** (dezelfde spend limit): `fit_title.py` geeft
+  nog geen waarschuwing wanneer titels van één en twee regels door elkaar lopen, en layout 22
+  belooft in `sjabloon.md` nog kolomkoppen die te herkleuren zijn terwijl geen script dat kan —
+  `set_text.py` biedt daar alleen `b="1"` en dat is sinds §9 nepvet.
+- **Een tweede testronde ná de tellerreparaties** is niet gedraaid. De vier reparaties in
+  `qa_tellingen.py` maken drie ontwerpbesluiten weer vrij die de bouwer onder dwang van de
+  teller had genomen (labelmaat naar 12pt, badges naar 18pt, merkstreepje naar 1,60 in).
 - **De vier goede voorbeeldslides zijn alleen als afbeelding in het gesprek beschikbaar**, niet
   als bestand. Ze zijn de feitelijke lat voor werklijn A en de blinde vergelijking, en ze horen
   eigenlijk in `assets/maatstaf/` naast de tien bestaande. Daarvoor zijn de PNG-bestanden nodig.
