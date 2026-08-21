@@ -525,8 +525,9 @@ aantal.
 
 - **Spreekdeck** — er praat iemand bij en het deck gaat daarna niet mee, dus de slide is de
   achtergrond bij dat verhaal. Wat de spreker zegt hoort niet op de slide; daar staat alleen wat
-  het verhaal draagt, en de toelichting gaat naar de presentatornotities. Dit is het strakke eind. `13` en `14` zijn een plot op schaal en een
-  schema, en beide vullen de zone (§6), want weinig woorden is geen lege slide.
+  het verhaal draagt, en de toelichting gaat naar de presentatornotities. Dit is het strakke
+  eind. `13` en `14` zijn een plot op schaal en een schema, en beide vullen de zone (§6), want
+  weinig woorden is geen lege slide.
 - **Licht leave-behind** — leesbaar zonder spreker, maar met één boodschap per slide en zonder
   uitgeschreven spreektekst. Dit register is er bijgekomen omdat de meting het aanwees: het
   gemeten spreekdeck zat op gemiddeld 85 woorden per contentslide met een piek van 101, en dat

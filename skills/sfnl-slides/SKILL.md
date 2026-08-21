@@ -142,9 +142,9 @@ slide bepaalt en daarmee doorweegt in de vijf besluiten erna.
    body 16pt Lato Light, voetnoot 11pt. Eén maat per rol, deckbreed. Dit is het enige besluit
    zonder alternatief — er is niets te kiezen behalve één tweesprong: **mag de body naar 12pt
    wanneer de compositie het vraagt?** Default: ja, maar alleen bij een kaartenrij van drie of
-   meer, of een tabelcel (`vormentaal.md` §2), en dan deckbreed voor die rol. De uitkomst is te zien op
-   `maatstaf/11`: vier kaarten van 2,95 in laten 16pt niet toe, dus daar staat de body op 13pt,
-   en dat is de prijs van vier kaarten naast elkaar. Wil je 16pt hard houden, dan zijn het drie
+   meer, of een tabelcel (`vormentaal.md` §2), en dan deckbreed voor die rol. De uitkomst is te
+   zien op `maatstaf/11`: vier kaarten van 2,95 in laten 16pt niet toe, dus daar staat de body
+   op 13pt, en dat is de prijs van vier kaarten naast elkaar. Wil je 16pt hard houden, dan zijn het drie
    kaarten of twee slides.
 
    Het gemeten werkdeck zakte naar 14pt over de hele deck omdat de tekst er eerst was en de maat
@@ -191,9 +191,9 @@ slide bepaalt en daarmee doorweegt in de vijf besluiten erna.
    (`maatstaf/04`), kost tegenover baat, nu tegenover straks. Schrijf per hue in één woord op wat
    hij betekent: grapefruit is kost of waarschuwing, emerald is baat, navy is structuur, sky en
    royal zijn vrij. Vraagt de deck een **sét** van drie of vier hues — vier fasen, vier
-   tabelrijen, vier categorieën die terugkomen — dan is dat één deckbreed besluit dat je hier neemt en niet
-   per slide (`maatstaf/11`, `12` zijn beide zo'n set). Daarna beslis je er niet meer over. Twee
-   categorieën in dezelfde set krijgen nooit dezelfde hue, en twee blokken die samen één
+   tabelrijen, vier categorieën die terugkomen — dan is dat één deckbreed besluit dat je hier
+   neemt en niet per slide (`maatstaf/11`, `12` zijn beide zo'n set). Daarna beslis je er niet
+   meer over. Twee categorieën in dezelfde set krijgen nooit dezelfde hue, en twee blokken die samen één
    werkstroom vormen krijgen nooit twee verschillende.
 5. **De twee registers.** Wijs aan welke slide bíjna helemaal wit wordt en welke echt verzadigd.
    Default: de slide waarvan de boodschap een getal of het besluit is wordt de verzadigde, een
