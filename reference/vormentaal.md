@@ -165,7 +165,8 @@ Wat een stil label dan is, in deze volgorde:
 - **`tx1` lumMod 65 mét spatiëring**, maar alleen in een deck waarin sky en royal niet meedoen.
   Doet er wél een set hues mee, dan is dit een vijfde kleur en gaat het niet op.
 - **Navy 100 procent** wanneer het label mag meedoen in de hiërarchie. Op 14pt naast een kop van
-  18pt leest dat als een tweede kop, dus dit is de uitzondering en niet de weg eruit. Oranje codeert buiten een set niets — daar
+  18pt leest dat als een tweede kop, dus dit is de uitzondering en niet de weg eruit. Oranje
+  codeert buiten een set niets — daar
 ís hij het accent; binnen een deckbrede set is hij één van de hues en codeert hij wat de set hem
 toewijst (`maatstaf/11`, `12`).
 
