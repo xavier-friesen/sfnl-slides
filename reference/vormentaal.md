@@ -73,8 +73,7 @@ toch in de contentzone, dan weigert `run()` het en blokkeert `qa_text.py` de dec
 
 12pt is de dichte variant voor een kaartenrij van drie of meer of een tabelcel, en het is de
 vloer voor alles wat gelezen wordt. De voetnoot van 11pt valt daarbuiten: dat is een eigen rol
-met een eigen maat, geen kleinere body. 14pt is het kapitaallabel. 10pt gebruik je niet meer, en
-13 of 15pt bestaan niet — een tussenmaat is altijd een rol die zijn eigen maat verloor.
+met een eigen maat, geen kleinere body. 14pt is het kapitaallabel. 10pt gebruik je niet meer.
 
 **Dezelfde rol houdt deckbreed dezelfde maat.** De afgekeurde deck had vier bodymaten en drie
 sluitregelmaten over vier slides. Los is elke slide dan correct en naast elkaar leest het als
