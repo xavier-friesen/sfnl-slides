@@ -1089,8 +1089,8 @@ def icoon(naam: str, x: float, y: float, d: float, delen, *,
                                     hue, pt).replace(lijn_xml((hue, pt)), ln))
         elif soort in ("pad", "vorm"):
             punten = [(px(a), py(b)) for a, b in deel[1]]
-            kinderen.append(contour(f"{naam} {soort}", 0, 0, punten,
-                                    sluit=(soort == "vorm")).replace("<a:ln><a:noFill/></a:ln>", ln))
+            pad = contour(f"{naam} {soort}", 0, 0, punten, sluit=(soort == "vorm"))
+            kinderen.append(pad.replace("<a:ln><a:noFill/></a:ln>", ln))
         elif soort in ("cirkel", "stip"):
             _, cx, cy, r = deel
             vulling = hue if soort == "stip" else None
