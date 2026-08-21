@@ -88,6 +88,15 @@ CHART_TYPES = {
     "pie": XL_CHART_TYPE.PIE,
     "doughnut": XL_CHART_TYPE.DOUGHNUT,
     "area": XL_CHART_TYPE.AREA,
+    # Radar: geoogst uit het meetplan Welzijn op Recept, waar de zes assen van positieve
+    # gezondheid als spinnenweb staan. Dat is de ene exhibitvorm waarvoor een radar het
+    # juiste antwoord is: een profiel over vaste assen, waar de VORM van het web de boodschap
+    # is en niet de losse waarde. Voor een reeks over tijd of een vergelijking van
+    # categorieën is het de verkeerde keuze -- daar leest een staaf of een lijn beter, en een
+    # radar suggereert een samenhang tussen de assen die er niet is.
+    "radar": XL_CHART_TYPE.RADAR,
+    "radar_markers": XL_CHART_TYPE.RADAR_MARKERS,
+    "radar_filled": XL_CHART_TYPE.RADAR_FILLED,
 }
 # No "scatter": argparse used to advertise XY_SCATTER, but main() always builds a
 # CategoryChartData and python-pptx routes XY_SCATTER to _XyChartXmlWriter, which reads
@@ -98,7 +107,10 @@ CHART_TYPES = {
 # Types whose series mark IS the line: colour the line, never the fill. Styling these
 # the fill way wrote <a:ln><a:noFill/></a:ln> onto every series, which deletes the line
 # itself and renders an empty plot area that every QA script passes.
-LINE_FAMILY = {"line", "line_markers"}
+# Reeksen die als LIJN worden getekend en dus geen vlakvulling hebben. `radar` en
+# `radar_markers` horen hier: het web is lijnwerk. `radar_filled` niet -- dat is een vlak, en
+# op meer dan één reeks dekt het de vorige af, dus gebruik het alleen met één reeks.
+LINE_FAMILY = {"line", "line_markers", "radar", "radar_markers"}
 
 # Types that plot a single series; python-pptx keeps chart_data[0] and drops the rest.
 SINGLE_SERIES_ONLY = {"pie", "doughnut"}

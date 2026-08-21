@@ -13,7 +13,8 @@ Usage:
         {"label": "2024",        "align": "r", "width_in": 2.0},
         {"label": "2025",        "align": "r", "width_in": 2.0}
       ],
-      "rows": [
+      "rows": [        # een rij is een lijst cellen, of {"sectie": "FASE 1"} voor
+                       # een sectiekop over de volle breedte
         ["Rentelasten", "1,2", "0,9"],
         ["Opbrengsten", "0,4", "1,6"]
       ]
@@ -296,6 +297,24 @@ def row_heights(total_in: float, rows: int) -> tuple[float, float, bool]:
     return HEADER_HEIGHT_IN, share, True
 
 
+def is_sectie(row) -> bool:
+    """Is deze rij een sectiekop in plaats van een gewone rij?
+
+    Een sectiekop is `{"sectie": "FASE 1"}` tussen de gewone rijen. Hij pakt de volle breedte,
+    draagt een volle vulling, en scheidt twee delen van dezelfde tabel zonder een tweede kop
+    en zonder een tweede tabel.
+
+    Geoogst en niet bedacht: van de elf decks die zijn nagekeken gebruikt het meetplan
+    Welzijn op Recept dit op vijf van de 22 slides (`Activiteiten & Outputs`, `Impact`,
+    `Proceskwaliteit` als volle rij tussen de gewone rijen), en de kick-off Aidsfonds en de
+    dashboardhandleiding doen hetzelfde met `Phase 1` / `Phase 2` en met `Deel 1` / `Deel 2`.
+    Het alternatief -- twee tabellen met een band ertussen -- ziet er vrijwel hetzelfde uit,
+    maar dan verschuiven de kolombreedtes tussen de twee helften zodra de inhoud verschilt, en
+    dat is precies de slordigheid die `vormentaal.md` §7 aanwijst.
+    """
+    return isinstance(row, dict) and "sectie" in row
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("deck", type=Path)
@@ -321,11 +340,15 @@ def main() -> None:
     if not rows:
         raise SystemExit("de tabel heeft geen rijen")
     for index, row in enumerate(rows):
+        if is_sectie(row):
+            continue
         if len(row) != len(columns):
             raise SystemExit(
                 f"rij {index} heeft {len(row)} cellen, de tabel heeft "
                 f"{len(columns)} kolommen"
             )
+    if is_sectie(rows[0]) and len(rows) == 1:
+        raise SystemExit("een tabel van alleen een sectiekop heeft niets om te scheiden")
 
     try:
         x, y, width, height = (float(v) for v in args.box.split(","))
@@ -380,12 +403,29 @@ def main() -> None:
             align=ALIGNMENTS[column["align"]],
         )
 
-    # Body
+    # Body. De zebra telt alleen de gewone rijen, want een sectiekop mag de om-en-om niet
+    # verschuiven -- anders staat na elke sectie de tint op de andere helft van de rijen.
+    gewone = 0
     for row_index, row in enumerate(rows):
+        if is_sectie(row):
+            eerste = table.cell(row_index + 1, 0)
+            if len(columns) > 1:
+                eerste.merge(table.cell(row_index + 1, len(columns) - 1))
+            eerste.text = str(row["sectie"])
+            fill_cell(eerste, HEADER_FILL)
+            style_cell(
+                eerste,
+                bold=True,
+                font=HEADER_FONT,
+                size_pt=HEADER_PT,
+                colour=HEADER_TEXT,
+                align=ALIGNMENTS["l"],
+            )
+            continue
         for col_index, value in enumerate(row):
             cell = table.cell(row_index + 1, col_index)
             cell.text = "" if value is None else str(value)
-            if args.zebra and row_index % 2 == 1:
+            if args.zebra and gewone % 2 == 1:
                 fill_cell(cell, HEADER_FILL, ZEBRA_BRIGHTNESS)
             else:
                 clear_fill(cell)
@@ -397,6 +437,7 @@ def main() -> None:
                 colour=BODY_TEXT,
                 align=ALIGNMENTS[columns[col_index]["align"]],
             )
+        gewone += 1
 
     style_borders(table, len(rows) + 1, len(columns))
 

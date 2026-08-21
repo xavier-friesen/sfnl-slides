@@ -679,6 +679,10 @@ PRESET_ADJ = {
     "homePlate": ("adj",),
     "triangle": ("adj",),
     "trapezoid": ("adj",),
+    "leftBrace": ("adj1", "adj2"),
+    "rightBrace": ("adj1", "adj2"),
+    "leftBracket": ("adj",),
+    "rightBracket": ("adj",),
     "snip1Rect": ("adj",),
     "bevel": ("adj",),
 }
@@ -1034,6 +1038,215 @@ def groep(naam: str, x: float, y: float, w: float, h: float, kinderen: list[str]
 
 
 # ---------------------------------------------------------------- op schaal
+
+def accolade(naam: str, x: float, y: float, w: float, h: float, hue="oranje", *,
+             kant: str = "rechts", punt_y: float | None = None, pt: float = 2) -> str:
+    """Een accolade die een groep vormen aan één uitkomst knoopt.
+
+    Dit is het merkteken met het hoogste rendement uit `reference/merktekens.md`, en het is
+    geoogst en niet bedacht: de effectenkaart in het MDT-eindrapport gebruikt hem acht keer,
+    tussen elke kolom van de resultatenketen. Dat is waarom die slide met dertig blokken
+    leesbaar blijft. Hij zegt "deze vier dingen leiden samen tot dat ene" met één haak; met
+    pijlen was het een kabelbos geworden.
+
+    `kant` is de kant waar de punt naar wijst: `"rechts"` haakt een groep links in en wijst
+    naar het blok rechts (`prst="rightBrace"`), `"links"` andersom.
+
+    **`punt_y` is de reden dat deze functie bestaat.** Het handvat `adj2` van een brace zet de
+    punt als duizendste van de eigen hoogte, en zonder eigen waarde staat hij op 50 procent:
+    precies in het midden, en dus zelden bij de vorm waar hij naar moet wijzen. Geef de
+    absolute y van het midden van de doelvorm, dan rekent deze functie het handvat terug. Ligt
+    de punt buiten de haak, dan is dat een fout in de compositie en niet in de waarde: de haak
+    moet de groep omvatten die hij bundelt, en de doelvorm hoort daar tegenover te staan.
+
+        v.append(accolade("Haak 1", 5.90, 1.95, 0.22, 1.80, "oranje",
+                          punt_y=anker(doel, "m")[1]))
+
+    Een brace heeft geen vulling; hij is lijnwerk (§8), dus de hue zit in de lijn. Op minder
+    dan 1,5pt verdwijnt hij naast een gevuld blok.
+    """
+    if kant not in {"links", "rechts"}:
+        raise ValueError('kant is "links" of "rechts", niet ' + repr(kant))
+    if h <= 0:
+        raise ValueError("een accolade zonder hoogte bundelt niets")
+    frac = 50000
+    if punt_y is not None:
+        rel = (punt_y - y) / h
+        if not 0.0 <= rel <= 1.0:
+            raise ValueError(
+                f"punt_y={punt_y:.2f} ligt buiten de haak ({y:.2f} tot {y + h:.2f}). De haak "
+                "hoort de groep te omvatten die hij bundelt, en de doelvorm staat ernaast — "
+                "vergroot de haak of verplaats het doel."
+            )
+        frac = int(round(rel * 100000))
+    prst = "rightBrace" if kant == "rechts" else "leftBrace"
+    return vlak(naam, x, y, w, h, prst=prst, lijn=(hue, pt),
+                adj={"adj1": 8333, "adj2": frac})
+
+
+#: Extensies die het sjabloon al als Default in `[Content_Types].xml` heeft staan. Wat hier
+#: niet in staat, voegt `media()` toe -- en `jpg` staat er inderdaad niet in, alleen `jpeg`,
+#: dus een foto die `.jpg` heet maakt zonder die stap een deck dat PowerPoint weigert.
+BEELDTYPES = {"png": "image/png", "jpeg": "image/jpeg", "jpg": "image/jpeg",
+              "gif": "image/gif", "emf": "image/x-emf", "svg": "image/svg+xml",
+              "tiff": "image/tiff", "webp": "image/webp"}
+
+
+def media(slide_pad: str | Path, bestand: str | Path) -> str:
+    """Zet een afbeelding in de uitgepakte boom en geef de `rId` terug.
+
+    Dit is de ontbrekende schakel naar een beeld, en het gat dat hij dicht is groot: drie
+    merktekens uit `reference/merktekens.md` lopen erop vast — het ronde portret op de
+    teamslide, de partnerlogo's op een mede-merk-cover, en het verkleinde eindproduct als
+    artefactvoorbeeld. Het handmatige alternatief was een plaatje ná de bouw in PowerPoint
+    erin slepen, en dan is het deck niet meer herbouwbaar; dat is precies de eigenschap waar
+    deze plugin op staat.
+
+    Drie dingen gebeuren hier, en alle drie stil misgaan als je ze zelf doet:
+
+    1. Het bestand wordt naar `ppt/media/` gekopieerd, met een naam die niet botst.
+    2. Er komt een relationship in `ppt/slides/_rels/slideN.xml.rels`, met een `rId` die nog
+       vrij is. Een tweede aanroep met hetzelfde bestand hergebruikt de bestaande `rId` in
+       plaats van een tweede kopie te maken -- de bouw is herhaalbaar.
+    3. De extensie komt als `Default` in `[Content_Types].xml` als hij er nog niet staat.
+       `jpeg` staat er wel en `jpg` niet, en zonder die regel weigert PowerPoint het bestand.
+    """
+    slide = Path(slide_pad)
+    src = Path(bestand)
+    if not src.is_file():
+        raise SystemExit(f"beeld niet gevonden: {src}")
+    ext = src.suffix.lstrip(".").lower()
+    if ext not in BEELDTYPES:
+        raise SystemExit(
+            f"onbekend beeldtype .{ext}. Bekend: {', '.join(sorted(BEELDTYPES))}"
+        )
+    ppt = slide.parent.parent
+    if ppt.name != "ppt":
+        raise SystemExit(
+            f"{slide} ziet niet uit als ppt/slides/slideN.xml — media() werkt op de "
+            "uitgepakte boom, niet op een ingepakt deck"
+        )
+    wortel = ppt.parent
+    mediadir = ppt / "media"
+    mediadir.mkdir(exist_ok=True)
+
+    rels = slide.parent / "_rels" / (slide.name + ".rels")
+    if not rels.is_file():
+        raise SystemExit(f"geen rels naast {slide.name}; is dit een echte slide?")
+    xml = rels.read_text(encoding="utf-8")
+
+    doel = None
+    for kandidaat in sorted(mediadir.iterdir()):
+        if kandidaat.is_file() and kandidaat.read_bytes() == src.read_bytes():
+            doel = kandidaat
+            break
+    if doel is None:
+        n = 1
+        while (mediadir / f"beeld{n}.{ext}").exists():
+            n += 1
+        doel = mediadir / f"beeld{n}.{ext}"
+        doel.write_bytes(src.read_bytes())
+
+    bestaand = re.search(
+        r'Id="(rId\d+)"[^>]*Target="\.\./media/' + re.escape(doel.name) + r'"', xml)
+    if bestaand:
+        return bestaand.group(1)
+
+    gebruikt = {int(m) for m in re.findall(r'Id="rId(\d+)"', xml)}
+    rid = f"rId{max(gebruikt, default=0) + 1}"
+    rel = (f'<Relationship Id="{rid}" Type="http://schemas.openxmlformats.org/'
+           f'officeDocument/2006/relationships/image" Target="../media/{doel.name}"/>')
+    rels.write_text(xml.replace("</Relationships>", rel + "</Relationships>"),
+                    encoding="utf-8")
+
+    ct = wortel / "[Content_Types].xml"
+    if ct.is_file():
+        ctxml = ct.read_text(encoding="utf-8")
+        if f'Extension="{ext}"' not in ctxml:
+            regel = f'<Default Extension="{ext}" ContentType="{BEELDTYPES[ext]}"/>'
+            ct.write_text(ctxml.replace("<Types ", "<Types ", 1).replace(
+                "<Default", regel + "<Default", 1), encoding="utf-8")
+    return rid
+
+
+def beeld(naam: str, x: float, y: float, w: float, h: float, rid: str, *,
+          prst: str = "rect", hoek: float | None = None, lijn=None,
+          rot: float | None = None, uitsnede: tuple[float, float, float, float] | None = None
+          ) -> str:
+    """Een afbeelding als vorm: `<p:pic>` met een `blipFill` in een presetgeometrie.
+
+    Omdat de geometrie vrij is, is een foto in een cirkel één aanroep: `prst="ellipse"` met
+    `w == h` geeft het ronde portret van de teamslide. `hoek` doet hetzelfde voor een
+    afgeronde hoek als bij `vlak()`, met dezelfde absolute radius in inch.
+
+    `uitsnede` is `(links, boven, rechts, onder)` als fractie van 0 tot 1, en het is de reden
+    dat een rond portret niet uitgerekt staat: een `blipFill` vult de vorm, dus een liggende
+    foto in een vierkante cirkel wordt platgedrukt tenzij je links en rechts wegsnijdt.
+    `uitsnede_vullend()` rekent die waarden voor je uit.
+    """
+    _ids[0] += 1
+    if hoek:
+        prst = "roundRect"
+        geom = (f'<a:prstGeom prst="roundRect">'
+                f'{_avlst({"adj": adj_van(hoek, w, h)})}</a:prstGeom>')
+    else:
+        geom = f'<a:prstGeom prst="{prst}"><a:avLst/></a:prstGeom>'
+    if uitsnede:
+        l, tb, r, b = (int(round(v * 100000)) for v in uitsnede)
+        rect = f'<a:srcRect l="{l}" t="{tb}" r="{r}" b="{b}"/>'
+    else:
+        rect = ""
+    draai = f' rot="{int(round(rot * 60000)) % 21600000}"' if rot else ""
+    return (f'<p:pic><p:nvPicPr><p:cNvPr id="{_ids[0]}" name="{naam}"/>'
+            f'<p:cNvPicPr><a:picLocks noChangeAspect="1"/></p:cNvPicPr><p:nvPr/>'
+            f'</p:nvPicPr><p:blipFill><a:blip r:embed="{rid}"/>{rect}'
+            f'<a:stretch><a:fillRect/></a:stretch></p:blipFill><p:spPr>'
+            f'<a:xfrm{draai}><a:off x="{emu(x)}" y="{emu(y)}"/>'
+            f'<a:ext cx="{emu(w)}" cy="{emu(h)}"/></a:xfrm>{geom}'
+            f'{lijn_xml(lijn)}</p:spPr></p:pic>')
+
+
+def uitsnede_vullend(bestand: str | Path, w: float, h: float
+                     ) -> tuple[float, float, float, float]:
+    """De `uitsnede` die een beeld de doos laat vullen zonder te vervormen.
+
+    Snijdt symmetrisch van de lange kant af, net als "vullen" in PowerPoint. Zonder Pillow of
+    zonder leesbare maten geeft hij `(0, 0, 0, 0)` terug: dan vult het beeld de doos wél maar
+    is het uitgerekt, en dat zie je op de render.
+    """
+    try:
+        from PIL import Image
+        with Image.open(bestand) as im:
+            bw, bh = im.size
+    except Exception:
+        return (0.0, 0.0, 0.0, 0.0)
+    if not bw or not bh:
+        return (0.0, 0.0, 0.0, 0.0)
+    doel = w / h
+    bron = bw / bh
+    if abs(bron - doel) < 1e-6:
+        return (0.0, 0.0, 0.0, 0.0)
+    if bron > doel:
+        weg = (1 - doel / bron) / 2
+        return (weg, 0.0, weg, 0.0)
+    weg = (1 - bron / doel) / 2
+    return (0.0, weg, 0.0, weg)
+
+
+def foto(slide_pad: str | Path, naam: str, x: float, y: float, w: float, h: float,
+         bestand: str | Path, *, prst: str = "rect", hoek: float | None = None,
+         lijn=None, vullend: bool = True) -> str:
+    """`media()` en `beeld()` in één aanroep, met de uitsnede al gerekend.
+
+    Dit is de weg die je in de praktijk neemt:
+
+        v.append(foto(slide, "Portret Liza", 0.48, 2.20, 1.60, 1.60,
+                      "foto/liza.jpg", prst="ellipse"))
+    """
+    rid = media(slide_pad, bestand)
+    snee = uitsnede_vullend(bestand, w, h) if vullend else None
+    return beeld(naam, x, y, w, h, rid, prst=prst, hoek=hoek, lijn=lijn, uitsnede=snee)
+
 
 def schaal(x: float, w: float, lo: float, hi: float):
     """Een schaal: geeft een functie terug die een waarde omzet naar een x (of y) in inch.

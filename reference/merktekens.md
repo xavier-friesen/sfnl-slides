@@ -354,26 +354,76 @@ draagt de trede het label.
 
 ---
 
+# Derde oogst: het meetplan Welzijn op Recept (22 slides)
+
+## 27. Het icoonkaartraster waarin het icoon wél iets doet
+
+**Codeert:** zes stakeholders, elk met zijn eigen vraag.
+
+Slide 6: een raster van 3 × 2 kaarten, elk met een afgerond icoonvlak in zijn eigen hue boven een
+kapitaallabel en een vraag. `adviesvorm.md` §4 zet icoontegels op de weigerlijst, en terecht —
+een rij tegels met een pictogram, een kop en twee regels is de categoriedefault van elk
+gegenereerd deck. Hier is het geen default: elke tegel is een andere stakeholder, dus het icoon
+codeert een categorie die de lezer moet kunnen onthouden. Dat is precies de uitzondering die de
+weigerlijst toestaat, en het is de moeite waard om te zien hoe hij eruitziet.
+
+**Bouwbaar** sinds `foto()`: het icoon is een afbeelding in een vorm. Zonder icoonbestand draagt
+het gekleurde vlak met het label de categorie net zo goed (§3).
+
+## 28. De genummerde meetmomentkaart met sublijst
+
+**Codeert:** drie momenten, en per moment wat er dan gemeten wordt.
+
+Slide 10: drie kaarten in sky, emerald en lavendel, elk met een badge, een gekleurde kop, een
+regel over wanneer, en daaronder onder een kaplabel `WAT WORDT GEMETEN` een korte lijst. De
+sublijst binnen de kaart is de vondst: de kaart draagt twee niveaus zonder een tweede kolom.
+
+**Bouwbaar:** ja, met een tweede `para()` in hetzelfde vak en een `label()` ertussen.
+
+## 29. De radar als profiel
+
+**Codeert:** een profiel over vaste assen, en of het web groter is geworden.
+
+Slide 13: de zes assen van positieve gezondheid als spinnenweb, met een tabel ernaast die de
+vragen geeft. Dit is de ene exhibitvorm waarvoor een radar het juiste antwoord is: de assen staan
+vast, ze zijn niet te ordenen, en de vórm van het web is de boodschap.
+
+**Bouwbaar sinds nu:** `add_chart.py --type radar` en `radar_markers`. Voor een reeks over tijd of
+een vergelijking van categorieën blijft een radar de verkeerde keuze — die suggereert een
+samenhang tussen de assen die er niet is.
+
+## 30. De sectiekoprij, en waarom dit deck hem beslist
+
+Slides 11, 12, 14, 15, 16 en 17 gebruiken allemaal een tabel met een volle gekleurde rij tussen
+de gewone rijen (`Activiteiten & Outputs`, `Impact`, `Proceskwaliteit`). Zes van de 22 slides in
+één deck. Samen met `Phase 1`/`Phase 2` bij Aidsfonds en `Deel 1`/`Deel 2` in de
+dashboardhandleiding is dat drie decks van de elf, en dat maakt het geen bijzonderheid maar een
+standaardvorm.
+
+**Bouwbaar sinds nu:** `{"sectie": "FASE 1"}` tussen de rijen in `add_table.py`.
+
+---
+
 ## Wat hiervan nog code vraagt
 
-1. **Een accolade die zijn punt op de doelvorm legt** in plaats van op zijn eigen midden. Dit is
-   het merkteken met het hoogste rendement van de tien: het is de reden dat de effectenkaart met
-   dertig blokken leesbaar is.
-2. **Een doosberekening voor gedraaide vormen**, zodat een zijrail op zijn plek staat zonder
-   proberen.
-3. **Een regel in §12 over het verschil tussen meter en chip**: graduatie tegen categorie. Nu
-   staat alleen de meter beschreven.
-4. **Een weg naar een afbeelding.** Dit is na de accolade het grootste gat en het raakt drie
-   merktekens uit de tweede oogst: het ronde portret (13), de logowand en de mede-merk-cover (24)
-   en het artefactvoorbeeld (25). Nodig is een `blipFill` in een vorm — een foto in een ellips of
-   een logo in een vak — met de bestaande discipline eromheen. Elk voorstel met een teamslide en
-   elk project met partners loopt hier nu vast, en het handmatige alternatief is een plaatje in
-   PowerPoint erin slepen ná de bouw, waarmee het deck niet meer herbouwbaar is.
-5. **Een sectiekoprij in `add_table.py`** (14): een rij die zijn cellen samenvoegt en een volle
-   vulling draagt. Nu is het antwoord twee tabellen met een band ertussen.
-6. **Een regel in §10 die bedoelde herhaling van toevallige onderscheidt** (12). Drie keer
-   dezelfde canvas met een verschuivend scopekader is een middel; drie keer dezelfde plattegrond
-   zonder reden is het defect. De huidige tekst kan alleen het tweede zien.
+**Vier van de zes zijn gebouwd**, in dezelfde ronde als deze oogst:
+
+| item | status |
+|---|---|
+| Een accolade die zijn punt op de doelvorm legt (1) | **gebouwd** — `accolade()` in `shapes.py`; `punt_y` neemt de absolute y van het midden van de doelvorm en rekent het handvat `adj2` terug. Zonder eigen waarde staat de punt op 50 procent van de eigen hoogte, en dus zelden bij het doel. Een punt buiten de haak weigert hij, met de reden erbij |
+| Een weg naar een afbeelding (4) | **gebouwd** — `media()`, `beeld()`, `uitsnede_vullend()` en `foto()` in `shapes.py`. `foto(slide, naam, x, y, w, h, bestand, prst="ellipse")` is het ronde portret in één aanroep; de uitsnede voorkomt dat een liggende foto in een cirkel wordt platgedrukt. Een tweede aanroep met hetzelfde bestand hergebruikt het beeld, dus de bouw blijft herhaalbaar |
+| Een sectiekoprij in `add_table.py` (5) | **gebouwd** — `{"sectie": "FASE 1"}` tussen de rijen. De rij voegt zijn cellen samen, draagt de kopvulling, en de zebra telt alleen de gewone rijen door zodat de tint na een sectie niet omslaat |
+| Een regel over meter tegen chip (3) | **gebouwd** — `vormentaal.md` §12: kan het meer of minder zijn (meter), of is het dit of dat (chip) |
+| Een regel over bedoelde tegen toevallige herhaling (6) | **gebouwd** — `vormentaal.md` §10: verschuift er één element terwijl de rest letterlijk gelijk blijft, dan is de herhaling het middel; verschilt de inhoud terwijl de plattegrond gelijk blijft, dan is de plattegrond de luiheid |
+| Een doosberekening voor gedraaide vormen (2) | **open** — een gedraaid vlak draait om zijn middelpunt, dus een smalle hoge zijrail met `rot=270` heeft een andere doos nodig dan je op het oog zou zetten. Nu is het proberen op de render. Dit is het enige item dat blijft staan, en het raakt één merkteken (3) |
+
+Twee dingen die bij het bouwen bleken en die nergens stonden:
+
+- **`jpg` staat niet als `Default` in `[Content_Types].xml`, alleen `jpeg`.** Een foto die
+  `.jpg` heet levert zonder die regel een deck op dat PowerPoint weigert. `media()` voegt de
+  extensie toe als hij ontbreekt.
+- **Een brace heeft geen vulling.** Het is lijnwerk (§8), dus de hue zit in de lijn, en onder
+  ongeveer 1,5pt verdwijnt hij naast een gevuld blok.
 
 ## Wat hiervan geen code hoort te worden
 

@@ -299,6 +299,26 @@ Daarbinnen ben je vrij.
 composities voor dezelfde boodschap en kies je met een reden die over de boodschap gaat
 (`adviesvorm.md` §3). Twee regels denkwerk; het voorkomt dat elke slide de eerste inval is.
 
+**Een beeld, een haak en een sectiekop.** Drie dingen die er sinds de oogst uit elf bestaande
+decks bij zijn gekomen, en die je anders zelf gaat namaken:
+
+- `foto(slide, naam, x, y, w, h, bestand, prst="ellipse")` zet een afbeelding in een vorm — een
+  rond portret op een teamslide, een partnerlogo op een cover, een verkleind eindproduct als
+  artefact. Hij regelt zelf de media, de relationship, het content-type en de uitsnede, en een
+  tweede aanroep met hetzelfde bestand hergebruikt het bestaande beeld. Dat laatste is de reden
+  dat je hem gebruikt in plaats van het plaatje ná de bouw in PowerPoint erin te slepen: zo
+  blijft de deck herbouwbaar.
+- `accolade(naam, x, y, w, h, hue, punt_y=...)` knoopt een groep vormen aan één uitkomst. Geef
+  `punt_y` de y van het midden van de doelvorm, dan wijst de haak daar werkelijk naartoe in
+  plaats van naar zijn eigen midden. Dit is het merkteken dat een schema met dertig blokken
+  leesbaar houdt; vier pijlen doen hetzelfde werk luider.
+- Een sectiekop in een tabel is `{"sectie": "FASE 1"}` tussen de rijen in `add_table.py`. Die
+  rij pakt de volle breedte en draagt een volle vulling, en scheidt twee delen van dezelfde
+  tabel zonder een tweede kop.
+
+`reference/merktekens.md` heeft er nog zesentwintig, met per stuk wat het codeert en of de laag
+het al kan. Lees dat wanneer je merkt dat je een kaart met tekst aan het maken bent.
+
 **Gebruik `scripts/shapes.py`.** Dat is de primitievenlaag: vlakken, lijnen, tekstruns,
 kolomrasters, een hoogtemeting, een handvol merktekens die élk één ding tekenen (punt, meter,
 pijl, streep) en het gereedschap om een eigen vorm te maken (`adj`, `contour`, `verbind`,
@@ -463,6 +483,11 @@ bij opslaan, en een `pack` daarna sloopt de grafieken die je net hebt toegevoegd
 
 Een echte reeks over tijd, een verdeling of een vergelijking van meer dan zes categorieën is
 een native grafiek. Handgetekende staafjes zijn dat niet.
+
+`--type radar` en `radar_markers` zijn er voor één geval: een profiel over vaste assen, waar de
+vórm van het web de boodschap is. Het meetplan Welzijn op Recept doet dat met de zes assen van
+positieve gezondheid, voor en na. Voor een reeks over tijd of een vergelijking van categorieën is
+een radar de verkeerde keuze — die suggereert een samenhang tussen de assen die er niet is.
 
 De hoogte van een tabelbox volgt uit de rijen — ongeveer 0,36 in voor de kop plus 0,45 per
 rij — en niet uit de restruimte van de zone. `add_table.py` verdeelt de gevraagde hoogte over

@@ -187,6 +187,14 @@ Beide voelden tijdens het bouwen als "die slide is de volle". Een slide is 13,33
 vol moet staan — een blok van 8 bij 2,5 in, of vier rijen over de volle breedte. Toen slide 12
 in dat deck volledig verzadigd werd gemaakt, kwam hij op 23 procent.
 
+**De goedkoopste verzadigde slide is de uitspraakslide.** Eén vraag of één bewering,
+gecentreerd op een vol vlak over de hele slide, verder niets — geen titel, geen kaart, geen
+toelichting. Geoogst uit de kick-off Aidsfonds, waar hij midden in de deck staat: een volledig
+oranje slide met één vraag tussen aanhalingstekens. Hij haalt de bovenkant van de verzadigde
+band zonder rekenwerk, hij kost nul woorden, en op een spreekdeck is hij de plek waar de spreker
+een minuut stil kan vallen. Bouw hem op een layout zonder titel (17) met één `drager()`, en let
+op de contrastregel uit §3: op oranje is de tekst navy tenzij hij op 40pt staat.
+
 Meet het dus, in dezelfde ronde als de render: `qa_tellingen.py --renders` geeft het aandeel
 wit, tint en verzadigd per slide. Zonder die meting blijft besluit 5 een intentie, en dat is
 nagemeten: het middengrijs uit de afgekeurde deck ontstond niet doordat iemand besloot dat elke
@@ -387,6 +395,21 @@ De band die dan overblijft is de slide waar de conclusie werkelijk een eigen zin
 anders op de slide staat — op `maatstaf/11` komt hij precies één keer voor, onder het
 beslismoment.
 
+**Bedoelde herhaling is geen eenvormigheid, en dat onderscheid ontbrak hier.** Drie keer
+dezelfde plattegrond zonder reden is het defect waar deze paragraaf over gaat. Maar drie keer
+letterlijk hetzelfde beeld met één element dat verschuift, is een middel — en een sterk middel.
+Geoogst uit de kick-off Baanbrekers: driemaal dezelfde verandertheorie-canvas, met daarover een
+gestreept kader dat één keer om de linkerhelft ligt, dan om het middendeel, dan om de rest, elk
+met zijn eigen label (`WP 1`, `WP 2 — SESSIE 1`, `WP 3`). De lezer orienteert zich één keer en
+volgt daarna alleen het kader. Drie verschillende composities voor dezelfde drie stappen hadden
+hem drie keer laten zoeken.
+
+Het verschil is te benoemen en dus te toetsen: **verschuift er één element terwijl de rest
+letterlijk gelijk blijft, dan is de herhaling het middel; verschilt de inhoud terwijl de
+plattegrond gelijk blijft, dan is de plattegrond de luiheid.** Bouw het eerste met
+`duplicate_slide.py` en verplaats het kader met `place_shapes.py`, zodat de slides werkelijk
+identiek zijn en niet bijna.
+
 Variatie zit niet in het layoutnummer. Zes contentslides op layout 19 met zes verschillende
 composities is goed. Maar kies de layout ook niet standaard: een tweeluik is layout 22, waar de
 kolomkoppen geërfde placeholders zijn die je mag herkleuren en verzwaren; doorlopende tekst is
@@ -421,6 +444,15 @@ is het een native grafiek; handgetekende staafjes zijn dat niet. Een financiële
 perioden of meer maal twee grootheden of meer is een tabel, want een financiële lezer kan proza
 niet vergelijken. Draagt een deck cijfers, dan zit er minstens één grafiek, tabel, schema of
 verdeling in.
+
+**Meter of chip: graduatie tegen categorie.** Twee merktekens die op elkaar lijken en iets
+anders zeggen. De puntenmeter uit `maatstaf/12` — drie punten waarvan er twee vol staan — codeert
+een gráádmeter, en de kunst is dat hij grof is: drie punten zeggen "zwaar, en dat is geen
+precisie". De chip codeert een categorie: een klein gekleurd blokje met één woord erin, zoals de
+derde kolom in de check-in die per rij `GELIJK`, `ANDERS` of `ALLEEN GZ` draagt. Beide vervangen
+een woord door een vorm, maar een chip in een reeks suggereert een ordening die er niet is, en
+een meter voor een categorie suggereert een graad die er niet is. Vraag dus: kan het meer of
+minder zijn (meter), of is het dit of dat (chip)?
 
 **Het aantal volgt uit de inhoud.** Heb je twee items en dacht je aan drie kaarten, dan wordt
 het een rij van twee. Geen derde kaart met een verzonnen regel en geen halflege kaart. Sjabloon-
