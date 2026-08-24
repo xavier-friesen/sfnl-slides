@@ -1,18 +1,21 @@
 # assets/folders/voorbeeld-a5/ — het tweeluik, de korte route
 
-Twee pagina's op A5, met de **titelbalk** als opening. Dit is het geval dat het vaakst voorkomt
+Twee pagina's op A5, met de **titelbalk** als opening. **Dit is een voorbeeld en geen sjabloon:**
+de tekst erin is verzonnen om de vorm te kunnen laten zien. Wat er in een echte folder op de
+pagina's komt, volgt uit het materiaal van de gebruiker — zie *De grens die deze skill bewaakt*
+in de SKILL. Dit is het geval dat het vaakst voorkomt
 en dat het minst op de vier-pagina-folder lijkt: een uitnodiging, een tweeluik, een korte
 notitie. De render staat in `assets/folders/maatstaf/06-tweeluik-a5.png`.
 
 | bestand | pagina |
 |---|---|
 | `Main.dc.html` | de voorkant: titelbalk in het huisverloop, chapeau, twee alinea's, en de gegevens onderaan |
-| `Achterkant.dc.html` | het programma met badges, de aanmeldregel, en een aflopende oranje band met het logo |
+| `Achterkant.dc.html` | een genummerde reeks met badges, een sluitregel achter een haarlijn, en een aflopende oranje band met het logo |
 
 Waarom dit een ander document is dan een folder van vier, en niet een kortere:
 
-1. **Er is geen achterkant om de logistiek op te zetten.** In een folder van vier staat die op
-   pagina 4. Hier moet hij tussendoor: op de voorkant onder een haarlijn, en op de achterkant in
+1. **Er is geen buitenste pagina om iets apart op te zetten.** In een folder van vier is pagina
+   4 die plek. Hier moet alles tussendoor: op de voorkant onder een haarlijn, op de achterkant in
    de aflopende band. Dat is een compositiebesluit en geen restje.
 2. **Er is geen aanloop.** De chapeau is meteen de boodschap. Wie hier eerst context schrijft,
    heeft de helft van zijn document opgemaakt aan opwarmen.

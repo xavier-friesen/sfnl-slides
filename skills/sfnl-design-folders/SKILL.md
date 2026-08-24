@@ -31,7 +31,7 @@ vanaf de map waarin dit bestand staat en niet vanaf het project. `reference/fold
 is dus `${CLAUDE_PLUGIN_ROOT}/reference/folders-stramien.md`.
 
 1. `reference/folders-vormentaal.md` — de maatstaf. Wat een SFNL-folder goed maakt, en de
-   weigerlijst: zestien dingen die maken dat een document er door een model gemaakt uitziet.
+   weigerlijst: achttien dingen die maken dat een document er door een model gemaakt uitziet.
 2. `reference/folders-stramien.md` — de feiten. De bladmaten, het raster, de maatladder, de
    merktekens met hun klassenaam, en het logo als markup om te kopiëren.
 3. `assets/folders/maatstaf/00-contactblad.png` — vijf gebouwde pagina's als contactblad. Kijk
@@ -56,11 +56,42 @@ canvas, maar wel gewoon een folder), en of de ingesloten letters er staan.
 `reference/voice.md` gaat over de taal. Lees dat wanneer je de outline schrijft; de regels over
 titels, getallen en herkomst gelden hier net zo goed als op een slide.
 
+## De grens die deze skill bewaakt
+
+**De skill beslist de vorm. Het materiaal van de gebruiker beslist de inhoud.**
+
+Er komt geen rubriek, geen paragraaf en geen pagina bij die niet uit de opdracht komt. Of er een
+programma op moet, een contactblok, een verantwoording, een inhoudsopgave, een citaat of een
+casebeschrijving: dat volgt uit wat de gebruiker aanlevert en uit wat hij ermee wil, en niet uit
+wat er gewoonlijk in zo'n document staat.
+
+Dat is geen beleefdheidsregel maar de plek waar dit soort skills het vaakst misgaat. Een model
+dat "uitnodiging" leest, weet dat daar meestal een programma en een aanmeldregel op staan, en
+vult die in. Dan staat er een agenda in de folder die de gebruiker nooit heeft genoemd, hij ziet
+hem pas op de render, en de helft van zijn pagina is bezet door iets wat hij niet heeft
+gevraagd.
+
+Wat je in plaats daarvan doet:
+
+- **Ontbreekt er iets wat de vorm nodig heeft** — er is een pagina over en geen materiaal om hem
+  mee te vullen — dan zeg je dat, met wat je mist, en je wacht. Niet invullen.
+- **Denk je dat er iets bij hoort**, dan stel je het voor met de reden, en je bouwt het pas na
+  ja. Eén zin: "op de laatste pagina is ruimte; zal ik daar de contactgegevens zetten, of heb je
+  daar iets anders voor?"
+- **Weet je een feit niet** — een datum, een bedrag, een naam — dan zet je er een zichtbare
+  markering neer (`[DATUM]`) en niet iets aannemelijks. `qa_folder.py` kan die niet vinden, de
+  gebruiker wel.
+- **Alles wat toch een aanname is**, komt onderaan de outline te staan als aanname, en gaat
+  nooit als vaststelling de pagina op.
+
+De vormbesluiten hieronder, de merktekens en de maatstaf gaan dus alleen over hóé iets op de
+pagina staat. Wát er staat, komt van de gebruiker.
+
 Daarna is het vragenvuur van stap 1 het eerste wat je doet, en dat is een poort.
 
 ## Stap 1 — Het vragenvuur, en dit is de eerste poort
 
-Negen vragen in twee blokken: vier over de opdracht, vijf over de vorm. **Leg ze in één keer voor
+Tien vragen in twee blokken: vijf over de opdracht, vijf over de vorm. **Leg ze in één keer voor
 en wacht op de antwoorden.** Er wordt niets geschreven voordat ze er zijn — geen outline, geen
 pagina. Wie de tekst eerst schrijft, kiest de vorm al: een folder van vier pagina's en een
 folder van twaalf zijn niet dezelfde tekst met meer wit ertussen.
@@ -75,7 +106,7 @@ het beeld en de vraag hetzelfde heten. Dat gaat in twee aanroepen achter elkaar,
 neemt er vier per keer: eerst de drie die het hele document bepalen (formaat, omvang,
 kleurregister), dan de twee over wat een pagina draagt en hoe de folder opent (beeldregister,
 opening). De poort blijft één poort — er wordt niets geschreven voordat beide binnen zijn.
-De vier opdrachtvragen stel je in gewoon proza in hetzelfde bericht als de kaart.
+De vijf opdrachtvragen stel je in gewoon proza in hetzelfde bericht als de kaart.
 
 Verandert er een optie, dan bouw je de kaart opnieuw met
 `python "${CLAUDE_PLUGIN_ROOT}/scripts/folders/keuzekaart.py"` — onderhoud, geen bouwstap.
@@ -87,8 +118,13 @@ nog steeds in het blok en de gebruiker bevestigt of wijzigt het. Overslaan is ge
 de skill het folderbreed, één keer, met de reden erbij bovenaan de outline. Wat er daarna niet
 gebeurt is het besluit per pagina opnieuw nemen.
 
-### De vier over de opdracht
+### De vijf over de opdracht
 
+- **Wat heb je al?** Een tekst, een notitie, een transcript, een reeks losse punten, of alleen
+  een idee. Vraag hiernaar vóór alle andere vragen en vraag door tot je het hebt, want dit is
+  het materiaal waaruit de folder bestaat. Is er nog niets, zeg dan wat je nodig hebt en bouw
+  niet vast: een folder schrijven ís de opdracht dan, en dat is een andere opdracht — daar is
+  `sfnl-writer` voor, en die levert de tekst waar deze skill de vorm omheen zet.
 - **Wie krijgt dit in handen, en wat moet die erna doen?** Een uitnodiging moet iemand naar een
   zaal krijgen; een executive summary moet iemand een besluit laten nemen; een proposal moet een
   aanbesteding winnen. Dat is een ander document, niet een andere titel.
@@ -118,19 +154,19 @@ titelblad kost er een.
    programmaboekje — dan is het één kolom en gaat de body omhoog. De maten in px staan in
    `folders-stramien.md`; een zesde formaat bestaat niet.
 2. **De omvang.** Eén tot drie pagina's, vier, acht tot zestien, of *laat het volgen uit de
-   inhoud*. Default is **vier pagina's**: omslag, twee inhoudspagina's, achterkant.
+   inhoud*. Default is **vier pagina's**.
 
    | omvang | wat het is | wat eraan hangt |
    |---|---|---|
-   | **een tot drie** | een one-pager, een tweeluik, een korte notitie | geen hoofdstukken, geen kopregels. Een folio alleen als er meer dan één pagina is |
+   | **een tot drie** | één blad, of één blad dubbelzijdig | geen hoofdstukken, geen kopregels. Een folio alleen als er meer dan één pagina is |
    | **vier** — default | de gewone folder | spreads gaan tellen: pagina 2 en 3 liggen tegenover elkaar |
-   | **acht tot zestien** | een samenvatting of proposal met hoofdstukken | kopregels en folio's op elke inhoudspagina, een inhoudsopgave loont, en hoofdstukopeningen bestaan (stap 2) |
+   | **acht tot zestien** | genoeg pagina's om in delen uiteen te vallen | kopregels en folio's op elke pagina, en hoofdstukopeningen bestaan (stap 2) |
    | **volgt uit de inhoud** | je weet nog niet hoeveel er te zeggen valt | de skill stelt een aantal voor in de outline, met de reden erbij |
 
-   **Twee en drie pagina's zijn geen randgeval maar de gewone praktijk**, en ze zijn een ander
-   document dan een folder van vier: er is geen achterkant om de logistiek op te zetten, dus die
-   moet ergens tussendoor, en er is geen ruimte voor een aanloop. De eerste zin is meteen de
-   boodschap.
+   **Twee en drie pagina's zijn geen randgeval maar de gewone praktijk**, en het zijn andere
+   documenten dan een folder van vier. Er is geen buitenste pagina om iets op te zetten dat
+   apart moet staan, dus wat daar anders had gestaan moet ergens tussendoor. En er is geen
+   ruimte voor een aanloop: de eerste zin is meteen de boodschap.
 
    **Hoe het gevouwen wordt, bepaalt welke aantallen bestaan.** Eén of twee pagina's is één plat
    vel, enkelzijdig of dubbelzijdig. Vier, acht, twaalf en zestien komen uit een gevouwen vel, en
@@ -169,7 +205,7 @@ titelblad kost er een.
 
    | opening | wat het is | wat het kost |
    |---|---|---|
-   | **titelblad** — default | pagina 1 is helemaal de titel: dektitel, ondertitel, klant en datum, logo, op een kleurveld of op wit | een hele pagina: een kwart van een folder van vier, de helft van een tweeluik |
+   | **titelblad** — default | pagina 1 draagt alleen de titel en wat er verder bij de identificatie hoort, op een kleurveld of op wit | een hele pagina: een kwart van een folder van vier, de helft van een tweeluik |
    | **titelbalk** | geen aparte pagina: pagina 1 draagt bovenaan een aflopende band met de dektitel, en de inhoud begint eronder | ongeveer een kwart pagina, en de eerste pagina wordt voller |
    | **gewoon titel** | de dektitel staat gewoon in de zetspiegel van pagina 1, met een streep eronder, en de tekst loopt door | vrijwel niets |
 
@@ -221,7 +257,9 @@ erom of de lezer die omslaat iets nieuws ziet.
 
 Dan per pagina:
 
-- **Wat het is** — omslag, inhoudspagina, kleurpagina, casespread, achterkant.
+- **Welke rol de pagina heeft** in de leesvolgorde — opent hij, draagt hij, sluit hij af, of
+  staat hij apart. Dat is een vormrol en niet een inhoudssoort: of de sluitpagina contactgegevens
+  draagt of een bronnenlijst, volgt uit het materiaal.
 - **Boodschap** — in één zin: wat moet de lezer van déze pagina overhouden.
 - **Drager** — welk element die boodschap draagt, gekozen uit vijf: een getal op displaymaat, de
   compositie zelf, een uitspraak, een kleurvlak, of een beeld. Een pagina zonder drager gaat niet
@@ -240,6 +278,13 @@ Dan per pagina:
 - **Tekst** — letterlijk zoals hij op de pagina komt, inclusief cijfers, eenheid en bron.
 - **Herkomst** — achter elke inhoudelijke regel `[brief]`, `[dossier]` of `[aanname]`. Een aanname
   mag nooit als vaststelling op de pagina. Zet alle aannames als lijstje onder de outline.
+
+**En hier houdt de outline zichzelf tegen.** Loop hem na op regels die je zelf hebt bedacht: elke
+regel die geen `[brief]` of `[dossier]` draagt, is er een. Sommige daarvan zijn onvermijdelijk en
+onschuldig — een overgangszin, een kop die de alinea eronder samenvat. Een héle rubriek is dat
+niet. Staat er een programma, een contactblok, een verantwoording of een tijdlijn in de outline
+die de gebruiker nooit heeft genoemd, dan haal je die eruit en vraag je ernaar. Het is
+goedkoper om dat hier te doen dan op de render.
 
 **Wat je niet in de outline zet: maten.** Geen px, geen kolombreedtes, geen paginaindeling. De
 plattegrond, de drager en het beeldbesluit horen er wél in — dat is de reden waarom de tekst deze
@@ -537,3 +582,7 @@ naar het contactblad, want de paren zijn dan andere paren.
 - **Geen Word.** Een brief of een document dat de klant zelf verder typt, is de `docx`-route van
   `sfnl-design`.
 - **Geen dashboard.** Iets interactiefs dat in de browser blijft, is `sfnl-design`.
+- **Geen schrijfopdracht.** Is er nog geen tekst — alleen een idee, of een stapel losse notities
+  — dan is het schrijven de opdracht en niet de opmaak. Dat is `sfnl-writer`, en die levert de
+  tekst waar deze skill de vorm omheen zet. Een folder opmaken uit niets betekent dat het model
+  de inhoud verzint, en dat is precies wat deze skill niet doet.

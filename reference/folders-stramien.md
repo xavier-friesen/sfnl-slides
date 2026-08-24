@@ -27,9 +27,14 @@ past.
 
 **Een drieluik vouwt in een vaste volgorde en daar gaat het meestal mis.** Op de buitenkant is de
 voorkant het **rechter** paneel; de volgorde is binnenflap, achterkant, voorkant. De binnenkant
-leest als één spread van drie panelen. Schrijf de inhoud in de volgorde waarin de lezer hem
-openvouwt: de voorkant doet één belofte, de binnenkant lost hem in drie beten in, de achterkant
-draagt de logistiek.
+leest als één spread van drie panelen.
+
+Wat dat je oplevert is een **leesvolgorde**, en die is anders dan de paneelvolgorde: de lezer
+ziet eerst de voorkant, vouwt dan open en ziet drie panelen tegelijk, en komt pas daarna bij de
+achterkant. Verdeel het materiaal dat je hébt over die volgorde — het eerste paneel draagt wat de
+lezer als eerste moet weten, de binnenkant is één samenhangend vlak van drie kolommen, en de
+achterkant is de plek die apart staat. Wat er op elk paneel komt, volgt uit de opdracht en niet
+uit deze tabel.
 
 **Hoe het gevouwen wordt, bepaalt welke aantallen bestaan.** Dat is de enige plek in deze skill
 waar de drukker meebeslist.

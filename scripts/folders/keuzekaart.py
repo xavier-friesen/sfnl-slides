@@ -165,8 +165,8 @@ def bouw_html() -> str:
             ("Acht tot zestien",
              f'<div style="height:100%;display:flex;gap:4px;flex-wrap:wrap;justify-content:center;align-content:center">'
              + _vel(8, 25, 33) + '</div>',
-             "Een samenvatting of proposal met hoofdstukken. Vanaf hier horen er kopregels "
-             "en folio&#39;s op, loont een inhoudsopgave, en is het aantal deelbaar door vier.", False),
+             "Genoeg pagina&#39;s om in delen uiteen te vallen. Vanaf hier horen er kopregels "
+             "en folio&#39;s op, bestaan hoofdstukopeningen, en is het aantal deelbaar door vier.", False),
             ("Laat het volgen uit de inhoud",
              f'<div style="height:100%;display:flex;gap:5px;justify-content:center;align-items:center">'
              + _vel(6, 30, 39, stippel=2) + '</div>',

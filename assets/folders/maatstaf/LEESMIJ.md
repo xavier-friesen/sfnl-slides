@@ -2,7 +2,9 @@
 
 Zes renders, gebouwd met deze skill met `scripts/folders/render.py`: vijf pagina's van één
 folder op het SFNL-formaat, plus een tweeluik op A5 als tweede geval. Ze zijn niet om
-na te tekenen maar om te weten wat "af" betekent. De bron van dezelfde vier staat in
+na te tekenen maar om te weten wat "af" betekent. **Het zijn voorbeelden en geen sjablonen:** de
+tekst erin is verzonnen om de vorm te kunnen laten zien, en zegt niets over wat er in een echte
+folder hoort te staan. De bron van dezelfde vier staat in
 `assets/folders/voorbeeld/`, als kale fragmenten.
 
 | bestand | wat het laat zien |

@@ -168,11 +168,11 @@ vulling.
 Niet een kortere folder maar een ander soort, en dat is de gewone praktijk: een one-pager, een
 tweeluik, een notitie van drie. Drie dingen vallen weg en dat verandert de opbouw.
 
-**Er is geen achterkant.** In een folder van vier zet je de logistiek — datum, plaats,
-aanmelden, contact — op pagina 4, en daarmee is hij uit de weg. Op twee pagina's is er geen
-pagina 4, dus die regels moeten ergens tussendoor: onderaan de laatste pagina, in een strook met
-een haarlijn erboven, of in de aflopende band onderaan. Dat is een compositiebesluit en geen
-restje.
+**Er is geen buitenste pagina.** In een folder van vier is pagina 4 de plek voor alles wat apart
+moet staan, en daarmee is het uit de weg. Op twee pagina's bestaat die plek niet, dus wat daar
+anders had gestaan moet ergens tussendoor: onderaan de laatste pagina onder een haarlijn, of in
+de aflopende band. Dat is een compositiebesluit en geen restje — en wát daar komt te staan volgt
+uit het materiaal, niet uit wat er gewoonlijk op een achterkant staat.
 
 **Er is geen aanloop.** Op vier pagina's mag pagina 2 het probleem schetsen en pagina 3 het
 antwoord geven. Op twee pagina's is de eerste zin meteen de boodschap. Wie hier een aanloop
@@ -297,6 +297,14 @@ hier omdat ze allemaal, stuk voor stuk, de eerste inval zijn.
     stel iconen op een rij. Haal het beeld weg: mist er niets, dan hoorde het er niet.
 16. **Hoofdstukken die elk anders openen**, of een band die per hoofdstuk van hoogte verandert.
     Dan begint de tekst op elke pagina ergens anders, en op de spread is dat een scheve horizon.
+17. **Een rubriek die de gebruiker nooit heeft genoemd.** Een programma op een uitnodiging, een
+    contactblok onderaan, een "belangrijkste inzichten" naast de tekst die dat al zei. Een model
+    weet wat er meestal in zo'n document staat en vult dat in; dan staat er inhoud in de folder
+    die niemand heeft geschreven. De vorm is van de skill, de inhoud van het materiaal — de
+    SKILL heeft er een eigen hoofdstuk voor onder *De grens die deze skill bewaakt*.
+18. **Een verzonnen feit waar een gat zat.** Een datum, een bedrag, een naam die aannemelijk
+    genoeg is om niet op te vallen. Zet er een zichtbare markering neer — `[DATUM]` — want die
+    vindt de gebruiker wel en een plausibel getal niet.
 
 ---
 
