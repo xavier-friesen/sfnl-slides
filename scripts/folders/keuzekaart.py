@@ -85,6 +85,21 @@ def _lorem(n: int = 5) -> str:
     return f'<p class="mini">{zin * n}</p>'
 
 
+def _vel(n: int, breed: int = 30, hoog: int = 39, stippel: int = 0) -> str:
+    """n paginablokjes op een rij; de laatste `stippel` stuks gestippeld.
+
+    Gestippeld betekent "en misschien nog", en dat is precies het verschil
+    tussen een vaste omvang en een omvang die uit de inhoud volgt.
+    """
+    uit = []
+    for k in range(n):
+        vaag = k >= n - stippel
+        rand = "1px dashed rgba(32,27,92,.35)" if vaag else "1px solid rgba(32,27,92,.30)"
+        uit.append(f'<div style="width:{breed}px;height:{hoog}px;border:{rand};'
+                   f'opacity:{".45" if vaag else "1"}"></div>')
+    return "".join(uit)
+
+
 def _blok(nummer: str, vraag: str, opties: list[tuple[str, str, str, bool]]) -> str:
     kaarten = []
     for naam, proef, meting, default in opties:
@@ -135,30 +150,28 @@ def bouw_html() -> str:
              "case of &eacute;&eacute;n verhaal over twee bladzijden.", False),
         ]),
 
-        _blok("Besluit 2 &mdash; omvang", "Hoeveel pagina's, en telt de folder als spreads?", [
-            ("Eén blad",
-             f'<div style="height:100%;display:flex;justify-content:center">'
-             f'<div style="width:76px;height:100px;box-shadow:inset 0 0 0 1px rgba(32,27,92,.3);padding:6px">{lab}{kop}{_lorem(1)}</div></div>',
-             "Een uitnodiging, een one-pager. Alles moet op &eacute;&eacute;n vlak "
-             "en er is geen tweede kans.", False),
+        _blok("Besluit 2 &mdash; omvang",
+              "Hoeveel pagina&#39;s, en hoe wordt het gevouwen?", [
+            ("Eén tot drie",
+             f'<div style="height:100%;display:flex;gap:6px;justify-content:center;align-items:center">'
+             + _vel(3, 40, 52, stippel=2) + '</div>',
+             "Een one-pager, een tweeluik of een korte notitie. Geen hoofdstukken, geen "
+             "kopregels. Gedrukt is dit &eacute;&eacute;n vel: enkelzijdig of dubbelzijdig.", False),
             ("Vier pagina's",
-             f'<div style="height:100%;display:flex;gap:4px;justify-content:center">'
-             + "".join(f'<div style="width:36px;height:47px;box-shadow:inset 0 0 0 1px rgba(32,27,92,.28)"></div>' for _ in range(4))
-             + '</div>',
-             "Omslag, twee inhoudspagina's, achterkant. De gewone folder, en de default "
-             "als de opdracht niets zegt.", True),
-            ("Acht tot twaalf",
-             f'<div style="height:100%;display:flex;gap:3px;flex-wrap:wrap;justify-content:center;align-content:center">'
-             + "".join(f'<div style="width:26px;height:34px;box-shadow:inset 0 0 0 1px rgba(32,27,92,.28)"></div>' for _ in range(8))
-             + '</div>',
-             "Een samenvatting of proposal met hoofdstukken. Vanaf hier horen er "
-             "kopregels en folio's op, en een inhoudsopgave loont.", False),
-            ("Zestien of meer",
-             f'<div style="height:100%;display:flex;gap:2px;flex-wrap:wrap;justify-content:center;align-content:center">'
-             + "".join(f'<div style="width:19px;height:25px;box-shadow:inset 0 0 0 1px rgba(32,27,92,.28)"></div>' for _ in range(16))
-             + '</div>',
-             "Een rapport. Overweeg of dit niet in delen moet: zestien pagina's schrijven "
-             "kost meer dan zestien pagina's opmaken.", False),
+             f'<div style="height:100%;display:flex;gap:5px;justify-content:center;align-items:center">'
+             + _vel(4, 34, 45) + '</div>',
+             "Omslag, twee inhoudspagina&#39;s, achterkant. De gewone folder, en de default "
+             "als de opdracht niets zegt. Eén gevouwen vel.", True),
+            ("Acht tot zestien",
+             f'<div style="height:100%;display:flex;gap:4px;flex-wrap:wrap;justify-content:center;align-content:center">'
+             + _vel(8, 25, 33) + '</div>',
+             "Een samenvatting of proposal met hoofdstukken. Vanaf hier horen er kopregels "
+             "en folio&#39;s op, loont een inhoudsopgave, en is het aantal deelbaar door vier.", False),
+            ("Laat het volgen uit de inhoud",
+             f'<div style="height:100%;display:flex;gap:5px;justify-content:center;align-items:center">'
+             + _vel(6, 30, 39, stippel=2) + '</div>',
+             "Je weet nog niet hoeveel er te zeggen valt. De skill stelt een aantal voor in "
+             "de outline, met de reden erbij, en jij keurt dat daar goed.", False),
         ]),
 
         _blok("Besluit 3 &mdash; kleurregister",

@@ -31,8 +31,19 @@ leest als één spread van drie panelen. Schrijf de inhoud in de volgorde waarin
 openvouwt: de voorkant doet één belofte, de binnenkant lost hem in drie beten in, de achterkant
 draagt de logistiek.
 
-**Bij drukwerk is het aantal pagina's deelbaar door vier.** Zo wordt een katern gevouwen. Dat is
-de enige plek in deze skill waar de drukker meebeslist.
+**Hoe het gevouwen wordt, bepaalt welke aantallen bestaan.** Dat is de enige plek in deze skill
+waar de drukker meebeslist.
+
+| omvang | hoe het op papier komt |
+|---|---|
+| 1 pagina | één plat vel, enkelzijdig |
+| 2 pagina's | één plat vel, dubbelzijdig |
+| 3 pagina's | bestaat niet op papier — dat is een vel van vier met een blanco achterkant. Als PDF is drie gewoon drie |
+| 4, 8, 12, 16 | een gevouwen katern, en dáárom is het aantal vanaf vier deelbaar door vier |
+
+Komt de gebruiker met vijf of zes pagina's en gaat het naar de drukker, zeg dan wat dat betekent
+(acht bladen met lege pagina's erin) en leg de keuze voor: inkorten naar vier, uitbreiden naar
+acht, of het bij een PDF houden. Stilzwijgend afronden is het defect.
 
 ---
 

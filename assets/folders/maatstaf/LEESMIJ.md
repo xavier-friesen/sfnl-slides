@@ -1,6 +1,7 @@
 # assets/folders/maatstaf/ — waar de lat ligt
 
-Vier pagina's, gebouwd met deze skill, gerenderd met `scripts/folders/render.py`. Ze zijn niet om
+Zes renders, gebouwd met deze skill met `scripts/folders/render.py`: vijf pagina's van één
+folder op het SFNL-formaat, plus een tweeluik op A5 als tweede geval. Ze zijn niet om
 na te tekenen maar om te weten wat "af" betekent. De bron van dezelfde vier staat in
 `assets/folders/voorbeeld/`, als kale fragmenten.
 
@@ -12,6 +13,7 @@ na te tekenen maar om te weten wat "af" betekent. De bron van dezelfde vier staa
 | `03-titelbalk-en-infographic.png` | een `.titelbalk` in violet om één pagina apart te zetten — het derde gebruik van de band, niet de dektitel en niet een hoofdstuk — met een infographic als drager in een `.beeldkader` op schaal 1:1 |
 | `04-kaarten-en-tabel.png` | drie kaarten op het verloop met gelijke hoogte, twee kolommen proza, een tabel naast een mintpaneel |
 | `05-kleurpagina.png` | een heel blad in mint met een aflopende oranje band onderaan, genummerde badges, en het logo op de band |
+| `06-tweeluik-a5.png` | de korte route: twee pagina's op A5 met de **titelbalk** als opening, en de body op 11 pt in plaats van 10. Bron in `assets/folders/voorbeeld-a5/` |
 
 ## Wat deze vier hebben gekost
 

@@ -160,13 +160,29 @@ a:hover { color: var(--grapefruit); }
 .zetspiegel--spreid  { display: flex; flex-direction: column; justify-content: space-between; }
 .zetspiegel--midden  { display: flex; flex-direction: column; justify-content: center; }
 
-/* Formaten. Alleen deze vijf; een zesde is een besluit, geen variant. */
+/* Formaten. Alleen deze zes; een zevende is een besluit, geen variant.
+
+   Op a5 en dl gaat de letter omhoog en dat is geen smaak maar de maat. De
+   zetspiegel is daar 473 px breed en dat is één kolom, geen twee: op 10 pt
+   levert dat 73 tekens per regel op, tegen de bovengrens aan. Op 11 pt is het
+   er 66 en dat leest. Het rapportformaat houdt zijn 10 pt omdat het in twee
+   of drie kolommen zet, en daar is de maat 32 tot 52 tekens. */
 .pagina[data-formaat="sfnl"]        { --breedte: 794px;  --hoogte: 1039px; }  /* 210 x 275 mm — het rapportformaat */
 .pagina[data-formaat="sfnl-spread"] { --breedte: 1587px; --hoogte: 1039px; }  /* 420 x 275 mm — de dubbelpagina  */
 .pagina[data-formaat="a4"]          { --breedte: 794px;  --hoogte: 1123px; }
 .pagina[data-formaat="a4-liggend"]  { --breedte: 1123px; --hoogte: 794px;  }
-.pagina[data-formaat="a5"]          { --breedte: 559px;  --hoogte: 794px;  --marge: 43px; --marge-onder: 50px; }
-.pagina[data-formaat="dl"]          { --breedte: 374px;  --hoogte: 794px;  --marge: 34px; --marge-onder: 40px; }
+.pagina[data-formaat="a5"] {
+  --breedte: 559px; --hoogte: 794px; --marge: 43px; --marge-onder: 50px;
+  --m-body: 14.67px; --r-body: 19.33px;   /* 11 / 14,5 pt */
+  --m-klein: 12px;   --r-klein: 15.5px;   /*  9 pt */
+  --m-kop: 15px;     --m-titel: 24px;
+}
+.pagina[data-formaat="dl"] {
+  --breedte: 374px; --hoogte: 794px; --marge: 34px; --marge-onder: 40px;
+  --m-body: 14.67px; --r-body: 19.33px;
+  --m-klein: 12px;   --r-klein: 15.5px;
+  --m-kop: 15px;     --m-titel: 22px;
+}
 
 /* Kleurvelden. Het veld bepaalt papier en inkt in één keer, zodat de
    contrastregel niet per element opnieuw genomen wordt.

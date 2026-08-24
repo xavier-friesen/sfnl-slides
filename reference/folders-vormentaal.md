@@ -163,7 +163,33 @@ vulling.
 
 ---
 
-## 9. De opening is eenmalig; de hoofdstukopening is iets anders
+## 9. Een folder van een tot drie pagina's is een ander document
+
+Niet een kortere folder maar een ander soort, en dat is de gewone praktijk: een one-pager, een
+tweeluik, een notitie van drie. Drie dingen vallen weg en dat verandert de opbouw.
+
+**Er is geen achterkant.** In een folder van vier zet je de logistiek — datum, plaats,
+aanmelden, contact — op pagina 4, en daarmee is hij uit de weg. Op twee pagina's is er geen
+pagina 4, dus die regels moeten ergens tussendoor: onderaan de laatste pagina, in een strook met
+een haarlijn erboven, of in de aflopende band onderaan. Dat is een compositiebesluit en geen
+restje.
+
+**Er is geen aanloop.** Op vier pagina's mag pagina 2 het probleem schetsen en pagina 3 het
+antwoord geven. Op twee pagina's is de eerste zin meteen de boodschap. Wie hier een aanloop
+schrijft, heeft de helft van zijn document opgemaakt aan opwarmen.
+
+**De omslag wordt duur.** Een titelblad kost op één blad alles, op een tweeluik de helft en op
+drie pagina's een derde. Daarom is onder de vier pagina's de titelbalk meestal het antwoord
+(besluit 5): een kwart pagina, en de titel staat er net zo goed op.
+
+**Wat er niet wegvalt is het kader.** Dezelfde marge, hetzelfde raster, dezelfde maatladder,
+hetzelfde aflopende werk. Een one-pager die er goedkoop uitziet, is bijna altijd een one-pager
+waarop iemand de marge heeft ingekort om er meer op te krijgen. Dan is er te veel tekst, en dat
+los je op in de tekst.
+
+---
+
+## 10. De opening is eenmalig; de hoofdstukopening is iets anders
 
 Twee vragen die op elkaar lijken en het niet zijn.
 
@@ -199,7 +225,7 @@ eerste zegt "dit is het stuk", de tweede zegt "hier begint een deel".
 
 ---
 
-## 10. Een infographic is een beeld dat rekent, geen versiering
+## 11. Een infographic is een beeld dat rekent, geen versiering
 
 Het onderscheid dat ertoe doet: een infographic laat een verhouding, een volgorde of een afstand
 zien die je in tekst zou moeten uitleggen. Drie gekleurde vlakken met een woord erin doen dat
@@ -233,7 +259,7 @@ toch kan nagaan waar het vandaan komt.
 
 ---
 
-## 11. De weigerlijst
+## 12. De weigerlijst
 
 Veertien dingen die maken dat een document eruitziet alsof een model het heeft gemaakt. Ze staan
 hier omdat ze allemaal, stuk voor stuk, de eerste inval zijn.
@@ -274,7 +300,7 @@ hier omdat ze allemaal, stuk voor stuk, de eerste inval zijn.
 
 ---
 
-## 12. Wat er niet in staat
+## 13. Wat er niet in staat
 
 Geen paginabibliotheek en geen sjablonen. `stijl.css` geeft het kader, het raster, de maatladder,
 de kleurregels en de merktekens; wat je ermee bouwt is elke pagina opnieuw jouw beslissing.

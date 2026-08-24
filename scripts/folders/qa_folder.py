@@ -94,17 +94,54 @@ METING = r"""() => {
         (el.className && typeof el.className === 'string' && el.className.trim()
           ? '.' + el.className.trim().split(/\s+/).slice(0, 2).join('.') : '');
 
-      // 1. Klipping: de doos snijdt zijn eigen inhoud af.
-      if (el.scrollHeight - el.clientHeight > 1.5 && cs.overflow !== 'visible'
-          && el.clientHeight > 0 && !bleed(el)) {
-        p.klip.push({el: naam, tekort: Math.round(el.scrollHeight - el.clientHeight),
-                     tekst: (el.innerText || '').trim().slice(0, 60)});
-      }
-      if (el.scrollWidth - el.clientWidth > 1.5 && cs.overflowX !== 'visible'
-          && el.clientWidth > 0 && !bleed(el)) {
-        p.klip.push({el: naam, tekort: Math.round(el.scrollWidth - el.clientWidth),
-                     richting: 'breedte',
-                     tekst: (el.innerText || '').trim().slice(0, 60)});
+      // 1. Klipping: er wordt tekst afgesneden.
+      //
+      // Meet de gezette tekstregels zelf, met een Range, en niet de dozen
+      // eromheen. Twee redenen, allebei nagemeten:
+      //
+      // * `scrollHeight` van een container telt álles mee wat eruit steekt,
+      //   ook een tonale bol die er juist hoort uit te steken. Een titelbalk
+      //   met een `.bol` op `right: -120px` meldde 120 px klipping terwijl er
+      //   geen letter verdween.
+      // * Andersom valt tekst die uit zijn éígen vak loopt buiten elke
+      //   doosmeting: een `<p>` met `white-space: nowrap` in een smalle
+      //   container houdt de breedte van die container, dus geen enkel
+      //   element steekt ergens uit — en toch is de helft van de kop weg.
+      //
+      // De regels van de tekst zijn het enige dat allebei ziet.
+      if (cs.overflow !== 'visible' && el.clientHeight > 0 && el.clientWidth > 0) {
+        const doos = el.getBoundingClientRect();
+        const rand = {links: doos.left + parseFloat(cs.borderLeftWidth || 0),
+                      rechts: doos.right - parseFloat(cs.borderRightWidth || 0),
+                      boven: doos.top + parseFloat(cs.borderTopWidth || 0),
+                      onder: doos.bottom - parseFloat(cs.borderBottomWidth || 0)};
+        const loop = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+        let ergste = 0, welke = '', richting = 'hoogte';
+        let knoop;
+        while ((knoop = loop.nextNode())) {
+          if (!knoop.textContent.trim()) continue;
+          const ouder = knoop.parentElement;
+          // Binnen een <svg> geldt een eigen coördinatenstelsel en snijdt de
+          // viewBox met opzet; een <text> op de onderste regel meet daar de
+          // descent van het font als overhang. Het logo meldde dat.
+          if (!ouder || ouder.closest('svg') || bleed(ouder)) continue;
+          const bereik = document.createRange();
+          bereik.selectNodeContents(knoop);
+          for (const r of bereik.getClientRects()) {
+            const verticaal = Math.max(r.bottom - rand.onder, rand.boven - r.top);
+            const horizontaal = Math.max(r.right - rand.rechts, rand.links - r.left);
+            const over = Math.max(verticaal, horizontaal);
+            if (over > ergste) {
+              ergste = over;
+              richting = verticaal >= horizontaal ? 'hoogte' : 'breedte';
+              welke = knoop.textContent.trim().slice(0, 60);
+            }
+          }
+        }
+        if (ergste > 1.5) {
+          p.klip.push({el: naam, tekort: Math.round(ergste),
+                       richting, tekst: welke});
+        }
       }
 
       // 2. Overloop: buiten de snijrand, en niet als aflopend werk bedoeld.
@@ -259,7 +296,8 @@ def toets(html: Path) -> dict:
     for p in m["paginas"]:
         for k in p["klip"]:
             bev.append({"ernst": "critical", "soort": "klip", "pagina": p["nr"],
-                        "wat": f"{k['el']} snijdt {k['tekort']} px van zijn eigen inhoud af",
+                        "wat": f"{k['el']} snijdt tekst af: {k['tekort']} px te veel in de "
+                               f"{k.get('richting', 'hoogte')}",
                         "tekst": k.get("tekst", "")})
         for o in p["overloop"]:
             bev.append({"ernst": "critical", "soort": "overloop", "pagina": p["nr"],

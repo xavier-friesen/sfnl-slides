@@ -38,6 +38,10 @@ is dus `${CLAUDE_PLUGIN_ROOT}/reference/folders-stramien.md`.
    ernaar. Niet om na te tekenen maar om te weten waar de lat ligt. De bron van diezelfde vijf
    staat in `assets/folders/voorbeeld/`, als kale fragmenten, dus je kunt zien hoe een pagina
    geschreven wordt — inclusief een titelbalk en een infographic op schaal 1:1.
+   Voor de korte route staat er een tweede set: `assets/folders/voorbeeld-a5/` is een tweeluik
+   op A5 met de titelbalk als opening, gerenderd in `maatstaf/06-tweeluik-a5.png`. Kijk daar naar
+   zodra de omvang onder de vier pagina's uitkomt, want dat is een ander document en geen
+   kortere folder.
 
 Draai daarna:
 
@@ -113,11 +117,35 @@ titelblad kost er een.
    kantoorprinter moet of als bijlage bij een aanbesteding gaat. A5 voor een uitnodiging of
    programmaboekje — dan is het één kolom en gaat de body omhoog. De maten in px staan in
    `folders-stramien.md`; een zesde formaat bestaat niet.
-2. **De omvang.** Eén blad, vier pagina's, acht tot twaalf, of zestien en meer. Default is **vier
-   pagina's**. Twee dingen die eraan hangen: vanaf acht pagina's horen er kopregels en folio's
-   op elke inhoudspagina, en vanaf acht loont een inhoudsopgave. En een folder die gedrukt wordt,
-   heeft een aantal pagina's dat door vier deelbaar is — dat is hoe een katern gevouwen wordt, en
-   het is de enige plek waar de drukker meebeslist.
+2. **De omvang.** Eén tot drie pagina's, vier, acht tot zestien, of *laat het volgen uit de
+   inhoud*. Default is **vier pagina's**: omslag, twee inhoudspagina's, achterkant.
+
+   | omvang | wat het is | wat eraan hangt |
+   |---|---|---|
+   | **een tot drie** | een one-pager, een tweeluik, een korte notitie | geen hoofdstukken, geen kopregels. Een folio alleen als er meer dan één pagina is |
+   | **vier** — default | de gewone folder | spreads gaan tellen: pagina 2 en 3 liggen tegenover elkaar |
+   | **acht tot zestien** | een samenvatting of proposal met hoofdstukken | kopregels en folio's op elke inhoudspagina, een inhoudsopgave loont, en hoofdstukopeningen bestaan (stap 2) |
+   | **volgt uit de inhoud** | je weet nog niet hoeveel er te zeggen valt | de skill stelt een aantal voor in de outline, met de reden erbij |
+
+   **Twee en drie pagina's zijn geen randgeval maar de gewone praktijk**, en ze zijn een ander
+   document dan een folder van vier: er is geen achterkant om de logistiek op te zetten, dus die
+   moet ergens tussendoor, en er is geen ruimte voor een aanloop. De eerste zin is meteen de
+   boodschap.
+
+   **Hoe het gevouwen wordt, bepaalt welke aantallen bestaan.** Eén of twee pagina's is één plat
+   vel, enkelzijdig of dubbelzijdig. Vier, acht, twaalf en zestien komen uit een gevouwen vel, en
+   dáárom is het aantal vanaf vier deelbaar door vier. **Drie pagina's bestaat alleen als PDF**:
+   op papier is het een vel van vier met een blanco achterkant, en dat is een besluit dat je met
+   de gebruiker neemt en niet stilzwijgend. Blijft het op een scherm, dan is drie gewoon drie.
+
+   **"Laat het volgen uit de inhoud" stelt het besluit uit naar de tweede poort, en schaft hem
+   niet af.** De skill zet in de outline een aantal neer met de reden — hoeveel de kernzin vraagt,
+   hoeveel er per pagina in gaat bij het gekozen formaat en beeldregister — en de gebruiker keurt
+   dat daar goed vóór er iets gebouwd wordt. De omvang is het enige besluit dat je zo kunt
+   uitstellen, en dat is geen coulance maar een eigenschap: hij *volgt* uit de inhoud, terwijl de
+   andere vier de inhoud juist vormen. Het formaat bepaalt hoeveel woorden er op een pagina gaan,
+   dus dat moet er eerder zijn dan de outline.
+
 3. **Het kleurregister.** Wit met oranje accent, kleurvlakken als ritme, oranje dominant of navy
    dominant. Default is **wit met oranje accent**: navy letter op wit, oranje voor de labels en
    de streep. Dat is het register van vrijwel elke inhoudspagina in het rapport. Kies je
@@ -141,15 +169,19 @@ titelblad kost er een.
 
    | opening | wat het is | wat het kost |
    |---|---|---|
-   | **titelblad** — default | pagina 1 is helemaal de titel: dektitel, ondertitel, klant en datum, logo, op een kleurveld of op wit | een hele pagina. Op vier pagina's is dat een kwart van je ruimte |
+   | **titelblad** — default | pagina 1 is helemaal de titel: dektitel, ondertitel, klant en datum, logo, op een kleurveld of op wit | een hele pagina: een kwart van een folder van vier, de helft van een tweeluik |
    | **titelbalk** | geen aparte pagina: pagina 1 draagt bovenaan een aflopende band met de dektitel, en de inhoud begint eronder | ongeveer een kwart pagina, en de eerste pagina wordt voller |
    | **gewoon titel** | de dektitel staat gewoon in de zetspiegel van pagina 1, met een streep eronder, en de tekst loopt door | vrijwel niets |
 
    Default is het **titelblad**, want dat is wat elk SFNL-drukwerk doet en het is de pagina waar
-   iemand het stuk aan herkent. Twee uitzonderingen die je zelf ziet aankomen. Op **één blad**
-   bestaat het niet — dan is er niets over voor de inhoud, dus daar is het de titelbalk of gewoon
-   een titel. En bij een **intern stuk dat alleen gelezen wordt** is een heel blad voor de titel
-   meestal zonde: een notitie van vier pagina's met een titelblad heeft drie pagina's inhoud.
+   iemand het stuk aan herkent. Twee uitzonderingen die je zelf ziet aankomen, en ze hangen
+   allebei aan besluit 2.
+
+   Bij een **korte omvang** wordt het duur: op één blad bestaat het niet, op een tweeluik kost het
+   de helft en op drie pagina's een derde. Onder de vier pagina's is de titelbalk daarom meestal
+   het antwoord — die kost een kwart pagina en zet de titel er net zo goed op. En bij een
+   **intern stuk dat alleen gelezen wordt** is een heel blad voor de titel sowieso zonde: een
+   notitie van vier pagina's met een titelblad houdt drie pagina's inhoud over.
 
    Kies je de titelbalk, dan spreek je hier ook de kleur af — oranje, navy of violet. Op oranje is
    de inkt navy; op navy en violet is hij wit.
@@ -174,6 +206,14 @@ De vier besluiten staan bovenaan `outline.md` en gelden voor elke pagina.
 
 Daarboven staat de **kernzin**: wat de lezer na het doorbladeren moet onthouden, in één zin. Dat
 is drie regels werk en het is de plek waar een pagina sneuvelt voordat hij bestaat.
+
+**Is de omvang uitgesteld** (besluit 2, "laat het volgen uit de inhoud"), dan zet je hem hier
+neer met de reden erbij: hoeveel de kernzin vraagt, hoeveel er per pagina in gaat bij het gekozen
+formaat en beeldregister, en of het gedrukt wordt — want dan is het aantal vanaf vier deelbaar
+door vier. Zeg er ook bij wat je hebt overwogen en niet doet: "vijf zou passen, maar gedrukt
+wordt dat acht met drie lege bladen, dus het worden er vier en de derde route gaat naar een
+bijlage."
+
 
 Dan de **paginakaart**: een genummerde lijst waarin elke pagina één regel is, en spreads bij
 elkaar staan. Dit is het editorial werk, en het is niet hetzelfde als een inhoudsopgave — het gaat
