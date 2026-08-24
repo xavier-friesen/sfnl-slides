@@ -28,8 +28,9 @@ past, past niet, en dat hoort te blijken.
   element dat over de snijrand steekt, een gat van 300 px in het midden van een pagina, wit op
   oranje op contrast 2,6. Drie ervan blokkeren; de rest is een aanwijzing en de render beslist.
 - **Vijf besluiten vóór de eerste regel tekst**, met een gerenderde keuzekaart erbij: formaat,
-  omvang, kleurregister, tekst tegenover beeld, en de titelmodus (gewoon titel, een aflopende
-  titelbalk, of een heel titelblad).
+  omvang, kleurregister, tekst tegenover beeld, en de opening — komt de dektitel op een heel
+  titelblad, in een aflopende titelbalk, of gewoon in de zetspiegel. Hoe hóófdstukken openen is
+  een andere vraag en die staat in de outline, want hij bestaat pas vanaf acht pagina's.
 - **Ruimte voor een infographic** is een merkteken, geen losse div: `.beeldkader` houdt de
   verhouding vast, en een kader waar het beeld nog niet in zit staat er zichtbaar leeg bij in
   plaats van als witruimte mee te lezen.

@@ -163,24 +163,39 @@ vulling.
 
 ---
 
-## 9. De titelmodus is één keuze voor de hele folder
+## 9. De opening is eenmalig; de hoofdstukopening is iets anders
 
-Drie manieren waarop een pagina opent, en de folder kiest er één (besluit 5 in het vragenvuur).
+Twee vragen die op elkaar lijken en het niet zijn.
 
-- **Gewoon titel.** Navy op wit in de zetspiegel, met een oranje streep eronder. Het rustigst.
-- **Titelbalk.** Een aflopende band bovenaan die de titel draagt. Luider, en het geeft de folder
-  een herkenbare kop — bij het doorbladeren zie je aan de kleur van de band waar je bent.
-- **Titelblad.** Een heel blad per hoofdstuk. Pas vanaf twaalf pagina's, want daaronder is er
-  niets terug te vinden en kost het een blad van de vier.
+**De opening** gaat over de dektitel: hoe komt de naam van het stuk op de folder te staan. Dat
+gebeurt één keer, op pagina 1, en het is besluit 5 in het vragenvuur.
 
-**Half balk en half gewoon is de fout.** Dan weet de lezer niet of een titel een hoofdstuk
-aankondigt of een bewering doet, en dat is precies wat de titelrij van een folder moet vertellen.
-Wat wél mag: in de modus titelblad dragen de inhoudspagina's daarachter gewoon een titel. Dat is
-dezelfde modus, niet een mengeling.
+- **Titelblad.** Pagina 1 is helemaal de titel. Wat elk SFNL-drukwerk doet, en het is de pagina
+  waaraan iemand het stuk later terugkent. Het kost een hele pagina, en op een folder van vier is
+  dat een kwart van je ruimte.
+- **Titelbalk.** Geen aparte pagina: een aflopende band bovenaan pagina 1 draagt de dektitel en
+  de inhoud begint eronder. Ongeveer een kwart pagina, en de eerste pagina wordt voller.
+- **Gewoon titel.** De dektitel staat in de zetspiegel met een streep eronder en de tekst loopt
+  door. Vrijwel gratis, en op één blad is het de enige die kan.
 
-**En de balk heeft één maat voor de hele folder.** Een band van 190 px op de ene pagina en 260 op
-de volgende laat de tekst per pagina op een andere hoogte beginnen, en op de spread is dat een
-scheve horizon.
+De afweging is dus ruimte tegen herkenbaarheid, en die valt anders uit naar buiten dan naar
+binnen. Een uitnodiging die de deur uit gaat verdient zijn titelblad; een interne notitie van
+vier pagina's die alleen gelezen wordt, houdt liever vier pagina's inhoud over dan drie.
+
+**De hoofdstukopening** gaat over iets anders: hoe begint een hoofdstuk binnen de folder. Die
+vraag bestaat pas vanaf acht pagina's — onder dat aantal zijn er geen hoofdstukken maar pagina's
+met een titel erboven, en er valt niets terug te vinden. Je beslist hem in de outline en niet in
+het vragenvuur.
+
+**De regel die hier geldt is consistentie, en die geldt alleen binnen elke vraag apart.** Alle
+hoofdstukken openen op dezelfde manier: hoofdstuk 1 met een band en hoofdstuk 2 met alleen een
+kop leest als een fout. En als er een band is, heeft hij één hoogte — 190 px op de ene pagina en
+260 op de volgende laat de tekst per pagina op een andere hoogte beginnen, en op de spread is dat
+een scheve horizon.
+
+Wat géén fout is: een folder die met een titelblad begint en daarna per hoofdstuk een band
+draagt. Dat zijn twee besluiten over twee verschillende dingen, en de lezer leest ze ook zo — de
+eerste zegt "dit is het stuk", de tweede zegt "hier begint een deel".
 
 ---
 
@@ -254,8 +269,8 @@ hier omdat ze allemaal, stuk voor stuk, de eerste inval zijn.
     een document, geen drukwerk.
 15. **Een infographic die niets uitrekent.** Drie gekleurde vlakken met een woord erin, of een
     stel iconen op een rij. Haal het beeld weg: mist er niets, dan hoorde het er niet.
-16. **Een titelbalk die per pagina van hoogte verandert.** Dan begint de tekst op elke pagina
-    ergens anders, en op de spread is dat een scheve horizon.
+16. **Hoofdstukken die elk anders openen**, of een band die per hoofdstuk van hoogte verandert.
+    Dan begint de tekst op elke pagina ergens anders, en op de spread is dat een scheve horizon.
 
 ---
 

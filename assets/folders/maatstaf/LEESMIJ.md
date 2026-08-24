@@ -7,9 +7,9 @@ na te tekenen maar om te weten wat "af" betekent. De bron van dezelfde vier staa
 | bestand | wat het laat zien |
 |---|---|
 | `00-contactblad.png` | de vijf als spreads: 1 alleen, dan 2-3, dan 4-5. Kijk hier áltijd eerst naar |
-| `01-omslag.png` | een omslag zonder foto: het huisverloop, één tonale bol, displaymaat, en drie labelblokken onderaan |
-| `02-tekstpagina.png` | het gewone register en titelmodus *gewoon titel*: watermerkcijfer, chapeau, twee uitgevulde kolommen met aanheffen, een uitspraak, een feitenstrip |
-| `03-titelbalk-en-infographic.png` | titelmodus *titelbalk* in violet, met een infographic als drager in een `.beeldkader` op schaal 1:1 |
+| `01-omslag.png` | de opening als **titelblad**: het huisverloop, één tonale bol, displaymaat, en drie labelblokken onderaan. Geen foto, want die was er niet |
+| `02-tekstpagina.png` | het gewone register: watermerkcijfer, chapeau, twee uitgevulde kolommen met aanheffen, een uitspraak, een feitenstrip |
+| `03-titelbalk-en-infographic.png` | een `.titelbalk` in violet om één pagina apart te zetten — het derde gebruik van de band, niet de dektitel en niet een hoofdstuk — met een infographic als drager in een `.beeldkader` op schaal 1:1 |
 | `04-kaarten-en-tabel.png` | drie kaarten op het verloop met gelijke hoogte, twee kolommen proza, een tabel naast een mintpaneel |
 | `05-kleurpagina.png` | een heel blad in mint met een aflopende oranje band onderaan, genummerde badges, en het logo op de band |
 

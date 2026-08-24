@@ -69,8 +69,8 @@ tokens en ziet de gebruiker waar hij tussen kiest in plaats van vier woorden.
 **Stel de vijf vormvragen daarna met `AskUserQuestion`**, met de optienamen van de kaart zodat
 het beeld en de vraag hetzelfde heten. Dat gaat in twee aanroepen achter elkaar, want het widget
 neemt er vier per keer: eerst de drie die het hele document bepalen (formaat, omvang,
-kleurregister), dan de twee over hoe een pagina opent en wat hem draagt (titelmodus,
-beeldregister). De poort blijft één poort — er wordt niets geschreven voordat beide binnen zijn.
+kleurregister), dan de twee over wat een pagina draagt en hoe de folder opent (beeldregister,
+opening). De poort blijft één poort — er wordt niets geschreven voordat beide binnen zijn.
 De vier opdrachtvragen stel je in gewoon proza in hetzelfde bericht als de kaart.
 
 Verandert er een optie, dan bouw je de kaart opnieuw met
@@ -102,9 +102,10 @@ gebeurt is het besluit per pagina opnieuw nemen.
 
 De volgorde loopt van grof naar fijn. Het formaat bepaalt hoeveel er per pagina in gaat, de
 omvang bepaalt hoeveel pagina's dat zijn, het kleurregister bepaalt hoeveel vlak er staat, het
-beeldregister bepaalt daarbinnen wat tekst blijft, en de titelmodus raakt alleen de kop van de
-pagina. Een besluit verderop draait er nooit een eerder in de rij terug — en de titelmodus staat
-daarom achteraan: hij is de enige die niets aan de rest van de pagina verandert.
+beeldregister bepaalt daarbinnen wat tekst blijft, en de opening raakt alleen de eerste pagina.
+Een besluit verderop draait er nooit een eerder in de rij terug — en de opening staat daarom
+achteraan: hij is de enige die maar één pagina raakt, en hij hangt aan de omvang, want een
+titelblad kost er een.
 
 1. **Het formaat.** SFNL-rapportformaat (210 × 275 mm), A4, A5, of de liggende spread
    (420 × 275 mm). Default is **SFNL-rapportformaat**: dat is de maat van de jaarrapporten en de
@@ -134,26 +135,30 @@ daarom achteraan: hij is de enige die niets aan de rest van de pagina verandert.
    ontworpen. Is er geen beeld en wil de gebruiker het toch, zeg dan wat het kost en stel
    gebalanceerd voor met kleurvlakken als drager.
 
-5. **De titelmodus: gewoon titel, titelbalk of titelblad.** Hoe opent een pagina, en dat geldt
-   voor de hele folder.
+5. **De opening: titelblad, titelbalk of gewoon titel.** Hoe komt de dektitel op de folder te
+   staan. Dit is een eenmalig besluit over de eerste pagina en geen modus die op elke pagina
+   terugkomt.
 
-   | modus | wat het is | wanneer |
+   | opening | wat het is | wat het kost |
    |---|---|---|
-   | **gewoon titel** — default | de titel staat in de zetspiegel, navy op wit, met een oranje streep eronder | het rustigst, en het register van vrijwel elke inhoudspagina in het rapport |
-   | **titelbalk** | een aflopende band bovenaan die de titel draagt, in oranje, navy of violet | luider, en het geeft een folder een herkenbare kop. Zet `--balk` op de `.pagina` |
-   | **titelblad** | een heel blad per hoofdstuk, met alleen de deeltitel erop | pas vanaf twaalf pagina's |
+   | **titelblad** — default | pagina 1 is helemaal de titel: dektitel, ondertitel, klant en datum, logo, op een kleurveld of op wit | een hele pagina. Op vier pagina's is dat een kwart van je ruimte |
+   | **titelbalk** | geen aparte pagina: pagina 1 draagt bovenaan een aflopende band met de dektitel, en de inhoud begint eronder | ongeveer een kwart pagina, en de eerste pagina wordt voller |
+   | **gewoon titel** | de dektitel staat gewoon in de zetspiegel van pagina 1, met een streep eronder, en de tekst loopt door | vrijwel niets |
 
-   **Onder de twaalf pagina's bestaat het titelblad niet.** Dat is geen formaliteit: een titelblad
-   is er om een hoofdstuk terugvindbaar te maken, en in een folder van vier pagina's is er niets
-   terug te vinden. Het kost bovendien een heel blad van de vier.
+   Default is het **titelblad**, want dat is wat elk SFNL-drukwerk doet en het is de pagina waar
+   iemand het stuk aan herkent. Twee uitzonderingen die je zelf ziet aankomen. Op **één blad**
+   bestaat het niet — dan is er niets over voor de inhoud, dus daar is het de titelbalk of gewoon
+   een titel. En bij een **intern stuk dat alleen gelezen wordt** is een heel blad voor de titel
+   meestal zonde: een notitie van vier pagina's met een titelblad heeft drie pagina's inhoud.
 
-   Dit besluit varieert **nooit per pagina**. Half balk en half gewoon levert een folder op waarin
-   de lezer niet weet of een titel een hoofdstuk of een bewering is. Wat wél mag: in de modus
-   *titelblad* dragen de inhoudspagina's daarachter gewoon een titel — dat is dezelfde modus en
-   geen mengeling.
+   Kies je de titelbalk, dan spreek je hier ook de kleur af — oranje, navy of violet. Op oranje is
+   de inkt navy; op navy en violet is hij wit.
 
-   Kies je de titelbalk, dan spreek je hier ook de kleur af, en dat is er één voor de hele folder.
-   Op oranje is de inkt navy; op navy en violet is hij wit. `maatstaf/03` is de balk in violet.
+   **Hoofdstukopeningen zijn iets anders en horen hier niet.** Heeft de folder hoofdstukken, dan
+   is de vraag hoe die openen een eigen vraag, en je beantwoordt hem in de outline en niet hier —
+   zie *Hoofdstukken* in stap 2. Een folder kan dus prima met een titelblad beginnen en daarna
+   per hoofdstuk een band dragen; dat is geen mengeling maar twee besluiten over twee
+   verschillende dingen.
 
 **Twee dingen worden niet gevraagd.** De maatladder is een regel en geen voorkeur: body 10/13 pt,
 klein 8 pt, kop 12 pt, titel 20 pt, plus displaymaat op de omslag. En de letters staan vast —
@@ -199,6 +204,23 @@ Dan per pagina:
 **Wat je niet in de outline zet: maten.** Geen px, geen kolombreedtes, geen paginaindeling. De
 plattegrond, de drager en het beeldbesluit horen er wél in — dat is de reden waarom de tekst deze
 lengte heeft, en het is het enige stuk vorm dat vóór het bouwen te beoordelen is.
+
+**Hoofdstukken, als de folder ze heeft.** Dit is een andere vraag dan besluit 5: dat ging over de
+dektitel en deze gaat over hoe een hoofdstuk begint. Hij bestaat pas vanaf acht pagina's — onder
+dat aantal is er niets terug te vinden en heb je gewoon pagina's met een titel erboven.
+
+Drie manieren, en je kiest er één voor alle hoofdstukken:
+
+| hoofdstukopening | wat je bouwt |
+|---|---|
+| **een kop met een watermerkcijfer** | `.kicker` plus `.titel` in de zetspiegel, met `.watermerk` half erachter. Het lichtst, en het is wat het rapport doet |
+| **een band** | een `.titelbalk` bovenaan die pagina, met `--balk` op de `.pagina` |
+| **een heel blad** | een pagina met alleen de hoofdstuknaam. Pas vanaf zestien pagina's, want het kost er telkens een |
+
+**Eén manier voor alle hoofdstukken, en één maat.** Hoofdstuk 1 met een band en hoofdstuk 2 met
+alleen een kop leest als een fout, en een band van 190 px op de ene en 260 op de volgende laat de
+tekst per pagina op een andere hoogte beginnen — op de spread is dat een scheve horizon. Zet de
+gekozen manier en de bandhoogte bovenaan de outline, bij de vijf besluiten.
 
 **Twee dingen die alleen bij drukwerk horen en die je hier vastlegt.** De **spreadindeling**: welke
 pagina's liggen tegenover elkaar, en klopt dat paar. En de **doorloop**: loopt een tekst over de

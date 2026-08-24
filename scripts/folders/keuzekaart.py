@@ -212,31 +212,40 @@ def bouw_html() -> str:
              "Werkt alleen met echt beeldmateriaal &mdash; zonder foto's wordt dit leeg.", False),
         ]),
 
-        _blok("Besluit 5 &mdash; titelmodus",
-              "Hoe opent een pagina? Dit geldt voor de hele folder.", [
-            ("Gewoon titel",
-             f'<div style="height:100%">{lab}{kop}'
-             f'<hr style="border:0;height:3px;width:38px;background:var(--oranje);margin:5px 0 6px">'
-             f'<div class="g2">{_lorem(3)}{_lorem(3)}</div></div>',
-             "De titel staat in de zetspiegel, navy op wit, met een oranje streep eronder. "
-             "Het rustigst, en het register van vrijwel elke inhoudspagina in het rapport.", True),
-            ("Titelbalk",
-             f'<div style="height:100%;margin:-12px -13px;display:flex;flex-direction:column">'
-             f'<div style="background:var(--oranje);color:var(--navy);padding:10px 13px 9px">'
-             f'<p class="minilabel" style="color:var(--navy);opacity:.75">Aanleiding</p>'
-             f'<p class="minikop" style="margin:0">Wie betaalt de preventie?</p></div>'
-             f'<div style="flex:1;padding:8px 13px 12px"><div class="g2">{_lorem(2)}{_lorem(2)}</div></div></div>',
-             "Een aflopende band bovenaan die de titel draagt, in oranje, navy of violet. "
-             "Luider, en het geeft een folder van acht pagina&#39;s een herkenbare kop.", False),
+        _blok("Besluit 5 &mdash; de opening",
+              "Hoe komt de dektitel op de folder? Dit gaat over pagina 1, eenmalig.", [
             ("Titelblad",
-             f'<div style="height:100%;display:flex;gap:6px">'
-             f'<div style="width:56px;height:100%;background:var(--verloop);padding:7px 6px;'
-             f'display:flex;flex-direction:column;justify-content:flex-end">'
-             f'<p class="minilabel" style="color:#fff;opacity:.85">Deel 2</p>'
-             f'<p class="minikop" style="color:#fff;font-size:11px">Drie routes</p></div>'
-             f'<div style="flex:1">{lab}{kop}{_lorem(3)}</div></div>',
-             "Een heel blad per hoofdstuk, met alleen de deeltitel erop. Loont pas vanaf "
-             "twaalf pagina&#39;s: onder dat aantal is er niets terug te vinden.", False),
+             f'<div style="height:100%;display:flex;gap:7px;align-items:center">'
+             f'<div style="width:70px;height:94px;background:var(--verloop);padding:7px 6px;'
+             f'display:flex;flex-direction:column;justify-content:space-between">'
+             f'<p class="minilabel" style="color:#fff;opacity:.85;margin:0">Uitnodiging</p>'
+             f'<p class="minikop" style="color:#fff;font-size:10px;margin:0">Wie betaalt de preventie?</p>'
+             f'<div style="display:flex;gap:2px;align-items:center">'
+             f'<div style="width:7px;height:7px;border-radius:50%;background:#fff"></div>'
+             f'<div style="width:7px;height:7px;background:#fff"></div></div></div>'
+             f'<div style="width:70px;height:94px;box-shadow:inset 0 0 0 1px rgba(32,27,92,.3);'
+             f'padding:6px;overflow:hidden">{lab}{_lorem(2)}</div>'
+             f'<div style="flex:1"></div></div>',
+             "Pagina 1 is helemaal de titel; de inhoud begint op pagina 2. Wat elk "
+             "SFNL-drukwerk doet, en het kost een hele pagina.", True),
+            ("Titelbalk",
+             f'<div style="height:100%;display:flex;justify-content:center;align-items:center">'
+             f'<div style="width:70px;height:94px;box-shadow:inset 0 0 0 1px rgba(32,27,92,.3);'
+             f'display:flex;flex-direction:column;overflow:hidden">'
+             f'<div style="background:var(--oranje);color:var(--navy);padding:6px 6px 5px">'
+             f'<p class="minikop" style="margin:0;font-size:8px">Wie betaalt de preventie?</p></div>'
+             f'<div style="flex:1;padding:5px 6px">{_lorem(2)}</div></div></div>',
+             "Geen aparte pagina: een aflopende band bovenaan pagina 1, met de inhoud "
+             "eronder. Kost een kwart pagina in plaats van een hele.", False),
+            ("Gewoon titel",
+             f'<div style="height:100%;display:flex;justify-content:center;align-items:center">'
+             f'<div style="width:70px;height:94px;box-shadow:inset 0 0 0 1px rgba(32,27,92,.3);'
+             f'padding:6px;overflow:hidden">'
+             f'<p class="minikop" style="margin:0 0 3px;font-size:8px">Wie betaalt de preventie?</p>'
+             f'<hr style="border:0;height:2px;width:22px;background:var(--oranje);margin:0 0 5px">'
+             f'{_lorem(3)}</div></div>',
+             "De titel staat gewoon in de zetspiegel en de tekst loopt door. Voor "
+             "&eacute;&eacute;n blad, of voor een intern stuk dat alleen gelezen wordt.", False),
         ]),
     ]
     return KAART.format(stijl=stijl, blokken="".join(blokken))

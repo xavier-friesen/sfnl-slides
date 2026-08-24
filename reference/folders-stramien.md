@@ -163,7 +163,7 @@ niet.
 | `.icoon` | een soort die de lezer moet vergelijken | zelf getekend in SVG op een raster van 24. Geen bibliotheek, geen emoji |
 | `.doorloop` | dit loopt door op de volgende pagina | een klein oranje driehoekje aan het eind van de laatste alinea |
 | `.logo` | het merk | inline SVG, erft `currentColor` |
-| `.titelbalk` | de titel op een aflopende band bovenaan | zet `--balk` op de `.pagina`, niet op de balk. `data-veld` kiest de kleur én de inkt |
+| `.titelbalk` | een titel op een aflopende band bovenaan — de dektitel op pagina 1, of een hoofdstuknaam | zet `--balk` op de `.pagina`, niet op de balk. `data-veld` kiest de kleur én de inkt |
 | `.beeldkader` | de gereserveerde plek voor een infographic of foto | verhouding inline met `aspect-ratio`; zonder opgaaf 3:2 |
 | `.beeldkader--leeg` | er hoort hier beeld en het is er nog niet | met `data-wat="…"`; `qa_folder.py` telt wat je hebt laten staan |
 
@@ -189,25 +189,53 @@ precies goed; op een inhoudspagina is het bijna altijd fout. `qa_folder.py` meet
 
 ---
 
-## 5a. De titelmodus
+## 5a. De opening, en de hoofdstukopening
 
-Drie modi, en het is één keuze voor de hele folder (besluit 5 in het vragenvuur).
+Twee verschillende dingen, en ze worden op verschillende momenten besloten.
 
-| modus | hoe je hem bouwt |
+**De opening** is hoe de dektitel op de folder komt. Eenmalig, pagina 1, besluit 5 in het
+vragenvuur.
+
+| opening | hoe je hem bouwt |
 |---|---|
+| **titelblad** | een hele pagina, gecomponeerd met `.display`, een kleurveld en het logo. Geen eigen klasse, want dat zou een paginasjabloon zijn |
+| **titelbalk** | `<header class="titelbalk" data-veld="oranje">` als broer van de zetspiegel, en `--balk` op de `.pagina` |
 | **gewoon titel** | `.titel` in de zetspiegel, met `.streep` eronder |
-| **titelbalk** | `<header class="titelbalk" data-veld="violet">` als broer van de zetspiegel, en `--balk` op de `.pagina` |
-| **titelblad** | een hele pagina, gecomponeerd met `.display`, `.watermerk` en een kleurveld. Geen eigen klasse, want dat zou een paginasjabloon zijn |
 
-De titelbalk bleedt links, rechts en boven, en lijnt binnenin uit op de marge. De titel hangt aan
-de **onderkant** van de band, want dan is de afstand tot de tekst eronder de maat die het oog
-leest. Gemeten voorbeeld: de casespread Civitates zet de casenaam op 42 pt in wit op een violet
-paneel over de volle bovenbreedte.
+**De hoofdstukopening** is hoe een hoofdstuk begint, en die vraag bestaat pas vanaf acht
+pagina's. Je beantwoordt hem in de outline (stap 2 van de SKILL). Drie manieren: een `.kicker`
+plus `.titel` met een `.watermerk` half erachter, een `.titelbalk` op die pagina, of een heel
+blad met alleen de hoofdstuknaam. Eén manier voor álle hoofdstukken, en één bandhoogte.
+
+Een folder kan dus met een titelblad beginnen en daarna per hoofdstuk een band dragen. Dat is
+geen mengeling maar twee besluiten over twee verschillende dingen.
+
+### De titelbalk
+
+De band heeft **drie gebruiken** en de consistentieregel geldt binnen elk ervan apart:
+
+1. **De dektitel op pagina 1**, als je bij besluit 5 voor de titelbalk hebt gekozen. Eén keer.
+2. **Een hoofdstukopening**, vanaf acht pagina's. Dan krijgen álle hoofdstukken er een, in
+   dezelfde kleur en dezelfde hoogte.
+3. **Eén pagina die apart staat** — een interview, een uitspraak, het beeld waar de hele folder
+   om draait. Dat is geen inconsistentie maar nadruk, en het staat zo in het drukwerk: het
+   rapport 2025 zet zijn interviewpaneel op precies één pagina, en de oranje band en het
+   mintveld ook. `maatstaf/03` doet hetzelfde met een violette band op de pagina met de
+   infographic.
+
+Wat je niet doet is twee van de drie door elkaar op één folder. Draagt hoofdstuk 2 een band en
+staat er ook een band op de pagina die apart hoort te staan, dan valt de nadruk weg.
+
+De band bleedt links, rechts en boven, en lijnt binnenin uit op de marge. De titel hangt aan de
+**onderkant** van de band, want dan is de afstand tot de tekst eronder de maat die het oog leest.
+Gemeten voorbeeld: de casespread Civitates zet de casenaam op 42 pt in wit op een violet paneel
+over de volle bovenbreedte.
 
 `--balk` staat op de `.pagina` en niet op de balk zelf. De balk leest hem als zijn hoogte, de
 zetspiegel telt hem bij zijn bovenmarge op, en zo noem je de bandhoogte maar één keer. Vergeet je
-hem, dan is de band nul hoog; `qa_folder.py` meldt dat als `critical`, want de titel staat er dan
-wel en de band niet.
+hem, dan zakt de band terug op zijn padding — niet naar nul, want `box-sizing: border-box` — en
+wordt de titel erin afgesneden. `qa_folder.py` leest daarom de variabele zelf en niet de hoogte,
+en meldt het als `critical`.
 
 Bruikbare bandhoogtes op `sfnl`: 190 px voor een titel van één regel, 232 voor twee regels met
 een kicker erboven, 300 als er ook een intro in de band staat.

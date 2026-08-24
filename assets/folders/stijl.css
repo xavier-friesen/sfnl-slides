@@ -608,9 +608,16 @@ a:hover { color: var(--grapefruit); }
   pointer-events: none;
 }
 
-/* 8.13a De titelbalk — de tweede van de drie titelmodi.
+/* 8.13a De titelbalk — een titel op een aflopende band.
 
-   Een aflopende band over de volle breedte die de titel draagt. Hij bleedt
+   Drie gebruiken, en ze zijn niet hetzelfde: de dektitel op pagina 1 (besluit 5
+   uit het vragenvuur), een hoofdstukopening vanaf acht pagina's, of één pagina
+   die apart staat. Dat laatste doet het drukwerk zelf ook — het rapport 2025
+   zet zijn interviewpaneel op precies één pagina. De consistentieregel geldt
+   binnen elk gebruik apart: krijgen de hoofdstukken een band, dan krijgen ze
+   hem allemaal, in dezelfde kleur en dezelfde hoogte.
+
+   De band loopt over de volle breedte en draagt de titel. Hij bleedt
    links, rechts en boven; binnenin lijnt hij uit op de marge, zodat de titel
    op dezelfde lijn staat als de tekst eronder. De titel hangt aan de ónderkant
    van de band, want dan is de afstand tot de tekst eronder de maat die het oog
