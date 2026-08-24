@@ -3,7 +3,7 @@
 Wat een folder goed maakt, en waaraan je ziet dat er een model achter zat. De feiten — maten,
 klassen, kleuren — staan in `folders-stramien.md`; dit gaat over de beslissingen.
 
-De metingen komen uit het SFNL-jaarrapport 2025, de casespread Civitates, en uit de vier pagina's
+De metingen komen uit het SFNL-jaarrapport 2025, de casespread Civitates, en uit de vijf pagina's
 die met deze skill zijn gebouwd en in `assets/folders/maatstaf/` staan.
 
 ---
@@ -163,7 +163,62 @@ vulling.
 
 ---
 
-## 9. De weigerlijst
+## 9. De titelmodus is één keuze voor de hele folder
+
+Drie manieren waarop een pagina opent, en de folder kiest er één (besluit 5 in het vragenvuur).
+
+- **Gewoon titel.** Navy op wit in de zetspiegel, met een oranje streep eronder. Het rustigst.
+- **Titelbalk.** Een aflopende band bovenaan die de titel draagt. Luider, en het geeft de folder
+  een herkenbare kop — bij het doorbladeren zie je aan de kleur van de band waar je bent.
+- **Titelblad.** Een heel blad per hoofdstuk. Pas vanaf twaalf pagina's, want daaronder is er
+  niets terug te vinden en kost het een blad van de vier.
+
+**Half balk en half gewoon is de fout.** Dan weet de lezer niet of een titel een hoofdstuk
+aankondigt of een bewering doet, en dat is precies wat de titelrij van een folder moet vertellen.
+Wat wél mag: in de modus titelblad dragen de inhoudspagina's daarachter gewoon een titel. Dat is
+dezelfde modus, niet een mengeling.
+
+**En de balk heeft één maat voor de hele folder.** Een band van 190 px op de ene pagina en 260 op
+de volgende laat de tekst per pagina op een andere hoogte beginnen, en op de spread is dat een
+scheve horizon.
+
+---
+
+## 10. Een infographic is een beeld dat rekent, geen versiering
+
+Het onderscheid dat ertoe doet: een infographic laat een verhouding, een volgorde of een afstand
+zien die je in tekst zou moeten uitleggen. Drie gekleurde vlakken met een woord erin doen dat
+niet — dat is een lijst met vulling.
+
+De toets die het vaakst iets oplevert: **haal het beeld weg en lees de pagina.** Mist er niets,
+dan was het versiering. `maatstaf/03` doorstaat die toets — de stippellijn die nergens aankomt is
+het hele argument van de pagina, en in tekst kost dat een alinea.
+
+**Drie dingen die stil misgaan, en de eerste is de vervelendste.**
+
+1. **Een SVG schaalt álles mee, ook zijn letters.** Teken op schaal 1:1: de `viewBox` even breed
+   als het kader in px. Een beeld dat op 680 is getekend en in een kader van 340 staat, zet zijn
+   13,33 px-tekst op 6,7 px, en dat is onder de vloer zonder dat er iets in de markup fout staat.
+   Meer hoogte nodig: laat de `viewBox` in de hoogte groeien en houd de breedte gelijk. Gemeten:
+   de infographic van `maatstaf/03` groeide van 268 naar 372 in de hoogte en de letters bleven.
+2. **De maatladder geldt ook binnen de SVG.** Nagemeten: dezelfde infographic voerde 12, 13 en
+   15 px in naast de zes van de ladder, en `qa_folder.py` telde acht maten op de folder. Gebruik
+   dezelfde getallen als op de pagina.
+3. **Een leeg kader leest als witruimte.** Zet `beeldkader--leeg` met een `data-wat` neer zolang
+   het beeld er nog niet is, dan staat er een gemarkeerd vlak en zie je op de render dat er iets
+   ontbreekt. Blijft dat staan, dan gaat het mee de PDF in; `qa_folder.py` telt ze.
+
+**De kleuren coderen, net als elders.** Oranje is de investering, emerald de opbrengst,
+grapefruit de waarschuwing, navy de structuur. Schrijf per kleur in één woord op wat hij
+betekent, en houd dat voor de hele folder aan.
+
+**En de herkomst staat in het bijschrift, niet in het beeld.** Elk getal draagt zijn eenheid,
+periode en bron; die staan in de `figcaption` eronder, zodat het beeld schoon blijft en de lezer
+toch kan nagaan waar het vandaan komt.
+
+---
+
+## 11. De weigerlijst
 
 Veertien dingen die maken dat een document eruitziet alsof een model het heeft gemaakt. Ze staan
 hier omdat ze allemaal, stuk voor stuk, de eerste inval zijn.
@@ -197,10 +252,14 @@ hier omdat ze allemaal, stuk voor stuk, de eerste inval zijn.
     meer was. Dan is er één pagina te veel.
 14. **Elk element netjes binnen de marge.** Geen enkel aflopend vlak, geen enkele overlap. Dat is
     een document, geen drukwerk.
+15. **Een infographic die niets uitrekent.** Drie gekleurde vlakken met een woord erin, of een
+    stel iconen op een rij. Haal het beeld weg: mist er niets, dan hoorde het er niet.
+16. **Een titelbalk die per pagina van hoogte verandert.** Dan begint de tekst op elke pagina
+    ergens anders, en op de spread is dat een scheve horizon.
 
 ---
 
-## 10. Wat er niet in staat
+## 12. Wat er niet in staat
 
 Geen paginabibliotheek en geen sjablonen. `stijl.css` geeft het kader, het raster, de maatladder,
 de kleurregels en de merktekens; wat je ermee bouwt is elke pagina opnieuw jouw beslissing.
@@ -209,6 +268,6 @@ Dat is een keuze en hij komt uit dezelfde meting als bij `sfnl-slides`: een rout
 uit een catalogus wordt gekozen, levert documenten op die geen van alle fout zijn en geen van
 alle goed. Wie zo bouwt, kiest niet meer maar vult in.
 
-Wat er wel is als je vastloopt: `assets/folders/voorbeeld/` heeft vier gebouwde pagina's als kale
-fragmenten, en `assets/folders/maatstaf/` heeft dezelfde vier gerenderd. Kijk ernaar om te weten
+Wat er wel is als je vastloopt: `assets/folders/voorbeeld/` heeft vijf gebouwde pagina's als kale
+fragmenten, en `assets/folders/maatstaf/` heeft dezelfde vijf gerenderd. Kijk ernaar om te weten
 waar de lat ligt, niet om na te tekenen.

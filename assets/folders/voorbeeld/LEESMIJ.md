@@ -8,7 +8,8 @@ De gerenderde versie staat in `assets/folders/maatstaf/`, met de fouten die erui
 | bestand | pagina |
 |---|---|
 | `Main.dc.html` | de omslag. Het eerste artboard moet Main heten; dat is een eis van de canvashelper |
-| `Aanleiding.dc.html` | de tekstpagina |
+| `Aanleiding.dc.html` | de tekstpagina, titelmodus *gewoon titel* |
+| `Geldstroom.dc.html` | titelmodus *titelbalk*, met een infographic als drager |
 | `Routes.dc.html` | kaarten plus tabel |
 | `Programma.dc.html` | de kleurpagina met de aflopende band |
 
@@ -22,3 +23,8 @@ Let bij het lezen op vier dingen, want die zijn niet vanzelfsprekend:
 3. **De tekst staat letterlijk in de markup**, niet als variabele. Alleen dan kan de gebruiker hem
    in het canvas ter plekke overtypen.
 4. **`data-volgnr` bepaalt de volgorde**, niet de bestandsnaam.
+5. **`--balk` staat op de `.pagina`**, niet op de `.titelbalk`. De balk én de zetspiegel lezen
+   dezelfde waarde, dus je noemt de bandhoogte maar één keer.
+6. **De infographic is inline SVG op schaal 1:1** — `viewBox="0 0 680 372"` in een kader met
+   `aspect-ratio: 680 / 372`. Alleen dan rendert de `font-size` binnen de SVG in dezelfde px als
+   op de pagina en blijft hij op de ladder.

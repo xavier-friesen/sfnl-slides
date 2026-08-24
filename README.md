@@ -8,9 +8,8 @@ invuloefening, en de render is de enige vormbeoordeling.
 | **`sfnl-slides`** | een SFNL-deck uit het officiële `.potx`-sjabloon |
 | **`sfnl-design-folders`** | drukwerk in HTML: een uitnodiging, een executive summary, een proposal, een spread |
 
-De plugin heet nog `sfnl-slides`, want dat is de naam waarmee hij geïnstalleerd staat. Wil je hem
-hernoemen nu er twee skills in zitten, dan is dat een aparte stap: iedereen die hem al heeft, moet
-opnieuw installeren.
+De plugin blijft `sfnl-slides` heten, ook nu er twee skills in zitten: dat is de naam waarmee hij
+geïnstalleerd staat, en hernoemen zou iedereen tot opnieuw installeren dwingen.
 
 ## sfnl-design-folders — drukwerk in HTML
 
@@ -28,8 +27,14 @@ past, past niet, en dat hoort te blijken.
 - **`qa_folder.py` meet wat stil misgaat**: tekst die door `overflow: hidden` is weggevallen, een
   element dat over de snijrand steekt, een gat van 300 px in het midden van een pagina, wit op
   oranje op contrast 2,6. Drie ervan blokkeren; de rest is een aanwijzing en de render beslist.
+- **Vijf besluiten vóór de eerste regel tekst**, met een gerenderde keuzekaart erbij: formaat,
+  omvang, kleurregister, tekst tegenover beeld, en de titelmodus (gewoon titel, een aflopende
+  titelbalk, of een heel titelblad).
+- **Ruimte voor een infographic** is een merkteken, geen losse div: `.beeldkader` houdt de
+  verhouding vast, en een kader waar het beeld nog niet in zit staat er zichtbaar leeg bij in
+  plaats van als witruimte mee te lezen.
 - **Er is geen paginabibliotheek.** `stijl.css` geeft het kader, het raster, de maatladder, de
-  kleurregels en zeventien merktekens die elk één ding tekenen. De compositie is elke pagina
+  kleurregels en twintig merktekens die elk één ding tekenen. De compositie is elke pagina
   opnieuw een beslissing.
 
 Alle maten en kleuren komen uit twee gemeten drukwerken: het jaarrapport 2025 en de casespread

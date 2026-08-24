@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Meten wat mechanisch te meten valt, en verder niets.
 
-Dit is geen poort en het keurt geen compositie af. Het meet elf dingen die je
-zonder oordeel kunt vaststellen en die stil misgaan — dat laatste is het
+Dit is geen poort en het keurt geen compositie af. Het meet dertien dingen die
+je zonder oordeel kunt vaststellen en die stil misgaan — dat laatste is het
 criterium. Een pagina die lelijk is, ziet iedereen op de render; een regel die
 onder de snijrand is weggevallen omdat `.pagina` `overflow: hidden` draagt, ziet
 niemand, ook de bouwer niet.
@@ -14,7 +14,11 @@ te pas komt:
   verdwenen.
 * **overloop** — een element steekt over de snijrand zonder dat het als
   aflopend werk is aangemerkt. Op papier is dat weg.
-* **te klein** — lopende tekst onder 8 pt. Dat is niet krap maar onleesbaar.
+* **te klein** — lopende tekst onder 8 pt, of een gespatieerd kapitaallabel
+  onder 6 pt. Dat is niet krap maar onleesbaar.
+* **emoji** — een tweede lettertype op de pagina dat als chatbericht leest.
+* **titelbalk** — een balk van nul px hoog, doordat `--balk` niet op de
+  .pagina staat. De titel staat er dan wel en de band niet.
 
 De rest is een aanwijzing: kijk ernaar en beslis. Voor `vulgraad`, `maat` en
 `palet` geldt uitdrukkelijk dat de render zwaarder weegt dan het getal.
@@ -59,10 +63,6 @@ METING = r"""() => {
   const uit = {paginas: [], maten: {}, families: {}, kleuren: {}, meldingen: []};
   const bleed = el => el.closest('.aflopend, .aflopend-boven, .aflopend-onder, ' +
                                 '.aflopend-links, .aflopend-rechts, .bol, .watermerk, .rondfoto');
-  // Paginameubilair: de folio en de kopregel staan bewust búiten de zetspiegel
-  // en zeggen dus niets over hoe vol de pagina staat. Zonder deze uitzondering
-  // meet elke pagina met een folio boven de 1,00 en verdwijnt de meting die
-  // hier het werk moet doen.
   // Alles buiten .zetspiegel is per definitie meubilair of aflopend werk: de
   // folio, de kopregel, een logo dat je zelf onderaan hebt gezet. Dat telt niet
   // mee in hoe vol de pagina staat. Deze regel verving een groeiende lijst met
@@ -162,10 +162,19 @@ METING = r"""() => {
       if (bg && bg !== 'rgba(0, 0, 0, 0)' && r.width * r.height > 900) {
         uit.kleuren[bg] = (uit.kleuren[bg] || 0) + 1;
       }
-      if (cs.boxShadow && cs.boxShadow !== 'none' && !cs.boxShadow.startsWith('inset')) {
+      if (cs.boxShadow && cs.boxShadow !== 'none'
+          && cs.boxShadow.split(/,(?![^(]*\))/).some(d => !d.includes('inset'))) {
         p.schaduw += 1;
       }
     });
+
+    // 6. Twee dingen die je op de render wél ziet maar makkelijk vergeet.
+    p.leegBeeld = Array.from(pag.querySelectorAll('.beeldkader--leeg'))
+      .map(el => el.dataset.wat || '(zonder data-wat)');
+    p.balk = pag.querySelector('.titelbalk')
+      ? {gezet: getComputedStyle(pag).getPropertyValue('--balk').trim(),
+         hoogte: Math.round(pag.querySelector('.titelbalk').getBoundingClientRect().height)}
+      : null;
 
     p.vulgraad = Math.round(
       ((p.onderrand - marge.boven) / (pr.height - marge.boven - marge.onder)) * 100) / 100;
@@ -283,6 +292,18 @@ def toets(html: Path) -> dict:
                 bev.append({"ernst": "warn", "soort": "maat", "pagina": p["nr"],
                             "wat": f"{r['el']} zet ongeveer {r['tekens']} tekens per regel "
                                    f"— boven 88 raakt het oog de volgende regel kwijt"})
+        for wat in p["leegBeeld"]:
+            bev.append({"ernst": "warn", "soort": "leeg-beeldkader", "pagina": p["nr"],
+                        "wat": f"er staat nog een leeg beeldkader: {wat!r}. Zet het beeld "
+                               f"erin, of haal het kader weg en herverdeel de ruimte — "
+                               f"een gemarkeerd vlak dat blijft staan, gaat mee de PDF in"})
+        if p["balk"] and p["balk"]["gezet"] in ("", "0px", "0"):
+            bev.append({"ernst": "critical", "soort": "titelbalk", "pagina": p["nr"],
+                        "wat": f"er staat een .titelbalk maar --balk is niet gezet, dus de "
+                               f"band zakt terug op zijn padding ({p['balk']['hoogte']} px) "
+                               f"en de titel erin wordt afgesneden. Zet --balk op de "
+                               f".pagina en niet op de balk zelf — de zetspiegel leest "
+                               f"dezelfde waarde"})
         if p["schaduw"]:
             bev.append({"ernst": "warn", "soort": "schaduw", "pagina": p["nr"],
                         "wat": f"{p['schaduw']} element(en) met een slagschaduw. Op papier "

@@ -31,13 +31,13 @@ vanaf de map waarin dit bestand staat en niet vanaf het project. `reference/fold
 is dus `${CLAUDE_PLUGIN_ROOT}/reference/folders-stramien.md`.
 
 1. `reference/folders-vormentaal.md` — de maatstaf. Wat een SFNL-folder goed maakt, en de
-   weigerlijst: veertien dingen die maken dat een document er door een model gemaakt uitziet.
+   weigerlijst: zestien dingen die maken dat een document er door een model gemaakt uitziet.
 2. `reference/folders-stramien.md` — de feiten. De bladmaten, het raster, de maatladder, de
    merktekens met hun klassenaam, en het logo als markup om te kopiëren.
-3. `assets/folders/maatstaf/00-contactblad.png` — vier gebouwde pagina's als contactblad. Kijk
-   ernaar. Niet om na te tekenen maar om te weten waar de lat ligt. De bron van diezelfde vier
+3. `assets/folders/maatstaf/00-contactblad.png` — vijf gebouwde pagina's als contactblad. Kijk
+   ernaar. Niet om na te tekenen maar om te weten waar de lat ligt. De bron van diezelfde vijf
    staat in `assets/folders/voorbeeld/`, als kale fragmenten, dus je kunt zien hoe een pagina
-   geschreven wordt.
+   geschreven wordt — inclusief een titelbalk en een infographic op schaal 1:1.
 
 Draai daarna:
 
@@ -56,19 +56,24 @@ Daarna is het vragenvuur van stap 1 het eerste wat je doet, en dat is een poort.
 
 ## Stap 1 — Het vragenvuur, en dit is de eerste poort
 
-Acht vragen in twee blokken: vier over de opdracht, vier over de vorm. **Leg ze in één keer voor
+Negen vragen in twee blokken: vier over de opdracht, vijf over de vorm. **Leg ze in één keer voor
 en wacht op de antwoorden.** Er wordt niets geschreven voordat ze er zijn — geen outline, geen
 pagina. Wie de tekst eerst schrijft, kiest de vorm al: een folder van vier pagina's en een
 folder van twaalf zijn niet dezelfde tekst met meer wit ertussen.
 
-**Stuur de keuzekaart mee vóór je de vier vormvragen stelt.** Dat is
+**Stuur de keuzekaart mee vóór je de vormvragen stelt.** Dat is
 `assets/folders/keuzekaarten/vragenvuur.png`: per besluit de opties naast elkaar, echt gezet in
 de folderstijl, met de meting eronder. Stuur het bestand, lees het niet — dan kost het geen
 tokens en ziet de gebruiker waar hij tussen kiest in plaats van vier woorden.
 
-**Stel de vier vormvragen daarna met `AskUserQuestion`, in één aanroep**, met de optienamen van
-de kaart zodat het beeld en de vraag hetzelfde heten. De vier opdrachtvragen stel je in gewoon
-proza in hetzelfde bericht. Verandert er een optie, dan bouw je de kaart opnieuw met
+**Stel de vijf vormvragen daarna met `AskUserQuestion`**, met de optienamen van de kaart zodat
+het beeld en de vraag hetzelfde heten. Dat gaat in twee aanroepen achter elkaar, want het widget
+neemt er vier per keer: eerst de drie die het hele document bepalen (formaat, omvang,
+kleurregister), dan de twee over hoe een pagina opent en wat hem draagt (titelmodus,
+beeldregister). De poort blijft één poort — er wordt niets geschreven voordat beide binnen zijn.
+De vier opdrachtvragen stel je in gewoon proza in hetzelfde bericht als de kaart.
+
+Verandert er een optie, dan bouw je de kaart opnieuw met
 `python "${CLAUDE_PLUGIN_ROOT}/scripts/folders/keuzekaart.py"` — onderhoud, geen bouwstap.
 
 Weet je een antwoord uit de opdracht, vul het dan in als voorstel met de bron erbij. Het staat
@@ -90,15 +95,16 @@ gebeurt is het besluit per pagina opnieuw nemen.
   dát de maatstaf: render het, kijk ernaar, en volg de vormentaal ervan in plaats van
   `assets/folders/maatstaf/`.
 - **Is er beeld?** Foto's, logo's van partners, een grafiek. Dit is de vraag die het vaakst te
-  laat komt. Zonder beeld is besluit 4 hieronder al genomen — dan wordt het tekstgedreven of
+  laat komt. Zonder beeld is besluit 4 hieronder half genomen — dan wordt het tekstgedreven of
   gebalanceerd, en niet beeldgedreven, hoe graag iemand dat ook wil.
 
-### De vier over de vorm
+### De vijf over de vorm
 
 De volgorde loopt van grof naar fijn. Het formaat bepaalt hoeveel er per pagina in gaat, de
-omvang bepaalt hoeveel pagina's dat zijn, het kleurregister bepaalt hoeveel vlak er staat, en het
-beeldregister bepaalt daarbinnen wat tekst blijft. Een besluit verderop draait er nooit een
-eerder in de rij terug.
+omvang bepaalt hoeveel pagina's dat zijn, het kleurregister bepaalt hoeveel vlak er staat, het
+beeldregister bepaalt daarbinnen wat tekst blijft, en de titelmodus raakt alleen de kop van de
+pagina. Een besluit verderop draait er nooit een eerder in de rij terug — en de titelmodus staat
+daarom achteraan: hij is de enige die niets aan de rest van de pagina verandert.
 
 1. **Het formaat.** SFNL-rapportformaat (210 × 275 mm), A4, A5, of de liggende spread
    (420 × 275 mm). Default is **SFNL-rapportformaat**: dat is de maat van de jaarrapporten en de
@@ -128,12 +134,34 @@ eerder in de rij terug.
    ontworpen. Is er geen beeld en wil de gebruiker het toch, zeg dan wat het kost en stel
    gebalanceerd voor met kleurvlakken als drager.
 
+5. **De titelmodus: gewoon titel, titelbalk of titelblad.** Hoe opent een pagina, en dat geldt
+   voor de hele folder.
+
+   | modus | wat het is | wanneer |
+   |---|---|---|
+   | **gewoon titel** — default | de titel staat in de zetspiegel, navy op wit, met een oranje streep eronder | het rustigst, en het register van vrijwel elke inhoudspagina in het rapport |
+   | **titelbalk** | een aflopende band bovenaan die de titel draagt, in oranje, navy of violet | luider, en het geeft een folder een herkenbare kop. Zet `--balk` op de `.pagina` |
+   | **titelblad** | een heel blad per hoofdstuk, met alleen de deeltitel erop | pas vanaf twaalf pagina's |
+
+   **Onder de twaalf pagina's bestaat het titelblad niet.** Dat is geen formaliteit: een titelblad
+   is er om een hoofdstuk terugvindbaar te maken, en in een folder van vier pagina's is er niets
+   terug te vinden. Het kost bovendien een heel blad van de vier.
+
+   Dit besluit varieert **nooit per pagina**. Half balk en half gewoon levert een folder op waarin
+   de lezer niet weet of een titel een hoofdstuk of een bewering is. Wat wél mag: in de modus
+   *titelblad* dragen de inhoudspagina's daarachter gewoon een titel — dat is dezelfde modus en
+   geen mengeling.
+
+   Kies je de titelbalk, dan spreek je hier ook de kleur af, en dat is er één voor de hele folder.
+   Op oranje is de inkt navy; op navy en violet is hij wit. `maatstaf/03` is de balk in violet.
+
 **Twee dingen worden niet gevraagd.** De maatladder is een regel en geen voorkeur: body 10/13 pt,
 klein 8 pt, kop 12 pt, titel 20 pt, plus displaymaat op de omslag. En de letters staan vast —
 Montserrat voor de kop, Lato voor het brood. Wie een derde familie wil, wil een andere huisstijl.
 
 **Wat je na dit blok hebt** is een vormbesluit per rij, en dat gaat als eerste blok bovenaan de
 outline mee: per besluit de gekozen waarde, en alleen bij een afwijking van de default de reden.
+Vijf regels, in één keer te herlezen.
 
 ## Stap 2 — De outline, en de tweede poort
 
@@ -158,10 +186,12 @@ Dan per pagina:
   voor, of staan er twee gelijke naast elkaar in een spread, dan herschik je hier. Na het bouwen
   kost dat een herbouw.
 - **Vorm die de inhoud vraagt** — eerst het woord (proza, tabel, kaarten, tijdlijn, verdeling,
-  beeld), dan wat beeld wordt, wat tekst blijft, en **waarom het niet visueler kon**. Die laatste
+  infographic, foto), dan wat beeld wordt, wat tekst blijft, en **waarom het niet visueler kon**. Die laatste
   helft is het werk, en de reden gaat over de inhoud. "De drie routes verschillen niet in omvang,
   dus een staafdiagram zou een verschil suggereren dat er niet is" is een reden; "past niet" is
-  dat niet, want een reden die op elke pagina past beslist niets.
+  dat niet, want een reden die op elke pagina past beslist niets. Wordt het een infographic, zet
+  dan hier in één zin wat het beeld moet laten zien — dat is de opdracht die je straks aan het
+  `.beeldkader` of aan `sfnl-infographic` meegeeft.
 - **Tekst** — letterlijk zoals hij op de pagina komt, inclusief cijfers, eenheid en bron.
 - **Herkomst** — achter elke inhoudelijke regel `[brief]`, `[dossier]` of `[aanname]`. Een aanname
   mag nooit als vaststelling op de pagina. Zet alle aannames als lijstje onder de outline.
@@ -240,7 +270,54 @@ kader, het raster en de maatrollen doe je met klassen (die horen niet per elemen
 en een specifieke breedte, kleur of afstand zet je inline. Tekst zet je letterlijk in de markup en
 nooit als variabele, anders kan de gebruiker hem niet ter plekke overtypen.
 
-### 2. Bouwen
+### 2. Een infographic in de folder
+
+Een beeld dat iets uitrekent — een geldstroom, een tijdlijn, een verdeling, een vergelijking —
+staat in een **`.beeldkader`**, en dat is een merkteken en geen losse div. Het houdt de verhouding
+vast zodat het raster niet verschuift als de inhoud verandert, en een léég kader is zichtbaar
+leeg: met `beeldkader--leeg` en een `data-wat` staat er een gemarkeerd vlak in plaats van wit.
+Zo lees je op de render dat er beeld hoort, in plaats van dat het als witruimte meegaat.
+`qa_folder.py` telt de lege kaders die je hebt laten staan.
+
+```html
+<figure style="margin: 0;">
+  <div class="beeldkader" style="aspect-ratio: 680 / 372;">
+    <svg viewBox="0 0 680 372" xmlns="http://www.w3.org/2000/svg"> … </svg>
+  </div>
+  <figcaption class="bron">Wat je ziet, en waar het vandaan komt.</figcaption>
+</figure>
+
+<!-- of, zolang het beeld er nog niet is -->
+<div class="beeldkader beeldkader--leeg" data-wat="Geldstroom gemeente → verzekeraar"
+     style="aspect-ratio: 16 / 9;"></div>
+```
+
+**Vier regels, en de eerste is de enige die stil misgaat.**
+
+1. **Teken op schaal 1:1.** De `viewBox` is even breed als het kader in px — op het
+   SFNL-formaat is een kader over de volle zetspiegel 680 breed, dus `viewBox="0 0 680 …"`.
+   Alleen dan rendert een `font-size="13.33"` binnen de SVG ook echt als 13,33 px en blijft het
+   beeld op de maatladder van de pagina. Schaal je het kader op, dan groeien de letters mee en
+   staat er ineens een zevende maat op de pagina. Dat is nagemeten: de infographic van
+   `maatstaf/03` voerde 12, 13 en 15 px in, naast de zes van de ladder.
+   Meer hoogte nodig? Laat de `viewBox` in de hóógte groeien en houd de breedte op 680.
+2. **Inline SVG, geen bestand.** Een los bestand moet als base64 het canvas in en is dan niet
+   meer herkleurbaar; inline erft het de merkkleuren en schaalt het mee met de pagina.
+3. **De kleuren komen uit het palet en coderen iets.** Oranje is de investering, emerald de
+   opbrengst, grapefruit de waarschuwing, navy de structuur. Schrijf per kleur in één woord op
+   wat hij betekent, net als bij besluit 3.
+4. **Het bijschrift draagt de herkomst.** Elk getal in het beeld heeft zijn eenheid, periode en
+   bron, en die staan in de `figcaption` en niet in het beeld zelf.
+
+**Wanneer je escaleert naar `sfnl-infographic`.** Die skill bouwt één beeld op maat, met een
+eigen compositieronde en een eigen renderloop, en levert SVG die je hier inplakt. De aanleiding
+komt van het oog en niet van een telling: je hebt het beeld zelf geprobeerd, het haalde de ronde
+niet, of dezelfde pagina komt voor de tweede keer terug als tekstwand. Meld dan wat er aan de
+hand is — welke pagina, waarom je herontwerp het niet haalde, en wat het beeld zou moeten doen —
+stel de escalatie voor met de kosten erbij, en wacht op ja of nee. Bij nee zet je een
+`beeldkader--leeg` neer met wat erin hoort, zodat de gebruiker ziet wat er open staat.
+
+### 3. Bouwen
 
 ```bash
 python $S/bouw.py <werkmap> --uit uitnodiging-werksessie.html --titel "Uitnodiging werksessie"
@@ -348,8 +425,8 @@ gelijk aan het echte jaarrapport.
 
 ## Wat blokkeert
 
-Vijf dingen. De eerste twee zijn van de soort "het bestand is stuk", de andere drie zijn een
-`critical` uit `qa_folder.py`. Verder blokkeert er niets op vormgeving; dat oordeel komt van de
+Zeven dingen. De eerste twee zijn van de soort "het bestand is stuk", de rest is een `critical`
+uit `qa_folder.py`. Verder blokkeert er niets op vormgeving; dat oordeel komt van de
 render.
 
 1. `bouw.py` vindt geen `.pagina` in een artboard, of een onbekend `data-formaat`.
@@ -358,6 +435,9 @@ render.
 4. **overloop** — een element steekt over de snijrand zonder als aflopend werk te zijn
    aangemerkt. Op papier is dat weg.
 5. **te klein** — lopende tekst onder 8 pt, of een kapitaallabel onder 6 pt.
+6. **titelbalk** — een balk van nul px hoog, doordat `--balk` op de balk staat in plaats van op
+   de `.pagina`. De titel staat er dan wel en de band niet.
+7. **emoji** — een tweede lettertype op de pagina dat als chatbericht leest.
 
 ## Zonder renderer
 

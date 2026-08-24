@@ -81,6 +81,11 @@
   /* Papiermaat. Wordt per formaat overschreven op .pagina. */
   --breedte: 794px;
   --hoogte:  1039px;
+
+  /* De hoogte van de titelbalk. Nul, want de meeste pagina's hebben er geen.
+     Zet hem op de .pagina die er wel een heeft — dan weten de balk én de
+     zetspiegel het allebei, en hoef je de maat maar op één plek te noemen. */
+  --balk: 0px;
 }
 
 /* ---------------------------------------------------------------
@@ -142,7 +147,10 @@ a:hover { color: var(--grapefruit); }
   position: relative;
   z-index: 1;
   height: 100%;
-  padding: var(--marge) var(--marge) var(--marge-onder);
+  /* De titelbalk staat bóven de zetspiegel en duwt hem omlaag. Staat er geen
+     balk, dan is --balk nul en verandert er niets. Zo hoef je de bandhoogte
+     maar op één plek te noemen. */
+  padding: calc(var(--marge) + var(--balk)) var(--marge) var(--marge-onder);
 }
 
 /* Een zetspiegel die zijn inhoud onderin verankert of uitspreidt. Dit is het
@@ -598,6 +606,98 @@ a:hover { color: var(--grapefruit); }
   background: currentColor;
   opacity: 0.10;
   pointer-events: none;
+}
+
+/* 8.13a De titelbalk — de tweede van de drie titelmodi.
+
+   Een aflopende band over de volle breedte die de titel draagt. Hij bleedt
+   links, rechts en boven; binnenin lijnt hij uit op de marge, zodat de titel
+   op dezelfde lijn staat als de tekst eronder. De titel hangt aan de ónderkant
+   van de band, want dan is de afstand tot de tekst eronder de maat die het oog
+   leest, en niet de afstand tot de snijrand.
+
+   Gemeten voorbeeld: de casespread Civitates zet de casenaam op 42 pt in wit
+   op een violet paneel over de volle bovenbreedte, met de intro eronder in
+   dezelfde band.
+
+   Gebruik: zet `--balk` op de .pagina, niet op de balk zelf. De zetspiegel
+   leest dezelfde waarde en schuift vanzelf mee. Vergeet je hem, dan is de band
+   nul hoog en zie je dat meteen; `qa_folder.py` meldt het ook. */
+.titelbalk {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: var(--balk);
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: var(--marge) var(--marge) 28px;
+  background: var(--papier);
+  color: var(--inkt);
+  overflow: hidden;
+}
+.titelbalk[data-veld="oranje"]  { background: var(--oranje);      color: var(--navy); }
+.titelbalk[data-veld="verloop"] { background: var(--verloop);     color: var(--navy); }
+.titelbalk[data-veld="navy"]    { background: var(--navy);        color: var(--wit);  }
+.titelbalk[data-veld="mint"]    { background: var(--mint-tint);   color: var(--navy); }
+.titelbalk[data-veld="violet"]  { background: var(--violet);      color: var(--wit);  }
+.titelbalk[data-veld="wit"]     { background: var(--wit);         color: var(--navy); }
+.titelbalk[data-inkt="wit"]     { color: var(--wit);  }
+.titelbalk[data-inkt="navy"]    { color: var(--navy); }
+
+/* 8.13b Het beeldkader — de gereserveerde plek voor een infographic of foto.
+
+   Twee redenen dat dit een merkteken is en geen losse div. Ten eerste houdt
+   het de verhouding vast, zodat het beeld het raster niet uit elkaar duwt als
+   de inhoud later verandert. Ten tweede is een léég kader zichtbaar leeg: met
+   `beeldkader--leeg` staat er een gemarkeerd vlak in plaats van wit, zodat je
+   op de render ziet dat er beeld hoort en het niet stil als witruimte
+   meeleest. `qa_folder.py` telt de lege kaders die je hebt laten staan.
+
+   De verhouding zet je inline — `style="aspect-ratio: 16 / 9"` — want dat is
+   een keuze per beeld en het is precies wat het eigenschappenpaneel van het
+   canvas kan bewerken. Zonder opgaaf staat hij op 3:2.
+
+   Wat erin gaat: inline SVG. Niet een bestand, want dan moet het als base64
+   het canvas in en is het niet meer herkleurbaar; inline erft het de
+   merkkleuren en schaalt het mee. Een foto is wel een <img>. */
+.beeldkader {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  overflow: hidden;
+  background: transparent;
+}
+.beeldkader > svg,
+.beeldkader > img { width: 100%; height: 100%; display: block; }
+.beeldkader > svg { object-fit: contain; }
+.beeldkader > img { object-fit: cover; }
+
+.beeldkader--leeg {
+  background:
+    linear-gradient(to top right, transparent calc(50% - 0.5px),
+      rgba(32, 27, 92, .18) 50%, transparent calc(50% + 0.5px)),
+    linear-gradient(to bottom right, transparent calc(50% - 0.5px),
+      rgba(32, 27, 92, .18) 50%, transparent calc(50% + 0.5px)),
+    var(--navy-tint);
+  box-shadow: inset 0 0 0 1px rgba(32, 27, 92, .22);
+}
+.beeldkader--leeg::after {
+  content: attr(data-wat);
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 10.67px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--navy);
+  opacity: .62;
+  text-align: center;
+  padding: 0 20px;
 }
 
 /* 8.13 Het icoon — zelf getekend, in lijn, op een raster van 24.

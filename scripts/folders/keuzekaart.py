@@ -69,7 +69,7 @@ h1 {{ font-family: var(--display); font-weight: 800; font-size: 25px; color: var
 .g2 {{ display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }}
 .g3 {{ display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5px; }}
 </style></head><body>
-<h1>Vier besluiten v&oacute;&oacute;r de eerste regel tekst</h1>
+<h1>Vijf besluiten v&oacute;&oacute;r de eerste regel tekst</h1>
 <p class="intro">Elk besluit heeft een default. Volg je die, dan hoef je niets te motiveren.
 Wijk je af, dan staat de reden bovenaan de outline. De vlakjes hieronder zijn echt gezet
 in de folderstijl, op ware verhouding maar verkleind &mdash; het gaat om de verdeling, niet om de tekst.</p>
@@ -197,9 +197,11 @@ def bouw_html() -> str:
              "woorden per pagina. Voor een samenvatting die alleen gelezen wordt.", False),
             ("Gebalanceerd",
              f'<div style="height:100%">{lab}{kop}'
-             f'<div class="g3" style="margin:5px 0 5px">'
-             + "".join(f'<div style="height:30px;background:var(--verloop)"></div>' for _ in range(3))
-             + f'</div><div class="g2">{_lorem(2)}{_lorem(2)}</div></div>',
+             f'<div style="margin:5px 0 5px;height:34px;background:var(--navy-tint);'
+             f'box-shadow:inset 0 0 0 1px rgba(32,27,92,.22);display:flex;'
+             f'align-items:center;justify-content:center">'
+             f'<span class="minilabel" style="margin:0;opacity:.7">Infographic</span></div>'
+             f'<div class="g2">{_lorem(2)}{_lorem(2)}</div></div>',
              "Kolommen afgewisseld met kaarten, een tabel of een beeld. 150 tot 250 woorden "
              "per pagina. De gewone folder.", True),
             ("Beeldgedreven",
@@ -208,6 +210,33 @@ def bouw_html() -> str:
              f'<div>{kop}{_lorem(1)}</div></div>',
              "Grote vlakken, aflopende beelden, weinig woorden. 60 tot 120 per pagina. "
              "Werkt alleen met echt beeldmateriaal &mdash; zonder foto's wordt dit leeg.", False),
+        ]),
+
+        _blok("Besluit 5 &mdash; titelmodus",
+              "Hoe opent een pagina? Dit geldt voor de hele folder.", [
+            ("Gewoon titel",
+             f'<div style="height:100%">{lab}{kop}'
+             f'<hr style="border:0;height:3px;width:38px;background:var(--oranje);margin:5px 0 6px">'
+             f'<div class="g2">{_lorem(3)}{_lorem(3)}</div></div>',
+             "De titel staat in de zetspiegel, navy op wit, met een oranje streep eronder. "
+             "Het rustigst, en het register van vrijwel elke inhoudspagina in het rapport.", True),
+            ("Titelbalk",
+             f'<div style="height:100%;margin:-12px -13px;display:flex;flex-direction:column">'
+             f'<div style="background:var(--oranje);color:var(--navy);padding:10px 13px 9px">'
+             f'<p class="minilabel" style="color:var(--navy);opacity:.75">Aanleiding</p>'
+             f'<p class="minikop" style="margin:0">Wie betaalt de preventie?</p></div>'
+             f'<div style="flex:1;padding:8px 13px 12px"><div class="g2">{_lorem(2)}{_lorem(2)}</div></div></div>',
+             "Een aflopende band bovenaan die de titel draagt, in oranje, navy of violet. "
+             "Luider, en het geeft een folder van acht pagina&#39;s een herkenbare kop.", False),
+            ("Titelblad",
+             f'<div style="height:100%;display:flex;gap:6px">'
+             f'<div style="width:56px;height:100%;background:var(--verloop);padding:7px 6px;'
+             f'display:flex;flex-direction:column;justify-content:flex-end">'
+             f'<p class="minilabel" style="color:#fff;opacity:.85">Deel 2</p>'
+             f'<p class="minikop" style="color:#fff;font-size:11px">Drie routes</p></div>'
+             f'<div style="flex:1">{lab}{kop}{_lorem(3)}</div></div>',
+             "Een heel blad per hoofdstuk, met alleen de deeltitel erop. Loont pas vanaf "
+             "twaalf pagina&#39;s: onder dat aantal is er niets terug te vinden.", False),
         ]),
     ]
     return KAART.format(stijl=stijl, blokken="".join(blokken))

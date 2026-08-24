@@ -163,6 +163,9 @@ niet.
 | `.icoon` | een soort die de lezer moet vergelijken | zelf getekend in SVG op een raster van 24. Geen bibliotheek, geen emoji |
 | `.doorloop` | dit loopt door op de volgende pagina | een klein oranje driehoekje aan het eind van de laatste alinea |
 | `.logo` | het merk | inline SVG, erft `currentColor` |
+| `.titelbalk` | de titel op een aflopende band bovenaan | zet `--balk` op de `.pagina`, niet op de balk. `data-veld` kiest de kleur én de inkt |
+| `.beeldkader` | de gereserveerde plek voor een infographic of foto | verhouding inline met `aspect-ratio`; zonder opgaaf 3:2 |
+| `.beeldkader--leeg` | er hoort hier beeld en het is er nog niet | met `data-wat="…"`; `qa_folder.py` telt wat je hebt laten staan |
 
 Structuur en zetting:
 
@@ -183,6 +186,55 @@ Structuur en zetting:
 **`--spreid` is de klasse waarmee je een gat maakt.** `justify-content: space-between` drukt twee
 blokken uit elkaar en laat de lucht op één plek vallen. Op een omslag met drie blokken is dat
 precies goed; op een inhoudspagina is het bijna altijd fout. `qa_folder.py` meet het als `gat`.
+
+---
+
+## 5a. De titelmodus
+
+Drie modi, en het is één keuze voor de hele folder (besluit 5 in het vragenvuur).
+
+| modus | hoe je hem bouwt |
+|---|---|
+| **gewoon titel** | `.titel` in de zetspiegel, met `.streep` eronder |
+| **titelbalk** | `<header class="titelbalk" data-veld="violet">` als broer van de zetspiegel, en `--balk` op de `.pagina` |
+| **titelblad** | een hele pagina, gecomponeerd met `.display`, `.watermerk` en een kleurveld. Geen eigen klasse, want dat zou een paginasjabloon zijn |
+
+De titelbalk bleedt links, rechts en boven, en lijnt binnenin uit op de marge. De titel hangt aan
+de **onderkant** van de band, want dan is de afstand tot de tekst eronder de maat die het oog
+leest. Gemeten voorbeeld: de casespread Civitates zet de casenaam op 42 pt in wit op een violet
+paneel over de volle bovenbreedte.
+
+`--balk` staat op de `.pagina` en niet op de balk zelf. De balk leest hem als zijn hoogte, de
+zetspiegel telt hem bij zijn bovenmarge op, en zo noem je de bandhoogte maar één keer. Vergeet je
+hem, dan is de band nul hoog; `qa_folder.py` meldt dat als `critical`, want de titel staat er dan
+wel en de band niet.
+
+Bruikbare bandhoogtes op `sfnl`: 190 px voor een titel van één regel, 232 voor twee regels met
+een kicker erboven, 300 als er ook een intro in de band staat.
+
+---
+
+## 5b. Het beeldkader
+
+Een infographic of foto staat in een `.beeldkader`. De verhouding zet je inline, want dat is een
+keuze per beeld en het is precies wat het eigenschappenpaneel van het canvas kan bewerken.
+
+Bruikbare maten op `sfnl`, waarbij de breedte de zetspiegel of een kolom volgt:
+
+| plek | breedte | verhoudingen die passen |
+|---|---|---|
+| over de volle zetspiegel | 680 px | `680 / 372` (het gemeten voorbeeld), `16 / 9`, `3 / 2` |
+| één van twee kolommen | 325 px | `4 / 3`, `1 / 1` |
+| één van drie kolommen | 207 px | `1 / 1`, `4 / 5` |
+
+**Teken de SVG op schaal 1:1** — `viewBox` even breed als het kader in px. Een `<svg>` schaalt
+álles mee, ook zijn `font-size`, dus een beeld dat op 680 is getekend en in een kader van 340
+staat, zet zijn 13,33 px-tekst op 6,7 px. Meer hoogte nodig: laat de `viewBox` in de hoogte
+groeien en houd de breedte gelijk.
+
+Een leeg kader krijgt `beeldkader--leeg` en een `data-wat` met wat er hoort te komen. Dan staat er
+een gemarkeerd vlak in plaats van wit, zie je op de render dat er iets ontbreekt, en telt
+`qa_folder.py` wat er nog open staat.
 
 ---
 
