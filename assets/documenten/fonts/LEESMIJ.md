@@ -1,16 +1,16 @@
-# assets/folders/fonts/ — de ingesloten letters
+# assets/documenten/fonts/ — de ingesloten letters
 
 `fonts.css` draagt Montserrat en Lato als `@font-face` met een `data:`-URI. Gegenereerd door
-`scripts/folders/haal_fonts.py`; niet met de hand bijwerken.
+`scripts/documenten/haal_fonts.py`; niet met de hand bijwerken.
 
 **Waarom ingesloten en niet van Google Fonts.** Drie dingen gaan anders mis, en alle drie stil:
 
-1. De render valt terug op Helvetica zodra Chromium geen internet heeft. De eerste proeffolder van
+1. De render valt terug op Helvetica zodra Chromium geen internet heeft. De eerste proefdocument van
    deze skill kwam er zo uit, en dan meet je de verkeerde regelafbreking en beoordeel je de
    verkeerde vorm.
 2. De PNG- en PDF-export van het design-canvas kan een Google Font niet meenemen; geëxporteerde
    tekst valt terug op de systeemletter.
-3. Een folder die alleen mét internet goed staat, is geen bestand maar een verzoek.
+3. Een document dat alleen mét internet goed staat, is geen bestand maar een verzoek.
 
 **Licentie.** Montserrat en Lato staan onder de SIL Open Font License 1.1, dus meeleveren en
 insluiten mag, met de licentietekst erbij. `OFL-Montserrat.txt` en `OFL-Lato.txt` staan hiernaast
@@ -30,6 +30,6 @@ drukt en de tekst is te selecteren; het staat in de SKILL onder Opleveren zodat 
 Opnieuw ophalen:
 
 ```bash
-python scripts/folders/haal_fonts.py
-python scripts/folders/haal_fonts.py --controleer
+python scripts/documenten/haal_fonts.py
+python scripts/documenten/haal_fonts.py --controleer
 ```

@@ -107,7 +107,7 @@ def check() -> dict:
             pass
     ok_chrome, chrome_info = _chromium()
     helper = zoek_helper()
-    stijl = WORTEL / "assets" / "folders" / "stijl.css"
+    stijl = WORTEL / "assets" / "documenten" / "stijl.css"
     return {
         "node": {"ok": bool(node), "pad": node, "versie": node_v},
         "renderer": {"ok": ok_chrome, "info": chrome_info},
@@ -131,7 +131,7 @@ def main() -> int:
     def regel(naam: str, ok: bool, extra: str = "") -> None:
         print(f"  {'ja ' if ok else 'NEE'}  {naam:<16} {extra}")
 
-    print("preflight — sfnl-design-folders\n")
+    print("preflight — sfnl-design-documents\n")
     regel("node", r["node"]["ok"], f"{r['node']['versie']} {r['node']['pad'] or ''}")
     regel("renderer", r["renderer"]["ok"], r["renderer"]["info"])
     regel("design-helper", r["design_helper"]["ok"], r["design_helper"]["pad"] or
@@ -142,7 +142,7 @@ def main() -> int:
 
     print()
     if not r["renderer"]["ok"]:
-        print("  Zonder renderer bouw je blind: geen vormbeoordeling, geen qa_folder.")
+        print("  Zonder renderer bouw je blind: geen vormbeoordeling, geen qa_document.")
         print("  Lees 'Zonder renderer' onderaan de SKILL vóór je begint.")
     if not r["design_helper"]["ok"]:
         print("  Zonder de helper is er geen canvas. Het losse HTML-bestand blijft")

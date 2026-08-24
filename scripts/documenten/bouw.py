@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Van artboards naar een folder: één bron, twee uitvoeren.
+"""Van artboards naar een document: één bron, twee uitvoeren.
 
 De `.dc.html`-artboards zijn de bron. Dit script leidt daar twee dingen uit af
 en houdt ze in de pas:
@@ -9,7 +9,7 @@ en houdt ze in de pas:
    `sfnl-html-to-pdf` een PDF wordt. Dat is wat de gebruiker overhoudt.
 2. **`canvas.json`** — de plaatsing van de artboards op het design-canvas, als
    spreads: pagina 1 alleen rechts, daarna 2-3, 4-5. Dat is hoe een lezer een
-   folder ziet, en het is de enige manier om twee tegenover elkaar liggende
+   document ziet, en het is de enige manier om twee tegenover elkaar liggende
    pagina's samen te beoordelen.
 
 Daarnaast **stempelt** het script `stijl.css` in de `<helmet>` van elk artboard.
@@ -51,8 +51,8 @@ import sys
 from pathlib import Path
 
 HIER = Path(__file__).resolve().parent
-STIJL_STANDAARD = HIER.parent.parent / "assets" / "folders" / "stijl.css"
-FONTS_STANDAARD = HIER.parent.parent / "assets" / "folders" / "fonts" / "fonts.css"
+STIJL_STANDAARD = HIER.parent.parent / "assets" / "documenten" / "stijl.css"
+FONTS_STANDAARD = HIER.parent.parent / "assets" / "documenten" / "fonts" / "fonts.css"
 
 #: De terugval als de ingesloten letters ontbreken. Hij werkt, maar hij werkt
 #: alleen mét internet, en de PNG- en PDF-export van het canvas neemt een
@@ -139,10 +139,10 @@ def lees_stijl(stijl: Path, fonts: Path) -> tuple[str, str, str]:
         link = ""
     else:
         link = GOOGLE_LINK + "\n"
-        print("let op: assets/folders/fonts/fonts.css ontbreekt, dus de letters "
+        print("let op: assets/documenten/fonts/fonts.css ontbreekt, dus de letters "
               "komen van Google Fonts. Dat werkt alleen met internet en de PNG- "
               "en PDF-export van het canvas neemt ze niet mee. Draai "
-              "`python scripts/folders/haal_fonts.py`.", file=sys.stderr)
+              "`python scripts/documenten/haal_fonts.py`.", file=sys.stderr)
     return css, _inspringen(css), link
 
 
@@ -336,7 +336,7 @@ def document(paginas: list[Pagina], stijl_ruw: str, titel: str, link: str = "") 
             f"@page {p.formaat.replace('-', '_')} "
             f"{{ size: {_mm(p.breedte)} {_mm(p.hoogte)}; margin: 0; }}"
         )
-    # Chromium leest maar één @page-blok zonder naam; een folder met twee
+    # Chromium leest maar één @page-blok zonder naam; een document met twee
     # formaten drukt daarom op de maat van de eerste pagina. Dat staat hier
     # expliciet omdat het anders stil misgaat.
     eerste = paginas[0]
@@ -362,7 +362,7 @@ def main() -> int:
                     help="ingesloten @font-face-CSS; ontbreekt hij, dan valt het "
                          "bestand terug op Google Fonts")
     ap.add_argument("--uit", default=None,
-                    help="naam van het losse HTML-bestand (default: folder.html)")
+                    help="naam van het losse HTML-bestand (default: document.html)")
     ap.add_argument("--titel", default=None)
     ap.add_argument("--alleen-stempel", action="store_true")
     ap.add_argument("--nieuw", default=None, metavar="NAAM",
@@ -408,7 +408,7 @@ def main() -> int:
         json.dumps(manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
     titel = a.titel or a.werkmap.resolve().name.replace("-", " ").title()
-    uit = a.werkmap / (a.uit or "folder.html")
+    uit = a.werkmap / (a.uit or "document.html")
     uit.write_text(document(paginas, stijl_ruw, titel, link), encoding="utf-8")
 
     print(json.dumps({

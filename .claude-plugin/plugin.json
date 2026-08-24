@@ -1,7 +1,7 @@
 {
   "name": "sfnl-slides",
-  "version": "1.1.0",
-  "description": "Twee skills die dezelfde regel volgen: de vorm is per stuk een ontwerpbeslissing en geen invuloefening, en de render is de enige vormbeoordeling. `sfnl-slides` bouwt een deck uit het officiële sjabloon — header geërfd uit master en layout, contentzone zelf gecomponeerd, met de dunne laag die de OOXML-valkuilen afhandelt en veertien gerenderde slides als maatstaf. `sfnl-design-folders` bouwt drukwerk in HTML — een uitnodiging, een executive summary, een proposal, een spread — op een vast blad met een snijrand, in het formaat van de SFNL-jaarrapporten, met de letters ingesloten en het canvas van de design-skill erbij om er met de muis aan te schuiven. Beide hebben twee poorten en beide poorten zijn een mens: het vragenvuur en de outline. Geen patroonbibliotheek in geen van beide.",
+  "version": "1.2.0",
+  "description": "Twee skills die dezelfde regel volgen: de vorm is per stuk een ontwerpbeslissing en geen invuloefening, en de render is de enige vormbeoordeling. `sfnl-slides` bouwt een deck uit het officiële sjabloon — header geërfd uit master en layout, contentzone zelf gecomponeerd, met de dunne laag die de OOXML-valkuilen afhandelt en veertien gerenderde slides als maatstaf. `sfnl-design-documents` bouwt drukwerk in HTML — een uitnodiging, een executive summary, een proposal, een spread — op een vast blad met een snijrand, in het formaat van de SFNL-jaarrapporten, met de letters ingesloten en het canvas van de design-skill erbij om er met de muis aan te schuiven. Beide hebben twee poorten en beide poorten zijn een mens: het vragenvuur en de outline. Geen patroonbibliotheek in geen van beide.",
   "author": {
     "name": "Social Finance NL",
     "email": "info@socialfinancenl.nl"
@@ -17,6 +17,7 @@
     "template",
     "design",
     "print",
+    "document",
     "folder",
     "brochure",
     "editorial",

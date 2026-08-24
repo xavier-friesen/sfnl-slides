@@ -1,10 +1,10 @@
-# De vormentaal van een SFNL-folder
+# De vormentaal van een SFNL-document
 
-Wat een folder goed maakt, en waaraan je ziet dat er een model achter zat. De feiten — maten,
-klassen, kleuren — staan in `folders-stramien.md`; dit gaat over de beslissingen.
+Wat een document goed maakt, en waaraan je ziet dat er een model achter zat. De feiten — maten,
+klassen, kleuren — staan in `documenten-stramien.md`; dit gaat over de beslissingen.
 
 De metingen komen uit het SFNL-jaarrapport 2025, de casespread Civitates, en uit de vijf pagina's
-die met deze skill zijn gebouwd en in `assets/folders/maatstaf/` staan.
+die met deze skill zijn gebouwd en in `assets/documenten/maatstaf/` staan.
 
 ---
 
@@ -47,7 +47,7 @@ de inhoudspagina's is geen nadruk meer maar een toon.
 
 ## 3. Witruimte is verdeeld, een gat is opgehoopt
 
-Dit is het defect dat op de eerste gebouwde folder op alle vier de pagina's zat, en het is het
+Dit is het defect dat op het eerste gebouwde document op alle vier de pagina's zat, en het is het
 snelst zichtbare verschil tussen ontworpen en opgemaakt.
 
 Witruimte is wat er tussen elk paar blokken zit, in verhoudingen die je hebt gekozen. Een gat is
@@ -65,7 +65,7 @@ De twee bronnen:
 kortere pagina. Een pagina die op driekwart ophoudt, is een pagina die te weinig te zeggen heeft
 voor deze maat — en dan is A5 het antwoord, of één pagina minder.
 
-`qa_folder.py` meet dit als `gat` (het grootste lege vlak over de volle breedte) en als
+`qa_document.py` meet dit als `gat` (het grootste lege vlak over de volle breedte) en als
 `vulgraad` (hoe ver de inhoud naar beneden komt). Boven de 170 px gat op een pagina met meer dan
 zeventig woorden meldt hij het. Onder de zeventig woorden meldt hij niets, want dan is de leegte
 de compositie.
@@ -153,7 +153,7 @@ daar niets anders dan "dit is van SFNL".
 
 Een tweede accent — mint, violet, periwinkel, emerald — betekent wél iets, en dan schrijf je in
 één woord op wat. Mint is uitkomst, violet is de case, grapefruit is waarschuwing. Dat woord
-staat bovenaan de outline en het geldt voor de hele folder. Twee categorieën in dezelfde reeks
+staat bovenaan de outline en het geldt voor het hele document. Twee categorieën in dezelfde reeks
 krijgen nooit dezelfde kleur, en twee blokken die samen één ding zijn krijgen nooit twee
 verschillende.
 
@@ -163,12 +163,12 @@ vulling.
 
 ---
 
-## 9. Een folder van een tot drie pagina's is een ander document
+## 9. Een document van een tot drie pagina's is een ander soort stuk
 
-Niet een kortere folder maar een ander soort, en dat is de gewone praktijk: een one-pager, een
+Niet een korter document maar een ander soort, en dat is de gewone praktijk: een one-pager, een
 tweeluik, een notitie van drie. Drie dingen vallen weg en dat verandert de opbouw.
 
-**Er is geen buitenste pagina.** In een folder van vier is pagina 4 de plek voor alles wat apart
+**Er is geen buitenste pagina.** In een document van vier is pagina 4 de plek voor alles wat apart
 moet staan, en daarmee is het uit de weg. Op twee pagina's bestaat die plek niet, dus wat daar
 anders had gestaan moet ergens tussendoor: onderaan de laatste pagina onder een haarlijn, of in
 de aflopende band. Dat is een compositiebesluit en geen restje — en wát daar komt te staan volgt
@@ -193,11 +193,11 @@ los je op in de tekst.
 
 Twee vragen die op elkaar lijken en het niet zijn.
 
-**De opening** gaat over de dektitel: hoe komt de naam van het stuk op de folder te staan. Dat
+**De opening** gaat over de dektitel: hoe komt de naam van het stuk op het document te staan. Dat
 gebeurt één keer, op pagina 1, en het is besluit 5 in het vragenvuur.
 
 - **Titelblad.** Pagina 1 is helemaal de titel. Wat elk SFNL-drukwerk doet, en het is de pagina
-  waaraan iemand het stuk later terugkent. Het kost een hele pagina, en op een folder van vier is
+  waaraan iemand het stuk later terugkent. Het kost een hele pagina, en op een document van vier is
   dat een kwart van je ruimte.
 - **Titelbalk.** Geen aparte pagina: een aflopende band bovenaan pagina 1 draagt de dektitel en
   de inhoud begint eronder. Ongeveer een kwart pagina, en de eerste pagina wordt voller.
@@ -208,7 +208,7 @@ De afweging is dus ruimte tegen herkenbaarheid, en die valt anders uit naar buit
 binnen. Een uitnodiging die de deur uit gaat verdient zijn titelblad; een interne notitie van
 vier pagina's die alleen gelezen wordt, houdt liever vier pagina's inhoud over dan drie.
 
-**De hoofdstukopening** gaat over iets anders: hoe begint een hoofdstuk binnen de folder. Die
+**De hoofdstukopening** gaat over iets anders: hoe begint een hoofdstuk binnen het document. Die
 vraag bestaat pas vanaf acht pagina's — onder dat aantal zijn er geen hoofdstukken maar pagina's
 met een titel erboven, en er valt niets terug te vinden. Je beslist hem in de outline en niet in
 het vragenvuur.
@@ -219,7 +219,7 @@ kop leest als een fout. En als er een band is, heeft hij één hoogte — 190 px
 260 op de volgende laat de tekst per pagina op een andere hoogte beginnen, en op de spread is dat
 een scheve horizon.
 
-Wat géén fout is: een folder die met een titelblad begint en daarna per hoofdstuk een band
+Wat géén fout is: een document dat met een titelblad begint en daarna per hoofdstuk een band
 draagt. Dat zijn twee besluiten over twee verschillende dingen, en de lezer leest ze ook zo — de
 eerste zegt "dit is het stuk", de tweede zegt "hier begint een deel".
 
@@ -243,15 +243,15 @@ het hele argument van de pagina, en in tekst kost dat een alinea.
    Meer hoogte nodig: laat de `viewBox` in de hoogte groeien en houd de breedte gelijk. Gemeten:
    de infographic van `maatstaf/03` groeide van 268 naar 372 in de hoogte en de letters bleven.
 2. **De maatladder geldt ook binnen de SVG.** Nagemeten: dezelfde infographic voerde 12, 13 en
-   15 px in naast de zes van de ladder, en `qa_folder.py` telde acht maten op de folder. Gebruik
+   15 px in naast de zes van de ladder, en `qa_document.py` telde acht maten op het document. Gebruik
    dezelfde getallen als op de pagina.
 3. **Een leeg kader leest als witruimte.** Zet `beeldkader--leeg` met een `data-wat` neer zolang
    het beeld er nog niet is, dan staat er een gemarkeerd vlak en zie je op de render dat er iets
-   ontbreekt. Blijft dat staan, dan gaat het mee de PDF in; `qa_folder.py` telt ze.
+   ontbreekt. Blijft dat staan, dan gaat het mee de PDF in; `qa_document.py` telt ze.
 
 **De kleuren coderen, net als elders.** Oranje is de investering, emerald de opbrengst,
 grapefruit de waarschuwing, navy de structuur. Schrijf per kleur in één woord op wat hij
-betekent, en houd dat voor de hele folder aan.
+betekent, en houd dat voor het hele document aan.
 
 **En de herkomst staat in het bijschrift, niet in het beeld.** Elk getal draagt zijn eenheid,
 periode en bron; die staan in de `figcaption` eronder, zodat het beeld schoon blijft en de lezer
@@ -268,8 +268,8 @@ hier omdat ze allemaal, stuk voor stuk, de eerste inval zijn.
    de duidelijkste tell die er is. Als de drie dingen echt vergelijkbaar zijn, is het een tabel.
    Als ze het niet zijn, horen ze niet in drie gelijke dozen.
 2. **Slagschaduwen.** Op papier bestaat geen schaduw. Een kaart krijgt een haarlijn in zijn eigen
-   kleur. `qa_folder.py` meldt elke niet-inset `box-shadow`.
-3. **Afgeronde hoeken overal.** De radius is één waarde voor de hele folder, en nul is een prima
+   kleur. `qa_document.py` meldt elke niet-inset `box-shadow`.
+3. **Afgeronde hoeken overal.** De radius is één waarde voor het hele document, en nul is een prima
    waarde. Vier verschillende radii in één document is geen ontwerp.
 4. **Emoji als icoon.** Die zetten een tweede lettertype op de pagina en lezen als een
    chatbericht. Teken het icoon zelf in SVG op het raster van 24, of laat het weg. Dit blokkeert.
@@ -286,7 +286,7 @@ hier omdat ze allemaal, stuk voor stuk, de eerste inval zijn.
 10. **Een tabel met randen rondom elke cel en een grijze kopbalk.** Dat is de Word-tabellook. Een
     lijn onder de kop, een haarlijn per rij, verder niets.
 11. **Vier of meer letterafmetingen die niemand heeft gekozen**, ontstaan doordat elk element zijn
-    eigen inline `font-size` kreeg. De ladder heeft er zes; `qa_folder.py` telt ze.
+    eigen inline `font-size` kreeg. De ladder heeft er zes; `qa_document.py` telt ze.
 12. **Wit op oranje voor lopende tekst.** Contrast 2,6. Het ziet er op een scherm nog net uit en
     op papier is het weg.
 13. **Een lege onderste helft met een zin in het midden**, omdat de pagina vol moest en er niets
@@ -299,7 +299,7 @@ hier omdat ze allemaal, stuk voor stuk, de eerste inval zijn.
     Dan begint de tekst op elke pagina ergens anders, en op de spread is dat een scheve horizon.
 17. **Een rubriek die de gebruiker nooit heeft genoemd.** Een programma op een uitnodiging, een
     contactblok onderaan, een "belangrijkste inzichten" naast de tekst die dat al zei. Een model
-    weet wat er meestal in zo'n document staat en vult dat in; dan staat er inhoud in de folder
+    weet wat er meestal in zo'n document staat en vult dat in; dan staat er inhoud in het document
     die niemand heeft geschreven. De vorm is van de skill, de inhoud van het materiaal — de
     SKILL heeft er een eigen hoofdstuk voor onder *De grens die deze skill bewaakt*.
 18. **Een verzonnen feit waar een gat zat.** Een datum, een bedrag, een naam die aannemelijk
@@ -317,6 +317,6 @@ Dat is een keuze en hij komt uit dezelfde meting als bij `sfnl-slides`: een rout
 uit een catalogus wordt gekozen, levert documenten op die geen van alle fout zijn en geen van
 alle goed. Wie zo bouwt, kiest niet meer maar vult in.
 
-Wat er wel is als je vastloopt: `assets/folders/voorbeeld/` heeft vijf gebouwde pagina's als kale
-fragmenten, en `assets/folders/maatstaf/` heeft dezelfde vijf gerenderd. Kijk ernaar om te weten
+Wat er wel is als je vastloopt: `assets/documenten/voorbeeld/` heeft vijf gebouwde pagina's als kale
+fragmenten, en `assets/documenten/maatstaf/` heeft dezelfde vijf gerenderd. Kijk ernaar om te weten
 waar de lat ligt, niet om na te tekenen.

@@ -1,24 +1,24 @@
 #!/usr/bin/env python3
-"""De folder renderen en er als spreads naar kijken.
+"""Het document renderen en er als spreads naar kijken.
 
 Dit is de enige vormbeoordeling die deze skill heeft. Er is geen validator die
 een compositie afkeurt voordat iemand hem gezien heeft; er is dit, en er is
-`qa_folder.py` dat meet wat mechanisch te meten valt.
+`qa_document.py` dat meet wat mechanisch te meten valt.
 
 Twee uitvoeren:
 
 * **losse pagina's** — `pagina-01.png` en verder, op ware maat, om een detail
   na te kijken.
-* **het contactblad** — alle spreads onder elkaar, want een folder wordt per
+* **het contactblad** — alle spreads onder elkaar, want een document wordt per
   spread gelezen en niet per pagina. Twee pagina's die los allebei kloppen en
   naast elkaar botsen, zie je alleen zo. De omslag staat alleen, daarna 2-3,
   4-5, zoals het gedrukte ding opengaat.
 
 Gebruik:
 
-    python render.py werkmap/folder.html
-    python render.py werkmap/folder.html --uit png --schaal 2
-    python render.py werkmap/folder.html --alleen-contactblad
+    python render.py werkmap/document.html
+    python render.py werkmap/document.html --uit png --schaal 2
+    python render.py werkmap/document.html --alleen-contactblad
 """
 
 from __future__ import annotations

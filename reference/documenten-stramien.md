@@ -1,7 +1,7 @@
-# Het stramien — de feiten van een SFNL-folder
+# Het stramien — de feiten van een SFNL-document
 
 Alles wat je moet opzoeken en niets wat je moet overwegen. De maatstaf staat in
-`folders-vormentaal.md`.
+`documenten-vormentaal.md`.
 
 Alle maten in px bij 96 dpi, want dat is de eenheid waarin een design-artboard meet en waarin
 `stijl.css` rekent. Eén mm is 3,7795 px. Waar hieronder "gemeten" staat, komt het getal uit het
@@ -22,7 +22,7 @@ een voorkeur.
 | `dl` | 99 × 210 | 374 × 794 | één paneel van een drieluik |
 
 **Er is geen zevende formaat.** Een eigen maat betekent dat `stijl.css`, `bouw.py` en de
-`@page`-regel alle drie bijgewerkt moeten worden, en dat de folder daarna nergens anders meer
+`@page`-regel alle drie bijgewerkt moeten worden, en dat het document daarna nergens anders meer
 past.
 
 **Een drieluik vouwt in een vaste volgorde en daar gaat het meestal mis.** Op de buitenkant is de
@@ -85,7 +85,7 @@ binnen de marge blijven staan, en dat is precies wat aflopend werk niet is.
 ## 3. De maatladder
 
 Vier rollen plus twee. Wie een vijfde maat nodig heeft, heeft een compositieprobleem en geen
-maatprobleem — `qa_folder.py` telt ze en meldt het boven de zes.
+maatprobleem — `qa_document.py` telt ze en meldt het boven de zes.
 
 | rol | klasse | px | pt | letter |
 |---|---|---|---|---|
@@ -99,7 +99,7 @@ maatprobleem — `qa_folder.py` telt ze en meldt het boven de zes.
 **De body staat op 10 pt en dat is lager dan de generieke drukvloer van 12 pt.** Dat is een
 gemeten afwijking en geen slordigheid: het rapport zet zijn brood op 10/13 in kolommen van 55 tot
 86 mm, en dat geeft 32 tot 52 tekens per regel. Op een A5-uitnodiging met één brede kolom ga je
-naar 11 of 12 pt, want daar is de maat anders. De vloer die `qa_folder.py` handhaaft is 8 pt voor
+naar 11 of 12 pt, want daar is de maat anders. De vloer die `qa_document.py` handhaaft is 8 pt voor
 lopende tekst en 6 pt voor een gespatieerd kapitaallabel — dat laatste omdat de casespread zijn
 kleinste labels op 6,8 pt zet en die leesbaar zijn.
 
@@ -109,7 +109,7 @@ repo nooit in; Montserrat ExtraBold is de substituut, en dat is niet gekozen maa
 het SFNL-drukwerk zelf zet zijn display-regels al in Montserrat ExtraBold.
 
 De letters zitten **ingesloten** als `@font-face` met een data-URI, uit
-`assets/folders/fonts/fonts.css`. Dat is 197 kB per artboard en die prijs is bewust: een folder
+`assets/documenten/fonts/fonts.css`. Dat is 197 kB per artboard en die prijs is bewust: een document
 die zijn letters van Google Fonts haalt, valt terug op Helvetica zodra er geen internet is, en de
 PNG- en PDF-export van het canvas neemt een Google Font sowieso niet mee. `haal_fonts.py` maakt
 het bestand opnieuw; Montserrat en Lato staan onder de SIL Open Font License 1.1 en de
@@ -181,7 +181,7 @@ niet.
 | `.logo` | het merk | inline SVG, erft `currentColor` |
 | `.titelbalk` | een titel op een aflopende band bovenaan — de dektitel op pagina 1, of een hoofdstuknaam | zet `--balk` op de `.pagina`, niet op de balk. `data-veld` kiest de kleur én de inkt |
 | `.beeldkader` | de gereserveerde plek voor een infographic of foto | verhouding inline met `aspect-ratio`; zonder opgaaf 3:2 |
-| `.beeldkader--leeg` | er hoort hier beeld en het is er nog niet | met `data-wat="…"`; `qa_folder.py` telt wat je hebt laten staan |
+| `.beeldkader--leeg` | er hoort hier beeld en het is er nog niet | met `data-wat="…"`; `qa_document.py` telt wat je hebt laten staan |
 
 Structuur en zetting:
 
@@ -201,7 +201,7 @@ Structuur en zetting:
 
 **`--spreid` is de klasse waarmee je een gat maakt.** `justify-content: space-between` drukt twee
 blokken uit elkaar en laat de lucht op één plek vallen. Op een omslag met drie blokken is dat
-precies goed; op een inhoudspagina is het bijna altijd fout. `qa_folder.py` meet het als `gat`.
+precies goed; op een inhoudspagina is het bijna altijd fout. `qa_document.py` meet het als `gat`.
 
 ---
 
@@ -209,7 +209,7 @@ precies goed; op een inhoudspagina is het bijna altijd fout. `qa_folder.py` meet
 
 Twee verschillende dingen, en ze worden op verschillende momenten besloten.
 
-**De opening** is hoe de dektitel op de folder komt. Eenmalig, pagina 1, besluit 5 in het
+**De opening** is hoe de dektitel op het document komt. Eenmalig, pagina 1, besluit 5 in het
 vragenvuur.
 
 | opening | hoe je hem bouwt |
@@ -223,7 +223,7 @@ pagina's. Je beantwoordt hem in de outline (stap 2 van de SKILL). Drie manieren:
 plus `.titel` met een `.watermerk` half erachter, een `.titelbalk` op die pagina, of een heel
 blad met alleen de hoofdstuknaam. Eén manier voor álle hoofdstukken, en één bandhoogte.
 
-Een folder kan dus met een titelblad beginnen en daarna per hoofdstuk een band dragen. Dat is
+Een document kan dus met een titelblad beginnen en daarna per hoofdstuk een band dragen. Dat is
 geen mengeling maar twee besluiten over twee verschillende dingen.
 
 ### De titelbalk
@@ -233,13 +233,13 @@ De band heeft **drie gebruiken** en de consistentieregel geldt binnen elk ervan 
 1. **De dektitel op pagina 1**, als je bij besluit 5 voor de titelbalk hebt gekozen. Eén keer.
 2. **Een hoofdstukopening**, vanaf acht pagina's. Dan krijgen álle hoofdstukken er een, in
    dezelfde kleur en dezelfde hoogte.
-3. **Eén pagina die apart staat** — een interview, een uitspraak, het beeld waar de hele folder
+3. **Eén pagina die apart staat** — een interview, een uitspraak, het beeld waar het hele document
    om draait. Dat is geen inconsistentie maar nadruk, en het staat zo in het drukwerk: het
    rapport 2025 zet zijn interviewpaneel op precies één pagina, en de oranje band en het
    mintveld ook. `maatstaf/03` doet hetzelfde met een violette band op de pagina met de
    infographic.
 
-Wat je niet doet is twee van de drie door elkaar op één folder. Draagt hoofdstuk 2 een band en
+Wat je niet doet is twee van de drie door elkaar op één document. Draagt hoofdstuk 2 een band en
 staat er ook een band op de pagina die apart hoort te staan, dan valt de nadruk weg.
 
 De band bleedt links, rechts en boven, en lijnt binnenin uit op de marge. De titel hangt aan de
@@ -250,7 +250,7 @@ over de volle bovenbreedte.
 `--balk` staat op de `.pagina` en niet op de balk zelf. De balk leest hem als zijn hoogte, de
 zetspiegel telt hem bij zijn bovenmarge op, en zo noem je de bandhoogte maar één keer. Vergeet je
 hem, dan zakt de band terug op zijn padding — niet naar nul, want `box-sizing: border-box` — en
-wordt de titel erin afgesneden. `qa_folder.py` leest daarom de variabele zelf en niet de hoogte,
+wordt de titel erin afgesneden. `qa_document.py` leest daarom de variabele zelf en niet de hoogte,
 en meldt het als `critical`.
 
 Bruikbare bandhoogtes op `sfnl`: 190 px voor een titel van één regel, 232 voor twee regels met
@@ -278,7 +278,7 @@ groeien en houd de breedte gelijk.
 
 Een leeg kader krijgt `beeldkader--leeg` en een `data-wat` met wat er hoort te komen. Dan staat er
 een gemarkeerd vlak in plaats van wit, zie je op de render dat er iets ontbreekt, en telt
-`qa_folder.py` wat er nog open staat.
+`qa_document.py` wat er nog open staat.
 
 ---
 
@@ -310,7 +310,7 @@ gebouwde omslag zonder dat de markup er verkeerd uitzag.
 
 ## 7. De scripts
 
-`$S` is `${CLAUDE_PLUGIN_ROOT}/scripts/folders`.
+`$S` is `${CLAUDE_PLUGIN_ROOT}/scripts/documenten`.
 
 | script | wat |
 |---|---|
@@ -318,7 +318,7 @@ gebouwde omslag zonder dat de markup er verkeerd uitzag.
 | `bouw.py <werkmap>` | stempelt de stijl in elk artboard, schrijft `canvas.json` als spreads en het losse HTML-bestand |
 | `bouw.py <werkmap> --nieuw Naam` | een leeg artboard met het skelet erin |
 | `render.py <html>` | losse pagina's plus het contactblad met de spreads |
-| `qa_folder.py <html>` | de negen metingen |
+| `qa_document.py <html>` | de negen metingen |
 | `haal_fonts.py` | de letters opnieuw insluiten. Onderhoud |
 | `keuzekaart.py` | de keuzekaart voor het vragenvuur opnieuw renderen. Onderhoud |
 
@@ -334,6 +334,6 @@ Wat `bouw.py` uit een pagina leest, van het `.pagina`-element:
 | `data-folio` | het paginanummer, of `nee` |
 
 Het losse HTML-bestand krijgt één `@page`-regel, op de maat van de eerste pagina. **Chromium leest
-maar één naamloze `@page`-regel**, dus een folder met twee bladmaten drukt op de maat van pagina
+maar één naamloze `@page`-regel**, dus een document met twee bladmaten drukt op de maat van pagina
 één. `bouw.py` zet er een waarschuwing bij in de CSS; wil je beide maten echt, exporteer dan per
 maat een apart bestand.

@@ -25,8 +25,8 @@ De rest is een aanwijzing: kijk ernaar en beslis. Voor `vulgraad`, `maat` en
 
 Gebruik:
 
-    python qa_folder.py werkmap/folder.html
-    python qa_folder.py werkmap/folder.html --json
+    python qa_document.py werkmap/document.html
+    python qa_document.py werkmap/document.html --json
 """
 
 from __future__ import annotations
@@ -221,9 +221,9 @@ METING = r"""() => {
     // De vulgraad ziet alleen of de inhoud tot onderaan komt, en dat is niet
     // genoeg: een pagina met een blok bovenaan, een blok onderaan en niets
     // ertussen meet 0,99 en heeft een gat van een derde blad. Gemeten op de
-    // eerste proeffolder — pagina 3 haalde vulgraad 0,93 met een wit vlak van
+    // eerste proefdocument — pagina 3 haalde vulgraad 0,93 met een wit vlak van
     // 250 px in het midden, en dat was het duidelijkst zichtbare defect van de
-    // hele folder. Dus: leg de zetspiegel als een bezetting van 4 px per stap
+    // hele document. Dus: leg de zetspiegel als een bezetting van 4 px per stap
     // en zoek de langste lege reeks.
     const top = pr.top + marge.boven, bod = pr.bottom - marge.onder;
     const stap = 4, n = Math.max(1, Math.ceil((bod - top) / stap));

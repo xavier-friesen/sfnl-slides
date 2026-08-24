@@ -1,9 +1,9 @@
-# assets/folders/voorbeeld/ — vier pagina's zoals je ze schrijft
+# assets/documenten/voorbeeld/ — vier pagina's zoals je ze schrijft
 
 Dit is de vorm waarin je zelf een pagina schrijft: alleen het `<div class="pagina">`-blok, zonder
 `<head>`, zonder `<style>` en zonder de 200 kB ingesloten letters. `bouw.py` stempelt dat erin.
 
-De gerenderde versie staat in `assets/folders/maatstaf/`, met de fouten die eruit zijn gehaald.
+De gerenderde versie staat in `assets/documenten/maatstaf/`, met de fouten die eruit zijn gehaald.
 
 | bestand | pagina |
 |---|---|

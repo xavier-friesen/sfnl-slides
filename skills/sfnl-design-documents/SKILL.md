@@ -1,11 +1,11 @@
 ---
-name: sfnl-design-folders
+name: sfnl-design-documents
 description: >
-  Ontwerp en bouw een drukklare folder in de huisstijl van Social Finance NL — een uitnodiging,
+  Ontwerp en bouw een drukklaar document in de huisstijl van Social Finance NL — een uitnodiging,
   een samenvatting, een executive summary, een proposal, een programmaboekje of een
   rapportspread — als bewerkbaar HTML, met het canvas van de `design`-skill erbij om er met de
   muis aan te schuiven. Gebruik deze skill wanneer de gebruiker iets gedrukts of paginagewijs
-  vraagt dat geen presentatie is. Trigger op "folder", "uitnodiging", "executive summary",
+  vraagt dat geen presentatie is. Trigger op "document", "folder", "uitnodiging", "executive summary",
   "samenvatting", "proposal", "one-pager", "brochure", "drieluik", "leaflet", "programmaboekje",
   "spread", "magazine", "drukklaar", "printklaar", of elk verzoek dat SFNL of Social Finance NL
   combineert met een document dat pagina's heeft en er goed uit moet zien. Werkt alleen in
@@ -14,44 +14,44 @@ description: >
   Affinity-rapportspread naar `sfnl-rapport`.
 ---
 
-# SFNL-design-folders
+# SFNL-design-documents
 
 Drukwerk maken dat er gedrukt uitziet, in HTML, en het bewerkbaar opleveren.
 
 De pagina is een vast blad met een snijrand, geen scherm dat meegroeit. Wat er niet op past,
 past niet, en dat hoort te blijken. De vorm van elke pagina componeer je zelf uit een
 primitievenlaag; er is geen paginabibliotheek om uit te kiezen. De render is je enige
-vormbeoordeling, en `qa_folder.py` meet ernaast wat stil misgaat.
+vormbeoordeling, en `qa_document.py` meet ernaast wat stil misgaat.
 
 ## Voordat je begint
 
-Lees deze drie, in deze volgorde, en één keer voor de hele folder en niet per pagina.
+Lees deze drie, in deze volgorde, en één keer voor het hele document en niet per pagina.
 **Alle paden in dit document staan vanaf de plugin-map**, dus `${CLAUDE_PLUGIN_ROOT}` — niet
-vanaf de map waarin dit bestand staat en niet vanaf het project. `reference/folders-stramien.md`
-is dus `${CLAUDE_PLUGIN_ROOT}/reference/folders-stramien.md`.
+vanaf de map waarin dit bestand staat en niet vanaf het project. `reference/documenten-stramien.md`
+is dus `${CLAUDE_PLUGIN_ROOT}/reference/documenten-stramien.md`.
 
-1. `reference/folders-vormentaal.md` — de maatstaf. Wat een SFNL-folder goed maakt, en de
+1. `reference/documenten-vormentaal.md` — de maatstaf. Wat een SFNL-document goed maakt, en de
    weigerlijst: achttien dingen die maken dat een document er door een model gemaakt uitziet.
-2. `reference/folders-stramien.md` — de feiten. De bladmaten, het raster, de maatladder, de
+2. `reference/documenten-stramien.md` — de feiten. De bladmaten, het raster, de maatladder, de
    merktekens met hun klassenaam, en het logo als markup om te kopiëren.
-3. `assets/folders/maatstaf/00-contactblad.png` — vijf gebouwde pagina's als contactblad. Kijk
+3. `assets/documenten/maatstaf/00-contactblad.png` — vijf gebouwde pagina's als contactblad. Kijk
    ernaar. Niet om na te tekenen maar om te weten waar de lat ligt. De bron van diezelfde vijf
-   staat in `assets/folders/voorbeeld/`, als kale fragmenten, dus je kunt zien hoe een pagina
+   staat in `assets/documenten/voorbeeld/`, als kale fragmenten, dus je kunt zien hoe een pagina
    geschreven wordt — inclusief een titelbalk en een infographic op schaal 1:1.
-   Voor de korte route staat er een tweede set: `assets/folders/voorbeeld-a5/` is een tweeluik
+   Voor de korte route staat er een tweede set: `assets/documenten/voorbeeld-a5/` is een tweeluik
    op A5 met de titelbalk als opening, gerenderd in `maatstaf/06-tweeluik-a5.png`. Kijk daar naar
    zodra de omvang onder de vier pagina's uitkomt, want dat is een ander document en geen
-   kortere folder.
+   kortere document.
 
 Draai daarna:
 
 ```bash
-python "${CLAUDE_PLUGIN_ROOT}/scripts/folders/preflight.py"
+python "${CLAUDE_PLUGIN_ROOT}/scripts/documenten/preflight.py"
 ```
 
 Dat zegt of er een browser is (zonder renderer bouw je blind — lees dan **Zonder renderer**
 onderaan), of `node` en de helper van de `design`-skill er zijn (zonder die twee is er geen
-canvas, maar wel gewoon een folder), en of de ingesloten letters er staan.
+canvas, maar wel gewoon een document), en of de ingesloten letters er staan.
 
 `reference/voice.md` gaat over de taal. Lees dat wanneer je de outline schrijft; de regels over
 titels, getallen en herkomst gelden hier net zo goed als op een slide.
@@ -67,7 +67,7 @@ wat er gewoonlijk in zo'n document staat.
 
 Dat is geen beleefdheidsregel maar de plek waar dit soort skills het vaakst misgaat. Een model
 dat "uitnodiging" leest, weet dat daar meestal een programma en een aanmeldregel op staan, en
-vult die in. Dan staat er een agenda in de folder die de gebruiker nooit heeft genoemd, hij ziet
+vult die in. Dan staat er een agenda in het document dat de gebruiker nooit heeft genoemd, hij ziet
 hem pas op de render, en de helft van zijn pagina is bezet door iets wat hij niet heeft
 gevraagd.
 
@@ -79,7 +79,7 @@ Wat je in plaats daarvan doet:
   ja. Eén zin: "op de laatste pagina is ruimte; zal ik daar de contactgegevens zetten, of heb je
   daar iets anders voor?"
 - **Weet je een feit niet** — een datum, een bedrag, een naam — dan zet je er een zichtbare
-  markering neer (`[DATUM]`) en niet iets aannemelijks. `qa_folder.py` kan die niet vinden, de
+  markering neer (`[DATUM]`) en niet iets aannemelijks. `qa_document.py` kan die niet vinden, de
   gebruiker wel.
 - **Alles wat toch een aanname is**, komt onderaan de outline te staan als aanname, en gaat
   nooit als vaststelling de pagina op.
@@ -93,37 +93,37 @@ Daarna is het vragenvuur van stap 1 het eerste wat je doet, en dat is een poort.
 
 Tien vragen in twee blokken: vijf over de opdracht, vijf over de vorm. **Leg ze in één keer voor
 en wacht op de antwoorden.** Er wordt niets geschreven voordat ze er zijn — geen outline, geen
-pagina. Wie de tekst eerst schrijft, kiest de vorm al: een folder van vier pagina's en een
-folder van twaalf zijn niet dezelfde tekst met meer wit ertussen.
+pagina. Wie de tekst eerst schrijft, kiest de vorm al: een document van vier pagina's en een
+document van twaalf zijn niet dezelfde tekst met meer wit ertussen.
 
 **Stuur de keuzekaart mee vóór je de vormvragen stelt.** Dat is
-`assets/folders/keuzekaarten/vragenvuur.png`: per besluit de opties naast elkaar, echt gezet in
-de folderstijl, met de meting eronder. Stuur het bestand, lees het niet — dan kost het geen
+`assets/documenten/keuzekaarten/vragenvuur.png`: per besluit de opties naast elkaar, echt gezet in
+het documentstijl, met de meting eronder. Stuur het bestand, lees het niet — dan kost het geen
 tokens en ziet de gebruiker waar hij tussen kiest in plaats van vier woorden.
 
 **Stel de vijf vormvragen daarna met `AskUserQuestion`**, met de optienamen van de kaart zodat
 het beeld en de vraag hetzelfde heten. Dat gaat in twee aanroepen achter elkaar, want het widget
 neemt er vier per keer: eerst de drie die het hele document bepalen (formaat, omvang,
-kleurregister), dan de twee over wat een pagina draagt en hoe de folder opent (beeldregister,
+kleurregister), dan de twee over wat een pagina draagt en hoe het document opent (beeldregister,
 opening). De poort blijft één poort — er wordt niets geschreven voordat beide binnen zijn.
 De vijf opdrachtvragen stel je in gewoon proza in hetzelfde bericht als de kaart.
 
 Verandert er een optie, dan bouw je de kaart opnieuw met
-`python "${CLAUDE_PLUGIN_ROOT}/scripts/folders/keuzekaart.py"` — onderhoud, geen bouwstap.
+`python "${CLAUDE_PLUGIN_ROOT}/scripts/documenten/keuzekaart.py"` — onderhoud, geen bouwstap.
 
 Weet je een antwoord uit de opdracht, vul het dan in als voorstel met de bron erbij. Het staat
 nog steeds in het blok en de gebruiker bevestigt of wijzigt het. Overslaan is geen antwoord.
 
 **"Kies jij maar" is een geldig antwoord.** Laat de gebruiker een besluit aan de skill, dan neemt
-de skill het folderbreed, één keer, met de reden erbij bovenaan de outline. Wat er daarna niet
+de skill het documentbreed, één keer, met de reden erbij bovenaan de outline. Wat er daarna niet
 gebeurt is het besluit per pagina opnieuw nemen.
 
 ### De vijf over de opdracht
 
 - **Wat heb je al?** Een tekst, een notitie, een transcript, een reeks losse punten, of alleen
   een idee. Vraag hiernaar vóór alle andere vragen en vraag door tot je het hebt, want dit is
-  het materiaal waaruit de folder bestaat. Is er nog niets, zeg dan wat je nodig hebt en bouw
-  niet vast: een folder schrijven ís de opdracht dan, en dat is een andere opdracht — daar is
+  het materiaal waaruit het document bestaat. Is er nog niets, zeg dan wat je nodig hebt en bouw
+  niet vast: een document schrijven ís de opdracht dan, en dat is een andere opdracht — daar is
   `sfnl-writer` voor, en die levert de tekst waar deze skill de vorm omheen zet.
 - **Wie krijgt dit in handen, en wat moet die erna doen?** Een uitnodiging moet iemand naar een
   zaal krijgen; een executive summary moet iemand een besluit laten nemen; een proposal moet een
@@ -133,7 +133,7 @@ gebeurt is het besluit per pagina opnieuw nemen.
   niemand omslaat.
 - **Is er een bestaand stuk dat als voorbeeld dient?** Vraag dit actief. Krijg je er een, dan is
   dát de maatstaf: render het, kijk ernaar, en volg de vormentaal ervan in plaats van
-  `assets/folders/maatstaf/`.
+  `assets/documenten/maatstaf/`.
 - **Is er beeld?** Foto's, logo's van partners, een grafiek. Dit is de vraag die het vaakst te
   laat komt. Zonder beeld is besluit 4 hieronder half genomen — dan wordt het tekstgedreven of
   gebalanceerd, en niet beeldgedreven, hoe graag iemand dat ook wil.
@@ -152,19 +152,19 @@ titelblad kost er een.
    reden dat ze als magazine lezen in plaats van als document. A4 kies je als het door een
    kantoorprinter moet of als bijlage bij een aanbesteding gaat. A5 voor een uitnodiging of
    programmaboekje — dan is het één kolom en gaat de body omhoog. De maten in px staan in
-   `folders-stramien.md`; een zesde formaat bestaat niet.
+   `documenten-stramien.md`; een zesde formaat bestaat niet.
 2. **De omvang.** Eén tot drie pagina's, vier, acht tot zestien, of *laat het volgen uit de
    inhoud*. Default is **vier pagina's**.
 
    | omvang | wat het is | wat eraan hangt |
    |---|---|---|
    | **een tot drie** | één blad, of één blad dubbelzijdig | geen hoofdstukken, geen kopregels. Een folio alleen als er meer dan één pagina is |
-   | **vier** — default | de gewone folder | spreads gaan tellen: pagina 2 en 3 liggen tegenover elkaar |
+   | **vier** — default | het gewone document | spreads gaan tellen: pagina 2 en 3 liggen tegenover elkaar |
    | **acht tot zestien** | genoeg pagina's om in delen uiteen te vallen | kopregels en folio's op elke pagina, en hoofdstukopeningen bestaan (stap 2) |
    | **volgt uit de inhoud** | je weet nog niet hoeveel er te zeggen valt | de skill stelt een aantal voor in de outline, met de reden erbij |
 
    **Twee en drie pagina's zijn geen randgeval maar de gewone praktijk**, en het zijn andere
-   documenten dan een folder van vier. Er is geen buitenste pagina om iets op te zetten dat
+   stukken dan een document van vier. Er is geen buitenste pagina om iets op te zetten dat
    apart moet staan, dus wat daar anders had gestaan moet ergens tussendoor. En er is geen
    ruimte voor een aanloop: de eerste zin is meteen de boodschap.
 
@@ -186,12 +186,12 @@ titelblad kost er een.
    dominant. Default is **wit met oranje accent**: navy letter op wit, oranje voor de labels en
    de streep. Dat is het register van vrijwel elke inhoudspagina in het rapport. Kies je
    kleurvlakken als ritme, dan spreek je hier ook het tweede accent af — mint, violet of
-   periwinkel — en dat is één keuze voor de hele folder en niet per pagina.
+   periwinkel — en dat is één keuze voor het hele document en niet per pagina.
 4. **Tekst tegenover beeld.** Tekstgedreven (300 tot 400 woorden per pagina), gebalanceerd (150
    tot 250) of beeldgedreven (60 tot 120). Default is **gebalanceerd**. De getallen zijn een
    indicatie en werken twee kanten op: past het verhaal in minder, dan is het minder, en vraagt
    het meer, dan is het meer. Een bewering schrappen om onder een richtwaarde te blijven is de
-   verkeerde reductie. `qa_folder.py` telt de woorden daarom zonder oordeel en er staat geen
+   verkeerde reductie. `qa_document.py` telt de woorden daarom zonder oordeel en er staat geen
    drempel op.
 
    **Beeldgedreven kies je alleen als er beeld is.** Zonder foto's wordt dat register grote lege
@@ -199,13 +199,13 @@ titelblad kost er een.
    ontworpen. Is er geen beeld en wil de gebruiker het toch, zeg dan wat het kost en stel
    gebalanceerd voor met kleurvlakken als drager.
 
-5. **De opening: titelblad, titelbalk of gewoon titel.** Hoe komt de dektitel op de folder te
+5. **De opening: titelblad, titelbalk of gewoon titel.** Hoe komt de dektitel op het document te
    staan. Dit is een eenmalig besluit over de eerste pagina en geen modus die op elke pagina
    terugkomt.
 
    | opening | wat het is | wat het kost |
    |---|---|---|
-   | **titelblad** — default | pagina 1 draagt alleen de titel en wat er verder bij de identificatie hoort, op een kleurveld of op wit | een hele pagina: een kwart van een folder van vier, de helft van een tweeluik |
+   | **titelblad** — default | pagina 1 draagt alleen de titel en wat er verder bij de identificatie hoort, op een kleurveld of op wit | een hele pagina: een kwart van een document van vier, de helft van een tweeluik |
    | **titelbalk** | geen aparte pagina: pagina 1 draagt bovenaan een aflopende band met de dektitel, en de inhoud begint eronder | ongeveer een kwart pagina, en de eerste pagina wordt voller |
    | **gewoon titel** | de dektitel staat gewoon in de zetspiegel van pagina 1, met een streep eronder, en de tekst loopt door | vrijwel niets |
 
@@ -222,9 +222,9 @@ titelblad kost er een.
    Kies je de titelbalk, dan spreek je hier ook de kleur af — oranje, navy of violet. Op oranje is
    de inkt navy; op navy en violet is hij wit.
 
-   **Hoofdstukopeningen zijn iets anders en horen hier niet.** Heeft de folder hoofdstukken, dan
+   **Hoofdstukopeningen zijn iets anders en horen hier niet.** Heeft het document hoofdstukken, dan
    is de vraag hoe die openen een eigen vraag, en je beantwoordt hem in de outline en niet hier —
-   zie *Hoofdstukken* in stap 2. Een folder kan dus prima met een titelblad beginnen en daarna
+   zie *Hoofdstukken* in stap 2. Een document kan dus prima met een titelblad beginnen en daarna
    per hoofdstuk een band dragen; dat is geen mengeling maar twee besluiten over twee
    verschillende dingen.
 
@@ -290,7 +290,7 @@ goedkoper om dat hier te doen dan op de render.
 plattegrond, de drager en het beeldbesluit horen er wél in — dat is de reden waarom de tekst deze
 lengte heeft, en het is het enige stuk vorm dat vóór het bouwen te beoordelen is.
 
-**Hoofdstukken, als de folder ze heeft.** Dit is een andere vraag dan besluit 5: dat ging over de
+**Hoofdstukken, als het document ze heeft.** Dit is een andere vraag dan besluit 5: dat ging over de
 dektitel en deze gaat over hoe een hoofdstuk begint. Hij bestaat pas vanaf acht pagina's — onder
 dat aantal is er niets terug te vinden en heb je gewoon pagina's met een titel erboven.
 
@@ -319,9 +319,9 @@ verandert, betekent pagina's opnieuw componeren.
 
 ## Stap 3 — Bouwen
 
-`$S` hieronder is `${CLAUDE_PLUGIN_ROOT}/scripts/folders`.
+`$S` hieronder is `${CLAUDE_PLUGIN_ROOT}/scripts/documenten`.
 
-**Zet de bouw meteen in één herbouwbare map.** Eén werkmap per folder, met één `.dc.html` per
+**Zet de bouw meteen in één herbouwbare map.** Eén werkmap per document, met één `.dc.html` per
 pagina en verder niets van jou — `canvas.json`, het losse HTML-bestand en de PNG's schrijft
 `bouw.py` en die gooi je gerust weg.
 
@@ -368,7 +368,7 @@ Een leeg skelet krijg je met `python $S/bouw.py <werkmap> --nieuw Programma --vo
 **Nog een keer, want het is de kern: er is geen paginabibliotheek.** `stijl.css` geeft je het
 kader, het raster, de maatladder, de kleurregels en veertien merktekens die elk één ding tekenen.
 Er zit geen `.omslag` in, geen `.hoofdstukopener` en geen `.kaartenrij`. Wat je ermee bouwt is
-elke pagina opnieuw jouw beslissing. `folders-stramien.md` heeft de volledige lijst met per stuk
+elke pagina opnieuw jouw beslissing. `documenten-stramien.md` heeft de volledige lijst met per stuk
 wat het codeert.
 
 **Klassen voor het systeem, inline styles voor het geval.** Het canvas laat de gebruiker straks
@@ -377,14 +377,14 @@ kader, het raster en de maatrollen doe je met klassen (die horen niet per elemen
 en een specifieke breedte, kleur of afstand zet je inline. Tekst zet je letterlijk in de markup en
 nooit als variabele, anders kan de gebruiker hem niet ter plekke overtypen.
 
-### 2. Een infographic in de folder
+### 2. Een infographic in het document
 
 Een beeld dat iets uitrekent — een geldstroom, een tijdlijn, een verdeling, een vergelijking —
 staat in een **`.beeldkader`**, en dat is een merkteken en geen losse div. Het houdt de verhouding
 vast zodat het raster niet verschuift als de inhoud verandert, en een léég kader is zichtbaar
 leeg: met `beeldkader--leeg` en een `data-wat` staat er een gemarkeerd vlak in plaats van wit.
 Zo lees je op de render dat er beeld hoort, in plaats van dat het als witruimte meegaat.
-`qa_folder.py` telt de lege kaders die je hebt laten staan.
+`qa_document.py` telt de lege kaders die je hebt laten staan.
 
 ```html
 <figure style="margin: 0;">
@@ -444,11 +444,11 @@ Dit is niet overslaanbaar. Het is de enige plek waar de vorm beoordeeld wordt.
 
 ```bash
 python $S/render.py <werkmap>/uitnodiging-werksessie.html
-python $S/qa_folder.py <werkmap>/uitnodiging-werksessie.html
+python $S/qa_document.py <werkmap>/uitnodiging-werksessie.html
 ```
 
 **Kijk eerst zelf naar `png/contactblad.png`.** Dat zet de pagina's als spreads onder elkaar,
-want een folder wordt per spread gelezen. Twee pagina's die los allebei kloppen en naast elkaar
+want een document wordt per spread gelezen. Twee pagina's die los allebei kloppen en naast elkaar
 botsen, zie je alleen zo. Open een losse pagina op ware maat alleen als daar iets verkeerd
 uitziet.
 
@@ -457,7 +457,7 @@ Wat je in de eerste ronde zelf gaat zien, en wat geen regel voor je oplost:
 - **Een gat in het midden van de pagina.** Twee blokken die naar boven en naar beneden zijn
   gedrukt met de lucht ertussen. Dat komt vrijwel altijd van `justify-content: space-between` of
   van een `margin-top: auto` te veel. De ruimte hoort verdeeld tussen de blokken, niet op één
-  plek gestapeld. `qa_folder.py` meet dit als `gat` en het was op de eerste gebouwde folder het
+  plek gestapeld. `qa_document.py` meet dit als `gat` en het was op het eerste gebouwde document het
   duidelijkst zichtbare defect van alle vier de pagina's.
 - **Drie kaarten van drie verschillende hoogtes.** Zet `kolommen--gelijk` op de rij.
 - **Een uitgevulde kolom met gaten van vier spaties erin.** De kolom is te smal voor de maat, of
@@ -471,7 +471,7 @@ Repareer per ronde alles wat **kritiek** of **belangrijk** is, in één keer, en
 Doorgaan tot die twee leeg zijn. Wat **klein** is verzamel je in één lijst die bij de oplevering
 meegaat.
 
-`qa_folder.py` is geen derde poort. Het meet negen dingen die stil misgaan; drie ervan blokkeren
+`qa_document.py` is geen derde poort. Het meet negen dingen die stil misgaan; drie ervan blokkeren
 en dat zijn precies de drie waar geen interpretatie aan te pas komt (**klip**, **overloop**,
 **te klein**). De rest is een aanwijzing: kijk ernaar en beslis. Voor `vulgraad`, `gat`, `maten`
 en `palet` geldt dat de render zwaarder weegt dan het getal — een kleurpagina met lucht boven een
@@ -522,18 +522,18 @@ Drie dingen gaan mee, en de eerste is de belangrijkste:
 Zeg erbij welke pagina's je in de loop hebt aangepast en wat er open staat. Een cijfer dat je niet
 hebt kunnen verifiëren noem je expliciet.
 
-**Gaat de folder echt naar een drukker, noem dan deze twee.** Er zit nog geen afloop van 3 mm en
+**Gaat het document echt naar een drukker, noem dan deze twee.** Er zit nog geen afloop van 3 mm en
 geen snijtekens in; dat is een aparte stap en de drukker vraagt erom. En Montserrat komt in de
 PDF als Type3 terecht, omdat Google alleen nog een variabel bestand serveert en Chromium dat zo
 insluit — de PDF drukt en de tekst is te selecteren, maar een drukkerij die om een lettertype
 vraagt, krijgt geen normale naam te zien. Lato komt wél gewoon als Lato-Light mee. Nagemeten op
-een gebouwde folder van vier pagina's: bladmaat 595 × 780 pt, wat exact 210 × 275 mm is en dus
+een gebouwhet document van vier pagina's: bladmaat 595 × 780 pt, wat exact 210 × 275 mm is en dus
 gelijk aan het echte jaarrapport.
 
 ## Wat blokkeert
 
 Zeven dingen. De eerste twee zijn van de soort "het bestand is stuk", de rest is een `critical`
-uit `qa_folder.py`. Verder blokkeert er niets op vormgeving; dat oordeel komt van de
+uit `qa_document.py`. Verder blokkeert er niets op vormgeving; dat oordeel komt van de
 render.
 
 1. `bouw.py` vindt geen `.pagina` in een artboard, of een onbekend `data-formaat`.
@@ -551,14 +551,14 @@ render.
 Meldt `preflight.py` geen browser, dan bouw je blind. Dat verandert twee dingen.
 
 Bouw conservatiever: minder elementen per pagina, ruimere afstand tussen blokken, en kort de
-tekst in tot ruim binnen zijn vak in plaats van precies. `qa_folder.py` werkt dan ook niet — dat
+tekst in tot ruim binnen zijn vak in plaats van precies. `qa_document.py` werkt dan ook niet — dat
 meet in de browser — dus de drie dingen die anders blokkeren, ziet niemand.
 
-En zeg het bij de oplevering, met zoveel woorden: deze folder is niet visueel geverifieerd. Dat
-is geen formaliteit. Het is het verschil tussen een folder die gecontroleerd is en een folder
+En zeg het bij de oplevering, met zoveel woorden: dit document is niet visueel geverifieerd. Dat
+is geen formaliteit. Het is het verschil tussen een document dat gecontroleerd is en een document
 waarvan alleen de markup klopt.
 
-## Een bestaande folder uitbreiden of terughalen
+## Een bestaanhet document uitbreiden of terughalen
 
 Heeft de gebruiker in het canvas zitten schuiven en opgeslagen, dan is de gepubliceerde versie
 nieuwer dan jouw werkmap. Haal hem terug met `seed-canvas.mjs --extract` naar een **verse, lege
@@ -584,5 +584,5 @@ naar het contactblad, want de paren zijn dan andere paren.
 - **Geen dashboard.** Iets interactiefs dat in de browser blijft, is `sfnl-design`.
 - **Geen schrijfopdracht.** Is er nog geen tekst — alleen een idee, of een stapel losse notities
   — dan is het schrijven de opdracht en niet de opmaak. Dat is `sfnl-writer`, en die levert de
-  tekst waar deze skill de vorm omheen zet. Een folder opmaken uit niets betekent dat het model
+  tekst waar deze skill de vorm omheen zet. Een document opmaken uit niets betekent dat het model
   de inhoud verzint, en dat is precies wat deze skill niet doet.

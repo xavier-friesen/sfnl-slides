@@ -1,5 +1,5 @@
 /* =====================================================================
-   SFNL folderstijl — de primitievenlaag voor gedrukte folders in HTML.
+   SFNL documentstijl — de primitievenlaag voor gedrukte documenten in HTML.
 
    Dit is GEEN patroonbibliotheek. Er staat geen `.cover`, geen
    `.hoofdstukopener` en geen `.kaartenrij` in. Wat er wel staat: het
@@ -118,7 +118,7 @@ a:hover { color: var(--grapefruit); }
 
    Eén .pagina is één blad. Hij is vast van maat, want dit is drukwerk:
    inhoud die niet past, past niet, en dat hoort te blijken in plaats
-   van weg te schalen. `qa_folder.py` meet dat.
+   van weg te schalen. `qa_document.py` meet dat.
    --------------------------------------------------------------- */
 
 /* Het blad. Vast van maat, en `overflow: hidden` is de snijrand: wat erbuiten
@@ -190,7 +190,7 @@ a:hover { color: var(--grapefruit); }
    Op oranje is de inkt navy en niet wit, en dat is nagemeten: wit haalt 2,6 op
    oranje en 2,8 op het verloop, navy haalt er 6,4. Een kop van 40 px in wit
    staat prima op oranje — het SFNL-drukwerk doet dat op elke omslag — maar een
-   alinea van 10 pt in wit op oranje is de eerste plek waar een folder er
+   alinea van 10 pt in wit op oranje is de eerste plek waar een document er
    goedkoop uit gaat zien. Wil je het hele veld in wit, dan zet je dat er
    expliciet bij met data-inkt="wit", en dan is het een keuze. */
 .pagina[data-veld="oranje"]  { --papier: var(--oranje);     --inkt: var(--navy); }
@@ -249,7 +249,7 @@ a:hover { color: var(--grapefruit); }
    laat elk paneel tot zijn eigen tekst krimpen, en drie kaarten van drie
    verschillende hoogten is het snelst zichtbare teken dat er niemand naar
    gekeken heeft. Zet deze klasse op elke rij met .paneel of .kaart erin.
-   Gemeten op de eerste proeffolder: drie kaarten met 3, 2 en 2 regels tekst
+   Gemeten op de eerste proefdocument: drie kaarten met 3, 2 en 2 regels tekst
    kwamen uit op 232, 204 en 204 px. */
 .kolommen--gelijk { align-items: stretch; }
 .kolommen--gelijk > .paneel,
@@ -645,7 +645,7 @@ a:hover { color: var(--grapefruit); }
 
    Gebruik: zet `--balk` op de .pagina, niet op de balk zelf. De zetspiegel
    leest dezelfde waarde en schuift vanzelf mee. Vergeet je hem, dan is de band
-   nul hoog en zie je dat meteen; `qa_folder.py` meldt het ook. */
+   nul hoog en zie je dat meteen; `qa_document.py` meldt het ook. */
 .titelbalk {
   position: absolute;
   top: 0; left: 0; right: 0;
@@ -675,7 +675,7 @@ a:hover { color: var(--grapefruit); }
    de inhoud later verandert. Ten tweede is een léég kader zichtbaar leeg: met
    `beeldkader--leeg` staat er een gemarkeerd vlak in plaats van wit, zodat je
    op de render ziet dat er beeld hoort en het niet stil als witruimte
-   meeleest. `qa_folder.py` telt de lege kaders die je hebt laten staan.
+   meeleest. `qa_document.py` telt de lege kaders die je hebt laten staan.
 
    De verhouding zet je inline — `style="aspect-ratio: 16 / 9"` — want dat is
    een keuze per beeld en het is precies wat het eigenschappenpaneel van het
@@ -743,7 +743,7 @@ a:hover { color: var(--grapefruit); }
    `currentColor`: wit op een kleurveld, navy op wit. Er is geen
    bestandsversie in deze skill, want een los bestand zou in het canvas als
    base64 mee moeten en dan is het niet meer herkleurbaar.
-   De markup staat in `reference/folders-stramien.md` onder Het logo. */
+   De markup staat in `reference/documenten-stramien.md` onder Het logo. */
 .logo { display: block; height: 40px; width: auto; color: currentColor; }
 .logo--groot { height: 62px; }
 .logo--klein { height: 27px; }

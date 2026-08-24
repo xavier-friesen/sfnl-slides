@@ -12,7 +12,7 @@ loopt achter zonder dat iemand het merkt, en dan kiest de gebruiker iets anders
 dan hij krijgt.
 
 Dit is onderhoud, geen bouwstap. Je draait hem als de stijl verandert, niet per
-folder.
+document.
 
 Gebruik:
 
@@ -31,9 +31,9 @@ sys.path.insert(0, str(HIER))
 from _browser import browser, wacht_op_letters  # noqa: E402
 
 WORTEL = HIER.parent.parent
-STIJL = WORTEL / "assets" / "folders" / "stijl.css"
-FONTS = WORTEL / "assets" / "folders" / "fonts" / "fonts.css"
-UIT = WORTEL / "assets" / "folders" / "keuzekaarten" / "vragenvuur.png"
+STIJL = WORTEL / "assets" / "documenten" / "stijl.css"
+FONTS = WORTEL / "assets" / "documenten" / "fonts" / "fonts.css"
+UIT = WORTEL / "assets" / "documenten" / "keuzekaarten" / "vragenvuur.png"
 
 KAART = """<!doctype html>
 <html lang="nl"><head><meta charset="utf-8"><style>
@@ -72,7 +72,7 @@ h1 {{ font-family: var(--display); font-weight: 800; font-size: 25px; color: var
 <h1>Vijf besluiten v&oacute;&oacute;r de eerste regel tekst</h1>
 <p class="intro">Elk besluit heeft een default. Volg je die, dan hoef je niets te motiveren.
 Wijk je af, dan staat de reden bovenaan de outline. De vlakjes hieronder zijn echt gezet
-in de folderstijl, op ware verhouding maar verkleind &mdash; het gaat om de verdeling, niet om de tekst.</p>
+in het documentstijl, op ware verhouding maar verkleind &mdash; het gaat om de verdeling, niet om de tekst.</p>
 {blokken}
 </body></html>
 """
@@ -160,7 +160,7 @@ def bouw_html() -> str:
             ("Vier pagina's",
              f'<div style="height:100%;display:flex;gap:5px;justify-content:center;align-items:center">'
              + _vel(4, 34, 45) + '</div>',
-             "Omslag, twee inhoudspagina&#39;s, achterkant. De gewone folder, en de default "
+             "Omslag, twee inhoudspagina&#39;s, achterkant. Het gewone document, en de default "
              "als de opdracht niets zegt. Eén gevouwen vel.", True),
             ("Acht tot zestien",
              f'<div style="height:100%;display:flex;gap:4px;flex-wrap:wrap;justify-content:center;align-content:center">'
@@ -175,7 +175,7 @@ def bouw_html() -> str:
         ]),
 
         _blok("Besluit 3 &mdash; kleurregister",
-              "Hoeveel kleur draagt de folder, en welk accent staat naast oranje?", [
+              "Hoeveel kleur draagt het document, en welk accent staat naast oranje?", [
             ("Wit met oranje accent",
              f'<div style="height:100%">{lab}{kop}<hr style="border:0;height:3px;width:38px;background:var(--oranje);margin:5px 0 6px">{_lorem(3)}</div>',
              "Wit papier, navy letter, oranje voor de labels en de streep. Het rustigste "
@@ -185,7 +185,7 @@ def bouw_html() -> str:
              f'<div style="flex:1">{lab}{kop}{_lorem(2)}</div>'
              f'<div style="width:52px;background:var(--mint-tint);padding:6px">{_lorem(2)}</div></div>',
              "Witte pagina's met hier en daar een heel vlak in mint, oranje of violet. "
-             "Zo krijgt een folder van acht pagina's een ritme.", False),
+             "Zo krijgt een document van acht pagina's een ritme.", False),
             ("Oranje dominant",
              f'<div style="height:100%;margin:-12px -13px;padding:12px 13px;background:var(--verloop);color:var(--navy)">'
              f'<p class="minilabel" style="color:#fff;opacity:.85">Aanleiding</p>'
@@ -216,7 +216,7 @@ def bouw_html() -> str:
              f'<span class="minilabel" style="margin:0;opacity:.7">Infographic</span></div>'
              f'<div class="g2">{_lorem(2)}{_lorem(2)}</div></div>',
              "Kolommen afgewisseld met kaarten, een tabel of een beeld. 150 tot 250 woorden "
-             "per pagina. De gewone folder.", True),
+             "per pagina. Het gewone document.", True),
             ("Beeldgedreven",
              f'<div style="height:100%;display:flex;flex-direction:column;gap:5px">'
              f'<div style="height:58px;background:var(--verloop)"></div>'
@@ -226,7 +226,7 @@ def bouw_html() -> str:
         ]),
 
         _blok("Besluit 5 &mdash; de opening",
-              "Hoe komt de dektitel op de folder? Dit gaat over pagina 1, eenmalig.", [
+              "Hoe komt de dektitel op het document? Dit gaat over pagina 1, eenmalig.", [
             ("Titelblad",
              f'<div style="height:100%;display:flex;gap:7px;align-items:center">'
              f'<div style="width:70px;height:94px;background:var(--verloop);padding:7px 6px;'

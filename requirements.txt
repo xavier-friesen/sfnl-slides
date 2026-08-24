@@ -31,14 +31,14 @@ pytest>=8.0
 # thumbnail.py composes the labelled contact sheet from the rendered PNGs.
 pillow>=10.0
 
-# --- sfnl-design-folders ---
+# --- sfnl-design-documents ---
 
-# De renderloop en alle metingen van de folderskill draaien in een echte browser:
-# render.py maakt de PNG's en het contactblad, qa_folder.py meet overloop, klipping
+# De renderloop en alle metingen van het documentskill draaien in een echte browser:
+# render.py maakt de PNG's en het contactblad, qa_document.py meet overloop, klipping
 # en gaten in het DOM zelf. Zonder dit bouw je blind, en dat is een andere manier
-# van bouwen — zie "Zonder renderer" in skills/sfnl-design-folders/SKILL.md.
+# van bouwen — zie "Zonder renderer" in skills/sfnl-design-documents/SKILL.md.
 #
 # Staat er al een Chromium op de machine (PLAYWRIGHT_BROWSERS_PATH), dan zoekt
-# scripts/folders/_browser.py hem op, ook als het buildnummer niet bij deze
+# scripts/documenten/_browser.py hem op, ook als het buildnummer niet bij deze
 # pip-versie hoort. Anders: python3 -m playwright install chromium
 playwright>=1.40

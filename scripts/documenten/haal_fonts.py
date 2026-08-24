@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
 """De huisstijlletters ophalen en insluiten, één keer, als onderhoudsstap.
 
-Waarom dit bestaat. Een folder die zijn letters van Google Fonts haalt, ziet er
+Waarom dit bestaat. Een document dat zijn letters van Google Fonts haalt, ziet er
 op drie plekken anders uit dan bedoeld:
 
 * **In de render.** Chromium in een sandbox heeft lang niet altijd internet. De
-  eerste proeffolder van deze skill kwam in Helvetica uit de renderloop, en dan
+  eerste proefdocument van deze skill kwam in Helvetica uit de renderloop, en dan
   meet je de verkeerde regelafbreking en beoordeel je de verkeerde vorm.
 * **In de PNG- en PDF-export van het canvas.** Die kan een Google Font niet
   meenemen; geëxporteerde tekst valt terug op de systeemletter.
-* **Bij de gebruiker.** Een folder die alleen met internet goed staat, is geen
+* **Bij de gebruiker.** Een document dat alleen met internet goed staat, is geen
   bestand maar een verzoek.
 
 Ingesloten `@font-face` met een `data:`-URI lost alle drie tegelijk op. Het kost
@@ -27,7 +27,7 @@ probleem.
 
 Gebruik:
 
-    python haal_fonts.py                 # naar assets/folders/fonts/
+    python haal_fonts.py                 # naar assets/documenten/fonts/
     python haal_fonts.py --controleer    # zeg alleen of het compleet is
 """
 
@@ -41,7 +41,7 @@ import urllib.request
 from pathlib import Path
 
 HIER = Path(__file__).resolve().parent
-DOEL = HIER.parent.parent / "assets" / "folders" / "fonts"
+DOEL = HIER.parent.parent / "assets" / "documenten" / "fonts"
 
 CSS_URL = ("https://fonts.googleapis.com/css2"
            "?family=Montserrat:wght@300;400;700;800"
@@ -104,9 +104,9 @@ def haal(doel: Path) -> dict:
         print(f"let op: niet gevonden in de Google-CSS: {sorted(mist)}", file=sys.stderr)
 
     regels = [
-        "/* SFNL-folderletters, ingesloten.",
+        "/* SFNL-documentletters, ingesloten.",
         " *",
-        " * Gegenereerd door scripts/folders/haal_fonts.py — niet met de hand bijwerken.",
+        " * Gegenereerd door scripts/documenten/haal_fonts.py — niet met de hand bijwerken.",
         " * Montserrat en Lato, SIL Open Font License 1.1, latin-subset.",
         " * De licentietekst staat naast dit bestand in OFL-Montserrat.txt en",
         " * OFL-Lato.txt en hoort mee te reizen met elke kopie.",
