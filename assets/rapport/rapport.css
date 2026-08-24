@@ -1,0 +1,1276 @@
+/* =====================================================================
+   rapport.css — de rapportlaag boven stijl.css
+
+   Dit bestand staat NOOIT alleen. Het komt ná
+   `assets/documenten/stijl.css` en leunt op alles wat daar staat: de
+   kleuren, de letters, de maatladder, `.pagina`, `.zetspiegel`, en de
+   merktekens. Wat hier bij komt, is het verschil tussen een document
+   van vier pagina's dat je met de hand componeert en een rapport van
+   tachtig dat zichzelf moet zetten.
+
+   Drie dingen die dit bestand toevoegt en die stijl.css niet heeft:
+
+   1. **Een raster van twaalf kolommen** waar alle vier de
+      layoutmodellen op vallen. Eén kolomeenheid is 26,67 px, de goot
+      is de gemeten 30 px (8 mm) uit het SFNL-drukwerk. Twee kolommen
+      van zes worden dan precies 310 px, en dat is exact
+      (zetspiegel − goot) / 2. Dat is geen toeval maar de reden dat de
+      goot 30 is: op elke andere waarde valt één van de vier modellen
+      naast het raster.
+
+   2. **Kaders.** Een rapportpagina wordt niet gecomponeerd maar
+      gevuld. `paginator.js` giet de tekststroom in de `.kader`-
+      elementen van de ene pagina na de andere. Een kader is dus een
+      doos met een gemeten hoogte en verder niets — geen inhoud in de
+      bron, geen betekenis, alleen een plek waar tekst in valt.
+
+   3. **Doorlopende typografie.** Koppen die zich aan hun alinea
+      binden, opsommingen die op de maatladder staan, een tabel die
+      over een paginagrens breekt met zijn kop erbij, voetnoten aan de
+      voet, kantnoten in de kantlijn, exhibits met hun bronregel.
+
+   VIER MODELLEN, en ze staan op `data-model` van de `.pagina`:
+
+     breed     één kolom over tien rasterkolommen (537 px), brood op
+               11/16,5 pt. Zevenenzeventig tekens per regel, gemeten.
+     kantlijn  één kolom over negen (480 px) plus een kantlijn van drie
+               (140 px) voor de noten, de bronnen en een kanttekening.
+               Brood op 10/13 pt, zesenzeventig tekens.
+     dubbel    twee kolommen van zes (310 px elk). Brood op 10/13 pt,
+               achtenveertig tekens. De maat van het SFNL-drukwerk zelf.
+     flexibel  kantlijn als basis, met per sectie de mogelijkheid naar
+               dubbel of naar een volle breedte te gaan. Eén broodmaat
+               voor het hele rapport: 10/13 pt.
+
+   VIER KLEURREGISTERS, op `data-register` van de `.pagina`:
+
+     helder    wit papier, navy inkt, oranje accent. De default.
+     diep      idem, maar hoofdstukken openen op een heel navy blad.
+     zacht     emerald als accent in plaats van oranje. Oranje blijft
+               over voor de folio en de doorloop, en verder niets.
+     contrast  violet als hoofdaccent, oranje als tweede. Het register
+               van de casespread.
+
+   Alle maten in px bij 96 dpi. Waar "gemeten" staat, komt het getal uit
+   het SFNL-jaarrapport 2025, uit de casespread Civitates, of uit een
+   nagemeten rapport van Bain, BMC of het McKinsey Global Institute —
+   `reference/rapport-vormentaal.md` zegt per geval welke.
+   ===================================================================== */
+
+
+/* ---------------------------------------------------------------
+   1. Het rapportkader
+
+   De marges zijn niet die van stijl.css en dat is een besluit. Een
+   document van vier pagina's ligt plat; een rapport van tachtig zit in
+   een rug. Dus: de binnenmarge is ruimer dan de buitenmarge, en de
+   ondermarge is ruimer dan allebei, want daar staat de folio in.
+
+   De hoogte van de zetspiegel is een geheel aantal regels. Dat is de
+   enige manier waarop twee pagina's naast elkaar op dezelfde hoogte
+   eindigen, en het is meteen de reden dat `--r-marge-onder` wordt
+   uitgerekend en niet opgegeven.
+   --------------------------------------------------------------- */
+
+.pagina[data-soort="rapport"] {
+  --r-marge-boven:  76px;   /* 20 mm */
+  --r-marge-binnen: 82px;   /* 22 mm — de rugzijde */
+  --r-marge-buiten: 62px;   /* 16 mm */
+
+  --r-goot: 30px;           /* gemeten: 23,5 pt tussen twee kolommen */
+  --r-regels: 50;           /* het aantal regels in de zetspiegel */
+
+  --r-zetbreedte: calc(var(--breedte) - var(--r-marge-binnen) - var(--r-marge-buiten));
+  --r-kolom: calc((var(--r-zetbreedte) - 11 * var(--r-goot)) / 12);
+  --r-zethoogte: calc(var(--r-regels) * var(--r-body));
+  --r-marge-onder: calc(var(--hoogte) - var(--r-marge-boven) - var(--r-zethoogte));
+
+  /* Wat de kantlijn en de kaders krijgen. Per model overschreven. */
+  --r-kaderbreedte: var(--r-zetbreedte);
+  --r-kantlijn: 0px;
+
+  /* Het accent van het register, en de tint eronder. */
+  --r-accent: var(--oranje);
+  --r-accent-2: var(--navy);
+  --r-tint: var(--navy-tint);
+  --r-watermerk: var(--oranje-tint);
+  --r-lijn: rgba(32, 27, 92, .22);
+}
+
+/* Een rasterkolom breed, voor wie iets buiten de kaders wil zetten.
+   n kolommen is n * --r-kolom + (n-1) * --r-goot. */
+.pagina[data-soort="rapport"] {
+  --k1:  calc(1 * var(--r-kolom));
+  --k2:  calc(2 * var(--r-kolom) + 1 * var(--r-goot));
+  --k3:  calc(3 * var(--r-kolom) + 2 * var(--r-goot));
+  --k4:  calc(4 * var(--r-kolom) + 3 * var(--r-goot));
+  --k6:  calc(6 * var(--r-kolom) + 5 * var(--r-goot));
+  --k8:  calc(8 * var(--r-kolom) + 7 * var(--r-goot));
+  --k9:  calc(9 * var(--r-kolom) + 8 * var(--r-goot));
+  --k10: calc(10 * var(--r-kolom) + 9 * var(--r-goot));
+  --k12: var(--r-zetbreedte);
+}
+
+/* A4 heeft 84 px meer hoogte dan het rapportformaat, en dat zijn bijna
+   precies vijf regels. Vijf erbij dus, niet vier en niet zes: op vier
+   blijft er 17 px onbenut onderaan en op zes valt de folio in de
+   snijrand. */
+.pagina[data-soort="rapport"][data-formaat="a4"] { --r-regels: 55; }
+
+/* De liggende A4 is een bijlageformaat: één brede kolom haalt daar 120
+   tekens en dat leest niet, dus daar is dubbel de enige zetting. */
+.pagina[data-soort="rapport"][data-formaat="a4-liggend"] { --r-regels: 36; }
+
+/* De zetspiegel van een rapport. Anders dan die van stijl.css: de
+   marges zijn asymmetrisch en ze spiegelen per zijde. `--balk` telt nog
+   steeds mee, want een hoofdstukband duwt de zetspiegel omlaag. */
+.zetspiegel--rapport {
+  padding: calc(var(--r-marge-boven) + var(--balk))
+           var(--r-marge-buiten)
+           var(--r-marge-onder)
+           var(--r-marge-binnen);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Recto is een rechterpagina: de rug zit links, dus de binnenmarge zit
+   links. Verso spiegelt. Zonder `data-zijde` gedraagt de pagina zich
+   als recto — dat is de losse PDF die niemand omslaat. */
+.pagina[data-zijde="verso"] > .zetspiegel--rapport {
+  padding-left: var(--r-marge-buiten);
+  padding-right: var(--r-marge-binnen);
+}
+
+
+/* ---------------------------------------------------------------
+   2. Het raster en de kaders
+
+   `.raster` is de doos waar de tekst in valt, en zijn hoogte is de
+   zetspiegelhoogte min wat de voetnoten innemen. Dat is de maat waar
+   paginator.js op meet, en het is de reden dat een voetnoot de tekst
+   erboven korter maakt in plaats van eroverheen te lopen.
+   --------------------------------------------------------------- */
+
+.raster {
+  position: relative;
+  display: grid;
+  grid-template-columns: var(--r-kaderbreedte);
+  grid-template-rows: 1fr;
+  column-gap: var(--r-goot);
+  /* Geen eigen hoogte: het raster neemt wat de zetspiegel overlaat.
+     Dat is robuuster dan het uitrekenen, en het was nodig — de eerste
+     versie rekende `zethoogte - balk - voetruimte` uit en dan moet elke
+     nieuwe rij op de pagina in die som worden bijgewerkt. Vergeet er
+     één, en het kader loopt precies die hoogte over de ondermarge heen
+     zonder dat het opvalt, want `overflow: hidden` snijdt het netjes af.
+     Nu regelt de flexbox het: de paginakop en de voetnoten nemen hun
+     hoogte, het raster de rest. Zonder allebei komt het uit op exact
+     `--r-zethoogte`, en dus op een geheel aantal regels. */
+  flex: 1 1 auto;
+  min-height: 0;
+  align-items: stretch;
+}
+
+/* De volle breedte boven het raster. Hier staat de hoofdstukopener in
+   het dubbele model: een hoofdstuktitel hoort over de hele zetspiegel
+   en niet in de linkerkolom. In `breed` en `kantlijn` is het effect
+   hetzelfde als een blok bovenaan het kader, en daarom staat de opener
+   in álle modellen hier — één plek in plaats van drie gevallen. */
+.paginakop {
+  flex: 0 0 auto;
+}
+.paginakop:empty { display: none; }
+
+/* Een kader is een doos met een gemeten hoogte en verder niets. Wat
+   erin komt, giet paginator.js erin. `overflow: hidden` is hier geen
+   snijrand maar een alarm: valt er tekst uit, dan meet qa_rapport.py
+   dat als klip en is de zetting stuk. */
+.kader {
+  position: relative;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* De kantlijn krijgt geen stroom. Hij vangt kantnoten, exhibitnummers
+   en een enkel citaat, elk op de hoogte van het blok waar het bij
+   hoort — paginator.js zet die hoogte als `top`. */
+.kantlijn {
+  position: relative;
+  min-height: 0;
+}
+
+/* --- model: breed ------------------------------------------------ */
+.pagina[data-model="breed"] {
+  --r-kaderbreedte: var(--k10);
+  --m-body: 14.67px;   /* 11 pt   */
+  --r-body: 22px;      /* 16,5 pt */
+  --regel: 22px;
+  --sprong-klein: 22px;
+  --sprong: 44px;
+  --sprong-groot: 66px;
+  --r-regels: 39;      /* 39 x 22 = 858 px; de rest is ondermarge */
+}
+.pagina[data-model="breed"][data-formaat="a4"] { --r-regels: 43; }
+
+/* --- model: kantlijn --------------------------------------------- */
+.pagina[data-model="kantlijn"] {
+  --r-kaderbreedte: var(--k9);
+  --r-kantlijn: var(--k3);
+}
+.pagina[data-model="kantlijn"] .raster {
+  grid-template-columns: var(--r-kaderbreedte) var(--r-kantlijn);
+}
+
+/* --- model: dubbel ----------------------------------------------- */
+.pagina[data-model="dubbel"] {
+  --r-kaderbreedte: var(--k6);
+}
+.pagina[data-model="dubbel"] .raster {
+  grid-template-columns: var(--r-kaderbreedte) var(--r-kaderbreedte);
+}
+
+/* --- model: flexibel --------------------------------------------- *
+   Flexibel is geen vijfde raster maar een pagina die per stuk kiest
+   welke van de drie hij is. `data-model="flexibel"` staat op het
+   rapport; de pagina zelf draagt alsnog `breed`, `kantlijn` of
+   `dubbel`. Wat hieronder staat, is de enige regel die dat afdwingt:
+   de broodmaat verandert niet mee. Een rapport waarin hoofdstuk 2 op
+   11 pt staat en hoofdstuk 3 op 10 leest als twee rapporten. */
+.pagina[data-flex="ja"][data-model="breed"] {
+  --m-body: 13.33px;
+  --r-body: 17.33px;
+  --regel: 17.33px;
+  --sprong-klein: 17.33px;
+  --sprong: 34.66px;
+  --sprong-groot: 52px;
+  --r-regels: 50;
+}
+
+/* Een kader dat over de volle zetspiegel loopt — een figuur die de
+   breedte nodig heeft, een tabel met acht kolommen. Op een pagina met
+   twee kaders vervangt hij ze allebei. */
+.kader--vol { grid-column: 1 / -1; }
+
+
+/* ---------------------------------------------------------------
+   3. De lopende tekst
+
+   Alles wat uit het bronbestand komt, staat in `.lopend`. Dat is één
+   klasse en niet vijf, want de tekst is niet van ons: wat er staat,
+   staat er, en het enige wat wij eraan doen is hem zetten.
+   --------------------------------------------------------------- */
+
+.lopend {
+  font-family: var(--brood);
+  font-weight: 300;
+  font-size: var(--m-body);
+  line-height: var(--r-body);
+  color: var(--inkt);
+  orphans: 2;
+  widows: 2;
+}
+
+/* Afbreken en uitvullen staan op de alinea en op de lijstregel, en niet
+   op de houder. Zetten ze op de houder, dan erven een kop, een
+   bijschrift en een bronregel ze mee, en dan breekt er een woord af in
+   een kop van drie woorden. */
+.lopend > p,
+.lopend li {
+  hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphenate-limit-chars: 6 3 3;
+}
+
+/* Uitvullen hangt aan de maat, en de maat hangt aan het model. Dit is
+   nagemeten en het ging tegen de verwachting in.
+
+   Van de drie rapporten die als maatstaf dienen zet er géén één zijn
+   lopende tekst uitgevuld: Bain zet 100 tekens vlaggend, het McKinsey
+   Global Institute 90, BMC 42 in twee kolommen — alle drie ragged
+   right. Wat wél uitvult is het SFNL-drukwerk zelf, en dat doet het in
+   kolommen van 32 tot 52 tekens.
+
+   Daar zit de regel in. Een uitgevulde regel moet het verschil tussen
+   de langste en de kortste zetting over de spaties verdelen; bij 48
+   tekens gaat dat op, bij 77 valt het als gaten in de regel. Dus:
+   `dubbel` vult uit, `breed` en `kantlijn` niet. Op de eerste gezette
+   proef was dat het duidelijkst zichtbare defect van de hele zetting —
+   rivieren van wit door een kolom van 480 px.
+
+   En uitvullen kan alleen mét afbreking. Vindt `bouw.py` in de browser
+   geen Nederlands afbreekwoordenboek, dan zet hij `data-afbreking="nee"`
+   op het lichaam en vervalt het uitvullen ook in `dubbel`. */
+.pagina[data-model="dubbel"]   .lopend > p,
+.pagina[data-model="dubbel"]   .lopend li { text-align: justify; }
+.pagina[data-model="breed"]    .lopend > p,
+.pagina[data-model="breed"]    .lopend li,
+.pagina[data-model="kantlijn"] .lopend > p,
+.pagina[data-model="kantlijn"] .lopend li { text-align: left; }
+[data-afbreking="nee"] .lopend > p,
+[data-afbreking="nee"] .lopend li {
+  text-align: left;
+  hyphens: none;
+  -webkit-hyphens: none;
+}
+
+.lopend > p {
+  margin: 0 0 var(--regel);
+}
+.lopend > p:last-child { margin-bottom: 0; }
+
+/* Het citaatblok: een blok dat in de bron als citaat is opgemaakt. Geen
+   aanhalingstekens erbij — die zouden tekst toevoegen — maar een
+   inspringing en een streep. */
+.citaatblok {
+  margin: var(--sprong) 0;
+  padding-left: calc(var(--r-kolom) * .9);
+  border-left: 2px solid var(--r-accent);
+  font-style: italic;
+  text-align: left;
+  hyphens: none;
+  break-inside: avoid;
+}
+.citaatblok > p { margin: 0 0 calc(var(--regel) * .5); }
+.citaatblok > p:last-child { margin-bottom: 0; }
+
+/* Een alinea die paginator.js in tweeën heeft geknipt, mag onderaan
+   geen witruimte meenemen en bovenaan geen inspringing krijgen. Deze
+   twee klassen zet de zetmotor zelf. */
+.lopend p.is-gesplitst-kop { margin-bottom: 0; }
+.lopend p.is-gesplitst-staart { text-indent: 0; }
+
+.lopend b, .lopend strong { font-weight: 700; }
+.lopend i, .lopend em { font-style: italic; }
+.lopend sup { font-size: .72em; line-height: 0; vertical-align: .42em; }
+
+/* Een verwijzing in de tekst naar een figuur of een tabel. Geen kleur,
+   want het is geen accent maar een aanwijzing. */
+.lopend .verwijzing { font-style: italic; }
+
+
+/* ---------------------------------------------------------------
+   4. De koppen
+
+   Vier niveaus, en het vierde is een run-in kop: hij staat op dezelfde
+   regel als de alinea die eronder hoort. Dat is wat het McKinsey
+   Global Institute doet — nagemeten in oranje op 9,8 pt boven de
+   alinea die erbij hoort — en het is de goedkoopste manier om een lang
+   hoofdstuk te geleden zonder er een pagina aan kwijt te zijn.
+
+   `break-after: avoid` op alle vier. Een kop onderaan een pagina met
+   zijn alinea op de volgende is het defect dat een lezer als eerste
+   ziet, en paginator.js dwingt het af met een harde regel bovenop
+   deze: een kop neemt minimaal twee regels van zijn alinea mee.
+   --------------------------------------------------------------- */
+
+.hoofdstuktitel,
+.sectiekop,
+.subkop,
+.runinkop {
+  font-family: var(--display);
+  color: var(--inkt);
+  break-after: avoid;
+  page-break-after: avoid;
+  text-wrap: balance;
+  text-align: left;
+  hyphens: none;
+  -webkit-hyphens: none;
+}
+
+/* Niveau 1 — de hoofdstuktitel. Staat op de hoofdstukopener en nergens
+   anders. */
+.hoofdstuktitel {
+  font-size: var(--m-titel);
+  font-weight: 800;
+  line-height: 1.14;
+  letter-spacing: -.012em;
+  margin: 0 0 var(--regel);
+}
+
+/* Niveau 2 — de sectiekop. Met een streep erboven, want een sectie
+   begint en dat hoort te blijken. De streep is 3 px in het accent en
+   dat is hetzelfde merkteken als `.streep` in stijl.css; hij staat
+   hier als pseudo-element zodat de zetmotor hem niet apart hoeft te
+   plaatsen wanneer een sectie op een nieuwe pagina begint. */
+.sectiekop {
+  font-size: var(--m-kop);
+  font-weight: 800;
+  line-height: 1.22;
+  margin: var(--sprong) 0 calc(var(--regel) * .6);
+  padding-top: calc(var(--regel) * .7);
+  position: relative;
+}
+.sectiekop::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0;
+  width: 56px; height: 3px;
+  background: var(--r-accent);
+}
+/* Bovenaan een kader hoort er geen sprong boven de kop te staan: de
+   bovenmarge van de pagina is de sprong. paginator.js zet deze klasse
+   op het eerste blok van elk kader. */
+.is-eerste-in-kader { margin-top: 0 !important; }
+
+/* Niveau 3 — de subkop. Zonder streep, en kleiner dan de sectiekop.
+   Vet, niet gekapitaliseerd: kapitalen op dit niveau leest als een
+   label en niet als een kop. */
+.subkop {
+  font-size: var(--m-body);
+  font-weight: 700;
+  line-height: var(--r-body);
+  margin: calc(var(--regel) * 1.2) 0 0;
+}
+
+/* Niveau 4 — de run-in kop. Direct boven de alinea waar hij bij hoort,
+   met een merkteken in het accent ervoor.
+
+   Bij MGI is deze kop zélf oranje, en dat was ook de eerste zetting
+   hier. Nagemeten haalt oranje op wit een contrast van 2,58, en dat is
+   onder de 4,5 die een regel lopende tekst nodig heeft. Een run-in kop
+   is een hele zin en dus lopende tekst. Dus: de letter is navy en het
+   accent zit in het vierkantje ervoor. Wat er niet gebeurt is het
+   oranje donkerder maken tot het haalt — dan is het geen huisstijloranje
+   meer. */
+.runinkop {
+  position: relative;
+  font-size: var(--m-body);
+  font-weight: 700;
+  line-height: var(--r-body);
+  color: var(--inkt);
+  margin: var(--regel) 0 0;
+  padding-left: 13px;
+}
+.runinkop::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: calc(var(--r-body) * .5 - 2.5px);
+  width: 5px; height: 5px;
+  background: var(--r-accent);
+}
+
+/* De chapeau: de inleidende alinea onder een hoofdstuktitel, groter en
+   halfvet. Eén per hoofdstuk, en alleen als de bron er een heeft — hij
+   wordt niet verzonnen. */
+.chapeau--rapport {
+  font-family: var(--brood);
+  font-weight: 400;
+  font-size: var(--m-kop);
+  line-height: calc(var(--r-body) * 1.25);
+  margin: 0 0 var(--sprong);
+  text-align: left;
+  hyphens: none;
+}
+
+
+/* ---------------------------------------------------------------
+   5. Opsommingen
+
+   Twee soorten en ze coderen iets verschillends. Een bolletjeslijst is
+   een verzameling zonder volgorde; een genummerde lijst is een reeks
+   waarin de nummers ergens naar verwijzen. Dat onderscheid komt uit de
+   bron en wordt hier niet gemaakt.
+
+   De inspringing is één rasterkolom. Zo valt de tekst van een lijst
+   samen met de kolomlijn en niet op een willekeurige 20 px.
+   --------------------------------------------------------------- */
+
+.lopend ul,
+.lopend ol {
+  margin: 0 0 var(--regel);
+  padding: 0 0 0 var(--r-kolom);
+  list-style: none;
+}
+.lopend li {
+  position: relative;
+  margin: 0 0 calc(var(--regel) * .38);
+  break-inside: avoid-page;
+}
+.lopend li:last-child { margin-bottom: 0; }
+
+/* Het bolletje is een vierkantje van 4 px in het accent, op de hoogte
+   van de x-hoogte van de eerste regel. Een rond opsommingsteken van
+   het lettertype zelf staat te hoog en te licht; dit is hetzelfde
+   merkteken als `.streep`, alleen kleiner. */
+.lopend ul > li::before {
+  content: "";
+  position: absolute;
+  left: calc(var(--r-kolom) * -1);
+  top: calc(var(--r-body) * .5 - 2px);
+  width: 5px; height: 5px;
+  background: var(--r-accent);
+}
+
+.lopend ol { counter-reset: opsomming; }
+.lopend ol > li { counter-increment: opsomming; }
+.lopend ol > li::before {
+  content: counter(opsomming) ".";
+  position: absolute;
+  left: calc(var(--r-kolom) * -1);
+  top: 0;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: calc(var(--m-body) * .92);
+  line-height: var(--r-body);
+  color: var(--r-accent);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Een lijst in een lijst springt nog een halve kolom in en verandert
+   van teken: een open vierkantje in plaats van een gevuld. Dieper dan
+   twee niveaus bestaat niet in een rapport — dat is een tabel. */
+.lopend li > ul,
+.lopend li > ol {
+  margin: calc(var(--regel) * .38) 0 0;
+  padding-left: calc(var(--r-kolom) * .7);
+}
+.lopend li > ul > li::before {
+  left: calc(var(--r-kolom) * -.7);
+  background: transparent;
+  border: 1px solid var(--r-accent);
+}
+
+
+/* ---------------------------------------------------------------
+   6. Het exhibit
+
+   Een figuur of een tabel met alles eromheen, en de volgorde van de
+   onderdelen is nagemeten bij het McKinsey Global Institute: een
+   haarlijn, het nummer klein en grijs, de titel vet, de eenheid
+   grijs eronder, het beeld, en dan NOOT en BRON in de kleine maat.
+   Die volgorde is niet willekeurig — hij laat de lezer in vier regels
+   beslissen of het beeld hem aangaat.
+
+   `break-inside: avoid` op het geheel. Een exhibit dat over een
+   paginagrens breekt is geen exhibit meer.
+   --------------------------------------------------------------- */
+
+.exhibit {
+  margin: var(--sprong) 0;
+  padding-top: calc(var(--regel) * .8);
+  border-top: 1px solid var(--r-lijn);
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+.exhibit:first-child { margin-top: 0; }
+
+.exhibit__nr {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: var(--m-klein);
+  line-height: var(--r-klein);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--r-accent);
+  margin: 0 0 calc(var(--regel) * .3);
+}
+
+.exhibit__titel {
+  font-family: var(--brood);
+  font-weight: 700;
+  font-size: var(--m-body);
+  line-height: calc(var(--r-body) * .95);
+  margin: 0 0 calc(var(--regel) * .25);
+  text-wrap: balance;
+}
+
+/* De eenheidsregel: waar het beeld in meet. "Aandeel van het totaal, %"
+   of "mln euro, prijspeil 2025". Zonder deze regel is elk getal in het
+   beeld een getal zonder eenheid, en dat is de meest voorkomende fout
+   in een rapportfiguur. */
+.exhibit__eenheid {
+  font-family: var(--brood);
+  font-weight: 300;
+  font-size: var(--m-klein);
+  line-height: var(--r-klein);
+  color: rgba(32, 27, 92, .62);
+  margin: 0 0 calc(var(--regel) * .7);
+}
+
+.exhibit__beeld { margin: 0; }
+.exhibit__beeld img,
+.exhibit__beeld svg { width: 100%; height: auto; display: block; }
+
+.exhibit__noot,
+.exhibit__bron {
+  font-family: var(--brood);
+  font-weight: 300;
+  font-size: 9.33px;
+  line-height: 12.5px;
+  color: rgba(32, 27, 92, .62);
+  margin: calc(var(--regel) * .45) 0 0;
+  text-align: left;
+  hyphens: none;
+}
+.exhibit__noot::before { content: "Noot  "; font-weight: 700; letter-spacing: .06em; }
+.exhibit__bron::before { content: "Bron  "; font-weight: 700; letter-spacing: .06em; }
+
+/* Een beeld zonder de exhibitomlijsting — een foto, een sfeerbeeld.
+   Dat draagt een bijschrift en verder niets. */
+.beeldblok {
+  margin: var(--sprong) 0;
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+.beeldblok:first-child { margin-top: 0; }
+.beeldblok img { width: 100%; height: auto; display: block; }
+.beeldblok figcaption {
+  font-family: var(--brood);
+  font-weight: 300;
+  font-size: var(--m-klein);
+  line-height: var(--r-klein);
+  color: rgba(32, 27, 92, .62);
+  margin: calc(var(--regel) * .4) 0 0;
+  text-align: left;
+  hyphens: none;
+}
+
+/* Een beeld dat nog niet geleverd is. Zichtbaar leeg, niet stil wit —
+   dezelfde regel als `.beeldkader--leeg` in stijl.css, en
+   qa_rapport.py telt wat er is blijven staan. */
+.beeldblok--leeg > div {
+  background: repeating-linear-gradient(135deg,
+              var(--r-tint) 0 9px, transparent 9px 18px);
+  border: 1px solid var(--r-lijn);
+  aspect-ratio: 3 / 2;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--display); font-weight: 700; font-size: 11px;
+  letter-spacing: .1em; text-transform: uppercase;
+  color: rgba(32, 27, 92, .5); text-align: center; padding: 12px;
+}
+
+
+/* ---------------------------------------------------------------
+   7. De tabel
+
+   Erft `.tabel` uit stijl.css en voegt toe wat een rapporttabel nodig
+   heeft: een kop die zich herhaalt wanneer de tabel over een
+   paginagrens breekt, en getallen die onder elkaar uitlijnen.
+   --------------------------------------------------------------- */
+
+.tabel--rapport {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--brood);
+  font-weight: 300;
+  font-size: var(--m-klein);
+  line-height: var(--r-klein);
+  margin: 0;
+}
+.tabel--rapport th {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: var(--m-klein);
+  line-height: var(--r-klein);
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  text-align: left;
+  vertical-align: bottom;
+  padding: 0 var(--r-goot) calc(var(--regel) * .35) 0;
+  border-bottom: 2px solid var(--inkt);
+  color: var(--inkt);
+}
+.tabel--rapport td {
+  padding: calc(var(--regel) * .32) var(--r-goot) calc(var(--regel) * .32) 0;
+  border-bottom: 1px solid var(--r-lijn);
+  vertical-align: top;
+}
+.tabel--rapport th:last-child,
+.tabel--rapport td:last-child { padding-right: 0; }
+
+/* Een cel met alleen cijfers lijnt rechts uit en zet zijn cijfers op
+   dezelfde breedte. Zonder `tabular-nums` staat een kolom met 1.114 en
+   9.980 niet onder elkaar, en dat is in een rapport het verschil
+   tussen een tabel en een lijstje. */
+.tabel--rapport td.getal,
+.tabel--rapport th.getal {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.tabel--rapport tr.totaal td {
+  font-weight: 700;
+  border-top: 1px solid var(--inkt);
+  border-bottom: none;
+}
+/* Een tabel die breder is dan de zetspiegel wordt in zijn breedte
+   gedwongen: `table-layout: fixed` verdeelt de kolommen gelijk en de
+   cellen breken af. Dat is lelijk en er gaat geen woord verloren, en
+   dat is precies de afweging — de zetmotor meldt het als klacht en de
+   skill legt de gebruiker voor wat er met die tabel moet gebeuren. */
+.tabel--rapport.is-te-breed {
+  table-layout: fixed;
+  width: 100%;
+}
+.tabel--rapport.is-te-breed th,
+.tabel--rapport.is-te-breed td {
+  padding-right: 8px;
+  word-break: break-word;
+  hyphens: auto;
+}
+
+/* De kop die de zetmotor bovenaan een vervolgstuk herhaalt. */
+.tabel--rapport thead.is-herhaald th::after {
+  content: " (vervolg)";
+  font-weight: 300;
+  text-transform: none;
+  letter-spacing: 0;
+  opacity: .55;
+}
+.tabel--rapport thead.is-herhaald th:not(:first-child)::after { content: ""; }
+
+
+/* ---------------------------------------------------------------
+   8. Kantnoot, citaat en paneel
+
+   Drie manieren om iets uit de stroom te lichten, en ze staan op
+   verschillende plekken. De kantnoot in de kantlijn, het citaat in de
+   kolom, het paneel over de volle breedte.
+   --------------------------------------------------------------- */
+
+/* De kantnoot staat in de kantlijn op de hoogte van het blok waar hij
+   bij hoort. Alleen in het kantlijnmodel; in de andere twee valt hij
+   terug op een klein blok in de kolom zelf. */
+.kantnoot {
+  position: absolute;
+  right: 0;
+  width: var(--r-kantlijn);
+  font-family: var(--brood);
+  font-weight: 300;
+  font-size: 9.33px;
+  line-height: 12.5px;
+  color: rgba(32, 27, 92, .7);
+  text-align: left;
+  hyphens: none;
+}
+.kantnoot::before {
+  content: "";
+  display: block;
+  width: 28px; height: 2px;
+  background: var(--r-accent);
+  margin-bottom: 6px;
+}
+.pagina:not([data-model="kantlijn"]) .kantnoot {
+  position: static;
+  width: auto;
+  margin: 0 0 var(--regel);
+  padding-left: calc(var(--r-kolom) * .8);
+  border-left: 2px solid var(--r-accent);
+}
+.pagina:not([data-model="kantlijn"]) .kantnoot::before { display: none; }
+
+/* Het citaat uit de tekst. Dit is het enige element dat tekst herhaalt
+   die al ergens anders staat, en daarom is het het enige element dat
+   nooit zonder toestemming op de pagina komt. `data-bron` verwijst
+   naar de alinea waar het uit komt; tekstcheck.py controleert dat het
+   er letterlijk in staat. */
+.pullcitaat {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 22px;
+  line-height: 1.2;
+  letter-spacing: -.014em;
+  color: var(--r-accent-2);
+  margin: var(--sprong) 0;
+  padding-left: calc(var(--r-kolom) * .8);
+  border-left: 3px solid var(--r-accent);
+  break-inside: avoid;
+  text-wrap: balance;
+  hyphens: none;
+}
+
+/* Het paneel: een gekleurd vlak met een blok tekst erin, over de volle
+   kaderbreedte. Voor een kader, een definitie, een casebeschrijving
+   die in de bron als apart blok staat. */
+.paneel--rapport {
+  background: var(--r-tint);
+  padding: calc(var(--regel) * 1.1) calc(var(--r-goot)) ;
+  margin: var(--sprong) 0;
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+.paneel--rapport > :first-child { margin-top: 0; }
+.paneel--rapport > :last-child { margin-bottom: 0; }
+.paneel--rapport .paneel__kop {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: var(--m-klein);
+  line-height: var(--r-klein);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--r-accent-2);
+  margin: 0 0 calc(var(--regel) * .5);
+}
+
+
+/* ---------------------------------------------------------------
+   9. De voetnoten
+
+   Aan de voet van de pagina waar hun verwijzing staat, gescheiden door
+   een korte haarlijn. Dat is wat BMC en MGI allebei doen, en het is de
+   enige plek waar een lezer ze zoekt.
+
+   De ruimte die ze innemen komt van de tekst erboven af, en dat regelt
+   de flexbox: de voetnoten nemen hun eigen hoogte en het raster krimpt
+   mee. Dat is de reden dat de zetmotor een blok soms terugneemt dat hij
+   net had geplaatst — de kolom is korter geworden nadat het blok er al
+   in stond.
+   --------------------------------------------------------------- */
+
+.voetnoten {
+  flex: 0 0 auto;
+  padding-top: calc(var(--regel) * .55);
+  position: relative;
+}
+.voetnoten:empty { display: none; padding: 0; }
+.voetnoten::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0;
+  width: 96px; height: 1px;
+  background: var(--r-lijn);
+}
+.voetnoot {
+  font-family: var(--brood);
+  font-weight: 300;
+  font-size: 9.33px;
+  line-height: 12.5px;
+  color: rgba(32, 27, 92, .72);
+  margin: 0 0 3px;
+  padding-left: 14px;
+  text-indent: -14px;
+  text-align: left;
+  hyphens: none;
+}
+.voetnoot:last-child { margin-bottom: 0; }
+.voetnoot .nr {
+  font-weight: 700;
+  color: var(--r-accent);
+  margin-right: 5px;
+}
+/* In het dubbele model lopen de voetnoten over allebei de kolommen —
+   ze horen bij de pagina, niet bij de kolom. */
+.pagina[data-model="dubbel"] .voetnoten {
+  columns: 2;
+  column-gap: var(--r-goot);
+}
+
+/* In het kantlijnmodel staat de noot niet aan de voet maar in de
+   kantlijn, op de hoogte van zijn verwijzing. Dat is de reden dat dat
+   model bestaat: een lege kantlijn van 140 px is geen ontwerp maar een
+   gat, en een noot naast de regel waar hij bij hoort leest zonder dat
+   het oog naar beneden moet. Gemeten op de eerste proef: zonder deze
+   regel stond er op elk van de dertig pagina's een lege kolom. */
+.pagina[data-model="kantlijn"] .kantlijn > .voetnoot {
+  position: absolute;
+  right: 0;
+  width: var(--r-kantlijn);
+  margin: 0;
+}
+.pagina[data-model="kantlijn"] .kantlijn > .voetnoot .nr {
+  font-family: var(--display);
+}
+
+
+/* ---------------------------------------------------------------
+   10. Kopregel en folio
+
+   De kopregel zegt waar je bent, de folio waar je bent in het geheel.
+   Ze staan allebei buiten de zetspiegel, in de marge, en ze spiegelen
+   per zijde: op een verso staat de folio linksonder, op een recto
+   rechtsonder. Dat is de enige manier waarop een dichtgeslagen rapport
+   zijn nummers aan de buitenkant houdt.
+
+   Het merkteken zelf is dat van stijl.css — hier staan alleen de
+   plaatsing en het spiegelen.
+   --------------------------------------------------------------- */
+
+.rapport-kopregel {
+  position: absolute;
+  top: calc(var(--r-marge-boven) - 34px);
+  left: var(--r-marge-binnen);
+  right: var(--r-marge-buiten);
+  margin: 0;
+  z-index: 2;
+  font-family: var(--brood);
+  font-weight: 300;
+  font-style: italic;
+  font-size: var(--m-klein);
+  line-height: var(--r-klein);
+  letter-spacing: .02em;
+  color: rgba(32, 27, 92, .58);
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+.pagina[data-zijde="verso"] .rapport-kopregel {
+  left: var(--r-marge-buiten);
+  right: var(--r-marge-binnen);
+  justify-content: flex-start;
+}
+.rapport-kopregel .streepje {
+  flex: 1;
+  align-self: center;
+  height: 1px;
+  background: var(--r-lijn);
+}
+
+/* Eén naam per zijde, aan de buitenkant. De verso draagt het rapport,
+   de recto het hoofdstuk — zo weet een lezer die halverwege opent
+   allebei zonder dat er twee namen naast elkaar staan te dringen.
+   Twee namen op één regel was de eerste zetting, en op de verso zag dat
+   eruit als een kopregel die niet was afgemaakt. */
+.pagina[data-zijde="recto"] .rapport-kopregel [data-plek="links"],
+.pagina[data-zijde="verso"] .rapport-kopregel [data-plek="rechts"] { display: none; }
+.pagina[data-zijde="verso"] .rapport-kopregel .streepje { order: 2; }
+
+.rapport-folio {
+  position: absolute;
+  bottom: calc(var(--r-marge-onder) - 46px);
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: var(--m-klein);
+  line-height: var(--r-klein);
+  letter-spacing: .04em;
+  color: var(--inkt);
+  z-index: 2;
+  font-variant-numeric: tabular-nums;
+}
+.pagina[data-zijde="recto"] .rapport-folio { right: var(--r-marge-buiten); }
+.pagina[data-zijde="verso"] .rapport-folio { left: var(--r-marge-buiten); }
+
+/* Het streepje voor de folio, in het accent. Klein, en het is het enige
+   gekleurde element op een gewone tekstpagina — dat maakt het een
+   herkenningsteken in plaats van een versiering. */
+.rapport-folio::before {
+  content: "";
+  display: inline-block;
+  width: 14px; height: 2px;
+  background: var(--r-accent);
+  vertical-align: .28em;
+  margin-right: 7px;
+}
+.pagina[data-zijde="verso"] .rapport-folio::before {
+  margin: 0 0 0 7px;
+  float: right;
+  margin-top: 5px;
+}
+
+
+/* ---------------------------------------------------------------
+   11. De hoofdstukopener
+
+   Drie manieren, en je kiest er één voor alle hoofdstukken. Ze staan
+   op `data-opener` van de `.pagina`.
+
+     nummer  kicker plus titel met een watermerkcijfer erachter, boven
+             aan de eerste pagina van het hoofdstuk. Kost geen pagina.
+     band    een aflopende band bovenaan die pagina. Kost een kwart.
+     blad    een heel blad met alleen de hoofdstuknaam. Kost er een per
+             hoofdstuk, dus pas vanaf een rapport van veertig pagina's.
+   --------------------------------------------------------------- */
+
+.opener {
+  position: relative;
+  margin: 0 0 var(--sprong-groot);
+  break-after: avoid;
+}
+.opener__kicker {
+  position: relative;
+  z-index: 1;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: var(--m-klein);
+  line-height: var(--r-klein);
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--r-accent);
+  margin: 0 0 calc(var(--regel) * .5);
+}
+.opener__titel {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: var(--m-titel);
+  line-height: 1.08;
+  letter-spacing: -.018em;
+  margin: 0;
+  position: relative;
+  z-index: 1;
+  text-wrap: balance;
+}
+
+/* Het watermerkcijfer staat hálf achter de titel en niet ernaast. Dat
+   is het merkteken uit het jaarrapport: het cijfer draagt de
+   hoofdstukgrens zonder er een regel voor te kosten. */
+.opener__watermerk {
+  position: absolute;
+  top: -26px;
+  /* Op nul en niet negatief: het kader snijdt zijn inhoud af, dus een
+     cijfer dat links buiten de tekstkolom begint wordt afgekapt en dat
+     leest als een fout in plaats van als een merkteken. Half áchter de
+     titel is de bedoeling; half buiten het blad is iets anders en dat
+     kan hier niet. */
+  left: 0;
+  z-index: 0;
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 132px;
+  line-height: .8;
+  color: var(--r-watermerk);
+  user-select: none;
+  pointer-events: none;
+}
+
+/* De band. `--balk` staat op de `.pagina` en niet op de band zelf —
+   diezelfde regel als in stijl.css, en om dezelfde reden: de
+   zetspiegel telt de bandhoogte bij zijn bovenmarge op, zodat de
+   hoogte maar op één plek staat. */
+.opener-band {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: var(--balk);
+  background: var(--r-accent);
+  color: var(--navy);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 0 var(--r-marge-buiten) calc(var(--regel) * 1.4) var(--r-marge-binnen);
+  z-index: 1;
+}
+.pagina[data-zijde="verso"] .opener-band {
+  padding-left: var(--r-marge-buiten);
+  padding-right: var(--r-marge-binnen);
+}
+.opener-band[data-veld="navy"]   { background: var(--navy);   color: var(--wit); }
+.opener-band[data-veld="violet"] { background: var(--violet); color: var(--wit); }
+.opener-band[data-veld="mint"]   { background: var(--mint-tint); color: var(--navy); }
+.opener-band .opener { margin: 0; }
+.opener-band .opener__watermerk { display: none; }
+.opener-band .opener__kicker { color: currentColor; opacity: .78; }
+.opener-band .opener__titel  { color: currentColor; }
+
+/* Het hele blad. De pagina draagt dan het kleurveld en de titel staat
+   onderin — dat is waar het oog hem zoekt wanneer hij omslaat. */
+.pagina[data-opener="blad"] > .zetspiegel--rapport { justify-content: flex-end; }
+.pagina[data-opener="blad"] .opener { margin-bottom: 0; }
+.pagina[data-opener="blad"] .opener__titel {
+  font-size: var(--m-display);
+}
+.pagina[data-opener="blad"] .opener__watermerk {
+  font-size: 240px;
+  top: auto; bottom: -44px; left: 0;
+  opacity: .5;
+}
+
+
+/* ---------------------------------------------------------------
+   12. De inhoudsopgave
+
+   Met echte paginanummers, en die komen uit de zetting en niet uit een
+   schatting: bouw.py zet het rapport, leest de folio's af, vult de
+   inhoudsopgave in en zet het opnieuw. Verschuift het aantal
+   inhoudspagina's daardoor, dan gaat er nog een ronde overheen.
+
+   De puntenlijn is een `leader` en geen reeks punten in de tekst.
+   Een tekstuele puntenlijn zou in tekstcheck.py als toegevoegde tekst
+   opduiken, en terecht.
+   --------------------------------------------------------------- */
+
+.inhoud { margin: 0; }
+.inhoud__regel {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin: 0 0 calc(var(--regel) * .55);
+  font-family: var(--brood);
+  font-weight: 300;
+  font-size: var(--m-body);
+  line-height: var(--r-body);
+  break-inside: avoid;
+}
+/* Het nummer in de inhoudsopgave is navy en niet oranje, om dezelfde
+   reden als bij de run-in kop: een inhoudsopgave van vijftig regels
+   leest als tekst en niet als een merkteken. Het accent zit in deze
+   opgave in de streep onder de titel en in de folio. */
+.inhoud__nr {
+  font-family: var(--display);
+  font-weight: 700;
+  color: var(--inkt);
+  min-width: 2.1em;
+  font-variant-numeric: tabular-nums;
+}
+.inhoud__naam { flex: 0 1 auto; }
+.inhoud__leader {
+  flex: 1 1 auto;
+  align-self: center;
+  height: 1px;
+  background: var(--r-lijn);
+  min-width: 24px;
+}
+.inhoud__folio {
+  font-family: var(--display);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+/* Niveau 2 springt in en gaat naar de kleine maat. Dieper dan twee
+   niveaus komt er niet in: een inhoudsopgave die drie niveaus diep
+   gaat, is een index. */
+.inhoud__regel[data-niveau="2"] {
+  padding-left: var(--r-kolom);
+  margin-bottom: calc(var(--regel) * .3);
+}
+.inhoud__regel[data-niveau="2"] .inhoud__nr { color: rgba(32, 27, 92, .72); }
+.inhoud__regel[data-niveau="1"] { margin-top: calc(var(--regel) * .7); }
+.inhoud__regel[data-niveau="1"] .inhoud__naam,
+.inhoud__regel[data-niveau="1"] .inhoud__folio { font-weight: 700; }
+.inhoud__regel[data-niveau="1"] .inhoud__naam { font-family: var(--display); }
+
+
+/* ---------------------------------------------------------------
+   13. De kleurregisters
+
+   Eén register per rapport. Wat een register doet, is vier variabelen
+   zetten: het accent, het tweede accent, de tint en de lijnkleur. Al
+   het andere hierboven leest die vier. Zo is een register één regel
+   veranderen en niet vijftig.
+   --------------------------------------------------------------- */
+
+/* helder — de default. Navy op wit, oranje voor het accent. */
+.pagina[data-register="helder"] {
+  --r-accent: var(--oranje);
+  --r-accent-2: var(--navy);
+  --r-tint: var(--navy-tint);
+  --r-watermerk: var(--oranje-tint);
+  --r-lijn: rgba(32, 27, 92, .22);
+}
+
+/* diep — hetzelfde op de tekstpagina's, maar de hoofdstukken openen op
+   navy. Alleen de opener verschilt, en dat is precies genoeg om een
+   rapport van tachtig pagina's ritme te geven. */
+.pagina[data-register="diep"] {
+  --r-accent: var(--oranje);
+  --r-accent-2: var(--navy);
+  --r-tint: var(--navy-tint);
+  --r-watermerk: var(--oranje-tint);
+  --r-lijn: rgba(32, 27, 92, .22);
+}
+.pagina[data-register="diep"][data-opener="blad"] {
+  --papier: var(--navy);
+  --inkt: var(--wit);
+  --r-tint: rgba(255, 255, 255, .12);
+  --r-watermerk: rgba(255, 255, 255, .13);
+  --r-lijn: rgba(255, 255, 255, .3);
+}
+.pagina[data-register="diep"] .opener-band { background: var(--navy); color: var(--wit); }
+
+/* zacht — emerald als accent. Voor een onderzoeksrapport of een
+   evaluatie: minder nadruk, meer rust. Oranje blijft over voor de
+   folio, zodat het merk niet verdwijnt. */
+.pagina[data-register="zacht"] {
+  --r-accent: var(--emerald);
+  --r-accent-2: var(--navy);
+  --r-tint: var(--mint-tint);
+  --r-watermerk: #CDEBE5;
+  --r-lijn: rgba(32, 27, 92, .18);
+}
+.pagina[data-register="zacht"] .rapport-folio::before { background: var(--oranje); }
+.pagina[data-register="zacht"][data-opener="blad"] {
+  --papier: var(--mint-tint);
+  --r-tint: rgba(32, 27, 92, .07);
+  --r-watermerk: rgba(32, 27, 92, .09);
+}
+.pagina[data-register="zacht"] .opener-band { background: var(--mint-tint); color: var(--navy); }
+
+/* contrast — violet als hoofdaccent en oranje als tweede. Dit is het
+   register van de casespread, en het is het enige register waarin twee
+   accenten naast elkaar staan. Gebruik het wanneer het rapport uit
+   cases bestaat die van elkaar moeten verschillen. */
+.pagina[data-register="contrast"] {
+  --r-accent: var(--violet);
+  --r-accent-2: var(--oranje);
+  --r-tint: #EEEBF6;
+  --r-watermerk: #DCD5EE;
+  --r-lijn: rgba(107, 93, 174, .28);
+}
+.pagina[data-register="contrast"][data-opener="blad"] {
+  --papier: var(--violet);
+  --inkt: var(--wit);
+  --r-accent: var(--oranje);
+  --r-tint: rgba(255, 255, 255, .14);
+  --r-watermerk: rgba(255, 255, 255, .16);
+  --r-lijn: rgba(255, 255, 255, .32);
+}
+.pagina[data-register="contrast"] .opener-band { background: var(--violet); color: var(--wit); }
+.pagina[data-register="contrast"] .opener-band .opener__kicker { color: var(--oranje); opacity: 1; }
+
+/* Op een donker blad wordt alles wat op navy-transparantie stond, wit-
+   transparant. Dit is de enige plek waar dat gebeurt en het geldt voor
+   alle registers tegelijk. */
+.pagina[data-inkt="wit"] .exhibit__eenheid,
+.pagina[data-inkt="wit"] .exhibit__noot,
+.pagina[data-inkt="wit"] .exhibit__bron,
+.pagina[data-inkt="wit"] .beeldblok figcaption,
+.pagina[data-inkt="wit"] .voetnoot,
+.pagina[data-inkt="wit"] .kantnoot,
+.pagina[data-inkt="wit"] .rapport-kopregel { color: rgba(255, 255, 255, .74); }
+
+
+/* ---------------------------------------------------------------
+   14. De omslag
+
+   Eén pagina, en hij is het enige blad in het hele rapport dat met de
+   hand gecomponeerd wordt. Wat erop staat komt uit de bron: de titel,
+   de ondertitel als er een is, de opdrachtgever, de datum. Wat er niet
+   op staat, staat er niet.
+   --------------------------------------------------------------- */
+
+.omslag { position: relative; flex: 1 1 auto; display: flex; flex-direction: column; }
+.omslag__boven { flex: 0 0 auto; }
+.omslag__midden { flex: 1 1 auto; display: flex; flex-direction: column; justify-content: center; }
+.omslag__onder { flex: 0 0 auto; }
+.omslag__onder > * + * { margin-top: var(--regel); }
+.omslag__boven { padding-bottom: var(--sprong); }
+.omslag__titel {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: var(--m-display);
+  line-height: 1.02;
+  letter-spacing: -.024em;
+  margin: 0;
+  text-wrap: balance;
+}
+.omslag__onderschrift {
+  font-family: var(--brood);
+  font-weight: 300;
+  font-size: 22px;
+  line-height: 1.36;
+  margin: calc(var(--regel) * .9) 0 0;
+  max-width: var(--k8);
+}
+.omslag__regel {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: var(--m-klein);
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+
+/* ---------------------------------------------------------------
+   15. Drukwerk
+
+   Eén `@page` schrijft bouw.py erbij, op de maat van het rapport. Wat
+   hier staat, is wat de browser bij het drukken anders doet dan op het
+   scherm: geen schaduw, geen tafel eromheen, en de kleuren precies
+   zoals ze op het scherm staan.
+   --------------------------------------------------------------- */
+
+@media print {
+  .vel { padding: 0 !important; background: none !important; }
+  .pagina { box-shadow: none !important; margin: 0 !important; }
+  .pagina[data-soort="rapport"] {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}

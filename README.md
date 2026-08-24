@@ -1,15 +1,62 @@
 # sfnl-slides
 
-Twee skills die dezelfde regel volgen: de vorm is per stuk een ontwerpbeslissing en geen
-invuloefening, en de render is de enige vormbeoordeling.
+Drie skills die dezelfde regel volgen: de vorm is een ontwerpbeslissing en geen invuloefening, en
+de render is de enige vormbeoordeling.
 
 | skill | wat je ermee maakt |
 |---|---|
 | **`sfnl-slides`** | een SFNL-deck uit het officiële `.potx`-sjabloon |
-| **`sfnl-design-documents`** | drukwerk in HTML: een uitnodiging, een executive summary, een proposal, een spread |
+| **`sfnl-design-documents`** | kort drukwerk in HTML: een uitnodiging, een executive summary, een proposal, een spread |
+| **`sfnl-rapport-opmaak`** | een afgerond Word-rapport van twintig tot honderdvijftig pagina's, opgemaakt zonder één woord aan de tekst te veranderen |
 
-De plugin blijft `sfnl-slides` heten, ook nu er twee skills in zitten: dat is de naam waarmee hij
+De plugin blijft `sfnl-slides` heten, ook nu er drie skills in zitten: dat is de naam waarmee hij
 geïnstalleerd staat, en hernoemen zou iedereen tot opnieuw installeren dwingen.
+
+## sfnl-rapport-opmaak — een aangeleverd rapport opmaken
+
+De andere twee skills componeren elke pagina zelf. Deze doet iets anders: hij neemt een tekst die
+al af is en laat hem door een systeem lopen. Bij tachtig pagina's kun je niet meer per pagina
+beslissen.
+
+- **De tekst verandert niet, en dat is te controleren.** `tekstcheck.py` plakt alle stukken met
+  hetzelfde `data-bron` weer aan elkaar en vergelijkt karakter voor karakter met de brontekst uit
+  het Word-document. Elke afwijking die niet in `wijzigingen.json` staat, blokkeert de oplevering.
+  Op het proefrapport van veertig pagina's: 194 van 194 blokken woordelijk gelijk, in alle vier de
+  modellen, en nul ongemarkeerde toevoegingen.
+- **Wat de opmaak wél toevoegt, staat gemarkeerd**: de folio, de kopregel, de inhoudsopgave, de
+  nummering, het nootcijfer, de herhaalde tabelkop en de omslagregels die de gebruiker zelf heeft
+  opgegeven. Zeven soorten, elk met `data-toevoeging`, en `tekstcheck.py` telt ze en schrijft ze
+  uit. Alles daarbuiten zonder `data-bron` is tekst die niemand heeft goedgekeurd.
+- **Voor elke inhoudelijke wijziging die de vorm zou willen, wordt expliciet toestemming
+  gevraagd** — een kop inkorten, een alinea splitsen, van vier handgetypte streepjes een echte
+  lijst maken. Zes soorten wijzigingen en meer bestaan er niet. `lees_docx.py` schrijft
+  `signalen.json` met de waarnemingen; de skill maakt daar voorstellen van met de bron- en de
+  doeltekst er letterlijk in; geen antwoord is nee.
+- **Een eigen zetmotor**, want dit is niet met CSS alleen te doen. `paginator.js` splitst een
+  alinea op de regelgrens met een `Range` en een binaire zoektocht, houdt twee regels aan tegen
+  weduwen en wezen, laat een kop nooit zonder zijn tekst achter, herhaalt de kop van een tabel die
+  over een paginagrens breekt, en zet de voetnoten op de pagina waar hun verwijzing staat — wat de
+  tekstkolom inkort, waardoor het blok dat er net in paste alsnog moet verhuizen.
+- **De inhoudsopgave klopt.** Zetten, de folio's aflezen, de opgave vullen, opnieuw zetten, tot de
+  kaart twee rondes hetzelfde is. Loopt in twee tot drie rondes. `qa_rapport.py` controleert het
+  daarna per blok-id en niet op koptekst, want twee secties kunnen dezelfde naam hebben.
+- **Vier layoutmodellen, vier kleurregisters, drie hoofdstukopeners**, elk met een gerenderde
+  keuzekaart die uit dezelfde pijplijn komt als het echte rapport en dus niets kan beloven wat de
+  zetmotor niet doet.
+
+De maten komen uit twee bronnen: het SFNL-drukwerk, en drie nagemeten rapporten van Bain, BMC en
+het McKinsey Global Institute. Die laatste leverden een uitkomst op die tegen de verwachting in
+ging — geen van de drie vult zijn lopende tekst uit — en dat is de reden dat hier alleen het
+dubbele model uitvult. `reference/rapport-vormentaal.md` §1 heeft de hele meting.
+
+```bash
+python scripts/rapport/preflight.py
+python scripts/rapport/lees_docx.py rapport.docx --uit werk/
+python scripts/rapport/bouw.py werk/ --model breed --register helder
+python scripts/rapport/tekstcheck.py werk/rapport.html      # blokkeert
+python scripts/rapport/render.py werk/rapport.html
+python scripts/rapport/qa_rapport.py werk/rapport.html
+```
 
 ## sfnl-design-documents — drukwerk in HTML
 
@@ -111,6 +158,13 @@ ze delen geen bestanden en importeren niet over de grens.
 
 ```
 skills/sfnl-slides/SKILL.md     de route: vragenvuur, outline, zes bouwstappen, de loop
+skills/sfnl-rapport-opmaak/     de zetroute: inlezen, vragenvuur, wijzigingsvoorstellen, zetten
+reference/rapport-vormentaal.md de maatstaf: de metingen aan Bain, BMC en MGI, de weigerlijst
+reference/rapport-stramien.md   de feiten: raster, vier modellen, vier registers, klassenlijst
+assets/rapport/rapport.css      de rapportlaag boven stijl.css
+assets/rapport/keuzekaarten/    drie gerenderde keuzekaarten: modellen, registers, openers
+assets/rapport/maatstaf/        vier gezette pagina's als maatstaf
+scripts/rapport/                de zetmotor en de checks
 reference/vormentaal.md         de maatstaf in proza — waar de lat ligt
 reference/adviesvorm.md         de laag erboven — antwoord voorop, exhibitcraft, weigerlijst
 reference/sjabloon.md           geometrie, layouts, placeholderdozen, negen valkuilen

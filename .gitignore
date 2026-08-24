@@ -47,6 +47,14 @@ deck.pdf
 !assets/documenten/maatstaf/*.png
 !assets/documenten/keuzekaarten/*.png
 
+# En hetzelfde voor sfnl-rapport-opmaak: vier gezette pagina's als maatstaf en drie
+# keuzekaarten die met het vragenvuur meegaan. De kaarten worden door keuzekaart.py uit
+# dezelfde pijplijn gebouwd als een echt rapport, dus ze horen in de repo — anders stuurt
+# de skill drie bestanden mee die er niet zijn, en dat is precies het beeld waar de
+# gebruiker zijn model op kiest.
+!assets/rapport/maatstaf/*.png
+!assets/rapport/keuzekaarten/*.png
+
 # Decks en sjablonen blijven buiten de repo, behalve het meegeleverde sjabloon in assets/.
 *.potx
 *.pptx

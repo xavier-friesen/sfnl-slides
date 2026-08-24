@@ -1,6 +1,6 @@
 {
   "name": "sfnl",
-  "description": "De pluginmarketplace van Social Finance NL. Eén plugin, sfnl-slides, met inmiddels twee skills: de compositie-eerst route naar een SFNL-deck, en dezelfde route naar drukklare documenten in HTML. De naam is de organisatie en niet de plugin, zodat er later meer bij kan. Deze repo bevat die ene plugin en die staat op de root, dus 'source' is './' en de marketplace werkt zowel vanuit een git-URL als vanuit een lokale checkout. Installeren: sfnl-slides@sfnl.",
+  "description": "De pluginmarketplace van Social Finance NL. Een plugin, sfnl-slides, met inmiddels drie skills: de compositie-eerst route naar een SFNL-deck, dezelfde route naar kort drukklaar drukwerk in HTML, en een zetroute die een afgerond Word-rapport opmaakt zonder de tekst aan te raken. De naam is de organisatie en niet de plugin, zodat er later meer bij kan. Deze repo bevat die ene plugin en die staat op de root, dus 'source' is './' en de marketplace werkt zowel vanuit een git-URL als vanuit een lokale checkout. Installeren: sfnl-slides@sfnl.",
   "owner": {
     "name": "Social Finance NL",
     "email": "info@socialfinancenl.nl"
@@ -8,8 +8,8 @@
   "plugins": [
     {
       "name": "sfnl-slides",
-      "description": "Twee skills die dezelfde regel volgen: de vorm is per stuk een ontwerpbeslissing en geen invuloefening, en de render is de enige vormbeoordeling. `sfnl-slides` bouwt een deck uit het officiële sjabloon — header geërfd uit master en layout, contentzone zelf gecomponeerd, met de dunne laag die de OOXML-valkuilen afhandelt en veertien gerenderde slides als maatstaf. `sfnl-design-documents` bouwt drukwerk in HTML — een uitnodiging, een executive summary, een proposal, een spread — op een vast blad met een snijrand, in het formaat van de SFNL-jaarrapporten, met de letters ingesloten en het canvas van de design-skill erbij om er met de muis aan te schuiven. Beide hebben twee poorten en beide poorten zijn een mens: het vragenvuur en de outline. Geen patroonbibliotheek in geen van beide.",
-      "version": "1.2.0",
+      "description": "Drie skills die dezelfde regel volgen: de vorm is een ontwerpbeslissing en geen invuloefening, en de render is de enige vormbeoordeling. `sfnl-slides` bouwt een deck uit het officiele sjabloon. `sfnl-design-documents` bouwt kort drukwerk in HTML — een uitnodiging, een executive summary, een spread — op een vast blad met een snijrand. `sfnl-rapport-opmaak` maakt van een afgerond Word-rapport een drukklaar rapport van twintig tot honderdvijftig pagina's, met een eigen zetmotor die op de regelgrens splitst, en met de harde belofte dat er geen woord aan de tekst verandert: elke inhoudelijke wijziging die de vorm zou willen, wordt expliciet gevraagd, en `tekstcheck.py` controleert achteraf karakter voor karakter. Vier layoutmodellen, vier kleurregisters, drie hoofdstukopeners, alle drie met een gerenderde keuzekaart. Geen patroonbibliotheek in geen van de drie.",
+      "version": "1.3.0",
       "source": "./",
       "author": {
         "name": "Social Finance NL"
