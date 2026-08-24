@@ -1,0 +1,688 @@
+/* =====================================================================
+   SFNL folderstijl — de primitievenlaag voor gedrukte folders in HTML.
+
+   Dit is GEEN patroonbibliotheek. Er staat geen `.cover`, geen
+   `.hoofdstukopener` en geen `.kaartenrij` in. Wat er wel staat: het
+   paginakader, het raster, de maatladder, de kleurregels en de
+   merktekens die elk één ding tekenen. De compositie van elke pagina
+   is elke keer opnieuw een ontwerpbeslissing.
+
+   Alle maten in px bij 96 dpi, want dat is de eenheid waarin de
+   design-canvas een artboard meet. Eén mm is 3,7795 px; de maten
+   hieronder zijn daaruit afgerond op hele px en de afronding staat
+   erbij waar hij ertoe doet.
+
+   De metingen komen uit twee echte SFNL-drukwerken: het jaarrapport
+   2025 (210 x 275 mm) en de casespread Civitates (420 x 275 mm).
+   Waar hieronder een getal staat met "gemeten" ernaast, komt het
+   daaruit en niet uit een voorkeur.
+   ===================================================================== */
+
+/* ---------------------------------------------------------------
+   1. Merkwaarden
+   --------------------------------------------------------------- */
+
+:root {
+  /* Kern. Deze vijf staan vast en worden nooit per document gekozen. */
+  --navy:        #201B5C;
+  --oranje:      #F87F4F;
+  --wit:         #FFFFFF;
+  --papier:      #FFFFFF;
+  --inkt:        #201B5C;   /* lopende tekst; nooit puur zwart */
+
+  /* Accenten. Ten hoogste een daarvan naast oranje in een document. */
+  --grapefruit:  #F95D63;
+  --emerald:     #6AC6BA;
+  --royal:       #3B62C1;
+  --sky:         #45B6E2;
+  --violet:      #6B5DAE;   /* gemeten uit de casespread */
+
+  /* Tinten. Gemeten uit de vlakken in het rapport, niet berekend. */
+  --mint-tint:      #E0F4F1;   /* emerald als paginaveld */
+  --periwinkel:     #A0ADE2;   /* royal als paneelveld  */
+  --oranje-tint:    #FFDFD0;   /* oranje als watermerk  */
+  --navy-tint:      #F4F3F7;
+  --grijs:          #F2F2F2;
+
+  /* Het huisverloop. Eén verloop, gemeten van #FF7F40 naar #FF5F55 op
+     de omslag en op de kaartenrij van het rapport 2025. Wie een tweede
+     verloop verzint, verzint een tweede huisstijl. */
+  --verloop: linear-gradient(150deg, var(--oranje) 0%, var(--grapefruit) 100%);
+
+  /* Letters. Gotham Bold is gelicentieerd en staat niet op het web;
+     Montserrat ExtraBold is de substituut die het drukwerk zelf al
+     gebruikt (gemeten in de casespread). Lato is de brood-letter. */
+  --display: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;
+  --brood:   'Lato', 'Helvetica Neue', Arial, sans-serif;
+
+  /* De maatladder. Vier rollen, en de body staat op 10/13 pt — de
+     gemeten zetting van het rapport. 10 pt is 13,33 px bij 96 dpi. */
+  --m-body:     13.33px;   /* 10 pt  */
+  --r-body:     17.33px;   /* 13 pt regelafstand, ratio 1,30 */
+  --m-klein:    10.67px;   /* 8 pt — bijschrift, bron, label */
+  --r-klein:    14px;
+  --m-kop:      16px;      /* 12 pt — sectiekop */
+  --m-titel:    26.67px;   /* 20 pt — paginatitel */
+  --m-display:  56px;      /* omslag, hoofdstuknummer; vrij naar boven */
+
+  /* Het kader. Marge 15 mm rondom, onder ruimer voor de folio.
+     Gemeten: tekstkolom begint op 42,5 pt van de snijrand = 15 mm. */
+  --marge:        57px;    /* 15 mm */
+  --marge-onder:  64px;    /* 17 mm — de folio staat eronder */
+  --goot:         30px;    /* 8 mm — gemeten 23,5 pt tussen twee kolommen */
+
+  /* Het basisraster. Elke verticale sprong is een veelvoud van de
+     regelafstand, zodat tekst in twee kolommen op één lijn blijft. */
+  --regel:  17.33px;
+  --sprong-klein: 17.33px;
+  --sprong:       34.66px;
+  --sprong-groot: 52px;
+
+  /* Papiermaat. Wordt per formaat overschreven op .pagina. */
+  --breedte: 794px;
+  --hoogte:  1039px;
+}
+
+/* ---------------------------------------------------------------
+   2. Grondslag
+   --------------------------------------------------------------- */
+
+* { box-sizing: border-box; }
+
+html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+body {
+  margin: 0;
+  background: #E7E6EA;              /* de tafel waarop de pagina's liggen */
+  color: var(--inkt);
+  font-family: var(--brood);
+  font-weight: 300;
+  font-size: var(--m-body);
+  line-height: var(--r-body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  font-kerning: normal;
+  font-variant-numeric: lining-nums;
+}
+
+a { color: var(--oranje); text-decoration: none; }
+a:hover { color: var(--grapefruit); }
+
+/* ---------------------------------------------------------------
+   3. De pagina
+
+   Eén .pagina is één blad. Hij is vast van maat, want dit is drukwerk:
+   inhoud die niet past, past niet, en dat hoort te blijken in plaats
+   van weg te schalen. `qa_folder.py` meet dat.
+   --------------------------------------------------------------- */
+
+/* Het blad. Vast van maat, en `overflow: hidden` is de snijrand: wat erbuiten
+   valt, valt er in het echt ook af. Het blad draagt zelf géén marge — dat doet
+   de zetspiegel hieronder — want een absoluut geplaatst element rekent tegen
+   de padding box, en een aflopend vlak zou dan keurig binnen de marge blijven
+   staan. Dat is precies wat aflopend werk niet is. */
+.pagina {
+  position: relative;
+  width: var(--breedte);
+  height: var(--hoogte);
+  overflow: hidden;
+  background: var(--papier);
+  color: var(--inkt);
+  page-break-after: always;
+  break-after: page;
+}
+
+.pagina:last-child { page-break-after: auto; break-after: auto; }
+
+/* De zetspiegel: het gebied waarbinnen tekst staat. Alles wat gelezen wordt
+   hoort hierin; alles wat de rand raakt staat ernaast als aflopend werk.
+   `z-index: 1` zet hem boven een aflopend vlak, dus de volgorde in de markup
+   maakt niet uit. */
+.zetspiegel {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  padding: var(--marge) var(--marge) var(--marge-onder);
+}
+
+/* Een zetspiegel die zijn inhoud onderin verankert of uitspreidt. Dit is het
+   verschil tussen een compositie en een blok tekst dat toevallig bovenaan
+   begint. */
+.zetspiegel--onder   { display: flex; flex-direction: column; justify-content: flex-end; }
+.zetspiegel--spreid  { display: flex; flex-direction: column; justify-content: space-between; }
+.zetspiegel--midden  { display: flex; flex-direction: column; justify-content: center; }
+
+/* Formaten. Alleen deze vijf; een zesde is een besluit, geen variant. */
+.pagina[data-formaat="sfnl"]        { --breedte: 794px;  --hoogte: 1039px; }  /* 210 x 275 mm — het rapportformaat */
+.pagina[data-formaat="sfnl-spread"] { --breedte: 1587px; --hoogte: 1039px; }  /* 420 x 275 mm — de dubbelpagina  */
+.pagina[data-formaat="a4"]          { --breedte: 794px;  --hoogte: 1123px; }
+.pagina[data-formaat="a4-liggend"]  { --breedte: 1123px; --hoogte: 794px;  }
+.pagina[data-formaat="a5"]          { --breedte: 559px;  --hoogte: 794px;  --marge: 43px; --marge-onder: 50px; }
+.pagina[data-formaat="dl"]          { --breedte: 374px;  --hoogte: 794px;  --marge: 34px; --marge-onder: 40px; }
+
+/* Kleurvelden. Het veld bepaalt papier en inkt in één keer, zodat de
+   contrastregel niet per element opnieuw genomen wordt.
+
+   Op oranje is de inkt navy en niet wit, en dat is nagemeten: wit haalt 2,6 op
+   oranje en 2,8 op het verloop, navy haalt er 6,4. Een kop van 40 px in wit
+   staat prima op oranje — het SFNL-drukwerk doet dat op elke omslag — maar een
+   alinea van 10 pt in wit op oranje is de eerste plek waar een folder er
+   goedkoop uit gaat zien. Wil je het hele veld in wit, dan zet je dat er
+   expliciet bij met data-inkt="wit", en dan is het een keuze. */
+.pagina[data-veld="oranje"]  { --papier: var(--oranje);     --inkt: var(--navy); }
+.pagina[data-veld="verloop"] { background: var(--verloop);  --inkt: var(--navy); }
+.pagina[data-veld="navy"]    { --papier: var(--navy);       --inkt: var(--wit);  }
+.pagina[data-veld="mint"]    { --papier: var(--mint-tint);  --inkt: var(--navy); }
+.pagina[data-veld="violet"]  { --papier: var(--violet);     --inkt: var(--wit);  }
+.pagina[data-veld="navy-tint"] { --papier: var(--navy-tint); --inkt: var(--navy); }
+
+.pagina[data-inkt="wit"]  { --inkt: var(--wit);  }
+.pagina[data-inkt="navy"] { --inkt: var(--navy); }
+
+/* ---------------------------------------------------------------
+   4. Aflopend werk
+
+   Een vlak of een foto die de snijrand raakt. Dit is het merkteken
+   dat drukwerk van een Word-document scheidt en het is bijna gratis:
+   één klasse. Zet hem op een kind van .pagina.
+   --------------------------------------------------------------- */
+
+.aflopend        { position: absolute; inset: 0; }
+.aflopend-boven  { position: absolute; top: 0; left: 0; right: 0; }
+.aflopend-onder  { position: absolute; bottom: 0; left: 0; right: 0; }
+.aflopend-links  { position: absolute; top: 0; bottom: 0; left: 0; }
+.aflopend-rechts { position: absolute; top: 0; bottom: 0; right: 0; }
+
+/* Alles wat ná een aflopend vlak komt, moet erbovenop. */
+.laag { position: relative; z-index: 1; }
+
+/* Een foto vult zijn doos en wordt bijgesneden, nooit vervormd. */
+.beeld { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* Zwart-wit is de behandeling voor sfeerbeeld naast een kleurveld;
+   een foto die zelf de boodschap draagt blijft in kleur. */
+.beeld--grijs { filter: grayscale(100%); }
+
+/* ---------------------------------------------------------------
+   5. Het kolommenraster
+
+   Twee of drie kolommen, met de gemeten goot. Vier kolommen bestaat
+   niet op het rapportformaat: de maat wordt dan 24 tekens en dat
+   leest niet meer.
+   --------------------------------------------------------------- */
+
+.kolommen {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--goot);
+  align-items: start;
+}
+.kolommen[data-kolommen="1"] { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+.kolommen[data-kolommen="2"] { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.kolommen[data-kolommen="3"] { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+/* Een rij panelen naast elkaar hoort even hoog te zijn. `align-items: start`
+   laat elk paneel tot zijn eigen tekst krimpen, en drie kaarten van drie
+   verschillende hoogten is het snelst zichtbare teken dat er niemand naar
+   gekeken heeft. Zet deze klasse op elke rij met .paneel of .kaart erin.
+   Gemeten op de eerste proeffolder: drie kaarten met 3, 2 en 2 regels tekst
+   kwamen uit op 232, 204 en 204 px. */
+.kolommen--gelijk { align-items: stretch; }
+.kolommen--gelijk > .paneel,
+.kolommen--gelijk > .kaart { display: flex; flex-direction: column; }
+
+/* Een element dat over alle kolommen loopt — een titel, een uitspraak,
+   een aflopende foto binnen het raster. */
+.overspan { grid-column: 1 / -1; }
+
+/* De stapel is de verticale tegenhanger: één kolom met een vaste
+   sprong ertussen, zodat de witruimte niet per element gekozen wordt. */
+.stapel      { display: flex; flex-direction: column; gap: var(--sprong-klein); }
+.stapel--ruim { gap: var(--sprong); }
+.stapel--dicht { gap: calc(var(--regel) / 2); }
+.rij         { display: flex; gap: var(--goot); align-items: flex-start; }
+
+/* ---------------------------------------------------------------
+   6. De zetting
+
+   Lopende tekst is uitgevuld met automatische afbreking. Dat is geen
+   smaak maar de reden dat een kolom van 55 mm leesbaar blijft: zonder
+   afbreking vallen er gaten van vier spaties in een uitgevulde regel.
+   Zet lang="nl" op <html> of op het blok, anders breekt Chromium
+   Nederlandse woorden op Engelse regels af.
+   --------------------------------------------------------------- */
+
+.tekst {
+  font-family: var(--brood);
+  font-weight: 300;
+  font-size: var(--m-body);
+  line-height: var(--r-body);
+  text-align: justify;
+  hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphenate-limit-chars: 6 3 3;
+  text-wrap: pretty;
+  orphans: 2;
+  widows: 2;
+}
+.tekst > p { margin: 0 0 var(--regel); }
+.tekst > p:last-child { margin-bottom: 0; }
+
+/* Vlaggend links. Voor een smalle kolom onder de 50 mm, voor een
+   bijschrift en voor alles op een kleurveld: uitvullen op een donker
+   veld maakt de gaten zichtbaarder dan op wit. */
+.tekst--links { text-align: left; }
+
+/* De aanhef: het vetgezette begin van een alinea dat de alinea
+   samenvat. Dit is het SFNL-alternatief voor een opsomming — gemeten
+   in het rapport op elke lopende pagina. */
+.tekst b, .tekst strong, .aanhef {
+  font-weight: 700;
+  font-family: var(--brood);
+}
+
+/* Cursief draagt een naam, een citaat of een vreemd woord. Nooit een
+   hele alinea. */
+.tekst i, .tekst em { font-style: italic; }
+
+/* ---------------------------------------------------------------
+   7. De maatladder
+
+   Vier rollen en niet meer. Wie een vijfde maat nodig heeft, heeft
+   een compositieprobleem en geen maatprobleem.
+   --------------------------------------------------------------- */
+
+.display {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: var(--m-display);
+  line-height: 1.02;
+  letter-spacing: -0.015em;
+  margin: 0;
+  text-wrap: balance;
+}
+
+.titel {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: var(--m-titel);
+  line-height: 1.12;
+  letter-spacing: -0.005em;
+  margin: 0;
+  text-wrap: balance;
+}
+
+.kop {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: var(--m-kop);
+  line-height: 1.2;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  margin: 0;
+  text-wrap: balance;
+}
+
+/* De lichte kop: Montserrat Light in kapitalen met ruime spatiëring.
+   Dit is de tweede kopvorm van het rapport en hij is stiller dan .kop
+   terwijl hij groter mag staan. */
+.kop--licht {
+  font-weight: 300;
+  letter-spacing: 0.09em;
+}
+
+/* Het label: het kleinste merkteken met de meeste spatiëring. Een
+   rubriek, een categorie, een kolomkop. Nooit een gelezen zin. */
+.label {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: var(--m-klein);
+  line-height: 1.3;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.klein {
+  font-family: var(--brood);
+  font-weight: 300;
+  font-size: var(--m-klein);
+  line-height: var(--r-klein);
+  margin: 0;
+}
+
+/* De bronregel en het fotobijschrift: dezelfde maat als .klein maar
+   stiller, en cursief zodat hij niet als tekst meeleest. */
+.bron {
+  font-family: var(--brood);
+  font-weight: 300;
+  font-style: italic;
+  font-size: var(--m-klein);
+  line-height: var(--r-klein);
+  opacity: 0.72;
+  margin: 0;
+}
+
+/* De chapeau: de vetgezette inleidende alinea onder een hoofdstukkop.
+   Eén per hoofdstuk. */
+.chapeau {
+  font-family: var(--brood);
+  font-weight: 700;
+  font-size: var(--m-body);
+  line-height: var(--r-body);
+  text-align: justify;
+  hyphens: auto;
+  margin: 0;
+}
+
+/* ---------------------------------------------------------------
+   8. Merktekens
+
+   Elk merkteken tekent één ding en codeert één ding. Ze zijn geoogst
+   uit het rapport 2025 en de casespread; per stuk staat erbij wat het
+   codeert en waar het vandaan komt.
+   --------------------------------------------------------------- */
+
+/* 8.1 De kopregel — welk hoofdstuk je leest, en waar je bent.
+   Rechtsboven, cursief hoofdstuknaam, gekleurde pijp, paginanummer,
+   en een haarlijn die naar links doorloopt. Gemeten op elke
+   rechterpagina van het rapport 2025. */
+.kopregel {
+  position: absolute;
+  top: calc(var(--marge) - 26px);
+  right: var(--marge);
+  left: var(--marge);
+  display: flex;
+  align-items: baseline;
+  justify-content: flex-end;
+  gap: 6px;
+  font-family: var(--brood);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 11px;
+  color: var(--navy);
+}
+.kopregel::before {
+  content: "";
+  flex: 1 1 auto;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.35;
+  transform: translateY(-3px);
+}
+.kopregel .pijp { color: var(--oranje); font-style: normal; }
+.kopregel .nr   { font-style: normal; font-weight: 700; }
+
+/* 8.2 De folio — het paginanummer, buitenonder.
+   Los van de kopregel, want een omslag of een kleurpagina draagt wel
+   een folio en geen kopregel. */
+.folio {
+  position: absolute;
+  bottom: calc(var(--marge-onder) - 34px);
+  font-family: var(--brood);
+  font-weight: 700;
+  font-size: 12px;
+  color: var(--inkt);
+  opacity: 0.9;
+}
+.folio--links  { left: var(--marge); }
+.folio--rechts { right: var(--marge); }
+
+/* 8.3 De kicker — het volgnummer boven een sectiekop.
+   Twee cijfers, klein, in het accent. Codeert: dit is de derde van
+   een reeks, en de reeks loopt door over de pagina's heen. */
+.kicker {
+  font-family: var(--brood);
+  font-weight: 400;
+  font-size: var(--m-klein);
+  letter-spacing: 0.06em;
+  color: var(--oranje);
+  margin: 0 0 4px;
+  display: block;
+}
+
+/* 8.4 De uitspraak — de pull quote.
+   Groot, in de display-letter, over de volle maat. Codeert: dit is
+   wat er van deze pagina blijft hangen. Eén per pagina, hooguit. */
+.uitspraak {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 22px;
+  line-height: 1.22;
+  letter-spacing: -0.01em;
+  color: var(--navy);
+  margin: 0;
+  text-wrap: balance;
+}
+.uitspraak--wit { color: var(--wit); }
+
+/* 8.5 Het watermerkcijfer — het hoofdstuknummer als groot, bleek
+   cijfer achter de kop. Codeert de hoofdstukgrens zonder een regel
+   te kosten. Gemeten: het cijfer staat half achter de kop, niet
+   ernaast. */
+.watermerk {
+  position: absolute;
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 96px;
+  line-height: 0.8;
+  color: var(--oranje-tint);
+  z-index: 0;
+  user-select: none;
+}
+.watermerk--mint { color: #CDEBE5; }
+
+/* 8.6 De haarlijn en de accentstreep.
+   De haarlijn scheidt; de accentstreep markeert een begin. Een streep
+   van 3 px in oranje onder een kop is het goedkoopste merkteken dat
+   er is en het staat in elk SFNL-drukwerk. */
+.haarlijn {
+  border: 0;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.22;
+  margin: 0;
+}
+.streep {
+  display: block;
+  width: 56px;
+  height: 3px;
+  background: var(--oranje);
+  border: 0;
+  margin: 0;
+}
+.streep--breed { width: 100%; }
+
+/* 8.7 Het paspoort — de labelrij met feiten in een zijkolom.
+   Label in kapitalen, waarde eronder in vet. Gemeten uit het
+   fondspaspoort van de casespread: label 6,8 pt, waarde 8,9 pt. */
+.paspoort { display: flex; flex-direction: column; gap: 9px; }
+.paspoort > div > .label {
+  font-size: 9px;
+  letter-spacing: 0.13em;
+  opacity: 0.72;
+  margin-bottom: 1px;
+}
+.paspoort > div > .waarde {
+  font-family: var(--brood);
+  font-weight: 700;
+  font-size: 11.9px;
+  line-height: 1.28;
+  margin: 0;
+}
+
+/* 8.8 De badge — een genummerde cirkel.
+   Codeert volgorde. Het cijfer staat gecentreerd en de cirkel is
+   altijd rond, nooit een afgeronde rechthoek. */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: var(--oranje);
+  color: var(--wit);
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 19px;
+  line-height: 1;
+}
+.badge--groot { width: 56px; height: 56px; font-size: 26px; }
+.badge--open  { background: transparent; color: var(--oranje); box-shadow: inset 0 0 0 2px currentColor; }
+
+/* 8.9 De lesmarkering — de cirkel-met-staaf boven een korte
+   aanbeveling. Gemeten op de aanbevelingspagina van het rapport 2025;
+   hij markeert een reeks losse punten zonder een opsommingsteken. */
+.lesmarkering { display: flex; align-items: center; gap: 3px; }
+.lesmarkering::before {
+  content: ""; width: 13px; height: 13px; border-radius: 50%;
+  background: var(--oranje); flex: 0 0 auto;
+}
+.lesmarkering::after {
+  content: ""; width: 18px; height: 11px; border-radius: 3px;
+  background: var(--oranje); flex: 0 0 auto;
+}
+
+/* 8.10 Het paneel — een gekleurd vlak met inhoud erin.
+   Rechthoekig tenzij er een reden is; de ronding is één waarde voor
+   het hele document en staat op --ronding. */
+.paneel {
+  --ronding: 0px;
+  border-radius: var(--ronding);
+  padding: 26px 28px;
+  background: var(--grijs);
+  color: var(--navy);
+}
+/* Let op de tekstkleur op oranje. Wit haalt 2,6 op oranje en 2,8 op het
+   verloop, en dat draagt geen gelezen regel: het is genoeg voor een kop vanaf
+   16 px en te weinig voor een alinea van 10 pt. Navy haalt er 6,4. Daarom is
+   navy hier de inkt en is wit de uitzondering die je per element zet, voor een
+   kop of een getal op displaymaat. Op navy en violet is het andersom. */
+.paneel[data-veld="oranje"]  { background: var(--oranje);      color: var(--navy); }
+.paneel[data-veld="verloop"] { background: var(--verloop);     color: var(--navy); }
+.paneel[data-veld="navy"]    { background: var(--navy);        color: var(--wit); }
+.paneel[data-veld="mint"]    { background: var(--mint-tint);   color: var(--navy); }
+.paneel[data-veld="violet"]  { background: var(--violet);      color: var(--wit); }
+.paneel[data-veld="periwinkel"] { background: var(--periwinkel); color: var(--navy); }
+.paneel[data-veld="wit"]     { background: var(--wit);         color: var(--navy); }
+
+/* De kaart is een paneel dat los op wit staat. Hij draagt een
+   haarlijn in zijn eigen kleur in plaats van een schaduw; een schaduw
+   is het merkteken van een scherm en dit is drukwerk. */
+.kaart {
+  --ronding: 6px;
+  border-radius: var(--ronding);
+  padding: 20px 20px 22px;
+  background: var(--wit);
+  box-shadow: inset 0 0 0 1px rgba(32, 27, 92, 0.16);
+}
+
+/* 8.11 De ronde foto — het portret dat over de rand van een paneel
+   heen hangt. Gemeten: het rapport zet hem half buiten het vlak, en
+   dat overlappen is precies wat hem uit de opmaaksjabloonlook haalt. */
+.rondfoto {
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+}
+
+/* 8.12 De tonale bol — het bleke cirkelvlak op een kleurpagina.
+   Gemeten op de omslag en op de bronvermelding van het rapport 2025:
+   een cirkel in dezelfde kleur, iets lichter, half buiten de pagina.
+   Dit is wat een vol oranje vlak diepte geeft zonder een tweede kleur. */
+.bol {
+  position: absolute;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.10;
+  pointer-events: none;
+}
+
+/* 8.13 Het icoon — zelf getekend, in lijn, op een raster van 24.
+   Er is geen iconenbibliotheek en er komt er geen. Emoji zijn
+   verboden: die zetten een tweede lettertype op de pagina en lezen
+   als een chatbericht. */
+.icoon {
+  width: 34px;
+  height: 34px;
+  display: block;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* 8.14 Het logo. Cirkel plus vierkant plus het woordmerk op drie regels,
+   alles in één kleur. Het staat als inline SVG in de pagina en erft daardoor
+   `currentColor`: wit op een kleurveld, navy op wit. Er is geen
+   bestandsversie in deze skill, want een los bestand zou in het canvas als
+   base64 mee moeten en dan is het niet meer herkleurbaar.
+   De markup staat in `reference/folders-stramien.md` onder Het logo. */
+.logo { display: block; height: 40px; width: auto; color: currentColor; }
+.logo--groot { height: 62px; }
+.logo--klein { height: 27px; }
+
+/* 8.15 De pijl die zegt "dit loopt door op de volgende pagina".
+   Gemeten in het rapport: een klein oranje driehoekje aan het eind
+   van de laatste alinea. */
+.doorloop {
+  display: inline-block;
+  margin-left: 4px;
+  color: var(--oranje);
+}
+
+/* ---------------------------------------------------------------
+   9. Tabel
+
+   Geen randen rondom, alleen een lijn onder de kop en een haarlijn
+   per rij. De Word-tabellook — grijze vulling met een raster van
+   lijntjes — is het snelst herkenbare teken dat er geen ontwerper
+   aan te pas kwam.
+   --------------------------------------------------------------- */
+
+.tabel {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--m-klein);
+  line-height: var(--r-klein);
+}
+.tabel th {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-align: left;
+  padding: 0 10px 7px 0;
+  border-bottom: 1.5px solid var(--oranje);
+}
+.tabel td {
+  padding: 7px 10px 7px 0;
+  border-bottom: 1px solid rgba(32, 27, 92, 0.14);
+  vertical-align: top;
+}
+.tabel tr:last-child td { border-bottom: 0; }
+.tabel .num { text-align: right; font-variant-numeric: tabular-nums; padding-right: 0; }
+
+/* ---------------------------------------------------------------
+   10. Print
+
+   De .pagina is al op maat, dus @page hoeft alleen de bladmaat te
+   zetten en alle marges op nul: de marge zit in de pagina zelf.
+   `bouw.py` schrijft de juiste @page-regel in het losse HTML-bestand.
+   --------------------------------------------------------------- */
+
+@media print {
+  body { background: none; }
+  .pagina { margin: 0; box-shadow: none; }
+}
+
+/* Op het scherm liggen de pagina's als bladen op een tafel. In een
+   artboard heeft dit geen effect, want daar is de pagina de wereld. */
+@media screen {
+  .vel { display: flex; flex-direction: column; align-items: center; gap: 28px; padding: 28px 0; }
+  .vel > .pagina { box-shadow: 0 2px 18px rgba(32, 27, 92, 0.18); }
+}

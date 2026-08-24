@@ -40,6 +40,13 @@ deck.pdf
 !assets/proeven/*.png
 !assets/keuzekaarten/*.png
 
+# Hetzelfde voor sfnl-design-folders: de maatstaf zijn vier gerenderde pagina's plus het
+# contactblad, en de keuzekaart is het beeld dat bij het vragenvuur meegaat. Beide worden
+# uit stijl.css gerenderd en beide horen in de repo, want anders stuurt de skill een
+# bestand mee dat er niet is.
+!assets/folders/maatstaf/*.png
+!assets/folders/keuzekaarten/*.png
+
 # Decks en sjablonen blijven buiten de repo, behalve het meegeleverde sjabloon in assets/.
 *.potx
 *.pptx

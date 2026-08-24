@@ -1,9 +1,50 @@
 # sfnl-slides
 
-Een SFNL-deck bouwen uit het officiële sjabloon, waarbij de compositie per slide een
-ontwerpbeslissing is en geen invuloefening.
+Twee skills die dezelfde regel volgen: de vorm is per stuk een ontwerpbeslissing en geen
+invuloefening, en de render is de enige vormbeoordeling.
 
-## Waarom deze plugin naast `sfnl-powerpoint` bestaat
+| skill | wat je ermee maakt |
+|---|---|
+| **`sfnl-slides`** | een SFNL-deck uit het officiële `.potx`-sjabloon |
+| **`sfnl-design-folders`** | drukwerk in HTML: een uitnodiging, een executive summary, een proposal, een spread |
+
+De plugin heet nog `sfnl-slides`, want dat is de naam waarmee hij geïnstalleerd staat. Wil je hem
+hernoemen nu er twee skills in zitten, dan is dat een aparte stap: iedereen die hem al heeft, moet
+opnieuw installeren.
+
+## sfnl-design-folders — drukwerk in HTML
+
+Een folder is een reeks vaste bladen met een snijrand, geen scherm dat meegroeit. Wat er niet op
+past, past niet, en dat hoort te blijken.
+
+- **Het formaat is dat van de jaarrapporten**: 210 × 275 mm, niet A4. Dat is de reden dat ze als
+  magazine lezen. A4, A5, de liggende spread en een drieluikpaneel zitten er ook in.
+- **Eén bron, twee uitvoeren.** De `.dc.html`-artboards zijn de bron. `bouw.py` leidt er het losse
+  print-HTML uit af *en* de spreadindeling voor het design-canvas, en houdt ze in de pas. Bewerkt
+  de gebruiker een pagina in het canvas en slaat hij op, dan haal je hem er als artboard weer uit.
+- **De letters zitten ingesloten**, als `@font-face` met een data-URI onder de OFL. Een folder die
+  zijn letters van Google Fonts haalt, valt terug op Helvetica zodra er geen internet is, en de
+  export van het canvas neemt ze sowieso niet mee.
+- **`qa_folder.py` meet wat stil misgaat**: tekst die door `overflow: hidden` is weggevallen, een
+  element dat over de snijrand steekt, een gat van 300 px in het midden van een pagina, wit op
+  oranje op contrast 2,6. Drie ervan blokkeren; de rest is een aanwijzing en de render beslist.
+- **Er is geen paginabibliotheek.** `stijl.css` geeft het kader, het raster, de maatladder, de
+  kleurregels en zeventien merktekens die elk één ding tekenen. De compositie is elke pagina
+  opnieuw een beslissing.
+
+Alle maten en kleuren komen uit twee gemeten drukwerken: het jaarrapport 2025 en de casespread
+Civitates. Wat er in `reference/folders-stramien.md` staat met "gemeten" ernaast, komt daaruit.
+
+```bash
+python scripts/folders/preflight.py
+python scripts/folders/bouw.py <werkmap> --uit uitnodiging.html --titel "Uitnodiging"
+python scripts/folders/render.py <werkmap>/uitnodiging.html
+python scripts/folders/qa_folder.py <werkmap>/uitnodiging.html
+```
+
+## sfnl-slides — een deck uit het sjabloon
+
+### Waarom deze route naast `sfnl-powerpoint` bestaat
 
 `sfnl-powerpoint` heeft de betrouwbaarheid opgelost. Geen kapotte bestanden, geen overlopende
 tekst, geen placeholders die blijven staan, een gehandhaafd layoutbeleid. Dat werkt, en het

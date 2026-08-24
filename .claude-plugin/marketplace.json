@@ -1,6 +1,6 @@
 {
   "name": "sfnl",
-  "description": "De pluginmarketplace van Social Finance NL. Nu met één plugin, sfnl-slides, de compositie-eerst route naar een SFNL-deck; de naam is de organisatie en niet de plugin, zodat er later meer bij kan. Deze repo bevat die ene plugin en die staat op de root, dus 'source' is './' en de marketplace werkt zowel vanuit een git-URL als vanuit een lokale checkout. Installeren: sfnl-slides@sfnl.",
+  "description": "De pluginmarketplace van Social Finance NL. Eén plugin, sfnl-slides, met inmiddels twee skills: de compositie-eerst route naar een SFNL-deck, en dezelfde route naar drukklare folders in HTML. De naam is de organisatie en niet de plugin, zodat er later meer bij kan. Deze repo bevat die ene plugin en die staat op de root, dus 'source' is './' en de marketplace werkt zowel vanuit een git-URL als vanuit een lokale checkout. Installeren: sfnl-slides@sfnl.",
   "owner": {
     "name": "Social Finance NL",
     "email": "info@socialfinancenl.nl"
@@ -8,8 +8,8 @@
   "plugins": [
     {
       "name": "sfnl-slides",
-      "description": "Bouw een SFNL-deck uit het officiële sjabloon waarbij de compositie per slide een ontwerpbeslissing is en geen invuloefening. Header geërfd uit master en layout, contentzone vrij, en de render is de enige vormbeoordeling. Eén skill, twee poorten die beide een mens zijn (het vragenvuur en de outline), één loop. De adviesvorm-laag zit erin: antwoord voorop, exhibitcraft met focuskleur, schetsplicht en weigerlijst. De letter op de slide is licht — Gotham Bold staat alleen in de titel, de drager staat op 28 tot 40pt Montserrat Light in navy en op ten hoogste een derde van de contentslides. Het vragenvuur legt vier vormbesluiten vast vóór de eerste regel tekst: dichtheid, gevuldheid, wat kleur codeert, en de titelmodus. 1.0.0 is de versie waarin de skill zichzelf heeft nagelopen: de tegenstrijdigheden tussen skill, maatstaf en scripts zijn eruit, de body staat op 14pt met vier maten per deck, presentatienotities zijn eruit omdat ze nooit nodig waren, en de visuele reviewer is blind op de eigen maatstaf getoetst voordat hij mocht blijven.",
-      "version": "1.0.0",
+      "description": "Twee skills die dezelfde regel volgen: de vorm is per stuk een ontwerpbeslissing en geen invuloefening, en de render is de enige vormbeoordeling. `sfnl-slides` bouwt een deck uit het officiële sjabloon — header geërfd uit master en layout, contentzone zelf gecomponeerd, met de dunne laag die de OOXML-valkuilen afhandelt en veertien gerenderde slides als maatstaf. `sfnl-design-folders` bouwt drukwerk in HTML — een uitnodiging, een executive summary, een proposal, een spread — op een vast blad met een snijrand, in het formaat van de SFNL-jaarrapporten, met de letters ingesloten en het canvas van de design-skill erbij om er met de muis aan te schuiven. Beide hebben twee poorten en beide poorten zijn een mens: het vragenvuur en de outline. Geen patroonbibliotheek in geen van beide.",
+      "version": "1.1.0",
       "source": "./",
       "author": {
         "name": "Social Finance NL"
