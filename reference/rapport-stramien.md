@@ -118,6 +118,14 @@ daar is de maat kort genoeg. En uitvullen kan alleen mét afbreking:
 het lichaam als het Nederlandse woordenboek ontbreekt. Dan vervalt het
 uitvullen ook in `dubbel`.
 
+**De noodrem selecteert op `[data-afbreking="nee"] .pagina .lopend > p`**,
+en die `.pagina` staat er expres in. Zonder dat woord woog de regel lichter
+dan `.pagina[data-model="dubbel"] .lopend > p` erboven, en dan haalde de
+noodrem het niet in precies het model dat uitvult. Op de gezette proef
+was dat te zien als rivieren van wit door de kolom terwijl het
+zetverslag netjes `afbreking: false` meldde — de meting klopte en de
+zetting niet.
+
 ---
 
 ## 3a. De dichtheid
@@ -166,7 +174,7 @@ boven de acht.
 | 22 | 16,5 | uitspraak | `.pullcitaat`, de omslagondertitel |
 | 26,67 | 20 | titel | `.opener__titel` |
 | 56 | 42 | display | de omslagtitel, en de hoofdstuktitel op een heel blad |
-| 132 / 240 | | watermerk | `.opener__watermerk` — geen tekst, een merkteken |
+| 168 / 104 / 260 | | watermerk | `.opener__watermerk` — geen tekst, een merkteken. 168 bij `nummer`, 104 in het dubbele model, 260 op een heel blad |
 
 In `breed` schuift het brood naar 14,67 px (11 pt) met regel 22, en
 schuiven de sprongen mee. De andere maten blijven.
@@ -241,7 +249,8 @@ Wat er bovenop `stijl.css` bij komt. Elk tekent één ding.
 | `.opener` | de hoofdstukopener |
 | `.opener__kicker` | "HOOFDSTUK 3", gespatieerde kapitalen in het accent |
 | `.opener__titel` | de hoofdstuktitel |
-| `.opener__watermerk` | het cijfer half achter de titel. `left: 0`, want het kader snijdt af |
+| `.opener__watermerk` | het hoofdstukcijfer, open getekend: vulling in de papierkleur, contour in `--r-watermerk-lijn`. Staat rechts buiten het kader, op de hoogte van de titel |
+| `.scheiding__streep` | de streep op het scheidingsblad van de bijlagen, vier rasterkolommen breed |
 | `.opener-band` | de aflopende band; `--balk` op de `.pagina` |
 | `.inhoud`, `.inhoud__regel`, `.inhoud__nr`, `.inhoud__naam`, `.inhoud__leader`, `.inhoud__folio` | de inhoudsopgave. De puntenlijn is een lijnelement en geen reeks punten, want punten zouden als toegevoegde tekst opduiken |
 | `.omslag`, `.omslag__boven/__midden/__onder`, `.omslag__titel`, `.omslag__onderschrift`, `.omslag__regel` | de omslag |
@@ -249,12 +258,29 @@ Wat er bovenop `stijl.css` bij komt. Elk tekent één ding.
 | `.voetnoot` | een noot aan de voet, of in de kantlijn in het kantlijnmodel |
 | `.paneel--rapport` | een gekleurd vlak met een blok tekst |
 
+### Het achterwerk
+
+De vier pagina's die niet uit het brondocument komen. Ze delen één
+compositie met de hoofdstukopener — kicker, titel, tekst eronder — omdat
+ze anders als een ander document lezen. Wat ze niet delen is de
+nummering: het zijn geen hoofdstukken, dus geen cijfer en geen regel in
+de inhoudsopgave. Zie §7d.
+
+| klasse | wat |
+|---|---|
+| `.extra` | de houder, op de hele kaderhoogte zodat een colofon onderaan kan hangen |
+| `.extra__kicker`, `.extra__titel`, `.extra__intro`, `.extra__lopend` | de opbouw van zo'n pagina |
+| `.team`, `.lid`, `.lid__naam`, `.lid__rol`, `.lid__mail` | het team als raster van drie. Twee leest als een tegenstelling, vier maakt de naam te smal voor een dubbele achternaam |
+| `.colofon` | de regels van het colofon, klein en onderaan |
+| `.omslag--achter` | het achterblad: hetzelfde vlak als de omslag, met het merk onderaan |
+| `.pagina[data-blanco]` | een blanco pagina die een katern afmaakt. Geen folio, geen kopregel |
+
 ---
 
 ## 6. De vier registers
 
-Op `data-register` van de `.pagina`. Een register zet vier variabelen;
-al het andere leest die vier.
+Op `data-register` van de `.pagina`. Een register zet vijf variabelen;
+al het andere leest die vijf.
 
 | register | `--r-accent` | `--r-accent-2` | `--r-tint` | `--r-watermerk` | de opener |
 |---|---|---|---|---|---|
@@ -263,7 +289,17 @@ al het andere leest die vier.
 | `zacht` | emerald `#6AC6BA` | navy | mint-tint `#E0F4F1` | `#CDEBE5` | mint blad |
 | `contrast` | violet `#6B5DAE` | oranje | `#EEEBF6` | `#DCD5EE` | violet blad, witte inkt |
 
+De vijfde is `--r-watermerk-lijn`: de contourkleur van het open
+hoofdstukcijfer. `--r-watermerk` is de dichte vlek van de eerste
+zetting en staat er nog voor wie hem leest; wat je op het blad ziet is
+de lijn. Op een navy of violet blad zijn allebei wit met een lage
+dekking, want daar is de inkt wit.
+
 In `zacht` blijft de folio oranje, zodat het merk niet verdwijnt.
+
+Het **omslagveld** staat hier los van: dat is `omslagveld` in
+`ontwerp.json` en het gaat vóór het register. Zie
+`rapport-vormentaal.md` §7.
 
 ---
 
@@ -273,14 +309,46 @@ Op `data-opener`. Eén manier voor álle hoofdstukken in een rapport.
 
 | opener | wat je krijgt | wat het kost |
 |---|---|---|
-| `nummer` | kicker, titel en een watermerkcijfer half erachter, boven aan de eerste pagina van het hoofdstuk | niets |
+| `nummer` | kicker, titel en het hoofdstukcijfer ernaast, buiten het kader, boven aan de eerste pagina van het hoofdstuk | niets |
 | `band` | een aflopende band bovenaan die pagina; `--balk` bepaalt de hoogte (232 px is de default) | ongeveer een kwart pagina |
-| `blad` | een heel blad met de hoofdstuknaam onderin en het cijfer op 240 px erachter | een pagina per hoofdstuk; pas vanaf veertig pagina's |
+| `blad` | een heel blad met de hoofdstuknaam onderin en het cijfer op 260 px linksonder | een pagina per hoofdstuk; pas vanaf veertig pagina's |
 
 **Alle drie dragen hetzelfde merkteken**, het hoofdstukcijfer, en dat is
 wat ze tot drie varianten van één ding maakt in plaats van drie losse
-ontwerpen: half achter de titel bij `nummer`, aan de buitenrand van de
-band bij `band`, groot onderin bij `blad`.
+ontwerpen: naast de titel en buiten het kader bij `nummer`, aan de
+buitenrand van de band bij `band`, groot linksonder bij `blad`.
+
+### Het cijfer, van dichtbij
+
+Het cijfer is opnieuw ontworpen, want de eerste versie deed precies wat
+punt 12 van de weigerlijst verbiedt.
+
+**Wat er misging.** Het cijfer stond als dichte lichte vlek half achter
+de titel. De letters dekken het middenstuk af, dus wat er op de pagina
+overbleef was een smalle gekleurde strook boven en onder de titel: een
+rechthoek, geen cijfer. Drie varianten zijn daarna gerenderd en tegen
+elkaar gezet. Groter en lager liep door de eerste alinea; hoger werd
+door het kader afgesneden; naar buiten werkte.
+
+**Wat het nu is.** Een **open cijfer** aan de buitenkant van het kader,
+op dezelfde hoogte als de titel:
+
+| | |
+|---|---|
+| vulling | `var(--papier)` — de papierkleur, dus het cijfer is hol |
+| contour | `-webkit-text-stroke` in `--r-watermerk-lijn`, 2,5 px bij `nummer`, 2 px in `dubbel`, 3 px op een heel blad |
+| plaats | `right: 0`, `top: -18px`; in `dubbel` `top: -8px` |
+| maat | 168 px; **104 px in het dubbele model**, want een hoofdstuk 10 op 168 px neemt de hele kolombreedte van 310 px in |
+
+De titel loopt dwars door het cijfer heen zonder er iets van af te
+snijden, en het cijfer blijft leesbaar als cijfer. De contour is dun en
+licht genoeg om achtergrond te blijven: het is geen tweede kop, het is
+de plaats van het hoofdstuk in het geheel.
+
+**Het spiegelt niet mee met de pagina.** Het hoort bij de titel en niet
+bij de bladrand, en een cijfer dat op elke tweede pagina naar de andere
+kant springt leest als een fout in de zetting. Op het scheidingsblad
+van de bijlagen staat het er niet: daar is geen nummer om te tonen.
 
 ### De band, van dichtbij
 
@@ -396,10 +464,14 @@ uit de toon valt dan een nummer dat nergens naar wijst.
 blok verandert er vier dingen:
 
 1. Er komt een **scheidingsblad** voor: een heel blad met een streep van
-   vier rasterkolommen en één woord op displaymaat. Is het blok zelf een
-   kop die alleen "Bijlagen" of "Appendix" zegt, dan ís dat de tekst van
-   het blad en is er niets toegevoegd. Staat er meer — "Bijlage A:
-   methodeverantwoording" — dan draagt het blad het woord uit
+   vier rasterkolommen, één woord op displaymaat, en de tonale bol van
+   de hoofdstukband — 430 px, half buiten het blad linksboven. Die bol
+   staat er omdat het blad zonder cijfer in het heldere register bijna
+   leeg was: een streep en een woord onderaan, en verder wit, wat leest
+   als een vergeten pagina in plaats van als een besluit. Is het blok
+   zelf een kop die alleen "Bijlagen" of "Appendix" zegt, dan ís dat de
+   tekst van het blad en is er niets toegevoegd. Staat er meer —
+   "Bijlage A: methodeverantwoording" — dan draagt het blad het woord uit
    `bijlagen.titel` als `data-toevoeging="scheiding"`.
 2. De openers **tellen in letters**: de kicker zegt "Bijlage A" in plaats
    van "Hoofdstuk 6".
@@ -436,6 +508,93 @@ zonder, en dat is beter dan er een verzinnen.
 
 ---
 
+## 7d. Het achterwerk
+
+Vier pagina's die niet uit het brondocument komen: over ons, het team,
+het colofon en het achterblad. `elementen` in `ontwerp.json` zet ze aan,
+en alle vier staan standaard **uit** — een rapport krijgt geen
+teampagina omdat rapporten vaak een teampagina hebben.
+
+```json
+"elementen": {"overOns": false, "team": false,
+              "colofon": false, "achterblad": false}
+```
+
+**De tekst komt uit `paginas.json`** in de werkmap, en nergens anders
+vandaan:
+
+```json
+{"overOns":   {"kop": "…", "alineas": ["…"]},
+ "team":      {"kop": "…", "intro": "…",
+               "leden": [{"naam": "…", "rol": "…", "mail": "…"}]},
+ "colofon":   {"kop": "Colofon", "regels": ["…"]},
+ "achterblad": {"regels": ["…"], "veld": "oranje"}}
+```
+
+Dit is de enige plek in het hele rapport waar hele alinea's staan die
+niet in het Word-document stonden. Ze dragen daarom allemaal
+`data-toevoeging="pagina"`, `tekstcheck.py` telt ze apart — op de proef
+34 — en bij de oplevering hoort te staan hoeveel er zo bij is gekomen en
+van wie die tekst is. Schrijft de skill ze zelf, dan gaan ze woordelijk
+langs de gebruiker voordat ze in het rapport komen.
+
+**Staat een pagina aan zonder tekst, dan komt hij er niet.** Hij wordt
+gemeld als `paginas_zonder_tekst` in het bouwverslag en dan vraag je
+erom. Het achterblad is de uitzondering: dat bestaat ook zonder tekst,
+want een achterkant met alleen het merk erop is af.
+
+**De drie tekstpagina's dwingen geen rechterpagina af**, en dat is een
+gemeten besluit. Ze dragen wél een `data-hoofdstuk` — ze hebben een
+eigen kopregel nodig — maar daarnaast `data-recto="nee"`, en
+`paginator.js` kijkt daarnaar voordat hij naar een recto springt. Zonder
+dat attribuut dwong elk van de drie een rechterpagina af en kostte het
+achterwerk vier blanco bladen: 49 pagina's werden er 53. Het achterblad
+is een heel blad en gaat wél naar een recto, zoals de omslag en de
+hoofdstukbladen.
+
+Ze staan achteraan, ná het laatste notenblok, in de volgorde van
+`EXTRA_PAGINAS`: over ons, team, colofon, achterblad. Een lezer die het
+stuk leest komt ze pas tegen als hij klaar is. Het achterblad draagt
+geen folio en geen kopregel en erft het veld van de omslag, tenzij
+`paginas.json` er een eigen `veld` bij zet.
+
+---
+
+## 7e. Drukklaar
+
+Twee sleutels: `drukklaar` (standaard `false`) en `katern` (standaard
+`4`). Op de opdrachtregel is `drukklaar` de vlag `--drukklaar`.
+
+De rekensom zelf staat niet hier maar in `scripts/gedeeld/drukwerk.py`,
+en die module is **van beide drukskills tegelijk**: `sfnl-design-documents`
+stelt bij kort drukwerk dezelfde vraag en krijgt hetzelfde antwoord. Een
+gebonden of geniet drukwerk wordt per vel gedrukt en een dubbelgevouwen
+vel is vier pagina's, dus een rapport van 49 pagina's wordt hoe dan ook
+52 pagina's papier.
+
+**Wat `bouw.py` doet als het niet uitkomt**: er komen blanco pagina's
+achteraan tot het wél uitkomt, en die gaan vóór het achterblad, want dat
+is op de pers de laatste pagina van het laatste vel. Dat is de enige van
+de drie uitwegen die een script mag nemen. Inkorten kan niet — daar zit
+tekst in — en het bij een PDF houden is een besluit van de gebruiker.
+
+Het verslag geeft er twee dingen over terug: `katern` met één zin uitleg
+("49 pagina's komt niet uit op een katern van 4: er moeten er 3 bij
+(naar 52)") en `blanco_toegevoegd`. Gemeten op de proef: 49 pagina's
+werden er 52 met drie blanco's.
+
+Een blanco pagina draagt `data-blanco="ja"`, geen folio en geen
+kopregel, en hij erft van de laatste pagina alleen wat het blad zelf is:
+model, register, formaat en dichtheid. `qa_rapport.py` rekent hem niet
+aan als lege pagina en telt hem niet mee in de gemiddelde vulgraad —
+anders meet dat getal de drukkerij in plaats van de zetting.
+
+**Wat er niet in zit**: een afloop van 3 mm en snijtekens. Die uitleg
+staat één keer, in `documenten-stramien.md` §1a, en geldt voor beide
+drukroutes.
+
+---
+
 ## 8. Wat de zetmotor toevoegt aan de markup
 
 Elk element dat brontekst draagt heeft `data-bron` met het blok-id uit
@@ -446,7 +605,7 @@ alles wat geen van beide heeft is tekst die niemand heeft goedgekeurd.
 | attribuut | waar | wat het zegt |
 |---|---|---|
 | `data-bron` | elk tekstelement | het blok-id in `document.json` |
-| `data-toevoeging` | folio, kopregel, inhoudsopgave, nummers, nootcijfers, herhaalde tabelkop, omslagregels | dit is geen brontekst |
+| `data-toevoeging` | folio, kopregel, inhoudsopgave, nummers, nootcijfers, herhaalde tabelkop, omslagregels, de vier pagina's van het achterwerk | dit is geen brontekst |
 | `data-deel` | de helften van een gesplitst blok | 1 of 2 |
 | `data-kop` | een kop | het niveau |
 | `data-kop-tekst` | een kop | de kale tekst, voor de inhoudsopgave |
@@ -458,6 +617,10 @@ alles wat geen van beide heeft is tekst die niemand heeft goedgekeurd.
 | `data-zijde` | de pagina | `recto` of `verso` |
 | `data-folio` | de pagina | het paginanummer, ook als het niet gedrukt wordt |
 | `data-flex` | de pagina | staat in een flexibel rapport |
+| `data-recto` | een blok met `data-hoofdstuk` | `nee` betekent: dit begint niet op een rechterpagina. Staat op over ons, het team en het colofon |
+| `data-veld` | de omslag, het achterblad, het scheidingsblad | het kleurveld waarop de pagina staat |
+| `data-sjabloon` | de omslag en het achterblad | welk paginasjabloon de zetmotor gebruikt |
+| `data-blanco` | de pagina | een blanco blad dat het katern afmaakt |
 
 ---
 
@@ -472,7 +635,8 @@ Eén map per rapport. Wat er in staat en wie het schrijft:
 | `signalen.json` | `lees_docx.py` | wat er aan de brontekst opvalt; grondstof voor wijzigingsvoorstellen |
 | `beeld/` | `lees_docx.py` | de uitgepakte beelden |
 | `ontwerpwidget.html` | `widget.py` | de intakepagina. Gaat naar de gebruiker en komt als `ontwerp.json` terug |
-| `ontwerp.json` | jij, na de vormbesluiten | de vijftien vormbesluiten |
+| `ontwerp.json` | jij, na de vormbesluiten | de vormbesluiten. Komt uit de widget en wordt woordelijk weggeschreven |
+| `paginas.json` | jij, na de tekst van de gebruiker | de tekst voor de vier pagina's van het achterwerk. Zie §7d |
 | `wijzigingen.json` | jij, ná toestemming | de goedgekeurde inhoudelijke wijzigingen |
 | `citaten.json` | `citaten.py` | het omzettingsplan voor de verwijzingen, per blok |
 | `beeld.json` | jij, bij `beeld: aangeleverd` | welk bestand achter welk blok komt |
@@ -499,15 +663,47 @@ Eén map per rapport. Wat er in staat en wie het schrijft:
   "bijlagen": null,            "eersteFolio": 1,
   "folioVanaf": 2,             "rapporttitel": null,
   "ondertitel": null,          "opdrachtgever": null,
-  "datum": null,               "colofon": null
+  "datum": null,               "omslagveld": "oranje",
+  "elementen": {"overOns": false, "team": false,
+                "colofon": false, "achterblad": false},
+  "drukklaar": false,          "katern": 4,
+  "herindelen": false,         "beeldtekst": false
 }
 ```
+
+De jongste sleutels staan onderaan, en ze staan allemaal op de veiligste
+stand:
+
+| sleutel | default | wat het besluit |
+|---|---|---|
+| `omslagveld` | `"oranje"` | het kleurveld van de omslag: `oranje`, `verloop`, `navy`, `violet`, `mint` of `wit`. Gaat vóór het register; zie `rapport-vormentaal.md` §7 |
+| `elementen` | alles `false` | welke van de vier pagina's van het achterwerk erin komen. Zie §7d |
+| `drukklaar` + `katern` | `false`, `4` | of het aantal pagina's moet uitkomen op de pers, en op welk katern. Zie §7e |
+| `herindelen` | `false` | mag de opmaak voorstellen doen om de tekst anders in te delen. Bij `false` doet de skill er geen enkel |
+| `beeldtekst` | `false` | mag tekst binnen een beeld of infographic worden aangepast |
 
 `bijlagen` is `null` of `{"vanaf": "b0180", "titel": "Bijlagen"}`;
 `beeld.json` is een lijst van
 `{"bestand": "figuur-3.png", "na": "b0042", "bijschrift": "…"}`, waarin
 `na` het blok-id is waarachter het beeld komt en `bijschrift` mag
-ontbreken.
+ontbreken. `colofon` bestaat niet meer als losse sleutel: die pagina
+zit nu in `elementen`, met zijn tekst in `paginas.json`.
+
+**`herindelen` en `beeldtekst` zijn toestemmingen en geen vormbesluiten.**
+Ze staan hier omdat `ontwerp.json` de plek is waar de besluiten van de
+gebruiker worden bewaard, maar ze schakelen niets aan de opmaak: ze
+bepalen of de skill iets mág vragen. `herindelen: false` betekent dat
+stap 3 van de skill overgeslagen wordt; `beeldtekst: false` betekent dat
+de tekst in een figuur blijft staan zoals hij staat. In deze route is
+beeld een rasterbestand uit de docx en is die tekst praktisch
+onbereikbaar, dus het is vooral een afspraak — in `sfnl-design-documents`
+bijt dezelfde regel harder, want daar staat de SVG inline in de markup.
+Dezelfde twee woorden in beide skills, met opzet.
+
+`bouw.py` waarschuwt wanneer er goedgekeurde wijzigingen liggen terwijl
+`herindelen` op nee staat. Ze worden wél toegepast — een per geval
+gegeven ja weegt zwaarder dan een schakelaar die vooraf op nee stond —
+maar er is dan ergens een besluit overgeslagen en dat hoor je te zien.
 
 `wijzigingen.json` — een lijst besluiten. Zonder `"akkoord": true`
 gebeurt er niets. Zes soorten en meer bestaan er niet:
@@ -536,17 +732,31 @@ gebeurt er niets. Zes soorten en meer bestaan er niet:
 | `lees_docx.py <bron> --uit <werkmap>` | `.docx`, `.md` of `.txt` uitlezen naar `document.json`, `bron-tekst.txt`, `signalen.json` en `beeld/` | |
 | `bouw.py <werkmap>` | de stroom schrijven, in de browser zetten, de inhoudsopgave in meerdere rondes vullen, en het losse HTML-bestand schrijven | |
 | `bouw.py <werkmap> --nieuw-ontwerp` | `ontwerp.json` met de defaults | |
-| `widget.py <werkmap>` | de ontwerpwidget voor dít rapport: vijftien besluiten op één pagina, en alleen wat de bron werkelijk heeft | |
+| `bouw.py <werkmap> --drukklaar` | hetzelfde, plus blanco pagina's tot het aantal uitkomt op het katern. Zie §7e | |
+| `widget.py <werkmap>` | de ontwerpwidget voor dít rapport: alle vormbesluiten op één pagina, en alleen wat de bron werkelijk heeft. **Het verplichte beginpunt** | |
 | `citaten.py <werkmap> --naar <stijl>` | het omzettingsplan voor de verwijzingen in `citaten.json`. Draait vóór `bouw.py` | |
 | `tekstcheck.py <html>` | staat er nog precies wat er stond | **ja** |
 | `qa_rapport.py <html>` | dertien metingen; vier ervan blokkeren | **ja** |
 | `render.py <html>` | contactbladen per twaalf spreads, of één spread, of één pagina | |
 | `keuzekaart.py` | de drie keuzekaarten opnieuw bouwen. Onderhoud | |
 
+En één script dat hier niet staat maar wel meedoet:
+
+| script | wat |
+|---|---|
+| `scripts/gedeeld/drukwerk.py` | de katernsom: komt dit aantal pagina's uit op de pers, en zo niet, hoeveel erbij of eraf. `bouw.py` leest hem via `vul_aan_tot_katern` |
+
+Die staat in `gedeeld/` en niet in `rapport/` omdat hij **van beide
+drukskills tegelijk** is: `sfnl-design-documents` stelt dezelfde vraag
+over kort drukwerk en hoort hetzelfde antwoord te krijgen. Hij rekent en
+hij beslist niet; los te draaien met `python drukwerk.py 45`.
+
 De volgorde is `preflight` → `lees_docx` → `widget` → (`citaten`) →
-`bouw` → `tekstcheck` → `render` en `qa_rapport`. `citaten.py` staat
-tussen haakjes omdat hij alleen draait wanneer `citaatstijl` iets anders
-is dan `zoals-aangeleverd`; `bouw.py` leest het plan dat hij achterlaat.
+`bouw` → `tekstcheck` → `render` en `qa_rapport`. `widget.py` staat er
+niet tussen haakjes: er wordt niets gebouwd voordat de ingevulde
+`ontwerp.json` terug is. `citaten.py` staat er wél tussen haakjes, want
+die draait alleen wanneer `citaatstijl` iets anders is dan
+`zoals-aangeleverd`; `bouw.py` leest het plan dat hij achterlaat.
 
 `bouw.py` heeft geen renderloze route. Het splitsen van een alinea op een
 regelgrens kan alleen een engine die weet hoe breed een woord is.

@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """De ontwerpwidget: alle vormbesluiten op één pagina, met een preview.
 
-Het vragenvuur van deze skill is met ruim dertig velden veel te lang
-geworden voor een gesprek. Vier per keer door een keuzewidget betekent
-acht rondes, en na de tweede weet niemand meer wat er in de eerste is
-gekozen. Dus: één pagina, alles zichtbaar, en een schematische preview
+Het vragenvuur van deze skill is met tweeëntwintig besluiten, verspreid
+over ruim dertig velden, veel te lang geworden voor een gesprek. Vier per
+keer door een keuzewidget betekent zes rondes, en na de tweede weet
+niemand meer wat er in de eerste is gekozen. Dus: één pagina, alles zichtbaar, en een schematische preview
 die meebeweegt.
 
 Wat deze widget anders maakt dan een formulier: hij wordt **per rapport

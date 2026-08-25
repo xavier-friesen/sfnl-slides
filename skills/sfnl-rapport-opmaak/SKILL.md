@@ -41,7 +41,8 @@ dit bestand staat en niet vanaf het project.
    zeventien, waarom oranje hier een merkteken is en geen inkt, hoe je het model en het register
    kiest, en hoe het verwijzingsapparaat wordt opgemaakt.
 2. `reference/rapport-stramien.md` — de feiten. Het raster, de vier modellen met hun gemeten
-   maten, de vier registers, de klassenlijst, de werkmap en de scripts.
+   maten, de vier registers, de klassenlijst, het achterwerk, de katernsom, de werkmap en de
+   scripts.
 
 **Kijk naar `assets/rapport/maatstaf/00-contactblad.png`.** Vier gezette pagina's als contactblad.
 Niet om na te tekenen maar om te weten waar de lat ligt. Er staan drie losse pagina's naast:
@@ -88,13 +89,23 @@ Wat je in plaats daarvan doet:
   het Word-document. Elke afwijking die niet in `wijzigingen.json` staat, blokkeert de
   oplevering. Dat is de enige harde poort in deze skill die geen mens is.
 
-**Elf dingen mag de opmaak wél toevoegen**, en ze dragen alle elf `data-toevoeging` in de markup
-zodat de check ze kan onderscheiden: de folio, de kopregel, de inhoudsopgave, de nummering
+**Twaalf dingen mag de opmaak wél toevoegen**, en ze dragen alle twaalf `data-toevoeging` in de
+markup zodat de check ze kan onderscheiden: de folio, de kopregel, de inhoudsopgave, de nummering
 (hoofdstuk, figuur, watermerk), het nootcijfer, de herhaalde tabelkop, de regels op de omslag die
 de gebruiker zelf heeft opgegeven, de kop boven een blok eindnoten, het nummer voor een bronregel
-bij genummerd citeren, het woord "Bijlagen" op het scheidingsblad, en het bijschrift bij een
-apart aangeleverd beeld. `reference/rapport-vormentaal.md` §5 heeft de tabel. Alles daarbuiten
-zonder `data-bron` is tekst die niemand heeft goedgekeurd, en `tekstcheck.py` schrijft het uit.
+bij genummerd citeren, het woord "Bijlagen" op het scheidingsblad, het bijschrift bij een
+apart aangeleverd beeld, en de tekst op de vier pagina's achterin. `reference/rapport-vormentaal.md`
+§5 heeft de tabel. Alles daarbuiten zonder `data-bron` is tekst die niemand heeft goedgekeurd, en
+`tekstcheck.py` schrijft het uit.
+
+**Die twaalfde is van een andere orde dan de elf andere.** Een folio is één getal en een kopregel
+is een kop die al bestond; over ons, het team, het colofon en het achterblad vormen samen de enige
+plek in het hele rapport waar hele alinea's staan die niet in het Word-document stonden. Ze staan
+standaard uit, ze komen uit `paginas.json`, en `tekstcheck.py` telt ze apart — op de proef 34
+stukken tekst. **Schrijft de skill die teksten zelf, dan gaan ze woordelijk langs de gebruiker ter
+goedkeuring vóórdat ze in het rapport komen.** Het is toegevoegde tekst en die staat onder
+dezelfde regel als al het andere. Bij de oplevering hoort te staan hoeveel er zo bij is gekomen en
+van wie die tekst is. Zie `rapport-stramien.md` §7d.
 
 **Eén uitzondering, en die is uitdrukkelijk gemaakt.** Verwijzingen in de lopende tekst
 gelijktrekken — `(Boogers e.a. 2016)` overal `(Boogers et al., 2016)` — telt als opmaak en niet
@@ -103,6 +114,21 @@ als herschrijven, en gaat dus niet per geval langs de gebruiker. Het is een besl
 schrijft elke omzetting vooraf op, `bouw.py` past alleen toe wat daar staat, `tekstcheck.py`
 speelt het plan terug tegen de bron, en bij de oplevering staan ze allemaal in het verslag. Zie
 stap 2.
+
+**Twee toestemmingen staan in `ontwerp.json`, en allebei staan ze standaard op nee.** Ze zijn geen
+vormbesluit: ze bepalen of je iets mág vragen.
+
+- **`herindelen`** — mag de opmaak de tekst anders indelen om hem beter te plaatsen? Van vier
+  handgetypte streepjes een echte lijst maken, een lange alinea splitsen, een alinea als chapeau
+  aanwijzen. Bij **nee** doet de skill in stap 3 **geen enkel voorstel** en blijft de indeling
+  precies zoals in het Word-document. Bij **ja** mag je voorstellen doen, en die gaan nog steeds
+  per geval langs de gebruiker — de poort van stap 3 blijft staan, dit besluit bepaalt alleen of
+  hij opengaat.
+- **`beeldtekst`** — mag tekst binnen een beeld of infographic worden aangepast? Standaard nee. In
+  deze route is beeld een rasterbestand uit de docx en is de tekst erin praktisch onbereikbaar,
+  dus het is vooral een afspraak. In `sfnl-design-documents` bijt dezelfde regel harder, want daar
+  staat de SVG inline in de markup en leest niemand hem terug. Dezelfde twee woorden in beide
+  skills, met opzet.
 
 **Wat je nooit doet, ook niet met toestemming**: een samenvatting schrijven die er niet stond,
 een conclusie toevoegen, een bijschrift verzinnen, een getal aanvullen, een pull quote plaatsen
@@ -130,7 +156,8 @@ en is dat een signaal en geen leesfout.
 
 **Lees `signalen.json` en houd het vast.** Nog niet voorleggen — dat is stap 3, en dat komt ná
 de vormbesluiten, want welke signalen ertoe doen hangt af van het model. Een kop van 74 tekens
-is een probleem in `dubbel` en niet in `breed`.
+is een probleem in `dubbel` en niet in `breed`. En of ze überhaupt worden voorgelegd hangt aan
+`herindelen`, dat in stap 2 wordt besloten en standaard op nee staat.
 
 **Kijk ook naar `apparaat` in `document.json`.** Daar staat wat het rapport aan verwijzingen
 heeft: hoeveel voet- en eindnoten, of er een kop is die een bronnenlijst aankondigt en welke
@@ -151,16 +178,21 @@ verdwenen is:
   komen dus niet mee. `lees_docx.py` ziet ze niet. Vraag er actief naar bij een document dat er
   aan de buitenkant ontworpen uitziet.
 
+**En wat je hierna doet, is de widget draaien.** Niet eerst een proef bouwen om te kijken hoe het
+valt: zonder `ontwerp.json` is elk gebouwd rapport een gok met tachtig pagina's eraan.
+
 ---
 
-## Stap 2 — De vormbesluiten, en dit is de eerste poort
+## Stap 2 — De widget, en dit is de eerste poort
 
-**Vijftien besluiten**, en er wordt niets gebouwd voordat ze er zijn. Wie eerst bouwt en dan
-vraagt, moet zestig pagina's opnieuw zetten.
+**Tweeëntwintig besluiten**, en er wordt niets gebouwd voordat ze er zijn. Wie eerst bouwt en dan
+vraagt, moet zestig pagina's opnieuw zetten. Het exacte aantal staat in wat `widget.py` teruggeeft
+onder `besluiten`; wat de bron niet heeft, valt eruit.
 
-Vijftien is te veel voor een gesprek. `AskUserQuestion` neemt er vier per keer, dus dat worden
-vier rondes, en na de tweede weet niemand meer wat er in de eerste is gekozen. Daarom bouwt deze
-skill er een pagina van:
+Tweeëntwintig is te veel voor een gesprek. `AskUserQuestion` neemt er vier per keer, dus dat
+worden zes rondes, en na de tweede weet niemand meer wat er in de eerste is gekozen. Daarom is de widget hier
+geen hulpmiddel maar **het beginpunt**: na het inlezen draai je hem, altijd, en er gebeurt daarna
+niets tot de ingevulde `ontwerp.json` terug is.
 
 ```bash
 python "${CLAUDE_PLUGIN_ROOT}/scripts/rapport/widget.py" werkmap/
@@ -186,11 +218,35 @@ De gebruiker vult in, drukt op kopiëren en plakt de `ontwerp.json` terug. Schri
 `werkmap/ontwerp.json` en **zeg in twee zinnen terug wat erin staat** — dat is de laatste kans om
 een misverstand te zien voordat er tachtig pagina's gezet zijn.
 
-**Zonder widget kan het ook.** Draait `widget.py` niet, of wil de gebruiker liever praten, dan
-stel je dezelfde besluiten met `AskUserQuestion` in vier rondes: het rapport (model, register,
-formaat, dichtheid), de pagina (opener, omslag, inhoudsopgave, dubbelzijdig), het apparaat
-(noten, bronnenlijst, citaatstijl, bijlagen), en het beeld met de omslagtekst. De poort blijft
-één poort.
+### Daarna mag je vragen, en maximaal acht
+
+**Pas als `ontwerp.json` terug is, stel je aanvullende vragen buiten de widget om.** Dat mag, en
+bij onduidelijkheid wordt het aangemoedigd — maar het zijn er **hoogstens acht**, en veel minder
+is prima. De vier opdrachtvragen tellen daar niet in mee: die zijn met de widget meegegaan en ze
+gaan over de opdracht en niet over het rapport. Deze acht gaan over wat de widget niet kan weten,
+want het staat niet in het document:
+
+- **De tekst voor de vier pagina's achterin**, als er een aan staat. Zonder tekst komt zo'n pagina
+  er niet in.
+- **Waar aangeleverd beeld hoort** — per bestand het blok waarachter het moet komen. Raden is hier
+  hetzelfde als verzinnen.
+- **Of een signaal uit `signalen.json` een voorstel waard is.** Dat is ook de plek waar
+  `herindelen` alsnog op ja kan komen te staan.
+- **Of het rapport naar een pers gaat die een ander katern draait dan vier.** Acht komt voor, en
+  dan verandert `katern` en niet de rest.
+
+**Waar ze niet over gaan is een vormbesluit dat al in de widget stond.** Een gebruiker die `breed`
+heeft aangevinkt en daarna gevraagd wordt of hij het zeker weet, neemt hetzelfde besluit twee keer
+en de tweede keer met minder aandacht. Vraag alleen door als de widget en het document elkaar
+tegenspreken, en zeg dan wat je ziet.
+
+**De terugvalroute blijft bestaan, maar hij is de uitzondering en niet de tweede optie.** Draait
+`widget.py` niet, dan stel je dezelfde besluiten met `AskUserQuestion`, vier per ronde, in deze
+volgorde: het rapport (model, register, formaat, dichtheid), de pagina (opener, omslag,
+inhoudsopgave, dubbelzijdig), de omslag (omslagveld) met de omslagtekst erbij in proza, het
+apparaat (noten, bronnenlijst, citaatstijl, bijlagen), het beeld en het achterwerk (beeld,
+elementen), en de drukker met de twee toestemmingen (drukklaar, katern, herindelen, beeldtekst).
+De poort blijft één poort: er wordt niets gebouwd voordat alle zes rondes binnen zijn.
 
 Verandert er een optie in de skill, dan bouw je de kaarten opnieuw met
 `python "${CLAUDE_PLUGIN_ROOT}/scripts/rapport/keuzekaart.py"` — onderhoud, geen bouwstap.
@@ -206,12 +262,15 @@ niet gebeurt is het besluit per hoofdstuk opnieuw nemen.
   aanbesteding in gaat zijn drie verschillende dingen, en het verschil zit in het formaat en het
   register.
 - **Wordt dit gedrukt, of blijft het een PDF?** Gedrukt betekent dat de binnenmarge en het
-  spiegelen ertoe doen, dat het aantal pagina's deelbaar door vier hoort te zijn, en dat er nog
-  een afloopstap komt die deze skill niet doet. Op een scherm is `dubbelzijdig` een keuze in
-  plaats van een gegeven.
+  spiegelen ertoe doen, en dat het aantal pagina's uit moet komen op een katern. Dit is geen
+  sfeervraag maar besluit 18: het komt als `drukklaar` in `ontwerp.json` te staan, en dan vult
+  `bouw.py` het rapport aan tot het aantal op de pers bestaat. Op een scherm is `dubbelzijdig`
+  een keuze in plaats van een gegeven en is het aantal pagina's vrij. Wat er ook dan niet in zit
+  is de afloop; die stap doet deze skill niet.
 - **Wat staat er op de omslag behalve de titel?** De opdrachtgever, de datum, een ondertitel, een
-  versieaanduiding. Dit is de enige plek waar je tekst aan het rapport toevoegt, en die tekst
-  komt woordelijk van de gebruiker. Verzin er niets bij, ook geen datum.
+  versieaanduiding. Samen met de pagina's achterin is dit de enige plek waar er tekst aan het
+  rapport bij komt, en die tekst komt woordelijk van de gebruiker. Verzin er niets bij, ook geen
+  datum.
 - **Is er een bestaand rapport dat als voorbeeld dient?** Vraag dit actief. Krijg je er een, dan
   is dát de maatstaf: bekijk het, en volg de vormentaal ervan in plaats van
   `assets/rapport/maatstaf/`.
@@ -256,21 +315,29 @@ niet gebeurt is het besluit per hoofdstuk opnieuw nemen.
    procent. En `dicht` levert niet altijd pagina's op; op de proef zijn `gemiddeld` en `dicht`
    allebei 35 pagina's omdat de winst opgaat aan openers en beeld dat niet meeschaalt.
 
-### De pagina — vier besluiten die eraan hangen
+### De pagina — vijf besluiten die eraan hangen
 
 5. **De hoofdstukopener.** `nummer`, `band` of `blad`, en één manier voor álle hoofdstukken.
-   Default is **`nummer`**: kicker, titel en een watermerkcijfer half erachter, en het kost geen
-   pagina. `band` kost een kwart pagina per hoofdstuk, `blad` een hele. Zie `openers.png`.
+   Default is **`nummer`**: kicker, titel en het hoofdstukcijfer ernaast, buiten het kader, en het
+   kost geen pagina. `band` kost een kwart pagina per hoofdstuk, `blad` een hele. Zie
+   `openers.png`.
 
 6. **De omslag.** Wel of niet. Default is **wel**. Zonder omslag komt de titel uit het
    brondocument gewoon in de stroom te staan als hoofdstuktitel — dan gaat er geen tekst
    verloren, en dat is de reden dat het een echte keuze is en geen formaliteit.
 
-7. **De inhoudsopgave, en hoe diep.** Wel of niet, en tot niveau 1 of niveau 2. Default is
+7. **Het veld van de omslag** (`omslagveld`). `oranje` (default), `verloop`, `navy`, `violet`,
+   `mint` of `wit`. **De omslag is nooit wit tenzij dat gekozen is**, en dit besluit gaat vóór het
+   register: ook een rapport in `zacht` krijgt een oranje omslag. Een wit voorblad met een titel
+   erop is de eerste pagina van een manuscript, en het verschil tussen een document en een rapport
+   zit voor de lezer die het oppakt in dat ene vlak. Leesbaar is het ook: navy op oranje haalt
+   contrast 6,4, ruim boven de drempel. `wit` blijft mogelijk — maar dan is het gekozen.
+
+8. **De inhoudsopgave, en hoe diep.** Wel of niet, en tot niveau 1 of niveau 2. Default is
    **wel, tot niveau 2**. Onder de twaalf pagina's is hij zonde; boven de veertig is hij
    onmisbaar. Dieper dan twee niveaus is geen inhoudsopgave meer maar een index.
 
-8. **Dubbelzijdig.** Spiegelt de marge mee met de pagina, en begint een hoofdstuk op een recto.
+9. **Dubbelzijdig.** Spiegelt de marge mee met de pagina, en begint een hoofdstuk op een recto.
    Default is **wel**. Bij drukwerk is dit geen keuze; op een scherm wel.
 
 ### Het apparaat — drie besluiten, en ze staan los van elkaar
@@ -281,30 +348,31 @@ lopende tekst geciteerd wordt. **Bied alleen aan wat daarin staat.** `rapport-vo
 heeft de hele redenering; §10 de dichtheid en §11 de bijlagen. Een bronnenlijst maken die
 er niet is, betekent bronregels schrijven, en dat doet deze skill niet.
 
-9. **Waar de noten staan** (`noten`). `geen`, `voetnoot` (default), `eindnoot-hoofdstuk` of
-   `eindnoot-rapport`. Bij het model `kantlijn` gaan voetnoten naar de kantlijn in plaats van
-   naar de voet. **`geen` is het enige besluit in deze hele skill dat brontekst laat vervallen**
-   — meld dat expliciet, met het aantal noten erbij, en laat de gebruiker het bevestigen.
+10. **Waar de noten staan** (`noten`). `geen`, `voetnoot` (default), `eindnoot-hoofdstuk` of
+    `eindnoot-rapport`. Bij het model `kantlijn` gaan voetnoten naar de kantlijn in plaats van
+    naar de voet. **`geen` is het enige besluit in deze hele skill dat brontekst laat vervallen**
+    — meld dat expliciet, met het aantal noten erbij, en laat de gebruiker het bevestigen.
+    `tekstcheck.py` telt die noten daarna als `weggelaten`.
 
-10. **De bronnenlijst** (`bronnenlijst`). `geen` (default; de regels blijven gewone alinea's),
+11. **De bronnenlijst** (`bronnenlijst`). `geen` (default; de regels blijven gewone alinea's),
     `apa` (hangende inspringing, op alfabet zoals aangeleverd) of `genummerd` (`[1]`, `[2]` … op
     citatievolgorde).
 
-    **Dit staat los van besluit 9.** Voetnoten *én* een bronnenlijst achterin is de gewoonste
+    **Dit staat los van besluit 10.** Voetnoten *én* een bronnenlijst achterin is de gewoonste
     combinatie die er is. Wie het als één vraag stelt — "voetnoten of een bronnenlijst?" — stelt
     de vraag verkeerd.
 
-11. **De verwijzingen in de tekst** (`citaatstijl`). `zoals-aangeleverd` (default),
+12. **De verwijzingen in de tekst** (`citaatstijl`). `zoals-aangeleverd` (default),
     `uniform` of `genummerd`. Zie hieronder; dit is het enige besluit dat de tekst aanraakt.
 
 ### De bijlagen, het beeld en de omslag
 
-12. **Waar de bijlagen beginnen** (`bijlagen`). Vanaf dat blok komt er een scheidingsblad met het
+13. **Waar de bijlagen beginnen** (`bijlagen`). Vanaf dat blok komt er een scheidingsblad met het
     woord "Bijlagen", tellen de openers in letters (A, B, C) in plaats van in cijfers, en krijgen
     ze in de inhoudsopgave een eigen groep. De folio loopt gewoon door. Staat het woord al als
     kop in de bron, dan ís die kop het scheidingsblad en wordt er niets toegevoegd.
 
-13. **Of het rapport beeld gebruikt** (`beeld`), en dit wordt **altijd expliciet gevraagd**, ook
+14. **Of het rapport beeld gebruikt** (`beeld`), en dit wordt **altijd expliciet gevraagd**, ook
     als er beeld in het Word-document zit.
 
     | | wat er gebeurt |
@@ -319,9 +387,43 @@ er niet is, betekent bronregels schrijven, en dat doet deze skill niet.
     waar het hoort.** Een figuur zonder plek wordt niet geplaatst en komt in het bouwverslag als
     `beeld_zonder_plek` terug — raden is hier hetzelfde als verzinnen.
 
-14. **Het beeldpad** (`beeldmap`) — alleen bij `aangeleverd`.
+15. **Het beeldpad** (`beeldmap`) — alleen bij `aangeleverd`.
 
-15. **De omslagtekst** — titel, ondertitel, opdrachtgever, datum, woordelijk van de gebruiker.
+16. **De omslagtekst** — titel, ondertitel, opdrachtgever, datum, woordelijk van de gebruiker.
+
+### Het achterwerk, de drukker en de twee toestemmingen
+
+17. **De pagina's achterin** (`elementen`). Vier vinkjes — `overOns`, `team`, `colofon`,
+    `achterblad` — en alle vier staan standaard **uit**. Een rapport krijgt geen teampagina omdat
+    rapporten vaak een teampagina hebben. Staat er een aan, dan moet de tekst ergens vandaan
+    komen, en dat is `paginas.json` in de werkmap:
+
+    ```json
+    {"overOns": {"kop": "…", "alineas": ["…"]},
+     "team": {"kop": "…", "intro": "…",
+              "leden": [{"naam": "…", "rol": "…", "mail": "…"}]},
+     "colofon": {"kop": "Colofon", "regels": ["…"]},
+     "achterblad": {"regels": ["…"], "veld": "oranje"}}
+    ```
+
+    **Staat een pagina aan zonder tekst, dan komt hij er niet.** Hij wordt gemeld als
+    `paginas_zonder_tekst` in het bouwverslag, en dan vraag je erom — dat is een van de acht.
+    Het achterblad is de uitzondering: dat bestaat ook zonder tekst, want een achterkant met
+    alleen het merk erop is af. De drie tekstpagina's dwingen geen rechterpagina af; op de proef
+    kostten drie pagina's die elk een recto afdwongen vier blanco bladen.
+
+18. **Drukklaar** (`drukklaar`, default `false`) **en het katern** (`katern`, default `4`). Staat
+    `drukklaar` aan en komt het aantal pagina's niet uit, dan zet `bouw.py` blanco pagina's
+    achteraan tot het wél uitkomt — vóór het achterblad, want dat is op de pers de laatste pagina
+    van het laatste vel. Gemeten op de proef: 49 pagina's werden er 52 met drie blanco's.
+    Opvullen is de enige van de drie uitwegen die een script mag nemen: inkorten kan niet, want
+    daar zit tekst in, en het bij een PDF houden is een besluit van de gebruiker.
+
+19. **`herindelen`** — default **nee**, en dan doet de skill in stap 3 geen enkel voorstel. Zie
+    *De grens die deze skill bewaakt* hierboven.
+
+20. **`beeldtekst`** — default **nee**, en dan blijft tekst binnen een beeld staan zoals hij
+    staat. De redenering staat op dezelfde plek.
 
 **Twee dingen worden niet gevraagd.** De maatladder is een regel en geen voorkeur: zeven maten,
 en ze staan in `rapport-stramien.md` §4. En de letters staan vast — Montserrat voor de kop, Lato
@@ -365,16 +467,26 @@ komt terug in `niet_gekoppeld`. Noem ze bij de oplevering. Liever één verwijzi
 valt dan een nummer dat nergens naar wijst.
 
 **Wat je na dit blok hebt** is `ontwerp.json`. Kwam die uit de widget, dan schrijf je hem
-woordelijk weg. Ging het per vraag, dan schrijf je hem met
-`python "$S/bouw.py" werkmap/ --nieuw-ontwerp --model … --register …` en vul je de omslagvelden
-aan met wat de gebruiker letterlijk heeft opgegeven.
+woordelijk weg. Ging het langs de terugvalroute, dan schrijf je hem met
+`python "$S/bouw.py" werkmap/ --nieuw-ontwerp --model … --register …` — `--omslagveld` en
+`--drukklaar` staan er ook op — en vul je de omslagregels aan met wat de gebruiker letterlijk
+heeft opgegeven. Staat er een pagina achterin aan, dan schrijf je daarnaast `paginas.json`.
 
 ---
 
 ## Stap 3 — De wijzigingsvoorstellen, en dit is de tweede poort
 
-Nu weet je het model, dus nu weet je welke signalen ertoe doen. Dit is de stap waar deze skill
-om bestaat en het is de stap die je niet mag overslaan, ook niet als er maar één voorstel is.
+**Staat `herindelen` op nee, dan slá je deze stap over.** Dat is de default en dus het gewone
+geval: er komt geen enkel voorstel, en de indeling blijft precies zoals in het Word-document — vier
+handgetypte streepjes blijven vier alinea's, een alinea van 280 woorden blijft één alinea, en een
+kop van 74 tekens loopt over drie regels. Zie je bij het lezen van `signalen.json` iets waarvan je
+denkt dat het de gebruiker aangaat, dan is dat een van de acht vragen uit stap 2 en niet een
+voorstel hier. Ga door naar stap 4.
+
+De rest van deze stap gaat over `herindelen: ja`. Nu weet je het model, dus nu weet je welke
+signalen ertoe doen — en hier staat de tweede poort: elk voorstel gaat afzonderlijk langs de
+gebruiker, ook als het er maar één is. Het besluit bepaalt of de poort opengaat, niet of hij er
+is.
 
 **Loop `signalen.json` langs en maak er voorstellen van.** Niet elk signaal wordt een voorstel:
 een kop van 66 tekens is in `breed` geen probleem. Wat je overhoudt zijn de gevallen waar de
@@ -457,11 +569,17 @@ HTML-bestand met de letters ingesloten en het beeld als data-URI.
 Geef het bestand een naam zoals de gebruiker het zou noemen, zonder apostrofs of andere tekens
 die een browser bij downloaden verhaspelt.
 
-**Lees het verslag dat het script teruggeeft.** Zeven getallen doen ertoe:
+**Lees het verslag dat het script teruggeeft.** Tien dingen doen ertoe:
 
-- **`paginas`** — zeg dit terug. Bij drukwerk is een aantal dat niet deelbaar is door vier een
-  gesprek: inkorten, uitbreiden, of het bij een PDF houden. Dat is een besluit van de gebruiker
-  en geen afronding van jou.
+- **`paginas`** — zeg dit terug. Het getal is inclusief de blanco's die het katern afmaken.
+- **`katern`** — één zin over de pers: of dit aantal daar bestaat, en zo niet, hoeveel er bij
+  moeten of af kunnen. Staat `drukklaar` uit, dan zegt hij dat het aantal vrij is. Staat hij aan
+  en komt het niet uit, dan heeft het script het al opgevuld; zie het volgende getal.
+- **`blanco_toegevoegd`** — hoeveel lege bladen er achteraan zijn gekomen, vóór het achterblad.
+  Zeg dit erbij, want het is papier dat de gebruiker betaalt. Wil hij ze niet, dan is inkorten of
+  het bij een PDF houden zíjn besluit en niet dat van het script.
+- **`paginas_zonder_tekst`** — pagina's uit `elementen` die aan stonden en er niet in zijn
+  gekomen, omdat er geen tekst voor was. Vraag om de tekst en bouw opnieuw, of zet de pagina uit.
 - **`rondes`** — hoeveel keer er gezet is voor de inhoudsopgave. Twee of drie is normaal; vier
   betekent dat het aantal inhoudspagina's blijft schuiven en dan is er iets aan de hand.
 - **`afbreking`** — staat die op `false`, dan is het uitvullen vervallen en is de tekst vlaggend
@@ -470,8 +588,9 @@ die een browser bij downloaden verhaspelt.
 - **`klachten`** — wat de zetmotor niet heeft kunnen oplossen. Er zijn er drie soorten:
   `te-groot-voor-kader` (een blok past niet in een heel kader), `te-breed` (een tabel is breder
   dan de zetspiegel en is in de breedte gedwongen, dus de cellen breken af), en `lus` (de zetting
-  kwam niet tot een eind). Alle drie zijn inhoudelijke problemen en dus stap 3 opnieuw: leg voor
-  wat er met dat blok moet gebeuren.
+  kwam niet tot een eind). Alle drie zijn inhoudelijke problemen: leg voor wat er met dat blok
+  moet gebeuren. Staat `herindelen` op nee, dan is dat geen voorstel maar een vraag — het blok
+  past niet, en de gebruiker beslist wat daaraan gebeurt.
 - **`citaten_omgezet`** en **`citaten_niet_gekoppeld`** — hoeveel verwijzingen zijn gelijkgetrokken
   en hoeveel er zijn blijven staan omdat er geen bronregel bij te vinden was. Het tweede getal
   hoort bij de oplevering, met de verwijzingen erbij: ze staan er nog precies zoals de auteur ze
@@ -501,7 +620,8 @@ Vier uitkomsten blokkeren:
   `wijzigingen.json`. Het verslag zegt waar precies: bronfragment, rapportfragment, en de tekens
   eromheen. Dit repareer je in `document.json` of in de wijziging, en nooit door de check aan te
   passen.
-- **`verdwenen`** — een blok uit de bron komt in het rapport niet voor.
+- **`verdwenen`** — een blok uit de bron komt in het rapport niet voor. Een blok zonder tekst —
+  een figuur zonder bijschrift — telt hier niet mee: er is niets te verliezen.
 - **`dubbel`** — een blok staat in meer dan zes stukken in het rapport.
 - **`ongemarkeerd_toegevoegd`** — tekst zonder `data-bron` en zonder `data-toevoeging`. Dit is de
   fout waar de hele skill om heen is gebouwd: een samenvatting die er niet stond, een verzonnen
@@ -509,11 +629,17 @@ Vier uitkomsten blokkeren:
   proefrapport is dit getal nul, dus je raakt de drempel alleen als er echt iets bij is
   geschreven.
 
-Drie uitkomsten blokkeren niet en gaan wél mee bij de oplevering:
+Vier uitkomsten blokkeren niet en gaan wél mee bij de oplevering:
 
 - **`toevoegingen`** — de gemarkeerde toevoegingen, geteld per soort. Zeg dit terug bij de
   oplevering: "de opmaak heeft 62 folio's, 58 kopregels, 41 inhoudsregels, 19 nummers en 6
-  nootcijfers toegevoegd, en verder niets." Dat is de zin waarmee je de belofte waarmaakt.
+  nootcijfers toegevoegd, en verder niets." Dat is de zin waarmee je de belofte waarmaakt. Staat
+  er `pagina` bij, dan is dat de tekst op de pagina's achterin, en die noem je apart: het zijn de
+  enige hele alinea's in het rapport die niet uit het Word-document komen.
+- **`weggelaten`** — noten die niet gezet zijn omdat `noten` op `geen` staat. Dat blokkeert niet,
+  want het is een besluit van de gebruiker, en het heet daarom niet `verdwenen`. Het wordt wél
+  geteld en het hoort bij de oplevering: zeg hoeveel noten er niet in het rapport staan. Valt er
+  een noot weg terwijl `noten` iets anders is, dan is het gewoon `verdwenen` en blokkeert het.
 - **`goedgekeurd`** — de blokken die afwijken van de bron omdat de gebruiker daar in stap 3 ja op
   heeft gezegd, met de wijziging erbij.
 - **`omgezet`** — de blokken waar een verwijzing is gelijkgetrokken. De check heeft het plan uit
@@ -551,7 +677,14 @@ Wat je in de eerste ronde zelf gaat zien, en wat geen script voor je oplost:
   rapport ligt tussen 0,75 en 0,90.
 - **Een exhibit dat los van zijn tekst is komen te staan.**
 - **Een omslag die niet klopt.** Dat is de enige pagina die met de hand gecomponeerd is en de
-  enige waar je vrij bent, dus daar kijk je apart naar.
+  enige waar je vrij bent, dus daar kijk je apart naar. Kijk ook of het veld doet wat het moet
+  doen: de titel staat in navy op oranje of in wit op navy, en het logo kantelt mee.
+- **De pagina's achterin, als er een aan staat.** Die zijn heel en splitsen niet, dus te veel
+  tekst in `paginas.json` komt terug als `te-groot-voor-kader`. En ze zien er anders uit dan je
+  denkt: een teampagina met twee namen is een ander beeld dan een met acht.
+- **De blanco's van het katern.** Ze horen daar, ze dragen geen folio en geen kopregel, en
+  `qa_rapport.py` rekent ze niet aan. Op het contactblad zie je of ze op de goede plek staan:
+  achteraan, en vóór het achterblad.
 
 Zoom in op wat opvalt:
 
@@ -588,22 +721,31 @@ Drie dingen gaan mee, en de eerste is de belangrijkste:
    en snijdt hij het SFNL-formaat af.
 3. **Het contactblad**, zodat de gebruiker het geheel in één beeld ziet.
 
-**En zeg deze zes dingen erbij**, in deze volgorde:
+**En zeg deze zeven dingen erbij**, in deze volgorde:
 
 - **Dat de tekst ongewijzigd is**, met het getal uit `tekstcheck.py`: "194 van 194 blokken
-  woordelijk gelijk aan het brondocument."
+  woordelijk gelijk aan het brondocument." Staat `noten` op `geen`, dan zeg je er in dezelfde adem
+  bij hoeveel noten er niet in het rapport staan — dat is het enige stuk brontekst dat vervalt, en
+  het vervalt omdat de gebruiker daarom heeft gevraagd.
 - **Wat de opmaak heeft toegevoegd**, geteld per soort.
-- **Welke wijzigingen zijn goedgekeurd** en welke de gebruiker heeft afgewezen.
+- **Hoeveel tekst er op de pagina's achterin staat en van wie die is.** Dit staat apart van de
+  vorige, want het is het enige toegevoegde dat uit hele alinea's bestaat: "over ons, het colofon
+  en het achterblad staan erin, 34 stukken tekst, allemaal aangeleverd door jou" — of, als jij ze
+  hebt geschreven, dat ze woordelijk zijn goedgekeurd en wanneer.
+- **Welke wijzigingen zijn goedgekeurd** en welke de gebruiker heeft afgewezen. Stond `herindelen`
+  op nee, dan zeg je dat er geen voorstellen zijn gedaan en dat de indeling is zoals in Word.
 - **Welke verwijzingen zijn gelijkgetrokken**, met het aantal en twee voorbeelden, en welke zijn
   blijven staan omdat er geen bronregel bij te vinden was. Dit is de enige tekst die zonder
   aparte toestemming is aangeraakt, dus hij hoort met naam en toenaam in de oplevering.
 - **Wat er open staat** — de kleine aanwijzingen uit `qa_rapport.py`, de beelden onder 150 dpi,
-  een tabel die in de breedte is gedwongen.
-- **Wat er nog niet in zit als het naar een drukker gaat.** Er zit geen afloop van 3 mm en geen
-  snijtekens in; dat is een aparte stap en de drukker vraagt erom. En Montserrat komt in de PDF
-  als Type3 terecht, omdat Google alleen nog een variabel bestand serveert en Chromium dat zo
-  insluit — de PDF drukt en de tekst is te selecteren, maar een drukkerij die om een lettertype
-  vraagt, krijgt geen normale naam te zien. Lato komt wél gewoon als Lato-Light mee.
+  een tabel die in de breedte is gedwongen, een pagina achterin die niet is gebouwd omdat er geen
+  tekst voor was.
+- **Wat er nog niet in zit als het naar een drukker gaat.** Er is geen afloop van 3 mm en er staan
+  geen snijtekens in, en Montserrat komt in de PDF als Type3 terecht — de PDF drukt en de tekst is
+  te selecteren, maar een drukkerij die om een lettertype vraagt, krijgt geen normale naam te
+  zien. Waaróm dat zo is en wat het kost om het te veranderen, staat in
+  `reference/documenten-stramien.md`, §1a *Wat er nog niet in zit als het naar de drukker gaat* —
+  één plek voor beide drukroutes. Neem de katernregel uit het bouwverslag in dezelfde adem mee.
 
 ---
 
@@ -635,7 +777,8 @@ Negen dingen. Verder blokkeert er niets op vormgeving; dat oordeel komt van de r
 Niet over de oude heen: `document.json` en `bron-tekst.txt` horen bij elkaar, en een half
 bijgewerkte werkmap laat `tekstcheck.py` op de verkeerde bron controleren.
 
-Neem `ontwerp.json` mee naar de nieuwe map — de vormbesluiten gelden nog. `wijzigingen.json`
+Neem `ontwerp.json` en `paginas.json` mee naar de nieuwe map — de vormbesluiten gelden nog, en de
+tekst voor de pagina's achterin hangt niet aan blok-id's. `wijzigingen.json`
 neem je **niet** zomaar mee: de blok-id's zijn opnieuw genummerd, en een wijziging die naar
 `b0042` verwijst raakt in de nieuwe versie een andere alinea. Loop hem langs, zoek de blokken op
 hun tekst terug, en leg twijfelgevallen opnieuw voor. `pas_wijzigingen_toe` meldt het als een

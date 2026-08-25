@@ -146,9 +146,19 @@ heeft opgemaakt. De eerste vijf zijn de ernstige.
 11. **Oranje als inkt.** Oranje op wit haalt contrast 2,58 en dat draagt
     geen regel tekst. Het draagt een streep, een vierkantje, een cijfer
     van twee tekens. Zie §4.
-12. **Een watermerkcijfer dat door zijn kader wordt afgesneden.** Half
-    achter de titel is een merkteken; afgekapt op de kolomrand is een
-    rechthoek.
+12. **Een watermerkcijfer dat door zijn kader wordt afgesneden.**
+    Afgekapt op de kolomrand is het geen merkteken meer maar een
+    rechthoek. Het punt staat er nog; de oplossing is veranderd. Half
+    achter de titel loste het niets op maar verplaatste het: de letters
+    dekken het middenstuk af, en wat overbleef was een smalle gekleurde
+    strook boven en onder de titel — precies de rechthoek die dit punt
+    verbiedt. Drie varianten zijn gerenderd en naast elkaar gelegd;
+    groter en lager liep door de eerste alinea, hoger werd door het
+    kader afgesneden. Het cijfer staat nu aan de buitenkant van het
+    kader, op dezelfde hoogte als de titel, en het is een **open
+    cijfer**: de vulling is de papierkleur en alleen de contour staat in
+    het accent. De titel loopt er dwars doorheen zonder er iets van af
+    te snijden. De maten staan in `rapport-stramien.md` §7.
 13. **Een figuur die op een andere pagina staat dan de tekst die ernaar
     verwijst.** Wanneer dat niet te vermijden is, hoort er in de tekst
     een verwijzing te staan — en die staat er alleen als de bron hem
@@ -201,9 +211,10 @@ lager uitkomt.
 
 ## 5. Wat de opmaak mag toevoegen
 
-Elf dingen, en ze dragen alle elf `data-toevoeging` in de markup zodat
-`tekstcheck.py` ze kan onderscheiden van brontekst. De laatste vier
-verschijnen alleen wanneer de bijbehorende keuze in `ontwerp.json` staat.
+Twaalf dingen, en ze dragen alle twaalf `data-toevoeging` in de markup
+zodat `tekstcheck.py` ze kan onderscheiden van brontekst. De laatste
+vijf verschijnen alleen wanneer de bijbehorende keuze in `ontwerp.json`
+staat.
 
 | toevoeging | wat | waarom het mag |
 |---|---|---|
@@ -218,6 +229,27 @@ verschijnen alleen wanneer de bijbehorende keuze in `ontwerp.json` staat.
 | `bronnummer` | `[3]` vóór een bronregel bij genummerd citeren | het nummer volgt uit de citatievolgorde in de tekst |
 | `scheiding` | het woord "Bijlagen" op het scheidingsblad | alleen wanneer de bron zelf geen zo'n kop heeft — heeft hij die wel, dan is het gewoon brontekst |
 | `beeldbijschrift` | het bijschrift bij een apart aangeleverd beeld | de gebruiker heeft het zelf geschreven; het staat niet in het rapport |
+| `pagina` | de tekst op de vier pagina's achterin: over ons, het team, het colofon, het achterblad | ze bestaan alleen wanneer `elementen` ze aanzet én de tekst in `paginas.json` staat |
+
+**`pagina` is van een andere orde dan de elf andere**, en daarom staat
+hij als laatste. De rest is navigatie of nummering: een folio is één
+getal, een kopregel is een kop die al bestond, een nootcijfer hangt aan
+een noot die de auteur schreef. Dit is de enige plek in het hele rapport
+waar hele alinea's staan die niet in het Word-document stonden. Op de
+proef gaat het om 34 stukken tekst.
+
+Daar horen drie dingen bij. De tekst komt uit `paginas.json` en dus van
+de gebruiker; schrijft de skill hem zelf, dan gaat hij **woordelijk
+langs de gebruiker voordat hij in het rapport komt** — het is
+toegevoegde tekst en die staat onder dezelfde regel als al het andere.
+`tekstcheck.py` telt hem apart van de folio's en de kopregels. En bij de
+oplevering staat hoeveel er zo bij is gekomen en van wie die tekst is.
+
+Staat een pagina aan zonder tekst, dan komt hij er **niet**: een lege
+teampagina is erger dan geen teampagina, en een tekst verzinnen is
+precies wat deze skill niet doet. Het bouwverslag meldt hem als
+`paginas_zonder_tekst` en dan vraag je erom. Het achterblad is de
+uitzondering — een achterkant met alleen het merk erop is af.
 
 Alles wat hier niet in staat en geen `data-bron` heeft, is tekst die
 niemand heeft goedgekeurd. `tekstcheck.py` noemt dat
@@ -287,6 +319,21 @@ De bol is daar het stuk dat het werk doet — een band zonder is een
 kleurvlak met tekst in de hoek, en dat leest als een onafgemaakt
 ontwerp.
 
+**De omslag valt buiten het register.** Welk kleurveld de omslag krijgt
+is een eigen besluit — `omslagveld` in `ontwerp.json`, standaard
+**oranje** — en dat besluit gaat vóór het register: ook een rapport in
+`zacht` krijgt een oranje omslag, tenzij er iets anders is gekozen. De
+reden is dat de omslag iets anders doet dan de tekstpagina's. Een wit
+voorblad met een titel erop is de eerste pagina van een manuscript, en
+het verschil tussen een document en een rapport zit voor de lezer die
+het oppakt in dat ene vlak. Het is bovendien geen concessie aan de
+leesbaarheid: navy op oranje haalt 6,4 (§4), ruim boven de drempel.
+
+Zes velden: `oranje`, `verloop`, `navy`, `violet`, `mint` en `wit`. Dat
+laatste blijft mogelijk, want een opdrachtgever kan erom vragen — maar
+dan is het gekozen en niet overkomen. Het achterblad erft het veld van
+de omslag, tenzij `paginas.json` er een eigen veld bij zet.
+
 ---
 
 ## 8. Beeld
@@ -344,7 +391,7 @@ vraag verkeerd gesteld.
 
 | | wat het doet | waarvoor |
 |---|---|---|
-| `geen` | de noten uit de bron worden niet gezet | alleen wanneer de gebruiker dat vraagt; het is het enige apparaat dat brontekst laat vervallen en het wordt dus expliciet gemeld |
+| `geen` | de noten uit de bron worden niet gezet | alleen wanneer de gebruiker dat vraagt; het is het enige apparaat dat brontekst laat vervallen en het wordt dus expliciet gemeld. `tekstcheck.py` telt die noten als `weggelaten`: apart van `verdwenen`, en het blokkeert niet, want het is een besluit |
 | `voetnoot` | onder aan de pagina waar de verwijzing staat, of in de kantlijn bij het model `kantlijn` | de default, en de enige vorm waarbij de lezer de noot leest zonder de vinger ergens in te houden |
 | `eindnoot-hoofdstuk` | een blok aan het eind van elk hoofdstuk | veel noten, of lange noten; het houdt de tekstpagina rustig zonder de noot onvindbaar te maken |
 | `eindnoot-rapport` | één blok achterin | de academische vorm; kies het voor een rapport dat als geheel wordt geciteerd |
@@ -447,8 +494,14 @@ het moment dat je erin belandt.
 
 - **Er komt een scheidingsblad**, met dezelfde compositie als een
   hoofdstukopener maar zonder cijfer: een streep, het woord "Bijlagen",
-  en het veld van het register. Dat is de hele functie — de lezer die
-  doorbladert weet dat het lopende betoog voorbij is.
+  het veld van het register, en de tonale bol van de hoofdstukband, half
+  buiten het blad linksboven. Dat is de hele functie — de lezer die
+  doorbladert weet dat het lopende betoog voorbij is. **De bol staat er
+  om een gemeten reden.** Zonder cijfer bleef er in het heldere register
+  een bijna leeg blad over: een streep en een woord onderaan, en verder
+  wit. Dat leest niet als een besluit maar als een pagina die vergeten
+  is. Met de bol erop zijn het scheidingsblad en de hoofdstukopener
+  familie van elkaar.
 - **Staat het woord al in de bron** — een kop die alleen "Bijlagen" of
   "Appendices" is — dan ís die kop het scheidingsblad en wordt er niets
   toegevoegd. Staat er meteen "Bijlage A: verantwoording", dan is dat de
@@ -484,3 +537,8 @@ Deze skill zet een aangeleverd rapport op. Wat hij niet doet:
   `sfnl-design-documents`.
 - **Geen Word terug.** De oplevering is HTML en PDF. Een rapport dat de
   klant zelf verder typt, is een ander product.
+- **Geen afloop en geen snijtekens.** Het aantal pagina's rekent
+  `bouw.py` wél uit, en met `drukklaar` vult hij het aan tot het katern
+  uitkomt. De 3 mm rondom en de snijtekens zitten er niet in. Waarom
+  dat zo is en wat het kost om het te veranderen, staat in
+  `documenten-stramien.md` §1a — één plek voor beide drukroutes.
