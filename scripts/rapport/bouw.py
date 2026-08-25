@@ -280,8 +280,12 @@ class Stroom:
         if o.get("hoofdstuknummers"):
             kicker = (f'<p class="opener__kicker" data-toevoeging="nummer">'
                       f'Hoofdstuk {nr}</p>')
+        # Het cijfer gaat mee bij alle drie de openers. Waar het komt te
+        # staan verschilt per opener en dat regelt de CSS: half achter de
+        # titel bij `nummer`, groot onderin bij `blad`, aan de
+        # buitenrand van de band bij `band`.
         watermerk = ""
-        if o.get("opener") in ("nummer", "blad") and o.get("hoofdstuknummers"):
+        if o.get("hoofdstuknummers"):
             watermerk = (f'<span class="opener__watermerk" aria-hidden="true" '
                          f'data-toevoeging="nummer">{nr}</span>')
         veld = {"diep": "navy", "contrast": "violet",

@@ -246,6 +246,40 @@ Op `data-opener`. Eén manier voor álle hoofdstukken in een rapport.
 | `band` | een aflopende band bovenaan die pagina; `--balk` bepaalt de hoogte (232 px is de default) | ongeveer een kwart pagina |
 | `blad` | een heel blad met de hoofdstuknaam onderin en het cijfer op 240 px erachter | een pagina per hoofdstuk; pas vanaf veertig pagina's |
 
+**Alle drie dragen hetzelfde merkteken**, het hoofdstukcijfer, en dat is
+wat ze tot drie varianten van één ding maakt in plaats van drie losse
+ontwerpen: half achter de titel bij `nummer`, aan de buitenrand van de
+band bij `band`, groot onderin bij `blad`.
+
+### De band, van dichtbij
+
+Een band die alleen een kleurvlak met twee regels tekst is, leest als een
+onafgemaakt ontwerp — dat was de eerste zetting. Wat er nu op staat komt
+uit het gemeten drukwerk en niet uit een idee:
+
+| onderdeel | waar | herkomst |
+|---|---|---|
+| het tekstblok — kicker plus titel | linksonder, hangend aan de onderkant van de band | de gemeten opbouw van de titelbalk: een groot veld met een klein blok in de onderhoek, en de leegte erboven ís de compositie. De afstand van de titel tot de tekst eronder is de maat die het oog leest |
+| de tonale bol | linksboven, half buiten het blad, `currentColor` op 10 procent, 2,1 × de bandhoogte | `stijl.css` §8.12: "gemeten op de omslag en op de bronvermelding van het rapport 2025: een cirkel in dezelfde kleur, iets lichter, half buiten de pagina. Dit is wat een vol oranje vlak diepte geeft zonder een tweede kleur" |
+| het hoofdstukcijfer | rechtsonder, op 0,46 × de bandhoogte, `currentColor` op 26 procent | het watermerk uit het jaarrapport, hier aan de buitenrand in plaats van achter de titel |
+
+Twee dingen die eraan vastzitten:
+
+- **De band spiegelt niet mee met de pagina.** De marges, de folio en de
+  kopregel doen dat wel, want een gebonden rapport wordt aan de
+  buitenrand doorgebladerd. De band niet: de bol staat boven het
+  tekstblok en het cijfer staat aan de andere kant, en dat is een
+  verhouding tussen de drie onderling. Spiegel je de bol wél, dan komen
+  op een verso de bol en het cijfer allebei rechts uit en vechten ze om
+  dezelfde hoek. Gemeten op de proef: precies dat gebeurde.
+- **`currentColor` doet in beide richtingen het goede.** Op een oranje of
+  mint band is de inkt navy, dus worden bol en cijfer een tint dónkerder;
+  op een navy of violette band is de inkt wit en worden ze lichter.
+  Allebei geeft het diepte, en het scheelt een uitzondering per register.
+
+Wat er níét bij komt: een logo, een haarlijn of een tweede kleur. De band
+is één vlak en het merk staat op de omslag.
+
 De **omslag** is geen hoofdstukblad: die krijgt `data-opener="omslag"`,
 en daar staat de titel in het midden in plaats van onderaan.
 

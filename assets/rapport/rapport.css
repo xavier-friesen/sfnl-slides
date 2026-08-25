@@ -1024,7 +1024,33 @@
 /* De band. `--balk` staat op de `.pagina` en niet op de band zelf —
    diezelfde regel als in stijl.css, en om dezelfde reden: de
    zetspiegel telt de bandhoogte bij zijn bovenmarge op, zodat de
-   hoogte maar op één plek staat. */
+   hoogte maar op één plek staat.
+
+   De band draagt drie dingen, en alle drie komen uit het gemeten
+   SFNL-drukwerk in plaats van uit een idee:
+
+   1. **Het tekstblok hangt aan de onderkant.** Dat is de gemeten
+      opbouw van de casespread en van de titelbalk in de
+      documentenskill: een groot kleurveld met een klein tekstblok in
+      de onderhoek, en de leegte erboven is de compositie. De afstand
+      van de titel tot de tekst eronder is de maat die het oog leest,
+      en die staat vast zolang de titel onderaan hangt.
+   2. **De tonale bol.** `stijl.css` beschrijft hem als "gemeten op de
+      omslag en op de bronvermelding van het rapport 2025: een cirkel in
+      dezelfde kleur, iets lichter, half buiten de pagina. Dit is wat
+      een vol oranje vlak diepte geeft zonder een tweede kleur." Dat is
+      precies het probleem van een hoofdstukband, dus dat is het
+      antwoord. Hij zit als pseudo-element aan de band en niet als
+      element in de markup, want hij draagt geen tekst en hoort
+      `tekstcheck.py` niet bezig te houden.
+   3. **Het hoofdstukcijfer**, groot en bleek, aan de buitenrand, op de
+      hoogte van de titel. Daarmee dragen alle drie de openers hetzelfde
+      merkteken — bij `nummer` half achter de titel, bij `blad` groot
+      onderin, bij `band` aan de buitenkant — en zijn het drie varianten
+      van één ding in plaats van drie losse ontwerpen.
+
+   Wat er níét bij komt: een logo, een haarlijn of een tweede kleur. De
+   band is één vlak en het merk staat op de omslag. */
 .opener-band {
   position: absolute;
   top: 0; left: 0; right: 0;
@@ -1036,18 +1062,76 @@
   justify-content: flex-end;
   padding: 0 var(--r-marge-buiten) calc(var(--regel) * 1.4) var(--r-marge-binnen);
   z-index: 1;
+  overflow: hidden;
 }
 .pagina[data-zijde="verso"] .opener-band {
   padding-left: var(--r-marge-buiten);
   padding-right: var(--r-marge-binnen);
 }
+
+/* De tonale bol: dezelfde kleur, een tint verschoven, half buiten het
+   blad. Aan de buitenbovenhoek, want daar valt hij samen met twee
+   snijranden en leest hij als diepte in plaats van als een cirkel op
+   een vlak.
+
+   De maat en de plaatsing zijn tegen elkaar afgewogen op de render.
+   Groot en hoog: er blijft een brede, flauwe boog over de bovenrand
+   staan, en de onderhelft van de band blijft vrij voor het tekstblok en
+   het cijfer. De eerste zetting had hem kleiner en lager, en toen sneed
+   de boog dwars door het hoofdstukcijfer heen — twee merktekens die om
+   dezelfde hoek vechten is erger dan één. */
+.opener-band::after {
+  content: "";
+  position: absolute;
+  width: calc(var(--balk) * 2.1);
+  height: calc(var(--balk) * 2.1);
+  left: calc(var(--balk) * -0.85);
+  top: calc(var(--balk) * -1.28);
+  border-radius: 50%;
+  background: currentColor;
+  opacity: .10;
+  pointer-events: none;
+}
+/* De band spiegelt níet mee met de pagina, en dat is een besluit.
+   De rest van het blad doet dat wel — de marges, de folio, de kopregel
+   — omdat een gebonden rapport aan de buitenrand wordt doorgebladerd.
+   Maar de band draagt drie dingen die zich tot elkáár verhouden: de bol
+   staat boven het tekstblok, het cijfer staat aan de andere kant.
+   Spiegel je de bol wél en het tekstblok volgt de paginamarge, dan
+   komen op een verso de bol en het cijfer allebei rechts uit en vechten
+   ze om dezelfde hoek. Gemeten op de proef: precies dat gebeurde.
+
+   Dus staat de bol altijd linksboven, het tekstblok altijd linksonder
+   en het cijfer altijd rechtsonder. Wat wél meespiegelt is hoe ver het
+   tekstblok van de rand staat, want dat is de paginamarge. */
+
 .opener-band[data-veld="navy"]   { background: var(--navy);   color: var(--wit); }
 .opener-band[data-veld="violet"] { background: var(--violet); color: var(--wit); }
 .opener-band[data-veld="mint"]   { background: var(--mint-tint); color: var(--navy); }
-.opener-band .opener { margin: 0; }
-.opener-band .opener__watermerk { display: none; }
+
+/* `.opener` wordt in de band een gewone doos zonder eigen
+   positioneringscontext, zodat het watermerkcijfer tegen de bánd
+   uitlijnt en niet tegen het tekstblok. */
+.opener-band .opener { margin: 0; position: static; }
 .opener-band .opener__kicker { color: currentColor; opacity: .78; }
-.opener-band .opener__titel  { color: currentColor; }
+.opener-band .opener__titel  { color: currentColor; position: relative; z-index: 1; }
+
+/* Het hoofdstukcijfer aan de buitenrand, met zijn onderkant op de
+   onderkant van de band. `line-height: .74` zet de cijferbasis vrijwel
+   op de doosrand, zodat het cijfer optisch op dezelfde lijn staat als
+   de titel ernaast in plaats van er een halve regel boven te zweven. */
+.opener-band .opener__watermerk {
+  top: auto; left: auto;
+  right: var(--r-marge-buiten);
+  bottom: calc(var(--regel) * 1.4);
+  font-size: calc(var(--balk) * 0.46);
+  line-height: .74;
+  color: currentColor;
+  opacity: .26;
+}
+.pagina[data-zijde="verso"] .opener-band .opener__watermerk {
+  right: var(--r-marge-binnen);
+}
 
 /* Het hele blad. De pagina draagt dan het kleurveld en de titel staat
    onderin — dat is waar het oog hem zoekt wanneer hij omslaat. */

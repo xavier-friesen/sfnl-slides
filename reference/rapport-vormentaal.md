@@ -267,6 +267,15 @@ opent.
   naast elkaar staan. Voor een rapport dat uit cases bestaat die van
   elkaar moeten verschillen.
 
+**Het register bepaalt de kleur van de hoofdstukband, niet de
+compositie.** Die is in alle vier hetzelfde: het tekstblok hangt
+linksonder in het veld, de tonale bol bleedt linksboven half buiten het
+blad, en het hoofdstukcijfer staat rechtsonder. Zie
+`rapport-stramien.md` §7 voor de maten en de herkomst van elk onderdeel.
+De bol is daar het stuk dat het werk doet — een band zonder is een
+kleurvlak met tekst in de hoek, en dat leest als een onafgemaakt
+ontwerp.
+
 ---
 
 ## 8. Beeld
