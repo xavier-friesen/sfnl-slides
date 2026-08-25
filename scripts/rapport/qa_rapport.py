@@ -188,6 +188,7 @@ METING = r"""() => {
       opener: p.getAttribute('data-opener') || '',
       deel: p.getAttribute('data-deel') || '',
       dichtheid: p.getAttribute('data-dichtheid') || '',
+      blanco: p.hasAttribute('data-blanco'),
       vulgraad: Math.round(vulgraad * 100) / 100,
       woorden: woorden,
       tekens: tekens,
@@ -333,7 +334,8 @@ def beoordeel(m: dict) -> dict:
                            "wat": "een kop staat als laatste in zijn kolom"})
 
     slap = [p for p in m["paginas"]
-            if p["vulgraad"] < 0.7 and not p["opener"] and p["nr"] != len(m["paginas"])]
+            if p["vulgraad"] < 0.7 and not p["opener"] and not p.get("blanco")
+            and p["nr"] != len(m["paginas"])]
     if slap:
         aanwijzing.append({"soort": "vulgraad", "aantal": len(slap),
                            "waar": [{"pagina": p["nr"], "vulgraad": p["vulgraad"]}
@@ -407,8 +409,14 @@ def main() -> int:
             "tekstpaginas": len(tekstpaginas),
             "wat": "geen drempel; dit staat er zodat je ziet wat de knop deed",
         },
+        # De blanco pagina's van het katern tellen niet mee: ze staan er
+        # omdat een vel vier pagina's is, niet omdat er iets niet paste.
+        # Zonder deze uitzondering zakt de gemiddelde vulgraad van een
+        # drukklaar rapport met drie lege bladen zichtbaar, en dan meet
+        # het getal de drukkerij in plaats van de zetting.
         "gemiddelde vulgraad": round(
-            sum(p["vulgraad"] for p in m["paginas"]) / max(1, len(m["paginas"])), 2),
+            sum(p["vulgraad"] for p in m["paginas"] if not p.get("blanco"))
+            / max(1, len([p for p in m["paginas"] if not p.get("blanco")])), 2),
         "lettergroottes": sorted(float(k) for k in m["maten"]),
         "beelden": len(m["beeld"]),
         **oordeel,

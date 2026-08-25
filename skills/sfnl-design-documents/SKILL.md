@@ -84,6 +84,26 @@ Wat je in plaats daarvan doet:
 - **Alles wat toch een aanname is**, komt onderaan de outline te staan als aanname, en gaat
   nooit als vaststelling de pagina op.
 
+**Tekst binnen een infographic valt hier ook onder, en dat is de sluipweg.** De woorden in een
+SVG zijn tekst van de gebruiker, net als de woorden in een alinea, en je past ze standaard niet
+aan: `beeldtekst: nee` is de stand tot hij iets anders zegt. Hier bijt die regel harder dan bij
+lopende tekst, want de SVG staat inline in de markup en niemand leest hem terug. Een label dat je
+zelf hebt ingekort, een cijfer dat je hebt afgerond, een eenheid die je hebt weggelaten: het staat
+op de pagina en het komt langs geen enkele controle — `qa_document.py` telt de woorden erin niet,
+de outline draagt ze niet en `sfnl-humanizer` heeft ze nooit gezien. Past een label niet in het
+beeld, dan wordt het kader groter of vraag je om een kortere formulering. Wil je de tekst in een
+beeld tóch aanpassen, dan vraag je dat per beeld, met wat je wilt wijzigen en waarom, en het
+antwoord noteer je bij die pagina in de outline.
+
+**Een colofon, een achterblad of een "over ons"-pagina komt langs als voorstel en nooit als
+vanzelfsprekendheid.** Zo'n pagina staat in bijna elk gedrukt stuk, en dat is precies waarom een
+model hem erbij zet zonder dat iemand erom vroeg. Stel hem voor met de reden — wat de lezer eraan
+heeft — en met de paginakosten erbij, en koppel die aan de katernsom: in kort drukwerk verschuift
+elke extra pagina de vouw, dus een colofon op een document van vier maakt er vijf, en gedrukt
+worden dat er acht met drie lege bladen. Soms werkt het andersom en vult juist zo'n pagina een
+katern dat toch al naar acht moet; zeg dat er dan bij, want dan is het een goedkope pagina in
+plaats van een dure. Gebouwd wordt hij pas na ja, en alleen als er materiaal voor is.
+
 De vormbesluiten hieronder, de merktekens en de maatstaf gaan dus alleen over hóé iets op de
 pagina staat. Wát er staat, komt van de gebruiker.
 
@@ -130,7 +150,12 @@ gebeurt is het besluit per pagina opnieuw nemen.
   aanbesteding winnen. Dat is een ander document, niet een andere titel.
 - **Wordt dit gedrukt, of blijft het een PDF op een scherm?** Gedrukt betekent aflopend werk,
   een snijrand en spreads die kloppen. Op een scherm betekent dat pagina 1 alleen staat en er
-  niemand omslaat.
+  niemand omslaat. Dit is geen sfeervraag maar een besluit dat verderop iets aanstuurt. Het komt
+  als `gedrukt: ja` of `gedrukt: nee` in het besluitenblok bovenaan de outline te staan, en bij
+  het bouwen wordt het de vlag `--gedrukt`, waarmee `bouw.py` de katernsom uitrekent — want
+  gedrukt is het aantal pagina's vanaf vier deelbaar door vier en op een scherm is het vrij. Weet
+  de gebruiker het nog niet, dan staat er `nee` tot hij iets anders zegt, en zeg erbij dat het
+  aantal pagina's dan nog kan schuiven.
 - **Is er een bestaand stuk dat als voorbeeld dient?** Vraag dit actief. Krijg je er een, dan is
   dát de maatstaf: render het, kijk ernaar, en volg de vormentaal ervan in plaats van
   `assets/documenten/maatstaf/`.
@@ -234,11 +259,15 @@ Montserrat voor de kop, Lato voor het brood. Wie een derde familie wil, wil een 
 
 **Wat je na dit blok hebt** is een vormbesluit per rij, en dat gaat als eerste blok bovenaan de
 outline mee: per besluit de gekozen waarde, en alleen bij een afwijking van de default de reden.
-Vijf regels, in één keer te herlezen.
+Zes regels, in één keer te herlezen — de vijf hierboven plus `gedrukt`, het enige antwoord uit de
+opdrachtvragen dat verderop een script aanstuurt. Deze route kent geen apart besluitenbestand: dat
+blok in `outline.md` is de enige plek waar de zes staan, en een besluit dat daar niet staat,
+bestaat bij het bouwen niet.
 
 ## Stap 2 — De outline, en de tweede poort
 
-De vier besluiten staan bovenaan `outline.md` en gelden voor elke pagina.
+De zes besluiten staan bovenaan `outline.md` en gelden voor elke pagina: de vijf over de vorm,
+plus `gedrukt` uit de opdrachtvragen.
 
 Daarboven staat de **kernzin**: wat de lezer na het doorbladeren moet onthouden, in één zin. Dat
 is drie regels werk en het is de plek waar een pagina sneuvelt voordat hij bestaat.
@@ -305,7 +334,7 @@ Drie manieren, en je kiest er één voor alle hoofdstukken:
 **Eén manier voor alle hoofdstukken, en één maat.** Hoofdstuk 1 met een band en hoofdstuk 2 met
 alleen een kop leest als een fout, en een band van 190 px op de ene en 260 op de volgende laat de
 tekst per pagina op een andere hoogte beginnen — op de spread is dat een scheve horizon. Zet de
-gekozen manier en de bandhoogte bovenaan de outline, bij de vijf besluiten.
+gekozen manier en de bandhoogte bovenaan de outline, in het besluitenblok.
 
 **Twee dingen die alleen bij drukwerk horen en die je hier vastlegt.** De **spreadindeling**: welke
 pagina's liggen tegenover elkaar, en klopt dat paar. En de **doorloop**: loopt een tekst over de
@@ -399,7 +428,7 @@ Zo lees je op de render dat er beeld hoort, in plaats van dat het als witruimte 
      style="aspect-ratio: 16 / 9;"></div>
 ```
 
-**Vier regels, en de eerste is de enige die stil misgaat.**
+**Vijf regels, en de eerste en de laatste zijn de twee die stil misgaan.**
 
 1. **Teken op schaal 1:1.** De `viewBox` is even breed als het kader in px — op het
    SFNL-formaat is een kader over de volle zetspiegel 680 breed, dus `viewBox="0 0 680 …"`.
@@ -415,6 +444,14 @@ Zo lees je op de render dat er beeld hoort, in plaats van dat het als witruimte 
    wat hij betekent, net als bij besluit 3.
 4. **Het bijschrift draagt de herkomst.** Elk getal in het beeld heeft zijn eenheid, periode en
    bron, en die staan in de `figcaption` en niet in het beeld zelf.
+5. **De tekst in het beeld is de tekst van de gebruiker.** Labels, cijfers, eenheden en de zin die
+   het beeld samenvat neem je over zoals ze in de outline staan. Je herformuleert ze niet omdat
+   het beter loopt en je kort ze niet in omdat het net niet past. Dit is de plek waar zo'n
+   wijziging onzichtbaar blijft: de SVG staat inline in de markup, dus er is geen telling en geen
+   controle die de woorden erin leest — `qa_document.py` kijkt naar dozen en maten, niet naar wat
+   er in een `<text>` staat. Past een label niet, dan wordt het kader groter of vraag je om een
+   kortere formulering. `beeldtekst: nee` is de stand; toestemming vraag je per beeld en je
+   noteert hem bij die pagina in de outline.
 
 **Wanneer je escaleert naar `sfnl-infographic`.** Die skill bouwt één beeld op maat, met een
 eigen compositieronde en een eigen renderloop, en levert SVG die je hier inplakt. De aanleiding
@@ -434,6 +471,14 @@ Dat doet drie dingen in één keer: het stempelt de letters en `stijl.css` in el
 schrijft `canvas.json` met de pagina's als **spreads** (1 alleen rechts, dan 2-3, 4-5), en het
 schrijft het losse HTML-bestand met `@page` erin. Draai het opnieuw na elke wijziging; het is
 idempotent.
+
+**Staat er `gedrukt: ja` bovenaan de outline, zet er dan `--gedrukt` bij.** Dan rekent het script
+de katernsom mee en zet die onder `katern` in zijn verslag: of dit aantal pagina's op de pers
+bestaat, en zo niet, hoeveel er bij moeten of af kunnen. Staat daar `klopt: false`, dan is dat
+werk voor jou en niet voor het script — leg de drie uitwegen voor (inkorten, uitbreiden, of het
+bij een PDF houden) en wacht op het antwoord. Er komt geen pagina bij om een som te laten
+kloppen; dat zou een pagina zijn waar geen materiaal voor is. Wat de drukker verder mist, staat in
+`documenten-stramien.md` §1a en noem je pas bij de oplevering.
 
 Geef het bestand een naam zoals de gebruiker het zou noemen, zonder apostrofs of andere tekens
 die een browser bij downloaden verhaspelt.
@@ -522,13 +567,14 @@ Drie dingen gaan mee, en de eerste is de belangrijkste:
 Zeg erbij welke pagina's je in de loop hebt aangepast en wat er open staat. Een cijfer dat je niet
 hebt kunnen verifiëren noem je expliciet.
 
-**Gaat het document echt naar een drukker, noem dan deze twee.** Er zit nog geen afloop van 3 mm en
-geen snijtekens in; dat is een aparte stap en de drukker vraagt erom. En Montserrat komt in de
-PDF als Type3 terecht, omdat Google alleen nog een variabel bestand serveert en Chromium dat zo
-insluit — de PDF drukt en de tekst is te selecteren, maar een drukkerij die om een lettertype
-vraagt, krijgt geen normale naam te zien. Lato komt wél gewoon als Lato-Light mee. Nagemeten op
-een gebouwhet document van vier pagina's: bladmaat 595 × 780 pt, wat exact 210 × 275 mm is en dus
-gelijk aan het echte jaarrapport.
+**Gaat het document echt naar een drukker, noem dan wat er nog niet in zit.** Er is geen afloop
+van 3 mm en er staan geen snijtekens in, en Montserrat komt in de PDF als Type3 terecht — de PDF
+drukt en de tekst is te selecteren, maar een drukkerij die om een lettertype vraagt, krijgt geen
+normale naam te zien. De bladmaat klopt wél: nagemeten op een gebouwd document van vier pagina's
+is dat 595 × 780 pt, exact 210 × 275 mm en dus gelijk aan het echte jaarrapport. Waaróm het zo is
+en wat eraan veranderen kost, staat in `reference/documenten-stramien.md`, §1a *Wat er nog niet in
+zit als het naar de drukker gaat*; neem de katernsom uit het verslag van `bouw.py` in dezelfde
+adem mee.
 
 ## Wat blokkeert
 

@@ -56,6 +56,11 @@ PAGINATOR = HIER / "paginator.js"
 
 sys.path.insert(0, str(HIER))
 sys.path.insert(0, str(WORTEL / "scripts" / "documenten"))
+# `scripts/gedeeld/` is van beide drukroutes tegelijk. Op dit moment
+# staat er één module in — de katernrekensom — en die staat daar omdat
+# de vraag "komt dit aantal pagina's uit op de pers" in de
+# documentenskill precies hetzelfde antwoord heeft.
+sys.path.insert(0, str(WORTEL / "scripts" / "gedeeld"))
 
 #: De bladmaten in px bij 96 dpi. Dezelfde tabel als in `stijl.css` en in
 #: `scripts/documenten/bouw.py`; een zevende formaat bestaat niet.
@@ -92,6 +97,24 @@ BEELDBRONNEN = ("geen", "uit-bron", "aangeleverd")
 #: is veranderd en niets meer.
 CITAATSTIJLEN = ("zoals-aangeleverd", "uniform", "genummerd")
 
+#: Het kleurveld van de omslag. **De omslag is nooit wit tenzij iemand
+#: daar expliciet voor kiest.** Dat is een besluit van de opdrachtgever
+#: en het gaat vóór het register: ook een rapport in `zacht` krijgt een
+#: oranje omslag, tenzij `omslagveld` iets anders zegt. Een wit voorblad
+#: met een titel erop is geen omslag maar de eerste pagina van een
+#: manuscript, en dat is precies het verschil dat deze skill moet maken.
+#: `wit` blijft mogelijk, want een opdrachtgever kan er om vragen — maar
+#: dan is het gekozen en niet overkomen.
+OMSLAGVELDEN = ("oranje", "verloop", "navy", "violet", "mint", "wit")
+
+#: De pagina's die niet uit het brondocument komen. Standaard staan ze
+#: allemaal uit: een rapport krijgt geen teampagina omdat rapporten vaak
+#: een teampagina hebben. Staat er een aan, dan moet de tékst ervan
+#: ergens vandaan komen — uit `paginas.json`, geschreven of goedgekeurd
+#: door de gebruiker — en die tekst draagt `data-toevoeging`, want het
+#: staat niet in het aangeleverde document.
+EXTRA_PAGINAS = ("overOns", "team", "colofon", "achterblad")
+
 STANDAARD_ONTWERP = {
     "model": "breed",
     "register": "helder",
@@ -117,7 +140,21 @@ STANDAARD_ONTWERP = {
     "ondertitel": None,
     "opdrachtgever": None,
     "datum": None,
-    "colofon": None,
+    # De omslag krijgt een kleurveld, en dat staat los van het register.
+    "omslagveld": "oranje",
+    # Welke pagina's er nog meer in komen. Alles uit; de tekst komt uit
+    # `paginas.json` en telt als toevoeging.
+    "elementen": {"overOns": False, "team": False,
+                  "colofon": False, "achterblad": False},
+    # Gaat dit naar de drukker, en op welk katern moet het uitkomen.
+    "drukklaar": False,
+    "katern": 4,
+    # De twee toestemmingen. Allebei standaard nee, en allebei expliciet
+    # gevraagd: zonder `herindelen` doet de skill geen enkel voorstel om
+    # de tekst anders in te delen, en zonder `beeldtekst` blijft de tekst
+    # in een figuur staan zoals hij staat.
+    "herindelen": False,
+    "beeldtekst": False,
 }
 
 #: De letters voor de bijlagen. Voorbij Z houdt het op, en een rapport
@@ -207,6 +244,8 @@ class Stroom:
         self.bronregels: set = set()
         self.extra_beeld: dict = {}
         self.beeld_zonder_plek: list = []
+        self.paginateksten: dict = {}
+        self.paginas_zonder_tekst: list = []
         self.toon_noten: bool = ontwerp.get("noten") != "geen"
         self.regels: list[str] = []
 
@@ -253,10 +292,16 @@ class Stroom:
         # zetspiegel meer, groeit hij niet mee, en zakt de hele omslag
         # naar de onderrand — dat was op de eerste gebouwde omslag te
         # zien als een titel die tegen het logo aan stond.
+        # Het kleurveld van de omslag. Standaard oranje, en dat is een
+        # besluit dat vóór het register gaat: een wit voorblad met een
+        # titel erop is de eerste pagina van een manuscript en niet de
+        # omslag van een rapport. `wit` kan, maar dan is het gekozen.
+        veld = self.o.get("omslagveld") or "oranje"
+        veldattr = "" if veld == "wit" else f' data-veld="{_esc(veld)}"'
         return (
             '<div class="omslag" data-plek="omslag" data-nieuwe-pagina="ja" '
             'data-opener="blad" data-sjabloon="omslag" data-folio="nee" '
-            'data-heel="ja">'
+            f'data-heel="ja"{veldattr}>'
             f'<div class="omslag__boven">{"".join(boven)}</div>'
             f'<div class="omslag__midden">{"".join(stuk)}</div>'
             f'<div class="omslag__onder">{"".join(onder)}</div>'
@@ -265,6 +310,109 @@ class Stroom:
     def _runs(self, runs: list) -> str:
         """De inline opmaak van één blok, met de notenstand van dit rapport."""
         return runs_naar_html(runs, self.noten_gezien, self.toon_noten)
+
+    # -- de pagina's die niet uit het brondocument komen ---------------
+    def extra_paginas(self) -> str:
+        """Over ons, het team, het colofon en het achterblad.
+
+        Alle vier staan standaard uit, en alle vier bestaan alleen
+        wanneer de gebruiker de tekst heeft aangeleverd in
+        `paginas.json`. Dat is geen formaliteit: dit is de enige plek in
+        het hele rapport waar hele alinea's staan die niet in het
+        Word-document stonden. Ze dragen daarom allemaal
+        `data-toevoeging="pagina"`, `tekstcheck.py` telt ze apart, en bij
+        de oplevering hoort te staan hoeveel woorden er zo bij zijn
+        gekomen en van wie ze zijn.
+
+        Staat een pagina aan zonder tekst, dan komt hij er **niet**. Een
+        lege teampagina is erger dan geen teampagina, en een tekst
+        verzinnen is precies wat deze skill niet doet. Het wordt gemeld
+        als `paginas_zonder_tekst` en dan vraag je erom.
+        """
+        aan = [n for n in EXTRA_PAGINAS if (self.o.get("elementen") or {}).get(n)]
+        if not aan:
+            return ""
+        bron = self.paginateksten
+        uit = []
+        for naam in aan:
+            gegevens = bron.get(naam) or {}
+            bouwer = getattr(self, f"_pagina_{naam.lower()}")
+            stuk = bouwer(gegevens)
+            if not stuk:
+                self.paginas_zonder_tekst.append(naam)
+                continue
+            uit.append(stuk)
+        return "\n".join(uit)
+
+    @staticmethod
+    def _paginakop(kop: str) -> str:
+        return (f'<p class="extra__kicker" data-toevoeging="pagina">'
+                f'{_esc(kop)}</p>')
+
+    def _pagina_overons(self, g: dict) -> str:
+        alineas = [a for a in (g.get("alineas") or []) if str(a).strip()]
+        if not alineas:
+            return ""
+        kop = g.get("kop") or "Over Social Finance NL"
+        regels = "".join(f'<p data-toevoeging="pagina">{_esc(a)}</p>' for a in alineas)
+        return (
+            '<div class="extra extra--overons" data-nieuwe-pagina="ja" '
+            f'data-heel="ja" data-recto="nee" data-opener="vol" data-hoofdstuk="{_esc(kop)}">'
+            f'{self._paginakop("Over ons")}'
+            f'<h1 class="extra__titel" data-toevoeging="pagina">{_esc(kop)}</h1>'
+            f'<div class="extra__lopend">{regels}</div></div>')
+
+    def _pagina_team(self, g: dict) -> str:
+        leden = [l for l in (g.get("leden") or []) if (l or {}).get("naam")]
+        if not leden:
+            return ""
+        kop = g.get("kop") or "Het team"
+        intro = (f'<p class="extra__intro" data-toevoeging="pagina">'
+                 f'{_esc(g["intro"])}</p>') if g.get("intro") else ""
+        kaarten = []
+        for lid in leden:
+            regels = [f'<p class="lid__naam" data-toevoeging="pagina">'
+                      f'{_esc(lid["naam"])}</p>']
+            for sleutel, klasse in (("rol", "lid__rol"), ("mail", "lid__mail")):
+                if lid.get(sleutel):
+                    regels.append(f'<p class="{klasse}" data-toevoeging="pagina">'
+                                  f'{_esc(lid[sleutel])}</p>')
+            kaarten.append(f'<div class="lid">{"".join(regels)}</div>')
+        return (
+            '<div class="extra extra--team" data-nieuwe-pagina="ja" '
+            f'data-heel="ja" data-recto="nee" data-opener="vol" data-hoofdstuk="{_esc(kop)}">'
+            f'{self._paginakop("Wie het maakte")}'
+            f'<h1 class="extra__titel" data-toevoeging="pagina">{_esc(kop)}</h1>'
+            f'{intro}<div class="team">{"".join(kaarten)}</div></div>')
+
+    def _pagina_colofon(self, g: dict) -> str:
+        regels = [r for r in (g.get("regels") or []) if str(r).strip()]
+        if not regels:
+            return ""
+        kop = g.get("kop") or "Colofon"
+        lijst = "".join(f'<p data-toevoeging="pagina">{_esc(r)}</p>' for r in regels)
+        return (
+            '<div class="extra extra--colofon" data-nieuwe-pagina="ja" '
+            f'data-heel="ja" data-recto="nee" data-opener="vol" data-hoofdstuk="{_esc(kop)}">'
+            f'<h1 class="extra__titel" data-toevoeging="pagina">{_esc(kop)}</h1>'
+            f'<div class="colofon">{lijst}</div></div>')
+
+    def _pagina_achterblad(self, g: dict) -> str:
+        regels = [r for r in (g.get("regels") or []) if str(r).strip()]
+        veld = g.get("veld") or self.o.get("omslagveld") or "oranje"
+        veldattr = "" if veld == "wit" else f' data-veld="{_esc(veld)}"'
+        lijst = "".join(f'<p class="omslag__regel" data-toevoeging="pagina">'
+                        f'{_esc(r)}</p>' for r in regels)
+        # Het achterblad is de enige extra pagina die zonder tekst wél
+        # bestaat: een achterkant met alleen het merk erop is een
+        # afgemaakt achterblad, en dat is bij drukwerk de gewone vorm.
+        return (
+            '<div class="omslag omslag--achter" data-nieuwe-pagina="ja" '
+            'data-opener="blad" data-sjabloon="achterblad" data-folio="nee" '
+            f'data-kopregel="nee" data-heel="ja"{veldattr}>'
+            '<div class="omslag__boven"></div>'
+            f'<div class="omslag__midden">{lijst}</div>'
+            f'<div class="omslag__onder">{LOGO}</div></div>')
 
     # -- voorbereiding ------------------------------------------------
     def bereid_voor(self, werkmap: Path) -> None:
@@ -275,6 +423,17 @@ class Stroom:
         bijlagen beginnen, en welk aangeleverd beeld waar tussen moet.
         """
         ap = self.doc.get("apparaat", {})
+
+        pad = werkmap / "paginas.json"
+        if pad.exists():
+            try:
+                self.paginateksten = json.loads(pad.read_text(encoding="utf-8")) or {}
+            except json.JSONDecodeError as fout:
+                sys.exit(f"paginas.json is geen geldige JSON: {fout}")
+            # Sleutels die met een liggend streepje beginnen zijn
+            # aantekeningen in het sjabloon, geen pagina's.
+            self.paginateksten = {k: v for k, v in self.paginateksten.items()
+                                  if not str(k).startswith("_")}
 
         if self.o.get("bronnenlijst") in ("apa", "genummerd"):
             lijst = ap.get("bronnenlijst")
@@ -364,6 +523,11 @@ class Stroom:
             kop = ("Noten bij dit hoofdstuk"
                    if self.o["noten"] == "eindnoot-hoofdstuk" else "Noten")
             self.regels.append(self._notenblok(kop))
+        # En dan het achterwerk: de pagina's die niet uit het
+        # brondocument komen. Ze staan achteraan omdat ze het rapport
+        # niet onderbreken — een lezer die het stuk leest komt ze pas
+        # tegen als hij klaar is.
+        self.regels.append(self.extra_paginas())
         return "\n".join(r for r in self.regels if r)
 
     # -- bijlagen -----------------------------------------------------
@@ -783,6 +947,21 @@ def sjablonen(ontwerp: dict) -> str:
     delen.append(f"""<template id="sjabloon-omslag"><div class="pagina" data-soort="rapport" data-model="{basis}">
   <div class="zetspiegel zetspiegel--rapport" data-plek="opener"></div>
 </div></template>""")
+    # Een pagina over de volle zetspiegel, met kopregel en folio. Het
+    # achterwerk gebruikt hem: die pagina's hebben geen kolommen nodig en
+    # in het dubbele model zouden ze anders in één smalle strook staan.
+    delen.append(f"""<template id="sjabloon-vol"><div class="pagina" data-soort="rapport" data-model="{basis}">
+  <p class="rapport-kopregel" data-toevoeging="kopregel"><span data-plek="links"></span><span class="streepje"></span><span data-plek="rechts"></span></p>
+  <div class="zetspiegel zetspiegel--rapport" data-plek="opener"></div>
+  <span class="rapport-folio" data-toevoeging="folio"></span>
+</div></template>""")
+    # Het achterblad krijgt hetzelfde skelet als de omslag: geen
+    # kopregel, geen folio, en één veld waar de opmaak in valt. Zonder
+    # eigen sjabloon valt de zetmotor terug op `sjabloon-tekst` en dan
+    # staat de achterkant vol met kaders en een folio.
+    delen.append(f"""<template id="sjabloon-achterblad"><div class="pagina" data-soort="rapport" data-model="{basis}">
+  <div class="zetspiegel zetspiegel--rapport" data-plek="opener"></div>
+</div></template>""")
     delen.append(f"""<template id="sjabloon-leeg"><div class="pagina" data-soort="rapport" data-model="{basis}">
   <div class="zetspiegel zetspiegel--rapport"></div>
 </div></template>""")
@@ -856,6 +1035,64 @@ def lees_stijl() -> str:
             sys.exit(f"ontbreekt: {p}")
         delen.append(p.read_text(encoding="utf-8"))
     return "\n".join(delen)
+
+
+#: De blanco pagina die een katern afmaakt. Hij draagt `data-blanco`
+#: zodat `qa_rapport.py` hem niet als lege pagina aanrekent, en hij
+#: draagt geen folio en geen kopregel — een blanco vel is blanco.
+BLANCO = ('<div class="pagina" {attrs} data-blanco="ja">'
+          '<div class="zetspiegel zetspiegel--rapport"></div></div>')
+
+
+def vul_aan_tot_katern(markup: str, ontwerp: dict) -> tuple[str, dict]:
+    """Blanco pagina's tot het aantal op de pers bestaat.
+
+    Een gebonden drukwerk wordt per vel gedrukt en een dubbelgevouwen vel
+    is vier pagina's. Een rapport van 45 pagina's wordt dus hoe dan ook
+    48 pagina's papier; de vraag is alleen of wij bepalen wat er op die
+    laatste drie staat of dat de drukker er iets van maakt.
+
+    Wat er hier gebeurt is het eerlijkste van de drie uitwegen: er komen
+    blanco pagina's bij. Inkorten kan niet — daar zit tekst in — en het
+    bij een PDF houden is een besluit van de gebruiker en niet van dit
+    script. Staat er een achterblad, dan gaan de blanco's ervóór, want
+    het achterblad is op de pers de laatste pagina van het laatste vel.
+    """
+    from drukwerk import katern as reken
+
+    paginas = markup.count('<div class="pagina"')
+    som = reken(paginas, bool(ontwerp.get("drukklaar")),
+                int(ontwerp.get("katern") or 4))
+    som["blanco_toegevoegd"] = 0
+    if som["klopt"] or not som["tekort"]:
+        return markup, som
+
+    laatste = list(re.finditer(r'<div class="pagina"([^>]*)>', markup))
+    if not laatste:
+        return markup, som
+    attrs = laatste[-1].group(1)
+    # Wat een blanco pagina niet erft: zijn plek in het deel, zijn
+    # kopregel, zijn opener en zijn veld. Wat hij wel erft: model,
+    # register, formaat en dichtheid, want dat is het blad zelf.
+    attrs = re.sub(r'\s+data-(deel|kopregel|opener|veld|flex|inkt|scheiding)="[^"]*"',
+                   "", attrs)
+    attrs = re.sub(r'\s+data-(volgnr|folio|zijde)="[^"]*"', "", attrs).strip()
+
+    # Vóór het achterblad, als dat er is.
+    achter = markup.rfind('<div class="pagina"')
+    invoegpunt = len(markup)
+    if 'data-sjabloon="achterblad"' in markup[achter:]:
+        invoegpunt = achter
+
+    volgnr = paginas - (1 if invoegpunt != len(markup) else 0)
+    bladen = []
+    for i in range(som["tekort"]):
+        nr = volgnr + i + 1
+        zijde = "recto" if nr % 2 else "verso"
+        bladen.append(BLANCO.format(
+            attrs=f'{attrs} data-zijde="{zijde}" data-volgnr="{nr}" data-folio="nee"'))
+    som["blanco_toegevoegd"] = len(bladen)
+    return markup[:invoegpunt] + "\n".join(bladen) + "\n" + markup[invoegpunt:], som
 
 
 def sluit_beeld_in(markup: str, werkmap: Path) -> tuple[str, int]:
@@ -999,10 +1236,20 @@ def laad_ontwerp(werkmap: Path, overschrijf: dict | None = None) -> dict:
         sys.exit(f"onbekend formaat: {o['formaat']}. Kies uit {', '.join(FORMATEN)}.")
     for sleutel, geldig in (("dichtheid", DICHTHEDEN), ("noten", NOTEN),
                             ("bronnenlijst", BRONNENLIJSTEN), ("beeld", BEELDBRONNEN),
-                            ("citaatstijl", CITAATSTIJLEN)):
+                            ("citaatstijl", CITAATSTIJLEN),
+                            ("omslagveld", OMSLAGVELDEN)):
         if o.get(sleutel) not in geldig:
             sys.exit(f"onbekende {sleutel}: {o.get(sleutel)}. "
                      f"Kies uit {', '.join(geldig)}.")
+    # Een ouder `ontwerp.json` kent `elementen` niet, en een half
+    # ingevuld blok mag geen sleutel laten ontbreken: `.get()` op een
+    # ontbrekende naam levert None en dat leest als uit, maar dan staat
+    # het ook niet in het verslag. Aanvullen dus.
+    el = dict(STANDAARD_ONTWERP["elementen"])
+    el.update({k: bool(v) for k, v in (o.get("elementen") or {}).items()
+               if k in EXTRA_PAGINAS})
+    o["elementen"] = el
+    o["katern"] = max(1, int(o.get("katern") or 4))
     return o
 
 
@@ -1100,6 +1347,9 @@ def main() -> int:
     ap.add_argument("--dichtheid", choices=DICHTHEDEN)
     ap.add_argument("--noten", choices=NOTEN)
     ap.add_argument("--bronnenlijst", choices=BRONNENLIJSTEN)
+    ap.add_argument("--omslagveld", choices=OMSLAGVELDEN)
+    ap.add_argument("--drukklaar", action="store_true", default=None,
+                    help="het aantal pagina's moet uitkomen op een katern")
     ap.add_argument("--nieuw-ontwerp", action="store_true",
                     help="schrijf ontwerp.json met de defaults en stop")
     ap.add_argument("--los-beeld", action="store_true",
@@ -1115,7 +1365,8 @@ def main() -> int:
     overschrijf = {"model": a.model, "register": a.register,
                    "opener": a.opener, "formaat": a.formaat,
                    "dichtheid": a.dichtheid, "noten": a.noten,
-                   "bronnenlijst": a.bronnenlijst}
+                   "bronnenlijst": a.bronnenlijst,
+                   "omslagveld": a.omslagveld, "drukklaar": a.drukklaar}
     ontwerp = laad_ontwerp(werkmap, overschrijf)
     if a.nieuw_ontwerp:
         (werkmap / "ontwerp.json").write_text(
@@ -1126,6 +1377,16 @@ def main() -> int:
     doc = json.loads((werkmap / "document.json").read_text(encoding="utf-8"))
     citaatplan = pas_citaten_toe(doc, werkmap)
     gedaan = pas_wijzigingen_toe(doc, werkmap)
+    # `herindelen: false` betekent dat de skill geen voorstellen doet. Ligt
+    # er dan toch een goedgekeurde wijziging, dan is er ergens een besluit
+    # overgeslagen. De wijziging wordt wél toegepast — een per geval
+    # gegeven ja weegt zwaarder dan een schakelaar die vooraf op nee
+    # stond — maar het wordt gezegd.
+    if gedaan and not ontwerp.get("herindelen"):
+        print(f"let op: er zijn {len(gedaan)} goedgekeurde wijzigingen toegepast "
+              f"terwijl 'herindelen' in ontwerp.json op nee staat. Ze gaan er wel "
+              f"in, want er is per geval toestemming gegeven, maar controleer of "
+              f"dat klopt.", file=sys.stderr)
     ontwerp.setdefault("rapporttitel", None)
     if not ontwerp.get("rapporttitel"):
         ontwerp["rapporttitel"] = doc.get("titel") or ""
@@ -1155,6 +1416,7 @@ def main() -> int:
         return 0
 
     markup, verslag = zet(werk_html, ontwerp)
+    markup, katernsom = vul_aan_tot_katern(markup, ontwerp)
 
     ingesloten = 0
     if not a.los_beeld:
@@ -1176,12 +1438,13 @@ def main() -> int:
     (werkmap / "zetverslag.json").write_text(
         json.dumps({"ontwerp": ontwerp, "verslag": verslag,
                     "wijzigingen": gedaan, "citaten": citaatplan,
+                    "katern": katernsom,
                     "beeld_ingesloten": ingesloten},
                    ensure_ascii=False, indent=1), encoding="utf-8")
 
     print(json.dumps({
         "bestand": str(uit),
-        "paginas": verslag["paginas"],
+        "paginas": verslag["paginas"] + katernsom["blanco_toegevoegd"],
         "rondes": verslag["rondes"],
         "klachten": verslag["klachten"][:12],
         "aantal_klachten": len(verslag["klachten"]),
@@ -1190,8 +1453,11 @@ def main() -> int:
         "wijzigingen_toegepast": len(gedaan),
         "citaten_omgezet": citaatplan.get("toegepast", 0),
         "citaten_niet_gekoppeld": len(citaatplan.get("niet_gekoppeld", [])),
+        "katern": katernsom["uitleg"],
+        "blanco_toegevoegd": katernsom["blanco_toegevoegd"],
         "beeld_ingesloten": ingesloten,
         "beeld_zonder_plek": stroom.beeld_zonder_plek,
+        "paginas_zonder_tekst": stroom.paginas_zonder_tekst,
         "mb": round(uit.stat().st_size / 1e6, 2),
     }, ensure_ascii=False, indent=2))
     return 0
@@ -1281,8 +1547,9 @@ def _waarschuw_over_apparaat(doc: dict, ontwerp: dict) -> None:
     if ontwerp.get("noten") == "geen" and (ap.get("voetnoten") or ap.get("eindnoten")):
         print(f"let op: notenplaatsing staat op 'geen' terwijl het brondocument "
               f"{ap.get('voetnoten', 0) + ap.get('eindnoten', 0)} noten heeft. Die "
-              f"tekst komt dan nergens terecht en tekstcheck.py blokkeert erop.",
-              file=sys.stderr)
+              f"tekst komt nergens in het rapport terecht. tekstcheck.py telt ze "
+              f"als 'weggelaten' en blokkeert niet — het is gevraagd — maar het "
+              f"hoort wel bij de oplevering te staan.", file=sys.stderr)
     if ontwerp.get("bronnenlijst") != "geen" and not ap.get("bronnenlijst"):
         print(f"let op: bronnenlijst staat op '{ontwerp['bronnenlijst']}' maar er is "
               f"in het brondocument geen kop gevonden die er een aankondigt. Er "

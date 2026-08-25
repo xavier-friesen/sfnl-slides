@@ -107,6 +107,7 @@
   --r-accent-2: var(--navy);
   --r-tint: var(--navy-tint);
   --r-watermerk: var(--oranje-tint);
+  --r-watermerk-lijn: rgba(248, 127, 79, .62);
   --r-lijn: rgba(32, 27, 92, .22);
 }
 
@@ -1205,24 +1206,55 @@
 
 /* Het watermerkcijfer staat hálf achter de titel en niet ernaast. Dat
    is het merkteken uit het jaarrapport: het cijfer draagt de
-   hoofdstukgrens zonder er een regel voor te kosten. */
+   hoofdstukgrens zonder er een regel voor te kosten.
+
+   Het is een **open cijfer**: de vulling is de papierkleur en alleen de
+   contour staat in het accent. In de eerste versie was het cijfer een
+   dichte lichte vlek achter de titel, en dat werkte niet — de titel dekt
+   het middenstuk af, dus wat er overbleef was een smalle gekleurde
+   strook boven en onder de letters. Een rechthoek, precies wat punt 12
+   van de weigerlijst verbiedt. Open getekend is het probleem weg: de
+   titel loopt dwars door het cijfer heen zonder er iets van af te
+   snijden, en het cijfer blijft leesbaar als cijfer.
+
+   De contour is dun en licht genoeg om achtergrond te blijven. Het is
+   geen tweede kop; het is de plaats van het hoofdstuk in het geheel. */
 .opener__watermerk {
   position: absolute;
-  top: -26px;
-  /* Op nul en niet negatief: het kader snijdt zijn inhoud af, dus een
-     cijfer dat links buiten de tekstkolom begint wordt afgekapt en dat
-     leest als een fout in plaats van als een merkteken. Half áchter de
-     titel is de bedoeling; half buiten het blad is iets anders en dat
-     kan hier niet. */
-  left: 0;
+  /* Aan de buitenkant van het kader en niet achter de titel. Drie
+     versies zijn tegen elkaar gezet en dit is de enige die het haalt:
+     achter de titel wordt het cijfer door de letters afgedekt en blijft
+     er een strook over, lager gezet loopt het door de eerste alinea, en
+     hoger gezet snijdt het kader het af. Rechts staat het vrij, het
+     vult de kantlijn die anders leeg is, en het staat op dezelfde hoogte
+     als de titel — dus het leest als één compositie in plaats van als
+     twee dingen op één pagina.
+
+     Het spiegelt niet mee met de pagina. Het hoort bij de titel en niet
+     bij de bladrand, en een cijfer dat om de pagina heen springt leest
+     als een fout in de zetting. */
+  top: -18px;
+  left: auto;
+  right: 0;
   z-index: 0;
   font-family: var(--display);
   font-weight: 800;
-  font-size: 132px;
+  font-size: 168px;
   line-height: .8;
-  color: var(--r-watermerk);
+  color: var(--papier);
+  -webkit-text-stroke: 2.5px var(--r-watermerk-lijn);
+  paint-order: stroke fill;
   user-select: none;
   pointer-events: none;
+}
+
+/* In het dubbele model is de kolom 310 px en past 168 px niet: een
+   hoofdstuk 10 zou de hele kolombreedte innemen. Twee derde van de maat
+   houdt hetzelfde beeld op een kolom die de helft smaller is. */
+.pagina[data-model="dubbel"] .opener__watermerk {
+  font-size: 104px;
+  top: -8px;
+  -webkit-text-stroke: 2px var(--r-watermerk-lijn);
 }
 
 /* De band. `--balk` staat op de `.pagina` en niet op de band zelf —
@@ -1344,10 +1376,19 @@
 .pagina[data-opener="blad"] .opener__titel {
   font-size: var(--m-display);
 }
+/* Op een heel blad staat het cijfer wél achter de titel, want daar is
+   ruimte: de titel hangt onderaan en de driekwart pagina erboven is
+   leeg. Het cijfer vult die leegte en de titel loopt er dwars doorheen.
+
+   Wat er niet meer gebeurt is bleeden. In de eerste versie stak het
+   cijfer 58 px onder het blad uit; wat er dan overbleef was de bovenkant
+   van een cijfer achter de titel — een rechthoek, en dat is precies wat
+   punt 12 van de weigerlijst verbiedt. Het staat nu helemaal op de
+   pagina, en het is groot genoeg om als cijfer te lezen. */
 .pagina[data-opener="blad"] .opener__watermerk {
-  font-size: 240px;
-  top: auto; bottom: -44px; left: 0;
-  opacity: .5;
+  font-size: 440px;
+  top: auto; bottom: 4px; left: 0; right: auto;
+  -webkit-text-stroke: 5px var(--r-watermerk-lijn);
 }
 
 
@@ -1429,6 +1470,7 @@
   --r-accent-2: var(--navy);
   --r-tint: var(--navy-tint);
   --r-watermerk: var(--oranje-tint);
+  --r-watermerk-lijn: rgba(248, 127, 79, .62);
   --r-lijn: rgba(32, 27, 92, .22);
 }
 
@@ -1440,6 +1482,7 @@
   --r-accent-2: var(--navy);
   --r-tint: var(--navy-tint);
   --r-watermerk: var(--oranje-tint);
+  --r-watermerk-lijn: rgba(248, 127, 79, .62);
   --r-lijn: rgba(32, 27, 92, .22);
 }
 .pagina[data-register="diep"][data-opener="blad"] {
@@ -1447,6 +1490,7 @@
   --inkt: var(--wit);
   --r-tint: rgba(255, 255, 255, .12);
   --r-watermerk: rgba(255, 255, 255, .13);
+  --r-watermerk-lijn: rgba(255, 255, 255, .42);
   --r-lijn: rgba(255, 255, 255, .3);
 }
 .pagina[data-register="diep"] .opener-band { background: var(--navy); color: var(--wit); }
@@ -1459,6 +1503,7 @@
   --r-accent-2: var(--navy);
   --r-tint: var(--mint-tint);
   --r-watermerk: #CDEBE5;
+  --r-watermerk-lijn: rgba(106, 198, 186, .78);
   --r-lijn: rgba(32, 27, 92, .18);
 }
 .pagina[data-register="zacht"] .rapport-folio::before { background: var(--oranje); }
@@ -1466,6 +1511,7 @@
   --papier: var(--mint-tint);
   --r-tint: rgba(32, 27, 92, .07);
   --r-watermerk: rgba(32, 27, 92, .09);
+  --r-watermerk-lijn: rgba(32, 27, 92, .3);
 }
 .pagina[data-register="zacht"] .opener-band { background: var(--mint-tint); color: var(--navy); }
 
@@ -1478,6 +1524,7 @@
   --r-accent-2: var(--oranje);
   --r-tint: #EEEBF6;
   --r-watermerk: #DCD5EE;
+  --r-watermerk-lijn: rgba(107, 93, 174, .58);
   --r-lijn: rgba(107, 93, 174, .28);
 }
 .pagina[data-register="contrast"][data-opener="blad"] {
@@ -1486,6 +1533,7 @@
   --r-accent: var(--oranje);
   --r-tint: rgba(255, 255, 255, .14);
   --r-watermerk: rgba(255, 255, 255, .16);
+  --r-watermerk-lijn: rgba(255, 255, 255, .45);
   --r-lijn: rgba(255, 255, 255, .32);
 }
 .pagina[data-register="contrast"] .opener-band { background: var(--violet); color: var(--wit); }
@@ -1543,6 +1591,157 @@
   text-transform: uppercase;
   margin: 0;
 }
+
+/* De omslag staat op een kleurveld, en standaard is dat oranje. Dat is
+   een besluit dat vóór het register gaat: ook een rapport in `zacht`
+   krijgt een oranje omslag tenzij `omslagveld` iets anders zegt.
+
+   Waarom niet wit: een wit voorblad met een titel erop is de eerste
+   pagina van een manuscript. Het verschil tussen een document en een
+   rapport zit voor de lezer die het oppakt in dat ene vlak, en het is
+   het goedkoopste verschil dat er is. `wit` blijft mogelijk — een
+   opdrachtgever kan erom vragen — maar dan is het gekozen.
+
+   Het veld zelf komt uit `stijl.css`: `.pagina[data-veld]` zet `--papier`
+   en `--inkt`, dus de titel, het onderschrift en het logo kantelen
+   vanzelf mee. Navy op oranje haalt contrast 6,4 en wit op navy 14,2;
+   allebei ruim boven de drempel. */
+.pagina[data-sjabloon="omslag"] .rapport-kopregel,
+.pagina[data-sjabloon="achterblad"] .rapport-kopregel,
+.pagina[data-sjabloon="omslag"] .rapport-folio,
+.pagina[data-sjabloon="achterblad"] .rapport-folio { display: none; }
+
+/* Het achterblad. Hetzelfde vlak als de omslag, met het merk onderaan en
+   verder zo min mogelijk. Dit is de enige extra pagina die zonder tekst
+   ook bestaat: een achterkant met alleen het logo erop is af. */
+.omslag--achter .omslag__midden {
+  justify-content: flex-end;
+  /* Lucht tussen het adresblok en het merk. Zonder dit staat de laatste
+     contactregel tegen het logo aan en leest het als één blok van zes
+     regels in plaats van als een adres met een afzender eronder. */
+  padding-bottom: var(--sprong);
+}
+.omslag--achter .omslag__midden > * + * { margin-top: calc(var(--regel) * .4); }
+
+
+/* ---------------------------------------------------------------
+   14b. Het achterwerk
+
+   Vier pagina's die niet uit het brondocument komen: over ons, het
+   team, het colofon en het achterblad. Ze staan standaard uit, en ze
+   bestaan alleen wanneer de gebruiker de tekst heeft aangeleverd.
+
+   Ze delen één compositie met de hoofdstukopener — kicker, titel, tekst
+   eronder — omdat ze anders als een ander document lezen. Wat ze niet
+   delen is de nummering: dit zijn geen hoofdstukken en ze krijgen dus
+   geen cijfer en geen plek in de inhoudsopgave.
+   --------------------------------------------------------------- */
+
+.extra {
+  display: flex;
+  flex-direction: column;
+  /* Op de hele hoogte, want het colofon hoort onderaan te staan en
+     `justify-content` heeft niets om mee te schuiven als de doos zo hoog
+     is als zijn inhoud. `flex` voor het geval de ouder een flexkolom is
+     (de volle zetspiegel), `min-height` voor het geval hij dat niet is. */
+  flex: 1 1 auto;
+  min-height: 100%;
+}
+.extra__kicker {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: var(--m-klein);
+  line-height: var(--r-klein);
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--r-accent);
+  margin: 0 0 calc(var(--regel) * .35);
+}
+.extra__titel {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: var(--m-titel);
+  line-height: 1.08;
+  letter-spacing: -.018em;
+  margin: 0 0 calc(var(--regel) * 1.2);
+  max-width: var(--k9);
+}
+.extra__intro {
+  font-family: var(--brood);
+  font-weight: 300;
+  font-size: var(--m-kop);
+  line-height: calc(var(--r-body) * 1.25);
+  margin: 0 0 calc(var(--regel) * 1.2);
+  max-width: var(--k8);
+}
+.extra__lopend > p {
+  font-family: var(--brood);
+  font-weight: 300;
+  font-size: var(--m-body);
+  line-height: var(--r-body);
+  margin: 0 0 var(--regel);
+  max-width: var(--k8);
+  text-align: left;
+}
+.extra__lopend > p:last-child { margin-bottom: 0; }
+
+/* Het team. Een raster van drie, want twee leest als een tegenstelling
+   en vier maakt de naam te smal voor een dubbele achternaam. */
+.team {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: calc(var(--regel) * 1.4) var(--r-goot);
+}
+.lid { break-inside: avoid; }
+.lid__naam {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: var(--m-body);
+  line-height: 1.25;
+  margin: 0;
+}
+.lid__naam::before {
+  content: "";
+  display: block;
+  width: 26px;
+  height: 3px;
+  background: var(--r-accent);
+  margin-bottom: calc(var(--regel) * .4);
+}
+.lid__rol,
+.lid__mail {
+  font-family: var(--brood);
+  font-weight: 300;
+  font-size: var(--m-klein);
+  line-height: var(--r-klein);
+  margin: 2px 0 0;
+  color: rgba(32, 27, 92, .68);
+}
+.lid__mail { font-variant-numeric: tabular-nums; }
+
+/* Het colofon. Klein gezet en onderaan, want het is naslag en geen
+   leesstof: wie het zoekt weet dat het achterin staat. */
+.extra--colofon { justify-content: flex-end; }
+.extra--colofon .extra__titel {
+  font-size: var(--m-titel);
+  margin-bottom: calc(var(--regel) * .8);
+}
+.colofon > p {
+  font-family: var(--brood);
+  font-weight: 300;
+  font-size: var(--m-klein);
+  line-height: var(--r-klein);
+  margin: 0;
+  max-width: var(--k6);
+  color: rgba(32, 27, 92, .78);
+}
+
+/* De blanco pagina die een katern afmaakt. Er staat niets op, en dat is
+   de bedoeling: hij bestaat omdat een dubbelgevouwen vel vier pagina's
+   is. Geen folio, geen kopregel, en `qa_rapport.py` rekent hem niet aan
+   als lege pagina. */
+.pagina[data-blanco] .rapport-kopregel,
+.pagina[data-blanco] .rapport-folio { display: none; }
 
 
 /* ---------------------------------------------------------------

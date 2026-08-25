@@ -546,6 +546,20 @@
       this.kopregel.hoofdstuk = blok.getAttribute('data-hoofdstuk');
     }
 
+    // Een blok dat de volle zetspiegel wil maar verder een gewone
+    // pagina blijft: het achterwerk. In het dubbele model staat het
+    // anders in één kolom van 310 px met de halve pagina leeg ernaast —
+    // op de proef stond de teampagina in een smalle strook met "Anne de
+    // Vries" over twee regels. Kopregel en folio blijven staan, want het
+    // is geen blad maar een pagina.
+    if (blok.getAttribute('data-opener') === 'vol') {
+      this.sluitPagina();
+      var volblad = this.nieuwePagina({ sjabloon: 'vol', opener: 'vol' });
+      volblad.querySelector('[data-plek="opener"]').appendChild(blok);
+      this.sluitPagina();
+      return null;
+    }
+
     // Een blok dat een heel blad voor zichzelf opeist: de omslag, en de
     // hoofdstukopener in de bladvariant. Die gaan niet door een kader.
     if (blok.getAttribute('data-opener') === 'blad') {
@@ -574,7 +588,14 @@
     }
 
     if (!this.pagina) {
-      if (this.cfg.dubbelzijdig && blok.hasAttribute('data-hoofdstuk')) this.naarRecto();
+      // Een hoofdstuk begint rechts. Het achterwerk niet: over ons, het
+      // team en het colofon dragen wel een `data-hoofdstuk` — ze hebben
+      // een eigen kopregel nodig — maar ze zijn geen hoofdstuk, en drie
+      // van die pagina's die elk een recto afdwingen kosten vier blanco
+      // bladen aan het eind van het rapport. Gemeten op de proef: 49
+      // pagina's werden er 53.
+      if (this.cfg.dubbelzijdig && blok.hasAttribute('data-hoofdstuk')
+          && blok.getAttribute('data-recto') !== 'nee') this.naarRecto();
       var opties = {};
       if (blok.getAttribute('data-opener') === 'band') {
         opties.opener = 'band';

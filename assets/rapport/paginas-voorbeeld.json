@@ -1,0 +1,56 @@
+{
+  "_leesmij": [
+    "Dit is het sjabloon voor `paginas.json` in de werkmap. Kopieer het,",
+    "gooi weg wat je niet gebruikt, en vul de rest met tekst die van de",
+    "opdrachtgever komt of die de opdrachtgever woordelijk heeft",
+    "goedgekeurd. Dit is de enige plek in het hele rapport waar hele",
+    "alinea's staan die niet in het Word-document stonden; ze dragen",
+    "daarom `data-toevoeging=\"pagina\"` in de markup en tekstcheck.py telt",
+    "ze apart uit bij de oplevering.",
+    "Een pagina die in ontwerp.json aan staat maar hier geen tekst heeft,",
+    "komt niet in het rapport. Dat wordt gemeld als `paginas_zonder_tekst`",
+    "en dan vraag je erom — een tekst verzinnen doet deze skill niet.",
+    "Het achterblad is de uitzondering: dat bestaat ook zonder regels,",
+    "want een achterkant met alleen het merk erop is af.",
+    "Deze sleutel begint met een liggend streepje en wordt genegeerd."
+  ],
+
+  "overOns": {
+    "kop": "Over Social Finance NL",
+    "alineas": [
+      "Eén alinea per regel in deze lijst. Wat hier hoort te staan is wat de organisatie doet en waarom dit rapport er is — niet een opsomming van diensten.",
+      "Twee tot vier alinea's is genoeg voor een pagina. Meer loopt over en dan zet de skill hem op twee pagina's, wat achterin het rapport zelden de bedoeling is."
+    ]
+  },
+
+  "team": {
+    "kop": "Wie aan dit rapport hebben gewerkt",
+    "intro": "Eén regel die zegt hoe het werk verdeeld was. Mag ontbreken.",
+    "leden": [
+      {"naam": "Voornaam Achternaam", "rol": "Wat deze persoon deed", "mail": "naam@socfin.nl"},
+      {"naam": "Voornaam Achternaam", "rol": "Wat deze persoon deed", "mail": "naam@socfin.nl"}
+    ]
+  },
+
+  "colofon": {
+    "kop": "Colofon",
+    "regels": [
+      "De titel van het rapport",
+      "Social Finance NL, maand jaar",
+      "In opdracht van …",
+      "Tekst: …",
+      "Vormgeving: …",
+      "Overname van tekst is toegestaan met bronvermelding."
+    ]
+  },
+
+  "achterblad": {
+    "veld": "oranje",
+    "regels": [
+      "Social Finance NL",
+      "Straat en huisnummer, plaats",
+      "info@socfin.nl",
+      "socfin.nl"
+    ]
+  }
+}

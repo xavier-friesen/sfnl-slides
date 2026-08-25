@@ -33,9 +33,20 @@ Elke pagina beschrijft zichzelf in data-attributen op zijn `.pagina`-element:
 het paginanummer (of `nee`), `data-kopregel` de hoofdstuknaam rechtsboven.
 Ontbreekt `data-volgnr`, dan telt de bestandsnaam.
 
+Gaat het document naar een drukker, dan moet het aantal pagina's op de pers
+bestaan. Met `--gedrukt` rekent het script dat uit met
+`scripts/gedeeld/drukwerk.py` en zet het onder `katern` in zijn verslag. Het
+rekent en het meldt, meer niet: er komt geen pagina bij en er gaat er geen af.
+Er zijn drie uitwegen uit een aantal dat niet uitkomt — pagina's erbij, pagina's
+eraf, of het bij een PDF houden — en welke de goede is hangt af van wat het
+document is. Dat is een besluit van de gebruiker; stilzwijgend afronden is het
+defect. Deze route kent geen `ontwerp.json`, dus het besluit staat bovenaan
+`outline.md` en de vlag draagt het hierheen.
+
 Gebruik:
 
     python bouw.py <werkmap>                       # stempelen + bouwen
+    python bouw.py <werkmap> --gedrukt             # met de katernsom erbij
     python bouw.py <werkmap> --uit uitnodiging.html
     python bouw.py <werkmap> --nieuw Programma --volgnr 2 --formaat sfnl
     python bouw.py <werkmap> --alleen-stempel
@@ -51,8 +62,13 @@ import sys
 from pathlib import Path
 
 HIER = Path(__file__).resolve().parent
-STIJL_STANDAARD = HIER.parent.parent / "assets" / "documenten" / "stijl.css"
-FONTS_STANDAARD = HIER.parent.parent / "assets" / "documenten" / "fonts" / "fonts.css"
+WORTEL = HIER.parent.parent
+STIJL_STANDAARD = WORTEL / "assets" / "documenten" / "stijl.css"
+FONTS_STANDAARD = WORTEL / "assets" / "documenten" / "fonts" / "fonts.css"
+
+# De katernsom is van twee routes tegelijk en staat daarom in `scripts/gedeeld`.
+sys.path.insert(0, str(WORTEL / "scripts" / "gedeeld"))
+from drukwerk import katern  # noqa: E402
 
 #: De terugval als de ingesloten letters ontbreken. Hij werkt, maar hij werkt
 #: alleen mét internet, en de PNG- en PDF-export van het canvas neemt een
@@ -364,6 +380,10 @@ def main() -> int:
     ap.add_argument("--uit", default=None,
                     help="naam van het losse HTML-bestand (default: document.html)")
     ap.add_argument("--titel", default=None)
+    ap.add_argument("--gedrukt", action="store_true",
+                    help="dit document gaat naar een drukker, dus reken de "
+                         "katernsom mee en zet hem in het verslag. Default uit: "
+                         "een PDF op een scherm is aan geen katern gebonden")
     ap.add_argument("--alleen-stempel", action="store_true")
     ap.add_argument("--nieuw", default=None, metavar="NAAM",
                     help="schrijf een leeg artboard met die naam en stop")
@@ -411,10 +431,18 @@ def main() -> int:
     uit = a.werkmap / (a.uit or "document.html")
     uit.write_text(document(paginas, stijl_ruw, titel, link), encoding="utf-8")
 
+    som = katern(len(paginas), gedrukt=a.gedrukt)
+    if not som["klopt"]:
+        # Melden, niet repareren. Wie hier pagina's zou bijmaken, zou een pagina
+        # bouwen waar geen materiaal voor is.
+        print(f"let op: {som['uitleg']} — leg de keuze voor in plaats van "
+              f"stilzwijgend af te ronden", file=sys.stderr)
+
     print(json.dumps({
         "paginas": [{"nr": p.volgnr, "artboard": f"{p.naam}.dc.html",
                      "formaat": p.formaat, "maat": [p.breedte, p.hoogte]}
                     for p in paginas],
+        "katern": som,
         "gestempeld": n,
         "canvas": str(a.werkmap / "canvas.json"),
         "document": str(uit),

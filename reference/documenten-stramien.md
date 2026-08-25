@@ -50,6 +50,43 @@ Komt de gebruiker met vijf of zes pagina's en gaat het naar de drukker, zeg dan 
 (acht bladen met lege pagina's erin) en leg de keuze voor: inkorten naar vier, uitbreiden naar
 acht, of het bij een PDF houden. Stilzwijgend afronden is het defect.
 
+**De som staat in een script en niet in je hoofd.** `bouw.py <werkmap> --gedrukt` rekent hem uit
+met `scripts/gedeeld/drukwerk.py` — daar staat hij omdat de rapportroute dezelfde vraag stelt —
+en zet het antwoord onder `katern` in het verslag: klopt het aantal, hoeveel er bij moeten, hoeveel
+eraf, en één zin die je kunt doorgeven. Het script rekent en meldt. Het maakt geen pagina bij en
+het gooit er geen weg, want welke van de drie uitwegen de goede is, hangt af van wat het document
+is en dat weet alleen de gebruiker. De vlag staat default uit: blijft het een PDF, dan is het
+aantal vrij. Deze route kent geen `ontwerp.json`, dus het besluit `gedrukt` staat bij de
+vormbesluiten bovenaan `outline.md` en de vlag draagt het naar het script.
+
+---
+
+## 1a. Wat er nog niet in zit als het naar de drukker gaat
+
+Twee dingen ontbreken in de PDF die deze route oplevert, en een drukker vraagt naar allebei. Dit
+is de plek waar die uitleg staat; de skills vatten hem samen en wijzen hierheen, want twee
+volledige kopieën lopen na de eerste correctie uit elkaar.
+
+**Er zit geen afloop van 3 mm in en er staan geen snijtekens.** De snijrand is `overflow: hidden`
+op `.pagina` en er is geen gebied buiten het blad: wat over de rand steekt is weg, en dat is
+precies wat `qa_document.py` als `overloop` meldt. Een echte afloop maakt het blad 6 mm breder en
+hoger en raakt daarmee de formatentabel hierboven, dezelfde tabel in `stijl.css` en de
+`@page`-regel die `bouw.py` schrijft. Dat is een aparte ingreep en geen vlag die je even omzet.
+Wat aflopend werk hier wél doet, is de rand ráken — `.aflopend` en zijn varianten lopen tot aan de
+snijlijn en niet erover.
+
+**Montserrat komt in de PDF als Type3 terecht.** Google serveert alleen nog een variabel bestand
+dat alle gewichten draagt, `haal_fonts.py` sluit datzelfde bestand in, en Chromium neemt het zo
+mee. De PDF drukt en de tekst is te selecteren, maar een drukkerij die om een lettertype vraagt,
+krijgt geen normale naam te zien. Lato komt wél gewoon als Lato-Light mee.
+
+De bladmaat zelf klopt en is nagemeten op een gebouwd document van vier pagina's: 595 × 780 pt,
+wat exact 210 × 275 mm is en dus gelijk aan het echte jaarrapport. Wat ontbreekt is de rand
+eromheen, niet de maat.
+
+Zeg deze twee bij de oplevering zodra de gebruiker het woord drukker laat vallen, samen met de
+katernsom hierboven. Alle drie horen bij dezelfde vraag: bestaat dit stuk op een pers.
+
 ---
 
 ## 2. Het kader
@@ -316,6 +353,7 @@ gebouwde omslag zonder dat de markup er verkeerd uitzag.
 |---|---|
 | `preflight.py` | is er een browser, node, de design-helper en `stijl.css` |
 | `bouw.py <werkmap>` | stempelt de stijl in elk artboard, schrijft `canvas.json` als spreads en het losse HTML-bestand |
+| `bouw.py <werkmap> --gedrukt` | hetzelfde, plus de katernsom uit `scripts/gedeeld/drukwerk.py` onder `katern` in het verslag. Zie §1 |
 | `bouw.py <werkmap> --nieuw Naam` | een leeg artboard met het skelet erin |
 | `render.py <html>` | losse pagina's plus het contactblad met de spreads |
 | `qa_document.py <html>` | de negen metingen |
