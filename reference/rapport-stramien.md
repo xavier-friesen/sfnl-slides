@@ -174,7 +174,7 @@ boven de acht.
 | 22 | 16,5 | uitspraak | `.pullcitaat`, de omslagondertitel |
 | 26,67 | 20 | titel | `.opener__titel` |
 | 56 | 42 | display | de omslagtitel, en de hoofdstuktitel op een heel blad |
-| 168 / 104 / 260 | | watermerk | `.opener__watermerk` — geen tekst, een merkteken. 168 bij `nummer`, 104 in het dubbele model, 260 op een heel blad |
+| 168 / 104 / 440 | | watermerk | `.opener__watermerk` — geen tekst, een merkteken. 168 bij `nummer`, 104 in het dubbele model, 440 op een heel blad |
 
 In `breed` schuift het brood naar 14,67 px (11 pt) met regel 22, en
 schuiven de sprongen mee. De andere maten blijven.
@@ -311,7 +311,7 @@ Op `data-opener`. Eén manier voor álle hoofdstukken in een rapport.
 |---|---|---|
 | `nummer` | kicker, titel en het hoofdstukcijfer ernaast, buiten het kader, boven aan de eerste pagina van het hoofdstuk | niets |
 | `band` | een aflopende band bovenaan die pagina; `--balk` bepaalt de hoogte (232 px is de default) | ongeveer een kwart pagina |
-| `blad` | een heel blad met de hoofdstuknaam onderin en het cijfer op 260 px linksonder | een pagina per hoofdstuk; pas vanaf veertig pagina's |
+| `blad` | een heel blad met de hoofdstuknaam onderin en het cijfer op 440 px erachter | een pagina per hoofdstuk; pas vanaf veertig pagina's |
 
 **Alle drie dragen hetzelfde merkteken**, het hoofdstukcijfer, en dat is
 wat ze tot drie varianten van één ding maakt in plaats van drie losse
@@ -336,9 +336,18 @@ op dezelfde hoogte als de titel:
 | | |
 |---|---|
 | vulling | `var(--papier)` — de papierkleur, dus het cijfer is hol |
-| contour | `-webkit-text-stroke` in `--r-watermerk-lijn`, 2,5 px bij `nummer`, 2 px in `dubbel`, 3 px op een heel blad |
-| plaats | `right: 0`, `top: -18px`; in `dubbel` `top: -8px` |
-| maat | 168 px; **104 px in het dubbele model**, want een hoofdstuk 10 op 168 px neemt de hele kolombreedte van 310 px in |
+| contour | `-webkit-text-stroke` in `--r-watermerk-lijn`, 2,5 px bij `nummer`, 2 px in `dubbel`, 5 px op een heel blad |
+| plaats | `right: 0`, `top: -18px`; in `dubbel` `top: -8px`; op een heel blad `left: 0`, `bottom: 4px` |
+| maat | 168 px; **104 px in het dubbele model**, want een hoofdstuk 10 op 168 px neemt de hele kolombreedte van 310 px in; **440 px op een heel blad** |
+
+**Op een heel blad staat het cijfer wél achter de titel**, en dat is het
+enige geval waarin dat werkt: de titel hangt daar onderaan en de
+driekwart pagina erboven is leeg, dus er is ruimte voor een cijfer dat
+groot genoeg is om cijfer te blijven. In de eerste versie stak het 58 px
+onder het blad uit op 260 px, en wat er dan overbleef was de bovenkant
+van een cijfer achter de titel — dezelfde rechthoek als op de
+tekstpagina, alleen op een ander blad. Het staat nu helemaal op de
+pagina.
 
 De titel loopt dwars door het cijfer heen zonder er iets van af te
 snijden, en het cijfer blijft leesbaar als cijfer. De contour is dun en
@@ -548,9 +557,13 @@ gemeten besluit. Ze dragen wél een `data-hoofdstuk` — ze hebben een
 eigen kopregel nodig — maar daarnaast `data-recto="nee"`, en
 `paginator.js` kijkt daarnaar voordat hij naar een recto springt. Zonder
 dat attribuut dwong elk van de drie een rechterpagina af en kostte het
-achterwerk vier blanco bladen: 49 pagina's werden er 53. Het achterblad
-is een heel blad en gaat wél naar een recto, zoals de omslag en de
-hoofdstukbladen.
+achterwerk vier blanco bladen: 49 pagina's werden er 53.
+
+**Het achterblad dwingt er ook geen af**, en om een andere reden. Het is
+de láátste pagina, en op de pers is dat de achterkant van het laatste vel
+— een verso. Een achterblad dat naar een recto springt, zet er een blanco
+pagina vóór en gaat zelf op de verkeerde kant van het vel staan. De
+omslag en de hoofdstukbladen doen dat wél, want die beginnen iets.
 
 Ze staan achteraan, ná het laatste notenblok, in de volgorde van
 `EXTRA_PAGINAS`: over ons, team, colofon, achterblad. Een lezer die het
@@ -589,6 +602,16 @@ model, register, formaat en dichtheid. `qa_rapport.py` rekent hem niet
 aan als lege pagina en telt hem niet mee in de gemiddelde vulgraad —
 anders meet dat getal de drukkerij in plaats van de zetting.
 
+**Na het invoegen worden `data-volgnr` en `data-zijde` opnieuw op
+volgorde gezet.** Dat is niet netjesheid maar een reparatie: de blanco's
+komen vóór het achterblad te staan, dus dat blad hield het volgnummer dat
+het vóór de opvulling had. Op de eerste drukklare proef stond er twee
+keer een pagina 49 in het bestand en stond het achterblad als recto
+gemarkeerd terwijl het de laatste pagina van het laatste vel is, dus een
+verso. De folio blijft ongemoeid — die komt uit de zetting en de
+inhoudsopgave wijst ernaar, en de blanco's staan achter alles wat een
+folio draagt.
+
 **Wat er niet in zit**: een afloop van 3 mm en snijtekens. Die uitleg
 staat één keer, in `documenten-stramien.md` §1a, en geldt voor beide
 drukroutes.
@@ -617,7 +640,7 @@ alles wat geen van beide heeft is tekst die niemand heeft goedgekeurd.
 | `data-zijde` | de pagina | `recto` of `verso` |
 | `data-folio` | de pagina | het paginanummer, ook als het niet gedrukt wordt |
 | `data-flex` | de pagina | staat in een flexibel rapport |
-| `data-recto` | een blok met `data-hoofdstuk` | `nee` betekent: dit begint niet op een rechterpagina. Staat op over ons, het team en het colofon |
+| `data-recto` | een blok dat een pagina opeist | `nee` betekent: dit begint niet op een rechterpagina. Staat op over ons, het team, het colofon en het achterblad |
 | `data-veld` | de omslag, het achterblad, het scheidingsblad | het kleurveld waarop de pagina staat |
 | `data-sjabloon` | de omslag en het achterblad | welk paginasjabloon de zetmotor gebruikt |
 | `data-blanco` | de pagina | een blanco blad dat het katern afmaakt |

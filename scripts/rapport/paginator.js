@@ -566,7 +566,14 @@
       var sjabloon = blok.getAttribute('data-sjabloon') || 'opener';
       if (blok.getAttribute('data-scheiding') === 'bijlagen') this.deel = 'bijlagen';
       this.sluitPagina();
-      if (this.cfg.dubbelzijdig && sjabloon !== 'omslag') this.naarRecto();
+      // Een hoofdstukblad begint rechts. De omslag niet — die is de
+      // eerste pagina — en het achterblad ook niet: dat is de láátste
+      // pagina, en op de pers is dat de achterkant van het laatste vel,
+      // dus een verso. Een achterblad dat een recto afdwingt zet er een
+      // blanco pagina vóór en schuift zichzelf naar de verkeerde kant
+      // van het vel.
+      if (this.cfg.dubbelzijdig && sjabloon !== 'omslag'
+          && blok.getAttribute('data-recto') !== 'nee') this.naarRecto();
       var bladzij = this.nieuwePagina({
         // De omslag is geen hoofdstukblad: op een hoofdstukblad hangt de
         // titel onderaan, op een omslag staat hij in het midden.

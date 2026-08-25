@@ -409,7 +409,7 @@ class Stroom:
         return (
             '<div class="omslag omslag--achter" data-nieuwe-pagina="ja" '
             'data-opener="blad" data-sjabloon="achterblad" data-folio="nee" '
-            f'data-kopregel="nee" data-heel="ja"{veldattr}>'
+            f'data-recto="nee" data-kopregel="nee" data-heel="ja"{veldattr}>'
             '<div class="omslag__boven"></div>'
             f'<div class="omslag__midden">{lijst}</div>'
             f'<div class="omslag__onder">{LOGO}</div></div>')
@@ -1084,15 +1084,34 @@ def vul_aan_tot_katern(markup: str, ontwerp: dict) -> tuple[str, dict]:
     if 'data-sjabloon="achterblad"' in markup[achter:]:
         invoegpunt = achter
 
-    volgnr = paginas - (1 if invoegpunt != len(markup) else 0)
-    bladen = []
-    for i in range(som["tekort"]):
-        nr = volgnr + i + 1
-        zijde = "recto" if nr % 2 else "verso"
-        bladen.append(BLANCO.format(
-            attrs=f'{attrs} data-zijde="{zijde}" data-volgnr="{nr}" data-folio="nee"'))
+    bladen = [BLANCO.format(attrs=f'{attrs} data-folio="nee"')
+              for _ in range(som["tekort"])]
     som["blanco_toegevoegd"] = len(bladen)
-    return markup[:invoegpunt] + "\n".join(bladen) + "\n" + markup[invoegpunt:], som
+    uit = markup[:invoegpunt] + "\n".join(bladen) + "\n" + markup[invoegpunt:]
+    return _hernummer(uit), som
+
+
+def _hernummer(markup: str) -> str:
+    """`data-volgnr` en `data-zijde` opnieuw op volgorde zetten.
+
+    Nodig omdat de blanco's vóór het achterblad worden ingevoegd: dat blad
+    hield anders het volgnummer dat het vóór de opvulling had, en dan
+    staat er twee keer een pagina 49 in het bestand en klopt zijn zijde
+    ook niet meer. Op de eerste drukklare proef was dat precies wat er
+    gebeurde. De folio blijft ongemoeid — die komt uit de zetting en de
+    inhoudsopgave wijst ernaar; de blanco's staan achter alles wat een
+    folio draagt, dus daar verschuift niets.
+    """
+    teller = [0]
+
+    def nummer(m):
+        teller[0] += 1
+        nr = teller[0]
+        attrs = re.sub(r'\s+data-(volgnr|zijde)="[^"]*"', "", m.group(1))
+        zijde = "recto" if nr % 2 else "verso"
+        return f'<div class="pagina"{attrs} data-zijde="{zijde}" data-volgnr="{nr}">'
+
+    return re.sub(r'<div class="pagina"([^>]*)>', nummer, markup)
 
 
 def sluit_beeld_in(markup: str, werkmap: Path) -> tuple[str, int]:

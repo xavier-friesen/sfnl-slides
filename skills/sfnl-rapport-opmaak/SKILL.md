@@ -425,6 +425,11 @@ er niet is, betekent bronregels schrijven, en dat doet deze skill niet.
 20. **`beeldtekst`** — default **nee**, en dan blijft tekst binnen een beeld staan zoals hij
     staat. De redenering staat op dezelfde plek.
 
+**En twee vinkjes staan er die je meestal laat staan.** De widget vraagt ook of de hoofdstukken en
+de figuren genummerd worden. Allebei staan ze aan, want zo heeft een gedrukt rapport het
+gewoonlijk, en daarom staan ze hier niet als apart besluit. Eén ding om te weten: `exhibitnummers`
+uitzetten in een rapport waarvan de tekst naar "figuur 3" verwijst, breekt die verwijzing.
+
 **Twee dingen worden niet gevraagd.** De maatladder is een regel en geen voorkeur: zeven maten,
 en ze staan in `rapport-stramien.md` §4. En de letters staan vast — Montserrat voor de kop, Lato
 voor het brood.
