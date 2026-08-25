@@ -19,7 +19,9 @@ Vijf uitkomsten, en de eerste vier blokkeren:
   de ernstige: er staat iets anders in het rapport dan de
   opdrachtgever heeft geschreven.
 * **verdwenen** — een blok uit de bron komt in het rapport niet voor.
-  Meestal is dat een blok dat de zetmotor heeft laten vallen.
+  Meestal is dat een blok dat de zetmotor heeft laten vallen. Een blok
+  zonder tekst — een figuur zonder bijschrift — telt hier niet mee: er
+  is niets te verliezen, dus er is niets verdwenen.
 * **dubbel** — een blok komt twee keer voor zonder dat het een
   gesplitste alinea is. Dan leest iemand dezelfde alinea twee keer.
 * **toegevoegd** — tekst in het rapport die geen `data-bron` heeft en ook
@@ -30,6 +32,23 @@ Vijf uitkomsten, en de eerste vier blokkeren:
   Op alle vier de modellen van het proefrapport is dit getal nul, dus
   het is een drempel die je alleen raakt als er echt iets bij is
   geschreven.
+* **omgezet** — een blok waarin een verwijzing is omgezet volgens
+  `citaten.json`. Blokkeert niet: de opdrachtgever heeft vastgesteld dat
+  een verwijzing gelijktrekken of hernummeren opmaak is en geen
+  herschrijving. Maar de controle is hier strénger dan bij een
+  goedgekeurde wijziging: de brontekst mét precies de vervangingen uit
+  het plan moet karakter voor karakter gelijk zijn aan wat er staat.
+  Klopt dat niet, dan valt het blok terug in **gewijzigd** en blokkeert
+  het alsnog — een omzetting kan dus geen dekmantel zijn voor een andere
+  verandering in dezelfde alinea.
+* **weggelaten** — noten die niet gezet zijn omdat `ontwerp.json`
+  `noten: geen` zegt. Dat is het enige vormbesluit in deze skill dat
+  brontekst laat vervallen, en het is uitdrukkelijk een besluit — dus
+  het heet geen `verdwenen` en het blokkeert niet. Het wordt wél
+  geteld en uitgeschreven, want bij de oplevering hoort te staan
+  hoeveel noten er niet in het rapport staan. Valt er een noot weg
+  terwijl `noten` iets anders is, dan is dat gewoon `verdwenen` en
+  blokkeert het.
 * **toevoeging** — de gemarkeerde toevoegingen: folio's, kopregels, de
   inhoudsopgave, hoofdstuknummers, figuurnummers, nootcijfers, de
   herhaalde tabelkop. Die horen erbij en ze worden geteld en genoemd,
@@ -225,11 +244,50 @@ def check(html_pad: Path, werkmap: Path, volledig: bool = False) -> dict:
                 for bid in ([w["id"]] if w.get("id") else []) + list(w.get("ids", [])):
                     akkoord[bid] = w
 
-    gewijzigd, verdwenen, dubbel, goedgekeurd = [], [], [], []
+    # De citatieomzetting. Die gaat niet per geval langs de gebruiker —
+    # een verwijzing omzetten is opmaak — maar hij wordt hier wél
+    # gecontroleerd, en strenger dan een goedgekeurde wijziging: de
+    # brontekst mét de vervangingen uit het plan moet exact gelijk zijn
+    # aan wat er in het rapport staat. Zo kan een omzetting niet als
+    # dekmantel dienen voor een andere verandering in dezelfde alinea.
+    omzetting: dict = {}
+    cpad = werkmap / "citaten.json"
+    if cpad.exists():
+        plan = json.loads(cpad.read_text(encoding="utf-8"))
+        for v in plan.get("vervangingen", []):
+            omzetting.setdefault(v["id"], []).append((v["van"], v["naar"]))
+
+    # `noten: geen` laat de noottekst uit het rapport. Dat is gevraagd,
+    # dus het mag de poort niet dichtgooien — maar het moet wel apart
+    # geteld worden, want het is de enige vormkeuze die brontekst laat
+    # vervallen.
+    zonder_noten = False
+    opad = werkmap / "ontwerp.json"
+    if opad.exists():
+        try:
+            zonder_noten = json.loads(
+                opad.read_text(encoding="utf-8")).get("noten") == "geen"
+        except json.JSONDecodeError:
+            pass
+
+    gewijzigd, verdwenen, dubbel, goedgekeurd, omgezet = [], [], [], [], []
+    weggelaten: list = []
 
     for bid in bron_volgorde:
         verwacht = bron[bid]
         if bid not in oogst.stukken:
+            if not " ".join(verwacht).strip():
+                # Een blok zonder tekst — een figuur zonder bijschrift.
+                # Bij `beeld: geen` staat het beeld er niet meer, en er
+                # is dan geen woord verloren gegaan.
+                continue
+            if zonder_noten and bid.startswith("noot"):
+                weggelaten.append({
+                    "id": bid,
+                    "bron": " ".join(verwacht)[:160],
+                    "wat": "niet gezet omdat ontwerp.json noten: geen zegt",
+                })
+                continue
             (goedgekeurd if bid in akkoord else verdwenen).append({
                 "id": bid,
                 "bron": " ".join(verwacht)[:120],
@@ -247,6 +305,26 @@ def check(html_pad: Path, werkmap: Path, volledig: bool = False) -> dict:
             bron_str = normaliseer(" ".join(verwacht))
             rapport_str = normaliseer("".join(gevonden))
             gelijk = bron_str == rapport_str
+        # Een blok waar de omzetting doorheen is gegaan: pas dezelfde
+        # vervangingen op de brontekst toe en kijk of het dán klopt.
+        if not gelijk and bid in omzetting and oogst.soort[bid] != "tabel":
+            # Op de genormaliseerde tekst en met genormaliseerde
+            # zoekstrings, want de bron in `bron-tekst.txt` is
+            # genormaliseerd en de vervangingen in het plan komen uit de
+            # ruwe bloktekst. Een verwijzing met een typografisch
+            # aanhalingsteken erin wordt anders niet teruggevonden en het
+            # blok valt onterecht als gewijzigd door.
+            met_omzetting = normaliseer(" ".join(verwacht))
+            for van, naar in omzetting[bid]:
+                met_omzetting = met_omzetting.replace(
+                    normaliseer(van), normaliseer(naar), 1)
+            if met_omzetting == rapport_str:
+                omgezet.append({
+                    "id": bid,
+                    "vervangingen": [{"van": v, "naar": n} for v, n in omzetting[bid]],
+                })
+                continue
+
         if gelijk:
             continue
         melding = {
@@ -287,6 +365,8 @@ def check(html_pad: Path, werkmap: Path, volledig: bool = False) -> dict:
         "verdwenen": verdwenen,
         "dubbel": dubbel,
         "goedgekeurd": goedgekeurd,
+        "omgezet": omgezet,
+        "weggelaten": weggelaten,
         "ongemarkeerd_toegevoegd": onbekend,
         "toevoegingen": {k: {"aantal": len(v), "voorbeeld": v[:4]}
                          for k, v in sorted(oogst.toevoegingen.items())},
@@ -338,6 +418,8 @@ def main() -> int:
         "verdwenen": len(res["verdwenen"]),
         "dubbel": len(res["dubbel"]),
         "goedgekeurd": len(res["goedgekeurd"]),
+        "citaten omgezet": len(res["omgezet"]),
+        "noten weggelaten": len(res["weggelaten"]),
         "ongemarkeerd_toegevoegd": len(res["ongemarkeerd_toegevoegd"]),
         "toevoegingen": {k: v["aantal"] for k, v in res["toevoegingen"].items()},
     }
@@ -347,6 +429,10 @@ def main() -> int:
             print(f"\n  {soort.upper()}  {m['id']}", file=sys.stderr)
             print(f"    {m.get('waar') or m.get('wat') or m.get('bron', '')}",
                   file=sys.stderr)
+    if res["weggelaten"]:
+        print(f"\n  {len(res['weggelaten'])} noten zijn niet gezet, op verzoek "
+              f"(ontwerp.json: noten: geen). Noem dit bij de oplevering.",
+              file=sys.stderr)
     if res["ongemarkeerd_toegevoegd"]:
         print("\n  ONGEMARKEERD TOEGEVOEGD:", file=sys.stderr)
         for t in res["ongemarkeerd_toegevoegd"][:8]:

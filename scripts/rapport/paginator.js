@@ -364,6 +364,7 @@
     this.kopregel = { hoofdstuk: '', nummer: '' };
     this.kaart = [];        // kop -> folio, voor de inhoudsopgave
     this.extra = [];        // blokken die vóór het huidige terug moeten
+    this.deel = '';         // '' of 'bijlagen', vanaf het scheidingsblad
     this.klachten = [];
   }
 
@@ -381,6 +382,11 @@
     p.setAttribute('data-zijde', zijde);
     p.setAttribute('data-register', this.cfg.register || 'helder');
     p.setAttribute('data-formaat', this.cfg.formaat || 'sfnl');
+    p.setAttribute('data-dichtheid', this.cfg.dichtheid || 'gemiddeld');
+    // Vanaf het scheidingsblad draagt elke pagina dat hij bij de
+    // bijlagen hoort. Dat stuurt de kicker en de kopregel.
+    if (this.deel) p.setAttribute('data-deel', this.deel);
+    if (opties.scheiding) p.setAttribute('data-scheiding', opties.scheiding);
     var basis = this.cfg.paginamodel || this.cfg.model;
     var model = opties.model || basis;
     p.setAttribute('data-model', model);
@@ -465,6 +471,7 @@
    * dat wat er al stond er niet meer in past.
    */
   Zetter.prototype.zetNoten = function (blok) {
+    if (this.cfg.notenOpPagina === false) return [];
     var ids = this.notenVan(blok);
     if (!ids.length) return [];
     var kantlijn = this.pagina.querySelector('.kantlijn');
@@ -543,6 +550,7 @@
     // hoofdstukopener in de bladvariant. Die gaan niet door een kader.
     if (blok.getAttribute('data-opener') === 'blad') {
       var sjabloon = blok.getAttribute('data-sjabloon') || 'opener';
+      if (blok.getAttribute('data-scheiding') === 'bijlagen') this.deel = 'bijlagen';
       this.sluitPagina();
       if (this.cfg.dubbelzijdig && sjabloon !== 'omslag') this.naarRecto();
       var bladzij = this.nieuwePagina({
@@ -552,7 +560,8 @@
         kopregel: false,
         folio: blok.getAttribute('data-folio') !== 'nee',
         veld: blok.getAttribute('data-veld') || undefined,
-        inkt: blok.getAttribute('data-inkt') || undefined
+        inkt: blok.getAttribute('data-inkt') || undefined,
+        scheiding: blok.getAttribute('data-scheiding') || undefined
       });
       bladzij.querySelector('[data-plek="opener"]').appendChild(blok);
       this.sluitPagina();
@@ -867,6 +876,7 @@
         niveau: +el.getAttribute('data-kop') || 1,
         tekst: (el.getAttribute('data-kop-tekst') || el.textContent || '').trim(),
         nummer: el.getAttribute('data-nummer') || '',
+        groep: el.getAttribute('data-groep') || (p ? (p.getAttribute('data-deel') || '') : ''),
         folio: p ? (p.getAttribute('data-folio') || '') : ''
       });
     }
@@ -969,9 +979,22 @@
     var houder = document.createElement('div');
     houder.className = 'inhoud';
     houder.setAttribute('data-toevoeging', 'inhoudsopgave');
+    var groep = '';
     for (var i = 0; i < regels.length; i++) {
       var r = regels[i];
       if (r.niveau > (cfg.inhoudDiepte || 2)) continue;
+      // De overgang naar de bijlagen krijgt een tussenkop, want een
+      // inhoudsopgave waarin bijlage A tussen hoofdstuk 5 en 6 staat,
+      // leest als een fout in de nummering.
+      if ((r.groep || '') !== groep) {
+        groep = r.groep || '';
+        if (groep === 'bijlagen') {
+          var tussen = document.createElement('p');
+          tussen.className = 'inhoud__groep';
+          tussen.textContent = cfg.bijlagewoord || 'Bijlagen';
+          houder.appendChild(tussen);
+        }
+      }
       var regel = document.createElement('div');
       regel.className = 'inhoud__regel';
       regel.setAttribute('data-niveau', String(r.niveau));

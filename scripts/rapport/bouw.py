@@ -68,12 +68,36 @@ FORMATEN = {
 MODELLEN = ("breed", "kantlijn", "dubbel", "flexibel")
 REGISTERS = ("helder", "diep", "zacht", "contrast")
 OPENERS = ("nummer", "band", "blad")
+DICHTHEDEN = ("ruim", "gemiddeld", "dicht")
+
+#: Waar de noten komen te staan. Dit is een plaatsingsbesluit en geen
+#: inhoudelijk besluit: dezelfde tekst, ergens anders op het blad.
+NOTEN = ("geen", "voetnoot", "eindnoot-hoofdstuk", "eindnoot-rapport")
+
+#: Of er een bronnenlijst wordt gezet, en hoe. Los van de noten, want
+#: voetnoten mét een volledige bronnenlijst achterin is het gewone geval
+#: en niet de uitzondering.
+BRONNENLIJSTEN = ("geen", "apa", "genummerd")
+
+#: Wat er aan beeld in het rapport komt. De skill vraagt dit expliciet,
+#: want stilzwijgend aannemen dat er geen beeld is, is de reden dat een
+#: rapport er kaal uitkomt terwijl de figuren in een aparte map stonden.
+BEELDBRONNEN = ("geen", "uit-bron", "aangeleverd")
+
+#: Wat er met de verwijzingen in de lopende tekst gebeurt. Anders dan de
+#: rest van deze lijsten raakt dit besluit de tekst zelf, en dat is een
+#: vaststelling van de opdrachtgever: een verwijzing gelijktrekken of
+#: hernummeren is opmaak. `citaten.py` rekent de omzetting uit en legt
+#: elke vervanging vast; `tekstcheck.py` controleert dat er precies dát
+#: is veranderd en niets meer.
+CITAATSTIJLEN = ("zoals-aangeleverd", "uniform", "genummerd")
 
 STANDAARD_ONTWERP = {
     "model": "breed",
     "register": "helder",
     "formaat": "sfnl",
     "opener": "nummer",
+    "dichtheid": "gemiddeld",
     "bandhoogte": 232,
     "dubbelzijdig": True,
     "omslag": True,
@@ -81,6 +105,12 @@ STANDAARD_ONTWERP = {
     "inhoudDiepte": 2,
     "hoofdstuknummers": True,
     "exhibitnummers": True,
+    "noten": "voetnoot",
+    "bronnenlijst": "geen",
+    "citaatstijl": "zoals-aangeleverd",
+    "beeld": "uit-bron",
+    "beeldmap": None,
+    "bijlagen": None,
     "eersteFolio": 1,
     "folioVanaf": 2,
     "rapporttitel": None,
@@ -89,6 +119,10 @@ STANDAARD_ONTWERP = {
     "datum": None,
     "colofon": None,
 }
+
+#: De letters voor de bijlagen. Voorbij Z houdt het op, en een rapport
+#: met zesentwintig bijlagen heeft een ander probleem dan opmaak.
+BIJLAGELETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 
 # =====================================================================
@@ -99,17 +133,23 @@ def _esc(t: str) -> str:
     return html.escape(t, quote=False)
 
 
-def runs_naar_html(runs: list, noten_gezien: set) -> str:
+def runs_naar_html(runs: list, noten_gezien: set, toon_noten: bool = True) -> str:
     """De inline opmaak, en niets erbij.
 
     Een run wordt `<b>`, `<i>`, `<sup>` of niets. Een voetnootverwijzing
     wordt een `<sup data-noot>` zónder tekst erin — het nummer zet de
     zetmotor erbij, want dat is toegevoegde tekst en die hoort als
     zodanig herkenbaar te zijn.
+
+    Bij `noten: geen` verdwijnt ook het verwijzingscijfer. Een noot die
+    er niet is met een bovengezet cijfer ervoor is erger dan geen noot:
+    de lezer zoekt naar iets wat nergens staat.
     """
     uit = []
     for run in runs:
         if "voetnoot" in run:
+            if not toon_noten:
+                continue
             nid = run["voetnoot"]
             noten_gezien.add(nid)
             uit.append(f'<sup data-noot="{_esc(nid)}" data-toevoeging="nootnummer"></sup>')
@@ -152,8 +192,22 @@ class Stroom:
         self.werkmap = werkmap
         self.noten_gezien: set = set()
         self.hoofdstuk = 0
+        self.bijlage = 0
         self.exhibit = 0
         self.titel_op_omslag: str | None = None
+        self.in_bijlagen = False
+        #: De noten die al in een notenblok zijn uitgeschreven. Wat er
+        #: openstaat is het verschil met `noten_gezien`, en dat is
+        #: robuuster dan een tweede lijst bijhouden: een noot die twee
+        #: keer voorkomt wordt zo één keer gezet.
+        self.noten_geplaatst: set = set()
+        #: De blokken die in een bronnenlijst vallen, en de blokken die
+        #: door een `hoort_bij` of een uitgeschreven notenblok al elders
+        #: terechtkomen.
+        self.bronregels: set = set()
+        self.extra_beeld: dict = {}
+        self.beeld_zonder_plek: list = []
+        self.toon_noten: bool = ontwerp.get("noten") != "geen"
         self.regels: list[str] = []
 
     # -- de omslag ----------------------------------------------------
@@ -182,7 +236,11 @@ class Stroom:
         if o.get("opdrachtgever"):
             boven.append(f'<p class="omslag__regel" data-toevoeging="omslag">'
                          f'{_esc(o["opdrachtgever"])}</p>')
-        stuk = [f'<h1 class="omslag__titel"{titelattr}>{_esc(titel)}</h1>']
+        # De titel uit zijn runs wanneer hij uit de bron komt, en als
+        # platte tekst wanneer de gebruiker hem zelf heeft opgegeven.
+        titel_html = (self._runs(titelblok["runs"])
+                      if self.titel_op_omslag else _esc(titel))
+        stuk = [f'<h1 class="omslag__titel"{titelattr}>{titel_html}</h1>']
         if o.get("ondertitel"):
             stuk.append(f'<p class="omslag__onderschrift" data-toevoeging="omslag">'
                         f'{_esc(o["ondertitel"])}</p>')
@@ -204,13 +262,70 @@ class Stroom:
             f'<div class="omslag__onder">{"".join(onder)}</div>'
             '</div>')
 
+    def _runs(self, runs: list) -> str:
+        """De inline opmaak van één blok, met de notenstand van dit rapport."""
+        return runs_naar_html(runs, self.noten_gezien, self.toon_noten)
+
+    # -- voorbereiding ------------------------------------------------
+    def bereid_voor(self, werkmap: Path) -> None:
+        """Wat er vóór de blokkenlus vastgesteld moet zijn.
+
+        Drie dingen, en ze hangen alle drie aan besluiten uit
+        `ontwerp.json`: welke blokken in de bronnenlijst vallen, waar de
+        bijlagen beginnen, en welk aangeleverd beeld waar tussen moet.
+        """
+        ap = self.doc.get("apparaat", {})
+
+        if self.o.get("bronnenlijst") in ("apa", "genummerd"):
+            lijst = ap.get("bronnenlijst")
+            if lijst:
+                ids = [b["id"] for b in self.doc["blokken"]]
+                try:
+                    a, z = ids.index(lijst["vanaf"]), ids.index(lijst["tot"])
+                    self.bronregels = set(ids[a:z + 1])
+                except ValueError:
+                    pass
+
+        if self.o.get("beeld") == "aangeleverd":
+            pad = werkmap / "beeld.json"
+            if pad.exists():
+                # `beeldmap` is waar de bestanden staan; in `beeld.json`
+                # staan alleen de namen. Een naam die naast de werkmap
+                # ligt of absoluut is, wordt met rust gelaten — anders
+                # gaat hij door de beeldmap heen. De insluiter verderop
+                # rekent alles alsnog af tegen de werkmap, dus wat hier
+                # uitkomt hoeft alleen te kloppen, niet mooi te zijn.
+                map_ = self.o.get("beeldmap")
+                for item in json.loads(pad.read_text(encoding="utf-8")):
+                    if not item.get("na"):
+                        # Zonder blok-id weet niemand waar dit heen moet, en
+                        # ergens neerzetten is raden. Het gaat er niet in en
+                        # het wordt gemeld — dat is de eerlijke faalwijze.
+                        self.beeld_zonder_plek.append(item.get("bestand", "?"))
+                        continue
+                    naam = item.get("bestand", "")
+                    if map_ and naam and not Path(naam).is_absolute() \
+                            and not (werkmap / naam).exists():
+                        item = {**item, "bestand": str(Path(map_) / naam)}
+                    self.extra_beeld.setdefault(item["na"], []).append(item)
+
     # -- de blokken ---------------------------------------------------
     def bouw(self) -> str:
         blokken = self.doc["blokken"]
+        bijlage_vanaf = (self.o.get("bijlagen") or {}).get("vanaf")
         i = 0
         while i < len(blokken):
             b = blokken[i]
             soort = b["soort"]
+
+            # De overgang naar de bijlagen. Het scheidingsblad komt
+            # ervoor; vanaf hier telt de nummering in letters.
+            if bijlage_vanaf and b["id"] == bijlage_vanaf and not self.in_bijlagen:
+                self.regels.append(self._scheidingsblad(b))
+                self.in_bijlagen = True
+                if self._is_scheidingskop(b):
+                    i += 1          # die kop staat nu op het blad zelf
+                    continue
             if soort == "titel":
                 # Op de omslag, tenzij die niet bestaat of een andere
                 # titel draagt. Dan hoort hij gewoon in de stroom, want
@@ -219,18 +334,156 @@ class Stroom:
                     self.regels.append(
                         f'<h1 class="hoofdstuktitel"'
                         f'{_attr(data_bron=b["id"], data_kop=1, data_kop_tekst=b["tekst"])}>'
-                        f'{runs_naar_html(b["runs"], self.noten_gezien)}</h1>')
+                        f'{self._runs(b["runs"])}</h1>')
                 i += 1
                 continue
             if b.get("hoort_bij"):
                 i += 1
                 continue                      # bijschrift zit al bij zijn beeld
+            # Een kop van niveau 1 sluit het vorige hoofdstuk af, en in
+            # eindnootmodus per hoofdstuk gaan de openstaande noten daar
+            # naartoe — vóór de opener, want anders staan ze achter de
+            # titel van het volgende hoofdstuk.
+            if (soort == "kop" and b.get("niveau") == 1
+                    and self.o.get("noten") == "eindnoot-hoofdstuk"):
+                self.regels.append(self._notenblok("Noten bij dit hoofdstuk"))
+
+            if b["id"] in self.bronregels:
+                i = self._bronnenlijst(blokken, i)
+                continue
             if soort == "lijst":
                 i = self._lijst(blokken, i)
                 continue
             self.regels.append(self._blok(b))
+            for extra in self.extra_beeld.get(b["id"], []):
+                self.regels.append(self._aangeleverd_beeld(extra))
             i += 1
+
+        # Wat er aan het eind nog open staat.
+        if self.o.get("noten") in ("eindnoot-hoofdstuk", "eindnoot-rapport"):
+            kop = ("Noten bij dit hoofdstuk"
+                   if self.o["noten"] == "eindnoot-hoofdstuk" else "Noten")
+            self.regels.append(self._notenblok(kop))
         return "\n".join(r for r in self.regels if r)
+
+    # -- bijlagen -----------------------------------------------------
+    @staticmethod
+    def _is_scheidingskop(b: dict) -> bool:
+        """Is dit een kop die alleen het woord 'Bijlagen' draagt.
+
+        Dan is die kop zelf het scheidingsblad en is er geen toegevoegde
+        tekst nodig. Staat er meer — "Bijlage A: methodeverantwoording" —
+        dan is dat de eerste bijlage en krijgt het scheidingsblad een
+        eigen woord, dat als toevoeging gemarkeerd wordt.
+        """
+        return (b.get("soort") == "kop"
+                and re.fullmatch(r"bijlage[nx]?|appendi(x|ces)|annexe?s?",
+                                 b.get("tekst", "").strip(), re.I) is not None)
+
+    def _scheidingsblad(self, b: dict) -> str:
+        eigen = self._is_scheidingskop(b)
+        woord = (self.o.get("bijlagen") or {}).get("titel") or "Bijlagen"
+        if eigen:
+            titel = (f'<h1 class="opener__titel"'
+                     f'{_attr(data_bron=b["id"], data_kop=1, data_kop_tekst=b["tekst"].strip())}>'
+                     f'{self._runs(b["runs"])}</h1>')
+        else:
+            titel = (f'<h1 class="opener__titel" data-toevoeging="scheiding">'
+                     f'{_esc(woord)}</h1>')
+        veld = {"diep": "navy", "contrast": "violet",
+                "zacht": "mint"}.get(self.o.get("register"), "")
+        return (
+            f'<div class="opener"'
+            f'{_attr(data_nieuwe_pagina=True, data_opener="blad", data_scheiding="bijlagen", data_veld=veld or None, data_heel=True, data_hoofdstuk=woord)}>'
+            f'<span class="scheiding__streep" aria-hidden="true"></span>'
+            f'{titel}</div>')
+
+    # -- het apparaat -------------------------------------------------
+    def _notenblok(self, kop: str) -> str:
+        """De openstaande noten als blok in de stroom.
+
+        Levert een lege string wanneer er niets open staat, zodat een
+        hoofdstuk zonder noten geen leeg notenblok krijgt.
+        """
+        openstaand = sorted(self.noten_gezien - self.noten_geplaatst,
+                            key=_nootsleutel)
+        if not openstaand:
+            return ""
+        regels = []
+        for nid in openstaand:
+            noot = self.doc["voetnoten"].get(nid)
+            if not noot:
+                continue
+            regels.append(
+                f'<p class="voetnoot" data-bron="noot{_esc(nid)}">'
+                f'<span class="nr" data-toevoeging="nootnummer">{_nootlabel(nid)}</span>'
+                f'{_esc(noot["tekst"])}</p>')
+        self.noten_geplaatst |= set(openstaand)
+        if not regels:
+            return ""
+        return (f'<div class="eindnoten" data-heel="ja">'
+                f'<p class="eindnoten__kop" data-toevoeging="notenkop">{_esc(kop)}</p>'
+                f'{"".join(regels)}</div>')
+
+    def _bronnenlijst(self, blokken: list, i: int) -> int:
+        """De aaneengesloten regels van de bronnenlijst als één blok.
+
+        Bij een genummerde omzetting gaat de lijst op citatievolgorde en
+        krijgt elke regel zijn nummer. Wat niet geciteerd wordt, gaat er
+        achteraan: weglaten zou tekst laten verdwijnen, en dat mag niet,
+        ook niet in een bronnenlijst.
+        """
+        stijl = self.o.get("bronnenlijst", "apa")
+        eigen, j = [], i
+        while j < len(blokken) and blokken[j]["id"] in self.bronregels:
+            eigen.append(blokken[j])
+            j += 1
+
+        plan = self.doc.get("_citaatplan") or {}
+        volgorde = plan.get("bronvolgorde") if stijl == "genummerd" else None
+        if volgorde:
+            # Ontdubbelen bij het herschikken, en niet alleen vertrouwen
+            # dat het plan klopt. Een bronregel die twee keer in de
+            # volgorde staat, zou anders twee keer gezet worden, en dat
+            # is precies het soort fout dat je op een bronnenlijst van
+            # zeventig regels niet meer terugvindt.
+            op_id = {b["id"]: b for b in eigen}
+            gedaan: set = set()
+            gesorteerd = []
+            for k in volgorde:
+                if k in op_id and k not in gedaan:
+                    gedaan.add(k)
+                    gesorteerd.append(op_id[k])
+            gesorteerd += [b for b in eigen if b["id"] not in gedaan]
+            eigen = gesorteerd
+
+        regels = []
+        for nr, b in enumerate(eigen, start=1):
+            nummer = ""
+            if volgorde:
+                nummer = (f'<span class="bron__nr" data-toevoeging="bronnummer">'
+                          f'[{nr}]</span> ')
+            regels.append(f'<p{_attr(data_bron=b["id"])}>{nummer}'
+                          f'{self._runs(b["runs"])}</p>')
+        self.regels.append(
+            f'<div class="bronnenlijst" data-stijl="{stijl}">{"".join(regels)}</div>')
+        return j
+
+    def _aangeleverd_beeld(self, item: dict) -> str:
+        """Een beeld dat de gebruiker apart heeft aangeleverd.
+
+        Het bijschrift komt van de gebruiker en niet uit het rapport, dus
+        het draagt `data-toevoeging` — net als de regels op de omslag.
+        Zonder bijschrift staat het beeld er zonder, en dat is beter dan
+        er een verzinnen.
+        """
+        bron = _esc(item["bestand"])
+        onder = ""
+        if item.get("bijschrift"):
+            onder = (f'<figcaption data-toevoeging="beeldbijschrift">'
+                     f'{_esc(item["bijschrift"])}</figcaption>')
+        return (f'<figure class="beeldblok" data-heel="ja">'
+                f'<img src="{bron}" alt="">{onder}</figure>')
 
     def _blok(self, b: dict) -> str:
         soort = b["soort"]
@@ -240,28 +493,31 @@ class Stroom:
             return self._alinea(b)
         if soort == "citaat":
             return (f'<blockquote class="citaatblok"{_attr(data_bron=b["id"])}>'
-                    f'<p>{runs_naar_html(b["runs"], self.noten_gezien)}</p></blockquote>')
+                    f'<p>{self._runs(b["runs"])}</p></blockquote>')
         if soort == "tabel":
             return self._tabel(b)
         if soort == "beeld":
             return self._beeld(b)
         if soort == "bijschrift":
             return (f'<p class="exhibit__bron"{_attr(data_bron=b["id"])}>'
-                    f'{runs_naar_html(b["runs"], self.noten_gezien)}</p>')
+                    f'{self._runs(b["runs"])}</p>')
         return self._alinea(b)
 
     def _alinea(self, b: dict) -> str:
-        inhoud = runs_naar_html(b["runs"], self.noten_gezien)
+        inhoud = self._runs(b["runs"])
         klasse = "chapeau--rapport" if b.get("chapeau") else ""
         return (f'<p{" class=" + chr(34) + klasse + chr(34) if klasse else ""}'
                 f'{_attr(data_bron=b["id"], data_deel=b.get("deel"))}>{inhoud}</p>')
 
     def _kop(self, b: dict) -> str:
         niveau = b.get("niveau", 2)
-        tekst = runs_naar_html(b["runs"], self.noten_gezien)
+        tekst = self._runs(b["runs"])
         kaal = b.get("tekst", "").strip()
         if niveau == 1:
-            self.hoofdstuk += 1
+            if self.in_bijlagen:
+                self.bijlage += 1
+            else:
+                self.hoofdstuk += 1
             return self._opener(b, tekst, kaal)
         if niveau == 2:
             tag, klasse = "h2", "sectiekop"
@@ -275,11 +531,16 @@ class Stroom:
 
     def _opener(self, b: dict, tekst: str, kaal: str) -> str:
         o = self.o
-        nr = str(self.hoofdstuk)
+        if self.in_bijlagen:
+            nr = BIJLAGELETTERS[(self.bijlage - 1) % len(BIJLAGELETTERS)]
+            woord = "Bijlage"
+        else:
+            nr = str(self.hoofdstuk)
+            woord = "Hoofdstuk"
         kicker = ""
         if o.get("hoofdstuknummers"):
             kicker = (f'<p class="opener__kicker" data-toevoeging="nummer">'
-                      f'Hoofdstuk {nr}</p>')
+                      f'{woord} {nr}</p>')
         # Het cijfer gaat mee bij alle drie de openers. Waar het komt te
         # staan verschilt per opener en dat regelt de CSS: half achter de
         # titel bij `nummer`, groot onderin bij `blad`, aan de
@@ -292,7 +553,7 @@ class Stroom:
                 "zacht": "mint"}.get(o.get("register"), "")
         return (
             f'<div class="opener"'
-            f'{_attr(data_bron=b["id"], data_kop=1, data_kop_tekst=kaal, data_nummer=nr, data_hoofdstuk=kaal, data_nieuwe_pagina=True, data_opener=o.get("opener", "nummer"), data_veld=veld or None, data_balk=o.get("bandhoogte") if o.get("opener") == "band" else None, data_heel=True)}>'
+            f'{_attr(data_bron=b["id"], data_kop=1, data_kop_tekst=kaal, data_nummer=nr, data_hoofdstuk=kaal, data_groep="bijlagen" if self.in_bijlagen else None, data_nieuwe_pagina=True, data_opener=o.get("opener", "nummer"), data_veld=veld or None, data_balk=o.get("bandhoogte") if o.get("opener") == "band" else None, data_heel=True)}>'
             f'{watermerk}{kicker}'
             f'<h1 class="opener__titel">{tekst}</h1>'
             f'</div>')
@@ -329,7 +590,7 @@ class Stroom:
                 j = sub_einde
                 continue
             items.append(f'<li{_attr(data_bron=b["id"])}>'
-                         f'{runs_naar_html(b["runs"], self.noten_gezien)}</li>')
+                         f'{self._runs(b["runs"])}</li>')
             j += 1
         self.regels.append(f'<{tag}>{"".join(items)}</{tag}>')
         return j
@@ -338,7 +599,7 @@ class Stroom:
         geordend = blokken[0].get("geordend", False)
         tag = "ol" if geordend else "ul"
         items = [f'<li{_attr(data_bron=b["id"])}>'
-                 f'{runs_naar_html(b["runs"], self.noten_gezien)}</li>' for b in blokken]
+                 f'{self._runs(b["runs"])}</li>' for b in blokken]
         return f'<{tag}>{"".join(items)}</{tag}>'
 
     def _tabel(self, b: dict) -> str:
@@ -353,7 +614,7 @@ class Stroom:
             tag = "th" if th else "td"
             klasse = ' class="getal"' if getalkolom.get(i) else ""
             span = f' colspan="{c["span"]}"' if c.get("span", 1) > 1 else ""
-            inhoud = "<br>".join(runs_naar_html(d["runs"], self.noten_gezien)
+            inhoud = "<br>".join(self._runs(d["runs"])
                                  for d in c["delen"]) or ""
             return f'<{tag}{klasse}{span}>{inhoud}</{tag}>'
 
@@ -374,6 +635,19 @@ class Stroom:
     def _beeld(self, b: dict) -> str:
         bestanden = b.get("beeldbestanden") or []
         bijschrift = b.get("bijschrift")
+        # Uit de runs en niet uit de platte tekst, anders vallen de
+        # cursief gezette woorden en de voetnootverwijzingen eruit.
+        bijschrift_html = (self._runs(b["bijschrift_runs"])
+                           if b.get("bijschrift_runs") else _esc(bijschrift or ""))
+        if self.o.get("beeld") == "geen":
+            # Het beeld gaat eruit, het bijschrift niet: dat is tekst van
+            # de auteur en die verdwijnt nergens door een vormkeuze. Wat
+            # overblijft is een gewone alinea met dezelfde `data-bron`,
+            # zodat `tekstcheck.py` hem gewoon terugvindt.
+            if not bijschrift:
+                return ""
+            bron_id = b.get("bijschrift_id", b["id"])
+            return f'<p class="bijschrift-los" data-bron="{bron_id}">{bijschrift_html}</p>'
         if not bestanden:
             return (f'<figure class="beeldblok beeldblok--leeg"{_attr(data_bron=b["id"])}>'
                     f'<div>beeld ontbreekt</div></figure>')
@@ -386,18 +660,27 @@ class Stroom:
             return (
                 f'<figure class="exhibit"{_attr(data_bron=b["id"], data_heel=True)}>'
                 f'{nr}'
-                f'<p class="exhibit__titel" data-bron="{bron_id}">{_esc(bijschrift)}</p>'
+                f'<p class="exhibit__titel" data-bron="{bron_id}">{bijschrift_html}</p>'
                 f'<div class="exhibit__beeld">{beeld}</div>'
                 f'</figure>')
         onder = ""
         if bijschrift:
             bron_id = b.get("bijschrift_id", b["id"])
-            onder = f'<figcaption data-bron="{bron_id}">{_esc(bijschrift)}</figcaption>'
+            onder = f'<figcaption data-bron="{bron_id}">{bijschrift_html}</figcaption>'
         return (f'<figure class="beeldblok"{_attr(data_bron=b["id"], data_heel=True)}>'
                 f'{beeld}{onder}</figure>')
 
     # -- de voetnoten -------------------------------------------------
     def voetnoten(self) -> str:
+        """De notenbak waar `paginator.js` uit put.
+
+        Leeg in eindnootmodus: dan staan de noten al als blok in de
+        stroom, en zou de zetmotor ze een tweede keer op de pagina
+        zetten. Dat zou `tekstcheck.py` als dubbele tekst melden, en
+        terecht.
+        """
+        if self.o.get("noten") in ("geen", "eindnoot-hoofdstuk", "eindnoot-rapport"):
+            return ""
         uit = []
         for nid in sorted(self.noten_gezien, key=_nootsleutel):
             noot = self.doc["voetnoten"].get(nid)
@@ -627,6 +910,10 @@ def zet(werk_html: Path, ontwerp: dict, rondes: int = 4) -> tuple[str, dict]:
         "eersteFolio": ontwerp.get("eersteFolio", 1),
         "folioVanaf": ontwerp.get("folioVanaf", 2),
         "inhoudDiepte": ontwerp.get("inhoudDiepte", 2),
+        "dichtheid": ontwerp.get("dichtheid", "gemiddeld"),
+        # Alleen in voetnootmodus zet de zetmotor noten op de pagina. In
+        # eindnootmodus staan ze al als blok in de stroom.
+        "notenOpPagina": ontwerp.get("noten") == "voetnoot",
         "rapporttitel": ontwerp.get("rapporttitel") or "",
         "minRegelsBoven": 2,
         "minRegelsOnder": 2,
@@ -710,6 +997,12 @@ def laad_ontwerp(werkmap: Path, overschrijf: dict | None = None) -> dict:
         sys.exit(f"onbekende opener: {o['opener']}. Kies uit {', '.join(OPENERS)}.")
     if o["formaat"] not in FORMATEN:
         sys.exit(f"onbekend formaat: {o['formaat']}. Kies uit {', '.join(FORMATEN)}.")
+    for sleutel, geldig in (("dichtheid", DICHTHEDEN), ("noten", NOTEN),
+                            ("bronnenlijst", BRONNENLIJSTEN), ("beeld", BEELDBRONNEN),
+                            ("citaatstijl", CITAATSTIJLEN)):
+        if o.get(sleutel) not in geldig:
+            sys.exit(f"onbekende {sleutel}: {o.get(sleutel)}. "
+                     f"Kies uit {', '.join(geldig)}.")
     return o
 
 
@@ -804,6 +1097,9 @@ def main() -> int:
     ap.add_argument("--register", choices=REGISTERS)
     ap.add_argument("--opener", choices=OPENERS)
     ap.add_argument("--formaat", choices=list(FORMATEN))
+    ap.add_argument("--dichtheid", choices=DICHTHEDEN)
+    ap.add_argument("--noten", choices=NOTEN)
+    ap.add_argument("--bronnenlijst", choices=BRONNENLIJSTEN)
     ap.add_argument("--nieuw-ontwerp", action="store_true",
                     help="schrijf ontwerp.json met de defaults en stop")
     ap.add_argument("--los-beeld", action="store_true",
@@ -817,7 +1113,9 @@ def main() -> int:
         sys.exit(f"geen document.json in {werkmap}. Draai eerst lees_docx.py.")
 
     overschrijf = {"model": a.model, "register": a.register,
-                   "opener": a.opener, "formaat": a.formaat}
+                   "opener": a.opener, "formaat": a.formaat,
+                   "dichtheid": a.dichtheid, "noten": a.noten,
+                   "bronnenlijst": a.bronnenlijst}
     ontwerp = laad_ontwerp(werkmap, overschrijf)
     if a.nieuw_ontwerp:
         (werkmap / "ontwerp.json").write_text(
@@ -826,12 +1124,15 @@ def main() -> int:
         return 0
 
     doc = json.loads((werkmap / "document.json").read_text(encoding="utf-8"))
+    citaatplan = pas_citaten_toe(doc, werkmap)
     gedaan = pas_wijzigingen_toe(doc, werkmap)
     ontwerp.setdefault("rapporttitel", None)
     if not ontwerp.get("rapporttitel"):
         ontwerp["rapporttitel"] = doc.get("titel") or ""
 
     stroom = Stroom(doc, ontwerp, werkmap)
+    stroom.bereid_voor(werkmap)
+    _waarschuw_over_apparaat(doc, ontwerp)
     voor = []
     if ontwerp.get("omslag"):
         voor.append(stroom.omslag())
@@ -874,7 +1175,8 @@ def main() -> int:
 
     (werkmap / "zetverslag.json").write_text(
         json.dumps({"ontwerp": ontwerp, "verslag": verslag,
-                    "wijzigingen": gedaan, "beeld_ingesloten": ingesloten},
+                    "wijzigingen": gedaan, "citaten": citaatplan,
+                    "beeld_ingesloten": ingesloten},
                    ensure_ascii=False, indent=1), encoding="utf-8")
 
     print(json.dumps({
@@ -886,10 +1188,114 @@ def main() -> int:
         "vulling_laatste_pagina": verslag["vullingLaatste"],
         "afbreking": verslag["afbreking"],
         "wijzigingen_toegepast": len(gedaan),
+        "citaten_omgezet": citaatplan.get("toegepast", 0),
+        "citaten_niet_gekoppeld": len(citaatplan.get("niet_gekoppeld", [])),
         "beeld_ingesloten": ingesloten,
+        "beeld_zonder_plek": stroom.beeld_zonder_plek,
         "mb": round(uit.stat().st_size / 1e6, 2),
     }, ensure_ascii=False, indent=2))
     return 0
+
+
+def vervang_in_runs(runs: list, van: str, naar: str) -> tuple[list, bool]:
+    """Een stuk tekst vervangen zonder de inline opmaak kwijt te raken.
+
+    Word knipt een alinea in tientallen runs, dus een verwijzing van
+    twintig tekens kan over drie runs verdeeld staan. Vervangen op de
+    platte tekst en er één run van maken zou al het vet en cursief in die
+    alinea wegvagen. Daarom wordt de vervanging op de samengevoegde tekst
+    gezocht en daarna teruggerekend naar de runs: alles vóór en ná de
+    treffer houdt zijn eigen opmaak, en de vervanging erft de opmaak van
+    de run waar hij begint.
+    """
+    tekst = "".join(r.get("t", "") for r in runs)
+    i = tekst.find(van)
+    if i < 0:
+        return runs, False
+    j = i + len(van)
+    uit, pos = [], 0
+    for r in runs:
+        t = r.get("t", "")
+        start, eind = pos, pos + len(t)
+        pos = eind
+        if eind <= i or start >= j:
+            uit.append(r)
+            continue
+        voor = t[:max(0, i - start)]
+        na = t[max(0, j - start):] if eind > j else ""
+        if voor:
+            uit.append({**r, "t": voor})
+        if start <= i < eind:
+            uit.append({**r, "t": naar})
+        if na:
+            uit.append({**r, "t": na})
+    return uit, True
+
+
+def pas_citaten_toe(doc: dict, werkmap: Path) -> dict:
+    """De citatieomzetting uit `citaten.json` doorvoeren.
+
+    Anders dan `wijzigingen.json` staat hier geen `akkoord` bij, en dat
+    is met opzet: de opdrachtgever heeft vastgesteld dat een verwijzing
+    omzetten opmaak is en geen herschrijving. Wat er wél gebeurt is
+    vastleggen: elke vervanging staat in het plan, `tekstcheck.py`
+    controleert dat er precies dát is veranderd en niets meer, en het
+    aantal gaat mee bij de oplevering.
+    """
+    pad = werkmap / "citaten.json"
+    if not pad.exists():
+        return {}
+    plan = json.loads(pad.read_text(encoding="utf-8"))
+    index = {b["id"]: b for b in doc["blokken"]}
+    gelukt = mislukt = 0
+    for v in plan.get("vervangingen", []):
+        blok = index.get(v["id"])
+        if blok is None:
+            mislukt += 1
+            continue
+        runs, ok = vervang_in_runs(blok.get("runs", []), v["van"], v["naar"])
+        if not ok:
+            mislukt += 1
+            continue
+        blok["runs"] = runs
+        blok["tekst"] = "".join(r.get("t", "") for r in runs)
+        gelukt += 1
+    plan["toegepast"] = gelukt
+    plan["mislukt"] = mislukt
+    doc["_citaatplan"] = plan
+    return plan
+
+
+def _waarschuw_over_apparaat(doc: dict, ontwerp: dict) -> None:
+    """Zeggen wanneer een besluit niet bij de bron past.
+
+    Dit blokkeert niet, want de gebruiker mag een bronnenlijst willen die
+    er nog niet is — dan komt hij er later in. Maar stil doorbouwen zou
+    betekenen dat er een besluit is genomen dat niets doet, en dat merkt
+    niemand tot de oplevering.
+    """
+    ap = doc.get("apparaat", {})
+    if ontwerp.get("noten") != "geen" and not ap.get("voetnoten") and not ap.get("eindnoten"):
+        print(f"let op: notenplaatsing staat op '{ontwerp['noten']}' maar het "
+              f"brondocument heeft geen noten. Er verandert niets.", file=sys.stderr)
+    if ontwerp.get("noten") == "geen" and (ap.get("voetnoten") or ap.get("eindnoten")):
+        print(f"let op: notenplaatsing staat op 'geen' terwijl het brondocument "
+              f"{ap.get('voetnoten', 0) + ap.get('eindnoten', 0)} noten heeft. Die "
+              f"tekst komt dan nergens terecht en tekstcheck.py blokkeert erop.",
+              file=sys.stderr)
+    if ontwerp.get("bronnenlijst") != "geen" and not ap.get("bronnenlijst"):
+        print(f"let op: bronnenlijst staat op '{ontwerp['bronnenlijst']}' maar er is "
+              f"in het brondocument geen kop gevonden die er een aankondigt. Er "
+              f"wordt niets als bronnenlijst gezet; een lijst verzinnen doet deze "
+              f"skill niet.", file=sys.stderr)
+    if ontwerp.get("bijlagen") and not ap.get("bijlagen"):
+        print("let op: er is een bijlagegrens opgegeven die niet uit de bron komt. "
+              "Controleer of het blok-id klopt.", file=sys.stderr)
+    if ap.get("bijlagen") and not ontwerp.get("bijlagen"):
+        n = len(ap["bijlagen"]["koppen"])
+        print(f"let op: het brondocument heeft {n} kop(pen) die met 'Bijlage' of "
+              f"'Appendix' beginnen, maar er is geen bijlagegrens ingesteld. Ze "
+              f"worden als gewone hoofdstukken gezet.", file=sys.stderr)
 
 
 def _bestandsnaam(titel: str) -> str:

@@ -78,7 +78,20 @@
   --r-marge-buiten: 62px;   /* 16 mm */
 
   --r-goot: 30px;           /* gemeten: 23,5 pt tussen twee kolommen */
-  --r-regels: 50;           /* het aantal regels in de zetspiegel */
+
+  /* Het aantal regels in de zetspiegel. `--r-basisregels` hoort bij het
+     model en het formaat; `--r-regels` is wat de dichtheidsknop ervan
+     maakt. Twee variabelen dus, want anders kan de knop het modelgetal
+     niet verschuiven zonder het te overschrijven. */
+  --r-basisregels: 50;
+  --r-regels: var(--r-basisregels);
+
+  /* De lucht tussen blokken, in regels. Niet de afstand tussen alinea's:
+     die blijft precies één regel, want anders staat de tekst niet meer
+     op het regelraster en eindigen twee pagina's naast elkaar niet meer
+     op dezelfde hoogte. Wat de knop wél verschuift is de sprong boven
+     een sectiekop, om een exhibit en om een paneel. */
+  --r-lucht: 2;
 
   --r-zetbreedte: calc(var(--breedte) - var(--r-marge-binnen) - var(--r-marge-buiten));
   --r-kolom: calc((var(--r-zetbreedte) - 11 * var(--r-goot)) / 12);
@@ -115,11 +128,11 @@
    precies vijf regels. Vijf erbij dus, niet vier en niet zes: op vier
    blijft er 17 px onbenut onderaan en op zes valt de folio in de
    snijrand. */
-.pagina[data-soort="rapport"][data-formaat="a4"] { --r-regels: 55; }
+.pagina[data-soort="rapport"][data-formaat="a4"] { --r-basisregels: 55; }
 
 /* De liggende A4 is een bijlageformaat: één brede kolom haalt daar 120
    tekens en dat leest niet, dus daar is dubbel de enige zetting. */
-.pagina[data-soort="rapport"][data-formaat="a4-liggend"] { --r-regels: 36; }
+.pagina[data-soort="rapport"][data-formaat="a4-liggend"] { --r-basisregels: 36; }
 
 /* De zetspiegel van een rapport. Anders dan die van stijl.css: de
    marges zijn asymmetrisch en ze spiegelen per zijde. `--balk` telt nog
@@ -208,9 +221,9 @@
   --sprong-klein: 22px;
   --sprong: 44px;
   --sprong-groot: 66px;
-  --r-regels: 39;      /* 39 x 22 = 858 px; de rest is ondermarge */
+  --r-basisregels: 39;   /* 39 x 22 = 858 px; de rest is ondermarge */
 }
-.pagina[data-model="breed"][data-formaat="a4"] { --r-regels: 43; }
+.pagina[data-model="breed"][data-formaat="a4"] { --r-basisregels: 43; }
 
 /* --- model: kantlijn --------------------------------------------- */
 .pagina[data-model="kantlijn"] {
@@ -243,7 +256,28 @@
   --sprong-klein: 17.33px;
   --sprong: 34.66px;
   --sprong-groot: 52px;
-  --r-regels: 50;
+  --r-basisregels: 50;
+}
+
+/* --- de dichtheidsknop -------------------------------------------- *
+   Drie standen, en geen drempel. Wat de knop doet is het aantal regels
+   per pagina met drie verschuiven en de lucht tussen blokken van twee
+   naar drie of anderhalve regel. Dat is ongeveer vijftien procent meer
+   of minder tekst per pagina; `qa_rapport.py` meet daarna hoeveel het
+   werkelijk werd en rapporteert dat als getal zonder oordeel.
+
+   Waarom het geen harde regel is: hoeveel er op een pagina mag staan
+   hangt af van wat er staat. Een hoofdstuk met drie figuren is ruim bij
+   dezelfde instelling waarbij een hoofdstuk met alleen proza dicht is.
+   Een drempel zou dat verschil wegdrukken; een knop plus een meting
+   laat de gebruiker beslissen. */
+.pagina[data-dichtheid="ruim"] {
+  --r-regels: calc(var(--r-basisregels) - 3);
+  --r-lucht: 3;
+}
+.pagina[data-dichtheid="dicht"] {
+  --r-regels: calc(var(--r-basisregels) + 3);
+  --r-lucht: 1.5;
 }
 
 /* Een kader dat over de volle zetspiegel loopt — een figuur die de
@@ -306,8 +340,13 @@
 .pagina[data-model="breed"]    .lopend li,
 .pagina[data-model="kantlijn"] .lopend > p,
 .pagina[data-model="kantlijn"] .lopend li { text-align: left; }
-[data-afbreking="nee"] .lopend > p,
-[data-afbreking="nee"] .lopend li {
+/* `.pagina` staat er expres in: zonder dat weegt deze regel lichter dan
+   `.pagina[data-model="dubbel"] .lopend > p` hierboven, en dan haalt de
+   noodrem het niet in precies het model dat uitvult. Dat was op de
+   gezette proef te zien als rivieren van wit door de kolom, terwijl het
+   verslag netjes `afbreking: false` meldde. */
+[data-afbreking="nee"] .pagina .lopend > p,
+[data-afbreking="nee"] .pagina .lopend li {
   text-align: left;
   hyphens: none;
   -webkit-hyphens: none;
@@ -322,7 +361,7 @@
    aanhalingstekens erbij — die zouden tekst toevoegen — maar een
    inspringing en een streep. */
 .citaatblok {
-  margin: var(--sprong) 0;
+  margin: calc(var(--regel) * var(--r-lucht)) 0;
   padding-left: calc(var(--r-kolom) * .9);
   border-left: 2px solid var(--r-accent);
   font-style: italic;
@@ -396,7 +435,7 @@
   font-size: var(--m-kop);
   font-weight: 800;
   line-height: 1.22;
-  margin: var(--sprong) 0 calc(var(--regel) * .6);
+  margin: calc(var(--regel) * var(--r-lucht)) 0 calc(var(--regel) * .6);
   padding-top: calc(var(--regel) * .7);
   position: relative;
 }
@@ -547,7 +586,7 @@
    --------------------------------------------------------------- */
 
 .exhibit {
-  margin: var(--sprong) 0;
+  margin: calc(var(--regel) * var(--r-lucht)) 0;
   padding-top: calc(var(--regel) * .8);
   border-top: 1px solid var(--r-lijn);
   break-inside: avoid;
@@ -609,7 +648,7 @@
 /* Een beeld zonder de exhibitomlijsting — een foto, een sfeerbeeld.
    Dat draagt een bijschrift en verder niets. */
 .beeldblok {
-  margin: var(--sprong) 0;
+  margin: calc(var(--regel) * var(--r-lucht)) 0;
   break-inside: avoid;
   page-break-inside: avoid;
 }
@@ -623,6 +662,22 @@
   color: rgba(32, 27, 92, .62);
   margin: calc(var(--regel) * .4) 0 0;
   text-align: left;
+  hyphens: none;
+}
+
+/* Het bijschrift dat overblijft wanneer het beeld eruit is gezet
+   (`beeld: geen`). Dezelfde letter als een bijschrift, maar het staat
+   nu alleen in de kolom, dus het krijgt een streepje mee — anders leest
+   het als een losse zin die iemand is vergeten. */
+.bijschrift-los {
+  font-family: var(--brood);
+  font-weight: 300;
+  font-size: var(--m-klein);
+  line-height: var(--r-klein);
+  color: rgba(32, 27, 92, .62);
+  margin: calc(var(--regel) * var(--r-lucht)) 0;
+  padding-left: 14px;
+  border-left: 2px solid var(--r-accent);
   hyphens: none;
 }
 
@@ -771,7 +826,7 @@
   line-height: 1.2;
   letter-spacing: -.014em;
   color: var(--r-accent-2);
-  margin: var(--sprong) 0;
+  margin: calc(var(--regel) * var(--r-lucht)) 0;
   padding-left: calc(var(--r-kolom) * .8);
   border-left: 3px solid var(--r-accent);
   break-inside: avoid;
@@ -785,7 +840,7 @@
 .paneel--rapport {
   background: var(--r-tint);
   padding: calc(var(--regel) * 1.1) calc(var(--r-goot)) ;
-  margin: var(--sprong) 0;
+  margin: calc(var(--regel) * var(--r-lucht)) 0;
   break-inside: avoid;
   page-break-inside: avoid;
 }
@@ -870,6 +925,155 @@
 .pagina[data-model="kantlijn"] .kantlijn > .voetnoot .nr {
   font-family: var(--display);
 }
+
+
+/* ---------------------------------------------------------------
+   9b. Het verwijzingsapparaat: eindnoten en de bronnenlijst
+
+   Twee onafhankelijke besluiten, en dat onderscheid is de kern van deze
+   sectie. **Waar de noten staan** is het ene: aan de voet van de pagina,
+   achter het hoofdstuk, achter het rapport, of nergens. **Of er een
+   bronnenlijst is** is het andere. Ze gaan samen: voetnoten met een
+   volledige bronnenlijst achterin is niet de uitzondering maar het
+   gewone geval in een Nederlands beleidsrapport, en het is precies wat
+   Chicago notes-bibliography doet.
+
+   Wat hier níét gebeurt is converteren. De citatiestijl in de lopende
+   tekst — auteur-jaar, genummerd, of een nootcijfer — is van de auteur
+   en verandert niet. Een `(Boogers, 2016)` omzetten naar een voetnoot
+   haalt tekst uit de alinea, en dat is een wijziging van de tekst die
+   door de toestemmingspoort moet. Verplaatsen mag wel: een voetnoot die
+   een eindnoot wordt, is precies dezelfde tekst op een andere plek.
+   --------------------------------------------------------------- */
+
+/* Het blok eindnoten, achter een hoofdstuk of achter het rapport. */
+.eindnoten {
+  margin: calc(var(--regel) * var(--r-lucht)) 0 0;
+  padding-top: calc(var(--regel) * .8);
+  border-top: 1px solid var(--r-lijn);
+}
+.eindnoten__kop {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: var(--m-klein);
+  line-height: var(--r-klein);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--r-accent);
+  margin: 0 0 calc(var(--regel) * .6);
+}
+/* Een eindnoot is ruimer gezet dan een voetnoot: hij staat niet meer in
+   de marge van de pagina maar in de leesstroom, en dan is 7 pt te klein.
+   Gemeten norm voor een notenblok in de stroom: de kleine maat. */
+.eindnoten .voetnoot {
+  font-size: var(--m-klein);
+  line-height: var(--r-klein);
+  margin-bottom: calc(var(--regel) * .32);
+  padding-left: 20px;
+  text-indent: -20px;
+}
+
+/* De bronnenlijst. Hangende inspringing, want dat is wat een
+   alfabetische lijst leesbaar maakt: de achternaam steekt uit en het oog
+   kan de kolom aflopen zonder te lezen. Eén regel wit tussen de items
+   zou de lijst twee keer zo lang maken; een halve regel is genoeg om ze
+   te scheiden. */
+.bronnenlijst > p,
+.bronnenlijst > li {
+  padding-left: 1.7em;
+  text-indent: -1.7em;
+  margin: 0 0 calc(var(--regel) * .5);
+  text-align: left;
+  hyphens: none;
+  -webkit-hyphens: none;
+}
+.bronnenlijst > p:last-child { margin-bottom: 0; }
+
+/* De genummerde variant. Het nummer telt de zetmotor niet: hij staat in
+   de bron, of hij staat er niet. Wat de opmaak doet is de inspringing
+   zodat de nummers onder elkaar staan. */
+.bronnenlijst[data-stijl="genummerd"] > p {
+  padding-left: 2.3em;
+  text-indent: -2.3em;
+  font-variant-numeric: tabular-nums;
+}
+.bron__nr {
+  font-family: var(--display);
+  font-weight: 700;
+  color: var(--r-accent);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------------------------------------------------------------
+   9c. De bijlagen
+
+   Een rapport dat overgaat in bijlagen hoort dat te laten zien, en één
+   regel wit is daar te weinig voor: de lezer die doorbladert moet aan
+   het blad kunnen zien dat het hoofdverhaal voorbij is. Vandaar het
+   scheidingsblad — een heel blad met alleen het woord dat de bron
+   ervoor gebruikt.
+
+   Vanaf dat blad verandert er drie dingen: de opener telt in letters in
+   plaats van cijfers, de kopregel zegt "Bijlage B" in plaats van de
+   rapporttitel, en de inhoudsopgave zet ze in een eigen groep. Dat is
+   genoeg; het register, het model en het raster blijven hetzelfde, want
+   een bijlage is een ander soort inhoud en geen ander rapport.
+   --------------------------------------------------------------- */
+
+.pagina[data-deel="bijlagen"] .opener__kicker { color: var(--r-accent); }
+
+/* Het scheidingsblad. Hetzelfde blad als een hoofdstukopener in de
+   bladvariant, maar zonder cijfer: er staat één woord op en dat is de
+   hele boodschap. */
+.pagina[data-scheiding="bijlagen"] .opener__watermerk { display: none; }
+
+/* Zonder cijfer bleef er in het heldere register een bijna leeg blad
+   over: een streep en een woord onderaan, en verder wit. Dat leest niet
+   als een besluit maar als een pagina die is vergeten. Vandaar dezelfde
+   tonale bol als op de hoofdstukband, half buiten het blad linksboven —
+   het is het merkteken dat de twee openers familie van elkaar maakt, en
+   op deze pagina is het het enige wat er verder staat. Hij bleedt eruit
+   en niet erin: `.pagina` heeft `overflow: hidden`, dus de rand valt
+   samen met de snijrand. */
+.pagina[data-scheiding="bijlagen"]::before {
+  content: "";
+  position: absolute;
+  width: 430px;
+  height: 430px;
+  left: -166px;
+  top: -178px;
+  border-radius: 50%;
+  background: var(--r-accent);
+  opacity: .12;
+  pointer-events: none;
+}
+.pagina[data-scheiding="bijlagen"][data-veld]::before {
+  background: currentColor;
+  opacity: .16;
+}
+.pagina[data-scheiding="bijlagen"] .opener__titel { font-size: var(--m-display); }
+.pagina[data-scheiding="bijlagen"] .scheiding__streep {
+  display: block;
+  width: var(--k4);
+  height: 3px;
+  background: var(--r-accent);
+  margin: 0 0 calc(var(--regel) * 1.2);
+}
+
+/* In de inhoudsopgave krijgen de bijlagen een tussenkop en een letter
+   in plaats van een cijfer. De tussenkop is toegevoegde tekst en draagt
+   dat ook in de markup. */
+.inhoud__groep {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: var(--m-klein);
+  line-height: var(--r-klein);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--r-accent);
+  margin: calc(var(--regel) * 1.6) 0 calc(var(--regel) * .5);
+}
+.inhoud__groep:first-child { margin-top: 0; }
 
 
 /* ---------------------------------------------------------------

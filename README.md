@@ -21,12 +21,16 @@ beslissen.
 - **De tekst verandert niet, en dat is te controleren.** `tekstcheck.py` plakt alle stukken met
   hetzelfde `data-bron` weer aan elkaar en vergelijkt karakter voor karakter met de brontekst uit
   het Word-document. Elke afwijking die niet in `wijzigingen.json` staat, blokkeert de oplevering.
-  Op het proefrapport van veertig pagina's: 194 van 194 blokken woordelijk gelijk, in alle vier de
-  modellen, en nul ongemarkeerde toevoegingen.
+  Op het proefrapport: 201 van 201 blokken woordelijk gelijk, in alle vier de modellen en in elke
+  stand van het verwijzingsapparaat, en nul ongemarkeerde toevoegingen. Nagemeten met drie
+  sabotages — een gewijzigd woord, een verwijderde alinea, een toegevoegde conclusie — en alle
+  drie blokkeren.
 - **Wat de opmaak wél toevoegt, staat gemarkeerd**: de folio, de kopregel, de inhoudsopgave, de
-  nummering, het nootcijfer, de herhaalde tabelkop en de omslagregels die de gebruiker zelf heeft
-  opgegeven. Zeven soorten, elk met `data-toevoeging`, en `tekstcheck.py` telt ze en schrijft ze
-  uit. Alles daarbuiten zonder `data-bron` is tekst die niemand heeft goedgekeurd.
+  nummering, het nootcijfer, de herhaalde tabelkop, de omslagregels die de gebruiker zelf heeft
+  opgegeven, de kop boven een eindnotenblok, het nummer voor een bronregel, het woord "Bijlagen"
+  op het scheidingsblad en het bijschrift bij een apart aangeleverd beeld. Elf soorten, elk met
+  `data-toevoeging`, en `tekstcheck.py` telt ze en schrijft ze uit. Alles daarbuiten zonder
+  `data-bron` is tekst die niemand heeft goedgekeurd.
 - **Voor elke inhoudelijke wijziging die de vorm zou willen, wordt expliciet toestemming
   gevraagd** — een kop inkorten, een alinea splitsen, van vier handgetypte streepjes een echte
   lijst maken. Zes soorten wijzigingen en meer bestaan er niet. `lees_docx.py` schrijft
@@ -43,6 +47,29 @@ beslissen.
 - **Vier layoutmodellen, vier kleurregisters, drie hoofdstukopeners**, elk met een gerenderde
   keuzekaart die uit dezelfde pijplijn komt als het echte rapport en dus niets kan beloven wat de
   zetmotor niet doet.
+- **Het verwijzingsapparaat is twee besluiten en geen één.** Waar de noten staan — voet, per
+  hoofdstuk, achterin, of niet — staat los van de vraag of de bronnenlijst wordt opgemaakt
+  (alfabetisch hangend of genummerd op citatievolgorde). Voetnoten *én* een bronnenlijst achterin
+  is de gewoonste combinatie die er is. `lees_docx.py` detecteert wat de bron werkelijk heeft, en
+  de skill biedt alleen dát aan: een bronnenlijst maken die er niet is, betekent bronregels
+  schrijven.
+- **Verwijzingen gelijktrekken telt als opmaak.** `(Boogers e.a. 2016)` wordt overal
+  `(Boogers et al., 2016)`, of `[3]` als het rapport genummerd citeert. Dat is de enige tekst die
+  zonder aparte toestemming wordt aangeraakt, en het is een uitdrukkelijk besluit: `citaten.py`
+  schrijft elke omzetting vooraf op, `tekstcheck.py` speelt het plan terug tegen de bron en laat
+  een blok dat méér is veranderd alsnog blokkeren, en bij de oplevering staan ze allemaal
+  genoemd. Een verwijzing zonder bronregel blijft staan zoals hij stond.
+- **Bijlagen krijgen een eigen scheidingsblad**, tellen in letters, en staan in de inhoudsopgave
+  onder een eigen groepskop. De folio loopt gewoon door.
+- **De dichtheid is een knop en geen grens.** Ruim, gemiddeld of dicht: 284, 295 of 318 woorden
+  per tekstpagina, gemeten. De letter verandert niet mee — alleen het aantal regels in de
+  zetspiegel en de lucht tussen de blokken.
+- **De vraag of er beeld in mag, wordt expliciet gesteld**, ook als er beeld in het Word-document
+  zit. Bij apart aangeleverde figuren koppelt een `beeld.json` elk bestand aan een blok; een
+  figuur zonder plek wordt niet geplaatst maar gemeld.
+- **Vijftien besluiten passen niet in een gesprek**, dus `widget.py` genereert er een pagina van:
+  alles op één scherm met een schets die meebeweegt, per rapport samengesteld uit wat de bron
+  werkelijk bevat. De uitvoer is de `ontwerp.json` die de gebruiker terugplakt.
 
 De maten komen uit twee bronnen: het SFNL-drukwerk, en drie nagemeten rapporten van Bain, BMC en
 het McKinsey Global Institute. Die laatste leverden een uitkomst op die tegen de verwachting in
@@ -52,6 +79,8 @@ dubbele model uitvult. `reference/rapport-vormentaal.md` §1 heeft de hele metin
 ```bash
 python scripts/rapport/preflight.py
 python scripts/rapport/lees_docx.py rapport.docx --uit werk/
+python scripts/rapport/widget.py werk/                      # de intakepagina
+python scripts/rapport/citaten.py werk/ --naar uniform      # alleen als het besluit dat vraagt
 python scripts/rapport/bouw.py werk/ --model breed --register helder
 python scripts/rapport/tekstcheck.py werk/rapport.html      # blokkeert
 python scripts/rapport/render.py werk/rapport.html
@@ -158,7 +187,7 @@ ze delen geen bestanden en importeren niet over de grens.
 
 ```
 skills/sfnl-slides/SKILL.md     de route: vragenvuur, outline, zes bouwstappen, de loop
-skills/sfnl-rapport-opmaak/     de zetroute: inlezen, vragenvuur, wijzigingsvoorstellen, zetten
+skills/sfnl-rapport-opmaak/     de zetroute: inlezen, vormbesluiten, wijzigingsvoorstellen, zetten
 reference/rapport-vormentaal.md de maatstaf: de metingen aan Bain, BMC en MGI, de weigerlijst
 reference/rapport-stramien.md   de feiten: raster, vier modellen, vier registers, klassenlijst
 assets/rapport/rapport.css      de rapportlaag boven stijl.css

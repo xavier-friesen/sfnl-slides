@@ -103,8 +103,8 @@ dezelfde pijplijn, dus ze kunnen niet beloven wat de zetmotor niet doet.
 
 ## 3. De weigerlijst
 
-Zestien dingen die een rapport eruit laten zien alsof een model het heeft
-opgemaakt. De eerste vijf zijn de ernstige.
+Zeventien dingen die een rapport eruit laten zien alsof een model het
+heeft opgemaakt. De eerste vijf zijn de ernstige.
 
 1. **Tekst veranderen om de vorm te laten kloppen.** Een kop inkorten
    omdat hij over drie regels loopt, een alinea splitsen om een figuur
@@ -112,7 +112,9 @@ opgemaakt. De eerste vijf zijn de ernstige.
    lijst van te maken. Allemaal begrijpelijk, allemaal verboden zonder
    expliciete toestemming per geval. Dit staat bovenaan omdat het de
    enige fout is die de gebruiker niet terugziet: de opmaak ziet er
-   beter uit en de tekst is stil anders.
+   beter uit en de tekst is stil anders. Er is één uitzondering en die
+   is expliciet gemaakt: het gelijktrekken van verwijzingen telt als
+   opmaak en niet als herschrijven — zie §9.
 2. **Een citaat, een streamer of een kaderblok dat tekst herhaalt.** Een
    pull quote dubbelt een zin uit de tekst. Dat is een inhoudelijke
    toevoeging, ook al is er geen woord bijgeschreven, en dus vraag je
@@ -159,6 +161,10 @@ opgemaakt. De eerste vijf zijn de ernstige.
     zacht. Onder 100 dpi is het een fout.
 16. **Een rapport opleveren dat niet visueel bekeken is.** Er is geen
     route zonder renderer: zonder browser is er geen zetting.
+17. **Een verwijzingsnummer dat nergens naar wijst.** Wie `[3]` in de
+    tekst zet, moet een derde regel in de bronnenlijst hebben.
+    `citaten.py` laat een verwijzing die hij niet kan koppelen staan
+    zoals hij stond en meldt hem apart; die melding negeren is de fout.
 
 ---
 
@@ -195,8 +201,9 @@ lager uitkomt.
 
 ## 5. Wat de opmaak mag toevoegen
 
-Precies zeven dingen, en ze dragen alle zeven `data-toevoeging` in de
-markup zodat `tekstcheck.py` ze kan onderscheiden van brontekst.
+Elf dingen, en ze dragen alle elf `data-toevoeging` in de markup zodat
+`tekstcheck.py` ze kan onderscheiden van brontekst. De laatste vier
+verschijnen alleen wanneer de bijbehorende keuze in `ontwerp.json` staat.
 
 | toevoeging | wat | waarom het mag |
 |---|---|---|
@@ -207,6 +214,10 @@ markup zodat `tekstcheck.py` ze kan onderscheiden van brontekst.
 | `nootnummer` | het cijfer bij een voetnootverwijzing en voor de noot | de noten stonden al in de bron; alleen het cijfer is nieuw |
 | `tabelkop` | de herhaalde kolomnamen op een vervolgtabel | zonder is de vervolgtabel onleesbaar |
 | `omslag` | opdrachtgever, datum, ondertitel op de omslag | alleen als de gebruiker ze in `ontwerp.json` heeft opgegeven |
+| `notenkop` | "Noten" boven een blok eindnoten | een reeks genummerde regels zonder kop is geen blok |
+| `bronnummer` | `[3]` vóór een bronregel bij genummerd citeren | het nummer volgt uit de citatievolgorde in de tekst |
+| `scheiding` | het woord "Bijlagen" op het scheidingsblad | alleen wanneer de bron zelf geen zo'n kop heeft — heeft hij die wel, dan is het gewoon brontekst |
+| `beeldbijschrift` | het bijschrift bij een apart aangeleverd beeld | de gebruiker heeft het zelf geschreven; het staat niet in het rapport |
 
 Alles wat hier niet in staat en geen `data-bron` heeft, is tekst die
 niemand heeft goedgekeurd. `tekstcheck.py` noemt dat
@@ -300,9 +311,162 @@ het brondocument; wat er niet is, blijft er niet.
 - **Een lege plek is zichtbaar leeg.** Hoort er beeld te komen dat er nog
   niet is, dan staat er een gemarkeerd vlak en geen wit.
 
+**En de vraag wordt gesteld, ook als het antwoord voor de hand ligt.**
+`beeld` in `ontwerp.json` kent drie standen, en er is geen stand waarin
+de skill zelf beslist wat er te zien is:
+
+| | wat er gebeurt |
+|---|---|
+| `geen` | tekst en tabellen, verder niets — ook wanneer er beeld in het Word-document zat. Dat is een keuze en wordt als zodanig gemeld |
+| `uit-bron` | wat in het document stond, op de plek waar het stond. De default zodra `lees_docx.py` beeld heeft uitgepakt |
+| `aangeleverd` | de gebruiker wijst bestanden aan, en zegt erbij waar ze horen |
+
+Bij `aangeleverd` hoort een `beeld.json` naast het rapport: per beeld het
+bestand, het blok waarachter het moet komen, en een bijschrift als de
+gebruiker er een heeft. Zonder die koppeling is er geen plaatsing — een
+map met foto's is geen opdracht, want de skill weet niet welke foto bij
+welke alinea hoort en gokken is hier hetzelfde als verzinnen. Het
+bijschrift dat de gebruiker meelevert is de enige bijschrifttekst die
+niet uit het rapport komt, en draagt daarom `data-toevoeging`.
+
 ---
 
-## 9. Wat er blijft liggen
+## 9. Het verwijzingsapparaat
+
+Een rapport dat citeert, doet dat op twee plekken tegelijk: kort in de
+lopende tekst en volledig ergens anders. Dat zijn **twee besluiten die
+los van elkaar staan**, en ze in één lijstje gooien is de fout die deze
+skill eerst maakte. Voetnoten *en* een bronnenlijst achterin is de
+gewoonste combinatie die er is; als je moet kiezen tussen die twee, is de
+vraag verkeerd gesteld.
+
+**Besluit één: waar de noten staan** (`noten` in `ontwerp.json`).
+
+| | wat het doet | waarvoor |
+|---|---|---|
+| `geen` | de noten uit de bron worden niet gezet | alleen wanneer de gebruiker dat vraagt; het is het enige apparaat dat brontekst laat vervallen en het wordt dus expliciet gemeld |
+| `voetnoot` | onder aan de pagina waar de verwijzing staat, of in de kantlijn bij het model `kantlijn` | de default, en de enige vorm waarbij de lezer de noot leest zonder de vinger ergens in te houden |
+| `eindnoot-hoofdstuk` | een blok aan het eind van elk hoofdstuk | veel noten, of lange noten; het houdt de tekstpagina rustig zonder de noot onvindbaar te maken |
+| `eindnoot-rapport` | één blok achterin | de academische vorm; kies het voor een rapport dat als geheel wordt geciteerd |
+
+**Besluit twee: of de bronnenlijst wordt opgemaakt** (`bronnenlijst`).
+Alleen aan te bieden wanneer de bron er een heeft: `lees_docx.py` zoekt
+naar een kop als "Literatuur" of "Bronnen" en legt de regels ertussen
+vast in `apparaat.bronnenlijst`. Zonder die kop is er geen keuze, want
+een bronnenlijst maken betekent bronregels schrijven.
+
+| | wat het doet |
+|---|---|
+| `geen` | de regels blijven staan waar ze staan, als gewone alinea's |
+| `apa` | hangende inspringing van 1,7 em, op alfabet zoals aangeleverd |
+| `genummerd` | `[1]`, `[2]` … op citatievolgorde, met dezelfde hangende inspringing |
+
+**En dan de citatiestijl** (`citaatstijl`). Dit is het enige punt waar de
+skill de tekst van de gebruiker aanraakt zonder per geval te vragen, en
+dat is een besluit van de opdrachtgever geweest: *een verwijzing
+gelijktrekken is opmaak, geen herschrijven.* De prijs die daarbij hoort
+is betaald in het systeem zelf:
+
+- `citaten.py` rekent de omzetting uit **voordat** er iets gebeurt en
+  schrijft hem weg in `citaten.json` — welk blok, wat er stond, wat er
+  komt te staan, en naar welke bronregel het wijst.
+- `tekstcheck.py` speelt dat plan terug tegen de brontekst. Klopt een
+  blok pas ná het toepassen van de omzettingen die ervoor gepland waren,
+  dan heet het `omgezet` en gaat het door; klopt het dan nog niet, dan is
+  het `gewijzigd` en **blokkeert het de oplevering**. Een omzetting die
+  meer aanraakt dan hij mocht, komt er dus niet doorheen.
+- Bij de oplevering staan ze allemaal in het verslag. Wat er verandert
+  blijft zichtbaar; het gaat alleen niet meer per geval langs de
+  gebruiker.
+
+Drie stijlen: `zoals-aangeleverd` (de default, er verandert niets),
+`uniform` (`e.a.` en `et. al.` worden `et al.`, en er komt een komma voor
+het jaartal) en `genummerd` (`[3]`, alleen mogelijk mét bronnenlijst,
+want het nummer moet ergens naar wijzen).
+
+**Twee dingen die er bewust niet in zitten**, allebei omdat ze op de
+proef een fout opleverden die je pas ziet als je de bron ernaast legt:
+
+1. **`en` wordt geen `&`.** Het lijkt dezelfde ingreep en is het niet: in
+   een verwijzing naar het "Ministerie van Sociale Zaken en
+   Werkgelegenheid" hoort dat `en` bij de naam. De eerste versie van de
+   regel maakte daar "Sociale Zaken & Werkgelegenheid" van — een
+   organisatie die niet bestaat. Aan de tekst is niet te zien of een `en`
+   twee auteurs scheidt of in een naam staat, dus blijft hij staan.
+2. **Auteur-jaar wordt geen voetnootverwijzing.** Dat vraagt een
+   noottekst per verwijzing, en die zou uit de bronregel gemaakt moeten
+   worden. Dan staat dezelfde regel twee keer in het rapport en is er
+   tekst bij geschreven. Wie dat effect wil, kiest `noten: voetnoot` met
+   een bronnenlijst erbij: hetzelfde resultaat zonder nieuwe tekst.
+
+En de faalwijze is expres saai: **een verwijzing die niet aan een
+bronregel te koppelen is, blijft staan zoals hij stond** en wordt gemeld.
+Liever één verwijzing die uit de toon valt dan een nummer dat nergens
+naar wijst.
+
+---
+
+## 10. De dichtheid
+
+Hoeveel er op een pagina mag. Drie standen, en het is een knop en geen
+grens: de zetmotor houdt zich in alle drie aan dezelfde regels voor
+weduwen, wezen en koppen — de dichtheid verschuift alleen waar de ruimte
+vandaan komt.
+
+| | regels zetspiegel | lucht tussen blokken | gemeten op het proefrapport |
+|---|---|---|---|
+| `ruim` | 47 | 3 × | 39 pagina's, 284 woorden per tekstpagina |
+| `gemiddeld` | 50 | 2 × | 35 pagina's, 295 woorden per tekstpagina |
+| `dicht` | 53 | 1,5 × | 35 pagina's, 318 woorden per tekstpagina |
+
+Drie dingen die daar in staan en die het besluit dragen:
+
+- **De letter verandert niet.** De dichtheid verandert het aantal regels
+  in de zetspiegel en de lucht tussen de blokken, en verder niets. De
+  zeven lettergroottes blijven zeven, en `ruim` en `dicht` zijn
+  herkenbaar hetzelfde rapport.
+- **Het verschil is kleiner dan het klinkt** — 34 woorden per pagina
+  tussen de uitersten, ongeveer 12 procent. Wie een rapport substantieel
+  korter wil, verandert het model (`dubbel` is 40 procent korter dan
+  `breed`) en niet de dichtheid.
+- **`dicht` levert niet altijd pagina's op.** Op de proef zijn
+  `gemiddeld` en `dicht` allebei 35 pagina's, omdat de winst opgaat aan
+  hoofdstukopeners en beeld dat niet meeschaalt. Dichter zetten is een
+  keuze over hoe de bladspiegel oogt, niet een manier om te bezuinigen.
+
+De default is `gemiddeld`. `ruim` is de goede keuze voor een rapport dat
+op scherm gelezen wordt of dat veel koppen heeft; `dicht` voor een lang
+en feitelijk stuk waar de lezer doorheen werkt.
+
+---
+
+## 11. De bijlagen
+
+Een bijlage is geen hoofdstuk, en het rapport hoort dat te laten zien op
+het moment dat je erin belandt.
+
+- **Er komt een scheidingsblad**, met dezelfde compositie als een
+  hoofdstukopener maar zonder cijfer: een streep, het woord "Bijlagen",
+  en het veld van het register. Dat is de hele functie — de lezer die
+  doorbladert weet dat het lopende betoog voorbij is.
+- **Staat het woord al in de bron** — een kop die alleen "Bijlagen" of
+  "Appendices" is — dan ís die kop het scheidingsblad en wordt er niets
+  toegevoegd. Staat er meteen "Bijlage A: verantwoording", dan is dat de
+  eerste bijlage en krijgt het scheidingsblad het woord als
+  `data-toevoeging="scheiding"`.
+- **Bijlagen tellen op letter**, A, B, C, en niet verder op het
+  hoofdstuknummer. Een rapport met vijf hoofdstukken en drie bijlagen
+  heeft geen hoofdstuk 8.
+- **De folio loopt door.** Een bijlage is achterin, niet ernaast; de
+  paginanummering breekt niet af en begint niet opnieuw.
+- **In de inhoudsopgave staan ze onder een eigen groepskop**, met dezelfde
+  witruimte ervoor als een hoofdstuk krijgt. Ze staan er wél in: een
+  bijlage die je alleen vindt door te bladeren is een bijlage die niemand
+  leest.
+
+---
+
+## 12. Wat er blijft liggen
 
 Deze skill zet een aangeleverd rapport op. Wat hij niet doet:
 

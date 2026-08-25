@@ -38,6 +38,12 @@ interpretatie aan te pas komt.
 * `tekstwand` — hoeveel spreads achter elkaar niets anders dragen dan
   lopende tekst. Vanaf vier is dat een leesbaarheidsprobleem, en het is
   het enige getal hier dat over de inhoud van de vorm gaat.
+* `dichtheid` — hoeveel woorden er werkelijk op een tekstpagina staan,
+  met de laagste en de hoogste erbij. **Zonder drempel**, en dat is met
+  opzet: hoeveel er op een pagina mág staan hangt af van wat er staat,
+  en een grens zou een hoofdstuk met drie figuren afkeuren om iets wat
+  geen probleem is. Wat dit getal doet is de dichtheidsknop
+  controleerbaar maken.
 
 Gebruik:
 
@@ -161,13 +167,30 @@ METING = r"""() => {
       if (kl && !kl.children.length) uit.legeKantlijn++;
     }
 
+    // Hoeveel er werkelijk op deze pagina staat. Geen drempel: de
+    // dichtheidsknop is een voorkeur en geen regel, en hoeveel er op
+    // een pagina mág staan hangt af van wat er staat. Wat dit getal
+    // wél doet is de knop controleerbaar maken — je ziet achteraf wat
+    // 'dicht' in dit rapport betekende.
+    let woorden = 0, tekens = 0;
+    kaders.forEach(k => {
+      const t = (k.textContent || '').trim();
+      if (!t) return;
+      tekens += t.length;
+      woorden += t.split(/\s+/).filter(Boolean).length;
+    });
+
     uit.paginas.push({
       nr: nr,
       folio: p.getAttribute('data-folio') || '',
       zijde: p.getAttribute('data-zijde') || '',
       model: p.getAttribute('data-model') || '',
       opener: p.getAttribute('data-opener') || '',
+      deel: p.getAttribute('data-deel') || '',
+      dichtheid: p.getAttribute('data-dichtheid') || '',
       vulgraad: Math.round(vulgraad * 100) / 100,
+      woorden: woorden,
+      tekens: tekens,
       dragers: dragers.length
     });
 
@@ -366,9 +389,24 @@ def main() -> int:
 
     m = meet(a.html)
     oordeel = beoordeel(m)
+    # De dichtheid, gemeten. Alleen over de pagina's die tekst dragen:
+    # een omslag en een hoofdstukblad hebben er per definitie weinig, en
+    # die zouden het gemiddelde omlaag trekken zonder dat het iets zegt.
+    tekstpaginas = [p for p in m["paginas"] if p["woorden"] > 40]
+    woorden = [p["woorden"] for p in tekstpaginas]
     verslag = {
         "bestand": str(a.html),
         "paginas": len(m["paginas"]),
+        "dichtheid": {
+            "knop": (m["paginas"][0].get("dichtheid") if m["paginas"] else ""),
+            "woorden per tekstpagina": {
+                "gemiddeld": round(sum(woorden) / max(1, len(woorden))),
+                "laagste": min(woorden) if woorden else 0,
+                "hoogste": max(woorden) if woorden else 0,
+            },
+            "tekstpaginas": len(tekstpaginas),
+            "wat": "geen drempel; dit staat er zodat je ziet wat de knop deed",
+        },
         "gemiddelde vulgraad": round(
             sum(p["vulgraad"] for p in m["paginas"]) / max(1, len(m["paginas"])), 2),
         "lettergroottes": sorted(float(k) for k in m["maten"]),

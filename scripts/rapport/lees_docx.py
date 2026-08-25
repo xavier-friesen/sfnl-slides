@@ -66,6 +66,24 @@ LIJSTSTIJLEN = {"listparagraph", "listbullet", "listnumber", "lijstalinea",
                 "lijstopsomteken", "lijstnummering", "listbullet2",
                 "listnumber2", "opsomming", "bullet", "bulletlist"}
 
+#: Koppen die een bronnenlijst aankondigen. De lijst is bewust ruim: een
+#: valse treffer kost een vraag aan de gebruiker, een gemiste treffer
+#: kost een bronnenlijst die als gewone alinea's wordt gezet.
+BRONNENKOP = re.compile(
+    r"^(bronnen|bronvermelding|bronnenlijst|literatuur|literatuurlijst|"
+    r"geraadpleegde\s+(bronnen|literatuur)|bibliografie|referenties|"
+    r"references|bibliography|works\s+cited)\b", re.I)
+
+#: Koppen die een bijlage aankondigen.
+BIJLAGEKOP = re.compile(r"^(bijlage[nx]?|appendix|appendices|annex)\b", re.I)
+
+#: Een verwijzing van het type (Auteur, 2016) of (Auteur et al., 2016).
+AUTEUR_JAAR = re.compile(
+    r"\((?:zie\s+)?[A-ZÀ-Þ][\w'’-]+(?:[^()]{0,60}?)?,\s*\d{4}[a-z]?(?:[,;][^()]{0,40})?\)")
+
+#: Een genummerde verwijzing van het type [12] of [3, 7-9].
+GENUMMERD = re.compile(r"\[\d{1,3}(?:\s*[,–-]\s*\d{1,3})*\]")
+
 #: Een regel die met een opsommingsteken of een nummer begint terwijl de
 #: alinea niet als lijst is opgemaakt. Dit is de meest voorkomende reden
 #: dat een Word-rapport er in de opmaak niet uitziet als een lijst.
@@ -735,6 +753,67 @@ def signalen(blokken: list, beelden: dict) -> list:
 #  Samenstellen
 # =====================================================================
 
+def apparaat(blokken: list, noten: dict) -> dict:
+    """Wat er aan verwijzingsapparaat in de bron zit.
+
+    De skill mag hierna alleen aanbieden wat er werkelijk ligt. Een
+    rapport zonder noten hoeft geen keuze tussen voetnoten en eindnoten,
+    en een rapport zonder bronnenlijst kan er geen krijgen — die zou
+    verzonnen moeten worden, en dat is precies wat deze skill niet doet.
+
+    Wat hier gedetecteerd wordt is de plaats van het apparaat, niet de
+    citatiestijl van de auteur. Die stijl staat in de lopende tekst en
+    verandert nooit; hij wordt alleen geteld, zodat de skill kan zeggen
+    "dit rapport citeert op auteur-jaar" en de gebruiker weet wat voor
+    bronnenlijst erbij hoort.
+    """
+    uit: dict = {"voetnoten": len([n for n in noten if not n.startswith("e")]),
+                 "eindnoten": len([n for n in noten if n.startswith("e")])}
+
+    # De bronnenlijst: een kop die er een aankondigt, plus alles tot de
+    # eerstvolgende kop van hetzelfde of een hoger niveau.
+    lijst = None
+    for i, b in enumerate(blokken):
+        if b.get("soort") != "kop" or not BRONNENKOP.match(b.get("tekst", "").strip()):
+            continue
+        niveau = b.get("niveau", 2)
+        einde = len(blokken)
+        for j in range(i + 1, len(blokken)):
+            k = blokken[j]
+            if k.get("soort") == "kop" and k.get("niveau", 9) <= niveau:
+                einde = j
+                break
+        regels = [k for k in blokken[i + 1:einde]
+                  if k.get("soort") in ("alinea", "lijst") and k.get("tekst", "").strip()]
+        if regels:
+            lijst = {"kop_id": b["id"], "kop": b["tekst"].strip(),
+                     "vanaf": regels[0]["id"], "tot": regels[-1]["id"],
+                     "aantal": len(regels)}
+    if lijst:
+        uit["bronnenlijst"] = lijst
+
+    # De bijlagen: vanaf de eerste kop die er een aankondigt.
+    bijlagekoppen = [b for b in blokken
+                     if b.get("soort") == "kop"
+                     and BIJLAGEKOP.match(b.get("tekst", "").strip())]
+    if bijlagekoppen:
+        uit["bijlagen"] = {"vanaf": bijlagekoppen[0]["id"],
+                           "koppen": [{"id": b["id"], "tekst": b["tekst"].strip(),
+                                       "niveau": b.get("niveau", 1)}
+                                      for b in bijlagekoppen]}
+
+    # De citatiestijl in de lopende tekst, alleen geteld.
+    aj = gn = 0
+    for b in blokken:
+        t = b.get("tekst", "")
+        if not t:
+            continue
+        aj += len(AUTEUR_JAAR.findall(t))
+        gn += len(GENUMMERD.findall(t))
+    uit["citaten"] = {"auteur_jaar": aj, "genummerd": gn}
+    return uit
+
+
 def bouw_document(blokken: list, noten: dict, kern: dict,
                   beelden: dict, bron: Path) -> dict:
     schoon: list = []
@@ -754,6 +833,13 @@ def bouw_document(blokken: list, noten: dict, kern: dict,
     for i, b in enumerate(schoon):
         if b["soort"] == "bijschrift" and i and schoon[i - 1]["soort"] == "beeld":
             schoon[i - 1]["bijschrift"] = b["tekst"]
+            # De runs gaan mee en niet alleen de platte tekst. Zonder dit
+            # verdwijnt alles wat in het bijschrift cursief staat — een
+            # boektitel, een vreemd woord — en, erger, een
+            # voetnootverwijzing. Gemeten op het proefrapport: noot 2
+            # stond in een bijschrift en kwam nergens in het rapport
+            # terecht; `tekstcheck.py` meldde hem als verdwenen.
+            schoon[i - 1]["bijschrift_runs"] = b["runs"]
             schoon[i - 1]["bijschrift_id"] = b["id"]
             b["hoort_bij"] = schoon[i - 1]["id"]
 
@@ -769,6 +855,7 @@ def bouw_document(blokken: list, noten: dict, kern: dict,
         "blokken": schoon,
         "voetnoten": noten,
         "beelden": beelden,
+        "apparaat": apparaat(schoon, noten),
         "telling": {
             "blokken": len(schoon),
             "koppen": sum(1 for b in schoon if b["soort"] == "kop"),
@@ -844,10 +931,22 @@ def main() -> int:
     (a.uit / "signalen.json").write_text(
         json.dumps(sig, ensure_ascii=False, indent=1), encoding="utf-8")
 
+    ap = doc["apparaat"]
     print(json.dumps({
         "werkmap": str(a.uit),
         "titel": doc["titel"],
         **doc["telling"],
+        "apparaat": {
+            "voetnoten": ap["voetnoten"],
+            "eindnoten": ap["eindnoten"],
+            "bronnenlijst": (f'{ap["bronnenlijst"]["aantal"]} regels onder '
+                             f'"{ap["bronnenlijst"]["kop"]}"')
+                            if ap.get("bronnenlijst") else "geen gevonden",
+            "bijlagen": (f'{len(ap["bijlagen"]["koppen"])} koppen, vanaf '
+                         f'{ap["bijlagen"]["vanaf"]}')
+                        if ap.get("bijlagen") else "geen gevonden",
+            "citaten in de tekst": ap["citaten"],
+        },
         "signalen": len(sig),
         "signaalsoorten": sorted({s["soort"] for s in sig}),
     }, ensure_ascii=False, indent=2))

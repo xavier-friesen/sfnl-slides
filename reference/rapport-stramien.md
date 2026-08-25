@@ -120,6 +120,37 @@ uitvullen ook in `dubbel`.
 
 ---
 
+## 3a. De dichtheid
+
+Op `data-dichtheid` van de `.pagina`. Drie standen, en geen drempel.
+
+| stand | regels per pagina | lucht tussen blokken | gemeten woorden per tekstpagina |
+|---|---|---|---|
+| `ruim` | basis − 3 | 3 regels | **284** (79–419) |
+| `gemiddeld` — default | basis | 2 regels | **295** (56–502) |
+| `dicht` | basis + 3 | 1,5 regel | **318** (46–547) |
+
+De meting komt van hetzelfde proefrapport in het kantlijnmodel; de
+spreiding is groot omdat een pagina met een figuur nu eenmaal minder
+woorden draagt dan een pagina zonder.
+
+**Wat de knop níét verschuift is de afstand tussen alinea's.** Die blijft
+precies één regel. Zou hij meebewegen, dan staat de tekst niet meer op
+het regelraster en eindigen twee pagina's naast elkaar niet meer op
+dezelfde hoogte — en dat is het enige wat de hele hoogteberekening van
+§1 bij elkaar houdt. Wat wél meebeweegt is de sprong boven een sectiekop
+en om een exhibit, een paneel en een citaat.
+
+**Er is geen bovengrens en geen ondergrens**, en dat is een besluit.
+Hoeveel er op een pagina mág staan hangt af van wat er staat: een
+hoofdstuk met drie figuren is ruim bij dezelfde instelling waarbij een
+hoofdstuk met alleen proza dicht is. Een drempel zou dat verschil
+wegdrukken. In plaats daarvan meet `qa_rapport.py` achteraf hoeveel
+woorden er werkelijk per tekstpagina staan, met de laagste en de hoogste
+erbij, en rapporteert dat zonder oordeel.
+
+---
+
 ## 4. De maatladder
 
 Zeven maten, en zes ervan staan al in `stijl.css`. Wie een achtste nodig
@@ -285,6 +316,126 @@ en daar staat de titel in het midden in plaats van onderaan.
 
 ---
 
+## 7a. Het verwijzingsapparaat
+
+Twee onafhankelijke besluiten, en dat onderscheid is de kern.
+
+**Waar de noten staan** — `noten` in `ontwerp.json`:
+
+| stand | wat er gebeurt |
+|---|---|
+| `geen` | er wordt geen notenapparaat gezet. Alleen als de bron geen noten heeft; anders verdwijnt die tekst en blokkeert `tekstcheck.py` |
+| `voetnoot` — default | aan de voet van de pagina waar de verwijzing staat. In het kantlijnmodel: in de kantlijn, naast de regel |
+| `eindnoot-hoofdstuk` | als `.eindnoten`-blok vóór de opener van het volgende hoofdstuk |
+| `eindnoot-rapport` | als één `.eindnoten`-blok aan het eind |
+
+**Of er een bronnenlijst is** — `bronnenlijst`:
+
+| stand | wat er gebeurt |
+|---|---|
+| `geen` — default | de regels onder de bronnenkop worden gewone alinea's |
+| `apa` | `.bronnenlijst` met hangende inspringing van 1,7 em |
+| `genummerd` | idem, op citatievolgorde, met `[n]` ervoor als `data-toevoeging="bronnummer"` |
+
+**Ze gaan samen.** Voetnoten mét een volledige bronnenlijst achterin is
+niet de uitzondering maar het gewone geval in een Nederlands
+beleidsrapport, en het is wat Chicago notes-bibliography doet. Vandaar
+twee besluiten en niet één lijst.
+
+`lees_docx.py` schrijft in `document.json` een `apparaat`-blok met wat er
+werkelijk in de bron zit: het aantal voet- en eindnoten, de gevonden
+bronnenlijst met zijn kop en bereik, de bijlagekoppen, en hoeveel
+auteur-jaar- en genummerde verwijzingen er in de lopende tekst staan. De
+skill biedt alleen aan wat daar in staat.
+
+### De citatiestijl
+
+`citaatstijl` raakt als enige besluit de tékst, en dat is een
+vaststelling van de opdrachtgever: een verwijzing gelijktrekken of
+hernummeren is opmaak en geen herschrijving. Het gaat dus niet per geval
+langs de gebruiker. Wat er tegenover staat is dat alles wordt vastgelegd.
+
+| stand | wat er gebeurt |
+|---|---|
+| `zoals-aangeleverd` — default | niets |
+| `uniform` | `e.a.` en `et. al.` worden `et al.`, en er komt een komma voor het jaartal |
+| `genummerd` | `(Boogers et al., 2016)` wordt `[3]`, en de bronnenlijst gaat op citatievolgorde |
+
+`citaten.py` rekent de omzetting uit en schrijft `citaten.json` met elke
+vervanging: welk blok, wat er stond, wat er komt te staan, en naar welke
+bronregel hij wijst. `bouw.py` voert ze uit met behoud van de inline
+opmaak — de vervanging wordt op de samengevoegde tekst gezocht en
+teruggerekend naar de runs, want een verwijzing van twintig tekens kan
+over drie runs verdeeld staan. `tekstcheck.py` controleert daarna dat er
+**precies** dát is veranderd: de brontekst mét de vervangingen uit het
+plan moet karakter voor karakter gelijk zijn aan wat er staat. Zo kan
+een omzetting geen dekmantel zijn voor een andere verandering in
+dezelfde alinea.
+
+**Wat niet meedoet:** `en` vervangen door `&`. In "Ministerie van Sociale
+Zaken en Werkgelegenheid" hoort dat `en` bij de naam, en er is aan de
+tekst niet te zien of een `en` twee auteurs scheidt of in een naam
+staat. Op de eerste proef maakte die regel er "Sociale Zaken &
+Werkgelegenheid" van.
+
+**En wat er ook niet in zit:** omzetten naar voetnootverwijzingen. Dat
+vraagt een noottekst per verwijzing, gemaakt uit de bronregel, en dan
+staat dezelfde regel twee keer in het rapport. Dat is een besluit over
+hoe het rapport zijn bronnen presenteert en niet langer een kwestie van
+vorm. Wie dat wil, kiest `noten: voetnoot` met een bronnenlijst erbij.
+
+**Een verwijzing die niet aan een bronregel te koppelen is, blijft staan
+zoals hij stond**, en `citaten.py` meldt hem. Liever één verwijzing die
+uit de toon valt dan een nummer dat nergens naar wijst.
+
+---
+
+## 7b. De bijlagen
+
+`bijlagen` in `ontwerp.json` is `null` of `{"vanaf": "b0197"}`. Vanaf dat
+blok verandert er vier dingen:
+
+1. Er komt een **scheidingsblad** voor: een heel blad met een streep van
+   vier rasterkolommen en één woord op displaymaat. Is het blok zelf een
+   kop die alleen "Bijlagen" of "Appendix" zegt, dan ís dat de tekst van
+   het blad en is er niets toegevoegd. Staat er meer — "Bijlage A:
+   methodeverantwoording" — dan draagt het blad het woord uit
+   `bijlagen.titel` als `data-toevoeging="scheiding"`.
+2. De openers **tellen in letters**: de kicker zegt "Bijlage A" in plaats
+   van "Hoofdstuk 6".
+3. Elke pagina daarna draagt `data-deel="bijlagen"`.
+4. De inhoudsopgave krijgt er een **tussenkop** boven, als
+   `.inhoud__groep`. Zonder die kop staat bijlage A tussen hoofdstuk 5 en
+   6 en leest de opgave als een fout in de nummering.
+
+Wat er níét verandert: het register, het model en het raster. Een bijlage
+is een ander soort inhoud en geen ander rapport.
+
+---
+
+## 7c. Beeld
+
+`beeld` in `ontwerp.json`: `geen`, `uit-bron` (default) of `aangeleverd`.
+De skill vraagt dit expliciet, want stilzwijgend aannemen dat er geen
+beeld is, is de reden dat een rapport kaal uitkomt terwijl de figuren in
+een aparte map stonden.
+
+Bij `aangeleverd` leest `bouw.py` een `beeld.json` uit de werkmap:
+
+```json
+[
+  {"bestand": "beeld/extra/geldstroom.png", "na": "b0042",
+   "bijschrift": "Verdeling van de vijftien bonds naar opdrachtgever."}
+]
+```
+
+Elk beeld komt ná het genoemde blok. Het bijschrift komt van de gebruiker
+en niet uit het rapport, dus het draagt `data-toevoeging="beeldbijschrift"`
+— net als de regels op de omslag. Zonder bijschrift staat het beeld er
+zonder, en dat is beter dan er een verzinnen.
+
+---
+
 ## 8. Wat de zetmotor toevoegt aan de markup
 
 Elk element dat brontekst draagt heeft `data-bron` met het blok-id uit
@@ -320,8 +471,11 @@ Eén map per rapport. Wat er in staat en wie het schrijft:
 | `bron-tekst.txt` | `lees_docx.py` | de vingerafdruk: één genormaliseerde regel per blok |
 | `signalen.json` | `lees_docx.py` | wat er aan de brontekst opvalt; grondstof voor wijzigingsvoorstellen |
 | `beeld/` | `lees_docx.py` | de uitgepakte beelden |
-| `ontwerp.json` | jij, na het vragenvuur | de vormbesluiten |
+| `ontwerpwidget.html` | `widget.py` | de intakepagina. Gaat naar de gebruiker en komt als `ontwerp.json` terug |
+| `ontwerp.json` | jij, na de vormbesluiten | de vijftien vormbesluiten |
 | `wijzigingen.json` | jij, ná toestemming | de goedgekeurde inhoudelijke wijzigingen |
+| `citaten.json` | `citaten.py` | het omzettingsplan voor de verwijzingen, per blok |
+| `beeld.json` | jij, bij `beeld: aangeleverd` | welk bestand achter welk blok komt |
 | `_zetten.html` | `bouw.py` | de werkpagina met de stroom en de zetmotor. Weggooibaar |
 | `<naam>.html` | `bouw.py` | het rapport. Dít is de oplevering |
 | `zetverslag.json` | `bouw.py` | wat de zetting deed, per ronde |
@@ -335,15 +489,25 @@ Eén map per rapport. Wat er in staat en wie het schrijft:
 {
   "model": "breed",            "register": "helder",
   "formaat": "sfnl",           "opener": "nummer",
-  "bandhoogte": 232,           "dubbelzijdig": true,
-  "omslag": true,              "inhoudsopgave": true,
-  "inhoudDiepte": 2,           "hoofdstuknummers": true,
-  "exhibitnummers": true,      "eersteFolio": 1,
+  "dichtheid": "gemiddeld",    "bandhoogte": 232,
+  "dubbelzijdig": true,        "omslag": true,
+  "inhoudsopgave": true,       "inhoudDiepte": 2,
+  "hoofdstuknummers": true,    "exhibitnummers": true,
+  "noten": "voetnoot",         "bronnenlijst": "geen",
+  "citaatstijl": "zoals-aangeleverd",
+  "beeld": "uit-bron",         "beeldmap": null,
+  "bijlagen": null,            "eersteFolio": 1,
   "folioVanaf": 2,             "rapporttitel": null,
   "ondertitel": null,          "opdrachtgever": null,
   "datum": null,               "colofon": null
 }
 ```
+
+`bijlagen` is `null` of `{"vanaf": "b0180", "titel": "Bijlagen"}`;
+`beeld.json` is een lijst van
+`{"bestand": "figuur-3.png", "na": "b0042", "bijschrift": "…"}`, waarin
+`na` het blok-id is waarachter het beeld komt en `bijschrift` mag
+ontbreken.
 
 `wijzigingen.json` — een lijst besluiten. Zonder `"akkoord": true`
 gebeurt er niets. Zes soorten en meer bestaan er niet:
@@ -372,10 +536,17 @@ gebeurt er niets. Zes soorten en meer bestaan er niet:
 | `lees_docx.py <bron> --uit <werkmap>` | `.docx`, `.md` of `.txt` uitlezen naar `document.json`, `bron-tekst.txt`, `signalen.json` en `beeld/` | |
 | `bouw.py <werkmap>` | de stroom schrijven, in de browser zetten, de inhoudsopgave in meerdere rondes vullen, en het losse HTML-bestand schrijven | |
 | `bouw.py <werkmap> --nieuw-ontwerp` | `ontwerp.json` met de defaults | |
+| `widget.py <werkmap>` | de ontwerpwidget voor dít rapport: vijftien besluiten op één pagina, en alleen wat de bron werkelijk heeft | |
+| `citaten.py <werkmap> --naar <stijl>` | het omzettingsplan voor de verwijzingen in `citaten.json`. Draait vóór `bouw.py` | |
 | `tekstcheck.py <html>` | staat er nog precies wat er stond | **ja** |
 | `qa_rapport.py <html>` | dertien metingen; vier ervan blokkeren | **ja** |
 | `render.py <html>` | contactbladen per twaalf spreads, of één spread, of één pagina | |
 | `keuzekaart.py` | de drie keuzekaarten opnieuw bouwen. Onderhoud | |
+
+De volgorde is `preflight` → `lees_docx` → `widget` → (`citaten`) →
+`bouw` → `tekstcheck` → `render` en `qa_rapport`. `citaten.py` staat
+tussen haakjes omdat hij alleen draait wanneer `citaatstijl` iets anders
+is dan `zoals-aangeleverd`; `bouw.py` leest het plan dat hij achterlaat.
 
 `bouw.py` heeft geen renderloze route. Het splitsen van een alinea op een
 regelgrens kan alleen een engine die weet hoe breed een woord is.
