@@ -716,15 +716,24 @@ beter. Bouw het niet stilletjes om — leg het voor, met beide contactbladen erb
 
 ## Stap 7 — Opleveren
 
-Drie dingen gaan mee, en de eerste is de belangrijkste:
+**Vier dingen gaan altijd mee.** Niet drie, niet op verzoek, en er is geen stand waarin je er
+één weglaat. `bouw.py` maakt de eerste drie in één keer; het contactblad komt uit `render.py`.
 
 1. **Het losse HTML-bestand.** Eén bestand, met de letters ingesloten en het beeld als data-URI.
    Het opent in elke browser, het werkt zonder internet, en de gebruiker kan het met een
    teksteditor aanpassen. Dit is wat er over is als alles wegvalt.
-2. **De PDF.** Roep `sfnl-html-to-pdf` aan op datzelfde bestand. Zet de marges op nul — de pagina
-   draagt zijn eigen marge — en gebruik `prefer_css_page_size`, anders drukt Chromium alles op A4
-   en snijdt hij het SFNL-formaat af.
-3. **Het contactblad**, zodat de gebruiker het geheel in één beeld ziet.
+2. **De PDF.** Automatisch, naast het HTML-bestand. `scripts/gedeeld/naar_pdf.py` drukt hem met de
+   marges op nul — de pagina draagt zijn eigen marge — en met `prefer_css_page_size`, anders drukt
+   Chromium alles op A4 en snijdt hij het SFNL-formaat af. Dat stond hier vroeger als proza, met
+   een verwijzing naar `sfnl-html-to-pdf`, en proza wordt overgeslagen; nu is het een stap in de
+   bouw. Nagemeten op de proef: 52 pagina's op 210 × 275 mm.
+3. **De artboards**, in `werkmap/canvas/`: één `.dc.html` per pagina plus een `canvas.json`, in
+   precies de vorm die `sfnl-design-documents` gebruikt. Dit is het enige van de vier waarin
+   iemand nog iets kan verschuiven zonder de zetmotor te openen — een figuur een kolom
+   opschuiven, een kop anders zetten. **Zeg er wel bij dat ze afgeleid zijn**: bouw je daarna
+   opnieuw uit `document.json`, dan is die wijziging weg. Wie in het canvas verder werkt, werkt
+   dáár verder.
+4. **Het contactblad** uit `render.py`, zodat de gebruiker het geheel in één beeld ziet.
 
 **En zeg deze zeven dingen erbij**, in deze volgorde:
 

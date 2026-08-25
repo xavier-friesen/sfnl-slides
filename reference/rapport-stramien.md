@@ -664,7 +664,9 @@ Eén map per rapport. Wat er in staat en wie het schrijft:
 | `citaten.json` | `citaten.py` | het omzettingsplan voor de verwijzingen, per blok |
 | `beeld.json` | jij, bij `beeld: aangeleverd` | welk bestand achter welk blok komt |
 | `_zetten.html` | `bouw.py` | de werkpagina met de stroom en de zetmotor. Weggooibaar |
-| `<naam>.html` | `bouw.py` | het rapport. Dít is de oplevering |
+| `<naam>.html` | `bouw.py` | het rapport, in één bestand met de letters ingesloten |
+| `<naam>.pdf` | `bouw.py` | dezelfde pagina's op de bladmaat die het document zelf zegt |
+| `canvas/` | `bouw.py` | één `.dc.html` per pagina plus `canvas.json` en `fonts.css`: het rapport als artboards |
 | `zetverslag.json` | `bouw.py` | wat de zetting deed, per ronde |
 | `tekstcheck.json` | `tekstcheck.py` | het volledige tekstverslag |
 | `qa_rapport.json` | `qa_rapport.py` | de metingen |
@@ -762,6 +764,7 @@ gebeurt er niets. Zes soorten en meer bestaan er niet:
 | `qa_rapport.py <html>` | dertien metingen; vier ervan blokkeren | **ja** |
 | `render.py <html>` | contactbladen per twaalf spreads, of één spread, of één pagina | |
 | `keuzekaart.py` | de drie keuzekaarten opnieuw bouwen. Onderhoud | |
+| `artboards.py <html>` | het gezette rapport uit elkaar halen tot `.dc.html`-artboards plus `canvas.json`. `bouw.py` draait hem zelf | |
 
 En één script dat hier niet staat maar wel meedoet:
 
@@ -783,3 +786,21 @@ die draait alleen wanneer `citaatstijl` iets anders is dan
 
 `bouw.py` heeft geen renderloze route. Het splitsen van een alinea op een
 regelgrens kan alleen een engine die weet hoe breed een woord is.
+
+**En hij levert altijd drie dingen tegelijk**: het HTML-bestand, de PDF
+en de artboards. Dat is geen vlag en er is geen stand waarin er één
+wegvalt. De reden dat het in het bouwscript zit en niet in de skill: het
+stond in de skill, als proza met een verwijzing naar een andere skill
+erbij, en proza wordt overgeslagen. Wie een rapport oplevert zonder PDF,
+levert iets op wat de opdrachtgever niet kan openen op de manier waarop
+hij het gaat lezen; wie het oplevert zonder artboards, levert iets op
+waar niemand meer iets aan kan verschuiven.
+
+Twee van de drie modules staan in `scripts/gedeeld` omdat de
+documentenroute ze net zo hard nodig heeft:
+
+| module | wat | van wie |
+|---|---|---|
+| `gedeeld/drukwerk.py` | de katernsom: komt dit aantal pagina's uit op de pers | beide drukroutes |
+| `gedeeld/naar_pdf.py` | het document printen op de bladmaat die het zelf zegt | beide drukroutes |
+| `gedeeld/canvas.py` | de artboards in spreads neerleggen: 1 alleen, dan 2-3, 4-5 | beide drukroutes |

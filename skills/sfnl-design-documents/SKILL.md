@@ -554,15 +554,20 @@ je liep.
 
 ## Stap 6 — Opleveren
 
-Drie dingen gaan mee, en de eerste is de belangrijkste:
+**Vier dingen gaan altijd mee.** Niet drie, niet op verzoek, en er is geen stand waarin je er
+één weglaat. `bouw.py` maakt de eerste drie in één keer.
 
 1. **Het losse HTML-bestand.** Eén bestand, met de letters ingesloten en `@page` erin. Het opent
    in elke browser, het werkt zonder internet, en de gebruiker kan het met een teksteditor
    aanpassen. Dit is wat er over is als alles wegvalt.
-2. **De PDF.** Roep `sfnl-html-to-pdf` aan op datzelfde bestand. Zet de marges op nul — de
-   pagina draagt zijn eigen marge — en gebruik `prefer_css_page_size`, anders drukt Chromium
-   alles op A4 en snijdt hij het SFNL-formaat af.
-3. **Het canvas**, als het er is, met de link.
+2. **De PDF.** Automatisch, naast het HTML-bestand. `scripts/gedeeld/naar_pdf.py` drukt hem met de
+   marges op nul — de pagina draagt zijn eigen marge — en met `prefer_css_page_size`, anders drukt
+   Chromium alles op A4 en snijdt hij het SFNL-formaat af. Dat stond hier vroeger als proza, met
+   een verwijzing naar `sfnl-html-to-pdf`, en proza wordt overgeslagen; nu is het een stap in de
+   bouw.
+3. **De artboards**, die je toch al hebt: hier zijn ze de bron en niet het afgeleide. Lever ze mee
+   met `canvas.json`, want daarin zit het enige waarmee iemand nog iets kan verschuiven.
+4. **Het canvas**, als het er is, met de link.
 
 Zeg erbij welke pagina's je in de loop hebt aangepast en wat er open staat. Een cijfer dat je niet
 hebt kunnen verifiëren noem je expliciet.

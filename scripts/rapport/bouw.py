@@ -1454,15 +1454,30 @@ def main() -> int:
         breedte=_mm(breedte), hoogte=_mm(hoogte), paginas=markup,
     ), encoding="utf-8")
 
+    # De oplevering is er altijd drie: het losse HTML-bestand, de
+    # artboards voor het designcanvas, en de PDF. Dat is geen keuze en
+    # geen vlag. Het HTML-bestand is wat er overblijft als alles wegvalt,
+    # de PDF is wat er naar de opdrachtgever gaat, en de artboards zijn
+    # het enige waarin iemand nog iets kan verschuiven zonder de zetmotor
+    # te openen. Wie er één van weglaat, levert half.
+    from artboards import bouw as bouw_artboards
+    from naar_pdf import naar_pdf
+    canvas = bouw_artboards(uit)
+    pdf = naar_pdf(uit)
+
     (werkmap / "zetverslag.json").write_text(
         json.dumps({"ontwerp": ontwerp, "verslag": verslag,
                     "wijzigingen": gedaan, "citaten": citaatplan,
                     "katern": katernsom,
+                    "canvas": canvas, "pdf": str(pdf),
                     "beeld_ingesloten": ingesloten},
                    ensure_ascii=False, indent=1), encoding="utf-8")
 
     print(json.dumps({
         "bestand": str(uit),
+        "pdf": str(pdf),
+        "artboards": canvas["canvas"],
+        "aantal_artboards": canvas["artboards"],
         "paginas": verslag["paginas"] + katernsom["blanco_toegevoegd"],
         "rondes": verslag["rondes"],
         "klachten": verslag["klachten"][:12],

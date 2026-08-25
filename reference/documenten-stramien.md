@@ -352,11 +352,25 @@ gebouwde omslag zonder dat de markup er verkeerd uitzag.
 | script | wat |
 |---|---|
 | `preflight.py` | is er een browser, node, de design-helper en `stijl.css` |
-| `bouw.py <werkmap>` | stempelt de stijl in elk artboard, schrijft `canvas.json` als spreads en het losse HTML-bestand |
+| `bouw.py <werkmap>` | stempelt de stijl in elk artboard, schrijft `canvas.json` als spreads, het losse HTML-bestand **en de PDF** |
 | `bouw.py <werkmap> --gedrukt` | hetzelfde, plus de katernsom uit `scripts/gedeeld/drukwerk.py` onder `katern` in het verslag. Zie §1 |
 | `bouw.py <werkmap> --nieuw Naam` | een leeg artboard met het skelet erin |
 | `render.py <html>` | losse pagina's plus het contactblad met de spreads |
 | `qa_document.py <html>` | de negen metingen |
+
+Drie modules staan in `scripts/gedeeld`, want de rapportroute stelt op
+die punten dezelfde vraag en hoort hetzelfde antwoord te krijgen:
+
+| module | wat |
+|---|---|
+| `gedeeld/drukwerk.py` | de katernsom: komt dit aantal pagina's uit op de pers |
+| `gedeeld/naar_pdf.py` | het document printen op de bladmaat die het zelf zegt — marges op nul, `prefer_css_page_size`, achtergronden mee |
+| `gedeeld/canvas.py` | de artboards in spreads neerleggen: 1 alleen, dan 2-3, 4-5 |
+
+**De PDF is geen aparte stap meer.** Hij stond als proza in de skill, met
+een verwijzing naar `sfnl-html-to-pdf` erbij, en werd daarom niet altijd
+gemaakt. `bouw.py` drukt hem nu zelf, naast het HTML-bestand, en de
+oplevering is dus altijd allebei plus de artboards.
 | `haal_fonts.py` | de letters opnieuw insluiten. Onderhoud |
 | `keuzekaart.py` | de keuzekaart voor het vragenvuur opnieuw renderen. Onderhoud |
 

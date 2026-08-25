@@ -66,9 +66,11 @@ WORTEL = HIER.parent.parent
 STIJL_STANDAARD = WORTEL / "assets" / "documenten" / "stijl.css"
 FONTS_STANDAARD = WORTEL / "assets" / "documenten" / "fonts" / "fonts.css"
 
-# De katernsom is van twee routes tegelijk en staat daarom in `scripts/gedeeld`.
+# De katernsom en de PDF-stap zijn van twee routes tegelijk en staan
+# daarom in `scripts/gedeeld`.
 sys.path.insert(0, str(WORTEL / "scripts" / "gedeeld"))
 from drukwerk import katern  # noqa: E402
+from canvas import manifest as leg_neer  # noqa: E402
 
 #: De terugval als de ingesloten letters ontbreken. Hij werkt, maar hij werkt
 #: alleen mét internet, en de PNG- en PDF-export van het canvas neemt een
@@ -266,38 +268,16 @@ def canvas(paginas: list[Pagina]) -> dict:
     samen kloppen. Wie de pagina's in een rij van vier neerlegt, kan dat niet
     zien.
     """
-    artboards = []
-    y = 0
-    i = 0
-    rijhoogte = 0
-    # Een liggend of dubbelbreed formaat staat altijd alleen op zijn rij.
-    while i < len(paginas):
-        p = paginas[i]
-        alleen = (i == 0) or p.breedte > 1100
-        if alleen:
-            groep = [p]
-        else:
-            groep = [p]
-            if i + 1 < len(paginas) and paginas[i + 1].breedte == p.breedte \
-                    and paginas[i + 1].breedte <= 1100:
-                groep.append(paginas[i + 1])
-        # Pagina 1 hangt rechts, zoals een omslag op een rechterpagina ligt.
-        x = p.breedte + KIER_SPREAD if (i == 0 and len(paginas) > 1) else 0
-        for q in groep:
-            artboards.append({
-                "file": f"{q.naam}.dc.html",
-                "x": x, "y": y, "w": q.breedte, "h": q.hoogte,
-                "title": _titel_van(q),
-                "print": "fixed",
-            })
-            x += q.breedte + KIER_SPREAD
-        rijhoogte = max(q.hoogte for q in groep)
-        y += rijhoogte + KIER_RIJ
-        i += len(groep)
-
-    entry = next((a for a in artboards if a["file"] == "Main.dc.html"), None)
-    manifest = {"artboards": artboards, "launch": {"view": "canvas"}}
-    if entry is None:
+    # De spreadindeling zelf staat in `scripts/gedeeld/canvas.py`: de
+    # rapportroute legt zijn afgeleide artboards op precies dezelfde
+    # manier neer, en twee kopieën van deze rekensom gaan een keer
+    # uiteenlopen.
+    manifest = leg_neer([{"bestand": f"{p.naam}.dc.html",
+                          "breedte": p.breedte, "hoogte": p.hoogte,
+                          "titel": _titel_van(p)} for p in paginas],
+                        kier_spread=KIER_SPREAD, kier_rij=KIER_RIJ)
+    artboards = manifest["artboards"]
+    if next((a for a in artboards if a["file"] == "Main.dc.html"), None) is None:
         print("let op: geen Main.dc.html — het canvas kiest dan het eerste "
               "artboard op naam. Noem de eerste pagina Main.", file=sys.stderr)
     return manifest
@@ -431,6 +411,15 @@ def main() -> int:
     uit = a.werkmap / (a.uit or "document.html")
     uit.write_text(document(paginas, stijl_ruw, titel, link), encoding="utf-8")
 
+    # En de PDF, altijd. De artboards zijn hier de bron en die staan er dus
+    # al; wat er tot nu toe ontbrak was het bestand dat je aan een
+    # opdrachtgever geeft. Het recept stond als proza in de skill — marges
+    # op nul, `prefer_css_page_size` — en proza wordt overgeslagen. Nu is
+    # het een stap, en hij staat in `scripts/gedeeld` omdat de rapportroute
+    # hem net zo hard nodig heeft.
+    from naar_pdf import naar_pdf  # noqa: E402
+    pdf = naar_pdf(uit)
+
     som = katern(len(paginas), gedrukt=a.gedrukt)
     if not som["klopt"]:
         # Melden, niet repareren. Wie hier pagina's zou bijmaken, zou een pagina
@@ -443,6 +432,7 @@ def main() -> int:
                      "formaat": p.formaat, "maat": [p.breedte, p.hoogte]}
                     for p in paginas],
         "katern": som,
+        "pdf": str(pdf),
         "gestempeld": n,
         "canvas": str(a.werkmap / "canvas.json"),
         "document": str(uit),
