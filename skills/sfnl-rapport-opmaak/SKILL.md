@@ -38,11 +38,12 @@ dit bestand staat en niet vanaf het project.
 
 1. `reference/rapport-vormentaal.md` — de maatstaf. Wat er nagemeten is aan de rapporten van
    Bain, BMC en het McKinsey Global Institute en wat daaruit volgt, de weigerlijst van
-   zeventien, waarom oranje hier een merkteken is en geen inkt, hoe je het model en het register
-   kiest, en hoe het verwijzingsapparaat wordt opgemaakt.
+   negentien, waarom oranje hier een merkteken is en geen inkt, hoe je het model en het register
+   kiest, en hoe het verwijzingsapparaat wordt opgemaakt. §13 zegt wat er op één echt rapport is
+   misgegaan en §14 waarom een meting die twee keer iets anders zegt geen meting is.
 2. `reference/rapport-stramien.md` — de feiten. Het raster, de vier modellen met hun gemeten
    maten, de vier registers, de klassenlijst, het achterwerk, de katernsom, de werkmap en de
-   scripts.
+   scripts. §9a heeft de documentsignalen, §9b de taal en `extra.css`, §9c de nootnummering.
 
 **Kijk naar `assets/rapport/maatstaf/00-contactblad.png`.** Vier gezette pagina's als contactblad.
 Niet om na te tekenen maar om te weten waar de lat ligt. Er staan drie losse pagina's naast:
@@ -154,10 +155,50 @@ wat de gebruiker wil weten en het is meteen de controle of er niets is weggevall
 nul lijstregels in een document dat vol opsommingen staat, dan zijn ze niet als lijst opgemaakt
 en is dat een signaal en geen leesfout.
 
-**Lees `signalen.json` en houd het vast.** Nog niet voorleggen — dat is stap 3, en dat komt ná
-de vormbesluiten, want welke signalen ertoe doen hangt af van het model. Een kop van 74 tekens
-is een probleem in `dubbel` en niet in `breed`. En of ze überhaupt worden voorgelegd hangt aan
-`herindelen`, dat in stap 2 wordt besloten en standaard op nee staat.
+**Lees `signalen.json`, en let op de `groep`.** Er staan twee soorten waarneming in en ze zijn
+op een ander moment aan de beurt.
+
+De signalen met `groep: "voorstel"` gaan over één blok — een kop van 74 tekens, vier handgetypte
+streepjes, een alinea van 280 woorden. **Die houd je vast en leg je nog niet voor**: dat is stap
+3, en die komt ná de vormbesluiten, want welke ervan ertoe doen hangt af van het model. Een kop
+van 74 tekens is een probleem in `dubbel` en niet in `breed`. En of ze überhaupt worden
+voorgelegd hangt aan `herindelen`, dat in stap 2 wordt besloten en standaard op nee staat.
+
+### De zes documentsignalen, en die zijn nú aan de beurt
+
+De signalen met `groep: "vormbesluit"` staan apart in de uitvoer onder `vormbesluiten`, en ze
+zijn van een andere orde. Ze gaan niet over één blok maar over het document als geheel, ze
+vragen geen wijziging aan de tekst, en er valt niets aan uit te stellen: **het zijn besluiten
+die vaststaan vóórdat er gezet wordt.** Ze komen alle zes uit één rapport — Engels, 18.043
+woorden, 522 blokken, 72 eindnoten, vijf bijlagen, zes figuren waarvan vier EMF. Ze waren daar
+alle zes bij het inlezen te zien, en ze kostten pas tijd toen ze tachtig gezette pagina's later
+in de visuele loop bovenkwamen.
+
+| soort | wat er gezien is | wat je ermee doet |
+|---|---|---|
+| `bron-niet-nederlands` | de lopende tekst is niet Nederlands, met de telling per taal erbij | zet `taal` in stap 2 op die taal. Het is besluit 1 en het staat niet voor niets vooraan |
+| `koppen-een-niveau-te-diep` | de hoogste kop staat op niveau 2 of dieper; niveau 1 komt niet voor | vraag of alle koppen een niveau omhoog gaan. Doe je dat niet, dan wordt elk hoofdstuk een sectie: geen regel op het bovenste niveau in de inhoudsopgave en geen hoofdstukopener op de pagina |
+| `kop-nummert-zichzelf` | een heel kopniveau draagt zijn eigen nummer | zet `hoofdstuknummers` op `"uit-bron"`. Anders staat er "3  3.2 Werkwijze" op de pagina en in de inhoudsopgave |
+| `beeld-niet-renderbaar` | een beeldformaat dat een browser niet toont — EMF, WMF, TIFF, EPS | vraag om png of svg, en zeg in welke maat. Zo'n figuur komt niet als foutmelding op de pagina maar als een leeg vlak, en dat valt op als de drukker belt. Omzetten gebeurt vóór het bouwen |
+| `beeld-buiten-de-stroom` | media in het `.docx` die door geen enkel blok wordt genoemd: een tekstvak, SmartArt, een figuur in de koptekst | vraag of ze meemoeten en achter welk blok. Waar ze horen staat nergens in het bestand, dus raden is hier hetzelfde als verzinnen |
+| `kop-zonder-inhoud` | een kop met niets eronder | vraag of hij blijft staan of samengaat met de volgende. Hem weghalen is een tekstwijziging en gaat langs stap 3 |
+
+**De widget legt ze voor, en jij noemt ze in stap 1 ook.** `widget.py` zet ze bovenaan onder
+"Dit moet je eerst beslissen", elk met wat er gezien is en één of twee voorbeelden uit het
+document; dat is de plek waar ze beslist worden. Noem ze in dezelfde adem als de telling, want
+twee van de zes — de taal en `hoofdstuknummers` — sturen een besluit dat eronder in de widget
+staat, en de vier andere vragen iets wat geen enkel formulier kan vragen.
+
+**Staat er niets in `vormbesluiten`, dan zeg je daar niets over.** Een lijst met "geen
+bevindingen" erboven kost aandacht en geeft er niets voor terug. Op het Nederlandse proefdocument
+staat er nul.
+
+De detectie is zo afgesteld dat er geen valse bij zitten, want een signaallijst die één keer
+onzin zegt wordt daarna niet meer gelezen. Twee grenzen zijn het waard om te kennen: de taal
+telt alleen woorden die in **precies één** taallijst staan, dus een Nederlands rapport met een
+Engels citaat per hoofdstuk meldt niets; en `kop-zonder-inhoud` meldt niet als er een diepere kop
+volgt, want dat is de gewone hoofdstukkop met zijn eerste sectiekop eronder. De rest staat in
+`rapport-stramien.md` §9a.
 
 **Kijk ook naar `apparaat` in `document.json`.** Daar staat wat het rapport aan verwijzingen
 heeft: hoeveel voet- en eindnoten, of er een kop is die een bronnenlijst aankondigt en welke
@@ -185,11 +226,17 @@ valt: zonder `ontwerp.json` is elk gebouwd rapport een gok met tachtig pagina's 
 
 ## Stap 2 — De widget, en dit is de eerste poort
 
-**Tweeëntwintig besluiten**, en er wordt niets gebouwd voordat ze er zijn. Wie eerst bouwt en dan
-vraagt, moet zestig pagina's opnieuw zetten. Het exacte aantal staat in wat `widget.py` teruggeeft
-onder `besluiten`; wat de bron niet heeft, valt eruit.
+**Drieëntwintig besluiten**, en er wordt niets gebouwd voordat ze er zijn. Wie eerst bouwt en dan
+vraagt, moet zestig pagina's opnieuw zetten.
 
-Tweeëntwintig is te veel voor een gesprek. `AskUserQuestion` neemt er vier per keer, dus dat
+`widget.py` geeft onder `besluiten` terug wat hij werkelijk heeft gevraagd, en daar staat een
+hoger getal: 28 op een schoon document, 24 op een document zonder noten of bronnenlijst. Dat is
+geen tegenspraak maar een andere telling — hij telt de sleutels die in `ontwerp.json` komen te
+staan, en de lijst hieronder telt de vragen. De vier omslagregels zijn hier één vraag, de diepte
+hoort bij de inhoudsopgave, en het katern bij `drukklaar`. Wat de bron niet heeft valt in beide
+tellingen weg en staat in `weggelaten`.
+
+Drieëntwintig is te veel voor een gesprek. `AskUserQuestion` neemt er vier per keer, dus dat
 worden zes rondes, en na de tweede weet niemand meer wat er in de eerste is gekozen. Daarom is de widget hier
 geen hulpmiddel maar **het beginpunt**: na het inlezen draai je hem, altijd, en er gebeurt daarna
 niets tot de ingevulde `ontwerp.json` terug is.
@@ -242,11 +289,12 @@ tegenspreken, en zeg dan wat je ziet.
 
 **De terugvalroute blijft bestaan, maar hij is de uitzondering en niet de tweede optie.** Draait
 `widget.py` niet, dan stel je dezelfde besluiten met `AskUserQuestion`, vier per ronde, in deze
-volgorde: het rapport (model, register, formaat, dichtheid), de pagina (opener, omslag,
-inhoudsopgave, dubbelzijdig), de omslag (omslagveld) met de omslagtekst erbij in proza, het
-apparaat (noten, bronnenlijst, citaatstijl, bijlagen), het beeld en het achterwerk (beeld,
-elementen), en de drukker met de twee toestemmingen (drukklaar, katern, herindelen, beeldtekst).
-De poort blijft één poort: er wordt niets gebouwd voordat alle zes rondes binnen zijn.
+volgorde: het rapport (taal, model, register, formaat), de pagina (dichtheid, opener, omslag,
+inhoudsopgave), de nummering en de omslag (dubbelzijdig, hoofdstuknummers, omslagveld) met de
+omslagtekst erbij in proza, het apparaat (noten, bronnenlijst, citaatstijl, bijlagen), het beeld
+en het achterwerk (beeld, elementen), en de drukker met de twee toestemmingen (drukklaar,
+katern, herindelen, beeldtekst). De poort blijft één poort: er wordt niets gebouwd voordat alle
+zes rondes binnen zijn.
 
 Verandert er een optie in de skill, dan bouw je de kaarten opnieuw met
 `python "${CLAUDE_PLUGIN_ROOT}/scripts/rapport/keuzekaart.py"` — onderhoud, geen bouwstap.
@@ -263,7 +311,7 @@ niet gebeurt is het besluit per hoofdstuk opnieuw nemen.
   register.
 - **Wordt dit gedrukt, of blijft het een PDF?** Gedrukt betekent dat de binnenmarge en het
   spiegelen ertoe doen, en dat het aantal pagina's uit moet komen op een katern. Dit is geen
-  sfeervraag maar besluit 18: het komt als `drukklaar` in `ontwerp.json` te staan, en dan vult
+  sfeervraag maar besluit 20: het komt als `drukklaar` in `ontwerp.json` te staan, en dan vult
   `bouw.py` het rapport aan tot het aantal op de pers bestaat. Op een scherm is `dubbelzijdig`
   een keuze in plaats van een gegeven en is het aantal pagina's vrij. Wat er ook dan niet in zit
   is de afloop; die stap doet deze skill niet.
@@ -275,9 +323,36 @@ niet gebeurt is het besluit per hoofdstuk opnieuw nemen.
   is dát de maatstaf: bekijk het, en volg de vormentaal ervan in plaats van
   `assets/rapport/maatstaf/`.
 
+### De taal — het besluit dat als eerste vaststaat
+
+1. **De taal** (`taal`). Default is **`nl`**. Elke ISO-code mag — `en`, `de`, `en-GB` — en er is
+   geen lijst om tegen te toetsen, want die zou alleen maar te kort zijn.
+
+   Hij doet twee dingen, en het eerste is het zwaarste: **`lang` bepaalt met welk woordenboek
+   Chromium afbreekt, en dus waar elke regel breekt en waar een pagina vol is.** Daarom staat dit
+   besluit vooraan en daarom kan het achteraf niet meer om. Gemeten op een Engels rapport van
+   18.043 woorden: één omzetting van `nl` naar `en` ná het zetten maakte drie alinea's een regel
+   langer, en die regels vielen weg onder de rand van hun kader — geen foutmelding, geen streep,
+   tekst weg. Dezelfde taal stuurt ook de afbreekproef, en die bepaalt of het hele rapport
+   uitgevuld of vlaggend wordt gezet.
+
+   Het tweede: hij bepaalt de taal van de woorden die deze skill zelf toevoegt. "Hoofdstuk 3"
+   wordt "Chapter 3", "Figuur 7" wordt "Figure 7", "Noten" wordt "Notes", en "Noot", "Bron" en
+   "(vervolg)" gaan als custom property naar de CSS. Alle andere tekst komt woordelijk uit het
+   Word-document en blijft staan zoals hij er staat.
+
+   `nl` en `en` staan in de labeltabel; `en-GB` put uit `en`, want een streekvariant heeft
+   dezelfde woorden. **Een taal daarbuiten krijgt de goede afbreking en Nederlandse woorden**,
+   met een melding op stderr — geef die door, want stil Nederlandse woorden boven een Portugese
+   kop zetten is erger dan de melding.
+
+   Staat `bron-niet-nederlands` in de signalen, dan is dit het besluit dat erbij hoort. De widget
+   streept die stand aan en vinkt hem niet aan: de taal van het rapport is een besluit en niet
+   een meting aan de bron.
+
 ### Het rapport — vier besluiten die alles eronder bepalen
 
-1. **Het model.** `breed`, `kantlijn`, `dubbel` of `flexibel`. Default is **`breed`**: één kolom
+2. **Het model.** `breed`, `kantlijn`, `dubbel` of `flexibel`. Default is **`breed`**: één kolom
    van 537 px op 11/16,5 pt, 77 tekens per regel. Dat is de veiligste keuze voor een tekst
    waarvan je de structuur nog niet kent — het heeft nooit een lege kolom en nooit een figuur die
    niet past.
@@ -289,17 +364,17 @@ niet gebeurt is het besluit per hoofdstuk opnieuw nemen.
    | **`dubbel`** | een lang, feitelijk rapport, en drukwerk | 48 tekens; hetzelfde rapport is ongeveer 40 procent korter. Het enige model dat uitvult, dus het enige dat een afbreekwoordenboek nodig heeft |
    | **`flexibel`** | het rapport bestaat uit ongelijksoortige delen — een analyse met een tabellenbijlage | `kantlijn` als basis; een brede tabel of figuur krijgt een pagina over de volle breedte |
 
-2. **Het register.** `helder`, `diep`, `zacht` of `contrast`. Default is **`helder`**: wit
+3. **Het register.** `helder`, `diep`, `zacht` of `contrast`. Default is **`helder`**: wit
    papier, navy inkt, oranje accent. Dat is het enige register dat tachtig pagina's volhoudt
    zonder te gaan schreeuwen. `diep` en `contrast` kosten een pagina per hoofdstuk en zijn pas
    vanaf veertig pagina's te verdedigen.
 
-3. **Het formaat.** `sfnl` (210 × 275 mm), `a4` of `a4-liggend`. Default is **`sfnl`**: de maat
+4. **Het formaat.** `sfnl` (210 × 275 mm), `a4` of `a4-liggend`. Default is **`sfnl`**: de maat
    van de jaarrapporten en de reden dat ze als magazine lezen. `a4` kies je als het door een
    kantoorprinter moet of als bijlage bij een aanbesteding gaat. `a4-liggend` is een
    bijlageformaat en zet alleen in `dubbel`.
 
-4. **De dichtheid.** `ruim`, `gemiddeld` of `dicht`. Default is **`gemiddeld`**. Dit is een knop
+5. **De dichtheid.** `ruim`, `gemiddeld` of `dicht`. Default is **`gemiddeld`**. Dit is een knop
    en geen grens: de zetmotor houdt zich in alle drie aan dezelfde regels voor weduwen, wezen en
    koppen, en de zeven lettergroottes blijven zeven. Wat er verschuift is het aantal regels in de
    zetspiegel en de lucht tussen de blokken.
@@ -315,30 +390,49 @@ niet gebeurt is het besluit per hoofdstuk opnieuw nemen.
    procent. En `dicht` levert niet altijd pagina's op; op de proef zijn `gemiddeld` en `dicht`
    allebei 35 pagina's omdat de winst opgaat aan openers en beeld dat niet meeschaalt.
 
-### De pagina — vijf besluiten die eraan hangen
+### De pagina — zes besluiten die eraan hangen
 
-5. **De hoofdstukopener.** `nummer`, `band` of `blad`, en één manier voor álle hoofdstukken.
+6. **De hoofdstukopener.** `nummer`, `band` of `blad`, en één manier voor álle hoofdstukken.
    Default is **`nummer`**: kicker, titel en het hoofdstukcijfer ernaast, buiten het kader, en het
    kost geen pagina. `band` kost een kwart pagina per hoofdstuk, `blad` een hele. Zie
    `openers.png`.
 
-6. **De omslag.** Wel of niet. Default is **wel**. Zonder omslag komt de titel uit het
+7. **De omslag.** Wel of niet. Default is **wel**. Zonder omslag komt de titel uit het
    brondocument gewoon in de stroom te staan als hoofdstuktitel — dan gaat er geen tekst
    verloren, en dat is de reden dat het een echte keuze is en geen formaliteit.
 
-7. **Het veld van de omslag** (`omslagveld`). `oranje` (default), `verloop`, `navy`, `violet`,
+8. **Het veld van de omslag** (`omslagveld`). `oranje` (default), `verloop`, `navy`, `violet`,
    `mint` of `wit`. **De omslag is nooit wit tenzij dat gekozen is**, en dit besluit gaat vóór het
    register: ook een rapport in `zacht` krijgt een oranje omslag. Een wit voorblad met een titel
    erop is de eerste pagina van een manuscript, en het verschil tussen een document en een rapport
    zit voor de lezer die het oppakt in dat ene vlak. Leesbaar is het ook: navy op oranje haalt
    contrast 6,4, ruim boven de drempel. `wit` blijft mogelijk — maar dan is het gekozen.
 
-8. **De inhoudsopgave, en hoe diep.** Wel of niet, en tot niveau 1 of niveau 2. Default is
+9. **De inhoudsopgave, en hoe diep.** Wel of niet, en tot niveau 1 of niveau 2. Default is
    **wel, tot niveau 2**. Onder de twaalf pagina's is hij zonde; boven de veertig is hij
    onmisbaar. Dieper dan twee niveaus is geen inhoudsopgave meer maar een index.
 
-9. **Dubbelzijdig.** Spiegelt de marge mee met de pagina, en begint een hoofdstuk op een recto.
-   Default is **wel**. Bij drukwerk is dit geen keuze; op een scherm wel.
+10. **Dubbelzijdig.** Spiegelt de marge mee met de pagina, en begint een hoofdstuk op een recto.
+    Default is **wel**. Bij drukwerk is dit geen keuze; op een scherm wel. Staat hij uit, dan
+    draagt geen enkele pagina meer `data-zijde` en wisselen de folio en de kopregel dus niet van
+    kant — in een PDF die niemand omslaat is er geen rug en geen buitenkant, en is elke pagina een
+    recto.
+
+11. **De hoofdstuknummers** (`hoofdstuknummers`). Drie standen, en de derde is er de reden dat dit
+    een besluit is en geen vinkje.
+
+    | | wat je krijgt |
+    |---|---|
+    | `true` — default | de skill telt zelf: "Hoofdstuk 3" als kicker boven de titel, en hetzelfde cijfer groot als watermerk |
+    | `false` | geen kicker en geen watermerkcijfer |
+    | `"uit-bron"` | geen kicker, wél het watermerkcijfer, en dat cijfer komt **uit de kop** in plaats van uit de eigen telling |
+
+    **`uit-bron` is voor een bron die zijn koppen zelf nummert**, en dat is precies het geval dat
+    `kop-nummert-zichzelf` in stap 1 meldt. Zonder die stand staat er "3  3.2 Werkwijze" op de
+    pagina en in de inhoudsopgave: twee nummeringen naast elkaar die uiteenlopen zodra de auteur
+    een hoofdstuk overslaat of bij een ander cijfer begint. Het cijfer komt dan uit de koptekst,
+    en de kop zelf verandert in geen van de drie standen — er valt hier niets aan de tekst te
+    doen. Staat er geen nummer in de kop, dan telt de zetmotor alsnog zelf.
 
 ### Het apparaat — drie besluiten, en ze staan los van elkaar
 
@@ -348,31 +442,31 @@ lopende tekst geciteerd wordt. **Bied alleen aan wat daarin staat.** `rapport-vo
 heeft de hele redenering; §10 de dichtheid en §11 de bijlagen. Een bronnenlijst maken die
 er niet is, betekent bronregels schrijven, en dat doet deze skill niet.
 
-10. **Waar de noten staan** (`noten`). `geen`, `voetnoot` (default), `eindnoot-hoofdstuk` of
+12. **Waar de noten staan** (`noten`). `geen`, `voetnoot` (default), `eindnoot-hoofdstuk` of
     `eindnoot-rapport`. Bij het model `kantlijn` gaan voetnoten naar de kantlijn in plaats van
     naar de voet. **`geen` is het enige besluit in deze hele skill dat brontekst laat vervallen**
     — meld dat expliciet, met het aantal noten erbij, en laat de gebruiker het bevestigen.
     `tekstcheck.py` telt die noten daarna als `weggelaten`.
 
-11. **De bronnenlijst** (`bronnenlijst`). `geen` (default; de regels blijven gewone alinea's),
+13. **De bronnenlijst** (`bronnenlijst`). `geen` (default; de regels blijven gewone alinea's),
     `apa` (hangende inspringing, op alfabet zoals aangeleverd) of `genummerd` (`[1]`, `[2]` … op
     citatievolgorde).
 
-    **Dit staat los van besluit 10.** Voetnoten *én* een bronnenlijst achterin is de gewoonste
+    **Dit staat los van besluit 12.** Voetnoten *én* een bronnenlijst achterin is de gewoonste
     combinatie die er is. Wie het als één vraag stelt — "voetnoten of een bronnenlijst?" — stelt
     de vraag verkeerd.
 
-12. **De verwijzingen in de tekst** (`citaatstijl`). `zoals-aangeleverd` (default),
+14. **De verwijzingen in de tekst** (`citaatstijl`). `zoals-aangeleverd` (default),
     `uniform` of `genummerd`. Zie hieronder; dit is het enige besluit dat de tekst aanraakt.
 
 ### De bijlagen, het beeld en de omslag
 
-13. **Waar de bijlagen beginnen** (`bijlagen`). Vanaf dat blok komt er een scheidingsblad met het
+15. **Waar de bijlagen beginnen** (`bijlagen`). Vanaf dat blok komt er een scheidingsblad met het
     woord "Bijlagen", tellen de openers in letters (A, B, C) in plaats van in cijfers, en krijgen
     ze in de inhoudsopgave een eigen groep. De folio loopt gewoon door. Staat het woord al als
     kop in de bron, dan ís die kop het scheidingsblad en wordt er niets toegevoegd.
 
-14. **Of het rapport beeld gebruikt** (`beeld`), en dit wordt **altijd expliciet gevraagd**, ook
+16. **Of het rapport beeld gebruikt** (`beeld`), en dit wordt **altijd expliciet gevraagd**, ook
     als er beeld in het Word-document zit.
 
     | | wat er gebeurt |
@@ -387,13 +481,13 @@ er niet is, betekent bronregels schrijven, en dat doet deze skill niet.
     waar het hoort.** Een figuur zonder plek wordt niet geplaatst en komt in het bouwverslag als
     `beeld_zonder_plek` terug — raden is hier hetzelfde als verzinnen.
 
-15. **Het beeldpad** (`beeldmap`) — alleen bij `aangeleverd`.
+17. **Het beeldpad** (`beeldmap`) — alleen bij `aangeleverd`.
 
-16. **De omslagtekst** — titel, ondertitel, opdrachtgever, datum, woordelijk van de gebruiker.
+18. **De omslagtekst** — titel, ondertitel, opdrachtgever, datum, woordelijk van de gebruiker.
 
 ### Het achterwerk, de drukker en de twee toestemmingen
 
-17. **De pagina's achterin** (`elementen`). Vier vinkjes — `overOns`, `team`, `colofon`,
+19. **De pagina's achterin** (`elementen`). Vier vinkjes — `overOns`, `team`, `colofon`,
     `achterblad` — en alle vier staan standaard **uit**. Een rapport krijgt geen teampagina omdat
     rapporten vaak een teampagina hebben. Staat er een aan, dan moet de tekst ergens vandaan
     komen, en dat is `paginas.json` in de werkmap:
@@ -412,23 +506,23 @@ er niet is, betekent bronregels schrijven, en dat doet deze skill niet.
     alleen het merk erop is af. De drie tekstpagina's dwingen geen rechterpagina af; op de proef
     kostten drie pagina's die elk een recto afdwongen vier blanco bladen.
 
-18. **Drukklaar** (`drukklaar`, default `false`) **en het katern** (`katern`, default `4`). Staat
+20. **Drukklaar** (`drukklaar`, default `false`) **en het katern** (`katern`, default `4`). Staat
     `drukklaar` aan en komt het aantal pagina's niet uit, dan zet `bouw.py` blanco pagina's
     achteraan tot het wél uitkomt — vóór het achterblad, want dat is op de pers de laatste pagina
     van het laatste vel. Gemeten op de proef: 49 pagina's werden er 52 met drie blanco's.
     Opvullen is de enige van de drie uitwegen die een script mag nemen: inkorten kan niet, want
     daar zit tekst in, en het bij een PDF houden is een besluit van de gebruiker.
 
-19. **`herindelen`** — default **nee**, en dan doet de skill in stap 3 geen enkel voorstel. Zie
+21. **`herindelen`** — default **nee**, en dan doet de skill in stap 3 geen enkel voorstel. Zie
     *De grens die deze skill bewaakt* hierboven.
 
-20. **`beeldtekst`** — default **nee**, en dan blijft tekst binnen een beeld staan zoals hij
+22. **`beeldtekst`** — default **nee**, en dan blijft tekst binnen een beeld staan zoals hij
     staat. De redenering staat op dezelfde plek.
 
-**En twee vinkjes staan er die je meestal laat staan.** De widget vraagt ook of de hoofdstukken en
-de figuren genummerd worden. Allebei staan ze aan, want zo heeft een gedrukt rapport het
-gewoonlijk, en daarom staan ze hier niet als apart besluit. Eén ding om te weten: `exhibitnummers`
-uitzetten in een rapport waarvan de tekst naar "figuur 3" verwijst, breekt die verwijzing.
+**En één vinkje staat er dat je meestal laat staan.** De widget vraagt ook of de figuren
+genummerd worden. Dat staat aan, want zo heeft een gedrukt rapport het gewoonlijk, en daarom
+staat het hier niet als apart besluit. Eén ding om te weten: `exhibitnummers` uitzetten in een
+rapport waarvan de tekst naar "figuur 3" verwijst, breekt die verwijzing.
 
 **Twee dingen worden niet gevraagd.** De maatladder is een regel en geen voorkeur: zeven maten,
 en ze staan in `rapport-stramien.md` §4. En de letters staan vast — Montserrat voor de kop, Lato
@@ -574,6 +668,29 @@ HTML-bestand met de letters ingesloten en het beeld als data-URI.
 Geef het bestand een naam zoals de gebruiker het zou noemen, zonder apostrofs of andere tekens
 die een browser bij downloaden verhaspelt.
 
+### De regel die na dit script geldt
+
+**Verander na `bouw.py` nooit meer iets aan de stijl of aan `lang`.** Geen stijlregel erbij in het
+opgeleverde HTML-bestand, geen andere lettermaat, geen andere marge, en geen andere taalcode.
+
+De reden is dat de regelval mét die stijl en die taal gemeten is. `paginator.js` heeft elk blok in
+een echte browser opgemeten en op een regelgrens gesplitst, en elk kader is precies zo vol als het
+op dat moment was. Verschuift daarna één ding, dan wordt een alinea ergens een regel langer, en
+die regel valt weg onder de `overflow: hidden` van het kader. Er komt geen foutmelding, er
+verspringt niets zichtbaars, en er is tekst weg. Gemeten op een Engels rapport van 18.043
+woorden: één omzetting van `nl` naar `en` ná het zetten maakte drie alinea's een regel langer.
+
+**De plek waar het wél kan is `extra.css` in de werkmap.** Die gaat achter de letters, `stijl.css`
+en `rapport.css` aan, en hij gaat in **beide** sjablonen mee — de werkpagina waarop gezet wordt en
+het bestand dat wordt opgeleverd. Zet je hem neer en bouw je opnieuw, dan wordt er gezet met
+dezelfde CSS als er wordt opgeleverd, en klopt de regelval weer. Het verslag zegt terug hoeveel
+regels hij telt. De twee uitwegen die er zonder deze haak waren, deugen allebei niet: de gedeelde
+`rapport.css` aanpassen overkomt elk volgend rapport ook, en ná het zetten stylen is de fout
+hierboven.
+
+Hetzelfde geldt voor `taal`: dat besluit hoort in `ontwerp.json` en het rapport wordt ermee
+gebouwd. Blijkt het verkeerd, dan zet je het om en **bouw je opnieuw**.
+
 **Lees het verslag dat het script teruggeeft.** Tien dingen doen ertoe:
 
 - **`paginas`** — zeg dit terug. Het getal is inclusief de blanco's die het katern afmaken.
@@ -602,6 +719,12 @@ die een browser bij downloaden verhaspelt.
   schreef, en dat is met opzet.
 - **`beeld_zonder_plek`** — apart aangeleverde figuren zonder blok-id in `beeld.json`. Die staan
   niet in het rapport. Vraag waar ze horen en bouw opnieuw.
+
+**En vijf regels bovenaan het verslag zeggen waarmee er gezet is.** Lees ze één keer terug en
+vergelijk ze met wat er in stap 2 is besloten: `taal`, `labels` (uit welke labeltabel de woorden
+komen — staat daar `nl` bij een Engels rapport, dan is er geen tabel voor die taal), `extra_css`
+(het aantal regels, of `geen`), `hoofdstuknummers` (`eigen telling`, `geen` of `uit de kop`) en
+`noten` (hoeveel er genummerd zijn). Dat laatste getal heb je in stap 5 nodig.
 
 ---
 
@@ -637,7 +760,7 @@ Vier uitkomsten blokkeren:
 Vier uitkomsten blokkeren niet en gaan wél mee bij de oplevering:
 
 - **`toevoegingen`** — de gemarkeerde toevoegingen, geteld per soort. Zeg dit terug bij de
-  oplevering: "de opmaak heeft 62 folio's, 58 kopregels, 41 inhoudsregels, 19 nummers en 6
+  oplevering: "de opmaak heeft 62 folio's, 58 kopregels, 41 inhoudsregels, 19 nummers en 12
   nootcijfers toegevoegd, en verder niets." Dat is de zin waarmee je de belofte waarmaakt. Staat
   er `pagina` bij, dan is dat de tekst op de pagina's achterin, en die noem je apart: het zijn de
   enige hele alinea's in het rapport die niet uit het Word-document komen.
@@ -651,6 +774,21 @@ Vier uitkomsten blokkeren niet en gaan wél mee bij de oplevering:
   `citaten.json` teruggespeeld tegen de brontekst en vastgesteld dat er verder niets is veranderd.
   Klopt een blok ook ná de geplande omzetting niet, dan heet het `gewijzigd` en blokkeert het
   alsnog — een omzetting die meer aanraakt dan hij mocht, komt er dus niet doorheen.
+
+### De notencontrole, en die reken je met de hand na
+
+**`nootnummer` in `tekstcheck.json` hoort twee keer het aantal noten te zijn.** Elke noot levert
+twee cijfers: één in de lopende tekst, bij de zin waar de noot bij hoort, en één vóór de noot
+zelf. Staat er precies het aantal noten, dan staat het cijfer alleen bij de noot en wijst er in de
+tekst niets naar. Dat is punt 18 van de weigerlijst en het is aan de pagina nauwelijks te zien:
+de noten staan er, genummerd en wel, en de lezer weet alleen niet waar ze bij horen. Op een rapport
+van 72 eindnoten is het zo een hele sessie blijven staan.
+
+Het aantal noten staat in het bouwverslag onder `noten`. Op het proefrapport: 6 noten, en
+`nootnummer` stond op 6. Nu staat er 12.
+
+Dit is geen automatische poort — `tekstcheck.py` telt de toevoegingen en velt er geen oordeel
+over. Je rekent het zelf na, en je zegt het na afloop terug.
 
 ---
 
@@ -698,15 +836,49 @@ python "$S/render.py" werkmap/rapport.html --spread 7      # één spread op lee
 python "$S/render.py" werkmap/rapport.html --pagina 14     # één pagina op ware maat
 ```
 
-`qa_rapport.py` is geen poort maar het meet dertien dingen. **Vier blokkeren**, en dat zijn
-precies de vier waar geen interpretatie aan te pas komt: `klip` (een kader snijdt zijn inhoud
-af — er is tekst weg), `overloop` (een element steekt over de snijrand), `te-klein` (tekst onder
-de leesvloer), en `contrast` (lopende tekst onder de leesbaarheidsdrempel). De rest is een
-aanwijzing: kijk ernaar en beslis. Voor `vulgraad`, `tekstwand` en `lege-kantlijn` weegt de
-render zwaarder dan het getal.
+`qa_rapport.py` is geen poort maar het meet veertien dingen. **Zes blokkeren.** Vijf ervan zijn
+metingen waar geen interpretatie aan te pas komt:
+
+- **`klip`** — een kader snijdt zijn inhoud af. Er is tekst weg.
+- **`overloop`** — een element steekt over de snijrand.
+- **`te-klein`** — tekst onder de leesvloer.
+- **`leeg-kader`** — een kolom blijft blanco terwijl de kolom erachter wél gevuld is. Een leeg
+  láátste kader is een hoofdstukeinde en hoort zo; dit is de stroom die in de verkeerde orde is
+  gevuld.
+- **`contrast`** — lopende tekst onder de leesbaarheidsdrempel.
+
+De zesde is **`figuur-te-klein`**: de tekst ín een aangeleverd beeld komt onder de 6 pt uit
+doordat het beeld in de kolom is teruggeschaald. Die staat apart omdat er één aanname in zit —
+38 px per brontekstregel — en die aanname staat woordelijk in het verslag, met de gemeten schaal
+erbij, zodat de som met een eigen aanname over te doen is. Tussen 6 en 8 pt heet het
+`figuur-krap` en dan is het een aanwijzing. Een beeld zonder enig detail draagt geen letter en
+wordt niet beoordeeld; dat staat er als `figuur-zonder-detail`.
+
+De rest is een aanwijzing: kijk ernaar en beslis. Voor `vulgraad`, `tekstwand` en `lege-kantlijn`
+weegt de render zwaarder dan het getal. Let bij `vulgraad` op één geval dat er sinds kort vaker
+in zit: de pagina die een gepromoveerd beeld achterlaat, blijft half gevuld. Dat is de prijs van
+een zetting die één keer vooruit loopt, en het is geen fout om te repareren.
 
 Repareer per ronde alles wat blokkeert, in één keer, en render opnieuw. Doorgaan tot `kritiek`
 leeg is. Wat klein is verzamel je in één lijst die bij de oplevering meegaat.
+
+### Wat de metingen zelf hebben geleerd
+
+Drie dingen om te weten voordat je een uitkomst gelooft. Ze staan uitgeschreven in
+`rapport-vormentaal.md` §14.
+
+- **Een meting die marge voor tekst aanziet, is duurder dan geen meting.** `klip` mat
+  `scrollHeight` tegen `clientHeight` en kon witruimte niet van letters onderscheiden: een
+  opsomming als laatste blok in een kader heette "er is tekst weg" terwijl de laatste regel twee
+  pixels erboven eindigde. Nu wordt de diepste tekstdragende node gemeten. Een valse blokkade
+  kost niet één zoektocht maar het gezag van de melding.
+- **Een meting die twee keer een ander antwoord geeft, is geen meting.** Er wordt nu ook op de
+  beelden gewacht — data-URI's zijn geen netwerkverkeer, en een ongedecodeerd beeld meldt breedte
+  nul. Drie runs geven een byte-identieke ruwe meting. Krijg je toch twee verschillende
+  uitkomsten op hetzelfde bestand, dan is dat zelf de bevinding.
+- **Wat aan de zetting niet te zien is, heeft een eigen meting nodig.** `figuur-te-klein` bestaat
+  omdat een figuur die keurig in de kolom past, op papier onleesbaar kan zijn. Op het
+  contactblad zie je dat niet en in de andere metingen ook niet.
 
 **Blijkt het model verkeerd te zijn**, dan is dat geen mislukking maar een besluit dat terug moet
 naar de gebruiker. De meest voorkomende: `lege-kantlijn` boven driekwart, en dan is `breed`
@@ -752,8 +924,8 @@ beter. Bouw het niet stilletjes om — leg het voor, met beide contactbladen erb
   blijven staan omdat er geen bronregel bij te vinden was. Dit is de enige tekst die zonder
   aparte toestemming is aangeraakt, dus hij hoort met naam en toenaam in de oplevering.
 - **Wat er open staat** — de kleine aanwijzingen uit `qa_rapport.py`, de beelden onder 150 dpi,
-  een tabel die in de breedte is gedwongen, een pagina achterin die niet is gebouwd omdat er geen
-  tekst voor was.
+  een figuur die als `figuur-krap` tussen de 6 en 8 pt uitkomt, een tabel die in de breedte is
+  gedwongen, een pagina achterin die niet is gebouwd omdat er geen tekst voor was.
 - **Wat er nog niet in zit als het naar een drukker gaat.** Er is geen afloop van 3 mm en er staan
   geen snijtekens in, en Montserrat komt in de PDF als Type3 terecht — de PDF drukt en de tekst is
   te selecteren, maar een drukkerij die om een lettertype vraagt, krijgt geen normale naam te
@@ -765,7 +937,7 @@ beter. Bouw het niet stilletjes om — leg het voor, met beide contactbladen erb
 
 ## Wat blokkeert
 
-Negen dingen. Verder blokkeert er niets op vormgeving; dat oordeel komt van de render.
+Elf dingen. Verder blokkeert er niets op vormgeving; dat oordeel komt van de render.
 
 1. `preflight.py` vindt geen browser. Er is dan geen route.
 2. `lees_docx.py` leest nul blokken, of nul koppen in een document met hoofdstukken.
@@ -779,9 +951,14 @@ Negen dingen. Verder blokkeert er niets op vormgeving; dat oordeel komt van de r
    weg.
 8. **`qa_rapport.py` meldt `te-klein`** — lopende tekst onder 8 pt, apparaat onder 7, een
    kapitaallabel onder 6.
-9. **`qa_rapport.py` meldt `contrast`** — lopende tekst onder de leesbaarheidsdrempel.
-   Merktekens in het accent staan apart geteld als `accentmerken` en blokkeren niet; zie
-   `rapport-vormentaal.md` §4.
+9. **`qa_rapport.py` meldt `leeg-kader`** — een kolom blijft blanco terwijl de kolom erachter
+   gevuld is. De stroom is in de verkeerde orde gevuld.
+10. **`qa_rapport.py` meldt `figuur-te-klein`** — de tekst in een figuur komt onder 6 pt uit. Het
+    beeld past in de kolom en is niet meer te lezen. Zet hem breder, laat hem promoveren, of vraag
+    om een versie met minder in één beeld.
+11. **`qa_rapport.py` meldt `contrast`** — lopende tekst onder de leesbaarheidsdrempel.
+    Merktekens in het accent staan apart geteld als `accentmerken` en blokkeren niet; zie
+    `rapport-vormentaal.md` §4.
 
 ---
 

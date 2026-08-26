@@ -105,6 +105,24 @@ rapport van dertig tot veertig pagina's.
 | `dubbel` | 2 × 310 | 13,33 px (10 pt) | 17,33 px | **48** (43–53) | ja |
 | `flexibel` | `kantlijn` als basis | 13,33 px | 17,33 px | 76 | nee |
 
+**De kolom in `breed` staat in het midden van de zetspiegel.** Hij is
+tien van de twaalf rasterkolommen, 537 van 650 px, en dat overschot van
+113 px lag tot voor kort helemaal aan één kant: 0 px wit links tegen
+113,3 rechts. De kopregel en de folio hangen aan de zetspiegel en niet
+aan de kolom, dus de haarlijn liep 113 px verder door dan de tekst en het
+paginanummer stond er 113 px naast — op elke pagina van elk breed
+rapport. Gecentreerd is het 56,7 px per kant, en de spiegeling blijft
+staan: de kolom staat op een recto 138,7 px van de rug en 118,7 px van de
+snijkant, en op een verso andersom. Die 20 px verschil is
+`--r-marge-binnen` min `--r-marge-buiten`.
+
+**En `.paginakop` en `.voetnoten` schuiven mee, met een eigen regel.** Ze
+zijn bróérs van `.raster` in de flexkolom van de zetspiegel en geen
+kinderen ervan, dus `justify-content` op het raster raakt ze niet. Zonder
+die tweede regel stond het kader op 56,7 px en de hoofdstukopener en de
+notenbalk op 0 — dezelfde misuitlijning, één laag hoger terug, zichtbaar
+op elke opener en op elke pagina met noten.
+
 **`flexibel` staat nooit op een pagina.** Het is een eigenschap van het
 rapport; de pagina draagt `breed`, `kantlijn` of `dubbel`, en daarnaast
 `data-flex="ja"` zodat de broodmaat gelijk blijft aan de basis. Zonder
@@ -200,7 +218,7 @@ Wat er bovenop `stijl.css` bij komt. Elk tekent één ding.
 | `.kader` | de doos waar de stroom in valt. `.lopend` staat erop |
 | `.kader--vol` | een kader over alle kolommen |
 | `.kantlijn` | de zijkolom van drie rasterkolommen |
-| `.voetnoten` | de bak aan de voet |
+| `.voetnoten` | de bak aan de voet. De haarlijn zit op `top: 0` van die bak, dus hij heeft een marge nodig: zonder stond hij pal tegen de laatste tekstregel — gemeten kleinste afstand 10,2 px in `breed` en 0,8 px in `dubbel`, nu 42,7 en 23,7. Een lege bak krijgt de marge niet |
 
 ### Tekst
 
@@ -515,6 +533,34 @@ en niet uit het rapport, dus het draagt `data-toevoeging="beeldbijschrift"`
 — net als de regels op de omslag. Zonder bijschrift staat het beeld er
 zonder, en dat is beter dan er een verzinnen.
 
+**Een beeld dat te hard krimpt, krijgt de volle zetspiegel.** De grens is
+een krimpfactor van **2,5**: intrinsieke breedte gedeeld door de breedte
+waarop het beeld gerenderd wordt. Gemeten op een tabel van 3000 px gaat
+hij in `dubbel` van 310 naar 650 px en in `breed` van 537 naar 650. Het
+getal komt van twee kanten. Een figuur van 3120 px in een kolom van 537
+px komt op 2,7 pt kapitaalhoogte uit; op ware grootte is diezelfde letter
+15,7 pt, en die zakt door de leesvloer van 6 bij factor 2,6. En een
+bitmap wordt op het dubbele geëxporteerd om op 192 dpi te drukken, dus
+factor 2 is bedoeld en kost niets — 2,5 laat daar een halve factor
+speling boven.
+
+De regel keek vroeger naar `scrollWidth` en vuurde daarom nooit voor
+beeld: een `img` met `max-width: 100%` wordt nooit te breed, hij krimpt.
+Nu wordt de intrinsieke breedte gemeten, in elk model. Die breedte staat
+als `data-eigenbreedte` op elke `<img>`, gestempeld op het origineel
+vóórdat de stroom gekloond wordt — een verse kloon kent zijn
+`naturalWidth` niet altijd al, en dan meet je nul en gebeurt er niets.
+Gemeten wordt tegen de gerenderde breedte van hetzelfde beeld en niet
+tegen de kaderbreedte: een beeld in een exhibit staat binnen de rand van
+dat exhibit en is daar smaller dan de kolom.
+
+**Wat het kost staat erbij.** De pagina die de promotie verlaat, blijft
+half gevuld achter. Dat is inherent aan een zetting die één keer vooruit
+loopt: de brede pagina moet ná de huidige komen en de blokken erna kunnen
+niet terug zonder de leesvolgorde te breken. Het gebeurde al voor brede
+tabellen en het gebeurt nu vaker. `qa_rapport.py` meet zo'n pagina als
+`vulgraad`; dat is een aanwijzing en geen fout.
+
 ---
 
 ## 7d. Het achterwerk
@@ -644,6 +690,7 @@ alles wat geen van beide heeft is tekst die niemand heeft goedgekeurd.
 | `data-veld` | de omslag, het achterblad, het scheidingsblad | het kleurveld waarop de pagina staat |
 | `data-sjabloon` | de omslag en het achterblad | welk paginasjabloon de zetmotor gebruikt |
 | `data-blanco` | de pagina | een blanco blad dat het katern afmaakt |
+| `data-eigenbreedte` | elke `<img>` | de intrinsieke breedte in px, gestempeld vóór het klonen. Zie §7c |
 
 ---
 
@@ -663,6 +710,7 @@ Eén map per rapport. Wat er in staat en wie het schrijft:
 | `wijzigingen.json` | jij, ná toestemming | de goedgekeurde inhoudelijke wijzigingen |
 | `citaten.json` | `citaten.py` | het omzettingsplan voor de verwijzingen, per blok |
 | `beeld.json` | jij, bij `beeld: aangeleverd` | welk bestand achter welk blok komt |
+| `extra.css` | jij, als dit rapport iets eigens nodig heeft | CSS die alleen voor dít rapport geldt. Optioneel. Zie §9b |
 | `_zetten.html` | `bouw.py` | de werkpagina met de stroom en de zetmotor. Weggooibaar |
 | `<naam>.html` | `bouw.py` | het rapport, in één bestand met de letters ingesloten |
 | `<naam>.pdf` | `bouw.py` | dezelfde pagina's op de bladmaat die het document zelf zegt |
@@ -676,6 +724,7 @@ Eén map per rapport. Wat er in staat en wie het schrijft:
 
 ```json
 {
+  "taal": "nl",
   "model": "breed",            "register": "helder",
   "formaat": "sfnl",           "opener": "nummer",
   "dichtheid": "gemiddeld",    "bandhoogte": 232,
@@ -696,11 +745,14 @@ Eén map per rapport. Wat er in staat en wie het schrijft:
 }
 ```
 
-De jongste sleutels staan onderaan, en ze staan allemaal op de veiligste
-stand:
+`taal` staat vooraan omdat dat besluit als eerste vaststaat; de andere
+jongste sleutels staan onderaan in het blok. Ze staan allemaal op de
+veiligste stand:
 
 | sleutel | default | wat het besluit |
 |---|---|---|
+| `taal` | `"nl"` | de taal waarin het rapport gezet wordt, als ISO-code. Stuurt de afbreking én de woorden die de skill zelf toevoegt. Elke code mag; er is geen lijst om tegen te toetsen. Op de opdrachtregel `--taal`. Zie §9b |
+| `hoofdstuknummers` | `true` | `true` (de skill telt zelf), `false` (geen kicker en geen watermerkcijfer) of `"uit-bron"` (geen kicker, wél een cijfer, en dat cijfer uit de kop). De koptekst verandert in geen van de drie |
 | `omslagveld` | `"oranje"` | het kleurveld van de omslag: `oranje`, `verloop`, `navy`, `violet`, `mint` of `wit`. Gaat vóór het register; zie `rapport-vormentaal.md` §7 |
 | `elementen` | alles `false` | welke van de vier pagina's van het achterwerk erin komen. Zie §7d |
 | `drukklaar` + `katern` | `false`, `4` | of het aantal pagina's moet uitkomen op de pers, en op welk katern. Zie §7e |
@@ -747,6 +799,141 @@ gebeurt er niets. Zes soorten en meer bestaan er niet:
 
 ---
 
+## 9a. De documentsignalen
+
+`lees_docx.py` schrijft twee soorten waarneming in `signalen.json`, en ze
+staan uit elkaar omdat ze op een ander moment aan de beurt zijn. Elk
+signaal draagt een `groep`:
+
+| groep | wat het is | wanneer |
+|---|---|---|
+| `voorstel` | een waarneming over één blok: een kop van 74 tekens, vier handgetypte streepjes, een alinea van 280 woorden. Draagt `wijziging` | stap 3, en alleen bij `herindelen: true` |
+| `vormbesluit` | een waarneming over het document als geheel. Draagt `besluit` | vóór het bouwen, in de widget en in stap 1 |
+
+In `signalen.json` staan ze in één lijst, met de vormbesluiten vooraan;
+de uitvoer van het script noemt ze apart onder `vormbesluiten`.
+
+De zes vormbesluiten komen alle zes uit één rapport — Engels, 18.043
+woorden, 522 blokken, 72 eindnoten, vijf bijlagen, zes figuren waarvan
+vier EMF — en ze waren daar alle zes bij het inlezen al te zien. Zie
+`rapport-vormentaal.md` §13.
+
+| soort | wat het ziet | waar de detectie ophoudt |
+|---|---|---|
+| `bron-niet-nederlands` | de lopende tekst is niet Nederlands, met de tellingen per taal erbij | alleen woorden die in **precies één** taallijst staan; de vaakst voorkomende woorden zijn gedeeld ("de" in nl en fr, "was" in nl en en) en die maken het onderscheid troebel. Tabellen tellen niet mee, onder 80 woorden wordt er niets gemeld, en er moeten twee keer zoveel treffers zijn als voor het Nederlands, én vier procent van alle woorden. Een Nederlands rapport met een Engels citaat per hoofdstuk — ruim een derde van de tekst — meldt niets |
+| `koppen-een-niveau-te-diep` | de hoogste kop staat op niveau 2 of dieper | meldt alleen als niveau 1 **helemaal niet** voorkomt, en pas vanaf vier koppen |
+| `kop-nummert-zichzelf` | een kopniveau draagt zijn eigen nummering | per niveau geteld, met een drempel van drie koppen en zestig procent. Daarom melden "Bijlage A" en "Bijlage B" niet. Een los getal zonder punt telt niet mee, en een jaartal ook niet — hoogstens drie cijfers |
+| `beeld-niet-renderbaar` | een beeldformaat dat Chromium niet toont: EMF, WMF, TIFF, EPS, WDP, HDP, PICT | op de extensie; wat er ín het bestand zit, wordt niet gelezen |
+| `beeld-buiten-de-stroom` | media in het `.docx` die door geen enkel blok wordt genoemd — een tekstvak, SmartArt, een figuur in de koptekst | het zegt dat het er is, niet waar het hoort; dat staat nergens in het bestand |
+| `kop-zonder-inhoud` | een kop met niets eronder | meldt **niet** als er een diepere kop volgt — dat is de gewone hoofdstukkop met zijn eerste sectiekop. Zonder die toets gaf het Engelse rapport zes treffers waarvan er één echt was. Twee koppen op het bovenste niveau achter elkaar tellen ook niet: dat is de deeltitel |
+
+**Elk van de zes komt hoogstens één keer in de lijst**, met zijn
+treffers erin. Over vier EMF-figuren valt één besluit te nemen; vier losse regels
+maken van een besluit een lijst, en een lijst wordt overgeslagen. De eis
+die het zwaarst weegt is dat er geen valse bij zitten: een signaallijst
+die één keer onzin zegt, wordt daarna niet meer gelezen.
+
+Nagemeten op het Nederlandse proefdocument: nul vormbesluiten en dezelfde
+achttien voorstellen als daarvoor.
+
+`widget.py` zet ze bovenaan de widget onder "Dit moet je eerst
+beslissen", elk met wat er gezien is en wat ermee gebeurt, en met één of
+twee voorbeelden uit het document erbij. Zijn er geen bevindingen, dan is
+er geen blok.
+
+---
+
+## 9b. `extra.css` en de taal — wat vóór het zetten vaststaat
+
+Twee dingen bepalen waar elke regel valt, en allebei moeten ze vaststaan
+vóórdat `bouw.py` draait. Wat er daarna aan verschuift, valt weg onder de
+`overflow: hidden` van het kader, en dat is de enige fout in deze skill
+die geen foutmelding geeft.
+
+**De taal.** `"taal"` in `ontwerp.json`, `--taal` op de opdrachtregel, en
+het komt terecht in `<html lang="…">` van **beide** sjablonen — de
+werkpagina waarop gezet wordt en het bestand dat wordt opgeleverd. `lang`
+bepaalt met welk woordenboek Chromium afbreekt. Gemeten: één omzetting
+van `nl` naar `en` ná het zetten maakte drie alinea's een regel langer,
+en die regels vielen onder de kaderrand weg.
+
+De taal doet nog twee dingen:
+
+- **De afbreekproef volgt de taal.** Die proef zet een lang woord in een
+  doos van 62 px en kijkt of het afbreekt, en de uitkomst bepaalt of het
+  hele rapport uitgevuld of vlaggend wordt gezet. Hij stond vast op
+  Nederlands met een Nederlands proefwoord. `PROEFWOORDEN` heeft er nu
+  een per taal — nl, en, de, fr, es, it — met het Engelse als terugval.
+  Een taal zonder eigen woord krijgt geen goede toets voor die taal, maar
+  wel een eerlijke: hij meet of Chromium überhaupt een woordenboek heeft,
+  en bij twijfel vervalt het uitvullen. Dat is de veilige kant.
+- **De woorden die de skill zelf toevoegt.** `LABELS` in `bouw.py` heeft
+  negen sleutels per taal: `hoofdstuk`, `bijlage`, `bijlagen`, `figuur`,
+  `noten`, `noten_hoofdstuk`, `noot`, `bron` en `vervolg`. `nl` en `en`
+  staan erin. De laatste drie staan niet in de HTML maar in `content:` in
+  de CSS en kunnen dus niet uit Python komen; ze gaan als custom property
+  mee — `--label-noot`, `--label-bron` en `--label-vervolg` — met het
+  Nederlandse woord als terugval in het stijlblad zelf. Zonder variabele
+  verandert er dus niets aan een Nederlands rapport.
+
+`en-GB` put uit `en`: een streekvariant heeft dezelfde woorden. Een taal
+waar geen tabel voor is, krijgt de goede afbreking en Nederlandse
+woorden, met een melding op stderr. Stil Nederlandse woorden boven een
+Portugese kop zetten is erger dan de melding.
+
+**`extra.css`.** Ligt er een `extra.css` in de werkmap, dan gaat hij
+achter de letters, `stijl.css` en `rapport.css` aan — in **beide**
+sjablonen, want zetten met andere CSS dan er opgeleverd wordt is precies
+het soort fout dat pas in de PDF te zien is. Dit is de enige plek waar
+één rapport iets eigens mag doen. De twee uitwegen die er zonder deze
+haak waren, deugen allebei niet: de gedeelde `rapport.css` aanpassen
+overkomt elk volgend rapport ook, en ná het zetten stylen verschuift de
+regelval onder een zetting die al gemeten is.
+
+Het labelblok komt ná `extra.css` en in hetzelfde document. Wie een van
+de drie labels daar wil overschrijven, heeft dus `!important` nodig; dat
+is de prijs voor één plek waar de labels vandaan komen.
+
+Het bouwverslag zegt terug waarmee er gezet is: `taal`, `labels` (uit
+welke labeltabel er geput is), `extra_css` (het aantal regels, of
+`geen`) en `hoofdstuknummers` (`eigen telling`, `geen` of `uit de kop`).
+
+---
+
+## 9c. De nootnummering
+
+Een noot krijgt zijn nummer bij **zijn eerste voorkomen in de lopende
+tekst**, uit één telling over het hele rapport. De verwijzing en de noot
+lezen uit die telling, en de noten worden er ook op gesorteerd.
+
+Twee dingen gingen daar mis en ze staan als punt 18 op de weigerlijst:
+
+- **De `<sup>` in de lopende tekst werd leeg gelaten.** Het commentaar
+  zei dat de zetmotor het cijfer erbij zou zetten, en in `paginator.js`
+  staat geen regel die dat doet. Op een rapport van 72 eindnoten stonden
+  alle 72 genummerd aan de voet en stond er in de tekst geen enkel cijfer
+  dat ernaar wees.
+- **Het nummer kwam uit het Word-id.** Word begint zijn eindnoot-id's bij
+  2 — −1, 0 en 1 zijn scheidingstekens — dus elke noot stond één te hoog.
+  `_ruw_nummer` bestaat nog als terugval voor een noot zonder telling;
+  binnen `Stroom` gaat de telling altijd mee.
+
+**De controle die het bewijst**: `nootnummer` in `tekstcheck.json` hoort
+**twee keer** het aantal noten te zijn — één cijfer in de tekst en één
+bij de noot. Op het proefrapport stond er 6 bij 6 noten; nu staat er 12.
+Het bouwverslag zegt in `noten` hoeveel er genummerd zijn.
+
+Bij `noten: geen` verdwijnt ook het verwijzingscijfer. Een noot die er
+niet is met een bovengezet cijfer ervoor is erger dan geen noot: de lezer
+zoekt naar iets wat nergens staat.
+
+`qa_rapport.py` herkent een noot sindsdien aan zijn markering en niet aan
+zijn maat. Dat is nodig geworden: nu er werkelijk een cijfer in de `sup`
+staat, is een noot van een superscript uit de brontekst alleen nog aan
+het attribuut te onderscheiden.
+
+---
+
 ## 10. De scripts
 
 `$S` is `${CLAUDE_PLUGIN_ROOT}/scripts/rapport`.
@@ -761,7 +948,7 @@ gebeurt er niets. Zes soorten en meer bestaan er niet:
 | `widget.py <werkmap>` | de ontwerpwidget voor dít rapport: alle vormbesluiten op één pagina, en alleen wat de bron werkelijk heeft. **Het verplichte beginpunt** | |
 | `citaten.py <werkmap> --naar <stijl>` | het omzettingsplan voor de verwijzingen in `citaten.json`. Draait vóór `bouw.py` | |
 | `tekstcheck.py <html>` | staat er nog precies wat er stond | **ja** |
-| `qa_rapport.py <html>` | dertien metingen; vier ervan blokkeren | **ja** |
+| `qa_rapport.py <html>` | veertien metingen; zes ervan blokkeren | **ja** |
 | `render.py <html>` | contactbladen per twaalf spreads, of één spread, of één pagina | |
 | `keuzekaart.py` | de drie keuzekaarten opnieuw bouwen. Onderhoud | |
 | `artboards.py <html>` | het gezette rapport uit elkaar halen tot `.dc.html`-artboards plus `canvas.json`. `bouw.py` draait hem zelf | |

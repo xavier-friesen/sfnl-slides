@@ -103,7 +103,7 @@ dezelfde pijplijn, dus ze kunnen niet beloven wat de zetmotor niet doet.
 
 ## 3. De weigerlijst
 
-Zeventien dingen die een rapport eruit laten zien alsof een model het
+Negentien dingen die een rapport eruit laten zien alsof een model het
 heeft opgemaakt. De eerste vijf zijn de ernstige.
 
 1. **Tekst veranderen om de vorm te laten kloppen.** Een kop inkorten
@@ -175,6 +175,31 @@ heeft opgemaakt. De eerste vijf zijn de ernstige.
     tekst zet, moet een derde regel in de bronnenlijst hebben.
     `citaten.py` laat een verwijzing die hij niet kan koppelen staan
     zoals hij stond en meldt hem apart; die melding negeren is de fout.
+18. **Een noot waar niets naar verwijst.** Het cijfer in de lopende tekst
+    ontbreekt, of het wijst naar een andere noot dan die eronder staat.
+    Het eerste is aan de pagina te zien zodra je erop let: op een rapport
+    van 72 eindnoten stonden alle 72 genummerd aan de voet en stond er in
+    de tekst nergens een cijfer dat ernaar wees — de `<sup>` werd leeg
+    gelaten. Het tweede is stiller en erger. Word begint zijn
+    eindnoot-id's bij 2, dus een nummer dat uit dat id komt staat overal
+    één te hoog: netjes gezet, consequent, en overal naar de verkeerde
+    noot. Genummerd wordt daarom op eerste voorkomen in de tekst, en de
+    noot en de verwijzing lezen uit dezelfde telling. De controle die het
+    bewijst staat in stap 5 van de skill: `nootnummer` in
+    `tekstcheck.json` hoort **twee keer** het aantal noten te zijn — één
+    cijfer in de tekst, één bij de noot. Op het proefrapport stond er 6
+    bij 6 noten; nu staat er 12.
+19. **Een tweede nummer dat iets anders zegt.** De bron nummert zijn
+    koppen zelf — "3.2 Werkwijze" — en de skill telt daar zijn eigen
+    nummering naast, dus er staat "3  3.2 Werkwijze" op de pagina en in
+    de inhoudsopgave. Het zijn twee tellingen die uiteenlopen zodra de
+    auteur een hoofdstuk overslaat, bij een ander cijfer begint of een
+    deel ongenummerd laat. De kop is niet fout en verandert niet: dit is
+    een vormbesluit en het valt vóór het bouwen. `hoofdstuknummers` op
+    `"uit-bron"` laat de kicker weg en haalt het watermerkcijfer uit de
+    kop. `lees_docx.py` ziet het bij het inlezen — `kop-nummert-zichzelf`,
+    per kopniveau geteld — dus je hoeft er geen tachtig gezette pagina's
+    op te wachten.
 
 ---
 
@@ -222,7 +247,7 @@ staat.
 | `kopregel` | rapporttitel op de verso, hoofdstuknaam op de recto | navigatie |
 | `inhoudsopgave` | de regels van de inhoudsopgave | navigatie; de tekst is een letterlijke kopie van de koppen |
 | `nummer` | "Hoofdstuk 3", het watermerkcijfer, "Figuur 7" | nummering die uit de structuur volgt |
-| `nootnummer` | het cijfer bij een voetnootverwijzing en voor de noot | de noten stonden al in de bron; alleen het cijfer is nieuw |
+| `nootnummer` | het cijfer bij een voetnootverwijzing en voor de noot | de noten stonden al in de bron; alleen het cijfer is nieuw. Elke noot levert er twee: één in de tekst en één bij de noot. Zie §3, punt 18 |
 | `tabelkop` | de herhaalde kolomnamen op een vervolgtabel | zonder is de vervolgtabel onleesbaar |
 | `omslag` | opdrachtgever, datum, ondertitel op de omslag | alleen als de gebruiker ze in `ontwerp.json` heeft opgegeven |
 | `notenkop` | "Noten" boven een blok eindnoten | een reeks genummerde regels zonder kop is geen blok |
@@ -542,3 +567,130 @@ Deze skill zet een aangeleverd rapport op. Wat hij niet doet:
   uitkomt. De 3 mm rondom en de snijtekens zitten er niet in. Waarom
   dat zo is en wat het kost om het te veranderen, staat in
   `documenten-stramien.md` §1a — één plek voor beide drukroutes.
+
+---
+
+## 13. Wat er is misgegaan
+
+Eén rapport heeft deze skill meer geleerd dan het proefrapport in deze
+repo: Engels, 18.043 woorden, 522 blokken, 72 eindnoten, vijf bijlagen en
+zes figuren waarvan vier EMF. Zes dingen hielden het opmaken op. Vijf
+ervan stonden bij het inlezen al in het document en kostten pas tijd toen
+ze in de visuele loop bovenkwamen — tachtig gezette pagina's verder. Dat
+is de hele reden dat `lees_docx.py` ze nu apart meldt, als vormbesluit en
+niet als wijzigingsvoorstel: `rapport-stramien.md` §9a heeft de
+detectiegrenzen.
+
+**Wat er bij het inlezen te zien was.**
+
+- **De bron was Engels en de skill zette Nederlandse woorden.**
+  "Hoofdstuk 3" boven een Engelse kop, "Figuur 7" onder een Engelse
+  figuur, "Noten" boven het notenblok: elf plekken, hardgecodeerd. Dat is
+  het deel dat je ziet. Wat je niet ziet is dat `lang` bepaalt met welk
+  woordenboek Chromium afbreekt en dus waar elke regel valt. Eén
+  omzetting van `nl` naar `en` ná het zetten maakte drie alinea's een
+  regel langer, en die drie regels vielen weg onder de `overflow: hidden`
+  van het kader: geen foutmelding, geen streep, geen kleur, tekst weg. En
+  de afbreekproef zelf stond vast op Nederlands met een Nederlands
+  proefwoord, terwijl die proef bepaalt of het hele rapport uitgevuld of
+  vlaggend wordt gezet — dus voor een Engels rapport werd het verkeerde
+  woordenboek bevraagd.
+- **De koppen begonnen bij niveau 2.** Het sjabloon hield niveau 1 voor
+  de omslag. Elk hoofdstuk werd daarmee een sectie: geen enkele regel op
+  het bovenste niveau in de inhoudsopgave en geen hoofdstukopener op de
+  pagina.
+- **De koppen droegen hun eigen nummer.** Zie punt 19 van de weigerlijst.
+- **Vier van de zes figuren waren EMF.** Chromium toont dat formaat niet,
+  en het meldt het ook niet: er komt een leeg vlak op de plek en in de
+  maat die ervoor gereserveerd is. In een PDF van tachtig pagina's valt
+  zoiets op als de drukker belt. Elke grafiek die uit Excel of PowerPoint
+  in Word is geplakt, is er een.
+- **Er zat media in het bestand die geen enkel blok noemde.** Een
+  tekstvak, een SmartArt, een Word-diagram, een figuur in de koptekst:
+  dat zit niet in de tekststroom, wordt niet ingelezen en komt dus niet
+  in het rapport. Achter welk blok het hoort staat nergens in het
+  bestand, dus dat kan alleen gevraagd worden.
+- **Er stonden koppen met niets eronder.** Geen alinea, geen lijst, geen
+  tabel, geen beeld en geen diepere kop. Zo'n kop komt onderaan een
+  pagina te staan met wit eronder, of hij krijgt een eigen opener zonder
+  tekst erachter, en in de inhoudsopgave wijst hij naar niets.
+
+**Wat er pas uit de zetting kwam**, en dat is het zesde en het duurste.
+Drie assessmenttabellen van 3120 px belandden in een kolom van 537 px —
+factor 5,8 — en kwamen daarmee op ongeveer 2,7 pt kapitaalhoogte uit,
+tegen een leesvloer van 6. Aan de zetting was niets te zien: het beeld
+paste keurig in de kolom, want het krimpt met de kolom mee. De
+promotieregel die een te breed blok naar de volle zetspiegel tilt, keek
+naar `scrollWidth`, en een `img` met `max-width: 100%` wordt nooit te
+breed — hij wordt kleiner. Die regel kón dus niet afgaan. En geen enkele
+meting zei er iets over; zie §14, les drie.
+
+**En er kwam er nog een uit die in geen van beide lijstjes past.** Het
+nootcijfer stond niet in de lopende tekst: 72 genummerde noten aan de
+voet en niets dat ernaar wees. Dat is nu punt 18 van de weigerlijst, met
+de telling die het bewijst.
+
+De les eronder: **een vormbesluit dat in het document te lezen is, hoort
+daar gelezen te worden en niet uit de zetting teruggevonden.** Vijf van
+de zes stonden gewoon in het `.docx`. Ze kostten een sessie omdat er
+niemand naar keek voordat er tachtig pagina's gezet waren.
+
+---
+
+## 14. Drie meetlessen
+
+Een rapport van tachtig pagina's wordt niet met het oog gecontroleerd
+maar met een meting, en in deze ronde ging het drie keer mis in de meting
+zelf. Het zijn precies deze drie omdat het drie verschillende manieren
+zijn waarop een meting kan falen: hij ziet iets wat er niet is, hij zegt
+twee keer iets anders, of hij is er niet.
+
+**1. Een meting die marge voor tekst aanziet, is duurder dan geen
+meting.** `klip` is de ernstigste meting die er is en hij blokkeert: hij
+zegt dat een kader zijn eigen inhoud afsnijdt en dat er dus tekst weg is
+die niemand ziet. De som was `scrollHeight` tegen `clientHeight`, en die
+twee kennen het verschil tussen letters en witruimte niet. Een opsomming
+als laatste blok in een kader steekt met zijn ondermarge over de rand,
+en dan heette dat "er is tekst weg" terwijl de laatste regel twee pixels
+erboven eindigde. Nagemeten met de ondermarge van één blok op 49 px: de
+oude som meldt 26 px klip terwijl er 22,9 px speling is. Gemeten wordt nu
+de onderkant van de diepste tekstdragende node, met de halve interlinie
+eraf. Wat een valse blokkade kost is niet de tijd van één zoektocht naar
+tekst die niet weg is; het is dat de melding daarna niet meer geloofd
+wordt, en dan komt de echte er ook doorheen. Een meting die blokkeert,
+mag alleen meten wat hij beweert te meten.
+
+**2. Een meting die twee keer een ander antwoord geeft, is geen meting.**
+Twee runs op hetzelfde bestand gaven verschillende uitkomsten. Op de
+letters werd gewacht, op de beelden niet — die zitten als data-URI in het
+bestand, dus ze zijn geen netwerkverkeer, en een beeld dat nog niet
+gedecodeerd is meldt breedte nul. Breedte nul is precies de invoer van de
+dpi-meting en van de figuurmeting. Er wordt nu ook op de beelden gewacht:
+drie runs geven een byte-identieke ruwe meting. Wat hier op het spel
+staat is niet de precisie maar het gezag. Een getal dat bij herhaling
+verspringt, kan geen enkel besluit dragen — niet "dit blokkeert" en niet
+"dit is af" — en de eerste keer dat het verspringt, verliest het ook zijn
+gelijk in alle gevallen waarin het toevallig klopte.
+
+**3. Wat aan de zetting niet te zien is, heeft een eigen meting nodig.**
+De drie tabellen uit §13 pasten. Ze pasten precies zoals bedoeld, in een
+kader zonder klip, zonder overloop en zonder een te kleine letter op de
+pagina — want de letter zat in het beeld en niet op de pagina. Er is nu
+een meting die per figuur uitrekent wat er van die letter overblijft:
+`schaal = gerenderde breedte / intrinsieke breedte`, en
+`pt = 38 × schaal × 0,55 × 0,75`. Onder 6 pt blokkeert het, tussen 6 en 8
+is het een aanwijzing. De 38 px per brontekstregel is een aanname en geen
+meting, en daarom staat hij woordelijk in het verslag: wie de figuur
+belangrijk vindt, kan de som met een eigen aanname overdoen. Er hoort één
+guard bij, en die komt regelrecht uit les 1: een beeld zonder enig detail
+— een egaal vlak, een plaatshouder — draagt geen letter en krijgt geen
+oordeel. Zonder die guard blokkeerde de nieuwe meting op de proefbeelden
+van deze skill zelf, en dat was precies de valse blokkade die hier werd
+weggehaald.
+
+**Waarom er geen vierde is.** De promotieregel die op `scrollWidth` keek
+en daarom nooit afging, ziet eruit als een eigen les — een meting die de
+verkeerde grootheid neemt. Hij staat onder les drie en niet ernaast: het
+is dezelfde blinde vlek, gezien vanaf de kant van de zetmotor in plaats
+van vanaf de kant van de controle. Een grootheid die niet kan afgaan,
+meet niets, en dat is hetzelfde als geen meting hebben.

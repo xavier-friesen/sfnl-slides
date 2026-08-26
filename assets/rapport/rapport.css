@@ -930,11 +930,13 @@
   flex: 0 0 auto;
   /* Lucht boven de bak, en die is er niet vanzelf. De haarlijn staat op
      `top: 0` van deze doos, dus zonder marge raakt hij de laatste
-     tekstregel. Gemeten over 76 pagina's was de kleinste afstand tussen
-     de onderkant van de laatste regel en de bovenkant van de bak 10 px,
-     en op die pagina las de eerste noot als een regel die over de tekst
-     heen liep. Met een marge van een regel en een kwart erbij is de
-     kleinste afstand 30 px.
+     tekstregel. Gemeten was de kleinste afstand tussen de onderkant van
+     de laatste regel en de bovenkant van de bak 10,2 px in `breed` en
+     0,8 px in `dubbel` — daar raakte de lijn de tekst werkelijk. Met een
+     marge van een regel en een kwart erbij is dat 42,7 en 23,7 px op
+     hetzelfde rapport, en 31,1 px op het proefdocument in deze repo. Het
+     getal hangt af van hoe vol de krapste pagina staat; wat vaststaat is
+     dat er nu altijd meer dan een regel tussen zit.
 
      De marge staat náást de padding en niet in plaats daarvan, want ze
      zitten aan weerskanten van de lijn en horen bij verschillende
