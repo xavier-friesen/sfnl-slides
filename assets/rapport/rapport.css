@@ -226,6 +226,47 @@
 }
 .pagina[data-model="breed"][data-formaat="a4"] { --r-basisregels: 43; }
 
+/* De brede kolom staat midden in de zetspiegel en niet tegen de
+   binnenmarge aan. Hij is tien van de twaalf rasterkolommen, 537 van de
+   650 px, en dat overschot van 113 px lag tot nu toe helemaal aan één
+   kant: op een recto 22 mm wit links tegen 46 mm rechts. Dat is op zich
+   al geen zetspiegel meer, maar het defect dat je ziet zit ergens
+   anders. De kopregel en de folio hangen aan de zetspiegel en niet aan
+   de kolom, dus de haarlijn liep 113 px verder door dan de tekst en het
+   paginanummer stond er 113 px naast — op elke pagina van elk breed
+   rapport.
+
+   Gecentreerd is het overschot 56,7 px per kant. Nagemeten op de
+   proefzetting: 0 / 113,3 werd 56,7 / 56,7.
+
+   Wat dit met de spiegeling doet is het nakijken waard, want een
+   gecentreerde kolom in een asymmetrische zetspiegel kan die spiegeling
+   net zo goed wegpoetsen. Dat gebeurt niet: de zetspiegel spiegelt zelf
+   nog steeds, dus de kolom staat op een recto 138,7 px van de rug en
+   118,7 px van de snijkant, en op een verso precies andersom. Die 20 px
+   verschil is `--r-marge-binnen` min `--r-marge-buiten`, en dat is wat
+   de spiegeling hoort te zijn. Vóór deze regel was de rugmarge op een
+   recto 82 px en op een verso 195 px — de spiegeling stond er wel, maar
+   drie keer zo groot en aan de verkeerde kant. */
+.pagina[data-model="breed"] .raster { justify-content: center; }
+
+/* En de twee buren van het raster schuiven mee. `.paginakop` en
+   `.voetnoten` zijn geen kinderen van het raster maar broers ervan in de
+   flexkolom van de zetspiegel, dus `justify-content` op het raster raakt
+   ze niet. Nagemeten op de proefzetting zonder deze regel: het kader
+   stond 56,7 px van de zetspiegelrand, de hoofdstukopener en de
+   nootbalk op 0. Dat is te zien op elke hoofdstukopener — de titel begint
+   dan links van de alinea eronder — en op elke pagina met noten: de
+   haarlijn en de nootcijfers hangen 56,7 px links van de tekstkolom.
+   Precies de misuitlijning die A8 wilde wegnemen, één laag hoger terug.
+   Met een eigen breedte en `align-self: center` staan alle drie op
+   dezelfde kolom. */
+.pagina[data-model="breed"] .paginakop,
+.pagina[data-model="breed"] .voetnoten {
+  width: var(--r-kaderbreedte);
+  align-self: center;
+}
+
 /* --- model: kantlijn --------------------------------------------- */
 .pagina[data-model="kantlijn"] {
   --r-kaderbreedte: var(--k9);
@@ -643,8 +684,16 @@
   text-align: left;
   hyphens: none;
 }
-.exhibit__noot::before { content: "Noot  "; font-weight: 700; letter-spacing: .06em; }
-.exhibit__bron::before { content: "Bron  "; font-weight: 700; letter-spacing: .06em; }
+/* De twee labels staan in een variabele met het Nederlandse woord als
+   terugval. Wordt er niets gezet, dan staat er `Noot` en `Bron` en
+   verandert er aan een Nederlands rapport niets; zet `bouw.py` bij een
+   anderstalig rapport een `:root` met `--label-noot: "Note"` erboven,
+   dan verandert het label mee zonder dat er een tweede stijlblad bij
+   komt. De terugval hoort hier in het blad te staan en niet alleen in
+   het script: een stijlblad dat zonder zijn variabelen `Noot` weglaat,
+   levert een bronregel zonder woord ervoor. */
+.exhibit__noot::before { content: var(--label-noot, "Noot") "  "; font-weight: 700; letter-spacing: .06em; }
+.exhibit__bron::before { content: var(--label-bron, "Bron") "  "; font-weight: 700; letter-spacing: .06em; }
 
 /* Een beeld zonder de exhibitomlijsting — een foto, een sfeerbeeld.
    Dat draagt een bijschrift en verder niets. */
@@ -765,9 +814,13 @@
   hyphens: auto;
 }
 
-/* De kop die de zetmotor bovenaan een vervolgstuk herhaalt. */
+/* De kop die de zetmotor bovenaan een vervolgstuk herhaalt. Het woord
+   staat in een variabele met het Nederlandse label als terugval,
+   dezelfde regel als bij `Noot` en `Bron` hierboven. De spatie ervoor
+   staat buiten de variabele: die scheidt het label van de kolomnaam en
+   hoort dus bij de zetting en niet bij het woord. */
 .tabel--rapport thead.is-herhaald th::after {
-  content: " (vervolg)";
+  content: " " var(--label-vervolg, "(vervolg)");
   font-weight: 300;
   text-transform: none;
   letter-spacing: 0;
@@ -875,10 +928,33 @@
 
 .voetnoten {
   flex: 0 0 auto;
+  /* Lucht boven de bak, en die is er niet vanzelf. De haarlijn staat op
+     `top: 0` van deze doos, dus zonder marge raakt hij de laatste
+     tekstregel. Gemeten over 76 pagina's was de kleinste afstand tussen
+     de onderkant van de laatste regel en de bovenkant van de bak 10 px,
+     en op die pagina las de eerste noot als een regel die over de tekst
+     heen liep. Met een marge van een regel en een kwart erbij is de
+     kleinste afstand 30 px.
+
+     De marge staat náást de padding en niet in plaats daarvan, want ze
+     zitten aan weerskanten van de lijn en horen bij verschillende
+     dingen: de padding is de ruimte onder de haarlijn en die hoort bij
+     de noten, de marge is de ruimte erboven en die hoort bij de tekst.
+     Allebei komen ze van het raster af — de flexbox geeft de bak zijn
+     hoogte en het raster krimpt mee — dus dit maakt de kolom korter en
+     loopt niet over de ondermarge heen. */
+  margin-top: calc(var(--regel) * 1.25);
   padding-top: calc(var(--regel) * .55);
   position: relative;
 }
-.voetnoten:empty { display: none; padding: 0; }
+/* Leeg neemt hij geen ruimte. Dat is in het kantlijnmodel het gewone
+   geval en niet de uitzondering: daar gaan de noten de kantlijn in en
+   blijft deze bak op elke pagina leeg achter. `display: none` haalt hem
+   uit de flexkolom en daarmee vervalt de marge al; `margin-top: 0` staat
+   er toch bij, want een marge die alleen door een `display` wordt
+   tegengehouden komt terug zodra iemand die weghaalt, en dan kost een
+   lege doos elke kantlijnpagina een regel en een kwart zetspiegel. */
+.voetnoten:empty { display: none; padding: 0; margin-top: 0; }
 .voetnoten::before {
   content: "";
   position: absolute;
