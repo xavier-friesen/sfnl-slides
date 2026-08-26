@@ -1320,15 +1320,28 @@ def _hernummer(markup: str) -> str:
     gebeurde. De folio blijft ongemoeid — die komt uit de zetting en de
     inhoudsopgave wijst ernaar; de blanco's staan achter alles wat een
     folio draagt, dus daar verschuift niets.
+
+    **De zijde komt alleen terug waar hij stond.** De zetmotor zet
+    `data-zijde` sinds kort alleen nog bij `dubbelzijdig`, want zonder dat
+    attribuut gedraagt een pagina zich als recto en dat is de losse PDF
+    die niemand omslaat. Deze functie schreef hem onvoorwaardelijk terug
+    en draaide die keuze dus weer om — maar alleen in de drukklare route,
+    want zonder opvulling komt hij hier niet langs. Gemeten op een
+    enkelzijdig kantlijnrapport met `drukklaar`: 32 van de 32 pagina's
+    kregen hun zijde terug, en dan wisselen de folio en de kopregel
+    alsnog van kant.
     """
     teller = [0]
 
     def nummer(m):
         teller[0] += 1
         nr = teller[0]
+        had_zijde = 'data-zijde="' in m.group(1)
         attrs = re.sub(r'\s+data-(volgnr|zijde)="[^"]*"', "", m.group(1))
-        zijde = "recto" if nr % 2 else "verso"
-        return f'<div class="pagina"{attrs} data-zijde="{zijde}" data-volgnr="{nr}">'
+        zijde = ""
+        if had_zijde:
+            zijde = f' data-zijde="{"recto" if nr % 2 else "verso"}"'
+        return f'<div class="pagina"{attrs}{zijde} data-volgnr="{nr}">'
 
     return re.sub(r'<div class="pagina"([^>]*)>', nummer, markup)
 

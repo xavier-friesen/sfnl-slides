@@ -58,6 +58,37 @@
   var TOLERANTIE = 0.75;   // px. Onder deze marge heet een blok passend.
   var MAX_RONDEN = 20000;  // noodrem tegen een lus die niet vordert.
 
+  /**
+   * Vanaf welke krimpfactor een beeld een bredere pagina krijgt.
+   *
+   * Een beeld met tekst erop — een tabel, een grafiek, een schermbeeld —
+   * krimpt zijn eigen typografie mee. `width: 100%` verbergt dat: het
+   * beeld loopt nooit over de rand, het wordt alleen kleiner. Daarom
+   * vuurde de promotieregel die op `scrollWidth` kijkt nooit voor beeld.
+   * Gemeten op de proef: drie assessmenttabellen van 3120 px belandden
+   * in een kolom van 537 px — factor 5,8 — en kwamen op ongeveer 2,7 pt
+   * kapitaalhoogte uit. De leesvloer voor een kapitaallabel is 6 pt.
+   * Onleesbaar op papier, en niets meldde het.
+   *
+   * De rekensom, terug vanaf die meting. Op ware grootte is diezelfde
+   * letter 5,8 x 2,7 = 15,7 pt kapitaalhoogte; dat is de maat waarop
+   * zulke platen getekend worden. Hij zakt door de 6 pt heen bij
+   * 15,7 / 6 = 2,6. Afgerond: 2,5.
+   *
+   * Diezelfde 2,5 komt er van de andere kant ook uit. Een bitmap wordt
+   * op het dubbele geëxporteerd zodat hij op ongeveer 192 dpi drukt in
+   * plaats van 96; factor 2 is dus bedoeld en kost geen leesbaarheid.
+   * Alles daarboven eet in de letter, en 2,5 laat een halve factor
+   * speling voordat er iets verhuist.
+   *
+   * De grens is bewust ruim. Een foto heeft geen letter en lijdt niet
+   * onder krimp, maar in de DOM is een foto niet van een tabel te
+   * onderscheiden — een pagina te veel is goedkoper dan een tabel die
+   * niemand kan lezen. Wat er na het verhuizen werkelijk uitkomt, meet
+   * `qa_rapport.py`; deze motor verplaatst alleen.
+   */
+  var KRIMPGRENS = 2.5;
+
   /* ------------------------------------------------------------------
      Meten
      ------------------------------------------------------------------ */
@@ -94,6 +125,64 @@
   /** De onderkant van het kader in schermcoördinaten. */
   function grensVan(kader) {
     return kader.getBoundingClientRect().top + kader.clientHeight;
+  }
+
+  /**
+   * De intrinsieke breedte van een beeld, in px.
+   *
+   * `data-eigenbreedte` eerst en `naturalWidth` daarna. Het attribuut
+   * staat er omdat de zetting op een kloon van de stroom werkt, en een
+   * verse kloon kent zijn `naturalWidth` niet altijd al: dan meet je nul
+   * en vuurt de promotieregel niet. `window.zet` stempelt de maat op het
+   * origineel — dat is geladen — voordat er gekloond wordt.
+   */
+  function eigenBreedte(img) {
+    var eigen = parseFloat(img.getAttribute('data-eigenbreedte')) || 0;
+    return eigen || img.naturalWidth || 0;
+  }
+
+  /**
+   * De volle zetspiegelbreedte op de pagina waar dit kader op staat.
+   *
+   * Gemeten aan het raster waar de kaders in staan, want dat is de volle
+   * breedte: in dubbel 310 + 30 + 310, in kantlijn 480 + 30 + 140, in
+   * breed 537 met de rest als lucht — alle drie 650 px. Uitrekenen uit
+   * de CSS-variabelen kan niet: `--r-zetbreedte` is een `calc()` en
+   * `getComputedStyle` levert die als tekst terug en niet als getal.
+   */
+  function volleBreedte(kader) {
+    var raster = kader.parentNode;
+    return raster && raster.clientWidth ? raster.clientWidth : kader.clientWidth;
+  }
+
+  /**
+   * De factor waarmee het grootste beeld in dit blok krimpt.
+   *
+   * 1 is op ware grootte, 4 is een kwart. Nul betekent: er zit geen
+   * beeld in, of het is nog niet geladen, en dan valt er niets te
+   * beslissen.
+   *
+   * Gemeten wordt de intrinsieke breedte tegen de gerenderde breedte van
+   * hetzelfde beeld, en niet tegen de kaderbreedte. Een beeld in een
+   * exhibit staat binnen de rand van dat exhibit en is daar smaller dan
+   * de kolom; de kolom meten zou de krimp onderschatten.
+   *
+   * Alleen `<img>`. Een inline `<svg>` krimpt zijn letter net zo hard,
+   * maar de docx-route levert bitmaps en op een svg is hier niets
+   * gemeten — een regel zonder meting hoort er niet in.
+   */
+  function krimpfactor(blok) {
+    var beelden = blok.tagName === 'IMG'
+      ? [blok] : Array.prototype.slice.call(blok.querySelectorAll('img'));
+    var grootste = 0;
+    for (var i = 0; i < beelden.length; i++) {
+      var eigen = eigenBreedte(beelden[i]);
+      var gerenderd = beelden[i].getBoundingClientRect().width;
+      if (!eigen || gerenderd <= 0) continue;
+      var factor = eigen / gerenderd;
+      if (factor > grootste) grootste = factor;
+    }
+    return grootste;
   }
 
   /* ------------------------------------------------------------------
@@ -349,6 +438,33 @@
     return staart;
   }
 
+  /**
+   * Splitsen van de inhoudsopgave.
+   *
+   * `.inhoud` is een `div`, en een `div` viel in de alinearoute. Die
+   * knipt op een tekenpositie, en een tekenpositie zit midden in een
+   * regel. Gemeten op de proef: de opgave brak op "Annex 2. AHO" /
+   * "assessment", met de folio op de andere pagina. Onderaan de ene
+   * pagina een puntenlijn die nergens heen loopt, bovenaan de volgende
+   * een half woord met een paginanummer erachter.
+   *
+   * De opgave is geen lopende tekst maar een lijst regels, en dus hoort
+   * hij op dezelfde grens te breken als een lijst: tussen twee kinderen.
+   * `splitsContainer` doet dat en hermeet daarna, want de onderkant van
+   * de laatste regel is niet de onderkant van de opgave.
+   *
+   * Wat de staart niet meeneemt is `data-nieuwe-pagina`. Dat attribuut
+   * zegt dat de inhoudsopgave op een nieuwe pagina begint, en dat geldt
+   * voor het begin en niet voor het vervolg. Zonder deze regel sluit het
+   * vervolg in het dubbele model de pagina waar het net op beland is en
+   * blijft de tweede kolom leeg.
+   */
+  function splitsInhoud(el, kader) {
+    return splitsContainer(el, kader,
+      function (l) { return Array.prototype.slice.call(l.children); },
+      function (kop, staart) { staart.removeAttribute('data-nieuwe-pagina'); });
+  }
+
   /* ------------------------------------------------------------------
      De pagina's
      ------------------------------------------------------------------ */
@@ -377,9 +493,22 @@
   Zetter.prototype.nieuwePagina = function (opties) {
     opties = opties || {};
     var p = this.sjabloon(opties.sjabloon || 'tekst');
-    var zijde = (this.paginas.length + (this.cfg.eersteZijde === 'verso' ? 1 : 0)) % 2
-      ? 'verso' : 'recto';
-    p.setAttribute('data-zijde', zijde);
+
+    // De zijde staat er alleen in een dubbelzijdig rapport.
+    //
+    // `rapport.css` zei het al — zonder `data-zijde` gedraagt de pagina
+    // zich als recto, en dat is de losse PDF die niemand omslaat — maar
+    // de zetmotor zette hem toch altijd. Bij `dubbelzijdig: false`
+    // verdwenen de blanco verso's wel, en bleven de folio en de kopregel
+    // van kant wisselen: pagina 6 met zijn nummer links, pagina 7 met
+    // zijn nummer rechts, in een bestand dat alleen gescrold wordt. Er
+    // is dan geen rug en geen buitenkant, dus is elke pagina een recto
+    // en hoort het attribuut er niet te staan.
+    if (this.cfg.dubbelzijdig) {
+      var zijde = (this.paginas.length + (this.cfg.eersteZijde === 'verso' ? 1 : 0)) % 2
+        ? 'verso' : 'recto';
+      p.setAttribute('data-zijde', zijde);
+    }
     p.setAttribute('data-register', this.cfg.register || 'helder');
     p.setAttribute('data-formaat', this.cfg.formaat || 'sfnl');
     p.setAttribute('data-dichtheid', this.cfg.dichtheid || 'gemiddeld');
@@ -516,6 +645,7 @@
   };
 
   Zetter.prototype.splits = function (el, kader) {
+    if (el.classList.contains('inhoud')) return splitsInhoud(el, kader);
     var t = el.tagName;
     if (t === 'UL' || t === 'OL') return splitsLijst(el, kader);
     if (t === 'TABLE') return splitsTabel(el, kader);
@@ -647,39 +777,53 @@
     kader.appendChild(blok);
     if (eerste) blok.classList.add('is-eerste-in-kader');
 
-    // Breder dan het kader. Dit is het enige geval waarin de hoogte
-    // niets zegt: een tabel van acht kolommen past qua hoogte prima in
-    // een kolom van 310 px en steekt er 74 px naast uit. `scrollHeight`
-    // ziet dat niet, dus het ging stil mis.
+    // Te breed voor deze kolom. Twee gevallen, en ze zien er in de DOM
+    // niet hetzelfde uit.
+    //
+    // Het eerste loopt over de rand. Een tabel van acht kolommen past
+    // qua hoogte prima in een kolom van 310 px en steekt er 74 px naast
+    // uit; dit is het enige geval waarin de hoogte niets zegt, want
+    // `scrollHeight` ziet het niet en het ging stil mis.
+    //
+    // Het tweede loopt juist niet over de rand. Een `<img>` op
+    // `width: 100%` wordt nooit te breed — hij krimpt — dus vuurde de
+    // eerste regel nooit voor beeld. Wat er krimpt is de letter op dat
+    // beeld, en die krimp is te meten. Zie `KRIMPGRENS`.
+    //
+    // Allebei gaan ze naar een eigen pagina over de volle zetspiegel, en
+    // dat mag in elk model. De oude eis `this.kaders.length > 1`
+    // betekende dat de route alleen in het dubbele model bestond: in
+    // breed en kantlijn stond een te wijde tabel er gewoon uit.
+    var solo = false;
+    if (!blok.classList.contains('is-vol-geprobeerd')
+        && volleBreedte(kader) > kader.clientWidth + 1
+        && (blok.scrollWidth > kader.clientWidth + 1
+            || krimpfactor(blok) > KRIMPGRENS)) {
+      kader = this.naarBredePagina(blok, kader);
+      eerste = true;
+      solo = true;
+    }
+
     if (blok.scrollWidth > kader.clientWidth + 1) {
+      // Nog steeds te breed, ook over de volle breedte. Dan wordt de
+      // tabel in zijn breedte gedwongen — de cellen breken af, er gaat
+      // geen tekst verloren — en het gaat als klacht mee, want dit is
+      // een inhoudelijk probleem en geen zetprobleem.
+      //
+      // Het getal wordt hier gemeten en niet vóór de verhuizing. Anders
+      // meldt de klacht de overmaat tegen de kolom terwijl er "breder
+      // dan de volle zetspiegel" staat.
       var over = Math.round(blok.scrollWidth - kader.clientWidth);
-      if (this.kaders.length > 1 && !blok.classList.contains('is-vol-geprobeerd')) {
-        // In het dubbele model: eigen pagina over de volle zetspiegel.
-        kader.removeChild(blok);
-        blok.classList.add('is-vol-geprobeerd');
-        this.gooiLegePaginaWeg();
-        this.sluitPagina();
-        this.nieuwePagina({ model: 'breed' });
-        this.kaders[0].appendChild(blok);
-        kader = this.kaders[0];
-        eerste = true;
-      }
-      if (blok.scrollWidth > kader.clientWidth + 1) {
-        // Nog steeds te breed, ook over de volle breedte. Dan wordt de
-        // tabel in zijn breedte gedwongen — de cellen breken af, er
-        // gaat geen tekst verloren — en het gaat als klacht mee, want
-        // dit is een inhoudelijk probleem en geen zetprobleem.
-        blok.classList.add('is-te-breed');
-        this.klachten.push({
-          soort: 'te-breed',
-          bron: blok.getAttribute('data-bron') || '',
-          over: over,
-          folio: this.pagina.getAttribute('data-folio') || '',
-          wat: 'Dit blok is ' + over + ' px breder dan de volle zetspiegel. Het is '
-             + 'in de breedte gedwongen, dus de cellen breken af. Een tabel met zo '
-             + 'veel kolommen hoort gekanteld, gesplitst of naar een liggende bijlage.'
-        });
-      }
+      blok.classList.add('is-te-breed');
+      this.klachten.push({
+        soort: 'te-breed',
+        bron: blok.getAttribute('data-bron') || '',
+        over: over,
+        folio: this.pagina.getAttribute('data-folio') || '',
+        wat: 'Dit blok is ' + over + ' px breder dan de volle zetspiegel. Het is '
+           + 'in de breedte gedwongen, dus de cellen breken af. Een tabel met zo '
+           + 'veel kolommen hoort gekanteld, gesplitst of naar een liggende bijlage.'
+      });
     }
 
     // Een kop die niet genoeg ruimte overlaat voor twee regels tekst,
@@ -729,6 +873,10 @@
     if (past(kader)) {
       this.bindKop(blok, kader);
       this.herstel(kader);
+      // Een brede pagina draagt dit blok en verder niets. `herstel` kan
+      // hier niets teruggenomen hebben — er staat maar één blok in het
+      // kader — dus de pagina die gesloten wordt is deze.
+      if (solo) this.sluitPagina();
       return null;
     }
 
@@ -862,6 +1010,28 @@
     var regels = Math.round(blok.getBoundingClientRect().height / lh);
     if (regels >= (this.cfg.minRegelsNaKop || 2)) return;
 
+    // Maar niet als er onder dit blok nog een regel vrij is.
+    //
+    // De regeltelling hierboven meet hoeveel regels het blok krijgt, en
+    // dat is niet de vraag die de kop stelt. De vraag is: sta ik
+    // onderaan een pagina met mijn tekst op de volgende. Een blok dat
+    // van zichzelf een regel lang is — "Model & organisation", twintig
+    // tekens — krijgt er altijd een, ook boven aan een lege pagina. Dan
+    // verhuisde de kop en sloot de pagina erachter. Gemeten op de proef:
+    // een pagina die voor zes procent vol stond, met 780 px onbenut.
+    //
+    // De drempel is een regelhoogte, want dat is precies wat het
+    // verschil uitmaakt. Past er onder dit blok nog een regel, dan is de
+    // pagina hier niet afgelopen: er komt tekst onder de kop en er is
+    // niets te repareren. Past er geen regel meer, dan is dit blok het
+    // laatste op de pagina en staat de kop wel degelijk alleen.
+    //
+    // `ruimteOver` en niet `scrollHeight`. Die laatste is voor een niet
+    // vol kader per definitie gelijk aan `clientHeight` en zou hier
+    // altijd nul melden — dan verandert deze regel niets. Zie de
+    // opmerking bij `ruimteOver` zelf.
+    if (ruimteOver(kader) >= lh) return;
+
     kader.removeChild(blok);
     kader.removeChild(vorige);
     this.klachten.push({
@@ -908,6 +1078,45 @@
         folio: p ? (p.getAttribute('data-folio') || '') : ''
       });
     }
+  };
+
+  /**
+   * Het blok naar een eigen pagina over de volle zetspiegel.
+   *
+   * De pagina krijgt één kader van 650 px in plaats van de kolom waar
+   * het blok niet in kon: in dubbel 310 -> 650, in kantlijn 480 -> 650,
+   * in breed 537 -> 650. Dat laatste is de reden dat hier
+   * `--r-kaderbreedte` op `--k12` wordt gezet en de pagina niet alleen
+   * op `breed` wordt gezet: een brede pagina in een breed rapport is
+   * even breed als de pagina die het blok net verliet, en dan is de
+   * verhuizing een lege beweging.
+   *
+   * De overige kaders en de kantlijn gaan eraf. In een raster van één
+   * kolom zouden ze in een tweede rij belanden met hoogte nul, en een
+   * voetnoot die in zo'n kantlijn valt is een voetnoot die niemand ziet.
+   *
+   * De pagina draagt dit blok en verder niets; de aanroeper sluit hem
+   * erna. Tekst over 650 px is zevenennegentig tekens per regel, en dat
+   * leest niet — dat staat in `bouw.py` al zo over het flexibele model.
+   */
+  Zetter.prototype.naarBredePagina = function (blok, kader) {
+    kader.removeChild(blok);
+    blok.classList.add('is-vol-geprobeerd');
+    this.gooiLegePaginaWeg();
+    this.sluitPagina();
+    var p = this.nieuwePagina({ model: 'breed' });
+    p.style.setProperty('--r-kaderbreedte', 'var(--k12)');
+    var kantlijn = p.querySelector('.kantlijn');
+    if (kantlijn) kantlijn.parentNode.removeChild(kantlijn);
+    for (var i = this.kaders.length - 1; i > 0; i--) {
+      this.kaders[i].parentNode.removeChild(this.kaders[i]);
+    }
+    this.kaders = this.kaders.slice(0, 1);
+    this.kaderNr = 0;
+    this.kaders[0].classList.add('kader--vol');
+    this.kaders[0].appendChild(blok);
+    blok.classList.add('is-eerste-in-kader');
+    return this.kaders[0];
   };
 
   /**
@@ -1052,6 +1261,19 @@
     var rapport = document.getElementById('rapport');
     var stroom = document.getElementById('stroom');
     rapport.innerHTML = '';
+
+    // De intrinsieke breedte van elk beeld vastleggen, vóór het klonen.
+    // Op de kloon is `naturalWidth` niet betrouwbaar — een verse `<img>`
+    // kent hem pas als het beeld is gedecodeerd, ook uit de cache — en
+    // een nul betekent hier "geen beeld" en niet "nog niet geladen". Het
+    // origineel staat sinds het laden in de pagina en is wél klaar.
+    // `qa_rapport.py` kan de maat op dezelfde plek teruglezen.
+    var beelden = stroom.querySelectorAll('img');
+    for (var b = 0; b < beelden.length; b++) {
+      if (beelden[b].naturalWidth) {
+        beelden[b].setAttribute('data-eigenbreedte', String(beelden[b].naturalWidth));
+      }
+    }
 
     // Een verse kopie van de stroom, want de vorige ronde heeft de
     // originele knopen verplaatst en gesplitst.
