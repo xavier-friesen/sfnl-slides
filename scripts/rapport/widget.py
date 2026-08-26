@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """De ontwerpwidget: alle vormbesluiten op één pagina, met een preview.
 
-Het vragenvuur van deze skill is met tweeëntwintig besluiten, verspreid
+Het vragenvuur van deze skill is met achtentwintig besluiten, verspreid
 over ruim dertig velden, veel te lang geworden voor een gesprek. Vier per
-keer door een keuzewidget betekent zes rondes, en na de tweede weet
+keer door een keuzewidget betekent zeven rondes, en na de tweede weet
 niemand meer wat er in de eerste is gekozen. Dus: één pagina, alles zichtbaar, en een schematische preview
 die meebeweegt.
 
@@ -22,6 +22,16 @@ binnen de skill, en een keuzeknop met alleen zo'n woord erop is geen
 vraag maar een raadsel. Elk veld zegt daarom wat je ervoor terugkrijgt,
 en elk blok begint met één regel die zegt waar het over gaat en of je
 het gerust kunt overslaan.
+
+Het derde: hij laat bovenaan zien wat er niet gevraagd maar gezien is.
+`lees_docx.py` legt naast de wijzigingsvoorstellen zes waarnemingen over
+het document als geheel vast — een Engelse bron, koppen die zichzelf
+nummeren, een figuur die een browser niet kan tonen — en die sturen de
+vormbesluiten eronder. Ze staan daarom bóven de vraagblokken, elk met
+wat er is gezien en wat ermee gebeurt; bij de twee die een besluit
+hieronder raken staat erbij welk. Is er niets gezien, dan staat er
+niets: een kopje met "geen bevindingen" eronder kost de lezer aandacht
+en geeft er niets voor terug.
 
 De preview is een **schema en geen zetproef**: het laat de omslag, de
 marges, de kolommen, de band en de folio zien, en het reageert op elke
@@ -44,6 +54,7 @@ from __future__ import annotations
 import argparse
 import html
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -103,6 +114,11 @@ h2 {{ font-family: var(--display); font-weight: 800; font-size: 13px;
 }}
 .opt input:checked + span {{ background: var(--navy); color: #fff; border-color: var(--navy); }}
 .opt input:focus-visible + span {{ outline: 2px solid var(--oranje); outline-offset: 2px; }}
+/* Een stand die bij dít document de goede is, krijgt een streep. Alleen
+   aanwijzen, niet aanvinken: welke stand het wordt blijft een besluit
+   van de gebruiker. */
+.opt.wijs span {{ border-color: var(--oranje);
+                 box-shadow: inset 0 -3px 0 var(--oranje); }}
 .stip {{ display: inline-block; width: 10px; height: 10px; border-radius: 50%;
         margin-right: 7px; border: 1px solid rgba(32,27,92,.28); }}
 .uitleg {{ grid-column: 2; font-size: 12.5px; color: var(--zacht);
@@ -133,6 +149,20 @@ select {{ padding: 7px 10px; border: 1px solid var(--lijn); font-family: var(--b
 .vink input {{ width: 17px; height: 17px; margin: 3px 0 0; accent-color: var(--navy); }}
 .vink span {{ font-size: 12.5px; line-height: 1.45; color: var(--zacht); }}
 .vink b {{ display: block; font-size: 13.5px; font-weight: 700; color: var(--navy); }}
+
+/* --- wat er eerst beslist moet worden ------------------------------ */
+/* Deze kaart staat boven de vormblokken, want het zijn waarnemingen die
+   de keuzes eronder sturen en niet andersom. De lijn links zet hem apart
+   van de vraagblokken zonder alarm te slaan; er is niets kapot, er valt
+   iets te beslissen. */
+.eerst {{ border-left: 4px solid var(--oranje); }}
+.bev + .bev {{ margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--lijn); }}
+.bev h3 {{ font-family: var(--display); font-weight: 700; font-size: 14px;
+          margin: 0 0 5px; }}
+.bev p {{ margin: 0; font-size: 12.5px; line-height: 1.5; color: var(--zacht);
+         max-width: 74ch; }}
+.bev p.doen {{ margin-top: 5px; color: var(--navy); }}
+.bev .vb {{ color: var(--navy); }}
 
 /* --- de preview --------------------------------------------------- */
 /* De kolom blijft staan terwijl links wordt gescrold. Op een laag scherm
@@ -282,7 +312,19 @@ function lees() {{
   for (const k of ['rapporttitel','ondertitel','opdrachtgever','datum','beeldmap']) {{
     if (!o[k]) o[k] = null;
   }}
-  return o;
+  // Hoofdstuknummers heeft drie standen en de derde is een woord, geen
+  // ja of nee. Als vinkje ingelezen zou "uit de bron" als "aan" terugkomen
+  // en dan telt de skill alsnog zelf.
+  o.hoofdstuknummers = o.hoofdstuknummers === 'uit-bron'
+    ? 'uit-bron' : o.hoofdstuknummers === 'ja';
+  // De taal staat in het formulier als twee knoppen plus een vrij veld,
+  // en in `ontwerp.json` als één ISO-code. Leeg mag hij niet zijn: dan
+  // zet Chromium af zonder woordenboek en vervalt de afbreking stil.
+  const code = (o.taalkeus === 'anders'
+    ? (o.taalAnders || '') : (o.taalkeus || 'nl')).trim();
+  delete o.taalkeus; delete o.taalAnders;
+  // De taal vooraan, want het is het besluit dat als eerste vaststaat.
+  return {{ taal: code || 'nl', ...o }};
 }}
 
 function ververs() {{
@@ -332,8 +374,38 @@ function ververs() {{
   }}
   document.getElementById('p-meting').innerHTML = tekst;
 
+  // Een taal buiten de tabel krijgt wel de goede afbreking maar
+  // Nederlandse woorden. Dat hoort hier te staan en niet pas op stderr
+  // van het bouwscript, want hier wordt de taal gekozen.
+  const code = String(o.taal || 'nl').toLowerCase();
+  const kort = code.split('-')[0];
+  const let_ = document.getElementById('taal-let');
+  if (kort !== 'nl' && kort !== 'en') {{
+    let_.innerHTML = 'Voor <b>' + o.taal + '</b> heeft de skill geen eigen ' +
+      'woorden. De tekst wordt wél in die taal afgebroken, maar Hoofdstuk, ' +
+      'Figuur en Noten blijven Nederlands. Het bouwscript zegt dat er ook bij.';
+  }} else if (code !== kort) {{
+    // en-GB krijgt de Engelse woorden: een streekvariant heeft dezelfde.
+    let_.innerHTML = 'Voor <b>' + o.taal + '</b> pakt de skill de ' +
+      (kort === 'nl' ? 'Nederlandse' : 'Engelse') + ' woorden — een ' +
+      'streekvariant heeft dezelfde — en de tekst wordt op ' + o.taal +
+      ' afgebroken.';
+  }} else {{
+    let_.textContent = 'Nederlands en Engels zijn de twee talen waarvoor de ' +
+      'skill eigen woorden heeft. Bij deze twee klopt allebei: de afbreking ' +
+      'en de toegevoegde woorden.';
+  }}
+
   document.getElementById('uit').textContent = JSON.stringify(o, null, 1);
 }}
+
+// Wie een code in het vrije veld typt, heeft de knop ernaast bedoeld.
+// Zonder dit blijft `nl` aangevinkt en gaat de getypte code verloren.
+const taalVrij = document.querySelector('[data-veld="taalAnders"]');
+taalVrij.addEventListener('input', () => {{
+  const anders = document.querySelector('[data-veld="taalkeus"][value="anders"]');
+  if (taalVrij.value.trim()) anders.checked = true;
+}});
 
 document.addEventListener('input', ververs);
 document.addEventListener('change', ververs);
@@ -386,15 +458,23 @@ VELDKLEUREN = {
 
 
 def keuze(veld: str, label: str, opties: list, gekozen: str, uitleg: str = "",
-          kleuren: dict | None = None) -> str:
+          kleuren: dict | None = None, nadruk: str | None = None) -> str:
+    """Een rij knoppen waarvan er één aan staat.
+
+    `nadruk` streept één stand aan omdat een bevinding bovenaan zegt dat
+    hij hier de goede is. Het zet hem niet aan: wat er in het rapport
+    komt te staan blijft een besluit van de gebruiker, en een widget die
+    zelf alvast kiest laat niet zien dat er gekozen is.
+    """
     knoppen = []
     for waarde, tekst in opties:
         aan = " checked" if waarde == gekozen else ""
+        wijs = " wijs" if nadruk is not None and waarde == nadruk else ""
         stip = ""
         if kleuren and waarde in kleuren:
             stip = f'<i class="stip" style="background:{kleuren[waarde]}"></i>'
         knoppen.append(
-            f'<label class="opt"><input type="radio" name="{veld}" '
+            f'<label class="opt{wijs}"><input type="radio" name="{veld}" '
             f'data-veld="{veld}" value="{_esc(waarde)}"{aan}>'
             f'<span>{stip}{_esc(tekst)}</span></label>')
     hulp = f'<p class="uitleg">{uitleg}</p>' if uitleg else ""
@@ -444,18 +524,183 @@ def keuzelijst(veld: str, label: str, opties: list, gekozen: str,
             f'<select data-veld="{veld}">{"".join(regels)}</select>{hulp}</div>')
 
 
-def kaart(titel: str, toelicht: str, *stukken: str) -> str:
+def kaart(titel: str, toelicht: str, *stukken: str, klasse: str = "") -> str:
     """Een blok met een kop en één regel die zegt waar het over gaat.
 
     Die regel is niet decoratief. Wie deze skill niet kent, moet aan de
     kop kunnen zien of dit blok hem aangaat of dat hij het kan laten
     staan; zonder die regel wordt elk blok een vraag.
     """
-    return (f'<div class="kaart"><h2>{_esc(titel)}</h2>'
+    return (f'<div class="kaart{(" " + klasse) if klasse else ""}">'
+            f'<h2>{_esc(titel)}</h2>'
             f'<p class="toelicht">{toelicht}</p>{"".join(stukken)}</div>')
 
 
-def bouw_secties(doc: dict, ontwerp: dict) -> tuple[str, str]:
+#: De zes waarnemingen die `lees_docx.py` als `vormbesluit` meegeeft, in
+#: de volgorde waarin ze hier komen te staan. Een signaal dat hier niet
+#: in staat, is een wijzigingsvoorstel over één blok en hoort niet in
+#: deze widget: dat komt pas ná het ontwerp aan de beurt.
+VORMBESLUITEN = ("bron-niet-nederlands", "koppen-een-niveau-te-diep",
+                 "kop-nummert-zichzelf", "beeld-niet-renderbaar",
+                 "beeld-buiten-de-stroom", "kop-zonder-inhoud")
+
+
+def _stuks(n: int, enkel: str, meer: str) -> str:
+    return f"{n} {enkel if n == 1 else meer}"
+
+
+def _voorbeelden(waarden: list) -> str:
+    """Eén of twee voorbeelden uit het document, tussen aanhalingstekens.
+
+    Twee is het maximum. Een derde maakt van een waarneming een lijst,
+    en een lijst wordt overgeslagen; hier hoeft de gebruiker alleen te
+    herkennen waar het over gaat.
+    """
+    stuks = [f'<span class="vb">"{_esc(w)}"</span>'
+             for w in waarden[:2] if str(w or "").strip()]
+    return " en ".join(stuks)
+
+
+def bevinding(sig: dict) -> tuple[str, str, str] | None:
+    """Eén vormbesluit als drie stukken tekst: kop, gezien, wat nu.
+
+    De tekst wordt hier opgebouwd uit de getallen in het signaal en niet
+    overgenomen uit `wat` en `voor de vorm`. Die twee velden zijn voor
+    het gesprek geschreven en staan in de taal van de skill; hier staat
+    wat de gebruiker ermee moet, en waar hij dat regelt.
+    """
+    soort = sig.get("soort")
+
+    if soort == "bron-niet-nederlands":
+        sleutel = sig.get("taal") or ""
+        naam = str(sleutel).capitalize() or "een andere taal"
+        tr = sig.get("treffers") or {}
+        return (
+            "Het brondocument is niet in het Nederlands geschreven",
+            f'Van de {sig.get("woorden", 0)} woorden lopende tekst horen er '
+            f'{tr.get(sleutel, 0)} bij het {naam} en {tr.get("nederlands", 0)} '
+            f'bij het Nederlands.',
+            f'Zet de taal hieronder bij <b>De taal</b> op {naam}; staat er geen '
+            f'knop voor, vul dan de ISO-code in het veld ernaast. Doe het nu en '
+            f'niet na het bouwen: de taal bepaalt waar elke regel breekt en in '
+            f'welke taal de woorden staan die de skill zelf toevoegt.')
+
+    if soort == "koppen-een-niveau-te-diep":
+        return (
+            "Alle koppen staan een niveau te diep",
+            f'{_stuks(sig.get("koppen", 0), "kop", "koppen")}, en de hoogste '
+            f'staat op niveau {sig.get("hoogste_niveau", 2)}. Niveau 1 komt niet '
+            f'voor — dat gebeurt bij een sjabloon waarin niveau 1 voor de omslag '
+            f'was.',
+            'De skill kan alle koppen één niveau omhoog schuiven voordat er '
+            'gezet wordt. Dat verandert de opmaak en geen woord van de tekst, '
+            'en ze vraagt het je eerst. Gebeurt het niet, dan wordt elk '
+            'hoofdstuk een sectie: geen hoofdstukopening op de pagina en een '
+            'inhoudsopgave zonder bovenste laag.')
+
+    if soort == "kop-nummert-zichzelf":
+        niveaus = sig.get("niveaus") or []
+        zin = "; ".join(
+            f'op niveau {n.get("niveau")} dragen {n.get("genummerd")} van de '
+            f'{n.get("koppen")} koppen hun eigen nummer' for n in niveaus)
+        vb = _voorbeelden(
+            [v for n in niveaus for v in (n.get("voorbeelden") or [])])
+        gezien = (zin[:1].upper() + zin[1:]) if zin else "De koppen dragen een nummer"
+        return (
+            "De koppen dragen hun eigen nummer",
+            gezien + (f', bijvoorbeeld {vb}.' if vb else "."),
+            'Kies hieronder bij <b>Nummers en zijden</b> de stand <b>uit de '
+            'bron overnemen</b>. De skill telt dan niet zelf mee, het nummer '
+            'blijft staan waar de auteur het schreef, en het grote cijfer op de '
+            'hoofdstukopening wordt uit de kop gelezen. Laat je het op nummeren '
+            'staan, dan komt er straks "3 3.2 Werkwijze" op de pagina en in de '
+            'inhoudsopgave.')
+
+    if soort == "beeld-niet-renderbaar":
+        best = sig.get("bestanden") or []
+        aantal = sig.get("aantal", len(best))
+        formaten = ", ".join(sorted({b.get("formaat", "") for b in best}))
+        vb = _voorbeelden([b.get("naam") for b in best])
+        return (
+            "Een beeldbestand dat een browser niet kan tonen",
+            f'{aantal} van de {sig.get("van", aantal)} beeldbestanden '
+            f'{"staat" if aantal == 1 else "staan"} in een formaat dat een '
+            f'browser niet opent: {formaten}'
+            + (f'. Het gaat om {vb}.' if vb else "."),
+            "Het rapport wordt in een browser gezet. Zo'n bestand komt daar "
+            "niet als foutmelding op de pagina maar als een leeg vlak, precies "
+            "zo groot als de figuur had moeten zijn. Het moet dus vóór het "
+            "bouwen vervangen worden door een png of een svg in dezelfde maat; "
+            "de skill vraagt wie dat doet en zet er tot die tijd niets neer.")
+
+    if soort == "beeld-buiten-de-stroom":
+        best = sig.get("bestanden") or []
+        aantal = sig.get("aantal", len(best))
+        vb = _voorbeelden([b.get("naam") if isinstance(b, dict) else b
+                           for b in best])
+        return (
+            "Beeld dat buiten de tekst staat",
+            _stuks(aantal, "beeldbestand", "beeldbestanden") + " in het "
+            "Word-document " + ("wordt" if aantal == 1 else "worden")
+            + " door geen enkele alinea genoemd"
+            + (f': {vb}.' if vb else "."),
+            'Een figuur in een tekstvak, een SmartArt of een beeld in de '
+            'koptekst zit niet in de tekststroom. Het is niet ingelezen en het '
+            'komt dus ook niet in het rapport. Moet het toch mee, dan vraagt de '
+            'skill achter welk blok het hoort: waar het staan moet, staat '
+            'nergens in het bestand.')
+
+    if soort == "kop-zonder-inhoud":
+        koppen = sig.get("koppen") or []
+        aantal = sig.get("aantal", len(koppen))
+        vb = _voorbeelden([k.get("tekst") for k in koppen])
+        return (
+            "Een kop zonder iets eronder",
+            _stuks(aantal, "kop heeft", "koppen hebben") + " niets onder zich: "
+            "geen alinea, geen lijst, geen tabel, geen beeld en geen diepere kop"
+            + (f'. Het gaat om {vb}.' if vb else "."),
+            "Zo'n kop is er een die de auteur vergeten is in te vullen, of een "
+            'sectie die leeg gebleven is. Gezet komt hij onderaan een pagina te '
+            'staan met wit eronder, en in de inhoudsopgave verwijst hij naar '
+            'niets. De skill laat hem staan en vraagt of hij weg mag of bij de '
+            'volgende hoort — dat is een wijziging in de tekst en die gaat apart '
+            'langs jou.')
+
+    return None
+
+
+def bevindingenkaart(gevonden: dict) -> str:
+    """De kaart met de vormbesluiten, of niets.
+
+    Niets als er niets is gezien. Een kopje met "geen bevindingen"
+    eronder is ruis: het vraagt de aandacht van de lezer en geeft er
+    niets voor terug.
+    """
+    stukken = []
+    for soort in VORMBESLUITEN:
+        sig = gevonden.get(soort)
+        if not sig:
+            continue
+        gemaakt = bevinding(sig)
+        if not gemaakt:
+            continue
+        titel, gezien, doen = gemaakt
+        stukken.append(f'<div class="bev"><h3>{_esc(titel)}</h3>'
+                       f'<p>{gezien}</p><p class="doen">{doen}</p></div>')
+    if not stukken:
+        return ""
+    return kaart(
+        "Dit moet je eerst beslissen",
+        "Wat er bij het inlezen aan het document zelf opviel — niet aan de "
+        "tekst, aan de vorm ervan. Het staat bovenaan omdat het de keuzes "
+        "hieronder stuurt. Per bevinding staat er eerst wat er gezien is en "
+        "daaronder wat ermee gebeurt; raakt het een keuze hieronder, dan staat "
+        "erbij welke. Achteraf hierop terugkomen kost een nieuwe zetting.",
+        *stukken, klasse="eerst")
+
+
+def bouw_secties(doc: dict, ontwerp: dict,
+                 vormbesluiten: dict | None = None) -> tuple[str, str, str]:
     ap = doc.get("apparaat", {})
     tel = doc.get("telling", {})
     heeft_noten = bool(ap.get("voetnoten") or ap.get("eindnoten"))
@@ -464,8 +709,52 @@ def bouw_secties(doc: dict, ontwerp: dict) -> tuple[str, str]:
     heeft_beeld = bool(tel.get("beelden"))
     citaten = ap.get("citaten", {})
     el = ontwerp.get("elementen") or {}
+    gevonden = vormbesluiten or {}
+    eigen_nummers = bool(gevonden.get("kop-nummert-zichzelf"))
 
     delen = []
+
+    # -- wat er eerst beslist moet worden ------------------------------
+    # Boven de vormblokken: het zijn waarnemingen die de keuzes eronder
+    # sturen. Andersom staat een gebruiker een taal te kiezen zonder te
+    # weten dat zijn bron Engels is.
+    eerst = bevindingenkaart(gevonden)
+    if eerst:
+        delen.append(eerst)
+
+    # -- de taal -------------------------------------------------------
+    taal = str(ontwerp.get("taal") or "nl").strip() or "nl"
+    taalkeus = taal.lower() if taal.lower() in ("nl", "en") else "anders"
+    # Wijst een bevinding een taal aan, dan wordt die stand aangestreept.
+    # Aanvinken doet de widget niet: de taal van het rapport is niet
+    # hetzelfde als de taal van de bron, en dat verschil is een besluit.
+    bron = gevonden.get("bron-niet-nederlands") or {}
+    gemeten = {"nederlands": "nl", "engels": "en",
+               "duits": "de", "frans": "fr"}.get(bron.get("taal") or "")
+    delen.append(kaart(
+        "De taal",
+        "In welke taal dit rapport gezet wordt. Eén vraag, en hij staat "
+        "vooraan omdat hij vóór het bouwen vast moet staan.",
+        keuze("taalkeus", "Taal van het rapport",
+              [("nl", "Nederlands"), ("en", "Engels"),
+               ("anders", "een andere taal")],
+              taalkeus,
+              "De taal doet twee dingen. Ze bepaalt met welk woordenboek de "
+              "tekst wordt afgebroken, en dus waar elke regel breekt en waar "
+              "een pagina vol is. En ze bepaalt in welke taal de woorden staan "
+              "die deze skill zelf toevoegt: <b>Hoofdstuk 3</b>, <b>Figuur "
+              "7</b>, <b>Noten</b>. Alle andere tekst komt woordelijk uit het "
+              "Word-document en blijft staan zoals hij er staat.",
+              nadruk=(None if gemeten is None
+                      else (gemeten if gemeten in ("nl", "en") else "anders"))),
+        tekstveld("taalAnders", "Andere taal",
+                  "" if taalkeus != "anders" else taal,
+                  "ISO-code, bijvoorbeeld de, fr of en-GB"),
+        '<p class="slot" id="taal-let"></p>',
+        '<p class="slot">Kies de taal vóór het bouwen. Achteraf omzetten '
+        'verschuift de regelval over het hele rapport, en een alinea die daar '
+        'een regel langer van wordt valt onder de rand van zijn kader weg — '
+        'zonder foutmelding en zonder dat iemand het ziet.</p>'))
 
     # -- de vorm -------------------------------------------------------
     delen.append(kaart(
@@ -571,10 +860,31 @@ def bouw_secties(doc: dict, ontwerp: dict) -> tuple[str, str]:
     ))
 
     # -- nummering -----------------------------------------------------
+    hn = ontwerp.get("hoofdstuknummers")
+    hn_keus = "uit-bron" if hn == "uit-bron" else ("ja" if hn else "nee")
+    hn_uitleg = (
+        "<b>De skill telt ze</b> zet <b>Hoofdstuk 1</b>, <b>2</b>, <b>3</b> "
+        "boven de titel en herhaalt het cijfer groot op de achtergrond van de "
+        "hoofdstukopening. <b>Niet nummeren</b> laat allebei weg. <b>Uit de "
+        "bron overnemen</b> is voor een document waarin de auteur zijn "
+        "hoofdstukken al genummerd heeft: er komt geen regel <b>Hoofdstuk 3</b> "
+        "boven een kop die zelf al \"3. De opgave\" heet, want dat is "
+        "dubbelop, maar het grote cijfer blijft wel staan. Dat cijfer komt dan "
+        "uit de kop zelf en niet uit een eigen telling — die twee lopen uiteen "
+        "zodra de bron een hoofdstuk overslaat of bij een ander cijfer begint. "
+        "De koptekst verandert in geen van de drie standen.")
+    if eigen_nummers:
+        hn_uitleg = ("Dit document nummert zijn koppen zelf, zie de bevinding "
+                     "bovenaan. <b>Uit de bron overnemen</b> is dan de stand "
+                     "die klopt. ") + hn_uitleg
     delen.append(kaart(
         "Nummers en zijden",
-        "Drie details van de nummering. Ze staan zoals een gedrukt rapport ze "
-        "gewoonlijk heeft; overslaan kan.",
+        ("Drie details van de nummering. Twee staan zoals een gedrukt rapport "
+         "ze gewoonlijk heeft, maar de hoofdstukken moet je hier wel "
+         "aanwijzen: dit document nummert zijn koppen zelf."
+         if eigen_nummers else
+         "Drie details van de nummering. Ze staan zoals een gedrukt rapport ze "
+         "gewoonlijk heeft; overslaan kan."),
         vinkje("dubbelzijdig", "Dubbelzijdig",
                "wordt voor- en achterop gedrukt",
                bool(ontwerp["dubbelzijdig"]),
@@ -582,9 +892,11 @@ def bouw_secties(doc: dict, ontwerp: dict) -> tuple[str, str]:
                "marges spiegelen zodat er bij de rug ruimte overblijft. Zet "
                "het uit als het rapport enkelzijdig geprint wordt of alleen "
                "als PDF wordt gelezen."),
-        vinkje("hoofdstuknummers", "Hoofdstuk nummeren",
-               "Hoofdstuk 1, 2, 3 boven de titel",
-               bool(ontwerp["hoofdstuknummers"])),
+        keuze("hoofdstuknummers", "Hoofdstukken nummeren",
+              [("ja", "de skill telt ze"), ("nee", "niet nummeren"),
+               ("uit-bron", "uit de bron overnemen")],
+              hn_keus, hn_uitleg,
+              nadruk="uit-bron" if eigen_nummers else None),
         vinkje("exhibitnummers", "Figuren nummeren",
                "Figuur 1, 2, 3 bij een beeld of tabel",
                bool(ontwerp["exhibitnummers"]),
@@ -779,6 +1091,13 @@ def bouw_secties(doc: dict, ontwerp: dict) -> tuple[str, str]:
              "je laten staan. Elk blok zegt bovenaan waar het over gaat. "
              "Rechts staat de uitkomst: die kopieer je onderaan en plak je "
              "terug in het gesprek.")
+    if eerst:
+        intro = ("Begin bovenaan: daar staat wat er aan dit document is gezien "
+                 "en wat je daarover moet beslissen. De blokken eronder staan "
+                 "al op een stand die te verdedigen is, dus daar verander je "
+                 "alleen wat je anders wilt; wat je niet kent, kun je laten "
+                 "staan. Rechts staat de uitkomst: die kopieer je onderaan en "
+                 "plak je terug in het gesprek.")
     telregel = (
         "In het brondocument: " +
         f'{tel.get("woorden", 0):,}'.replace(",", ".") +
@@ -786,6 +1105,51 @@ def bouw_secties(doc: dict, ontwerp: dict) -> tuple[str, str]:
         f'tabellen, {tel.get("beelden", 0)} beelden en '
         f'{ap.get("voetnoten", 0)} noten.')
     return "\n".join(delen), intro, telregel
+
+
+#: Een veld in het formulier heet niet altijd zoals het besluit in
+#: `ontwerp.json` heet: de taal staat er als een keuzerij plus een vrij
+#: veld, de vier extra pagina's als losse vinkjes, de bijlagen als de
+#: kop waar ze beginnen.
+VELD_NAAR_BESLUIT = {
+    "taalkeus": "taal", "taalAnders": "taal",
+    "bijlageVanaf": "bijlagen",
+    "elementen.overOns": "elementen", "elementen.team": "elementen",
+    "elementen.colofon": "elementen", "elementen.achterblad": "elementen",
+}
+
+#: Alles wat in `ontwerp.json` terecht kan komen, in de volgorde van het
+#: formulier. Wat de bron niet heeft, wordt niet gevraagd en staat dan in
+#: `weggelaten`.
+BESLUITEN = ("taal", "model", "register", "formaat", "opener", "dichtheid",
+             "omslag", "inhoudsopgave", "elementen", "inhoudDiepte",
+             "dubbelzijdig", "hoofdstuknummers", "exhibitnummers",
+             "noten", "bronnenlijst", "citaatstijl", "bijlagen",
+             "beeld", "beeldmap", "omslagveld",
+             "rapporttitel", "ondertitel", "opdrachtgever", "datum",
+             "drukklaar", "katern", "herindelen", "beeldtekst")
+
+_VELD = re.compile(r'<(?:input|select)\b([^>]*?)data-veld="([^"]+)"')
+
+
+def gestelde_besluiten(secties: str) -> list:
+    """Welke besluiten er werkelijk in het formulier staan.
+
+    Geteld uit de HTML en niet uit een lijst ernaast. Zo'n lijst loopt
+    achter zodra er een blok bij komt, en dan meldt de widget besluiten
+    die hij niet vraagt — precies wat hij hoort te voorkomen.
+
+    Een verborgen veld telt niet mee. Dat is een antwoord dat meegaat
+    omdat het in `ontwerp.json` hoort te staan, maar er is niets
+    gevraagd: het brondocument heeft geen noten, dus er valt niets te
+    plaatsen.
+    """
+    gevraagd = set()
+    for kop, naam in _VELD.findall(secties):
+        if 'type="hidden"' in kop:
+            continue
+        gevraagd.add(VELD_NAAR_BESLUIT.get(naam, naam))
+    return [b for b in BESLUITEN if b in gevraagd]
 
 
 def main() -> int:
@@ -800,6 +1164,15 @@ def main() -> int:
         sys.exit(f"geen document.json in {a.werkmap}. Draai eerst lees_docx.py.")
     doc = json.loads(docpad.read_text(encoding="utf-8"))
 
+    # De vormbesluiten uit `signalen.json`: waarnemingen over het
+    # document als geheel, die vóór het bouwen vast moeten staan. De
+    # wijzigingsvoorstellen over losse blokken blijven hier buiten; die
+    # komen pas ná het ontwerp aan de beurt.
+    sigpad = a.werkmap / "signalen.json"
+    signalen = json.loads(sigpad.read_text(encoding="utf-8")) if sigpad.exists() else []
+    vormbesluiten = {s.get("soort"): s for s in signalen
+                     if isinstance(s, dict) and s.get("groep") == "vormbesluit"}
+
     sys.path.insert(0, str(HIER))
     from bouw import STANDAARD_ONTWERP, laad_ontwerp
     if (a.werkmap / "ontwerp.json").exists():
@@ -811,20 +1184,14 @@ def main() -> int:
     # Wat de bron níét heeft, hoort ook niet als stand in de widget te
     # staan: anders komt er een besluit terug dat nergens over gaat.
     apparaat = doc.get("apparaat", {})
-    heeft = {
-        "noten": bool(apparaat.get("voetnoten") or apparaat.get("eindnoten")),
-        "bronnenlijst": bool(apparaat.get("bronnenlijst")),
-        "bijlagen": bool(apparaat.get("bijlagen")),
-        "citaatstijl": bool(apparaat.get("citaten", {}).get("auteur_jaar")),
-    }
-    if not heeft["noten"]:
+    if not (apparaat.get("voetnoten") or apparaat.get("eindnoten")):
         ontwerp["noten"] = "geen"
-    if not heeft["bronnenlijst"]:
+    if not apparaat.get("bronnenlijst"):
         ontwerp["bronnenlijst"] = "geen"
     if not doc.get("telling", {}).get("beelden") and ontwerp["beeld"] == "uit-bron":
         ontwerp["beeld"] = "geen"
 
-    secties, intro, telregel = bouw_secties(doc, ontwerp)
+    secties, intro, telregel = bouw_secties(doc, ontwerp, vormbesluiten)
     fonts = FONTS.read_text(encoding="utf-8") if FONTS.exists() else ""
     uit = a.uit or (a.werkmap / "ontwerpwidget.html")
     uit.write_text(SJABLOON.format(
@@ -833,22 +1200,17 @@ def main() -> int:
         maten=json.dumps(MATEN, ensure_ascii=False),
     ), encoding="utf-8")
 
-    # De teller telt wat er werkelijk in de widget staat. Een besluit dat
-    # is weggelaten omdat de bron het niet heeft, staat daarom niet in
-    # beide lijsten.
-    alle = ["model", "register", "formaat", "opener", "dichtheid",
-            "omslag", "inhoudsopgave", "elementen", "inhoudDiepte",
-            "dubbelzijdig", "nummering",
-            "noten", "bronnenlijst", "citaatstijl", "bijlagen",
-            "beeld", "omslagveld", "omslagtekst", "drukklaar", "katern",
-            "herindelen", "beeldtekst"]
-    weggelaten = [n for n, aanwezig in heeft.items() if not aanwezig]
+    # De teller telt wat er werkelijk in de widget staat, uit de HTML
+    # zelf. Een besluit dat is weggelaten omdat de bron het niet heeft,
+    # staat daarom in de tweede lijst en niet in de eerste.
+    gevraagd = gestelde_besluiten(secties)
 
     print(json.dumps({
         "widget": str(uit),
         "kb": round(uit.stat().st_size / 1024),
-        "besluiten": [b for b in alle if b not in weggelaten],
-        "weggelaten": weggelaten,
+        "besluiten": gevraagd,
+        "weggelaten": [b for b in BESLUITEN if b not in gevraagd],
+        "vormbesluiten": [s for s in VORMBESLUITEN if s in vormbesluiten],
     }, ensure_ascii=False, indent=2))
     return 0
 
