@@ -33,6 +33,7 @@ Gebruik:
 
     python bouw.py werkmap/
     python bouw.py werkmap/ --uit rapport.html
+    python bouw.py werkmap/ --taal en
     python bouw.py werkmap/ --nieuw-ontwerp --model dubbel --register zacht
 """
 
@@ -116,6 +117,15 @@ OMSLAGVELDEN = ("oranje", "verloop", "navy", "violet", "mint", "wit")
 EXTRA_PAGINAS = ("overOns", "team", "colofon", "achterblad")
 
 STANDAARD_ONTWERP = {
+    # De taal van het rapport, en dat is een vormbesluit. `lang` bepaalt
+    # met welk afbreekwoordenboek Chromium hyfeneert en dus waar elke
+    # regel valt; hij moet vóór het zetten vaststaan. Gemeten op een
+    # Engels rapport van 18.043 woorden: één omzetting van `nl` naar `en`
+    # ná het zetten maakte drie alinea's een regel langer, en die regels
+    # vielen weg onder de `overflow: hidden` van het kader — tekst weg
+    # zonder dat iemand het ziet. Elke ISO-code mag; er is geen lijst om
+    # tegen te toetsen, want die zou alleen maar te kort zijn.
+    "taal": "nl",
     "model": "breed",
     "register": "helder",
     "formaat": "sfnl",
@@ -161,6 +171,116 @@ STANDAARD_ONTWERP = {
 #: met zesentwintig bijlagen heeft een ander probleem dan opmaak.
 BIJLAGELETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
+#: De woorden die deze skill zelf aan het rapport toevoegt.
+#:
+#: Ze stonden op elf plekken hardgecodeerd in het Nederlands, en op een
+#: Engels rapport leverde dat een "Hoofdstuk 3" boven een Engelse kop en
+#: een "Figuur 7" onder een Engelse figuur. Het zijn de enige woorden in
+#: het hele rapport die niet van de auteur komen, dus ze horen bij de
+#: taal van het rapport en niet bij de plek waar ze gezet worden.
+#:
+#: De laatste drie staan niet in de HTML maar in `content:` in de CSS.
+#: Die kunnen niet uit Python komen; ze gaan als custom property mee —
+#: zie `labelstijl()`.
+LABELS = {
+    "nl": {
+        "hoofdstuk": "Hoofdstuk",
+        "bijlage": "Bijlage",
+        "bijlagen": "Bijlagen",
+        "figuur": "Figuur",
+        "noten": "Noten",
+        "noten_hoofdstuk": "Noten bij dit hoofdstuk",
+        "noot": "Noot",
+        "bron": "Bron",
+        "vervolg": "(vervolg)",
+    },
+    "en": {
+        "hoofdstuk": "Chapter",
+        "bijlage": "Appendix",
+        "bijlagen": "Appendices",
+        "figuur": "Figure",
+        "noten": "Notes",
+        "noten_hoofdstuk": "Notes to this chapter",
+        "noot": "Note",
+        "bron": "Source",
+        "vervolg": "(continued)",
+    },
+}
+
+
+def labeltaal(taal: str | None) -> str:
+    """Uit welke labeltabel dit rapport put.
+
+    `en-GB` put uit `en`: een streekvariant heeft dezelfde woorden. Een
+    taal waar geen tabel voor is valt terug op `nl`, en dat wordt gezegd
+    — stil Nederlandse woorden boven een Portugese kop zetten is erger
+    dan de melding.
+    """
+    code = (taal or "nl").strip().lower()
+    if code in LABELS:
+        return code
+    kort = code.split("-")[0]
+    return kort if kort in LABELS else "nl"
+
+
+def labels(taal: str | None) -> dict:
+    return LABELS[labeltaal(taal)]
+
+
+def labelstijl(taal: str | None) -> str:
+    """De drie labels die in de CSS staan, als custom properties.
+
+    `Noot`, `Bron` en `(vervolg)` staan in `content:` en kunnen dus niet
+    uit de HTML komen. Wat wel kan is ze als variabele meegeven: de CSS
+    schrijft `content: var(--label-noot, "Noot")` en dit blok bepaalt wat
+    daar staat.
+
+    Het blok komt ná de rest van de CSS en in hetzelfde document — dat
+    laatste is wat telt, want een custom property werkt waar hij staat.
+    Wie in `extra.css` een van deze drie wil overschrijven, heeft dus
+    `!important` nodig; dat is de prijs voor één plek waar de labels
+    vandaan komen.
+    """
+    L = labels(taal)
+
+    def css(t: str) -> str:
+        # Een aanhalingsteken of een backslash in een label breekt anders
+        # de string en daarmee het hele blok. Een regelovergang ook.
+        t = str(t).replace("\\", "\\\\").replace('"', '\\"')
+        t = t.replace("\n", " ").replace("\r", " ")
+        return f'"{t}"'
+
+    return ("<style>\n:root { "
+            f'--label-noot: {css(L["noot"])}; '
+            f'--label-bron: {css(L["bron"])}; '
+            f'--label-vervolg: {css(L["vervolg"])}; '
+            "}\n</style>")
+
+
+#: Drie standen voor `hoofdstuknummers`, en de derde is het gewone geval
+#: bij een bron die zijn koppen zelf nummert. Zie `_opener`.
+HOOFDSTUKNUMMERS = (True, False, "uit-bron")
+
+#: Het nummer dat de auteur zelf vóór de kop heeft gezet.
+#:
+#: Alleen de gewone vormen: `3`, `3.`, `3.2`, `A.`, en met een woord
+#: ervoor `Bijlage A`, `Annex 2.`. Een losse hoofdletter zónder punt of
+#: dubbele punt telt niet mee, anders wordt "A study of outcomes"
+#: hoofdstuk A. Wat er niet op past valt terug op de eigen telling.
+_KOPNUMMER = re.compile(
+    r"^\s*(?:"
+    r"(?:[^\W\d_]{2,}\.?\s+)?(\d+(?:\.\d+)*)(?=[.):\s]|$)"
+    r"|[^\W\d_]{2,}\.?\s+([A-Z])(?=[.):\s]|$)"
+    r"|([A-Z])(?=[.):]|$)"
+    r")")
+
+
+def _nummer_uit_kop(kop: str) -> str:
+    m = _KOPNUMMER.match(kop or "")
+    if not m:
+        return ""
+    return next((g for g in m.groups() if g), "")
+
 
 # =====================================================================
 #  De stroom
@@ -170,13 +290,23 @@ def _esc(t: str) -> str:
     return html.escape(t, quote=False)
 
 
-def runs_naar_html(runs: list, noten_gezien: set, toon_noten: bool = True) -> str:
+def runs_naar_html(runs: list, noten_gezien: set, toon_noten: bool = True,
+                   nootnr: dict | None = None) -> str:
     """De inline opmaak, en niets erbij.
 
     Een run wordt `<b>`, `<i>`, `<sup>` of niets. Een voetnootverwijzing
-    wordt een `<sup data-noot>` zónder tekst erin — het nummer zet de
-    zetmotor erbij, want dat is toegevoegde tekst en die hoort als
-    zodanig herkenbaar te zijn.
+    wordt een `<sup data-noot>` mét het nummer erin. Dat stond er lang
+    niet: het commentaar zei dat de zetmotor het cijfer erbij zou
+    zetten, en in `paginator.js` staat geen regel die dat doet. Gemeten
+    op een rapport van 72 noten: alle 72 stonden genummerd aan de voet
+    en in de lopende tekst stond nergens een cijfer dat ernaar wees.
+
+    `nootnr` is de telling van het hele rapport: de noot krijgt zijn
+    nummer bij zijn eerste voorkomen in de tekst. Niet uit het Word-id,
+    want Word begint zijn eindnoot-id's bij 2 — −1, 0 en 1 zijn
+    scheidingstekens — en dan staat elke noot één te hoog. Zonder
+    telling valt het terug op het ruwe id; dat is beter dan niets, maar
+    binnen `Stroom` gaat de telling altijd mee.
 
     Bij `noten: geen` verdwijnt ook het verwijzingscijfer. Een noot die
     er niet is met een bovengezet cijfer ervoor is erger dan geen noot:
@@ -189,7 +319,12 @@ def runs_naar_html(runs: list, noten_gezien: set, toon_noten: bool = True) -> st
                 continue
             nid = run["voetnoot"]
             noten_gezien.add(nid)
-            uit.append(f'<sup data-noot="{_esc(nid)}" data-toevoeging="nootnummer"></sup>')
+            if nootnr is None:
+                nr = _ruw_nummer(nid)
+            else:
+                nr = nootnr.setdefault(nid, len(nootnr) + 1)
+            uit.append(f'<sup data-noot="{_esc(nid)}" '
+                       f'data-toevoeging="nootnummer">{nr}</sup>')
             continue
         t = _esc(run.get("t", ""))
         if not t:
@@ -228,6 +363,14 @@ class Stroom:
         self.o = ontwerp
         self.werkmap = werkmap
         self.noten_gezien: set = set()
+        #: Nootnummer per noot-id, toegekend bij het eerste voorkomen in
+        #: de tekst. Dat is de enige telling in dit script die het echte
+        #: nootnummer kent: het Word-id is er geen, en de volgorde
+        #: waarin de noten in `document.json` staan evenmin.
+        self.nootnr: dict = {}
+        #: De woorden die deze skill zelf toevoegt, in de taal van het
+        #: rapport.
+        self.L: dict = labels(ontwerp.get("taal"))
         self.hoofdstuk = 0
         self.bijlage = 0
         self.exhibit = 0
@@ -309,7 +452,29 @@ class Stroom:
 
     def _runs(self, runs: list) -> str:
         """De inline opmaak van één blok, met de notenstand van dit rapport."""
-        return runs_naar_html(runs, self.noten_gezien, self.toon_noten)
+        return runs_naar_html(runs, self.noten_gezien, self.toon_noten,
+                              self.nootnr)
+
+    # -- de nootnummers -----------------------------------------------
+    def _label(self, nid: str) -> str:
+        """Het nummer van deze noot, zoals het in de tekst staat.
+
+        Uit dezelfde telling als de verwijzing, want anders wijst de ene
+        naar de andere niet.
+        """
+        return str(self.nootnr.get(nid) or _ruw_nummer(nid))
+
+    def _nootorde(self, nid: str):
+        """De volgorde van de noten: die van de tekst.
+
+        Op het id sorteren gaat mis zodra de noten in het Word-document
+        niet op volgorde staan, en bij eindnoten schuift het id ook nog
+        eens op. Een noot die nergens in de tekst voorkomt kan niet
+        bestaan — `noten_gezien` wordt op hetzelfde moment gevuld als de
+        telling — maar mocht hij er zijn, dan gaat hij achteraan.
+        """
+        nr = self.nootnr.get(nid)
+        return (0, nr) if nr else (1, _ruw_nummer(nid))
 
     # -- de pagina's die niet uit het brondocument komen ---------------
     def extra_paginas(self) -> str:
@@ -505,7 +670,7 @@ class Stroom:
             # titel van het volgende hoofdstuk.
             if (soort == "kop" and b.get("niveau") == 1
                     and self.o.get("noten") == "eindnoot-hoofdstuk"):
-                self.regels.append(self._notenblok("Noten bij dit hoofdstuk"))
+                self.regels.append(self._notenblok(self.L["noten_hoofdstuk"]))
 
             if b["id"] in self.bronregels:
                 i = self._bronnenlijst(blokken, i)
@@ -520,8 +685,8 @@ class Stroom:
 
         # Wat er aan het eind nog open staat.
         if self.o.get("noten") in ("eindnoot-hoofdstuk", "eindnoot-rapport"):
-            kop = ("Noten bij dit hoofdstuk"
-                   if self.o["noten"] == "eindnoot-hoofdstuk" else "Noten")
+            kop = (self.L["noten_hoofdstuk"]
+                   if self.o["noten"] == "eindnoot-hoofdstuk" else self.L["noten"])
             self.regels.append(self._notenblok(kop))
         # En dan het achterwerk: de pagina's die niet uit het
         # brondocument komen. Ze staan achteraan omdat ze het rapport
@@ -546,7 +711,7 @@ class Stroom:
 
     def _scheidingsblad(self, b: dict) -> str:
         eigen = self._is_scheidingskop(b)
-        woord = (self.o.get("bijlagen") or {}).get("titel") or "Bijlagen"
+        woord = (self.o.get("bijlagen") or {}).get("titel") or self.L["bijlagen"]
         if eigen:
             titel = (f'<h1 class="opener__titel"'
                      f'{_attr(data_bron=b["id"], data_kop=1, data_kop_tekst=b["tekst"].strip())}>'
@@ -570,7 +735,7 @@ class Stroom:
         hoofdstuk zonder noten geen leeg notenblok krijgt.
         """
         openstaand = sorted(self.noten_gezien - self.noten_geplaatst,
-                            key=_nootsleutel)
+                            key=self._nootorde)
         if not openstaand:
             return ""
         regels = []
@@ -580,7 +745,7 @@ class Stroom:
                 continue
             regels.append(
                 f'<p class="voetnoot" data-bron="noot{_esc(nid)}">'
-                f'<span class="nr" data-toevoeging="nootnummer">{_nootlabel(nid)}</span>'
+                f'<span class="nr" data-toevoeging="nootnummer">{self._label(nid)}</span>'
                 f'{_esc(noot["tekst"])}</p>')
         self.noten_geplaatst |= set(openstaand)
         if not regels:
@@ -697,27 +862,45 @@ class Stroom:
         o = self.o
         if self.in_bijlagen:
             nr = BIJLAGELETTERS[(self.bijlage - 1) % len(BIJLAGELETTERS)]
-            woord = "Bijlage"
+            woord = self.L["bijlage"]
         else:
             nr = str(self.hoofdstuk)
-            woord = "Hoofdstuk"
+            woord = self.L["hoofdstuk"]
+        # `hoofdstuknummers` heeft drie standen en de derde is voor een
+        # bron die zijn koppen zelf nummert. Dan is een kicker
+        # "Hoofdstuk 3" boven een kop die al "3. De opgave" heet dubbelop
+        # — maar het watermerkcijfer wil je wél, en dat cijfer hoort dan
+        # uit de kop te komen en niet uit de eigen telling: die twee
+        # lopen uiteen zodra de bron een hoofdstuk overslaat, bij 0
+        # begint of een deel ongenummerd laat. De kop zelf verandert
+        # niet — het nummer blijft in de titel staan zoals de auteur het
+        # schreef; alleen het watermerk komt eruit. Staat er geen nummer
+        # in de kop, dan telt de zetmotor zelf.
+        stand = o.get("hoofdstuknummers")
+        uit_bron = stand == "uit-bron"
+        if uit_bron:
+            nr = _nummer_uit_kop(kaal) or nr
         kicker = ""
-        if o.get("hoofdstuknummers"):
+        if stand and not uit_bron:
             kicker = (f'<p class="opener__kicker" data-toevoeging="nummer">'
-                      f'{woord} {nr}</p>')
+                      f'{_esc(woord)} {_esc(nr)}</p>')
         # Het cijfer gaat mee bij alle drie de openers. Waar het komt te
         # staan verschilt per opener en dat regelt de CSS: half achter de
         # titel bij `nummer`, groot onderin bij `blad`, aan de
         # buitenrand van de band bij `band`.
         watermerk = ""
-        if o.get("hoofdstuknummers"):
+        if stand:
             watermerk = (f'<span class="opener__watermerk" aria-hidden="true" '
-                         f'data-toevoeging="nummer">{nr}</span>')
+                         f'data-toevoeging="nummer">{_esc(nr)}</span>')
         veld = {"diep": "navy", "contrast": "violet",
                 "zacht": "mint"}.get(o.get("register"), "")
+        # `data-nummer` is wat de inhoudsopgave in zijn nummerkolom zet.
+        # In `uit-bron` staat het nummer al in de koptekst, en dan zou
+        # die regel "3   3. De opgave" worden. Het gaat er dus niet in;
+        # het nummer staat er al.
         return (
             f'<div class="opener"'
-            f'{_attr(data_bron=b["id"], data_kop=1, data_kop_tekst=kaal, data_nummer=nr, data_hoofdstuk=kaal, data_groep="bijlagen" if self.in_bijlagen else None, data_nieuwe_pagina=True, data_opener=o.get("opener", "nummer"), data_veld=veld or None, data_balk=o.get("bandhoogte") if o.get("opener") == "band" else None, data_heel=True)}>'
+            f'{_attr(data_bron=b["id"], data_kop=1, data_kop_tekst=kaal, data_nummer=None if uit_bron else nr, data_hoofdstuk=kaal, data_groep="bijlagen" if self.in_bijlagen else None, data_nieuwe_pagina=True, data_opener=o.get("opener", "nummer"), data_veld=veld or None, data_balk=o.get("bandhoogte") if o.get("opener") == "band" else None, data_heel=True)}>'
             f'{watermerk}{kicker}'
             f'<h1 class="opener__titel">{tekst}</h1>'
             f'</div>')
@@ -819,7 +1002,7 @@ class Stroom:
         if bijschrift and self.o.get("exhibitnummers"):
             self.exhibit += 1
             nr = (f'<p class="exhibit__nr" data-toevoeging="nummer">'
-                  f'Figuur {self.exhibit}</p>')
+                  f'{_esc(self.L["figuur"])} {self.exhibit}</p>')
             bron_id = b.get("bijschrift_id", b["id"])
             return (
                 f'<figure class="exhibit"{_attr(data_bron=b["id"], data_heel=True)}>'
@@ -846,23 +1029,31 @@ class Stroom:
         if self.o.get("noten") in ("geen", "eindnoot-hoofdstuk", "eindnoot-rapport"):
             return ""
         uit = []
-        for nid in sorted(self.noten_gezien, key=_nootsleutel):
+        for nid in sorted(self.noten_gezien, key=self._nootorde):
             noot = self.doc["voetnoten"].get(nid)
             if not noot:
                 continue
             uit.append(
                 f'<p class="voetnoot" id="noot-{_esc(nid)}" data-bron="noot{_esc(nid)}">'
-                f'<span class="nr" data-toevoeging="nootnummer">{_nootlabel(nid)}</span>'
+                f'<span class="nr" data-toevoeging="nootnummer">{self._label(nid)}</span>'
                 f'{_esc(noot["tekst"])}</p>')
         return "\n".join(uit)
 
 
-def _nootsleutel(nid: str):
-    return (1, int(nid[1:])) if nid.startswith("e") else (0, int(nid))
+def _ruw_nummer(nid: str) -> int:
+    """Het cijfer uit het Word-id, en dat is níet het nootnummer.
 
-
-def _nootlabel(nid: str) -> str:
-    return nid[1:] if nid.startswith("e") else nid
+    Word telt zijn eindnoot-id's vanaf 2 en zijn voetnoot-id's vanaf 1,
+    en in beide gevallen zegt het id alleen iets over de volgorde in het
+    bestand. Deze functie bestaat alleen als terugval voor een noot
+    waarvoor geen telling is meegegeven; wie het echte nummer wil,
+    gebruikt `Stroom._label`.
+    """
+    kaal = nid[1:] if nid.startswith("e") else nid
+    try:
+        return int(kaal)
+    except ValueError:
+        return 0
 
 
 def _getalkolommen(rijen: list) -> dict:
@@ -973,13 +1164,14 @@ def sjablonen(ontwerp: dict) -> str:
 # =====================================================================
 
 WERK = """<!doctype html>
-<html lang="nl">
+<html lang="{taal}">
 <head>
 <meta charset="utf-8">
 <title>{titel} — zetten</title>
 <style>
 {stijl}
 </style>
+{labelstijl}
 </head>
 <body class="rapport" data-model="{model}">
 {sjablonen}
@@ -998,7 +1190,7 @@ WERK = """<!doctype html>
 """
 
 EIND = """<!doctype html>
-<html lang="nl">
+<html lang="{taal}">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -1009,6 +1201,7 @@ EIND = """<!doctype html>
 /* -- Drukwerk. De pagina draagt zijn eigen marge, dus @page staat op nul. -- */
 @page {{ size: {breedte} {hoogte}; margin: 0; }}
 </style>
+{labelstijl}
 </head>
 <body{lichaamattr}>
 <div class="vel">
@@ -1023,7 +1216,26 @@ def _mm(px: float) -> str:
     return f"{px / 96 * 25.4:.4g}mm"
 
 
-def lees_stijl() -> str:
+def lees_extra_css(werkmap: Path | None) -> tuple[str, int]:
+    """De CSS die alleen bij dít rapport hoort, als die er is.
+
+    Zonder deze haak waren er twee uitwegen om één rapport iets anders
+    te laten doen, en ze deugen allebei niet: de gedeelde `rapport.css`
+    aanpassen — waarmee het elk volgend rapport ook overkomt — of ná het
+    zetten stylen, en dan verschuift de regelval onder een zetting die
+    al gemeten is. Zie de taal: één verschoven regel valt weg onder de
+    `overflow: hidden` van het kader en niemand ziet het.
+    """
+    if werkmap is None:
+        return "", 0
+    pad = werkmap / "extra.css"
+    if not pad.exists():
+        return "", 0
+    tekst = pad.read_text(encoding="utf-8")
+    return tekst, len(tekst.splitlines())
+
+
+def lees_stijl(werkmap: Path | None = None) -> str:
     delen = []
     if FONTS.exists():
         delen.append(FONTS.read_text(encoding="utf-8"))
@@ -1034,6 +1246,13 @@ def lees_stijl() -> str:
         if not p.exists():
             sys.exit(f"ontbreekt: {p}")
         delen.append(p.read_text(encoding="utf-8"))
+    # Achteraan, want dit is de eigen CSS van dit rapport en die hoort
+    # het laatste woord te hebben. En in béide sjablonen, want er zetten
+    # met andere CSS dan er opgeleverd wordt is precies het soort fout
+    # dat pas in de PDF te zien is.
+    extra, _ = lees_extra_css(werkmap)
+    if extra:
+        delen.append("/* -- extra.css, uit de werkmap -- */\n" + extra)
     return "\n".join(delen)
 
 
@@ -1171,6 +1390,13 @@ def zet(werk_html: Path, ontwerp: dict, rondes: int = 4) -> tuple[str, dict]:
         # eindnootmodus staan ze al als blok in de stroom.
         "notenOpPagina": ontwerp.get("noten") == "voetnoot",
         "rapporttitel": ontwerp.get("rapporttitel") or "",
+        # Het woord boven de bijlagen in de inhoudsopgave. `paginator.js`
+        # heeft er een Nederlandse terugval voor; die staat er goed, maar
+        # in een Engels rapport is hij fout. Hier komt hij uit dezelfde
+        # labeltabel als het scheidingsblad, zodat de twee hetzelfde
+        # zeggen.
+        "bijlagewoord": ((ontwerp.get("bijlagen") or {}).get("titel")
+                         or labels(ontwerp.get("taal"))["bijlagen"]),
         "minRegelsBoven": 2,
         "minRegelsOnder": 2,
         "minRegelsNaKop": 2,
@@ -1182,7 +1408,7 @@ def zet(werk_html: Path, ontwerp: dict, rondes: int = 4) -> tuple[str, dict]:
         page.goto(werk_html.resolve().as_uri())
         wacht_op_letters(page)
 
-        afbreking = page.evaluate(PROEF_AFBREKING)
+        afbreking = page.evaluate(proef_afbreking(ontwerp.get("taal") or "nl"))
         if not afbreking:
             page.evaluate("() => document.body.setAttribute('data-afbreking', 'nee')")
 
@@ -1213,15 +1439,46 @@ def zet(werk_html: Path, ontwerp: dict, rondes: int = 4) -> tuple[str, dict]:
 #: ze meestal — en dan hoort het uitvullen te vervallen in plaats van
 #: stil verkeerd te gaan.
 #:
-#: De proef: een lang Nederlands woord in een doos van 60 px. Breekt hij
-#: af, dan wordt het meer dan één regel hoog.
-PROEF_AFBREKING = """() => {
+#: De proef: een lang woord in een doos van 62 px, in de taal van het
+#: rapport. Breekt hij af, dan wordt het meer dan één regel hoog.
+#:
+#: **De taal moet meedoen.** De proef stond vast op Nederlands, en de
+#: uitkomst bepaalt of het hele rapport uitgevuld of vlaggend wordt
+#: gezet. Voor een Engels rapport werd dus het verkeerde woordenboek
+#: bevraagd: is het Nederlandse er wel en het Engelse niet, dan vult het
+#: rapport uit zonder dat er iets afbreekt, en dat zijn rivieren van wit
+#: door de kolom. Andersom vervalt het uitvullen terwijl het had gekund.
+PROEFWOORDEN = {
+    "nl": "schuldhulpverleningstraject",
+    "en": "internationalization",
+    "de": "Verantwortlichkeiten",
+    "fr": "responsabilités",
+    "es": "responsabilidades",
+    "it": "responsabilità",
+}
+
+
+def proef_afbreking(taal: str) -> str:
+    """De proef, met het woord en de taalcode van dit rapport erin.
+
+    Een taal zonder eigen proefwoord krijgt het Engelse. Dat is geen
+    goede toets voor die taal, maar het is een eerlijke: hij meet of
+    Chromium überhaupt een woordenboek heeft, en bij twijfel valt het
+    uitvullen weg — de veilige kant.
+    """
+    kort = (taal or "nl").split("-")[0].lower()
+    woord = PROEFWOORDEN.get(kort, PROEFWOORDEN["en"])
+    return _PROEF_SJABLOON.replace("__TAAL__", _esc(taal or "nl")) \
+                          .replace("__WOORD__", _esc(woord))
+
+
+_PROEF_SJABLOON = """() => {
   const d = document.createElement('div');
-  d.lang = 'nl';
+  d.lang = '__TAAL__';
   d.style.cssText = 'position:absolute;visibility:hidden;left:-9999px;width:62px;' +
     "font:300 13.33px/17.33px Lato,sans-serif;hyphens:auto;-webkit-hyphens:auto;" +
     'hyphenate-limit-chars:6 3 3';
-  d.textContent = 'schuldhulpverleningstraject';
+  d.textContent = '__WOORD__';
   document.body.appendChild(d);
   const regels = d.getClientRects().length ? d.offsetHeight : 0;
   document.body.removeChild(d);
@@ -1245,6 +1502,22 @@ def laad_ontwerp(werkmap: Path, overschrijf: dict | None = None) -> dict:
         o.update(json.loads(pad.read_text(encoding="utf-8")))
     if overschrijf:
         o.update({k: v for k, v in overschrijf.items() if v is not None})
+    # De taal wordt niet tegen een lijst getoetst — elke ISO-code moet
+    # kunnen — maar leeg mag hij niet zijn: dan zet Chromium zonder
+    # woordenboek af en vervalt de afbreking stil.
+    o["taal"] = str(o.get("taal") or "").strip() or "nl"
+    lt = labeltaal(o["taal"])
+    if lt != o["taal"].split("-")[0].lower():
+        L = LABELS[lt]
+        print(f"let op: er is geen labeltabel voor '{o['taal']}'. Het rapport "
+              f"wordt wél op '{o['taal']}' gezet, maar de woorden die deze skill "
+              f"zelf toevoegt — {L['hoofdstuk']}, {L['figuur']}, {L['noten']} — "
+              f"komen uit het Nederlands. Vul LABELS aan in bouw.py als dat niet "
+              f"klopt.", file=sys.stderr)
+    if o.get("hoofdstuknummers") not in HOOFDSTUKNUMMERS:
+        sys.exit(f"onbekende hoofdstuknummers: {o.get('hoofdstuknummers')!r}. "
+                 f"Kies uit true (eigen telling), false (geen) of \"uit-bron\" "
+                 f"(geen kicker, watermerkcijfer uit de kop).")
     if o["model"] not in MODELLEN:
         sys.exit(f"onbekend model: {o['model']}. Kies uit {', '.join(MODELLEN)}.")
     if o["register"] not in REGISTERS:
@@ -1367,6 +1640,12 @@ def main() -> int:
     ap.add_argument("--noten", choices=NOTEN)
     ap.add_argument("--bronnenlijst", choices=BRONNENLIJSTEN)
     ap.add_argument("--omslagveld", choices=OMSLAGVELDEN)
+    # Geen `choices`: elke ISO-code moet kunnen. Wat er niet in LABELS
+    # staat krijgt Nederlandse labels en een melding; de afbreking volgt
+    # hoe dan ook de opgegeven code.
+    ap.add_argument("--taal", default=None,
+                    help="taal van het rapport (ISO-code, bv. nl of en); "
+                         "bepaalt de afbreking en de toegevoegde woorden")
     ap.add_argument("--drukklaar", action="store_true", default=None,
                     help="het aantal pagina's moet uitkomen op een katern")
     ap.add_argument("--nieuw-ontwerp", action="store_true",
@@ -1381,7 +1660,7 @@ def main() -> int:
     if not (werkmap / "document.json").exists():
         sys.exit(f"geen document.json in {werkmap}. Draai eerst lees_docx.py.")
 
-    overschrijf = {"model": a.model, "register": a.register,
+    overschrijf = {"taal": a.taal, "model": a.model, "register": a.register,
                    "opener": a.opener, "formaat": a.formaat,
                    "dichtheid": a.dichtheid, "noten": a.noten,
                    "bronnenlijst": a.bronnenlijst,
@@ -1422,8 +1701,11 @@ def main() -> int:
 
     titel = ontwerp.get("rapporttitel") or doc.get("titel") or werkmap.name
     werk_html = werkmap / "_zetten.html"
+    extra_css, extra_regels = lees_extra_css(werkmap)
     werk_html.write_text(WERK.format(
-        titel=_esc(titel), stijl=lees_stijl(), model=ontwerp["model"],
+        titel=_esc(titel), taal=_esc(ontwerp.get("taal") or "nl"),
+        stijl=lees_stijl(werkmap), labelstijl=labelstijl(ontwerp.get("taal")),
+        model=ontwerp["model"],
         sjablonen=sjablonen(ontwerp),
         stroom="\n".join(voor) + "\n" + lichaam,
         noten=stroom.voetnoten(),
@@ -1450,7 +1732,9 @@ def main() -> int:
     # gezette proef in het dubbele model als gaten in de kolom te zien.
     lichaamattr = "" if verslag["afbreking"] else ' data-afbreking="nee"'
     uit.write_text(EIND.format(
-        titel=_esc(titel), stijl=lees_stijl(), lichaamattr=lichaamattr,
+        titel=_esc(titel), taal=_esc(ontwerp.get("taal") or "nl"),
+        stijl=lees_stijl(werkmap), labelstijl=labelstijl(ontwerp.get("taal")),
+        lichaamattr=lichaamattr,
         breedte=_mm(breedte), hoogte=_mm(hoogte), paginas=markup,
     ), encoding="utf-8")
 
@@ -1476,6 +1760,12 @@ def main() -> int:
     print(json.dumps({
         "bestand": str(uit),
         "pdf": str(pdf),
+        "taal": ontwerp["taal"],
+        "labels": labeltaal(ontwerp["taal"]),
+        "extra_css": (f"{extra_regels} regels" if extra_css else "geen"),
+        "hoofdstuknummers": {True: "eigen telling", False: "geen",
+                             "uit-bron": "uit de kop"}[ontwerp["hoofdstuknummers"]],
+        "noten": f"{len(stroom.nootnr)} genummerd",
         "artboards": canvas["canvas"],
         "aantal_artboards": canvas["artboards"],
         "paginas": verslag["paginas"] + katernsom["blanco_toegevoegd"],
