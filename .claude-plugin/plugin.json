@@ -1,7 +1,7 @@
 {
   "name": "sfnl-slides",
-  "version": "1.3.0",
-  "description": "Drie skills die dezelfde regel volgen: de vorm is een ontwerpbeslissing en geen invuloefening, en de render is de enige vormbeoordeling. `sfnl-slides` bouwt een deck uit het officiele sjabloon. `sfnl-design-documents` bouwt kort drukwerk in HTML — een uitnodiging, een executive summary, een spread — op een vast blad met een snijrand. `sfnl-rapport-opmaak` maakt van een afgerond Word-rapport een drukklaar rapport van twintig tot honderdvijftig pagina's, met een eigen zetmotor die op de regelgrens splitst, en met de harde belofte dat er geen woord aan de tekst verandert: elke inhoudelijke wijziging die de vorm zou willen, wordt expliciet gevraagd, en `tekstcheck.py` controleert achteraf karakter voor karakter. Vier layoutmodellen, vier kleurregisters, drie hoofdstukopeners — alle drie met een gerenderde keuzekaart — plus drie dichtheden, voet- of eindnoten naast een opgemaakte bronnenlijst, verwijzingen die gelijkgetrokken en gelogd worden, bijlagen met een eigen scheidingsblad, en een intakewidget die de vijftien vormbesluiten op een pagina zet. Geen patroonbibliotheek in geen van de drie.",
+  "version": "1.4.0",
+  "description": "Drie skills die dezelfde regel volgen: de vorm is een ontwerpbeslissing en geen invuloefening, en de render is de enige vormbeoordeling. `sfnl-slides` bouwt een deck uit het officiele sjabloon. `sfnl-design-documents` bouwt kort drukwerk in HTML — een uitnodiging, een executive summary, een spread — op een vast blad met een snijrand. `sfnl-rapport-opmaak` maakt van een afgerond Word-rapport een drukklaar rapport van twintig tot honderdvijftig pagina's, met een eigen zetmotor die op de regelgrens splitst, en met de harde belofte dat er geen woord aan de tekst verandert: elke inhoudelijke wijziging die de vorm zou willen, wordt expliciet gevraagd, en `tekstcheck.py` controleert achteraf karakter voor karakter. Vier layoutmodellen, vier kleurregisters, drie hoofdstukopeners — alle drie met een gerenderde keuzekaart — plus drie dichtheden, voet- of eindnoten naast een opgemaakte bronnenlijst, verwijzingen die gelijkgetrokken en gelogd worden, bijlagen met een eigen scheidingsblad, een taal die de afbreking en de labels stuurt, en een intakewidget die begint bij wat er aan het document zelf is gezien. Elke oplevering is het HTML-bestand, de PDF en de artboards voor het designcanvas. Geen patroonbibliotheek in geen van de drie.",
   "author": {
     "name": "Social Finance NL",
     "email": "info@socialfinancenl.nl"
@@ -34,6 +34,12 @@
     "bronnenlijst",
     "apa",
     "bijlagen",
-    "citaties"
+    "citaties",
+    "engels",
+    "taal",
+    "artboard",
+    "pdf",
+    "drukklaar",
+    "canvas"
   ]
 }

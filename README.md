@@ -25,6 +25,12 @@ beslissen.
   stand van het verwijzingsapparaat, en nul ongemarkeerde toevoegingen. Nagemeten met drie
   sabotages — een gewijzigd woord, een verwijderde alinea, een toegevoegde conclusie — en alle
   drie blokkeren.
+- **De metingen liegen niet, en dat is apart gerepareerd.** `klip` mat marge en noemde dat
+  verdwenen tekst; de meting kijkt nu naar de diepste tekstdragende node. Twee runs op hetzelfde
+  bestand gaven verschillende uitkomsten omdat er niet op de beelden werd gewacht; drie runs geven
+  nu een byte-identieke meting. En wat aan de zetting niet te zien was, heeft een eigen meting
+  gekregen: een figuur van 3120 px in een kolom van 537 px komt op 2,7 pt kapitaalhoogte uit en is
+  op papier onleesbaar, terwijl het beeld keurig binnen de kolom paste.
 - **Wat de opmaak wél toevoegt, staat gemarkeerd**: de folio, de kopregel, de inhoudsopgave, de
   nummering, het nootcijfer, de herhaalde tabelkop, de omslagregels die de gebruiker zelf heeft
   opgegeven, de kop boven een eindnotenblok, het nummer voor een bronregel, het woord "Bijlagen"
@@ -67,9 +73,18 @@ beslissen.
 - **De vraag of er beeld in mag, wordt expliciet gesteld**, ook als er beeld in het Word-document
   zit. Bij apart aangeleverde figuren koppelt een `beeld.json` elk bestand aan een blok; een
   figuur zonder plek wordt niet geplaatst maar gemeld.
-- **Vijftien besluiten passen niet in een gesprek**, dus `widget.py` genereert er een pagina van:
-  alles op één scherm met een schets die meebeweegt, per rapport samengesteld uit wat de bron
-  werkelijk bevat. De uitvoer is de `ontwerp.json` die de gebruiker terugplakt.
+- **De intake begint bij wat er aan het document zelf is gezien.** `lees_docx.py` meldt zes
+  vormbesluiten bij het inlezen — de bron is niet Nederlands, de koppen beginnen bij niveau 2, ze
+  nummeren zichzelf, een figuur is EMF en toont dus niet in een browser, er zit media buiten de
+  tekststroom, een kop heeft geen inhoud. Vijf van de zes problemen van het eerste echte Engelse
+  rapport waren hiermee vóór het bouwen te zien. `widget.py` zet ze bovenaan, met daaronder de
+  vormbesluiten; de uitvoer is de `ontwerp.json` die de gebruiker terugplakt.
+- **De taal is een vormbesluit en geen instelling achteraf.** `lang` bepaalt met welk woordenboek
+  Chromium afbreekt en dus waar elke regel valt. Eén omzetting ná het zetten maakte drie alinea's
+  een regel langer, en die regels vielen weg onder de `overflow: hidden` van het kader — tekst weg
+  zonder foutmelding. De taal stuurt ook de labels: `Hoofdstuk 3` wordt `Chapter 3`.
+- **Elke oplevering is drie dingen**: het losse HTML-bestand, de PDF op de bladmaat die het
+  document zelf zegt, en de artboards voor het designcanvas. Geen vlag, geen keuze.
 
 De maten komen uit twee bronnen: het SFNL-drukwerk, en drie nagemeten rapporten van Bain, BMC en
 het McKinsey Global Institute. Die laatste leverden een uitkomst op die tegen de verwachting in
@@ -81,7 +96,8 @@ python scripts/rapport/preflight.py
 python scripts/rapport/lees_docx.py rapport.docx --uit werk/
 python scripts/rapport/widget.py werk/                      # de intakepagina
 python scripts/rapport/citaten.py werk/ --naar uniform      # alleen als het besluit dat vraagt
-python scripts/rapport/bouw.py werk/ --model breed --register helder
+python scripts/rapport/bouw.py werk/ --model breed --register helder --taal nl
+#   levert in één keer het HTML-bestand, de PDF en werk/canvas/ met de artboards
 python scripts/rapport/tekstcheck.py werk/rapport.html      # blokkeert
 python scripts/rapport/render.py werk/rapport.html
 python scripts/rapport/qa_rapport.py werk/rapport.html
