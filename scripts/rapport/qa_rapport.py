@@ -1,21 +1,34 @@
 #!/usr/bin/env python3
 """Wat er in een gezet rapport stil misgaat, gemeten in de browser.
 
-Dit is geen poort en het keurt geen vorm af. Het meet dertien dingen die
-je op een contactblad van dertig spreads niet ziet en die op papier wél
-opvallen. Vier ervan blokkeren, en dat zijn precies de vier waar geen
-interpretatie aan te pas komt.
+Dit is geen poort en het keurt geen vorm af. Het meet veertien dingen
+die je op een contactblad van dertig spreads niet ziet en die op papier
+wél opvallen. Zes ervan blokkeren. Vijf daarvan zijn metingen waar geen
+interpretatie aan te pas komt; de zesde, `figuur-te-klein`, rust op één
+aanname over de tekst ín een beeld, en die aanname staat erbij.
 
 **Blokkeert:**
 
 * `klip` — een kader snijdt zijn eigen inhoud af. Er is tekst verdwenen
-  die niemand ziet. Dit is de ernstigste meting die er is.
+  die niemand ziet. Dit is de ernstigste meting die er is, en daarom
+  meet hij de onderkant van de diepste tekstdragende node en niet
+  `scrollHeight`: dat laatste telt de ondermarge van het laatste blok
+  mee en meldt dan een klip op een opsomming die keurig boven de rand
+  eindigt. Zie `KLIP_LUCHT` hieronder.
 * `overloop` — een element steekt over de snijrand.
 * `te-klein` — lopende tekst onder 8 pt of een kapitaallabel onder 6 pt.
+* `figuur-te-klein` — de tekst ín een aangeleverd beeld komt onder de
+  leesvloer uit doordat het beeld in de kolom is teruggeschaald. Dit is
+  de enige meting met een schatting erin, en de schatting staat in de
+  uitvoer. Een beeld zonder enig detail draagt geen tekst en wordt niet
+  beoordeeld; dat staat er als `figuur-zonder-detail`.
 * `leeg-kader` — een kolom die blanco blijft terwijl de kolom ernaast
   wél gevuld is. Een leeg láátste kader is een hoofdstukeinde en hoort
   zo; een leeg kader met een gevuld kader erachter betekent dat de
   stroom in de verkeerde orde is gevuld.
+* `contrast` — lopende tekst op een kleurveld onder de
+  leesbaarheidsdrempel. Merktekens van een paar tekens tellen niet mee;
+  die staan apart als `accentmerken`.
 
 **Aanwijzing, en de render beslist:**
 
@@ -28,8 +41,11 @@ interpretatie aan te pas komt.
 * `inhoud` — verwijst de inhoudsopgave naar de pagina waar de kop
   werkelijk staat. Dit is de meting die het vaakst iets vindt na een
   handmatige wijziging in het HTML-bestand.
-* `beeld-dpi` — de effectieve resolutie van elk beeld op papier.
-* `contrast` — tekst op een kleurveld onder de leesbaarheidsdrempel.
+* `beeld-dpi` — de effectieve resolutie van elk beeld op papier. Een
+  beeld waarvan de intrinsieke breedte niet te lezen was, staat er als
+  `beeld-ongemeten`: daar is niets van bekend, en dat is geen niets.
+* `figuur-krap` — een figuur waarvan de geschatte tekst tussen 6 en 8 pt
+  uitkomt. Leesbaar op de pers, maar niet meer dan dat.
 * `maten` — het aantal verschillende lettergroottes. Boven de acht is er
   een compositieprobleem en geen maatprobleem.
 * `lege-kantlijn` — hoeveel pagina's in het kantlijnmodel een lege
@@ -67,13 +83,137 @@ from _browser import browser, wacht_op_letters  # noqa: E402
 DPI_ZACHT = 150
 DPI_FOUT = 100
 
-METING = r"""() => {
-  const uit = {paginas: [], klip: [], overloop: [], teKlein: [], leegKader: [],
-               wees: [], losseKop: [], beeld: [], contrast: [], maten: {},
-               inhoud: [], legeKantlijn: 0, kantlijnPaginas: 0, tekstwand: 0,
+#: Hoeveel px één regel tekst meet ín een aangeleverd beeld, gerekend in
+#: de pixels van dat beeld zelf. **Dit is een aanname en geen meting**:
+#: wat er in een PNG staat is voor dit script onzichtbaar, dus wie de
+#: figuur belangrijk vindt moet ernaar kijken.
+#:
+#: De waarde: een aangeleverd beeld komt bijna altijd uit Word,
+#: PowerPoint, Excel of een schermafdruk, en die zetten hun kleinste
+#: tekst rond 10 pt op 96 dpi — 13,3 px, met een regelafstand van 1,4 is
+#: dat 19 px per regel. Zulke bestanden worden op 2× geëxporteerd (een
+#: retinascherm, "opslaan als afbeelding" op 192 dpi), en dat is de
+#: reden dat ze met drieduizend pixels breed binnenkomen. 19 × 2 = 38.
+#:
+#: Wat dit getal waard is: een figuur van 3120 px in een kolom van 537 px
+#: komt er op 2,7 pt uit, en dat is precies de figuur waar deze meting
+#: voor gemaakt is. Staat er grotere tekst in het beeld, dan is het
+#: oordeel te streng; staat er kleinere in, te mild. De verhouding zelf
+#: — de schaal — staat in de uitvoer, dus de som is met een eigen
+#: aanname over te doen.
+BRONTEKSTREGEL_PX = 38
+
+#: Van een regel is ongeveer 55 procent kapitaalhoogte; het oog leest de
+#: kapitaalhoogte en niet de regelafstand. × 0,75 gaat van px naar pt.
+KAPITAALDEEL = 0.55
+
+#: Dezelfde leesvloer als voor een gespatieerd kapitaallabel: onder 6 pt
+#: is het op papier geen tekst meer. Tussen 6 en 8 pt leest het, maar
+#: alleen met de goede bril en het goede licht.
+FIGUUR_VLOER_PT = 6.0
+FIGUUR_KRAP_PT = 8.0
+
+#: Hoeveel van de pixels van een beeld op een rand liggen. Het scheidt
+#: één ding, en dat is het enige waar het voor bedoeld is: een vlak
+#: zónder enig detail — een kleurveld, een lege plaatshouder — draagt
+#: geen letter, en die op 3 pt afkeuren zou precies de valse melding
+#: zijn die dit script hoort te vermijden. Gemeten op de proefbeelden
+#: van deze skill: een egaal veld haalt 0,000 en een tabel met tekst
+#: 0,05 tot 0,2. Een foto komt er ruim boven en wordt dus wél
+#: beoordeeld — dat een foto geen tekst draagt, is aan het bestand niet
+#: te zien, en dan is de melding met de aanname erbij eerlijker dan
+#: stilte. Is het beeld niet te lezen (een canvas die niet vrijgegeven
+#: wordt), dan wordt er beoordeeld: liever een melding te veel dan een
+#: onleesbare figuur die niemand ziet.
+FIGUUR_DETAIL = 0.005
+
+#: Hoeveel px een tekstblok over de kaderrand mag steken voordat het
+#: `klip` heet. Een regel neemt meer ruimte in dan zijn letters: de
+#: halve interlinie onder de laatste regel is leeg papier, en die trekt
+#: de meting er zelf al af. Wat hier overblijft is de speling voor
+#: afrondingsverschillen in de layout.
+KLIP_LUCHT = 1.0
+
+METING = r"""(cfg) => {
+  const uit = {paginas: [], klip: [], klipMarge: [], overloop: [], teKlein: [],
+               leegKader: [], wees: [], losseKop: [], beeld: [],
+               beeldOngemeten: [], contrast: [], maten: {}, inhoud: [],
+               legeKantlijn: 0, kantlijnPaginas: 0, tekstwand: 0,
                accentmerken: []};
 
   const paginas = Array.from(document.querySelectorAll('.pagina'));
+
+  // De drie getallen die van buiten komen; ze staan met hun reden
+  // bovenaan dit bestand.
+  const BRONTEKSTREGEL = cfg.brontekstregel;
+  const KAPITAALDEEL = cfg.kapitaaldeel;
+  const KLIPLUCHT = cfg.klipLucht;
+
+  // Wat tekst draagt, en dus wat weg kan zijn als het onder de rand
+  // staat. De tags eerst, dan de klassen uit §5 van het stramien die
+  // een eigen tekstblok zijn en niet al een `p` of een `li` zijn. Een
+  // `sup` en een `span` staan er met opzet niet bij: die zitten ín een
+  // regel, hun doos wordt door `vertical-align` verschoven, en waar de
+  // regel eindigt zegt het blok eromheen.
+  const TEKSTNODES =
+    'p, li, h1, h2, h3, h4, h5, h6, td, th, dt, dd, blockquote, pre, ' +
+    'figure, figcaption, img, svg, table, ' +
+    '.voetnoot, .kantnoot, .pullcitaat, .paneel--rapport, .citaatblok, ' +
+    '.chapeau--rapport, .inhoud__regel, .exhibit, .beeldblok, ' +
+    '.tabel--rapport, .lid, .colofon, .team, .extra__intro, .extra__lopend';
+  // Wat ook zonder tekst inkt op het blad zet.
+  const INKT = 'img, svg, hr, .scheiding__streep, .opener-band';
+
+  // Een noot herken je aan zijn markering en niet aan zijn maat. Sinds
+  // het nootcijfer in de `sup` zelf staat, is een nootverwijzing
+  // `<sup data-noot="3">3</sup>` en een superscript uit de brontekst
+  // `<sup>th</sup>` — even klein, even hoog, en alleen het attribuut
+  // zegt welke van de twee het is. Wie op maat zoekt, vindt in
+  // "September 12th" een noot die er niet is.
+  const isNoot = (el) => !!(el.closest('.voetnoot, .kantnoot')
+                            || el.closest('[data-noot], [data-noot-id]')
+                            || el.closest('[data-toevoeging="nootnummer"]'));
+
+  // Hoeveel detail draagt een beeld. Zie `FIGUUR_DETAIL` bovenaan: dit
+  // scheidt een kleurveld van een figuur en verder niets. Het beeld
+  // wordt op hoogstens 320 px breed getekend, want meer is er voor
+  // deze vraag niet nodig.
+  const detailVan = (img) => {
+    try {
+      const b = Math.min(320, img.naturalWidth);
+      const h = Math.max(1, Math.round(img.naturalHeight * (b / img.naturalWidth)));
+      const c = document.createElement('canvas');
+      c.width = b; c.height = h;
+      const ctx = c.getContext('2d', {willReadFrequently: true});
+      ctx.drawImage(img, 0, 0, b, h);
+      const d = ctx.getImageData(0, 0, b, h).data;
+      let randen = 0, n = 0;
+      const grijs = (i) => d[i] * .3 + d[i + 1] * .59 + d[i + 2] * .11;
+      for (let y = 0; y < h; y++) {
+        for (let x = 1; x < b; x++) {
+          const i = (y * b + x) * 4;
+          if (Math.abs(grijs(i) - grijs(i - 4)) > 8) randen++;
+          n++;
+        }
+      }
+      return n ? randen / n : null;
+    } catch (e) {
+      return null;   // een canvas die niet gelezen mag worden
+    }
+  };
+
+  // De onderkant van de inkt, niet van de doos. Onder de laatste regel
+  // van een tekstblok staat de halve interlinie leeg; die meetellen is
+  // hoe een kader met een opsomming als laatste blok een klip ging
+  // heten terwijl de laatste regel twee pixels boven de rand eindigde.
+  const inktOnder = (el) => {
+    const r = el.getBoundingClientRect();
+    if (el.matches(INKT) || el.matches('table, figure')) return r.bottom;
+    const s = getComputedStyle(el);
+    const lh = parseFloat(s.lineHeight), fs = parseFloat(s.fontSize);
+    if (!lh || !fs || lh <= fs * 1.2) return r.bottom;
+    return r.bottom - (lh - fs * 1.2) / 2;
+  };
   const lum = (c) => {
     const m = c.match(/[\d.]+/g); if (!m) return 1;
     const [r, g, b] = m.slice(0, 3).map(Number).map(v => {
@@ -113,9 +253,47 @@ METING = r"""() => {
     const leeg = kaders.filter((k, j) => !k.children.length && j < laatsteGevuld).length;
 
     kaders.forEach((k, j) => {
-      if (k.scrollHeight > k.clientHeight + 1) {
-        uit.klip.push({pagina: nr, kader: j + 1,
-                       over: Math.round(k.scrollHeight - k.clientHeight)});
+      // Klip: staat er tekst ónder de rand waar het kader afsnijdt.
+      //
+      // `scrollHeight` tegen `clientHeight` kan dat niet zien. Die
+      // meting telt de ondermarge van het laatste blok mee — een
+      // opsomming heeft er een van 17 tot 22 px — en meldt dan een klip
+      // op een kader waar niets aan de hand is. Dat is duur: `klip`
+      // blokkeert de oplevering en stuurt iemand op zoek naar tekst die
+      // er nooit onder stond. Dus: zoek de diepste tekstdragende node
+      // en leg zijn onderkant naast de rand van het kader.
+      const kr = k.getBoundingClientRect();
+      const ks = getComputedStyle(k);
+      const rand = kr.bottom - (parseFloat(ks.borderBottomWidth) || 0);
+      let diepte = -Infinity, diepste = null;
+      k.querySelectorAll(TEKSTNODES).forEach(el => {
+        const r = el.getBoundingClientRect();
+        if (!r.width || !r.height) return;
+        if (!(el.textContent || '').trim() && !el.matches(INKT)) return;
+        const onder = inktOnder(el);
+        if (onder > diepte) { diepte = onder; diepste = el; }
+      });
+      if (diepste && diepte - rand > KLIPLUCHT) {
+        uit.klip.push({
+          pagina: nr, kader: j + 1,
+          over: Math.round((diepte - rand) * 10) / 10,
+          // `getAttribute` en niet `className`: op een `svg` is dat
+          // laatste een SVGAnimatedString en leest de melding dan
+          // "[object SVGAnimatedString]".
+          element: diepste.tagName.toLowerCase()
+                   + ((diepste.getAttribute('class') || '').trim()
+                      ? '.' + diepste.getAttribute('class').trim().split(/\s+/).join('.')
+                      : ''),
+          bron: diepste.getAttribute('data-bron')
+                || (diepste.closest('[data-bron]') || {getAttribute: () => ''})
+                     .getAttribute('data-bron') || '',
+          tekst: (diepste.textContent || '').trim().slice(-60)});
+      } else if (k.scrollHeight > k.clientHeight + 1) {
+        // Alleen de ondermarge steekt over de rand. Er gaat geen letter
+        // verloren, dus dit is geen melding — het staat hier zodat na
+        // te lopen is waar de oude meting op afging.
+        uit.klipMarge.push({pagina: nr, kader: j + 1,
+                            over: Math.round(k.scrollHeight - k.clientHeight)});
       }
       // De vulgraad meet de onderkant van het laatste kind tegen de
       // onderkant van het kader. `scrollHeight` kan hier niet: dat is
@@ -227,9 +405,14 @@ METING = r"""() => {
       // norm. Het McKinsey Global Institute zet zijn voetnoten op 7 pt,
       // Bain zijn exhibitnoten op 6,2. Een gespatieerd kapitaallabel:
       // 6 pt, zoals de casespread Civitates doet.
-      const apparaat = el.closest(
-        '.voetnoot, .kantnoot, .rapport-kopregel, .exhibit__bron, ' +
-        '.exhibit__noot, .beeldblok figcaption');
+      //
+      // Wat apparaat ís, staat in de markering en niet in de maat. Een
+      // noot is een noot omdat hij als noot gemarkeerd is; dat een
+      // superscript uit de brontekst even klein staat, maakt daar geen
+      // noot van. Zie `isNoot` bovenaan.
+      const apparaat = isNoot(el) || el.closest(
+        '.rapport-kopregel, .exhibit__bron, .exhibit__noot, ' +
+        '.beeldblok figcaption');
       const kapitaal = s.textTransform === 'uppercase';
       const vloer = kapitaal ? 6 : (apparaat ? 7 : 8);
       if (pt < vloer - 0.05) {
@@ -252,20 +435,61 @@ METING = r"""() => {
       // worden wél geteld, met hun kleur, zodat het een keuze blijft en
       // geen ongeluk. Het watermerk hoort per definitie op de grens van
       // het zichtbare en valt er ook buiten.
+      //
+      // Het nootcijfer staat er op zijn markering en niet op zijn
+      // lengte: een noot boven de negenennegentig heeft drie tekens en
+      // een noot in een bijlage vier, en dan zou de lengteregel hem
+      // ineens als lopende tekst zien.
       const tekst = (el.textContent || '').trim();
-      const merk = tekst.length <= 3 || kapitaal
+      const nootcijfer = el.matches('[data-toevoeging="nootnummer"], sup[data-noot]');
+      const merk = nootcijfer || tekst.length <= 3 || kapitaal
                    || el.classList.contains('opener__watermerk');
       const rij = {verhouding: Math.round(v * 100) / 100, drempel: drempel,
                    px: px, kleur: s.color, tekst: tekst.slice(0, 40)};
       if (merk) uit.accentmerken.push(rij); else uit.contrast.push(rij);
     });
 
-  // Beeldresolutie op papier.
+  // Beeldresolutie op papier, en hoeveel er van de tekst ín het beeld
+  // overblijft.
+  //
+  // Het tweede is de meting die ontbrak. Een assessmenttabel van 3120 px
+  // in een kolom van 537 px past keurig — aan de zetting is niets te
+  // zien — en staat op papier op 2,7 pt. De som staat hieronder; de
+  // aanname waar hij op rust staat bij `BRONTEKSTREGEL_PX`.
+  //
+  // De gerenderde breedte komt uit de DOM en niet uit het model. Wordt
+  // een breed beeld naar een eigen bredere pagina gepromoveerd, dan
+  // meet dit vanzelf die bredere kolom en komt de figuur er ruim boven
+  // de vloer uit. Dat is de bedoeling: de meting hoort te zeggen wat er
+  // op het blad staat.
   document.querySelectorAll('.pagina img').forEach(img => {
     const b = img.getBoundingClientRect().width;
-    if (!b || !img.naturalWidth) return;
-    uit.beeld.push({breedte_px: Math.round(b), bron_px: img.naturalWidth,
-                    dpi: Math.round(img.naturalWidth / (b / 96))});
+    const p = img.closest('.pagina');
+    const fig = img.closest('figure, .exhibit, .beeldblok');
+    const naam = (fig
+      ? (((fig.querySelector('.exhibit__nr, figcaption, .exhibit__titel') || {})
+            .textContent || '').trim() || fig.getAttribute('data-bron') || '')
+      : (img.getAttribute('alt') || '')).slice(0, 50);
+    if (!b || !img.naturalWidth) {
+      // Zonder intrinsieke breedte is er niets te rekenen. Dat stil
+      // overslaan is hoe een figuur onder de vloer ongezien blijft, dus
+      // het wordt geteld.
+      uit.beeldOngemeten.push({
+        pagina: p ? Number(p.getAttribute('data-volgnr') || 0) : 0,
+        wat: naam, breedte_px: Math.round(b || 0), bron_px: img.naturalWidth || 0});
+      return;
+    }
+    const schaal = b / img.naturalWidth;
+    const pt = BRONTEKSTREGEL * schaal * KAPITAALDEEL * 0.75;
+    const detail = detailVan(img);
+    uit.beeld.push({
+      pagina: p ? Number(p.getAttribute('data-volgnr') || 0) : 0,
+      wat: naam,
+      breedte_px: Math.round(b), bron_px: img.naturalWidth,
+      dpi: Math.round(img.naturalWidth / (b / 96)),
+      schaal: Math.round(schaal * 1000) / 1000,
+      pt: Math.round(pt * 10) / 10,
+      detail: detail === null ? null : Math.round(detail * 1000) / 1000});
   });
 
   // Klopt de inhoudsopgave met waar de koppen werkelijk staan. De
@@ -291,12 +515,42 @@ METING = r"""() => {
 }"""
 
 
+#: Wacht tot elk beeld gedecodeerd is. `wacht_op_letters` wacht op het
+#: netwerk en op de letters; de beelden zitten hier als data-URI in het
+#: bestand en zijn dus geen netwerkverkeer. Een beeld dat nog niet
+#: gedecodeerd is, meldt `naturalWidth: 0` en heeft nog geen hoogte —
+#: dan valt het uit de figuurmeting en staat het kader lager dan het op
+#: papier staat. Dat is precies het soort verschil dat twee runs op
+#: hetzelfde bestand uit elkaar laat lopen.
+BEELDEN_KLAAR = """() => Promise.all(
+  Array.from(document.images).map(
+    i => i.complete ? null : (i.decode ? i.decode().catch(() => null)
+                                       : null))).then(() => true)"""
+
+
+def draagt_tekst(beeld: dict) -> bool:
+    """Kan er tekst in dit beeld staan.
+
+    Een vlak zonder enig randje draagt geen letter en wordt niet op
+    leesbaarheid beoordeeld; zie `FIGUUR_DETAIL`. Is het detail niet
+    gemeten, dan telt het beeld mee — liever een melding te veel.
+    """
+    return beeld.get("detail") is None or beeld["detail"] >= FIGUUR_DETAIL
+
+
 def meet(html: Path) -> dict:
     with browser() as b:
         page = b.new_page(viewport={"width": 1000, "height": 1200})
         page.goto(html.resolve().as_uri())
+        # Eerst de letters, dan de beelden, en dan pas meten. Zonder dit
+        # meet je een bladspiegel die nog aan het schuiven is, en dan
+        # zegt dezelfde meting op hetzelfde bestand twee keer iets
+        # anders. Een meting die dat doet, is geen meting.
         wacht_op_letters(page)
-        return page.evaluate(METING)
+        page.evaluate(BEELDEN_KLAAR)
+        return page.evaluate(METING, {"brontekstregel": BRONTEKSTREGEL_PX,
+                                      "kapitaaldeel": KAPITAALDEEL,
+                                      "klipLucht": KLIP_LUCHT})
 
 
 def beoordeel(m: dict) -> dict:
@@ -305,7 +559,10 @@ def beoordeel(m: dict) -> dict:
     if m["klip"]:
         kritiek.append({"soort": "klip", "aantal": len(m["klip"]),
                         "waar": m["klip"][:6],
-                        "wat": "een kader snijdt zijn inhoud af; er is tekst weg"})
+                        "wat": "een kader snijdt zijn inhoud af; er staat tekst "
+                               "onder de rand. `over` is hoeveel px het diepste "
+                               "tekstblok onder de rand uitkomt, `element` welk "
+                               "blok dat is en `tekst` het staartje ervan"})
     if m["overloop"]:
         kritiek.append({"soort": "overloop", "aantal": len(m["overloop"]),
                         "waar": m["overloop"][:6],
@@ -341,6 +598,52 @@ def beoordeel(m: dict) -> dict:
                            "waar": [{"pagina": p["nr"], "vulgraad": p["vulgraad"]}
                                     for p in slap[:8]],
                            "wat": "deze pagina's staan minder dan 70 procent vol"})
+
+    # Wat er van de tekst ín een figuur overblijft. De som staat in de
+    # meting; wat hier gebeurt is hem tegen de vloer leggen. De vloer is
+    # dezelfde 6 pt die voor een gespatieerd kapitaallabel geldt.
+    deel = f"{KAPITAALDEEL}".replace(".", ",")
+    schatting = (f"schatting: één regel in het aangeleverde bestand is "
+                 f"{BRONTEKSTREGEL_PX} px (10 pt op 96 dpi, op 2× geëxporteerd). "
+                 f"pt = {BRONTEKSTREGEL_PX} × schaal × {deel} × 0,75. "
+                 f"Wat er werkelijk in het beeld staat, ziet dit script niet — "
+                 f"staat er geen tekst in, dan zegt dit getal niets")
+    # Een beeld zonder enig detail draagt geen tekst en wordt niet
+    # beoordeeld; zie `FIGUUR_DETAIL`. Wat er niet in staat, kan er ook
+    # niet te klein in staan.
+    beoordeelbaar = [b for b in m["beeld"] if draagt_tekst(b)]
+    vlak = [b for b in m["beeld"] if not draagt_tekst(b)]
+    onleesbaar = [b for b in beoordeelbaar if b.get("pt", 99) < FIGUUR_VLOER_PT]
+    krap = [b for b in beoordeelbaar
+            if FIGUUR_VLOER_PT <= b.get("pt", 99) < FIGUUR_KRAP_PT]
+    if onleesbaar:
+        kritiek.append({"soort": "figuur-te-klein", "aantal": len(onleesbaar),
+                        "waar": onleesbaar[:6], "aanname": schatting,
+                        "wat": f"de tekst in deze figuren komt onder {FIGUUR_VLOER_PT:.0f} "
+                               "pt uit; het beeld past in de kolom maar is niet "
+                               "meer te lezen. Zet hem breder, laat hem op een "
+                               "eigen pagina promoveren, of vraag om een versie "
+                               "met minder in één beeld"})
+    if krap:
+        aanwijzing.append({"soort": "figuur-krap", "aantal": len(krap),
+                           "waar": krap[:6], "aanname": schatting,
+                           "wat": f"tussen {FIGUUR_VLOER_PT:.0f} en "
+                                  f"{FIGUUR_KRAP_PT:.0f} pt; leesbaar, en niet meer "
+                                  "dan dat"})
+    if vlak:
+        klein.append({"soort": "figuur-zonder-detail", "aantal": len(vlak),
+                      "waar": [{"pagina": b["pagina"], "wat": b["wat"],
+                                "detail": b["detail"]} for b in vlak[:4]],
+                      "wat": "deze beelden dragen geen enkel randje en dus geen "
+                             "tekst; ze zijn op leesbaarheid niet beoordeeld. Een "
+                             "lege plaatshouder hoort hier te staan, een figuur niet"})
+    if m["beeldOngemeten"]:
+        aanwijzing.append({"soort": "beeld-ongemeten",
+                           "aantal": len(m["beeldOngemeten"]),
+                           "waar": m["beeldOngemeten"][:6],
+                           "wat": "deze beelden hadden geen intrinsieke breedte of "
+                                  "geen breedte op het blad; dpi en leesbaarheid "
+                                  "zijn er niet van bekend"})
 
     fout = [b for b in m["beeld"] if b["dpi"] < DPI_FOUT]
     zacht = [b for b in m["beeld"] if DPI_FOUT <= b["dpi"] < DPI_ZACHT]
@@ -396,6 +699,7 @@ def main() -> int:
     # die zouden het gemiddelde omlaag trekken zonder dat het iets zegt.
     tekstpaginas = [p for p in m["paginas"] if p["woorden"] > 40]
     woorden = [p["woorden"] for p in tekstpaginas]
+    gemeten = [b for b in m["beeld"] if draagt_tekst(b)]
     verslag = {
         "bestand": str(a.html),
         "paginas": len(m["paginas"]),
@@ -419,6 +723,14 @@ def main() -> int:
             / max(1, len([p for p in m["paginas"] if not p.get("blanco")])), 2),
         "lettergroottes": sorted(float(k) for k in m["maten"]),
         "beelden": len(m["beeld"]),
+        # De krapste figuur van het stel, zodat het getal er ook staat
+        # als niets de vloer raakt. Het is een schatting; zie
+        # `BRONTEKSTREGEL_PX`. Beelden zonder detail tellen niet mee:
+        # daar staat geen tekst in.
+        "kleinste figuurtekst": ({
+            "pt": min(b["pt"] for b in gemeten),
+            "wat": "geschat, op één aangenomen brontekstregel van "
+                   f"{BRONTEKSTREGEL_PX} px"} if gemeten else None),
         **oordeel,
     }
     if a.alles:
