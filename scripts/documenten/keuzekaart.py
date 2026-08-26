@@ -175,7 +175,9 @@ def bouw_html() -> str:
         ]),
 
         _blok("Besluit 3 &mdash; kleurregister",
-              "Hoeveel kleur draagt het document, en welk accent staat naast oranje?", [
+              "Hoeveel kleur draagt het document, en welk accent staat naast oranje? "
+              "Een executive summary staat altijd op navy; elk ander document in principe "
+              "op oranje, tenzij je iets anders vraagt.", [
             ("Wit met oranje accent",
              f'<div style="height:100%">{lab}{kop}<hr style="border:0;height:3px;width:38px;background:var(--oranje);margin:5px 0 6px">{_lorem(3)}</div>',
              "Wit papier, navy letter, oranje voor de labels en de streep. Het rustigste "
@@ -198,8 +200,8 @@ def bouw_html() -> str:
              f'<p class="minilabel">Aanleiding</p>'
              f'<p class="minikop" style="color:#fff">Wie betaalt<br>de preventie?</p>'
              f'<div style="color:#fff">{_lorem(2)}</div></div>',
-             "Donker en formeel. Voor een proposal of een bestuurlijke samenvatting; "
-             "beeld werkt hier beter dan veel tekst.", False),
+             "Donker en formeel, en de vaste stand voor een executive summary. Ook voor "
+             "een proposal; beeld werkt hier beter dan veel tekst.", False),
         ]),
 
         _blok("Besluit 4 &mdash; tekst tegenover beeld",
@@ -227,7 +229,7 @@ def bouw_html() -> str:
 
         _blok("Besluit 5 &mdash; de opening",
               "Hoe komt de dektitel op het document? Dit gaat over pagina 1, eenmalig.", [
-            ("Titelblad",
+            ("Voorblad",
              f'<div style="height:100%;display:flex;gap:7px;align-items:center">'
              f'<div style="width:70px;height:94px;background:var(--verloop);padding:7px 6px;'
              f'display:flex;flex-direction:column;justify-content:space-between">'
@@ -240,7 +242,9 @@ def bouw_html() -> str:
              f'padding:6px;overflow:hidden">{lab}{_lorem(2)}</div>'
              f'<div style="flex:1"></div></div>',
              "Pagina 1 is helemaal de titel; de inhoud begint op pagina 2. Wat elk "
-             "SFNL-drukwerk doet, en het kost een hele pagina.", True),
+             "SFNL-drukwerk doet, en het kost een hele pagina. Gebouwd met "
+             "&#46;omslag, hetzelfde merkteken als de omslag van een rapport: "
+             "afzender boven, titel in het midden, datum en logo onder.", True),
             ("Titelbalk",
              f'<div style="height:100%;display:flex;justify-content:center;align-items:center">'
              f'<div style="width:70px;height:94px;box-shadow:inset 0 0 0 1px rgba(32,27,92,.3);'

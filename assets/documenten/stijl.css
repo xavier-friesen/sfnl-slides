@@ -503,6 +503,11 @@ a:hover { color: var(--grapefruit); }
 .haarlijn {
   border: 0;
   height: 1px;
+  /* `color: inherit` is geen sierregel: een <hr> krijgt van de browser
+     zelf `color: gray` mee, en dan is `currentColor` grijs in plaats van
+     de inkt van de pagina. Op wit valt dat niet op, op een navyveld
+     wel. */
+  color: inherit;
   background: currentColor;
   opacity: 0.22;
   margin: 0;
@@ -516,6 +521,11 @@ a:hover { color: var(--grapefruit); }
   margin: 0;
 }
 .streep--breed { width: 100%; }
+
+/* Op een kleurveld is oranje niet te zien. Dan draagt de streep de inkt
+   van het veld — wit op oranje, navy op mint — en dat blijft één regel
+   in plaats van een `background` in de markup. */
+.streep--inkt  { color: inherit; background: currentColor; }
 
 /* 8.7 Het paspoort — de labelrij met feiten in een zijkolom.
    Label in kapitalen, waarde eronder in vet. Gemeten uit het
@@ -756,6 +766,85 @@ a:hover { color: var(--grapefruit); }
   margin-left: 4px;
   color: var(--oranje);
 }
+
+/* 8.16 De omslag — het voorblad.
+
+   Dit is het enige paginatype met een eigen klasse, en dat is een
+   uitdrukkelijk besluit: elk document heeft precies één voorblad, elk
+   voorblad zegt dezelfde vier dingen (waar het over gaat, wat het is,
+   van wie het komt, wanneer), en de rangorde daartussen hoort niet per
+   document opnieuw verzonnen te worden. De rapportskill had hem al —
+   `rapport.css` §14 heette dit — en twee handgecomponeerde voorbladen
+   naast elkaar leverden twee verschillende maatladders op. Vandaar één
+   component hier, in de laag die beide skills lezen.
+
+   Drie zones en niet meer: `__boven` draagt wat het stuk ís,
+   `__midden` draagt de titel en zweeft in het midden, `__onder`
+   draagt de datum, de afzender en het logo. De compositie blijft vrij
+   binnen elke zone — een rij labelblokken in `__onder` is gewoon een
+   `.rij` — maar de rangorde staat vast.
+
+   Wat een voorblad niet is: een pagina met een titel erop. Zet je de
+   titel in de zetspiegel met de tekst eronder, dan is dat besluit
+   "gewoon titel" en niet dit merkteken.
+
+   `.omslag` is een flexkolom die de hele zetspiegel vult, en de
+   attributen staan op `.omslag` zelf en niet op een omhulsel eromheen:
+   met een omhulsel groeit hij niet mee en zakt het hele voorblad naar
+   de onderrand. Dat was op het eerste gebouwde voorblad van de
+   rapportskill te zien als een titel die tegen het logo aan stond. */
+.omslag {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.omslag__boven { flex: 0 0 auto; padding-bottom: var(--sprong); }
+.omslag__midden { flex: 1 1 auto; display: flex; flex-direction: column; justify-content: center; }
+.omslag__onder { flex: 0 0 auto; }
+.omslag__onder > * + * { margin-top: var(--regel); }
+
+/* De titel staat op de displaymaat. Wil hij groter, dan zet je
+   `--m-display` op de pagina en niet een `font-size` op de titel: dan
+   blijft het één maat die de ladder kent, en groeit een hoofdstuknummer
+   op dezelfde pagina mee. */
+.omslag__titel {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: var(--m-display);
+  line-height: 1.02;
+  letter-spacing: -.024em;
+  margin: 0;
+  text-wrap: balance;
+}
+
+/* De ondertitel: één zin die zegt waar het over gaat, in het brood en
+   licht, zodat hij niet met de titel concurreert. De maat komt uit de
+   ladder van de laag — op een document de titelmaat, in een rapport de
+   uitspraakmaat — en de regelbreedte is een variabele omdat het
+   rapport in kolommen meet en een document in tekens. */
+.omslag__onderschrift {
+  font-family: var(--brood);
+  font-weight: 300;
+  font-size: var(--m-omslag-onderschrift, var(--m-titel));
+  line-height: 1.36;
+  margin: calc(var(--regel) * .9) 0 0;
+  max-width: var(--omslag-maat, 34ch);
+}
+
+/* De regel: de opdrachtgever bovenaan, de datum onderaan. Kapitaal,
+   gespatieerd, op de kleinste maat — hetzelfde register als `.label`,
+   maar zwaarder, want op een voorblad staat hij alleen. */
+.omslag__regel {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: var(--m-klein);
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  margin: 0;
+}
+
 
 /* ---------------------------------------------------------------
    9. Tabel

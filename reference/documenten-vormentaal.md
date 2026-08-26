@@ -178,7 +178,7 @@ uit het materiaal, niet uit wat er gewoonlijk op een achterkant staat.
 antwoord geven. Op twee pagina's is de eerste zin meteen de boodschap. Wie hier een aanloop
 schrijft, heeft de helft van zijn document opgemaakt aan opwarmen.
 
-**De omslag wordt duur.** Een titelblad kost op één blad alles, op een tweeluik de helft en op
+**Het voorblad wordt duur.** Een voorblad kost op één blad alles, op een tweeluik de helft en op
 drie pagina's een derde. Daarom is onder de vier pagina's de titelbalk meestal het antwoord
 (besluit 5): een kwart pagina, en de titel staat er net zo goed op.
 
@@ -205,7 +205,7 @@ gebeurt één keer, op pagina 1, en het is besluit 5 in het vragenvuur.
   door. Vrijwel gratis, en op één blad is het de enige die kan.
 
 De afweging is dus ruimte tegen herkenbaarheid, en die valt anders uit naar buiten dan naar
-binnen. Een uitnodiging die de deur uit gaat verdient zijn titelblad; een interne notitie van
+binnen. Een uitnodiging die de deur uit gaat verdient zijn voorblad; een interne notitie van
 vier pagina's die alleen gelezen wordt, houdt liever vier pagina's inhoud over dan drie.
 
 **De hoofdstukopening** gaat over iets anders: hoe begint een hoofdstuk binnen het document. Die
@@ -219,7 +219,7 @@ kop leest als een fout. En als er een band is, heeft hij één hoogte — 190 px
 260 op de volgende laat de tekst per pagina op een andere hoogte beginnen, en op de spread is dat
 een scheve horizon.
 
-Wat géén fout is: een document dat met een titelblad begint en daarna per hoofdstuk een band
+Wat géén fout is: een document dat met een voorblad begint en daarna per hoofdstuk een band
 draagt. Dat zijn twee besluiten over twee verschillende dingen, en de lezer leest ze ook zo — de
 eerste zegt "dit is het stuk", de tweede zegt "hier begint een deel".
 

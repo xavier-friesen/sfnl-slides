@@ -7,7 +7,7 @@ De gerenderde versie staat in `assets/documenten/maatstaf/`, met de fouten die e
 
 | bestand | pagina |
 |---|---|
-| `Main.dc.html` | de opening als titelblad. Het eerste artboard moet Main heten; dat is een eis van de canvashelper |
+| `Main.dc.html` | de opening als voorblad, gebouwd met `.omslag`. Het eerste artboard moet Main heten; dat is een eis van de canvashelper |
 | `Aanleiding.dc.html` | de tekstpagina |
 | `Geldstroom.dc.html` | een `.titelbalk` om één pagina apart te zetten, met een infographic als drager |
 | `Routes.dc.html` | kaarten plus tabel |

@@ -19,7 +19,7 @@ Waarom dit een ander document is dan een document van vier, en niet een kortere:
    de aflopende band. Dat is een compositiebesluit en geen restje.
 2. **Er is geen aanloop.** De chapeau is meteen de boodschap. Wie hier eerst context schrijft,
    heeft de helft van zijn document opgemaakt aan opwarmen.
-3. **De opening is een titelbalk en geen titelblad.** Een titelblad zou de helft van het
+3. **De opening is een titelbalk en geen voorblad.** Een voorblad zou de helft van het
    document kosten. De band kost een kwart van één pagina en zet de titel er net zo goed op.
 4. **De letter staat hoger.** Op `a5` en `dl` zet `stijl.css` de body op 11 pt in plaats van
    10 pt, en de kleine maat op 9. Dat is geen smaak maar de maat: de zetspiegel is 473 px breed

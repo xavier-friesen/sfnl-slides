@@ -1636,38 +1636,22 @@
    hand gecomponeerd wordt. Wat erop staat komt uit de bron: de titel,
    de ondertitel als er een is, de opdrachtgever, de datum. Wat er niet
    op staat, staat er niet.
+
+   Het merkteken zelf — `.omslag` met zijn drie zones, de titel, het
+   onderschrift en de regel — staat in `stijl.css` §8.16, want de
+   documentenskill bouwt zijn voorblad met hetzelfde component. Wat
+   hier staat is de rapportmaat eroverheen: twee variabelen, en verder
+   niets.
    --------------------------------------------------------------- */
 
-.omslag { position: relative; flex: 1 1 auto; display: flex; flex-direction: column; }
-.omslag__boven { flex: 0 0 auto; }
-.omslag__midden { flex: 1 1 auto; display: flex; flex-direction: column; justify-content: center; }
-.omslag__onder { flex: 0 0 auto; }
-.omslag__onder > * + * { margin-top: var(--regel); }
-.omslag__boven { padding-bottom: var(--sprong); }
-.omslag__titel {
-  font-family: var(--display);
-  font-weight: 800;
-  font-size: var(--m-display);
-  line-height: 1.02;
-  letter-spacing: -.024em;
-  margin: 0;
-  text-wrap: balance;
-}
-.omslag__onderschrift {
-  font-family: var(--brood);
-  font-weight: 300;
-  font-size: 22px;
-  line-height: 1.36;
-  margin: calc(var(--regel) * .9) 0 0;
-  max-width: var(--k8);
-}
-.omslag__regel {
-  font-family: var(--display);
-  font-weight: 700;
-  font-size: var(--m-klein);
-  letter-spacing: .16em;
-  text-transform: uppercase;
-  margin: 0;
+/* De ondertitel op de uitspraakmaat van het rapport (22 px, §4 van
+   `rapport-stramien.md`) en niet op de titelmaat, en zijn regelbreedte
+   in kolommen van het rapportraster in plaats van in tekens. Acht
+   kolommen is de maat waarop de rest van het rapport ook zijn brede
+   blokken zet. */
+.pagina[data-soort="rapport"] .omslag {
+  --m-omslag-onderschrift: 22px;
+  --omslag-maat: var(--k8);
 }
 
 /* De omslag staat op een kleurveld, en standaard is dat oranje. Dat is

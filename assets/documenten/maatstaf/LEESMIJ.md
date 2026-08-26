@@ -1,7 +1,8 @@
 # assets/documenten/maatstaf/ — waar de lat ligt
 
-Zes renders, gebouwd met deze skill met `scripts/documenten/render.py`: vijf pagina's van één
-document op het SFNL-formaat, plus een tweeluik op A5 als tweede geval. Ze zijn niet om
+Zeven renders plus een contactblad, gebouwd met deze skill met `scripts/documenten/render.py`:
+vijf pagina's van één document op het SFNL-formaat, een tweeluik op A5 als tweede geval, en het
+voorblad nog een keer in het navy-register. Ze zijn niet om
 na te tekenen maar om te weten wat "af" betekent. **Het zijn voorbeelden en geen sjablonen:** de
 tekst erin is verzonnen om de vorm te kunnen laten zien, en zegt niets over wat er in een echt
 document hoort te staan. De bron van dezelfde vier staat in
@@ -10,12 +11,13 @@ document hoort te staan. De bron van dezelfde vier staat in
 | bestand | wat het laat zien |
 |---|---|
 | `00-contactblad.png` | de vijf als spreads: 1 alleen, dan 2-3, dan 4-5. Kijk hier áltijd eerst naar |
-| `01-omslag.png` | de opening als **titelblad**: het huisverloop, één tonale bol, displaymaat, en drie labelblokken onderaan. Geen foto, want die was er niet |
+| `01-omslag.png` | de opening als **voorblad**, gebouwd met `.omslag`: het huisverloop, één tonale bol, de afzender boven, de titel op displaymaat in het midden, en onderaan drie labelblokken met het logo. Geen foto, want die was er niet |
 | `02-tekstpagina.png` | het gewone register: watermerkcijfer, chapeau, twee uitgevulde kolommen met aanheffen, een uitspraak, een feitenstrip |
 | `03-titelbalk-en-infographic.png` | een `.titelbalk` in violet om één pagina apart te zetten — het derde gebruik van de band, niet de dektitel en niet een hoofdstuk — met een infographic als drager in een `.beeldkader` op schaal 1:1 |
 | `04-kaarten-en-tabel.png` | drie kaarten op het verloop met gelijke hoogte, twee kolommen proza, een tabel naast een mintpaneel |
 | `05-kleurpagina.png` | een heel blad in mint met een aflopende oranje band onderaan, genummerde badges, en het logo op de band |
 | `06-tweeluik-a5.png` | de korte route: twee pagina's op A5 met de **titelbalk** als opening, en de body op 11 pt in plaats van 10. Bron in `assets/documenten/voorbeeld-a5/` |
+| `07-voorblad-navy.png` | hetzelfde voorblad in het andere register: een executive summary staat op navy, en dat is een regel. Alleen `data-veld` en `data-inkt` verschillen van `01`; het skelet is letterlijk hetzelfde. Bron in `assets/documenten/voorbeeld-navy/` |
 
 ## Wat deze vier hebben gekost
 

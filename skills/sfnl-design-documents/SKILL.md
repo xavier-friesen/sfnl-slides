@@ -41,7 +41,9 @@ is dus `${CLAUDE_PLUGIN_ROOT}/reference/documenten-stramien.md`.
    Voor de korte route staat er een tweede set: `assets/documenten/voorbeeld-a5/` is een tweeluik
    op A5 met de titelbalk als opening, gerenderd in `maatstaf/06-tweeluik-a5.png`. Kijk daar naar
    zodra de omvang onder de vier pagina's uitkomt, want dat is een ander document en geen
-   kortere document.
+   kortere document. En `assets/documenten/voorbeeld-navy/` is hetzelfde voorblad in het
+   navy-register, gerenderd in `maatstaf/07-voorblad-navy.png`: dat is de stand van een
+   executive summary.
 
 Draai daarna:
 
@@ -170,7 +172,7 @@ omvang bepaalt hoeveel pagina's dat zijn, het kleurregister bepaalt hoeveel vlak
 beeldregister bepaalt daarbinnen wat tekst blijft, en de opening raakt alleen de eerste pagina.
 Een besluit verderop draait er nooit een eerder in de rij terug — en de opening staat daarom
 achteraan: hij is de enige die maar één pagina raakt, en hij hangt aan de omvang, want een
-titelblad kost er een.
+voorblad kost er een.
 
 1. **Het formaat.** SFNL-rapportformaat (210 × 275 mm), A4, A5, of de liggende spread
    (420 × 275 mm). Default is **SFNL-rapportformaat**: dat is de maat van de jaarrapporten en de
@@ -212,6 +214,13 @@ titelblad kost er een.
    de streep. Dat is het register van vrijwel elke inhoudspagina in het rapport. Kies je
    kleurvlakken als ritme, dan spreek je hier ook het tweede accent af — mint, violet of
    periwinkel — en dat is één keuze voor het hele document en niet per pagina.
+
+   **Eén soort stuk kiest zijn eigen register en die vraag stel je niet: een executive summary is
+   navy.** Voorblad op navy met witte inkt, en navy als het dominante veld erbinnen. Dat gaat naar
+   een bestuurstafel, en de blauwe stijl is wat het daar hoort te zijn. Meld het als een besluit
+   dat al vaststaat, met de reden erbij, in plaats van het als optie aan te bieden. **Elk ander
+   document staat in principe op oranje** — het huisverloop op het voorblad, oranje als accent
+   erbinnen — tenzij de gebruiker om iets anders vraagt. Vraagt hij erom, dan geldt zijn keuze.
 4. **Tekst tegenover beeld.** Tekstgedreven (300 tot 400 woorden per pagina), gebalanceerd (150
    tot 250) of beeldgedreven (60 tot 120). Default is **gebalanceerd**. De getallen zijn een
    indicatie en werken twee kanten op: past het verhaal in minder, dan is het minder, en vraagt
@@ -224,32 +233,36 @@ titelblad kost er een.
    ontworpen. Is er geen beeld en wil de gebruiker het toch, zeg dan wat het kost en stel
    gebalanceerd voor met kleurvlakken als drager.
 
-5. **De opening: titelblad, titelbalk of gewoon titel.** Hoe komt de dektitel op het document te
+5. **De opening: voorblad, titelbalk of gewoon titel.** Hoe komt de dektitel op het document te
    staan. Dit is een eenmalig besluit over de eerste pagina en geen modus die op elke pagina
    terugkomt.
 
    | opening | wat het is | wat het kost |
    |---|---|---|
-   | **titelblad** — default | pagina 1 draagt alleen de titel en wat er verder bij de identificatie hoort, op een kleurveld of op wit | een hele pagina: een kwart van een document van vier, de helft van een tweeluik |
+   | **voorblad** — default | pagina 1 draagt alleen de titel en wat er verder bij de identificatie hoort, op een kleurveld. Gebouwd met `.omslag`, hetzelfde merkteken waarmee de rapportskill zijn omslag zet — drie zones, vier velden, zie *Het voorblad* in stap 3 | een hele pagina: een kwart van een document van vier, de helft van een tweeluik |
    | **titelbalk** | geen aparte pagina: pagina 1 draagt bovenaan een aflopende band met de dektitel, en de inhoud begint eronder | ongeveer een kwart pagina, en de eerste pagina wordt voller |
    | **gewoon titel** | de dektitel staat gewoon in de zetspiegel van pagina 1, met een streep eronder, en de tekst loopt door | vrijwel niets |
 
-   Default is het **titelblad**, want dat is wat elk SFNL-drukwerk doet en het is de pagina waar
+   Default is het **voorblad**, want dat is wat elk SFNL-drukwerk doet en het is de pagina waar
    iemand het stuk aan herkent. Twee uitzonderingen die je zelf ziet aankomen, en ze hangen
    allebei aan besluit 2.
+
+   **Kies je het voorblad, dan vraag je in hetzelfde bericht de vier velden**: titel, ondertitel,
+   afzender of opdrachtgever, datum. Woordelijk van de gebruiker, want dit is de enige tekst op
+   het document die niet uit het materiaal komt. Leeg laten betekent dat het er niet op staat.
 
    Bij een **korte omvang** wordt het duur: op één blad bestaat het niet, op een tweeluik kost het
    de helft en op drie pagina's een derde. Onder de vier pagina's is de titelbalk daarom meestal
    het antwoord — die kost een kwart pagina en zet de titel er net zo goed op. En bij een
    **intern stuk dat alleen gelezen wordt** is een heel blad voor de titel sowieso zonde: een
-   notitie van vier pagina's met een titelblad houdt drie pagina's inhoud over.
+   notitie van vier pagina's met een voorblad houdt drie pagina's inhoud over.
 
    Kies je de titelbalk, dan spreek je hier ook de kleur af — oranje, navy of violet. Op oranje is
    de inkt navy; op navy en violet is hij wit.
 
    **Hoofdstukopeningen zijn iets anders en horen hier niet.** Heeft het document hoofdstukken, dan
    is de vraag hoe die openen een eigen vraag, en je beantwoordt hem in de outline en niet hier —
-   zie *Hoofdstukken* in stap 2. Een document kan dus prima met een titelblad beginnen en daarna
+   zie *Hoofdstukken* in stap 2. Een document kan dus prima met een voorblad beginnen en daarna
    per hoofdstuk een band dragen; dat is geen mengeling maar twee besluiten over twee
    verschillende dingen.
 
@@ -396,8 +409,14 @@ Een leeg skelet krijg je met `python $S/bouw.py <werkmap> --nieuw Programma --vo
 
 **Nog een keer, want het is de kern: er is geen paginabibliotheek.** `stijl.css` geeft je het
 kader, het raster, de maatladder, de kleurregels en veertien merktekens die elk één ding tekenen.
-Er zit geen `.omslag` in, geen `.hoofdstukopener` en geen `.kaartenrij`. Wat je ermee bouwt is
-elke pagina opnieuw jouw beslissing. `documenten-stramien.md` heeft de volledige lijst met per stuk
+Er zit geen `.hoofdstukopener` in en geen `.kaartenrij`. Wat je ermee bouwt is
+elke pagina opnieuw jouw beslissing.
+
+**Op één pagina geldt dat niet, en dat is het voorblad.** `.omslag` is het enige paginatype met
+een eigen klasse, want elk document heeft er precies één en het zegt elke keer dezelfde vier
+dingen. Het is hetzelfde merkteken waarmee `sfnl-rapport-opmaak` zijn omslag zet — één component
+in `stijl.css` §8.16, niet twee handgecomponeerde voorbladen die uit elkaar lopen. Zie
+*Het voorblad* hieronder. `documenten-stramien.md` heeft de volledige lijst met per stuk
 wat het codeert.
 
 **Klassen voor het systeem, inline styles voor het geval.** Het canvas laat de gebruiker straks
@@ -406,7 +425,72 @@ kader, het raster en de maatrollen doe je met klassen (die horen niet per elemen
 en een specifieke breedte, kleur of afstand zet je inline. Tekst zet je letterlijk in de markup en
 nooit als variabele, anders kan de gebruiker hem niet ter plekke overtypen.
 
-### 2. Een infographic in het document
+### 2. Het voorblad
+
+Dit is de enige pagina die je niet vrij componeert, en dat is opzet. Elk document heeft precies
+één voorblad, elk voorblad zegt dezelfde vier dingen, en de rangorde daartussen hoort niet per
+document opnieuw verzonnen te worden. `sfnl-rapport-opmaak` had dat al opgelost; hier gaat het
+langs precies dezelfde weg, met hetzelfde merkteken uit dezelfde `stijl.css`. Twee gerenderde
+voorbeelden: `assets/documenten/maatstaf/01-omslag.png` op het huisverloop, met de markup in
+`assets/documenten/voorbeeld/Main.dc.html`, en `maatstaf/07-voorblad-navy.png` in het
+navy-register, met de markup in `assets/documenten/voorbeeld-navy/Main.dc.html`. Tussen die twee
+verschillen alleen `data-veld` en `data-inkt`.
+
+**Drie zones, en de rangorde staat vast.**
+
+```html
+<div class="pagina" data-formaat="sfnl" data-veld="verloop" data-inkt="wit" data-volgnr="1"
+     data-titel="Voorblad" data-folio="nee" style="--m-display: 62px;">
+  <div class="zetspiegel">
+    <div class="omslag">
+      <div class="omslag__boven">
+        <p class="omslag__regel">In opdracht van de gemeente Tilburg</p>
+      </div>
+      <div class="omslag__midden">
+        <h1 class="omslag__titel">Wie betaalt de preventie?</h1>
+        <p class="omslag__onderschrift">Een analyse van vijftien jaar resultaatfinanciering.</p>
+      </div>
+      <div class="omslag__onder">
+        <p class="omslag__regel">Maart 2026</p>
+        <svg class="logo logo--groot" …></svg>
+      </div>
+    </div>
+  </div>
+</div>
+```
+
+| zone | wat erin hoort |
+|---|---|
+| `__boven` | wat het stuk **is** of van wie het komt: de opdrachtgever, "Uitnodiging · werksessie", "Executive summary" |
+| `__midden` | waar het over **gaat**: de titel, en daaronder één zin ondertitel. Deze zone zweeft in het midden van het blad |
+| `__onder` | de feiten en het merk: de datum, en het logo als laatste element |
+
+Binnen een zone ben je vrij. De onderzone van een uitnodiging draagt geen datumregel maar een
+`.rij` met drie labelblokken — wanneer, waar, aanmelden — en dat is dezelfde vorm met andere
+feiten. Wat je niet doet is de rangorde omgooien: een titel onderaan en een datum in het midden
+is geen variant maar een fout.
+
+**De vier velden komen woordelijk van de gebruiker.** Titel, ondertitel, afzender of
+opdrachtgever, datum. Dit is de enige plek in het document waar tekst staat die niet uit het
+materiaal komt, dus vraag ze en verzin ze niet — precies zoals de rapportskill ze vraagt. Een veld
+dat leeg blijft, komt er niet op te staan: een `.omslag` met alleen een titel en een logo is een
+geldig voorblad. Een ondertitel is één zin en geen samenvatting.
+
+**De kleur van het veld is geen smaak.** Een executive summary staat op **navy** —
+`data-veld="navy" data-inkt="wit"` — en dat is een vaste regel en geen voorkeur: dat stuk gaat
+naar een bestuurstafel en de blauwe stijl is wat het daar hoort te zijn. Elk ander document staat
+op **oranje**, en dan bedoelen we het huisverloop (`data-veld="verloop"`), tenzij de gebruiker om
+iets anders vraagt. Vraagt hij erom, dan geldt hij en niet deze regel.
+
+**Twee maten en verder niets inline.** Wil de titel groter dan de displaymaat, dan zet je
+`--m-display` op de `.pagina` — niet een `font-size` op de titel, want dan staat er een maat in het
+document die de ladder niet kent. En de ondertitel staat op de titelmaat (20 pt); dat is de rung
+die daarvoor bestaat.
+
+**Op een kleurveld draagt de streep de inkt van het veld**: `class="streep streep--inkt"`. Oranje
+op oranje is niet te zien, en dat is het soort detail dat pas op de render blijkt.
+
+### 3. Een infographic in het document
 
 Een beeld dat iets uitrekent — een geldstroom, een tijdlijn, een verdeling, een vergelijking —
 staat in een **`.beeldkader`**, en dat is een merkteken en geen losse div. Het houdt de verhouding
@@ -461,7 +545,7 @@ hand is — welke pagina, waarom je herontwerp het niet haalde, en wat het beeld
 stel de escalatie voor met de kosten erbij, en wacht op ja of nee. Bij nee zet je een
 `beeldkader--leeg` neer met wat erin hoort, zodat de gebruiker ziet wat er open staat.
 
-### 3. Bouwen
+### 4. Bouwen
 
 ```bash
 python $S/bouw.py <werkmap> --uit uitnodiging-werksessie.html --titel "Uitnodiging werksessie"

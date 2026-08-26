@@ -271,7 +271,7 @@ Wat er bovenop `stijl.css` bij komt. Elk tekent één ding.
 | `.scheiding__streep` | de streep op het scheidingsblad van de bijlagen, vier rasterkolommen breed |
 | `.opener-band` | de aflopende band; `--balk` op de `.pagina` |
 | `.inhoud`, `.inhoud__regel`, `.inhoud__nr`, `.inhoud__naam`, `.inhoud__leader`, `.inhoud__folio` | de inhoudsopgave. De puntenlijn is een lijnelement en geen reeks punten, want punten zouden als toegevoegde tekst opduiken |
-| `.omslag`, `.omslag__boven/__midden/__onder`, `.omslag__titel`, `.omslag__onderschrift`, `.omslag__regel` | de omslag |
+| `.omslag`, `.omslag__boven/__midden/__onder`, `.omslag__titel`, `.omslag__onderschrift`, `.omslag__regel` | de omslag. Het component staat in `stijl.css` §8.16, want `sfnl-design-documents` bouwt zijn voorblad met hetzelfde merkteken; `rapport.css` §14 zet er alleen de rapportmaat op — `--m-omslag-onderschrift` op 22 px en `--omslag-maat` op acht kolommen |
 | `.kantnoot` | een kanttekening in de kantlijn, met een streepje erboven |
 | `.voetnoot` | een noot aan de voet, of in de kantlijn in het kantlijnmodel |
 | `.paneel--rapport` | een gekleurd vlak met een blok tekst |
