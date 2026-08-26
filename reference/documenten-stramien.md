@@ -167,7 +167,7 @@ niet.
 | `.kicker` | dit is de zoveelste van een reeks | klein, oranje, boven de kop |
 | `.uitspraak` | wat er van deze pagina blijft hangen | één per pagina, hooguit |
 | `.watermerk` | de hoofdstukgrens, zonder een regel te kosten | half áchter de kop, niet ernaast |
-| `.streep` | hier begint iets | 56 × 3 px in oranje. Het goedkoopste merkteken dat er is |
+| `.streep` | hier begint iets | 56 × 3 px in oranje. Het goedkoopste merkteken dat er is. Op een kleurveld `.streep--inkt`, want oranje op oranje is niet te zien |
 | `.haarlijn` | hier houdt iets op | 1 px op 22 procent dekking |
 | `.paspoort` | een rij feiten in een zijkolom | label in kapitalen op 9 px, waarde eronder in vet |
 | `.badge` | volgorde | altijd rond, nooit een afgeronde rechthoek |
@@ -182,6 +182,7 @@ niet.
 | `.titelbalk` | een titel op een aflopende band bovenaan — de dektitel op pagina 1, of een hoofdstuknaam | zet `--balk` op de `.pagina`, niet op de balk. `data-veld` kiest de kleur én de inkt |
 | `.beeldkader` | de gereserveerde plek voor een infographic of foto | verhouding inline met `aspect-ratio`; zonder opgaaf 3:2 |
 | `.beeldkader--leeg` | er hoort hier beeld en het is er nog niet | met `data-wat="…"`; `qa_document.py` telt wat je hebt laten staan |
+| `.omslag` + `__boven/__midden/__onder`, `__titel`, `__onderschrift`, `__regel` | het voorblad | het enige paginatype met een eigen klasse, gedeeld met `sfnl-rapport-opmaak`. Drie zones met een vaste rangorde; zie *Het voorblad* |
 
 Structuur en zetting:
 
@@ -200,8 +201,10 @@ Structuur en zetting:
 | `.beeld`, `.beeld--grijs` | een foto vult zijn doos en wordt bijgesneden, nooit vervormd |
 
 **`--spreid` is de klasse waarmee je een gat maakt.** `justify-content: space-between` drukt twee
-blokken uit elkaar en laat de lucht op één plek vallen. Op een omslag met drie blokken is dat
-precies goed; op een inhoudspagina is het bijna altijd fout. `qa_document.py` meet het als `gat`.
+blokken uit elkaar en laat de lucht op één plek vallen. Op een inhoudspagina is dat bijna altijd
+fout. Op een voorblad heb je hem niet nodig: `.omslag` verdeelt zijn drie zones zelf, en anders
+dan `--spreid` laat hij de titel in het midden zweven in plaats van hem naar de bovenrand te
+duwen. `qa_document.py` meet het als `gat`.
 
 ---
 
@@ -214,7 +217,7 @@ vragenvuur.
 
 | opening | hoe je hem bouwt |
 |---|---|
-| **titelblad** | een hele pagina, gecomponeerd met `.display`, een kleurveld en het logo. Geen eigen klasse, want dat zou een paginasjabloon zijn |
+| **voorblad** | een hele pagina, gebouwd met `.omslag` — het enige paginatype met een eigen klasse, en hetzelfde merkteken dat `sfnl-rapport-opmaak` voor zijn omslag gebruikt. Zie *Het voorblad* hieronder |
 | **titelbalk** | `<header class="titelbalk" data-veld="oranje">` als broer van de zetspiegel, en `--balk` op de `.pagina` |
 | **gewoon titel** | `.titel` in de zetspiegel, met `.streep` eronder |
 
@@ -223,8 +226,38 @@ pagina's. Je beantwoordt hem in de outline (stap 2 van de SKILL). Drie manieren:
 plus `.titel` met een `.watermerk` half erachter, een `.titelbalk` op die pagina, of een heel
 blad met alleen de hoofdstuknaam. Eén manier voor álle hoofdstukken, en één bandhoogte.
 
-Een document kan dus met een titelblad beginnen en daarna per hoofdstuk een band dragen. Dat is
+Een document kan dus met een voorblad beginnen en daarna per hoofdstuk een band dragen. Dat is
 geen mengeling maar twee besluiten over twee verschillende dingen.
+
+### Het voorblad
+
+`.omslag` staat in `stijl.css` §8.16 en niet in de rapportlaag, want beide skills bouwen hun
+voorblad ermee. Eén component betekent één maatladder op de pagina waar iemand het stuk aan
+herkent; twee handgecomponeerde voorbladen leverden twee verschillende ladders op, en dat is
+precies wat er gebeurde vóór dit component bestond.
+
+| onderdeel | wat het is |
+|---|---|
+| `.omslag` | de flexkolom die de hele zetspiegel vult. De drie zones zijn zijn enige kinderen |
+| `.omslag__boven` | wat het stuk is of van wie het komt. Eén regel, of niets |
+| `.omslag__midden` | de titel en de ondertitel. Zweeft in het midden van het blad |
+| `.omslag__onder` | de datum, de feiten en het logo als laatste element |
+| `.omslag__titel` | de dektitel op `--m-display`, gewicht 800, regelafstand 1,02 |
+| `.omslag__onderschrift` | één zin, in het brood en licht, op de titelmaat (20 pt) en maximaal 34 tekens breed |
+| `.omslag__regel` | de kapitale, gespatieerde regel: de opdrachtgever boven, de datum onder |
+
+Vier velden en niet meer: titel, ondertitel, afzender of opdrachtgever, datum. Ze komen woordelijk
+van de gebruiker — dit is de enige tekst op het document die niet uit het materiaal komt — en een
+leeg veld komt er niet op te staan.
+
+**Twee maatvariabelen, en ze zitten er om de lagen te laten verschillen zonder het component te
+kopiëren.** `--m-omslag-onderschrift` en `--omslag-maat` staan standaard op de titelmaat en op
+34 tekens; `rapport.css` §14 zet ze op 22 px en op acht rasterkolommen, want een rapport meet in
+kolommen en een document in tekens. Wil de titel groter dan de displaymaat, dan zet je
+`--m-display` op de `.pagina` en niet een `font-size` op de titel.
+
+**Het kleurveld is een regel.** Een executive summary staat op navy met witte inkt; elk ander
+document op het huisverloop, tenzij de gebruiker om iets anders vraagt.
 
 ### De titelbalk
 

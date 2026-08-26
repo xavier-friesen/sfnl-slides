@@ -105,7 +105,7 @@ past, past niet, en dat hoort te blijken.
   oranje op contrast 2,6. Drie ervan blokkeren; de rest is een aanwijzing en de render beslist.
 - **Vijf besluiten vóór de eerste regel tekst**, met een gerenderde keuzekaart erbij: formaat,
   omvang (van één pagina tot zestien, of laat het uit de inhoud volgen), kleurregister, tekst
-  tegenover beeld, en de opening — komt de dektitel op een heel titelblad, in een aflopende
+  tegenover beeld, en de opening — komt de dektitel op een heel voorblad, in een aflopende
   titelbalk, of gewoon in de zetspiegel. Hoe hóófdstukken openen is
   een andere vraag en die staat in de outline, want hij bestaat pas vanaf acht pagina's.
 - **Ruimte voor een infographic** is een merkteken, geen losse div: `.beeldkader` houdt de
@@ -114,6 +114,14 @@ past, past niet, en dat hoort te blijken.
 - **Er is geen paginabibliotheek.** `stijl.css` geeft het kader, het raster, de maatladder, de
   kleurregels en twintig merktekens die elk één ding tekenen. De compositie is elke pagina
   opnieuw een beslissing.
+- **Op één pagina geldt dat niet, en dat is het voorblad.** `.omslag` is het enige paginatype met
+  een eigen klasse: drie zones met een vaste rangorde, vier velden die woordelijk van de
+  gebruiker komen, en het is hetzelfde component waarmee `sfnl-rapport-opmaak` zijn omslag zet.
+  Het staat daarom in `stijl.css` en niet in de rapportlaag; `rapport.css` zet er twee
+  maatvariabelen op en verder niets. Vóór dat component bestond, leverden twee handgecomponeerde
+  voorbladen twee verschillende maatladders op. Het kleurveld is een regel en geen smaak: een
+  executive summary staat op navy, elk ander document op het huisverloop tenzij erom gevraagd
+  wordt.
 
 Alle maten en kleuren komen uit twee gemeten drukwerken: het jaarrapport 2025 en de casespread
 Civitates. Wat er in `reference/documenten-stramien.md` staat met "gemeten" ernaast, komt daaruit.
