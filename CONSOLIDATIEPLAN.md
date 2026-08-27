@@ -205,23 +205,36 @@ kleur, blijft dat verschil staan.
 
 Nagemeten op `assets/word/SFNL_Word_sjabloon.dotx` — dit wordt `reference/word-stramien.md`:
 
-- **A4, 210 × 297 mm**, marges 25,4 mm rondom, zetspiegel 159,1 mm, kopregel en voettekst op
-  12,5 mm. `titlePg` staat aan, dus de eerste pagina heeft eigen kop en voet.
+- **Het blad is geen echte A4**: `pgSz` is 209,90 × 297,03 mm waar A4 209,97 × 297,04 is. Reken
+  daarom uit `pgSz` en niet uit "A4 min marges" — met marges van 25,4 mm rondom komt de
+  zetspiegel op 159,10 mm en niet op 159,20. Kopregel en voettekst op 12,5 mm.
+- **`titlePg` staat aan, en de kop- en voetteksten staan andersom dan ik eerst meldde.** Uit de
+  rIds van `sectPr`: `header2` is de eerste pagina, met het grote PNG-logo; `header1` de default
+  en die is leeg; `footer3` de eerste pagina, met een lege contactstrook van 3 × 53,0 mm;
+  `footer2` de default, met het kleine logo en het paginanummer. `footer1` is de even-voet en
+  wordt **nooit getoond**, want `evenAndOddHeaders` staat niet in `settings.xml`.
 - **De stijlen staan er compleet in, de inhoud niet.** Het bestand heeft één lege alinea: het is
   een stijlendrager en geen voorbeeldpagina, dus de skill componeert zelf uit de stijlen.
-- **Typografie:** `Normal` is Lato Light 12 pt. `Title` Montserrat SemiBold 28 pt met −0,5 pt
-  spatiëring, `Subtitle` Montserrat Light 11 pt met +0,75 pt. `Heading 1` is Gotham Bold 22 pt,
-  `Heading 2` Montserrat Light 18 pt, de rest van de koppen Montserrat Light. Tabelstijl
-  `Table Grid1` op 11 pt.
+- **Typografie:** `Standaard` is Lato Light 12 pt. `Titel` Montserrat SemiBold 28 pt met −0,5 pt
+  spatiëring, `Ondertitel` Montserrat Light 11 pt met +0,75 pt. `Kop1` is Gotham Bold Regular
+  22 pt met **+1,0** pt spatiëring (de −0,5 hoort bij `Titel`, niet hier), `Kop2` Montserrat
+  Light 18 pt, `Kop3`–`Kop7` 12 pt en `Kop8`/`Kop9` 10,5 pt. De kopladder is dus 28 – 11 – 22 –
+  18 – 12 en houdt daar op. Tabelstijl `TableGrid1` op 11 pt.
+- **Alle stijl-id's zijn Nederlands** — `Standaard`, `Kop1`–`Kop9`, `Titel`, `Ondertitel`,
+  `Citaat`, `Lijstalinea`, `TableGrid1`. Dit is de belangrijkste bouwersval: `w:pStyle
+  w:val="Heading1"` valt stil terug op `Standaard`, en `qa_word.py` blokkeert erop.
+- **De letternaam is `Gotham Bold Regular`**, vier keer in `Kop1`/`Kop1Char` plus één in
+  `fontTable.xml`. Wie op `Gotham Bold` grept, vindt niets.
 - **`Heading 1` vraagt een licentiefont.** Op een SFNL-machine staat Gotham; in een sandbox en op
   de machine van een klant niet, en dan substitueert Word stil — waardoor de regelval verandert
   zonder melding. `sfnl-word` maakt daar een expliciet besluit van met Montserrat SemiBold als
   terugval, en zegt bij oplevering welke van de twee in het bestand staat.
 - **De themafonts zijn beide Lato Light**, dus Montserrat en Gotham hangen aan de stijlen en niet
   aan het thema. Wie een stijl overschrijft, verliest ze.
-- **Het logo staat twee keer in het bestand:** als PNG van 61,0 × 16,3 mm in de kopregel, als JPG
-  van 38,2 × 10,2 mm in de voettekst. Zelfde tekening. Een JPG-logo op wit heeft
-  compressieartefacten en geen transparantie; dat hoort de PNG te zijn.
+- **Het logo staat twee keer in het bestand:** als PNG van 59,9 × 16,0 mm op de eerste pagina,
+  als JPG van 37,6 × 10,1 mm in de voettekst daarna. Meet met `wp:extent` en niet met `a:ext`;
+  die lopen 1,87 % uiteen, dus het beeld wordt in zijn kader geperst. Beide zijn 934 × 251 px —
+  de PNG 10.268 bytes met alfakanaal, de JPG 52.399 zonder. Dat hoort de PNG te zijn.
 
 ## Fasering
 

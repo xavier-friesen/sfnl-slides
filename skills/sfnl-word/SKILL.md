@@ -334,7 +334,7 @@ terug met andere stijlen erin.
   SVG is geen werkdocument meer, en een PNG erin maakt het bestand groot en de tekst
   onbewerkbaar rond het beeld.
 - **Geen dashboard.** Iets interactiefs dat in de browser blijft en meegroeit met het scherm,
-  is `scherm`.
+  is `online-design`.
 - **Geen Excel.** Een rekenmodel, een businesscase of een planner is `sfnl-excel` of
   `sfnl-projectplanner`. Een tabel van vier rijen in een notitie hoort hier; een tabel waar
   iemand in gaat rekenen hoort daar.

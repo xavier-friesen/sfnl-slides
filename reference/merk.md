@@ -118,9 +118,14 @@ Het logo is een oranje cirkel, een oranje vierkant, "SOCIAL FINANCE" in navy Mon
 "NL" in oranje. Als markup staat het in `assets/documenten/stijl.css` §8 en in
 `reference/documenten-stramien.md`; als bitmap in het Word-sjabloon.
 
-Uit het sjabloon nagemeten: de kopregel draagt hem als PNG op 61,0 × 16,3 mm, de voettekst als
-JPG op 38,2 × 10,2 mm. Dat is dezelfde tekening twee keer, en de JPG hoort er niet te zijn — een
-logo op wit met JPG-compressie krijgt artefacten en heeft geen transparantie.
+Uit het sjabloon nagemeten: de kopregel van de eerste pagina draagt hem als PNG op
+59,9 × 16,0 mm, de voettekst van de volgende pagina's als JPG op 37,6 × 10,1 mm. Meet met
+`wp:extent` en niet met `a:ext` — dat is het getal dat Word voor de opmaak gebruikt, en de twee
+lopen 1,87 % uiteen, dus het beeld wordt in zijn kader geperst.
+
+Het is dezelfde tekening twee keer, en de JPG hoort er niet te zijn: beide zijn 934 × 251 px, de
+PNG is 10.268 bytes met alfakanaal en de JPG 52.399 progressief zonder. Vijf keer zo groot, geen
+transparantie, en compressieartefacten op wit.
 
 ---
 
