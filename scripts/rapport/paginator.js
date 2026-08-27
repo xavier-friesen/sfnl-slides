@@ -56,6 +56,32 @@
   'use strict';
 
   var TOLERANTIE = 0.75;   // px. Onder deze marge heet een blok passend.
+
+  /**
+   * Bindt dit blok zich aan wat eronder komt.
+   *
+   * Een kop uit het brondocument draagt `data-kop` met zijn niveau
+   * erin, en daar hangt de inhoudsopgave aan. Maar niet elk tussenkopje
+   * ís in Word een kop: een alinea die volledig vetgezet is, kort, en
+   * zonder punt aan het eind, doet op de pagina precies hetzelfde werk
+   * en heet in Word een gewone alinea. `lees_docx.py` merkt die als
+   * `vetkop` en `bouw.py` zet er `data-bindt` op.
+   *
+   * Voor de zetting zijn ze hetzelfde: allebei blijven ze bij hun
+   * tekst. Voor de inhoudsopgave niet — die leest alleen `data-kop`,
+   * want een vetgezette regel is geen sectie. Vandaar twee attributen
+   * en één functie.
+   *
+   * Gemeten op het AS-IS-rapport (83 pagina's, 28 vetgezette regels):
+   * zonder deze regel stonden "Data & evidence" op pagina 48 en
+   * "Institutional perspective" op pagina 57 als laatste regel van hun
+   * pagina, met hun tekst op de volgende. Beide waren onzichtbaar voor
+   * elke bestaande controle, want geen van de drie kop-regels keek naar
+   * een alinea.
+   */
+  function isKop(el) {
+    return !!el && (el.hasAttribute('data-kop') || el.hasAttribute('data-bindt'));
+  }
   var MAX_RONDEN = 20000;  // noodrem tegen een lus die niet vordert.
 
   /**
@@ -102,6 +128,56 @@
 
   function past(kader) {
     return kader.scrollHeight <= kader.clientHeight + TOLERANTIE;
+  }
+
+  /**
+   * Staat er van dit blok nog inkt buiten het kader.
+   *
+   * `past` meet `scrollHeight`, en dat getal telt mee wat er geen letter
+   * is: de ondermarge van het laatste kind, en het verschil tussen een
+   * regelbox en de letters erin. Voor de vraag "is er nog plek" is dat
+   * de goede meting — je wilt niet dat een alinea tegen de onderrand
+   * aankruipt. Voor de vraag "verhuist dit blok" is het de verkeerde,
+   * en het verschil kostte hele pagina's.
+   *
+   * Wat er gebeurde: een alinea van vijftien regels in vijftien regels
+   * ruimte stak er 2 px uit — regelbox, geen letter. `past` zei "vol",
+   * dus ging het blok naar de splitser; die meet de tekstrechthoeken en
+   * zei "past heel", dus gaf hij geen knippunt terug; en zonder knippunt
+   * verhuist het hele blok. Vijftien regels wit achter, midden in een
+   * lopend hoofdstuk, zonder klacht en zonder klip. Gemeten op het
+   * AS-IS-rapport: pagina 18, blok b0072.
+   *
+   * Deze functie meet hetzelfde als de splitser: de diepste
+   * tekstrechthoek, plus de onderkant van wat inkt draagt zonder tekst
+   * te zijn — een beeld, een streep, een tabel. Zegt hij dat er niets
+   * buiten valt, dan blijft het blok staan waar het staat.
+   */
+  function inktBuitenKader(blok, kader) {
+    var grens = grensVan(kader) + TOLERANTIE;
+    var onder = -Infinity;
+    var r = document.createRange();
+    r.selectNodeContents(blok);
+    var rects = r.getClientRects();
+    for (var i = 0; i < rects.length; i++) {
+      if (rects[i].height > 0 && rects[i].bottom > onder) onder = rects[i].bottom;
+    }
+    var inkt = blok.querySelectorAll('img, svg, hr, table, figure, .paneel--rapport');
+    for (var j = 0; j < inkt.length; j++) {
+      var b = inkt[j].getBoundingClientRect().bottom;
+      if (b > onder) onder = b;
+    }
+    // Een blok dat zelf een vlak draagt — een paneel met een achtergrond,
+    // een citaat met een streep ernaast — wordt op zijn border box
+    // beoordeeld en niet op zijn letters: daar is de rand wél te zien.
+    var st = getComputedStyle(blok);
+    if (st.backgroundImage !== 'none'
+        || (st.backgroundColor && st.backgroundColor !== 'rgba(0, 0, 0, 0)')
+        || parseFloat(st.borderBottomWidth) > 0
+        || parseFloat(st.paddingBottom) > 0) {
+      onder = Math.max(onder, blok.getBoundingClientRect().bottom);
+    }
+    return onder === -Infinity ? false : onder > grens;
   }
 
   /**
@@ -547,16 +623,31 @@
     } else if (folio) {
       folio.textContent = String(this.folio);
     }
+    // De kopregel, en dat is vier standen en geen vinkje.
+    //
+    // `beide` is de gewone: de verso draagt de rapporttitel, de recto de
+    // hoofdstuknaam. Maar een rapport dat in één zitting wordt gelezen
+    // heeft geen navigatie nodig, en dan is de kopregel een streep die
+    // op elke pagina hetzelfde zegt. `geen` is daarom een stand en niet
+    // een gebrek. `rapport` en `hoofdstuk` zetten één naam op béide
+    // zijden: bruikbaar in een rapport zonder hoofdstukken, of in een
+    // rapport waarvan de titel op elke pagina van belang is.
+    var stand = this.cfg.kopregel || 'beide';
     var kop = p.querySelector('.rapport-kopregel');
     if (kop) {
-      if (opties.kopregel === false || !this.kopregel.hoofdstuk) {
+      if (opties.kopregel === false || stand === 'geen'
+          || (stand !== 'rapport' && !this.kopregel.hoofdstuk)) {
         kop.remove();
       } else {
         var links = kop.querySelector('[data-plek="links"]');
         var rechts = kop.querySelector('[data-plek="rechts"]');
-        if (links) links.textContent = this.cfg.rapporttitel || '';
-        if (rechts) rechts.textContent = this.kopregel.hoofdstuk;
-        p.setAttribute('data-kopregel', this.kopregel.hoofdstuk);
+        var titel = this.cfg.rapporttitel || '';
+        var hfst = this.kopregel.hoofdstuk || titel;
+        if (stand === 'rapport') { hfst = titel; }
+        if (stand === 'hoofdstuk') { titel = this.kopregel.hoofdstuk || titel; }
+        if (links) links.textContent = titel;
+        if (rechts) rechts.textContent = hfst;
+        p.setAttribute('data-kopregel', hfst);
       }
     }
     this.rapport.appendChild(p);
@@ -738,6 +829,18 @@
         opties.opener = 'band';
         opties.kopregel = false;
       }
+      // En op een pagina die met een hoofdstukopener begint staat er
+      // ook geen kopregel — welke opener het ook is.
+      //
+      // De band en het blad deden dit al; de nummervariant, en dat is
+      // de default, niet. Het gevolg stond op elke hoofdstukpagina van
+      // elk rapport: "2. Prevention eco-system for AHOs in The
+      // Netherlands" in cursief grijs met een haarlijn eronder, en
+      // daaronder in 20 pt dezelfde woorden. Een kopregel zegt waar je
+      // bent; op de pagina waar de titel zelf staat, zegt hij niets wat
+      // de titel niet luider zegt, en de haarlijn snijdt door het
+      // watermerkcijfer heen.
+      if (blok.classList.contains('opener')) opties.kopregel = false;
       if (blok.getAttribute('data-model')) opties.model = blok.getAttribute('data-model');
       this.nieuwePagina(opties);
     }
@@ -769,6 +872,10 @@
       var kopplek = this.pagina.querySelector('[data-plek="kop"]');
       if (kopplek && !kopplek.children.length) {
         kopplek.appendChild(blok);
+        // Ook hier weg, want deze pagina kan al bestaan hebben toen de
+        // opener aankwam — dan is de stand hierboven niet langsgekomen.
+        var bestaand = this.pagina.querySelector('.rapport-kopregel');
+        if (bestaand) bestaand.remove();
         return null;
       }
     }
@@ -838,7 +945,7 @@
     // naar het volgende kader en is er niets te repareren. Gemeten op de
     // proef in het brede model: "Wie financiert wat" stond alleen
     // onderaan pagina 34.
-    if (blok.hasAttribute('data-kop') && !eerste && past(kader)) {
+    if (isKop(blok) && !eerste && past(kader)) {
       var lh = regelhoogte(kader);
       var onder = parseFloat(getComputedStyle(blok).marginBottom) || 0;
       if (ruimteOver(kader) - onder < 2 * lh) {
@@ -904,6 +1011,45 @@
     }
 
     // Niet splitsbaar of niet zinnig te splitsen: het blok verhuist.
+    //
+    // En dan is het het waard om te weten hoeveel ruimte er achterblijft.
+    // Een blok dat één regel te groot is laat een gat van één regel; een
+    // figuur van driekwart pagina die niet meer past, laat driekwart
+    // pagina wit achter in het midden van een lopend hoofdstuk. Dat
+    // tweede is het defect dat op de proef als "de tekst zegt 'de figuur
+    // hieronder' en dan komt er een halve pagina wit" bovenkwam, en het
+    // is aan de zetting niet te repareren: het blok past niet en er valt
+    // niets te splitsen. Wat er wél kan is het melden, zodat de keuze
+    // bij de gebruiker terechtkomt — het beeld kleiner, het beeld over
+    // de volle breedte, of de alinea ervoor korter.
+    // Eerst: valt er eigenlijk wel inkt buiten het kader. Zo niet, dan
+    // blijft het blok staan. Dit is de reparatie van het defect dat in
+    // `inktBuitenKader` staat uitgeschreven, en het is de goedkoopste
+    // die er is: er verandert niets aan de zetting behalve dat een blok
+    // dat er past er ook in blijft.
+    if (!inktBuitenKader(blok, kader)) {
+      this.bindKop(blok, kader);
+      if (solo) this.sluitPagina();
+      return null;
+    }
+
+    var vrij = ruimteOver(kader) + blok.getBoundingClientRect().height;
+    var lh0 = regelhoogte(kader) || 22;
+    if (!eerste && vrij > 6 * lh0) {
+      this.klachten.push({
+        soort: 'gat-in-de-pagina',
+        bron: blok.getAttribute('data-bron') || '',
+        tekst: (blok.textContent || '').slice(0, 70),
+        regels: Math.round(vrij / lh0),
+        blokregels: Math.round(blok.getBoundingClientRect().height / lh0),
+
+        folio: this.pagina.getAttribute('data-folio') || '',
+        wat: 'Dit blok past niet meer en is niet te splitsen, dus het verhuist '
+           + 'heel. Er blijft ' + Math.round(vrij / lh0) + ' regels wit achter '
+           + 'op de vorige pagina.'
+      });
+    }
+
     this.haalNotenWeg(noten);
     kader.removeChild(blok);
     blok.classList.remove('is-eerste-in-kader');
@@ -950,12 +1096,15 @@
       terug.unshift(laatste);        // in leesvolgorde houden
     }
     if (!terug.length) return false;
-    // En als er nu een kop als laatste overblijft, gaat die ook mee.
+    // En als er nu koppen als laatste overblijven, gaan die ook mee.
+    // Een reeks en niet één: een sectiekop met een vetgezet tussenkopje
+    // eronder is twee elementen, en één ervan achterlaten geeft
+    // hetzelfde defect één regel hoger.
     var kop = kader.lastElementChild;
-    if (kop && kop.hasAttribute('data-kop')
-        && !kop.classList.contains('is-eerste-in-kader')) {
+    while (isKop(kop) && !kop.classList.contains('is-eerste-in-kader')) {
       kader.removeChild(kop);
       terug.unshift(kop);
+      kop = kader.lastElementChild;
     }
     this.extra = terug.concat(this.extra);
     this.volgendKader();
@@ -981,11 +1130,15 @@
    * zijn tekst op de volgende pagina.
    */
   Zetter.prototype.neemKopMee = function (kader) {
+    var mee = [];
     var kop = kader.lastElementChild;
-    if (!kop || !kop.hasAttribute('data-kop')) return false;
-    if (kop.classList.contains('is-eerste-in-kader')) return false;
-    kader.removeChild(kop);
-    this.extra = [kop].concat(this.extra);
+    while (isKop(kop) && !kop.classList.contains('is-eerste-in-kader')) {
+      kader.removeChild(kop);
+      mee.unshift(kop);
+      kop = kader.lastElementChild;
+    }
+    if (!mee.length) return false;
+    this.extra = mee.concat(this.extra);
     return true;
   };
 
@@ -1004,8 +1157,26 @@
    */
   Zetter.prototype.bindKop = function (blok, kader) {
     var vorige = blok.previousElementSibling;
-    if (!vorige || !vorige.hasAttribute('data-kop')) return;
+    if (!isKop(vorige)) return;
     if (vorige.classList.contains('is-eerste-in-kader')) return;
+
+    // De hele reeks koppen erboven, en niet alleen de dichtstbijzijnde.
+    //
+    // Een sectiekop met een vetgezet tussenkopje eronder is één blok
+    // opmaak in twee elementen: "5.4.1 Outcome-based financing models"
+    // gevolgd door "Model & organisation". Verhuisde alleen het
+    // onderste, dan bleef het bovenste als laatste regel van de pagina
+    // staan — hetzelfde defect, één regel hoger. Gemeten op het
+    // AS-IS-rapport: pagina 44 hield een sectiekop, een tussenkopje en
+    // één alinea over, met de figuur waar de alinea naar verwijst op de
+    // volgende pagina.
+    var reeks = [vorige];
+    var boven = vorige.previousElementSibling;
+    while (isKop(boven) && !boven.classList.contains('is-eerste-in-kader')) {
+      reeks.unshift(boven);
+      boven = boven.previousElementSibling;
+    }
+
     var lh = regelhoogte(blok);
     var regels = Math.round(blok.getBoundingClientRect().height / lh);
     if (regels >= (this.cfg.minRegelsNaKop || 2)) return;
@@ -1033,18 +1204,22 @@
     if (ruimteOver(kader) >= lh) return;
 
     kader.removeChild(blok);
-    kader.removeChild(vorige);
+    for (var i = 0; i < reeks.length; i++) kader.removeChild(reeks[i]);
     this.klachten.push({
       soort: 'kop-verhuisd',
       bron: vorige.getAttribute('data-bron') || '',
       tekst: (vorige.textContent || '').slice(0, 60),
+      koppen: reeks.length,
       folio: this.pagina.getAttribute('data-folio') || '',
       wat: 'Kop met te weinig tekst eronder; samen naar de volgende pagina.'
     });
     this.volgendKader();
     var nieuw = this.kader();
-    nieuw.appendChild(vorige);
-    vorige.classList.add('is-eerste-in-kader');
+    for (var j = 0; j < reeks.length; j++) {
+      nieuw.appendChild(reeks[j]);
+      reeks[j].classList.remove('is-eerste-in-kader');
+    }
+    reeks[0].classList.add('is-eerste-in-kader');
     nieuw.appendChild(blok);
   };
 
@@ -1150,7 +1325,14 @@
     var volgende = (this.paginas.length + (this.cfg.eersteZijde === 'verso' ? 1 : 0)) % 2
       ? 'verso' : 'recto';
     if (volgende === 'verso') {
-      this.nieuwePagina({ sjabloon: 'leeg', kopregel: false, folio: false });
+      // `data-blanco` erop, want dit is een leeg vel en geen halfvolle
+      // pagina. Zonder dat attribuut telde `qa_rapport.py` hem mee in de
+      // vulgraad en meldde hij "staat minder dan 70 procent vol" — waar
+      // op de proef vier van de eenentwintig meldingen vandaan kwamen.
+      // Een blanco verso vóór een hoofdstuk is de vorm en niet een
+      // bevinding.
+      var leeg = this.nieuwePagina({ sjabloon: 'leeg', kopregel: false, folio: false });
+      leeg.setAttribute('data-blanco', 'recto');
       this.sluitPagina();
     }
   };

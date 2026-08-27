@@ -131,6 +131,15 @@ STANDAARD_ONTWERP = {
     "formaat": "sfnl",
     "opener": "nummer",
     "dichtheid": "gemiddeld",
+    # De kopregel: `beide` (verso de rapporttitel, recto de hoofdstuknaam),
+    # `rapport`, `hoofdstuk` of `geen`. Een rapport dat in één zitting
+    # gelezen wordt heeft geen navigatie nodig; dan is de kopregel een
+    # streep die op elke pagina hetzelfde zegt.
+    "kopregel": "beide",
+    # Wat er gebeurt met een alinea die volledig vetgezet is en zich als
+    # tussenkop gedraagt: `binden` (bij zijn tekst houden, verder niets),
+    # `als-kop` (ook als tussenkop zetten) of `laten`.
+    "vetkop": "binden",
     "bandhoogte": 232,
     "dubbelzijdig": True,
     "omslag": True,
@@ -833,10 +842,39 @@ class Stroom:
         return self._alinea(b)
 
     def _alinea(self, b: dict) -> str:
+        """Een alinea, en soms een tussenkop die er in Word geen was.
+
+        `lees_docx.py` markeert een alinea die volledig vetgezet is, kort
+        is en een gewone alinea onder zich heeft als `vetkop`. Wat daar
+        hier mee gebeurt hangt aan één besluit met drie standen, en de
+        eerste twee dragen allebei `data-bindt` — dat is het attribuut
+        waaraan `paginator.js` de regel "een kop blijft bij zijn tekst"
+        ook voor deze regels ophangt.
+
+          binden   (default) alleen bij zijn tekst houden; de regel
+                   blijft een vetgezette alinea, precies zoals in Word
+          als-kop  óók als tussenkop zetten: de maat en de lucht van een
+                   run-in kop
+          laten    niets — dan kan er weer een alleen onderaan een
+                   pagina komen te staan
+
+        `data-bindt` en niet `data-kop`: aan `data-kop` hangt de
+        inhoudsopgave, en een vetgezette regel is geen sectie.
+        """
         inhoud = self._runs(b["runs"])
-        klasse = "chapeau--rapport" if b.get("chapeau") else ""
+        klassen = []
+        if b.get("chapeau"):
+            klassen.append("chapeau--rapport")
+        stand = self.o.get("vetkop") or "binden"
+        bindt = None
+        if b.get("vetkop") and stand in ("binden", "als-kop"):
+            bindt = "vetkop"
+            if stand == "als-kop":
+                klassen.append("vetkop--rapport")
+        klasse = " ".join(klassen)
         return (f'<p{" class=" + chr(34) + klasse + chr(34) if klasse else ""}'
-                f'{_attr(data_bron=b["id"], data_deel=b.get("deel"))}>{inhoud}</p>')
+                f'{_attr(data_bron=b["id"], data_deel=b.get("deel"), data_bindt=bindt)}'
+                f'>{inhoud}</p>')
 
     def _kop(self, b: dict) -> str:
         niveau = b.get("niveau", 2)
@@ -1403,6 +1441,7 @@ def zet(werk_html: Path, ontwerp: dict, rondes: int = 4) -> tuple[str, dict]:
         # eindnootmodus staan ze al als blok in de stroom.
         "notenOpPagina": ontwerp.get("noten") == "voetnoot",
         "rapporttitel": ontwerp.get("rapporttitel") or "",
+        "kopregel": ontwerp.get("kopregel") or "beide",
         # Het woord boven de bijlagen in de inhoudsopgave. `paginator.js`
         # heeft er een Nederlandse terugval voor; die staat er goed, maar
         # in een Engels rapport is hij fout. Hier komt hij uit dezelfde
