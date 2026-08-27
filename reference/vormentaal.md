@@ -483,6 +483,24 @@ Een eigen vorm erft geen regelafstand en geen alinea-afstand. Zet beide, en deck
   of de tekst korter, nooit het font kleiner. Eén vak met 90 procent schaling haalt een hele rij
   uit de lijn.
 
+Drie regels over de tekens zelf. Ze stonden hier niet en kwamen uit de opschoningsroute
+(`deck-check`), die ze mechanisch toepast; ze horen hier omdat ze over zetting gaan en niet over
+opschonen. De titel en de subtitel staan los daarvan in `voice.md` (kapitalen, geen punt, geen
+uitroepteken; de subtitel in zinsvorm).
+
+- **Eindinterpunctie volgt de vorm van de regel.** Een losse regel, een label, een kolomkop en
+  een lijstitem eindigen zonder punt; een volle zin in een prozablok houdt zijn punt. Een
+  vraagteken blijft altijd staan en een afkorting met punten (`o.a.`) wordt nooit afgeknipt. Wat
+  hier het zwaarst weegt is niet welke van de twee je kiest maar dat de deck het overal hetzelfde
+  doet: vier kaarten waarvan twee met en twee zonder punt is dezelfde soort fout als twee
+  kaartvormen in één deck (§8).
+- **Een slash die twee begrippen scheidt krijgt een spatie aan beide zijden**: `zorg / welzijn`,
+  niet `zorg/welzijn`. Een samentrekking (`en/of`), een breuk (`3/4`), een eenheid (`km/u`) en een
+  pad in een URL houden hun slash zonder spaties.
+- **Een reeks krijgt een en-streepje**: `2023–2025`, niet `2023-2025`. Het koppelteken verbindt
+  een samenstelling, het en-streepje spant een bereik, en het gedachtestreepje is er voor een
+  tussenzin — die laatste gebruik je op een slide vrijwel nooit (`voice.md`, Humanizer-kern 8).
+
 ## 10. Herhaling zit in de geometrie, niet in de vulling
 
 Zet achter elke slide de plattegrond in vier woorden — "drie kaarten, open onderkant", "tabel
