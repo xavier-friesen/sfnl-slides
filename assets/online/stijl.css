@@ -1,0 +1,1106 @@
+/* =====================================================================
+   SFNL schermstijl — de primitievenlaag voor HTML dat een scherm is.
+
+   Dit is GEEN patroonbibliotheek. Er staat geen `.dashboard`, geen
+   `.kpi-rij` en geen `.sidebar` in. Wat er wel staat: de tokens voor
+   beide thema's, het raster, de maatladder, de kleurregels en de
+   merktekens die elk één ding tekenen. De compositie van elke pagina
+   is elke keer opnieuw een ontwerpbeslissing.
+
+   De zusterstijl is `assets/documenten/stijl.css`. Die beschrijft een
+   vast blad met een snijrand; dit beschrijft een scherm dat meegroeit.
+   Wat ze delen zijn de merkwaarden, en die staan in geen van beide
+   bestanden zélf: ze worden erin gestempeld door
+   `scripts/gedeeld/merk.py --css`, tussen `merk:begin` en `merk:einde`
+   (§0). Staat er búiten dat blok een hexwaarde, dan is dat een fout, en
+   `scripts/preflight.py` meldt hem.
+
+   Alle maten in px. Een scherm heeft geen dpi-omrekening nodig en
+   geen mm: de px ís hier de eenheid. Waar een getal "gemeten" heet,
+   komt het uit `reference/online-vormentaal.md` en niet uit een
+   voorkeur.
+   ===================================================================== */
+
+/* ---------------------------------------------------------------
+   0. Merkwaarden — uit reference/merk.md, en niet uit dit bestand.
+
+   Het blok tussen de merktekens hieronder is GEGENEREERD door
+   `python scripts/gedeeld/merk.py --css` en is woordelijk het `:root`-blok
+   uit `assets/gedeeld/merk.css`. Een kleurwaarde die je hier verandert,
+   verandert niet mee in `scripts/gedeeld/merk.py`; `scripts/preflight.py`
+   hergenereert dit blok, vergelijkt het en meldt elk verschil.
+
+   Waarom een gestempeld blok en geen `@import url("../gedeeld/merk.css")`:
+   `bouw.py` plakt deze stylesheet als tekst achter `fonts.css` in één
+   `<style>`-blok, en de CSS-parser laat een `@import` vallen die niet vooraan
+   de stylesheet staat — dan zouden alle kleuren zonder melding ongedefinieerd
+   zijn. En een relatieve URL in een `<style>` wordt tegen het document
+   opgelost en niet tegen de stylesheet, dus het pad klopt alleen toevallig,
+   per map waarin het document belandt.
+
+   Wat deze stylesheet daarnáást uit merk.css gebruikt is de
+   `--<naam>-rgb`-drieling: elke neutraal hieronder is alpha op een merkkleur,
+   en `rgba(33, 20, 95, .14)` zou dezelfde hardgecodeerde merkwaarde in een
+   ander notatiestelsel zijn.
+   --------------------------------------------------------------- */
+
+/* merk:begin — gegenereerd door scripts/gedeeld/merk.py --css */
+:root {
+  /* Uit het themapalet van SFNL_Word_sjabloon.dotx: dat sjabloon is de
+     merkbron en niet deze plugin. Zie reference/merk.md §1. */
+  --navy:          #21145F;     /* accent3 — de inkt. Lopende tekst is nooit puur zwart */
+  --oranje:        #FF7F40;     /* accent1 — het accent. Labels, de streep, de badge */
+  --wit:           #FFFFFF;     /* accent6 — het papier */
+  --grapefruit:    #FF595A;     /* accent2 — het tweede eind van het verloop; alarm, nadruk */
+  --emerald:       #66C9BA;     /* accent4 — positief, uitkomst */
+  --royal:         #425CC7;     /* accent5, hlink — secundaire data, en de hyperlink */
+
+  /* Niet in het themapalet, dus gemeten uit het drukwerk. */
+  --sky:           #45B6E2;     /* tertiaire data */
+  --violet:        #6B5DAE;     /* de casespread; een heel paneel of een rail */
+  --grijs:         #F2F2F2;     /* een kaartvulling */
+  --mint-tint:     #E0F4F1;     /* een hele pagina of een paneel in emerald */
+  --periwinkel:    #A0ADE2;     /* het interviewpaneel */
+  --oranje-tint:   #FFDFD0;     /* het watermerkcijfer */
+  --navy-tint:     #F4F3F7;     /* een stille container */
+
+  /* De twee rollen. Per pagina overschreven; dit is waar ze op
+     uitkomen als niemand iets overschrijft. */
+  --papier:        var(--wit);
+  --inkt:          var(--navy);
+
+  /* Dezelfde kleuren als drieling, voor alpha: schrijf
+     rgba(var(--navy-rgb), .16) en nooit de cijfers zelf. */
+  --navy-rgb:          33, 20, 95;
+  --oranje-rgb:        255, 127, 64;
+  --wit-rgb:           255, 255, 255;
+  --grapefruit-rgb:    255, 89, 90;
+  --emerald-rgb:       102, 201, 186;
+  --royal-rgb:         66, 92, 199;
+  --sky-rgb:           69, 182, 226;
+  --violet-rgb:        107, 93, 174;
+  --grijs-rgb:         242, 242, 242;
+  --mint-tint-rgb:     224, 244, 241;
+  --periwinkel-rgb:    160, 173, 226;
+  --oranje-tint-rgb:   255, 223, 208;
+  --navy-tint-rgb:     244, 243, 247;
+
+  /* Het huisverloop. Er is er één en die is gemeten; een tweede
+     verloop is een tweede huisstijl. */
+  --verloop:       linear-gradient(150deg, var(--oranje) 0%, var(--grapefruit) 100%);
+
+  /* De letterstapels. De familie is invariant, de maat staat per
+     medium in de vormentaal van dat medium en dus niet hier.
+     Gotham reist nooit mee; de terugval is Montserrat SemiBold. */
+  --display:       'Montserrat', 'Helvetica Neue', Arial, sans-serif;
+  --brood:         'Lato', 'Helvetica Neue', Arial, sans-serif;
+}
+/* merk:einde */
+
+/* ---------------------------------------------------------------
+   1. De tokens, en dit is het enige echte vormbesluit van deze stijl
+
+   Navy is de inkt van SFNL. Op een donkere achtergrond is navy op
+   navy niets, dus de vraag "welke kleur wordt de tekst" is de
+   verkeerde vraag. De goede vraag is welke róllen wisselen, en het
+   antwoord is: navy wordt de grond en wit wordt de inkt. De
+   verhouding blijft exact dezelfde — 15,79 beide kanten op — omdat
+   het hetzelfde paar is, omgekeerd.
+
+   Alle neutralen zijn een percentage wit in navy (donker) of navy in
+   wit (licht). Dat is geen nieuwe kleur maar een tint, en dat is de
+   regel die `merk.md` §4 al stelt.
+
+   Drie scopes, en ze zijn er allemaal nodig:
+
+   * `:root` — het volledige lichte palet. Elk token dat verderop
+     wordt gebruikt, staat hier. Een token dat alleen in een
+     donkerblok staat, bestaat in de ongestempelde stand niet.
+   * `@media (prefers-color-scheme: dark)` met de `:not([data-theme="light"])`
+     -wachter — het systeem staat op donker en niemand heeft
+     gestempeld.
+   * `:root[data-theme="dark"]` — iemand heeft wél gestempeld, en dan
+     wint de stempel in beide richtingen.
+
+   De twee donkerblokken horen woordelijk dezelfde eigenschappen met
+   dezelfde waarden te dragen. `qa_online.py` vergelijkt ze.
+   --------------------------------------------------------------- */
+
+:root {
+  color-scheme: light dark;
+
+  /* -- De grond en de inkt. Licht: wit papier, navy inkt. --
+
+        De neutralen zijn alpha op een merkkleur, met de `-rgb`-drieling die
+        `merk.py` daarvoor levert. Dat is niet hetzelfde als een vaste tint en
+        het is beter: een haarlijn ín een paneel composeert dan over dát paneel
+        en niet over de pagina. Het is ook de bestaande huisrecept —
+        `vormentaal.md` §3 zet een stille regel al op navy alpha 70. -- */
+  --grond:      var(--wit);
+  --grond-op:   var(--navy-tint);   /* een stille container op de grond; 1,10 */
+  --inkt:       var(--navy);        /* 15,79 op de grond */
+  --inkt-stil:  rgba(var(--navy-rgb), .70);   /* 6,11 */
+  --lijn:       rgba(var(--navy-rgb), .14);   /* 1,33 — tabelregel, kaartrand */
+  --rasterlijn: rgba(var(--navy-rgb), .08);   /* 1,17 — de rasterlijn van een grafiek */
+  --rand:       rgba(var(--navy-rgb), .60);   /* 4,43 — besturingsrand */
+  --focus:      var(--navy);        /* 15,79. Oranje haalt 2,51 en mag dit niet zijn */
+
+  /* -- De accenten. Deze wisselen NIET mee met het thema, en dat is
+        opzet: oranje, emerald, sky en grapefruit zijn lichte kleuren
+        in beide thema's, dus de inkt erop is navy in beide thema's.
+        Alleen de neutrale laag klapt om. -- */
+  --accent:       var(--oranje);
+  --accent-inkt:  var(--navy);      /* navy op oranje: 6,29 */
+
+  /* -- Een tint is een percentage van de kleur in de grond. Op licht zijn
+        het de vier die uit het drukwerk gemeten zijn, en die blijven zoals ze
+        zijn: ze zijn gedrukt en niet uitgerekend. -- */
+  --tint-oranje:  var(--oranje-tint);   /* 1,26 tegen wit */
+  --tint-mint:    var(--mint-tint);     /* 1,14 */
+  --tint-navy:    var(--navy-tint);     /* 1,10 */
+  --tint-royal:   var(--periwinkel);    /* 2,19 */
+
+  /* -- De reekskleuren voor een grafiek. Drie slots, en waarom er
+        geen vier zijn staat in `online-vormentaal.md` §6: elke vierde
+        merkkleur levert een paar onder de normale-zichtvloer van 15
+        (royal↔violet 6,9 · oranje↔grapefruit 8,7 · sky↔emerald 9,4).
+        De vormmethode voor de grafiek zelf is die van de
+        `dataviz`-skill; dit zijn alleen de parameters. -- */
+  --reeks-1: var(--royal);
+  --reeks-2: var(--oranje);
+  --reeks-3: var(--emerald);
+  /* Ordinaal, één hue, licht → donker. Gevalideerd. */
+  --trap-1: var(--periwinkel);
+  --trap-2: var(--royal);
+  --trap-3: var(--navy);
+  /* Status. Gereserveerd, nooit hergebruikt als reeks 4. */
+  --goed:   var(--emerald);
+  --let-op: var(--oranje);
+  --slecht: var(--grapefruit);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    /* == DONKER — houd dit blok woordelijk gelijk aan het blok
+          hieronder. qa_online.py vergelijkt ze. == */
+    --grond:      var(--navy);
+    --grond-op:   rgba(var(--wit-rgb), .10);   /* 1,32 tegen de grond; wit erop 11,98 */
+    --inkt:       var(--wit);                  /* 15,79 */
+    --inkt-stil:  rgba(var(--wit-rgb), .70);   /* 8,19 */
+    --lijn:       rgba(var(--wit-rgb), .26);   /* 2,24 — meer dan op licht, met reden */
+    --rasterlijn:     rgba(var(--wit-rgb), .13);   /* 1,45 */
+    --rand:       rgba(var(--wit-rgb), .42);   /* 3,80 */
+    --focus:      var(--wit);
+    --accent:       var(--oranje);
+    --accent-inkt:  var(--navy);
+    --tint-oranje:  rgba(var(--oranje-rgb), .32);      /* 1,69; wit erop 9,34 */
+    --tint-mint:    rgba(var(--emerald-rgb), .32);     /* 1,91; wit erop 8,26 */
+    --tint-navy:    rgba(var(--wit-rgb), .16);         /* 1,60; wit erop 9,84 */
+    --tint-royal:   rgba(var(--periwinkel-rgb), .32);  /* 1,88; wit erop 8,39 */
+    --reeks-1: var(--royal);
+    --reeks-2: var(--oranje);
+    --reeks-3: var(--emerald);
+    --trap-1: rgba(var(--periwinkel-rgb), .55);
+    --trap-2: var(--periwinkel);
+    --trap-3: var(--royal);
+    --goed:   var(--emerald);
+    --let-op: var(--oranje);
+    --slecht: var(--grapefruit);
+  }
+}
+
+:root[data-theme="dark"] {
+  /* == DONKER — de gestempelde stand. Gelijk aan het blok hierboven. == */
+  --grond:      var(--navy);
+  --grond-op:   rgba(var(--wit-rgb), .10);
+  --inkt:       var(--wit);
+  --inkt-stil:  rgba(var(--wit-rgb), .70);
+  --lijn:       rgba(var(--wit-rgb), .26);
+  --rasterlijn:     rgba(var(--wit-rgb), .13);
+  --rand:       rgba(var(--wit-rgb), .42);
+  --focus:      var(--wit);
+  --accent:       var(--oranje);
+  --accent-inkt:  var(--navy);
+  --tint-oranje:  rgba(var(--oranje-rgb), .32);
+  --tint-mint:    rgba(var(--emerald-rgb), .32);
+  --tint-navy:    rgba(var(--wit-rgb), .16);
+  --tint-royal:   rgba(var(--periwinkel-rgb), .32);
+  --reeks-1: var(--royal);
+  --reeks-2: var(--oranje);
+  --reeks-3: var(--emerald);
+  --trap-1: rgba(var(--periwinkel-rgb), .55);
+  --trap-2: var(--periwinkel);
+  --trap-3: var(--royal);
+  --goed:   var(--emerald);
+  --let-op: var(--oranje);
+  --slecht: var(--grapefruit);
+}
+
+/* De donkere stand moet ook expliciet uitgezet kunnen worden. Zonder
+   dit blok erft `data-theme="light"` op een systeem-donkere machine
+   het lichte palet uit `:root` — wat klopt — maar `color-scheme`
+   blijft dan op `light dark` staan en Chromium tekent de scrollbalk
+   nog donker. */
+:root[data-theme="light"] { color-scheme: light; }
+:root[data-theme="dark"]  { color-scheme: dark;  }
+
+/* ---------------------------------------------------------------
+   2. De maatladder en het kader
+
+   Zes maten, en ze staan vast in px — ook als het scherm groeit. Dat
+   is het besluit dat een scherm van een blad onderscheidt en het gaat
+   de andere kant op dan je verwacht: op een blad is de zetspiegel
+   vast en de maat vast; op een scherm groeit de breedte en blijft de
+   maat vast. Wie de maat laat meegroeien met `clamp()` op de
+   viewport, heeft op 1440 px een andere hiërarchie dan op 600 en kan
+   geen van beide nameten. Wat wél meebeweegt: het aantal kolommen, de
+   marge en de goot.
+
+   De body staat op 16/26. Dat is niet de drukwerkmaat (10/13 pt =
+   13,33/17,33 px) en dat hoort ook niet: een scherm staat op 50 tot 70
+   cm en een blad op 35.
+   --------------------------------------------------------------- */
+
+:root {
+  --m-mini:    12px;     /* het label: kapitaal, gespatieerd, nooit een zin */
+  --m-klein:   13px;
+  --r-klein:   20px;
+  --m-body:    16px;
+  --r-body:    26px;
+  --m-kop:     20px;
+  --m-titel:   30px;
+  --m-display: 46px;
+
+  --regel:        26px;
+  --sprong-klein: 13px;
+  --sprong:       26px;
+  --sprong-groot: 52px;
+
+  --goot:   24px;
+  --marge:  20px;        /* groeit mee, zie §3 */
+  --kader:  1200px;      /* de bovengrens van de pagina */
+  --maat:   34em;        /* de leesmaat: 34 × 16 = 544 px ≈ 70 tekens */
+
+  --radius:     0px;     /* panelen en kaarten. Nul is een prima waarde */
+  --radius-pil: 999px;   /* badge, chip, pil — en verder niets */
+  --haarlijn:   1px;
+}
+
+/* ---------------------------------------------------------------
+   3. Grondslag
+   --------------------------------------------------------------- */
+
+* { box-sizing: border-box; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+/* De body draagt zijn eigen achtergrond. Dat is geen netheid: een
+   pagina met een transparante body leent de grond van wat er
+   achter staat, en in een artifactviewer is dat het thema van de
+   host. Dan klapt de tekst om en de achtergrond niet.
+   `qa_online.py` meet dit. */
+body {
+  margin: 0;
+  background: var(--grond);
+  color: var(--inkt);
+  font-family: var(--brood);
+  font-weight: 300;
+  font-size: var(--m-body);
+  line-height: var(--r-body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  font-kerning: normal;
+  font-variant-numeric: lining-nums;
+}
+
+@media (min-width: 720px)  { :root { --marge: 40px; } }
+@media (min-width: 1080px) { :root { --marge: 56px; } }
+
+/* Het dek: de pagina zelf. Eén per pagina, en alles wat gelezen wordt
+   staat erin. Dit is het schermequivalent van de zetspiegel, met één
+   verschil dat het hele besluit samenvat: de zetspiegel heeft een
+   vaste breedte en dit heeft een bovengrens. */
+.dek {
+  max-width: var(--kader);
+  margin: 0 auto;
+  padding: var(--marge);
+}
+
+/* Een blok dat de volle breedte van het venster pakt en niet die van
+   het dek. Dit is wat op een scherm in de plaats komt van aflopend
+   werk: er is geen snijrand, dus "tot de rand" betekent tot de rand
+   van het venster. Zet het buiten .dek, niet erin. */
+.volbreed {
+  width: 100%;
+  padding-inline: var(--marge);
+}
+.volbreed > * {
+  max-width: var(--kader);
+  margin-inline: auto;
+}
+
+/* De leesmaat. Alles wat werkelijk gelezen wordt — een alinea, een
+   chapeau — staat binnen deze breedte, ook als het dek 1200 px is.
+   Een regel van 1120 px zet 144 tekens en dan raakt het oog de
+   volgende regel kwijt. */
+.leesmaat { max-width: var(--maat); }
+
+/* Sla de navigatie over. Onzichtbaar tot hij focus krijgt, en dan is
+   hij het eerste dat een toetsenbordgebruiker tegenkomt. */
+.sprong {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 99;
+  background: var(--grond);
+  color: var(--inkt);
+  padding: 10px 16px;
+  border: var(--haarlijn) solid var(--rand);
+}
+.sprong:focus { left: 8px; top: 8px; }
+
+/* ---------------------------------------------------------------
+   4. Focus, hover en beweging
+
+   Drie dingen die op papier niet bestaan en die daarom in deze stijl
+   staan en niet in `documenten/stijl.css`.
+
+   De focusring is de inkt en niet het accent. Dat is nagemeten:
+   oranje haalt 2,51 op wit en een focusindicator moet 3,0 halen tegen
+   wat eromheen staat. Navy haalt 15,79 op wit en wit haalt 15,79 op
+   navy, dus dezelfde regel werkt in beide thema's.
+   --------------------------------------------------------------- */
+
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+/* `outline: none` zonder vervanging is de meest voorkomende manier om
+   een pagina onbruikbaar te maken voor iemand met een toetsenbord, en
+   je ziet het op geen enkele render. Deze regel is er zodat er nooit
+   een reden is om het te doen. */
+a, button, summary, [tabindex] { outline-offset: 2px; }
+
+a {
+  color: var(--inkt);
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+}
+a:hover { text-decoration-color: var(--inkt); }
+
+/* Hover is een toevoeging en nooit de enige drager van informatie:
+   op een aanraakscherm bestaat hij niet. Wat je op hover laat zien,
+   staat ook in de tabel of in het label. */
+@media (hover: hover) {
+  .kaart:hover, .paneel:hover { border-color: var(--rand); }
+}
+
+/* Wie beweging heeft uitgezet, krijgt geen beweging. Dit blok is niet
+   optioneel: een systeeminstelling die je negeert, is erger dan een
+   animatie die je niet had gemaakt. */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ---------------------------------------------------------------
+   5. Het raster
+
+   Eén raster, dat zichzelf indeelt. `auto-fit` met een `minmax` doet
+   op een scherm wat een kolommenkeuze op een blad doet, met het
+   verschil dat je hier de mínimumbreedte kiest en niet het aantal.
+   Dat is de goede kant om het te kiezen: een kaart van 240 px is een
+   kaart, en of er drie of vier naast elkaar staan hangt van het
+   venster af en niet van jou.
+   --------------------------------------------------------------- */
+
+.raster {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(var(--kolom-min, 240px), 1fr));
+  gap: var(--goot);
+  align-items: start;
+}
+.raster--gelijk { align-items: stretch; }
+.overspan { grid-column: 1 / -1; }
+
+/* Twee kolommen van ongelijke breedte — een tabel naast een
+   toelichting. Onder de knikbreedte stapelen ze, en dat is de enige
+   plek in deze stijl waar een mediaquery een indeling verandert. */
+.tweeluik {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--goot);
+}
+@media (min-width: 900px) {
+  .tweeluik { grid-template-columns: var(--verdeling, 2fr 1fr); }
+}
+
+.stapel        { display: flex; flex-direction: column; gap: var(--sprong-klein); }
+.stapel--ruim  { gap: var(--sprong); }
+.stapel--wijd  { gap: var(--sprong-groot); }
+.rij {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--goot);
+  align-items: center;
+}
+
+/* ---------------------------------------------------------------
+   6. De zetting
+
+   Één verschil met het drukwerk, en het is een besluit: op een scherm
+   wordt niet uitgevuld. Een uitgevulde kolom heeft een vaste breedte
+   nodig om te kloppen, en een scherm heeft die niet — dus de gaten
+   verschuiven per venster en je kunt ze niet nameten. Vlaggend
+   rechts, altijd.
+   --------------------------------------------------------------- */
+
+.tekst {
+  font-family: var(--brood);
+  font-weight: 300;
+  font-size: var(--m-body);
+  line-height: var(--r-body);
+  text-align: left;
+  text-wrap: pretty;
+  hyphens: none;
+  max-width: var(--maat);
+}
+.tekst > p { margin: 0 0 var(--regel); }
+.tekst > p:last-child { margin-bottom: 0; }
+
+/* De aanhef vervangt de opsomming, net als in het drukwerk. */
+.tekst b, .tekst strong, .aanhef { font-weight: 700; }
+.tekst i, .tekst em { font-style: italic; }
+
+.display {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: var(--m-display);
+  line-height: 1.02;
+  letter-spacing: -0.015em;
+  margin: 0;
+  font-variant-numeric: lining-nums tabular-nums;
+}
+.titel {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: var(--m-titel);
+  line-height: 1.14;
+  letter-spacing: -0.005em;
+  margin: 0;
+  text-wrap: balance;
+}
+.kop {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: var(--m-kop);
+  line-height: 1.25;
+  letter-spacing: 0.01em;
+  margin: 0;
+  text-wrap: balance;
+}
+.kop--licht { font-weight: 300; letter-spacing: 0.06em; }
+
+.label {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: var(--m-mini);
+  line-height: 1.4;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--inkt-stil);
+  margin: 0;
+}
+.klein {
+  font-size: var(--m-klein);
+  line-height: var(--r-klein);
+  margin: 0;
+}
+.bron {
+  font-size: var(--m-klein);
+  line-height: var(--r-klein);
+  font-style: italic;
+  color: var(--inkt-stil);
+  margin: 0;
+}
+.chapeau {
+  font-weight: 700;
+  font-size: var(--m-body);
+  line-height: var(--r-body);
+  max-width: var(--maat);
+  margin: 0;
+}
+
+/* ---------------------------------------------------------------
+   7. Merktekens
+
+   Elk merkteken tekent één ding en codeert één ding. Ze zijn geoogst
+   uit `assets/documenten/stijl.css` §8 en uit `reference/merktekens.md`,
+   en per stuk is nagegaan of hij op een scherm nog klopt. Wat er niet
+   staat, staat er met opzet niet — de kopregel, de folio, het
+   watermerkcijfer en de omslag hangen alle vier aan een vast blad.
+   Zie `online-vormentaal.md` §7.
+   --------------------------------------------------------------- */
+
+/* 7.1 De streep en de haarlijn. Ongewijzigd overgenomen: het
+   goedkoopste merkteken dat er is. Op een gekleurd vlak draagt hij de
+   inkt van dat vlak. */
+.streep {
+  display: block;
+  width: 56px;
+  height: 3px;
+  background: var(--accent);
+  border: 0;
+  margin: 0;
+}
+.streep--inkt { background: currentColor; }
+.haarlijn {
+  border: 0;
+  border-top: var(--haarlijn) solid var(--lijn);
+  margin: var(--sprong) 0;
+}
+
+/* 7.2 De kicker: de rubriek boven een kop, met het merkvierkant ervoor.
+
+   De tekst staat NIET in oranje, en dat is nagemeten en niet gekozen: oranje
+   haalt 2,51 op wit en 6,29 op navy, dus een oranje kicker zou in het lichte
+   thema onder de drempel van 4,5 zakken en in het donkere erboven. Een accent
+   dat maar in één van de twee thema's werkt, is geen accent. `qa_online.py`
+   meldde dit als eerste bevinding op de maatstaf, in de vorm waarin het hier
+   stond.
+
+   Wat er in de plaats komt is het vierkant uit het logo als merkteken vóór de
+   regel: het oranje staat er, het draagt geen letter, en de tekst staat op de
+   stille inkt (6,11 op licht, 8,19 op donker). */
+.kicker {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: var(--m-mini);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--inkt-stil);
+  margin: 0 0 6px;
+}
+.kicker::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  background: var(--accent);
+  flex: none;
+}
+
+/* 7.3 De badge — een genummerde cirkel. Volgorde, en waar je nu bent. */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-pil);
+  background: var(--accent);
+  color: var(--accent-inkt);
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: var(--m-klein);
+  flex: none;
+}
+
+/* 7.4 De chip — dit of dat, als label in plaats van als woord.
+   Merkteken 7 uit `merktekens.md`. Op een scherm is dit het
+   merkteken dat het meeste werk doet: een tabelkolom met een status
+   wordt er scanbaar van. De kleur codeert, en de tekst zegt hetzelfde
+   — nooit alleen de kleur. */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 10px;
+  border-radius: var(--radius-pil);
+  background: var(--tint-navy);
+  color: var(--inkt);
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: var(--m-mini);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.chip--goed   { background: var(--tint-mint); }
+.chip--let-op { background: var(--tint-oranje); }
+.chip--vol    { background: var(--accent); color: var(--accent-inkt); }
+
+/* Het stipje vóór een chip. Dit is de secundaire codering die de
+   `dataviz`-meting verplicht stelt: emerald haalt 1,98 op wit en mag
+   dus nooit alléén de categorie dragen. */
+.stip {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-pil);
+  background: currentColor;
+  flex: none;
+}
+
+/* 7.5 Het paneel en de kaart. Een paneel is een gekleurd vlak met
+   inhoud erin; een kaart is een paneel dat los op de grond staat en
+   een haarlijn draagt in plaats van een vulling.
+
+   Geen schaduw. Niet hier, niet op een scherm, niet ergens anders:
+   `merk.md` §4. Een kaart die van de grond af moet komen, krijgt
+   `--grond-op` en een haarlijn. */
+.paneel {
+  background: var(--grond-op);
+  color: var(--inkt);
+  border-radius: var(--radius);
+  padding: var(--sprong);
+}
+.paneel--vol {
+  background: var(--accent);
+  color: var(--accent-inkt);
+  --inkt: var(--accent-inkt);
+  --inkt-stil: var(--accent-inkt);
+  --focus: var(--navy);
+}
+.paneel--mint   { background: var(--tint-mint); }
+.paneel--oranje { background: var(--tint-oranje); }
+.paneel--royal  { background: var(--tint-royal); }
+.kaart {
+  background: transparent;
+  border: var(--haarlijn) solid var(--lijn);
+  border-radius: var(--radius);
+  padding: var(--sprong);
+  transition: border-color 120ms linear;
+}
+
+/* 7.6 Het cijfer — het getal dat de kaart draagt, met zijn eenheid en
+   zijn label. Dit is de typografie van een kerncijfer en niet de
+   anatomie van een tegel: die staat in de `dataviz`-skill en wordt
+   hier niet herhaald. */
+.cijfer {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: var(--m-display);
+  line-height: 1.02;
+  letter-spacing: -0.015em;
+  font-variant-numeric: lining-nums tabular-nums;
+  margin: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+.cijfer .eenheid {
+  font-size: var(--m-kop);
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+/* 7.7 De uitspraak — de pull quote. */
+.uitspraak {
+  font-family: var(--display);
+  font-weight: 300;
+  font-size: var(--m-titel);
+  line-height: 1.28;
+  letter-spacing: -0.005em;
+  margin: 0;
+  max-width: 26em;
+  border-left: 3px solid var(--accent);
+  padding-left: var(--sprong);
+}
+
+/* 7.8 Het paspoort — de labelrij met feiten. Op een scherm is dit een
+   <dl>, en dat is geen detail: een schermlezer leest de paren dan als
+   paren. */
+.paspoort {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 6px var(--goot);
+  margin: 0;
+}
+.paspoort dt {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: var(--m-mini);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--inkt-stil);
+  align-self: baseline;
+}
+.paspoort dd { margin: 0; font-size: var(--m-klein); line-height: var(--r-klein); }
+
+/* 7.9 De tabel. Een lijn onder de kop, een haarlijn per rij, verder
+   niets — dezelfde regel als op papier. Wat er op een scherm bijkomt:
+   getallen op `tabular-nums` zodat de kolom uitlijnt, `scope` op de
+   koppen zodat een schermlezer weet waar een cel bij hoort, en een
+   houder die horizontaal schuift.
+
+   Die houder is de reden dat deze klasse hier staat. Een brede tabel
+   op een smal scherm duwt anders het hele document breder dan het
+   venster, en dan schuift de pagina zelf horizontaal. Dat is het
+   defect dat `qa_online.py` als `horizontaal` meldt, en de houder is
+   de reparatie. */
+/* Zet er `tabindex="0" role="region" aria-label="…"` op. Dat is geen sier:
+   een gebied dat schuift en niet focusbaar is, kan iemand met alleen een
+   toetsenbord niet bereiken, en dan zijn de laatste kolommen weg. En zeg in de
+   bronregel eronder dát hij schuift — op de render van 420 px ziet de tabel er
+   anders gewoon afgesneden uit, en zo kwam hij ook over. */
+.tabelhouder {
+  overflow-x: auto;
+  max-width: 100%;
+  -webkit-overflow-scrolling: touch;
+}
+.tabelhouder:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.tabel {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--m-klein);
+  line-height: var(--r-klein);
+}
+.tabel caption {
+  text-align: left;
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: var(--m-mini);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--inkt-stil);
+  padding-bottom: 10px;
+}
+.tabel th {
+  text-align: left;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: var(--m-mini);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 8px 12px 8px 0;
+  white-space: nowrap;
+}
+/* De zware lijn hoort onder de kóprij en niet onder elke rijkop. Zonder deze
+   scoping krijgt een <th scope="row"> ook 2 px navy, en dan staat er onder elk
+   rijlabel een stompje streep — nagemeten op de eerste render van de maatstaf. */
+.tabel thead th { border-bottom: 2px solid var(--inkt); }
+.tabel tbody th {
+  border-bottom: var(--haarlijn) solid var(--lijn);
+  font-size: var(--m-klein);
+  letter-spacing: 0.02em;
+  text-transform: none;
+  padding: 10px 12px 10px 0;
+}
+.tabel td {
+  border-bottom: var(--haarlijn) solid var(--lijn);
+  padding: 10px 12px 10px 0;
+  vertical-align: baseline;
+}
+.tabel td:last-child, .tabel th:last-child { padding-right: 0; }
+.tabel .getal {
+  text-align: right;
+  font-variant-numeric: lining-nums tabular-nums;
+}
+.tabel tbody tr:last-child td { border-bottom: 0; }
+
+/* 7.10 De koprand — wat op een scherm in de plaats komt van de omslag en de
+   titelbalk. Eén band bovenaan met de titel en het merk erin. Hij loopt tot de
+   rand van het venster, want dat is hier "aflopend".
+
+   De stille stand is de default en de gekleurde is de variant, en dat is opzet:
+   een band in de merkkleur bovenaan élk dashboard is een toon en geen accent. */
+.koprand {
+  background: var(--grond-op);
+  color: var(--inkt);
+  border-bottom: var(--haarlijn) solid var(--lijn);
+  padding-block: var(--sprong);
+}
+.koprand--accent {
+  background: var(--accent);
+  color: var(--accent-inkt);
+  --inkt: var(--accent-inkt);
+  --inkt-stil: var(--accent-inkt);
+  --focus: var(--navy);
+  border-bottom: 0;
+}
+.koprand--verloop {
+  background: var(--verloop);
+  color: var(--navy);
+  --inkt: var(--navy);
+  --inkt-stil: var(--navy);
+  --focus: var(--navy);
+  border-bottom: 0;
+}
+
+/* De band draagt zijn eigen verticale ruimte, dus het dek erbinnen draagt
+   alleen zijn zijmarge. Zonder deze regel tellen de twee bij elkaar op: op
+   1440 px werd dat 26 + 56 px boven én onder, en dan staat er een oranje vlak
+   van 190 px met vier woorden erin. Dat is de "luide leegte" van de
+   weigerlijst, en het is nagemeten op de eerste render van de maatstaf. */
+.koprand > .dek { padding-block: 0; }
+
+/* 7.11 Het logo. Cirkel plus vierkant plus het woordmerk, in twee
+   regels. De markup staat in `reference/documenten-stramien.md`;
+   deze klassen zetten hem. Op een donkere grond draagt het woordmerk
+   de inkt en niet navy, en dáárom staat "SOCIAL FINANCE" hier op
+   `currentColor` in plaats van op navy. */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--display);
+  line-height: 1;
+}
+.logo__vorm { display: flex; align-items: center; gap: 3px; flex: none; }
+.logo__cirkel {
+  width: 13px; height: 13px;
+  border-radius: var(--radius-pil);
+  background: var(--oranje);
+}
+.logo__vierkant { width: 13px; height: 13px; background: var(--oranje); }
+.logo__woord {
+  font-weight: 800;
+  font-size: var(--m-mini);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: currentColor;
+}
+.logo__nl { color: var(--oranje); }
+
+/* Op een vol merkvlak is het logo éénkleurig, in de inkt van dat vlak.
+
+   Dat is geen sier maar de enige stand die leesbaar is: op een oranje band
+   haalt het oranje "NL" precies 1,00 tegen zijn eigen grond, en dan staat het
+   er niet. Op de eerste render van de maatstaf was "NL" onzichtbaar en niemand
+   zag dat het weg was — de band leek gewoon "SOCIAL FINANCE" te dragen.
+   `qa_online.py` meldde het als contrast 1,00; de render deed dat niet, en dat
+   is precies waarom deze meting blokkeert. */
+.koprand--accent .logo__nl,
+.koprand--verloop .logo__nl,
+.paneel--vol .logo__nl,
+.logo--eenkleurig .logo__nl { color: inherit; }
+.koprand--accent .logo__cirkel,
+.koprand--accent .logo__vierkant,
+.koprand--verloop .logo__cirkel,
+.koprand--verloop .logo__vierkant,
+.paneel--vol .logo__cirkel,
+.paneel--vol .logo__vierkant,
+.logo--eenkleurig .logo__cirkel,
+.logo--eenkleurig .logo__vierkant { background: currentColor; }
+
+/* 7.12 Het beeldkader — de gereserveerde plek voor een grafiek of een
+   beeld. `--verhouding` houdt de hoogte aan de breedte vast, want een
+   kader dat meegroeit in de breedte en niet in de hoogte, drukt zijn
+   inhoud plat. */
+.beeldkader {
+  position: relative;
+  width: 100%;
+  aspect-ratio: var(--verhouding, 16 / 9);
+  overflow: hidden;
+  border-radius: var(--radius);
+}
+.beeldkader > svg, .beeldkader > img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.beeldkader--leeg {
+  border: var(--haarlijn) dashed var(--rand);
+  display: grid;
+  place-items: center;
+  color: var(--inkt-stil);
+  font-size: var(--m-klein);
+}
+.beeldkader--leeg::after { content: attr(data-wat); }
+
+/* 7.13 Het icoon — zelf getekend, in lijn, op een raster van 24.
+   Geen emoji: dat is een tweede lettertype op de pagina en het leest
+   als een chatbericht. */
+.icoon {
+  width: 24px; height: 24px;
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* 7.14 De filterrij — het merkteken dat alleen op een scherm bestaat.
+   Eén rij boven de inhoud, en niet een kolom ernaast: een filter dat
+   je moet zoeken, is geen filter. De besturingsrand haalt 4,43 op
+   licht en 3,56 op donker, dus hij is in beide thema's te zien. */
+.filterrij {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sprong-klein);
+  align-items: center;
+  padding-block: var(--sprong-klein);
+}
+.knop {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: var(--m-mini);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--inkt);
+  background: transparent;
+  border: var(--haarlijn) solid var(--rand);
+  border-radius: var(--radius-pil);
+  padding: 6px 14px;
+  cursor: pointer;
+  min-height: 32px;
+}
+.knop[aria-pressed="true"] {
+  background: var(--inkt);
+  color: var(--grond);
+  border-color: var(--inkt);
+}
+.knop:hover { border-color: var(--inkt); }
+
+/* 7.15 De grafiekhouder — en dit merkteken bestaat alleen omdat een scherm
+   meegroeit.
+
+   Een SVG schaalt álles mee, ook zijn letters. Een as-label van 13 px in een
+   beeld dat op 720 px is getekend, staat op een venster van 420 px op 7,6 px,
+   en er staat niets fout in de markup. Op een blad speelt dat niet: daar is de
+   kaderbreedte bekend en teken je 1:1 (`documenten-vormentaal.md` §11).
+
+   Het antwoord: de plot is SVG en de tekst is HTML. De SVG draagt alleen wat
+   geen maat heeft — rasterlijnen en polylijnen, op `preserveAspectRatio="none"`
+   met `vector-effect="non-scaling-stroke"` zodat de lijndikte niet meerekt. De
+   as-labels, de punten en de legenda staan er in HTML rond en over heen, en die
+   houden de maatladder.
+
+   Wat dit merkteken NIET doet is de vorm van de grafiek kiezen. Welke vorm bij
+   welke taak hoort, welke kleur welke rol krijgt en hoe de hover werkt, staat in
+   de `dataviz`-skill; dit is de houder waarin dat past. */
+.grafiek {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  grid-template-rows: 1fr max-content;
+  gap: 8px;
+  --plot-hoogte: 260px;
+}
+.grafiek__y {
+  grid-column: 1; grid-row: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+  font-size: var(--m-klein);
+  line-height: 1;
+  color: var(--inkt-stil);
+  font-variant-numeric: lining-nums tabular-nums;
+}
+.grafiek__plot {
+  grid-column: 2; grid-row: 1;
+  position: relative;
+  height: var(--plot-hoogte);
+}
+.grafiek__plot > svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.grafiek__x {
+  grid-column: 2; grid-row: 2;
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--m-klein);
+  color: var(--inkt-stil);
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+/* Een punt op de plot. `--x` en `--y` zijn percentages, want de plot groeit. */
+.grafiek__punt {
+  position: absolute;
+  left: var(--x);
+  bottom: var(--y);
+  width: 9px; height: 9px;
+  margin: -4.5px 0 0 -4.5px;
+  border-radius: var(--radius-pil);
+  background: currentColor;
+  /* De ring van 2 px in de grondkleur houdt twee punten die elkaar raken
+     apart. Dat is de spacer-regel van de `dataviz`-skill. */
+  box-shadow: 0 0 0 2px var(--grond) inset;
+}
+
+/* Het label dat rechtstreeks bij een reeks staat. Dit is geen versiering: de
+   contrastmeting van het palet dwingt hem af — emerald haalt 1,98 op wit en
+   oranje 2,51, dus de kleur mag nooit de enige codering zijn. */
+.grafiek__reekslabel {
+  position: absolute;
+  left: var(--x);
+  bottom: var(--y);
+  transform: translate(8px, 50%);
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: var(--m-klein);
+  white-space: nowrap;
+  color: var(--inkt);
+}
+
+.legenda {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--goot);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--m-klein);
+}
+.legenda li { display: flex; align-items: center; gap: 8px; }
+
+/* 7.16 De themaschakelaar. Alleen op de losse HTML-route: in een
+   artifact stempelt de viewer zelf `data-theme` op de root, en twee
+   schakelaars op één pagina is er één te veel. `bouw.py --artifact`
+   laat hem weg. */
+.thema {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: var(--m-mini);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: inherit;
+  background: transparent;
+  border: var(--haarlijn) solid currentColor;
+  border-radius: var(--radius-pil);
+  padding: 6px 14px;
+  cursor: pointer;
+  min-height: 32px;
+}
+
+/* ---------------------------------------------------------------
+   8. Drukken
+
+   Een dashboard dat iemand doorstuurt, wordt een PDF. `naar_pdf.py`
+   emuleert `print`, dus dit blok is wat er dan gebeurt: het lichte
+   thema, geen schakelaar, geen sticky, en een bladmaat — anders drukt
+   Chromium op Letter.
+   --------------------------------------------------------------- */
+
+@page { size: A4; margin: 12mm; }
+
+@media print {
+  :root {
+    color-scheme: light;
+    --grond: var(--wit);
+    --inkt: var(--navy);
+    --marge: 0px;
+  }
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { background: var(--wit); color: var(--navy); }
+  .thema, .sprong, .filterrij { display: none; }
+  .kaart, .paneel { break-inside: avoid; }
+  .tabelhouder { overflow: visible; }
+  a { text-decoration-color: var(--navy); }
+}

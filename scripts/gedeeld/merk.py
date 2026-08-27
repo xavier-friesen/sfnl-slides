@@ -71,7 +71,8 @@ EINDE = "/* merk:einde */"
 #: bij en dat is geen omissie: die komt altijd ná `stijl.css` en erft de
 #: waarden daaruit. Twee keer hetzelfde `:root` stempelen zou de vraag
 #: openlaten welke van de twee de bron is.
-GESTEMPELD = (WORTEL / "assets" / "documenten" / "stijl.css",)
+GESTEMPELD = (WORTEL / "assets" / "documenten" / "stijl.css",
+              WORTEL / "assets" / "online" / "stijl.css")
 
 
 # --------------------------------------------------------------------- kleur
