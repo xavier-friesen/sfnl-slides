@@ -48,6 +48,30 @@ En de tinten, gemeten uit de vlakken in het rapport en niet berekend:
 | oranje-tint | `#FFDFD0` | het watermerkcijfer |
 | navy-tint | `#F4F3F7` | een stille container |
 
+### Welke tekstkleur op welk vlak
+
+Een gekleurd vlak bepaalt zijn eigen tekstkleur, en dat is geen smaak. Alle verhoudingen hieronder
+zijn met `merk.contrast()` gerekend op de waarden van §1; de drempels zijn 4,5 voor lopende tekst
+en 3,0 voor grote tekst.
+
+| vlak | navy erop | wit erop | wat er dus op staat |
+|---|---|---|---|
+| oranje | **6,29** | 2,51 | navy — of wit, als uitzondering, zie §4 |
+| grapefruit | **5,13** | 3,08 | navy |
+| emerald | **7,99** | 1,98 | navy |
+| sky | **6,80** | 2,32 | navy |
+| royal | 2,70 | **5,85** | **wit** — navy haalt geen van beide drempels |
+| violet | 2,86 | **5,52** | **wit** — idem |
+| navy | — | **15,79** | wit |
+
+**De twee donkere vlakken zijn de val.** Navy op royal haalt 2,70 en navy op violet 2,86. Dat
+ziet er op een scherm net leesbaar uit en het is het op papier niet, en het is precies de fout die
+je maakt als je "navy is de inkt" als regel toepast in plaats van als vertrekpunt. Op royal en op
+violet staat wit.
+
+Deze getallen zijn opnieuw gemeten na de paletmigratie. De vorige meting stond tegen de oude
+waarden en gaf 2,7 en 2,8 — dezelfde conclusie, andere derde decimaal.
+
 ### Wat er op 27 augustus 2026 is veranderd, en waarom
 
 De plugin rendeerde tot die datum vijf andere waarden. Ze zijn vervangen door die van het
@@ -145,9 +169,10 @@ eigen bovenop.
   "ongeveer oranje" bestaat niet. Wat hier niet staat, is geen merkkleur.
 - **Oranje draagt geen lopende tekst, en wit op oranje is de ene uitzondering.** Oranje als inkt
   op wit haalt 2,51 en dat is nooit goed. Op een oranje vlak haalt navy 6,29, en dat is de gewone
-  route. Wit op datzelfde vlak haalt **ook** 2,51 — de verhouding is symmetrisch, dus wit op
+  route (§1, "Welke tekstkleur op welk vlak"). Wit op datzelfde vlak haalt **ook** 2,51 — de verhouding is symmetrisch, dus wit op
   oranje is precies zo zwak als oranje op wit — en het is desondanks toegestaan, want het
-  gedrukte werk doet het: de lessentekst in de lessenband van de casespread staat wit op oranje.
+  gedrukte werk doet het: korte tekst op een oranje band staat er wit op. Het is een huisbesluit
+  en geen meting die het draagt.
 
   Het is dus een merkbesluit en geen toegankelijk contrast, en daarom is het gebonden. Alleen in
   drukwerk. Alleen voor korte tekst op display- of leadmaat, in een band of een paneel. Nooit voor

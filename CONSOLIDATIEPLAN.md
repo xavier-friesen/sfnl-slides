@@ -135,6 +135,18 @@ beoordeling — dat is hier het equivalent van de renderloop.
 Wat hij niet doet: een rapport zetten. Loopt het over meer dan een paar pagina's, dan is de
 zetmotor van `rapport-deliverable` beter dan de hand, en dat zegt de skill dan ook.
 
+**En hij is niet aan één paginatype gebonden.** De bronskill droeg een compleet uitgewerkte
+casespread — vijf blokken in vaste volgorde, zeven paspoortvelden, vijf fondsarchetypes. Dat is
+een oud artifact en het is eruit: de skill bouwt een generiek stuk SFNL-drukwerk of een
+rapportpagina, en welke paginatypes er zijn staat in de stramienen en niet in de skill. Secties 1
+tot 6 van het bouwscript zijn het apparaat en staan er voor elke pagina hetzelfde; 7 en 8 zijn de
+kopij en de compositie, en die verschillen per paginatype.
+
+Eén ding uit die casespread was wél echt en is gebleven, gegeneraliseerd: de veiligheidsregel dat
+navy niet op elk gekleurd vlak kan. Opnieuw gemeten na de paletmigratie en uitgewerkt tot een
+paringstabel in `merk.md` §1 — navy op royal haalt 2,70 en navy op violet 2,86, dus daar staat
+wit; op oranje, grapefruit, emerald en sky staat navy.
+
 ### 3. `deck-check` hoort bij `slides`, maar niet in hetzelfde bestand
 
 Eigen bestand, zelfde familie. `slides` is 836 regels en de fixer 511; samen wordt dat

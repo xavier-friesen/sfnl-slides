@@ -2,17 +2,17 @@
 name: ontwerp-met-affinity
 description: >
   Bouw en beoordeel drukwerk in de huisstijl van Social Finance NL rechtstreeks in Affinity
-  (Publisher, Designer of Photo) via de Affinity MCP-connector — een casespread, een
-  hoofdstukopener, een visualpagina, een uitnodiging of een los stuk drukwerk. De maten,
-  het raster, de kleuren en de letters komen uit het stramien van de plugin; deze skill
-  draagt de Affinity-laag: de SDK-leesplicht, de scriptbibliotheek, de eenheidsomrekening,
-  de bekende valkuilen en de renderloop. Gebruik deze skill wanneer de gebruiker iets in
-  Affinity wil maken, wijzigen, inkorten of laten nakijken. Trigger op "casespread",
-  "spread bouwen", "opmaak in Affinity", "in Affinity", "Affinity Publisher", "Designer",
-  "stramien", "fondspaspoort", "lessenband", "pull quote", "maak er een spread van",
-  "zet dit in het rapport", "check deze spread", op elk verzoek dat SFNL, Social Finance NL
-  of huisstijl combineert met Affinity, en op de situatie dat er een Affinity-document open
-  staat en er iets aan het formaat, het raster of de opmaak moet gebeuren. Vereist dat
+  (Publisher, Designer of Photo) via de Affinity MCP-connector — een rapportpagina, een
+  spread, een hoofdstukopener, een tekst- of visualpagina, een uitnodiging of een los stuk
+  drukwerk. De maten, het raster, de kleuren en de letters komen uit het stramien van de
+  plugin; deze skill draagt de Affinity-laag: de SDK-leesplicht, de scriptbibliotheek, de
+  eenheidsomrekening, de bekende valkuilen en de renderloop. Gebruik deze skill wanneer de
+  gebruiker iets in Affinity wil maken, wijzigen, inkorten of laten nakijken. Trigger op
+  "in Affinity", "opmaak in Affinity", "Affinity Publisher", "Designer", "spread bouwen",
+  "pagina opmaken", "stramien", "pull quote", "maak er een spread van", "zet dit in het
+  rapport", "check deze pagina", op elk verzoek dat SFNL, Social Finance NL of huisstijl
+  combineert met Affinity, en op de situatie dat er een Affinity-document open staat en er
+  iets aan het formaat, het raster of de opmaak moet gebeuren. Vereist dat
   Affinity draait op de machine van de gebruiker (versie april 2026 of later) met MCP aan;
   draait het niet, dan is er geen route en bied je `ontwerp-documenten` aan. Voor PowerPoint
   ga je naar `slides`, voor drukwerk in HTML naar `ontwerp-documenten`, voor een lang
@@ -52,7 +52,7 @@ En dan één van deze twee, afhankelijk van wat er gevraagd is:
 
 | de vraag | het stramien |
 |---|---|
-| een spread, een casespread, een hoofdstukopener, een visualpagina, een tekstpagina | `reference/rapport-stramien.md` |
+| een rapportpagina, een spread, een hoofdstukopener, een tekstpagina, een visualpagina | `reference/rapport-stramien.md` |
 | een uitnodiging, een one-pager, een executive summary, een los stuk drukwerk | `reference/documenten-stramien.md` |
 
 Twijfel je, dan is de vraag of het stuk in een rug zit. Een rapport zit in een rug en heeft
@@ -61,7 +61,7 @@ en heeft één marge rondom (`documenten-stramien.md` §2).
 
 **Een spread is twee bladen naast elkaar en dat staat in beide bestanden anders.**
 `rapport-stramien.md` §1 kent alleen enkele pagina's; de spread als één blad staat in
-`documenten-stramien.md` §1 onder `sfnl-spread`. Voor een casespread heb je dus de bladmaat
+`documenten-stramien.md` §1 onder `sfnl-spread`. Voor een rapportspread heb je dus de bladmaat
 van dáár en het raster, de maatladder, de registers en de openers uit `rapport-stramien.md`.
 Noem in je oplevering welke twee je hebt gecombineerd, zodat het naspeurbaar is.
 
@@ -101,17 +101,17 @@ een verkeerd gelezen preamble niet.
 ## Stap 2 — De scriptbibliotheek, en dit is de tweede poort
 
 `list_library_scripts`, en dan `read_library_script` op alles wat er relevant uitziet. Er kunnen
-scripts klaarstaan voor het logo, voor de kleuren als documentstalen, voor een paginaopzet, voor
-een casespread.
+scripts klaarstaan voor het logo, voor de kleuren als documentstalen, voor een paginaopzet of
+voor een paginatype dat je nu ook nodig hebt.
 
 Hergebruiken gaat boven opnieuw bouwen, en dat is geen efficiëntieargument: een script dat al een
 keer op een render is beoordeeld draagt de correcties van die render, en een vers script begint
 weer op nul.
 
 Aan het eind leg je terug wat herbruikbaar is, met `save_script_to_library` onder een naam met
-**`sfnl-`-prefix** — `sfnl-casespread`, `sfnl-logo`, `sfnl-stalen`. Wat je teruglegt is een
-patroon en niet een case: haal de gegevens van dít stuk eruit en laat de structuur staan. Zeg in
-je oplevering wat je hebt teruggelegd en onder welke naam.
+**`sfnl-`-prefix** — `sfnl-hoofdstukopener`, `sfnl-logo`, `sfnl-stalen`. Wat je teruglegt is een
+patroon en niet een exemplaar: haal de kopij van dít stuk eruit en laat de structuur staan. Zeg
+in je oplevering wat je hebt teruggelegd en onder welke naam.
 
 ## Stap 3 — De eenheden, en hier gaat het stil mis
 
@@ -225,16 +225,19 @@ Kijk naar de render en loop deze punten na. **Op de render, niet op de code.**
 Repareer per ronde alles wat je ziet, in één keer, en render opnieuw. Doorgaan tot er niets
 meer bij komt.
 
-## Het bouwscript voor een casespread
+## Het bouwscript: van stramien naar document
 
 Dit is de structuur, niet de maatvoering. **Elke maat staat op `null` en het script weigert te
 lopen zolang er één null in staat.** Vul ze in uit het stramien, met de paragraaf erbij in het
-commentaar.
+commentaar. Dat is met opzet lastiger dan een getal typen: een geraden maat is in Affinity niet
+van een opgezochte te onderscheiden, en op de render al helemaal niet.
 
-De blokvolgorde en de veldenlijst van het fondspaspoort houd je gelijk over alle cases, ook als
-een veld leeg blijft: dan staat er "Niet openbaar", blijft het raster over de cases heel, en ziet
-de lezer dat de vraag is gesteld. Cases die naast elkaar te leggen zijn, is de reden dat dit
-paginatype bestaat.
+Het script is niet aan één paginatype gebonden. Secties 1 tot 6 zijn het apparaat — het stramien,
+de maatladder, de kleuren, het document, de letters en de primitieven — en die staan er voor elke
+pagina hetzelfde. Sectie 7 is de kopij en sectie 8 de compositie, en dáár verschilt een
+hoofdstukopener van een tekstpagina van een uitnodiging. Welke paginatypes er zijn en wat ze
+dragen, staat in `reference/rapport-stramien.md` §7 en `reference/documenten-stramien.md`; deze
+skill schrijft ze niet voor.
 
 ```javascript
 const { Document, NewDocumentOptions, DocumentPreset } = require('/document');
@@ -370,34 +373,38 @@ function text(x, y, w, h, blocks) {
 // handmatige overschrijving beschikbaar.
 function lines(t, w, corps) { return Math.max(1, Math.ceil(t.length / Math.floor(w / (corps * 0.5)))); }
 
-// ─── 7. DE CASE ─────────────────────────────────────────────────────────────
-// Gegevens van de gebruiker. De vijf blokken en de zeven paspoortvelden staan
-// in vaste volgorde, ook als een veld leeg blijft ("Niet openbaar").
-const CASE = {
-  nr: '', register: '', fonds: '', intro: '', attributie: '',
-  kern: [ /* {eenheid, waarde, caption, groot} × 3 */ ],
-  feiten: [ /* [label, waarde] × 7, vaste volgorde */ ],
-  bron: '', naam: '', functie: '', context: '',
-  koppen: [ /* 4 gesprekskoppen */ ], antwoorden: [ /* 4 antwoorden */ ],
-  lessen: [ /* [kop, tekst] × 3 */ ], quote: '',
-  folioL: '', folioR: '',
-  titelRegels: null,   // handmatige overschrijving van de regelschatting
+// ─── 7. DE KOPIJ ────────────────────────────────────────────────────────────
+// De tekst en de cijfers van de gebruiker, en niets anders. Geen maten, geen
+// kleuren, geen posities: die staan hierboven. Wat dit object bevat hangt aan
+// het paginatype dat je bouwt -- een hoofdstukopener heeft een nummer en een
+// titel, een tekstpagina kopij en tussenkoppen, een visualpagina een beeld met
+// een bijschrift en een bronregel.
+//
+// Twee regels die voor elk paginatype gelden. Een veld dat leeg blijft, laat je
+// leeg staan in plaats van weg -- dan blijft het raster over de pagina's heen
+// heel en zie je op de render dat er iets ontbreekt in plaats van dat de rest
+// opschuift. En elke regelschatting houdt een handmatige overschrijving naast
+// zich, want `lines()` schat en de render beslist.
+const KOPIJ = {
+  /* de velden van dit paginatype; zie rapport-stramien.md §7 */
+  regelsOverschrijving: null,   // per veld dat de schatting misrekent
 };
 
-// ─── 8. DE PAGINA ───────────────────────────────────────────────────────────
+// ─── 8. DE COMPOSITIE ───────────────────────────────────────────────────────
 // Een kolom stroomt van boven naar beneden, dus de y van elk blok volgt uit de
-// hoogte van het blok erboven en niet uit een vaste tabel — reken het aantal
+// hoogte van het blok erboven en niet uit een vaste tabel -- reken het aantal
 // regels uit de tekstlengte, anders schuift een lange waarde over het label
 // eronder:
 //
 //   let y = M.margeBoven;
-//   const nT = CASE.titelRegels || lines(CASE.fonds, breedte, T.display.corps);
+//   const nT = KOPIJ.regelsOverschrijving || lines(KOPIJ.titel, breedte, T.display.corps);
 //   text(x, y, breedte, nT * T.display.regel + lucht, [ ... ]);
 //   y += nT * T.display.regel + lucht;
 //
-// Bouw de vlakken, dan de linkerpagina, dan de rechterpagina, en render tussen
-// elk van die drie. Zet de hulplijnen met doc.addGuide() op de rasterlijnen uit
-// §2; dan is op de render te zien of iets ernaast staat.
+// Bouw eerst de vlakken, dan de tekst, en op een spread de linkerpagina voor de
+// rechter. Render tussen elk van die stappen. Zet de hulplijnen met
+// doc.addGuide() op de rasterlijnen uit §2; dan is op de render te zien of iets
+// ernaast staat in plaats van dat je het moet vermoeden.
 
 console.log('sessionUuid = ' + doc.sessionUuid);
 ```
@@ -419,9 +426,9 @@ orde:
    `Transform.createScale(1, k)` met `k = (nieuweH - box.y) / box.height`, gevolgd door
    `t.translate(0, box.y - k * box.y)` — de translate wordt ná de scale toegepast.
 3. **Verschuif alles wat aan de onderrand hangt** over het volledige verschil: het citaat, de
-   streep eronder, beide folio's, en een lessenblok compleet met zijn kop, cijfers, koppen en
-   teksten. Een band aan de onderrand verschuif je in plaats van hem in te korten, zodat hij
-   zijn eigen hoogte houdt.
+   streep eronder, de folio's, en elk blok dat als geheel aan de onderrand staat — compleet, met
+   zijn kop en alles eronder. Een band aan de onderrand verschuif je in plaats van hem in te
+   korten, zodat hij zijn eigen hoogte houdt.
 4. **Verdicht daarna de doorlopende kolommen.** Een kolom die van boven naar beneden stroomt
    levert geen ruimte op door verschuiven; daar verklein je de tussenruimte tussen de rijen en
    schuift de bronregel mee.
