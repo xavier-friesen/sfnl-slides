@@ -21,14 +21,22 @@ De vijf accenten komen uit het themapalet van `SFNL_Word_sjabloon.dotx`. Dat sja
 merkbron: het is het bestand dat in de organisatie circuleert en waarvan elke kleurkiezer in Word
 en PowerPoint bij SFNL zijn waarden neemt.
 
-| naam | hex | themaslot | rol |
-|---|---|---|---|
-| navy | `#21145F` | accent3 | de inkt. Lopende tekst is nooit puur zwart |
-| oranje | `#FF7F40` | accent1 | het accent. Labels, de streep, de badge |
-| wit | `#FFFFFF` | accent6 | het papier |
-| grapefruit | `#FF595A` | accent2 | het tweede eind van het verloop; alarm, nadruk |
-| emerald | `#66C9BA` | accent4 | positief, uitkomst |
-| royal | `#425CC7` | accent5, hlink | secundaire data, en de hyperlink |
+| naam | hex | slot in `.dotx` | slot in `.potx` | rol |
+|---|---|---|---|---|
+| navy | `#21145F` | accent3 | accent6, dk2, folHlink | de inkt. Lopende tekst is nooit puur zwart |
+| oranje | `#FF7F40` | accent1 | accent1 | het accent. Labels, de streep, de badge |
+| wit | `#FFFFFF` | accent6 | lt2 | het papier |
+| grapefruit | `#FF595A` | accent2 | accent2 | het tweede eind van het verloop; alarm, nadruk |
+| emerald | `#66C9BA` | accent4 | accent5 | positief, uitkomst |
+| royal | `#425CC7` | accent5, hlink | accent3, hlink | secundaire data, en de hyperlink |
+| sky | `#45B6E2` | — | accent4 | tertiaire data |
+
+**De twee sjablonen nummeren hun slots anders, en dat is geen fout maar het is een val.** In het
+Word-sjabloon is navy `accent3`; in het PowerPoint-sjabloon is navy `accent6` én `dk2`, en zit
+royal op `accent3`. Wie een slotnummer overneemt van het ene naar het andere sjabloon, verwisselt
+navy en royal — en dat is precies de paring waar navy 2,70 haalt. **Verwijs dus naar de kleur en
+nooit naar het slot**, tenzij je in één van de twee bestanden zelf zit. `HUE` in
+`scripts/shapes.py` gaat van de `.potx`-indeling uit en heeft dat goed.
 
 Vier waarden staan niet in het Word-thema en blijven daarom staan zoals ze gemeten zijn uit het
 drukwerk:

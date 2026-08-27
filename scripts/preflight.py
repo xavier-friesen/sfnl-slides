@@ -20,6 +20,7 @@ Output:
       "renderers": {"powerpoint_com": true, "soffice": null, "soffice_probe": {...},
                     "pdf_to_png": null},
       "merk":      {"klopt": true, "uit_de_pas": [], "hardgecodeerd": [], ...},
+      "potx_thema": {"klopt": true, "verouderd": []},
       "verdict":   "full" | "qa-only",
       "missing":   [...],
       "remediation": [...]
@@ -345,6 +346,63 @@ MERK_EIGEN = ("merk.py", "merk.css")
 MERK_UITGEZONDERD = ("#FFFFFF",)
 
 
+#: Het themapalet van het `.potx` is de derde plek waar merkkleuren staan, en de
+#: poort keek er niet naar. Gemeten na de paletmigratie van 27 augustus 2026:
+#: `theme1.xml` en `theme2.xml` droegen alle vijf de oude waarden, dus elk deck
+#: uit deze plugin rendeerde in het oude oranje — terwijl `preflight.py`
+#: `"klopt": true` meldde, want hij grepte scripts, stylesheets en artboards en
+#: niet het thema in een zipbestand. Dat is precies de soort blinde vlek die de
+#: merklaag moest opheffen.
+#:
+#: De slotindeling van het `.potx` is een ANDERE dan die van het Word-sjabloon:
+#: hier is navy `accent6` en `dk2`, royal `accent3`, emerald `accent5` en sky
+#: `accent4`. Daarom kijkt deze check naar de wáárden en niet naar de slots.
+POTX_THEMAS = ("ppt/theme/theme1.xml", "ppt/theme/theme2.xml")
+
+
+def check_potx_thema() -> dict:
+    """Draagt het themapalet van het sjabloon de huidige merkwaarden?
+
+    Alleen de vijf accenten die de migratie raakte; `theme3`/`theme4` zijn de
+    Office-standaardthema's en geen merk.
+    """
+    import re
+    import zipfile
+    wortel = Path(__file__).resolve().parent.parent
+    potx = wortel / "assets" / "sfnl-sjabloon.potx"
+    uit: dict = {"bestand": potx.exists(), "verouderd": [], "klopt": None}
+    if not potx.exists():
+        uit["detail"] = "geen sjabloon om te controleren"
+        return uit
+    sys.path.insert(0, str(wortel / "scripts" / "gedeeld"))
+    try:
+        import merk
+    except Exception as fout:  # noqa: BLE001
+        uit["detail"] = f"merk.py niet te importeren ({fout})"
+        return uit
+    oud = {h.lstrip("#").upper(): n for h, n in merk.VERVANGEN.items()}
+    try:
+        with zipfile.ZipFile(potx) as z:
+            aanwezig = set(z.namelist())
+            for naam in POTX_THEMAS:
+                if naam not in aanwezig:
+                    continue
+                s = z.read(naam).decode("utf-8", "replace")
+                m = re.search(r"<a:clrScheme.*?</a:clrScheme>", s, re.S)
+                if not m:
+                    continue
+                for c in re.finditer(r'val="([0-9A-Fa-f]{6})"', m.group(0)):
+                    h = c.group(1).upper()
+                    if h in oud:
+                        uit["verouderd"].append(
+                            {"waar": naam, "hex": "#" + h, "kleur": oud[h]})
+    except (OSError, zipfile.BadZipFile) as e:
+        uit["detail"] = f"sjabloon niet te lezen: {e}"
+        return uit
+    uit["klopt"] = not uit["verouderd"]
+    return uit
+
+
 def check_merk() -> dict:
     """`{"gemeten", "klopt", "uit_de_pas", "hardgecodeerd", "verouderd"}`.
 
@@ -512,6 +570,7 @@ def main() -> None:
     soffice = check_soffice()
     raster = check_raster()
     merk = check_merk()
+    potx_thema = check_potx_thema()
 
     # Het binary vinden is niet hetzelfde als kunnen renderen: zie `probe_soffice`. Bij
     # `ran: False` is er niet geprobeerd, en dan blijft de aanwezigheid van het binary
@@ -660,6 +719,7 @@ def main() -> None:
             # Staat de merklaag gelijk met zichzelf: merk.css zoals merk.py hem zou
             # schrijven, en geen merkkleur die ergens anders als hexwaarde staat.
             "merk": merk,
+            "potx_thema": potx_thema,
             # Welke merkfonts te MÉTEN zijn op deze machine (niet: wat de renderer ziet).
             # Zonder deze regel las een lege `fonts_measured` in de QA als "de fonts staan
             # er niet", terwijl het ook een ontbrekende Pillow kan zijn — of, op een
