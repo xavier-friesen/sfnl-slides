@@ -23,13 +23,11 @@ Gebruik:
 from __future__ import annotations
 
 import argparse
-import glob
 import json
 import os
 import shutil
 import subprocess
 import sys
-import tempfile
 from pathlib import Path
 
 HIER = Path(__file__).resolve().parent
@@ -39,18 +37,15 @@ WORTEL = HIER.parent.parent
 def zoek_helper() -> str | None:
     """`seed-canvas.mjs` van de design-skill, of None.
 
-    De skill wordt per sessie uitgepakt onder een versienummer, dus dit is een
-    zoekopdracht en geen constante.
+    Staat nu in `scripts/gedeeld/canvas.py`, want alle vier de skills leggen hun werk op
+    een canvas voor en zochten dit pad elk apart op. Deze versie koos de alfabetisch
+    laatste kandidaat, en dat is geen keuze: er staan er vaak meer dan een en de
+    alfabetische winnaar kan een oudere skillversie zijn, dus dan seedt het canvas op een
+    verouderde editor. De gedeelde versie sorteert op skillversie en dan op uitpaktijd.
     """
-    for wortel in (tempfile.gettempdir(), str(Path.home()), "/tmp"):
-        try:
-            tref = sorted(glob.glob(str(Path(wortel) / "**" / "design" / "seed-canvas.mjs"),
-                                    recursive=True))
-        except OSError:
-            continue
-        if tref:
-            return tref[-1]
-    return None
+    sys.path.insert(0, str(WORTEL / "scripts" / "gedeeld"))
+    from canvas import zoek_helper as _zoek
+    return _zoek()
 
 
 def _chromium() -> tuple[bool, str]:
@@ -138,7 +133,12 @@ def main() -> int:
           "roep de design-skill één keer aan; hij wordt per sessie uitgepakt")
     regel("stijl.css", r["stijl"]["ok"], r["stijl"]["pad"])
     lok = ", ".join(k for k, v in r["letters"].items() if v) or "geen"
-    regel("letters lokaal", any(r["letters"].values()), f"{lok} (Google Fonts is de terugval)")
+    # Niet "Google Fonts is de terugval": `assets/documenten/fonts/fonts.css` sluit
+    # Montserrat en Lato als data-URI in, precies omdat een render zonder internet
+    # anders op Helvetica terugvalt. Deze regel zegt dus alleen wat er systeembreed
+    # staat, en dat is voor het document geen voorwaarde.
+    regel("letters lokaal", any(r["letters"].values()),
+          f"{lok} (niet nodig: fonts.css sluit Montserrat en Lato in)")
 
     print()
     if not r["renderer"]["ok"]:

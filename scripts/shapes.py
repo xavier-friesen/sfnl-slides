@@ -211,7 +211,24 @@ def _split(v):
 
 def _clr(hue: str, alpha: int | None = None) -> str:
     """Eén `<a:schemeClr>`. Volgorde binnen het element is bindend: `lumMod`, dan `lumOff`,
-    dan `alpha` (`sjabloon.md`, Volgorde binnen de XML)."""
+    dan `alpha` (`sjabloon.md`, Volgorde binnen de XML).
+
+    De alpha is een **honderdduizendste**: `7000` is 7 procent en `100000` is dekkend. Dat
+    is de OOXML-eenheid en die staat vast. `svg.py` van `sfnl-infographic` rekent met een
+    breuk tussen 0 en 1, en die twee lagen worden nu door twee skills gebruikt -- dus een
+    breuk die hier binnenkomt is niet zeldzaam maar te verwachten. Zonder de grens
+    hieronder was `("navy", 0.16)` geldige invoer: `int(0.16)` is 0, dus
+    `<a:alpha val="0"/>`, dus een vorm die volledig doorzichtig is. Nagemeten op de
+    keten van layout 19: drie van de vier staven waren er niet, en de XML valideerde
+    schoon. Dat is een uur zoeken in een render.
+    """
+    if alpha is not None and 0 < alpha < 1000:
+        raise ValueError(
+            f"alpha {alpha} is geen OOXML-alpha. Deze laag rekent in honderdduizendsten, "
+            f"dus 7 procent is 7000 en niet 0,07. Kwam dit uit svg.py van "
+            f"sfnl-infographic, die rekent met een breuk: vermenigvuldig met 100000, of "
+            f"gebruik `\"container:{hue}\"` voor de gekalibreerde containerdekking."
+        )
     slot = HUE.get(hue, hue)
     inner = ""
     if hue in LUM:

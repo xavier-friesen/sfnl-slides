@@ -20,6 +20,8 @@ naamstrip van het frame plus de tweakchips (ruim).
 
 from __future__ import annotations
 
+from pathlib import Path
+
 #: Tussen twee pagina's van dezelfde spread: de rug.
 KIER_SPREAD = 24
 
@@ -77,3 +79,45 @@ def leg_neer(paginas: list[dict],
 def manifest(paginas: list[dict], **kier) -> dict:
     """Hetzelfde, maar als het hele `canvas.json`."""
     return {"artboards": leg_neer(paginas, **kier), "launch": {"view": "canvas"}}
+
+
+def zoek_helper() -> str | None:
+    """Pad naar `seed-canvas.mjs` van de design-skill, of None.
+
+    Van alle vier de skills, want alle vier leggen hun werk op een canvas voor en alle
+    vier hebben hetzelfde probleem: de design-skill wordt per sessie onder een
+    versienummer uitgepakt, dus het pad ligt niet vast en dit is een zoekopdracht.
+
+    **En zoeken is niet genoeg -- kiezen is het punt.** Er staan er vaak meer dan een:
+    dezelfde skillversie komt onder wisselende hashmappen terecht en er kunnen oudere
+    versies naast staan. De eerste versie hiervan nam de alfabetisch laatste, en dat
+    kiest niets: van `3b10cbb2` en `ea784c4b` wint de tweede op zijn eerste letter en
+    niet omdat hij bij deze sessie hoort. Een oude payload betekent een canvas op een
+    verouderde editor, en dat merk je pas als de gebruiker erin klikt. Daarom: hoogste
+    skillversie eerst, en daarbinnen de meest recent uitgepakte.
+    """
+    import glob
+    import re
+    import tempfile
+
+    def sleutel(p: str) -> tuple:
+        m = re.search(r"bundled-skills[\\/]+([0-9][0-9.]*)", p)
+        versie = tuple(int(x) for x in m.group(1).split(".")) if m else ()
+        try:
+            gewijzigd = Path(p).stat().st_mtime
+        except OSError:
+            gewijzigd = 0.0
+        return (versie, gewijzigd)
+
+    wortels = (tempfile.gettempdir(), str(Path.home()), "/tmp")
+    for patroon in ("**/bundled-skills/*/*/design/seed-canvas.mjs",
+                    "**/design/seed-canvas.mjs"):
+        tref: list[str] = []
+        for w in wortels:
+            try:
+                tref += glob.glob(str(Path(w) / patroon), recursive=True)
+            except OSError:
+                continue
+        if tref:
+            return max(tref, key=sleutel)
+    return None

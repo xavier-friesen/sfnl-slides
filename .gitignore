@@ -47,6 +47,13 @@ deck.pdf
 !assets/documenten/maatstaf/*.png
 !assets/documenten/keuzekaarten/*.png
 
+# En voor sfnl-infographic: vijf afgemaakte infographics als maatstaf, de drie schetsen die
+# de conceptkeuze laten zien, en het vormenwoordenboek. Dat laatste is de belangrijkste asset
+# van die skill — zesenveertig vormen op één blad — en zonder deze uitzondering stuurt de
+# leeslijst de bouwer naar een bestand dat er niet is.
+!assets/infographic/maatstaf/*.png
+!assets/infographic/vormen/*.png
+
 # En hetzelfde voor sfnl-rapport-opmaak: vier gezette pagina's als maatstaf en drie
 # keuzekaarten die met het vragenvuur meegaan. De kaarten worden door keuzekaart.py uit
 # dezelfde pijplijn gebouwd als een echt rapport, dus ze horen in de repo — anders stuurt

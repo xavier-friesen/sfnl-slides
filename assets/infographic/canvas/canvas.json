@@ -1,0 +1,54 @@
+{
+  "artboards": [
+    {
+      "file": "Main.dc.html",
+      "x": 0,
+      "y": 0,
+      "w": 1280,
+      "h": 427,
+      "title": "A — geldstroom"
+    },
+    {
+      "file": "ConceptB.dc.html",
+      "x": 0,
+      "y": 507,
+      "w": 1280,
+      "h": 427,
+      "title": "B — tijdlijn op schaal"
+    },
+    {
+      "file": "ConceptC.dc.html",
+      "x": 0,
+      "y": 1014,
+      "w": 1280,
+      "h": 427,
+      "title": "C — vier kolommen"
+    }
+  ],
+  "launch": {
+    "view": "canvas"
+  },
+  "annotations": [
+    {
+      "id": "concept-1",
+      "x": -340,
+      "y": 0,
+      "w": 300,
+      "text": "A — geldstroom\n\nPlattegrond: stroom die opsplitst\nMeting: dikte is het aandeel\nDrager: de inleg, links op displaymaat\nKost: de volgorde in de tijd verdwijnt"
+    },
+    {
+      "id": "concept-2",
+      "x": -340,
+      "y": 507,
+      "w": 300,
+      "text": "B — tijdlijn op schaal\n\nPlattegrond: as met vijf momenten\nMeting: x is de datum, de gaten zijn echt\nDrager: de doorlooptijd, rechtsboven\nKost: de bedragen staan er als getal, niet als vorm"
+    },
+    {
+      "id": "concept-3",
+      "x": -340,
+      "y": 1014,
+      "w": 300,
+      "text": "C — vier kolommen\n\nPlattegrond: vier kolommen met kopband\nMeting: geen — dit is het rooster van de drie\nDrager: de band onderaan\nKost: zegt wie er meedoen, niet hoeveel of wanneer"
+    }
+  ]
+}

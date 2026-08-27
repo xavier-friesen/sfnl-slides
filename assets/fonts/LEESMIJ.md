@@ -1,8 +1,21 @@
 # assets/fonts/ — fontbestanden voor de MÉTING
 
-Deze map is de eerste plek waar `find_font_file()` in `scripts/_deck.py` zoekt. Wat hier
-staat, kunnen `qa_text.py`, `fit_title.py` en de fontmeting van `preflight.py` echt meten in plaats van te
-schatten — op elke machine, ook in een Linux-sandbox of Cowork.
+Deze map is de eerste plek waar `find_font_file()` in `scripts/_deck.py` zoekt, en ook de
+eerste waar `vind_font()` in `scripts/infographic/svg.py` kijkt. Wat hier staat, kunnen
+`qa_text.py`, `fit_title.py`, de fontmeting van `preflight.py` en de regelafbreking van de
+infographicroute echt meten in plaats van schatten — op elke machine, ook in een
+Linux-sandbox of Cowork.
+
+**En let op waar de letters wél al staan.** `assets/documenten/fonts/` draagt Montserrat en
+Lato als woff2, omdat `fonts.css` ze als data-URI insluit voor de twee HTML-drukroutes.
+`svg.py` leest diezelfde bestanden als tweede keus, dus de infographicroute meet uit de doos
+echt. Twee dingen die deze map daarnaast nog toevoegen: een **volledige** snede in plaats van
+de latin-subset (het promillageteken zit niet in de subset), en een **statische** snede in
+plaats van het variabele Montserrat, dat op `wght=100` staat en dus geïnstantieerd moet worden
+op 300 of 600. Staat hier een `.ttf`, dan gaat die vóór.
+
+Voor de deckroute — `qa_text.py` en `fit_title.py` — is die woff2 geen alternatief:
+`_deck.py` zoekt op `.ttf`, `.otf` en `.ttc`.
 
 De map is nu leeg, en dat is een keuze, niet een vergissing:
 

@@ -545,6 +545,16 @@ hand is — welke pagina, waarom je herontwerp het niet haalde, en wat het beeld
 stel de escalatie voor met de kosten erbij, en wacht op ja of nee. Bij nee zet je een
 `beeldkader--leeg` neer met wat erin hoort, zodat de gebruiker ziet wat er open staat.
 
+**En bij ja: geef het kader mee, niet alleen de opdracht.** `sfnl-infographic` zit in dezelfde
+plugin en heeft de kaders van deze route als canvas klaarstaan — `doc-breed` voor de volle
+zetspiegel (680 px), `doc-kolom2` voor één van twee (325), `doc-kolom3` voor één van drie (207)
+— plus `Maten.voor("document")` voor de maatladder van §3 hierboven. Zeg dus welk kader het
+wordt, want dat is het enige dat die skill van jou nodig heeft en het is het antwoord dat
+achteraf niet meer te repareren is: een beeld dat op de bandmaat van 960 pt is getekend, krimpt
+in een kader van 680 px met factor 0,53 en zet zijn 10pt-voetnoot op 5,31 pt. Wat je terugkrijgt
+is een `.beeldkader` met de SVG inline, klaar om in het artboard te zetten, en de meting die
+eronder hoort. Zie `reference/samenstellen.md` §2.
+
 ### 4. Bouwen
 
 ```bash
