@@ -67,8 +67,13 @@ WORTEL = Path(__file__).resolve().parent.parent.parent
 sys.path.insert(0, str(WORTEL / "scripts" / "documenten"))
 from _browser import browser, wacht_op_letters  # noqa: E402
 
-MERK_CSS = WORTEL / "assets" / "gedeeld" / "merk.css"
-MERK_PY = WORTEL / "scripts" / "gedeeld" / "merk.py"
+# Het palet komt uit merk.py en niet uit een eigen lijst. Een toets die zijn
+# eigen kopie van de waarheid bijhoudt, toetst op een gegeven moment die kopie
+# — dat is precies wat `qa_document.py` is overkomen met de vijf oude waarden.
+sys.path.insert(0, str(WORTEL / "scripts" / "gedeeld"))
+from merk import KLEUREN, rgb as merk_rgb  # noqa: E402
+
+PALET = {naam: merk_rgb(naam) for naam in KLEUREN}
 
 #: (naam, prefers-color-scheme, data-theme of None)
 STANDEN = (("licht", "light", None),
@@ -88,7 +93,8 @@ EMOJI = re.compile(
 # De meting in de browser
 # ---------------------------------------------------------------------------
 
-METING = r"""(vloerTekst, vloerCaps) => {
+METING = r"""(vloeren) => {
+  const vloerTekst = vloeren.tekst, vloerCaps = vloeren.caps;
   // --- kleur, en al het rekenwerk erop -------------------------------------
   // Eén pixel op een canvas normaliseert elke kleursyntaxis die de browser
   // kent, inclusief de `color(srgb …)` waar color-mix() naar computeert.
@@ -150,7 +156,13 @@ METING = r"""(vloerTekst, vloerCaps) => {
       }
       n = n.parentElement;
     }
-    if (!lagen.length) return {kleuren: [], onbekend: true};
+    // Niets gevonden: geen enkel element in de keten draagt een achtergrond.
+    // Dan is de grond die van de host, en die kennen we niet. Meet tegen wit
+    // en zeg dat het onzeker is — nooit overslaan. Overslaan was de eerste
+    // versie hiervan, en dan bleef juist de ergste bevinding uit: op een
+    // pagina met een doorzichtige body werd oranje-op-wit helemaal niet
+    // gemeten, want er was geen wit om tegen te meten.
+    if (!lagen.length) return {kleuren: [[255, 255, 255, 1]], onbekend: true};
     // Van achter naar voren composeren. Startpunt: het diepste dekkende laagje,
     // of anders wit — en dan is de meting onzeker en dat melden we.
     let onbekend = false;
@@ -173,7 +185,7 @@ METING = r"""(vloerTekst, vloerCaps) => {
 
   const uit = {tokens: {}, bevindingen: [], maten: {}, families: {},
                kleuren: [], grond: null, inkt: null, schuift: 0, breedste: [],
-               teksten: 0};
+               teksten: 0, cssfout: null};
 
   // --- 1. De tokens ---------------------------------------------------------
   // Elke custom property die ergens in een stylesheet wordt gedeclareerd,
@@ -181,17 +193,32 @@ METING = r"""(vloerTekst, vloerCaps) => {
   // niet, en dan valt de eigenschap die hem gebruikt stil terug.
   const wortel = getComputedStyle(document.documentElement);
   const namen = new Set();
+  const opWortelVan = new Set();
   const scopes = {};   // eigenschap -> {scope: waarde}
+  uit.cssfout = null;
+  /* Let op de volgorde van de takken hieronder, en niet op de leesbaarheid:
+     sinds CSS Nesting draagt élke CSSStyleRule een `cssRules`-lijst, ook een
+     lege. Een tak `else if (r.cssRules) recurse()` vóór `else if (r.style)`
+     stuurt daardoor iedere gewone regel de lege recursie in, en dan vindt deze
+     meting nul tokens — zonder foutmelding, want er is niets fout. Dat is
+     precies wat er gebeurde: `tokens 0` op een pagina met 105 stijlregels en
+     31 tokens in het merkblok. Dus: eerst de declaraties oogsten, dán
+     afdalen. */
   const regelsIn = (lijst, scope) => {
     for (const r of lijst) {
       if (r.type === 4 /* media */) {
         const dark = /prefers-color-scheme\s*:\s*dark/.test(r.conditionText || '');
         const print = /\bprint\b/.test(r.conditionText || '');
         regelsIn(r.cssRules || [], dark ? 'media-donker' : (print ? 'print' : scope));
-      } else if (r.cssRules) {
-        regelsIn(r.cssRules, scope);
-      } else if (r.style) {
+        continue;
+      }
+      if (r.style) {
         const sel = r.selectorText || '';
+        // Staat de declaratie op de wortel? Alleen dán kun je hem op de wortel
+        // nameten. Een token dat op `.grafiek` staat (zoals `--plot-hoogte`)
+        // hoort niet op `:root` te resolveren en is geen bevinding — dat was
+        // de eerste valse melding van deze toets.
+        const opWortel = /(^|[\s,>+~])(:root|html)\b/.test(sel);
         let s = scope;
         if (scope === 'basis') {
           if (/\[data-theme\s*=\s*["']?dark/.test(sel)) s = 'stempel-donker';
@@ -201,19 +228,33 @@ METING = r"""(vloerTekst, vloerCaps) => {
         } else if (scope === 'media-donker') {
           s = 'media-donker';
         }
-        for (const p of r.style) {
-          if (!p.startsWith('--')) continue;
+        // Met een index en niet met for...of: een CSSStyleDeclaration is niet
+        // in elke engine itereerbaar, en een throw hier zou in de catch
+        // hieronder verdwijnen. Dáárvoor is `cssfout`.
+        for (let i = 0; i < r.style.length; i++) {
+          const p = r.style.item(i);
+          if (!p || !p.startsWith('--')) continue;
           namen.add(p);
           (scopes[p] = scopes[p] || {})[s] = r.style.getPropertyValue(p).trim();
+          if (opWortel) opWortelVan.add(p);
         }
       }
+      if (r.cssRules && r.cssRules.length) regelsIn(r.cssRules, scope);
     }
   };
   for (const sheet of document.styleSheets) {
-    try { regelsIn(sheet.cssRules, 'basis'); } catch (e) { /* cross-origin */ }
+    try {
+      regelsIn(sheet.cssRules, 'basis');
+    } catch (e) {
+      // Alleen een cross-origin stylesheet mag hier landen. Al het andere is
+      // een fout in deze meting en dan moet je het weten.
+      if (!uit.cssfout) uit.cssfout = String(e);
+    }
   }
   for (const n of namen) {
-    uit.tokens[n] = {waarde: wortel.getPropertyValue(n).trim(), scopes: scopes[n] || {}};
+    uit.tokens[n] = {waarde: wortel.getPropertyValue(n).trim(),
+                     scopes: scopes[n] || {},
+                     opWortel: opWortelVan.has(n)};
   }
 
   // --- 2. De grond van de body ---------------------------------------------
@@ -221,6 +262,7 @@ METING = r"""(vloerTekst, vloerCaps) => {
   const bg = pixel(bcs.backgroundColor);
   uit.grond = {css: bcs.backgroundColor, alpha: bg ? bg[3] : null};
   uit.inkt = bcs.color;
+  const bodyDoorzichtig = !bg || bg[3] < 0.995;
 
   // --- 3. Breedte ----------------------------------------------------------
   const de = document.documentElement;
@@ -296,7 +338,12 @@ METING = r"""(vloerTekst, vloerCaps) => {
     const caps = cs.textTransform === 'uppercase'
               && parseFloat(cs.letterSpacing) / px >= 0.055;
     const vloer = caps ? vloerCaps : vloerTekst;
-    if (px < vloer) {
+    // Het woordmerk is geen tekst maar een merk: het draagt de gemeten
+    // spatiëring van het logo (0,04em) en valt daarmee net buiten de
+    // caps-vloer, terwijl niemand het leest — hij herkent het. Dit is de enige
+    // uitzondering op de vloer en hij staat hier met naam en al, zodat er geen
+    // tweede bij kan komen zonder dat iemand het ziet.
+    if (px < vloer && !el.closest('.logo')) {
       uit.bevindingen.push({soort: 'te-klein', ernst: 'warn', el: naam,
         wat: `${naam} staat op ${px} px — de vloer voor ` +
              `${caps ? 'een kapitaallabel' : 'lopende tekst'} op een scherm is ${vloer} px`,
@@ -325,7 +372,10 @@ METING = r"""(vloerTekst, vloerCaps) => {
                `de drempel voor ${groot ? 'grote tekst' : 'lopende tekst'} op ` +
                `${px} px is ${drempel.toFixed(1)}`,
           tekst: tekst.slice(0, 50)});
-      } else if (g.onbekend) {
+      } else if (g.onbekend && !bodyDoorzichtig) {
+        // Draagt de body zélf geen grond, dan geldt dit voor élk element op de
+        // pagina en is één melding genoeg — die staat in `grond`. Zonder deze
+        // uitzondering stond er honderd keer dezelfde regel.
         uit.bevindingen.push({soort: 'grond-onzeker', ernst: 'warn', el: naam,
           wat: `${naam} staat op geen enkele dekkende achtergrond; de ${slechtste.toFixed(2)} ` +
                `hierboven is tegen wit gemeten en niet tegen wat er werkelijk staat`});
@@ -505,38 +555,6 @@ METING = r"""(vloerTekst, vloerCaps) => {
 # Het palet
 # ---------------------------------------------------------------------------
 
-def palet(override: Path | None = None) -> tuple[dict, str]:
-    """naam → (r, g, b), uit dezelfde bron als de pagina zelf."""
-    bron = None
-    if override and override.exists():
-        bron, waar = override.read_text(encoding="utf-8"), str(override)
-    elif MERK_PY.exists():
-        sys.path.insert(0, str(MERK_PY.parent))
-        try:
-            from merk import KLEUREN  # type: ignore
-            uit = {}
-            for naam, waarde in KLEUREN.items():
-                hex_ = waarde if isinstance(waarde, str) else waarde.get("hex", "")
-                if re.fullmatch(r"#[0-9a-fA-F]{6}", hex_ or ""):
-                    uit[naam] = _rgb(hex_)
-            if uit:
-                return uit, "scripts/gedeeld/merk.py"
-        except Exception:
-            pass
-    if bron is None and MERK_CSS.exists():
-        bron, waar = MERK_CSS.read_text(encoding="utf-8"), "assets/gedeeld/merk.css"
-    if bron is None:
-        return {}, "(geen merkbron — de palettoets vervalt)"
-    uit = {naam: _rgb(h) for naam, h in
-           re.findall(r"--([a-z0-9-]+)\s*:\s*(#[0-9a-fA-F]{6})\b", bron)}
-    return uit, waar
-
-
-def _rgb(h: str) -> tuple[int, int, int]:
-    h = h.lstrip("#")
-    return tuple(int(h[i:i + 2], 16) for i in (0, 2, 4))  # type: ignore[return-value]
-
-
 def _op_de_lijn(c: tuple[float, float, float], pal: dict, marge: float = 14.0) -> bool:
     """Ligt deze kleur op of dicht bij het pad tussen twee merkkleuren?
 
@@ -564,8 +582,8 @@ def _op_de_lijn(c: tuple[float, float, float], pal: dict, marge: float = 14.0) -
 # Toetsen
 # ---------------------------------------------------------------------------
 
-def toets(html: Path, breedtes: list[int], merk_override: Path | None = None) -> dict:
-    pal, merkbron = palet(merk_override)
+def toets(html: Path, breedtes: list[int]) -> dict:
+    pal, merkbron = PALET, "scripts/gedeeld/merk.py"
     uri = html.resolve().as_uri()
     ruw: list[tuple[str, int, dict]] = []
 
@@ -582,7 +600,9 @@ def toets(html: Path, breedtes: list[int], merk_override: Path | None = None) ->
             for breed in breedtes:
                 page.set_viewport_size({"width": breed, "height": 1000})
                 page.wait_for_timeout(140)
-                ruw.append((naam, breed, page.evaluate(METING, [VLOER_TEKST, VLOER_CAPS])))
+                ruw.append((naam, breed,
+                            page.evaluate(METING, {"tekst": VLOER_TEKST,
+                                                   "caps": VLOER_CAPS})))
             ctx.close()
 
     bev: list[dict] = []
@@ -592,11 +612,17 @@ def toets(html: Path, breedtes: list[int], merk_override: Path | None = None) ->
     alle_tokens = {}
     for naam, _breed, m in ruw:
         for tok, info in m["tokens"].items():
-            rij = alle_tokens.setdefault(tok, {"scopes": info["scopes"], "leeg": []})
+            rij = alle_tokens.setdefault(tok, {"scopes": info["scopes"],
+                                              "opWortel": info.get("opWortel", False),
+                                              "leeg": []})
+            rij["opWortel"] = rij["opWortel"] or info.get("opWortel", False)
             if not info["waarde"] and naam not in rij["leeg"]:
                 rij["leeg"].append(naam)
     for tok, rij in sorted(alle_tokens.items()):
-        if not rij["leeg"]:
+        # Een token dat nergens op de wortel wordt gedeclareerd, is lokaal —
+        # `--plot-hoogte` op `.grafiek`, `--kolom-min` op een raster. Dat hoort
+        # op `:root` niet te resolveren en is dus geen bevinding.
+        if not rij["leeg"] or not rij["opWortel"]:
             continue
         sc = rij["scopes"]
         if "root" not in sc and ("media-donker" in sc or "stempel-donker" in sc):
@@ -646,6 +672,12 @@ def toets(html: Path, breedtes: list[int], merk_override: Path | None = None) ->
     gronden: dict[str, str] = {}
     for naam, breed, m in ruw:
         gronden[naam] = m["grond"]["css"]
+        if m.get("cssfout"):
+            leg_neer("cssfout", "warn",
+                     f"een stylesheet was niet uit te lezen ({m['cssfout']}), dus "
+                     f"de tokentoets is over dat blad heen gestapt. Bij een "
+                     f"ingesloten <style> hoort dat niet te kunnen",
+                     naam, breed)
         for f in m["bevindingen"]:
             leg_neer(f["soort"], f["ernst"], f["wat"], naam, breed, f.get("tekst", ""))
 
@@ -724,16 +756,13 @@ def main() -> int:
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("html", type=Path)
     ap.add_argument("--breedtes", default="1440,420")
-    ap.add_argument("--merk", type=Path, default=None,
-                    help="pad naar een :root-blok met de merkkleuren, als merk.py "
-                         "en merk.css er nog niet zijn")
     ap.add_argument("--json", action="store_true")
     a = ap.parse_args()
     if not a.html.exists():
         sys.exit(f"niet gevonden: {a.html}")
     breedtes = [int(x) for x in a.breedtes.split(",") if x.strip()]
 
-    r = toets(a.html, breedtes, a.merk)
+    r = toets(a.html, breedtes)
     if a.json:
         print(json.dumps(r, ensure_ascii=False, indent=2))
         return 1 if r["critical"] else 0

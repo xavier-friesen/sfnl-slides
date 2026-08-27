@@ -54,21 +54,22 @@ WORTEL = HIER.parent.parent
 
 STIJL = WORTEL / "assets" / "online" / "stijl.css"
 FONTS = WORTEL / "assets" / "documenten" / "fonts" / "fonts.css"
-MERK_CSS = WORTEL / "assets" / "gedeeld" / "merk.css"
-MERK_PY = WORTEL / "scripts" / "gedeeld" / "merk.py"
 
-IMPORT_REGEL = re.compile(r'^\s*@import\s+url\(["\']?\.\./gedeeld/merk\.css["\']?\)\s*;\s*$',
-                          re.M)
-HEX = re.compile(r"#[0-9a-fA-F]{3}(?:[0-9A-Fa-f]{3})?\b")
+sys.path.insert(0, str(WORTEL / "scripts" / "gedeeld"))
+from merk import BEGIN, EINDE, stempel as merk_stempel  # noqa: E402
 
-#: De namen die deze stijl uit merk.css verwacht. Loopt `merk.py` met andere
-#: namen, dan resolveert `var(--oranje)` naar niets en dat is stil: de pagina
-#: rendert, alleen zonder kleur. `qa_online.py` meldt elk token dat niet
-#: resolveert, dus die controle staat daar en niet hier — maar deze lijst
-#: staat er zodat je weet waar je moet kijken.
+HEXWAARDE = re.compile(r"#[0-9a-fA-F]{3}(?:[0-9A-Fa-f]{3})?\b")
+
+#: De namen die deze stijl uit het merkblok verwacht. Loopt `merk.py` met
+#: andere namen, dan resolveert `var(--oranje)` naar niets en dat is stil: de
+#: pagina rendert, alleen zonder kleur. `qa_online.py` meldt elk token dat niet
+#: resolveert, dus die controle staat daar en niet hier — maar deze lijst staat
+#: er zodat je weet waar je moet kijken.
 VERWACHT = ("navy", "oranje", "wit", "grapefruit", "emerald", "royal", "sky",
             "violet", "grijs", "mint-tint", "periwinkel", "oranje-tint",
-            "navy-tint", "verloop", "display", "brood")
+            "navy-tint", "verloop", "display", "brood",
+            "navy-rgb", "wit-rgb", "oranje-rgb", "emerald-rgb",
+            "periwinkel-rgb")
 
 THEMA_JS = """
 /* De themaschakelaar. Twintig regels, geen framework, geen afhankelijkheid.
@@ -162,55 +163,37 @@ ARTIFACT = """<title>{titel}</title>
 # De merkwaarden
 # ---------------------------------------------------------------------------
 
-def merkwaarden(override: Path | None = None) -> tuple[str, str]:
-    """Het `:root`-blok met de merkkleuren en -letters, plus waar het vandaan komt.
+def stijlblok() -> tuple[str, dict]:
+    """letters + schermstijl, in die volgorde, als één CSS-blok.
 
-    De volgorde is niet vrij. `merk.py` is de bron; `merk.css` is er de
-    gegenereerde vorm van en staat in de repo omdat een stylesheet geen Python
-    kan importeren. Zijn ze beide er, dan wint de bron — dan kan een
-    verouderde `merk.css` deze pagina nooit vervuilen.
+    De merkwaarden staan al in de stylesheet, gestempeld. Wat hier gebeurt is
+    de controle dát ze er staan en dat ze nog kloppen — met `merk.py` zelf als
+    scheidsrechter, niet met een tweede lijst.
     """
-    if override:
-        if not override.exists():
-            sys.exit(f"--merk niet gevonden: {override}")
-        return override.read_text(encoding="utf-8"), f"--merk {override}"
-    if MERK_PY.exists():
-        sys.path.insert(0, str(MERK_PY.parent))
-        try:
-            from merk import css_variabelen  # type: ignore
-            return css_variabelen(), "scripts/gedeeld/merk.py"
-        except Exception as e:
-            print(f"let op: merk.py staat er maar levert niets: {e}", file=sys.stderr)
-    if MERK_CSS.exists():
-        return MERK_CSS.read_text(encoding="utf-8"), "assets/gedeeld/merk.css"
-    sys.exit(
-        "geen merkwaarden gevonden. Er zijn drie bronnen, in deze volgorde:\n"
-        f"  1. {MERK_PY} — css_variabelen()\n"
-        f"  2. {MERK_CSS} — gegenereerd met `merk.py --css`\n"
-        "  3. --merk <pad> naar een los :root-blok\n"
-        "Zonder een daarvan staat er geen kleurwaarde in de pagina, en een\n"
-        "hexwaarde in stijl.css is geen uitweg: die staat één keer, in merk.md.")
-
-
-def stijlblok(merk: str) -> tuple[str, dict]:
-    """merk + letters + schermstijl, in die volgorde, als één CSS-blok."""
     if not STIJL.exists():
         sys.exit(f"schermstijl niet gevonden: {STIJL}")
     stijl = STIJL.read_text(encoding="utf-8")
 
-    # De mechanische toets van `merk.md` §0: een hexwaarde buiten merk.css is
+    if BEGIN not in stijl or EINDE not in stijl:
+        sys.exit(f"{STIJL.name} heeft geen merkblok. Zet {BEGIN} en {EINDE} op de "
+                 f"plek waar het :root-blok hoort en draai "
+                 f"`python scripts/gedeeld/merk.py --css`.")
+    if merk_stempel(stijl) != stijl:
+        sys.exit(f"het merkblok in {STIJL.name} loopt uit de pas met merk.py. "
+                 f"Draai `python scripts/gedeeld/merk.py --css`.\n"
+                 f"Zonder dat bouwt deze pagina met een kleur die niet meer de "
+                 f"merkkleur is, en dat ziet niemand op de render.")
+
+    # De mechanische toets van `merk.md`: een hexwaarde buíten het merkblok is
     # een fout. Hier, en niet alleen in preflight, want dit script is de plek
     # waar de stijl de pagina in gaat.
-    resten = [h for h in HEX.findall(IMPORT_REGEL.sub("", stijl))]
+    kop, rest = stijl.split(BEGIN, 1)
+    _, staart = rest.split(EINDE, 1)
+    resten = sorted(set(HEXWAARDE.findall(kop + staart)))
     if resten:
-        sys.exit(f"hexwaarde in {STIJL.name}: {', '.join(sorted(set(resten)))}. "
-                 f"Kleuren komen uit merk.md, niet uit een stylesheet.")
-
-    if not IMPORT_REGEL.search(stijl):
-        print("let op: geen @import van merk.css in stijl.css — de merkwaarden "
-              "worden nu ervóór gezet en dat werkt, maar het bestand klopt niet "
-              "meer met de beschrijving erboven.", file=sys.stderr)
-        stijl = "@import url(\"../gedeeld/merk.css\");\n" + stijl
+        sys.exit(f"hexwaarde buiten het merkblok in {STIJL.name}: "
+                 f"{', '.join(resten)}. Kleuren komen uit merk.md; gebruik "
+                 f"var(--naam) of rgba(var(--naam-rgb), .nn).")
 
     fonts = FONTS.read_text(encoding="utf-8") if FONTS.exists() else ""
     if not fonts:
@@ -221,9 +204,8 @@ def stijlblok(merk: str) -> tuple[str, dict]:
             "blokkeert elke andere host, en zonder internet valt de pagina terug "
             "op Helvetica.")
 
-    css = IMPORT_REGEL.sub(lambda _: merk.strip(), stijl, count=1)
-    css = fonts.rstrip() + "\n\n" + css
-    return css, {"merk_regels": merk.count("\n") + 1,
+    css = fonts.rstrip() + "\n\n" + stijl
+    return css, {"merkblok": "in de pas met scripts/gedeeld/merk.py",
                  "letters_kb": round(len(fonts) / 1024),
                  "stijl_regels": stijl.count("\n") + 1}
 
@@ -242,8 +224,7 @@ def _titel_uit(fragment: str, terugval: str) -> str:
 
 
 def bouw(fragment: Path, uit: Path | None = None, titel: str | None = None,
-         artifact: bool = False, merk_override: Path | None = None,
-         stempel: str | None = None) -> dict:
+         artifact: bool = False, stempel: str | None = None) -> dict:
     if not fragment.exists():
         sys.exit(f"fragment niet gevonden: {fragment}\n"
                  f"Leg er een neer met: python bouw.py --nieuw {fragment}")
@@ -253,8 +234,7 @@ def bouw(fragment: Path, uit: Path | None = None, titel: str | None = None,
                  f"Het fragment is alleen de pagina; de schil stempelt dit script "
                  f"erin.")
 
-    merk, bron = merkwaarden(merk_override)
-    css, tellingen = stijlblok(merk)
+    css, tellingen = stijlblok()
 
     naam = fragment.name
     for staart in (".frag.html", ".html"):
@@ -280,7 +260,7 @@ def bouw(fragment: Path, uit: Path | None = None, titel: str | None = None,
         geschreven["artifact_kb"] = round(len(art.encode()) / 1024)
         geschreven["schakelaar_verwijderd"] = zonder != inhoud
 
-    return {"fragment": str(fragment), "titel": kop, "merkbron": bron,
+    return {"fragment": str(fragment), "titel": kop,
             **tellingen, **geschreven,
             "verwachte_tokens": len(VERWACHT)}
 
@@ -296,9 +276,6 @@ def main() -> int:
                     help="de <title>. Zonder dit neemt het script de <h1>")
     ap.add_argument("--artifact", action="store_true",
                     help="schrijf er ook de artifactvariant bij")
-    ap.add_argument("--merk", type=Path, default=None,
-                    help="pad naar een los :root-blok, als merk.py en merk.css "
-                         "er nog niet zijn")
     ap.add_argument("--stempel", choices=("light", "dark"), default=None,
                     help="zet data-theme vast op de <html>. Alleen voor de "
                          "renderloop; de oplevering draagt geen stempel")
@@ -314,7 +291,7 @@ def main() -> int:
 
     if not a.fragment:
         ap.error("geef een fragment, of --nieuw <pad>")
-    r = bouw(a.fragment, a.uit, a.titel, a.artifact, a.merk, a.stempel)
+    r = bouw(a.fragment, a.uit, a.titel, a.artifact, a.stempel)
     print(json.dumps(r, ensure_ascii=False, indent=2))
     return 0
 

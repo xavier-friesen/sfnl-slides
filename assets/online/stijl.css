@@ -362,6 +362,24 @@ body {
 }
 .sprong:focus { left: 8px; top: 8px; }
 
+/* Tekst die alleen een schermlezer krijgt. Er is geen papieren equivalent: op
+   een blad staat er wat er staat. Op een scherm is dit waar de tekstversie van
+   een grafiek in gaat, of de naam van een gebied dat visueel al duidelijk is.
+
+   `clip-path` en niet `display: none`: dat laatste haalt het uit de
+   toegankelijkheidsboom en dan leest niemand het. */
+.alleen-lezer {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
 /* ---------------------------------------------------------------
    4. Focus, hover en beweging
 
@@ -584,7 +602,7 @@ a:hover { text-decoration-color: var(--inkt); }
    stille inkt (6,11 op licht, 8,19 op donker). */
 .kicker {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 8px;
   font-family: var(--display);
   font-weight: 700;
@@ -598,6 +616,7 @@ a:hover { text-decoration-color: var(--inkt); }
   content: "";
   width: 10px;
   height: 10px;
+  margin-top: 3px;   /* op de eerste regel, ook als de kicker er twee heeft */
   background: var(--accent);
   flex: none;
 }
@@ -767,6 +786,16 @@ a:hover { text-decoration-color: var(--inkt); }
   font-size: var(--m-klein);
   line-height: var(--r-klein);
 }
+/* Een `<caption>` hoort bij een tabel die niet schuift. Bij een tabel die wél
+   schuift, hoort hij er niet: de caption is een blok ter breedte van de tabel,
+   dus hij wrapt niet binnen de scrollport en loopt er aan de rechterkant uit.
+   Op de eerste render van de maatstaf stond er op 420 px "DEELNEMERS,
+   BEVESTIGDE UITSTROOM EN UITBET" en dan hield het op.
+
+   Voor een schuivende tabel: zet de titel als `.label` bóven de `.tabelhouder`
+   en verwijs ernaar met `aria-labelledby` op de `<table>`. Dan is de naam
+   zichtbaar, wrapt hij wel, en leest een schermlezer hem nog steeds als de
+   naam van de tabel. */
 .tabel caption {
   text-align: left;
   font-family: var(--display);
