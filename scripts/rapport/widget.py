@@ -536,13 +536,14 @@ def kaart(titel: str, toelicht: str, *stukken: str, klasse: str = "") -> str:
             f'<p class="toelicht">{toelicht}</p>{"".join(stukken)}</div>')
 
 
-#: De zes waarnemingen die `lees_docx.py` als `vormbesluit` meegeeft, in
+#: De zeven waarnemingen die `lees_docx.py` als `vormbesluit` meegeeft, in
 #: de volgorde waarin ze hier komen te staan. Een signaal dat hier niet
 #: in staat, is een wijzigingsvoorstel over één blok en hoort niet in
 #: deze widget: dat komt pas ná het ontwerp aan de beurt.
 VORMBESLUITEN = ("bron-niet-nederlands", "koppen-een-niveau-te-diep",
                  "kop-nummert-zichzelf", "beeld-niet-renderbaar",
-                 "beeld-buiten-de-stroom", "kop-zonder-inhoud")
+                 "beeld-buiten-de-stroom", "kop-zonder-inhoud",
+                 "vetregel-als-kop")
 
 
 def _stuks(n: int, enkel: str, meer: str) -> str:
@@ -666,6 +667,21 @@ def bevinding(sig: dict) -> tuple[str, str, str] | None:
             'volgende hoort — dat is een wijziging in de tekst en die gaat apart '
             'langs jou.')
 
+    if soort == "vetregel-als-kop":
+        aantal = sig.get("aantal", 0)
+        vb = _voorbeelden(sig.get("voorbeelden") or [])
+        return (
+            "Vetgezette regels die als tussenkop werken",
+            _stuks(aantal, "alinea is", "alinea's zijn") + " volledig "
+            "vetgezet, kort, en zonder punt aan het eind, met gewone tekst "
+            "eronder" + (f'. Het gaat om {vb}.' if vb else "."),
+            'In Word zijn dat alinea\'s en geen koppen, en dat verschil zag de '
+            'zetting: zo\'n regel kon als laatste regel van een pagina komen te '
+            'staan met zijn tekst op de volgende. Dat gebeurt niet meer — ze '
+            'blijven bij hun tekst, en dat is geen keuze. Wat je hieronder bij '
+            '<b>De vorm</b> wél kiest, is of ze ook de lucht van een tussenkop '
+            'krijgen of vetgezette alinea\'s blijven zoals in Word.')
+
     return None
 
 
@@ -711,6 +727,7 @@ def bouw_secties(doc: dict, ontwerp: dict,
     el = ontwerp.get("elementen") or {}
     gevonden = vormbesluiten or {}
     eigen_nummers = bool(gevonden.get("kop-nummert-zichzelf"))
+    vetregels = gevonden.get("vetregel-als-kop") or {}
 
     delen = []
 
@@ -803,6 +820,22 @@ def bouw_secties(doc: dict, ontwerp: dict,
               "en kost ongeveer een kwart pagina. Een <b>hele pagina</b> kost "
               "er precies één per hoofdstuk, dus dat loont pas vanaf een stuk "
               "of veertig pagina's."),
+        keuze("kopregel", "Kopregel bovenaan",
+              [("beide", "rapport links, hoofdstuk rechts"),
+               ("hoofdstuk", "alleen het hoofdstuk"),
+               ("rapport", "alleen de rapporttitel"),
+               ("geen", "geen kopregel")],
+              ontwerp.get("kopregel", "beide"),
+              "De regel in kleine cursieve letters bovenaan elke pagina, met "
+              "een haarlijn ernaast. Hij zegt waar je bent in een rapport dat "
+              "iemand halverwege opslaat. <b>Rapport links, hoofdstuk "
+              "rechts</b> zet één naam per zijde aan de buitenkant: de "
+              "linkerpagina draagt de rapporttitel, de rechter de "
+              "hoofdstuknaam. Wordt het rapport in één zitting gelezen, of "
+              "heeft het geen hoofdstukken, dan zegt die regel op elke pagina "
+              "hetzelfde en is <b>geen kopregel</b> de rustigere pagina. Op de "
+              "pagina waar een hoofdstuk begint staat hij nooit — daar staat "
+              "de titel zelf al."),
         keuze("dichtheid", "Hoeveel tekst op een pagina",
               [("ruim", "ruim"), ("gemiddeld", "gemiddeld"), ("dicht", "dicht")],
               ontwerp["dichtheid"],
@@ -811,6 +844,23 @@ def bouw_secties(doc: dict, ontwerp: dict,
               "en kopjes. Wat het niet doet is de letter kleiner maken; die "
               "blijft in alle drie de standen gelijk. Ruim leest rustiger, "
               "dicht scheelt pagina's."),
+        # Alleen aanbieden als het document ze heeft. Een keuze over iets
+        # wat er niet is, is een vraag die de gebruiker niet kan
+        # beantwoorden — dezelfde regel als bij de noten en de
+        # bronnenlijst.
+        keuze("vetkop", "Vetgezette tussenkopjes",
+              [("binden", "laten zoals ze staan"),
+               ("als-kop", "als tussenkop zetten")],
+              ontwerp.get("vetkop", "binden"),
+              f'Dit document heeft {vetregels.get("aantal", 0)} regels die '
+              f'volledig vetgezet zijn en zich als tussenkop gedragen — zie de '
+              f'bevinding bovenaan. Ze blijven in beide standen bij hun tekst; '
+              f'dat is geen keuze. <b>Laten zoals ze staan</b> houdt ze precies '
+              f'zoals in Word: vetgezette alinea\'s in de tekst. <b>Als '
+              f'tussenkop zetten</b> geeft ze de lucht van een kopje erboven, '
+              f'zodat ze op de pagina als kop lezen. De letter blijft in beide '
+              f'gelijk, en de tekst verandert in geen van de twee.')
+        if vetregels else "",
     ))
 
     # -- wat er in komt ------------------------------------------------
@@ -1121,7 +1171,8 @@ VELD_NAAR_BESLUIT = {
 #: Alles wat in `ontwerp.json` terecht kan komen, in de volgorde van het
 #: formulier. Wat de bron niet heeft, wordt niet gevraagd en staat dan in
 #: `weggelaten`.
-BESLUITEN = ("taal", "model", "register", "formaat", "opener", "dichtheid",
+BESLUITEN = ("taal", "model", "register", "formaat", "opener", "kopregel",
+             "dichtheid", "vetkop",
              "omslag", "inhoudsopgave", "elementen", "inhoudDiepte",
              "dubbelzijdig", "hoofdstuknummers", "exhibitnummers",
              "noten", "bronnenlijst", "citaatstijl", "bijlagen",

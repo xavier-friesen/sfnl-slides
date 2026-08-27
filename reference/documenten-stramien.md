@@ -385,11 +385,14 @@ gebouwde omslag zonder dat de markup er verkeerd uitzag.
 | script | wat |
 |---|---|
 | `preflight.py` | is er een browser, node, de design-helper en `stijl.css` |
+| `widget.py <werkmap>` | de opdrachtwidget: alle tien de vragen op één pagina, met een schets en de katernsom. **Het verplichte beginpunt** |
 | `bouw.py <werkmap>` | stempelt de stijl in elk artboard, schrijft `canvas.json` als spreads, het losse HTML-bestand **en de PDF** |
 | `bouw.py <werkmap> --gedrukt` | hetzelfde, plus de katernsom uit `scripts/gedeeld/drukwerk.py` onder `katern` in het verslag. Zie §1 |
 | `bouw.py <werkmap> --nieuw Naam` | een leeg artboard met het skelet erin |
 | `render.py <html>` | losse pagina's plus het contactblad met de spreads |
 | `qa_document.py <html>` | de negen metingen |
+| `haal_fonts.py` | de letters opnieuw insluiten. Onderhoud |
+| `keuzekaart.py` | de keuzekaart voor het vragenvuur opnieuw renderen. Onderhoud |
 
 Drie modules staan in `scripts/gedeeld`, want de rapportroute stelt op
 die punten dezelfde vraag en hoort hetzelfde antwoord te krijgen:
@@ -404,8 +407,15 @@ die punten dezelfde vraag en hoort hetzelfde antwoord te krijgen:
 een verwijzing naar `sfnl-html-to-pdf` erbij, en werd daarom niet altijd
 gemaakt. `bouw.py` drukt hem nu zelf, naast het HTML-bestand, en de
 oplevering is dus altijd allebei plus de artboards.
-| `haal_fonts.py` | de letters opnieuw insluiten. Onderhoud |
-| `keuzekaart.py` | de keuzekaart voor het vragenvuur opnieuw renderen. Onderhoud |
+
+**`widget.py` is de tegenhanger van `scripts/rapport/widget.py` en heeft
+met opzet dezelfde vorm.** Eén verschil dat in het script staat
+uitgeschreven: daar ligt er een `.docx`, dus kan de widget lezen wat er
+is en alleen aanbieden wat er ligt; hier is er nog niets en is de eerste
+vraag juist *wat heb je al*. De uitvoer is `opdracht.json` in de werkmap.
+Daar leest geen script uit — de zes besluiten die bij het bouwen gelden
+staan bovenaan `outline.md` — maar hij bewaart de vijf opdrachtantwoorden,
+en die staan nergens anders.
 
 Wat `bouw.py` uit een pagina leest, van het `.pagina`-element:
 

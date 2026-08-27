@@ -55,6 +55,8 @@ Dat zegt of er een browser is (zonder renderer bouw je blind — lees dan **Zond
 onderaan), of `node` en de helper van de `design`-skill er zijn (zonder die twee is er geen
 canvas, maar wel gewoon een document), en of de ingesloten letters er staan.
 
+Daarna is `widget.py` het eerste wat je draait, en niet een outline. Zie stap 1.
+
 `reference/voice.md` gaat over de taal. Lees dat wanneer je de outline schrijft; de regels over
 titels, getallen en herkomst gelden hier net zo goed als op een slide.
 
@@ -111,36 +113,75 @@ pagina staat. Wát er staat, komt van de gebruiker.
 
 Daarna is het vragenvuur van stap 1 het eerste wat je doet, en dat is een poort.
 
-## Stap 1 — Het vragenvuur, en dit is de eerste poort
+## Stap 1 — De widget, en dit is de eerste poort
 
-Tien vragen in twee blokken: vijf over de opdracht, vijf over de vorm. **Leg ze in één keer voor
-en wacht op de antwoorden.** Er wordt niets geschreven voordat ze er zijn — geen outline, geen
-pagina. Wie de tekst eerst schrijft, kiest de vorm al: een document van vier pagina's en een
-document van twaalf zijn niet dezelfde tekst met meer wit ertussen.
+Tien vragen: vijf over de opdracht en vijf over de vorm. Ze gaan **in één keer** en op één
+scherm, en er wordt niets geschreven voordat de antwoorden er zijn — geen outline, geen pagina.
+Wie de tekst eerst schrijft, kiest de vorm al: een document van vier pagina's en een document van
+twaalf zijn niet dezelfde tekst met meer wit ertussen.
 
-**Stuur de keuzekaart mee vóór je de vormvragen stelt.** Dat is
-`assets/documenten/keuzekaarten/vragenvuur.png`: per besluit de opties naast elkaar, echt gezet in
-het documentstijl, met de meting eronder. Stuur het bestand, lees het niet — dan kost het geen
-tokens en ziet de gebruiker waar hij tussen kiest in plaats van vier woorden.
+```bash
+python "${CLAUDE_PLUGIN_ROOT}/scripts/documenten/widget.py" <werkmap> --titel "…"
+```
 
-**Stel de vijf vormvragen daarna met `AskUserQuestion`**, met de optienamen van de kaart zodat
-het beeld en de vraag hetzelfde heten. Dat gaat in twee aanroepen achter elkaar, want het widget
-neemt er vier per keer: eerst de drie die het hele document bepalen (formaat, omvang,
-kleurregister), dan de twee over wat een pagina draagt en hoe het document opent (beeldregister,
-opening). De poort blijft één poort — er wordt niets geschreven voordat beide binnen zijn.
-De vijf opdrachtvragen stel je in gewoon proza in hetzelfde bericht als de kaart.
+Dat schrijft `werkmap/opdrachtwidget.html`: alle tien de vragen op één pagina, met een schets die
+meebeweegt en met de katernsom eronder zodra "gedrukt" op ja staat. `--titel` is optioneel en
+vult alleen het titelveld voor.
 
-Verandert er een optie, dan bouw je de kaart opnieuw met
+**Stuur twee dingen in één bericht.**
+
+1. **De widget** (`werkmap/opdrachtwidget.html`).
+2. **De keuzekaart** `assets/documenten/keuzekaarten/vragenvuur.png`: per besluit de opties naast
+   elkaar, echt gezet in de documentstijl, met de meting eronder. De schets in de widget is een
+   schema en geen zetproef; de kaart is wél met deze skill gezet. **Stuur het bestand, lees het
+   niet** — dan kost het geen tokens en ziet de gebruiker waar hij tussen kiest in plaats van
+   vier woorden.
+
+De gebruiker vult in, drukt op kopiëren en plakt de JSON terug. Schrijf die weg als
+`werkmap/opdracht.json` en **zeg in twee zinnen terug wat erin staat** — dat is de laatste kans om
+een misverstand te zien voordat er een outline ligt.
+
+### `AskUserQuestion` stelt hier geen vormbesluit. Niet één.
+
+Dit is de regel die het vaakst wordt overtreden, en hij staat er expliciet omdat een model dat
+een vragenlijst ziet naar het vragenwidget grijpt. Deze skill dééd dat ook: vijf vormvragen in
+twee `AskUserQuestion`-rondes, met de opdrachtvragen als proza in hetzelfde bericht. Wat de
+gebruiker dan ziet is een tekstblok met vijf vragen, daarna vier knoppen, daarna nog eens twee, en
+op geen enkel moment het geheel. Wie in de tweede ronde bedenkt dat de omvang toch anders moet,
+kan er niet meer bij.
+
+**Zolang `widget.py` draait, gaat er geen enkel vormbesluit door `AskUserQuestion`** — niet als
+losse vraag, niet in twee rondes, en ook niet "even ter bevestiging" nadat de widget terug is. Een
+gebruiker die A5 heeft aangevinkt en daarna gevraagd wordt of hij het zeker weet, neemt hetzelfde
+besluit twee keer en de tweede keer met minder aandacht.
+
+Waar `AskUserQuestion` wél voor is in deze skill: wat de widget niet kán vragen omdat het antwoord
+er nog niet is. De omvang die uit de inhoud volgt en in de outline wordt vastgesteld, een pagina
+waarvoor materiaal ontbreekt, een colofon dat je voorstelt, een label in een infographic dat niet
+past. Dat zijn vragen over déze opdracht en niet over de vorm van elk document.
+
+**De terugvalroute bestaat, en hij begint met een fout uit het script.** Draait `widget.py` niet —
+niet-nul afsluitcode, of er komt geen HTML uit — dan **zet je die foutmelding woordelijk in je
+bericht aan de gebruiker** en stel je de vijf vormbesluiten met `AskUserQuestion` in twee rondes:
+eerst formaat, omvang en kleurregister, dan beeldregister en opening. De vijf opdrachtvragen gaan
+dan als proza in hetzelfde bericht als de kaart. Zonder die foutmelding is er geen terugvalroute.
+
+Verandert er een optie in de skill, dan bouw je de kaart opnieuw met
 `python "${CLAUDE_PLUGIN_ROOT}/scripts/documenten/keuzekaart.py"` — onderhoud, geen bouwstap.
 
-Weet je een antwoord uit de opdracht, vul het dan in als voorstel met de bron erbij. Het staat
-nog steeds in het blok en de gebruiker bevestigt of wijzigt het. Overslaan is geen antwoord.
+Weet je een antwoord uit de opdracht, zet het er dan als voorstel bij met de bron erbij, in het
+bericht naast de widget. De gebruiker bevestigt of wijzigt het in het formulier. Overslaan is geen
+antwoord.
 
 **"Kies jij maar" is een geldig antwoord.** Laat de gebruiker een besluit aan de skill, dan neemt
 de skill het documentbreed, één keer, met de reden erbij bovenaan de outline. Wat er daarna niet
 gebeurt is het besluit per pagina opnieuw nemen.
 
 ### De vijf over de opdracht
+
+Dit zijn de vijf velden in het bovenste blok van de widget — `materiaal`, `lezer`, `gedrukt`,
+`voorbeeld` en `beeldbron`. Hieronder staat waaróm ze er staan en waar je op let in het antwoord;
+gesteld worden ze in het formulier.
 
 - **Wat heb je al?** Een tekst, een notitie, een transcript, een reeks losse punten, of alleen
   een idee. Vraag hiernaar vóór alle andere vragen en vraag door tot je het hebt, want dit is
@@ -166,6 +207,11 @@ gebeurt is het besluit per pagina opnieuw nemen.
   gebalanceerd, en niet beeldgedreven, hoe graag iemand dat ook wil.
 
 ### De vijf over de vorm
+
+Dit zijn de vijf velden in het tweede blok van de widget — `formaat`, `omvang`, `register`,
+`beeldregister` en `opening`, met `accent` en `balkkleur` erbij zodra ze van toepassing zijn. Ze
+staan er allemaal op hun default, dus een gebruiker die alleen het bovenste blok invult krijgt een
+verdedigbaar document. Hieronder staat wat er aan elk besluit hangt.
 
 De volgorde loopt van grof naar fijn. Het formaat bepaalt hoeveel er per pagina in gaat, de
 omvang bepaalt hoeveel pagina's dat zijn, het kleurregister bepaalt hoeveel vlak er staat, het
@@ -270,12 +316,18 @@ voorblad kost er een.
 klein 8 pt, kop 12 pt, titel 20 pt, plus displaymaat op de omslag. En de letters staan vast —
 Montserrat voor de kop, Lato voor het brood. Wie een derde familie wil, wil een andere huisstijl.
 
-**Wat je na dit blok hebt** is een vormbesluit per rij, en dat gaat als eerste blok bovenaan de
-outline mee: per besluit de gekozen waarde, en alleen bij een afwijking van de default de reden.
-Zes regels, in één keer te herlezen — de vijf hierboven plus `gedrukt`, het enige antwoord uit de
-opdrachtvragen dat verderop een script aanstuurt. Deze route kent geen apart besluitenbestand: dat
-blok in `outline.md` is de enige plek waar de zes staan, en een besluit dat daar niet staat,
-bestaat bij het bouwen niet.
+**Wat je na dit blok hebt** is `werkmap/opdracht.json` — de JSON zoals de gebruiker hem heeft
+teruggeplakt, woordelijk weggeschreven. Daaruit gaan zes regels als eerste blok bovenaan de
+outline: per besluit de gekozen waarde, en alleen bij een afwijking van de default de reden. Zes
+regels, in één keer te herlezen — de vijf vormbesluiten plus `gedrukt`, het enige antwoord uit de
+opdrachtvragen dat verderop een script aanstuurt.
+
+**`opdracht.json` is het geheugen en `outline.md` is de bron.** Bij het bouwen leest niets uit die
+JSON: de scripts van deze route lezen het artboard, en `--gedrukt` is de enige vlag die een besluit
+draagt. Het blok in `outline.md` is dus de plek waar de zes gelden, en een besluit dat daar niet
+staat bestaat bij het bouwen niet. De JSON staat er zodat over twee weken nog te zien is wat er
+gevraagd is en wat er is geantwoord — inclusief de vijf opdrachtantwoorden, die nergens anders
+worden bewaard.
 
 ## Stap 2 — De outline, en de tweede poort
 

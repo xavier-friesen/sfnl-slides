@@ -22,7 +22,7 @@ rug.
 
 | | px | mm | waarom |
 |---|---|---|---|
-| marge boven | 76 | 20 | de kopregel staat erin, op 42 px van de snijrand |
+| marge boven | 96 | 25 | de kopregel staat erin, op een vaste 42 px van de snijrand |
 | marge binnen (rug) | 82 | 22 | ruimer dan buiten, want de rug eet marge |
 | marge buiten | 62 | 16 | de folio staat erin |
 | marge onder | **uitgerekend** | | `hoogte − marge-boven − zethoogte` |
@@ -38,11 +38,29 @@ elkaar op dezelfde hoogte eindigen.
 
 | formaat | model | regels | zethoogte | marge onder |
 |---|---|---|---|---|
-| `sfnl` (794 × 1039) | `kantlijn`, `dubbel` | 50 × 17,33 | 867 (gemeten) | 96,5 |
-| `sfnl` | `breed` | 39 × 22 | 858 (gemeten) | 105 |
-| `a4` (794 × 1123) | `kantlijn`, `dubbel` | 55 × 17,33 | 953 | 94 |
-| `a4` | `breed` | 43 × 22 | 946 | 101 |
-| `a4-liggend` (1123 × 794) | alleen `dubbel` | 36 × 17,33 | 624 | 94 |
+| `sfnl` (794 × 1039) | `kantlijn`, `dubbel` | 49 × 17,33 | 849 (gemeten) | 94 |
+| `sfnl` | `breed` | 38 × 22 | 836 (gemeten) | 107 |
+| `a4` (794 × 1123) | `kantlijn`, `dubbel` | 54 × 17,33 | 936 | 91 |
+| `a4` | `breed` | 42 × 22 | 924 | 103 |
+| `a4-liggend` (1123 × 794) | alleen `dubbel` | 35 × 17,33 | 607 | 91 |
+
+**De bovenmarge was 20 mm en is 25 geworden, en dat kostte per formaat
+één regel.** De kopregel staat in die marge, op 42 px van de snijrand; op
+20 mm bleef er tussen de haarlijn en de eerste tekstregel 21 px over, en
+dat is minder dan één regel. Op een pagina die met lopende tekst begint
+valt dat nog mee; op een pagina die met een sectiekop of een tabelkop
+begint staan er twee koppen tegen elkaar aan met een streep ertussen —
+en dat is de gewone pagina in een rapport met veel secties. Eronder
+bijschuiven kan niet: `.is-eerste-in-kader` zet de bovenmarge van het
+eerste blok op nul, want anders eindigen twee pagina's naast elkaar niet
+meer op dezelfde hoogte. Op 25 mm is de lucht 41 px, bijna twee regels
+in het brede model.
+
+De ondermarge staat er nog: de regel die eraf ging, ging van de
+zetspiegel af en niet van de marge. En de regel is terugverdiend — de
+reparatie in `past` (zie §5a) haalt er meer uit dan de marge kost.
+Nagemeten op het AS-IS-rapport, 471 blokken, 18.111 woorden: 81
+pagina's voor en 81 pagina's na.
 
 Drie formaten, en er is geen vierde. `a5` en `dl` uit de documentenskill
 bestaan hier niet: onder A4 is een rapport geen rapport.
@@ -233,6 +251,7 @@ Wat er bovenop `stijl.css` bij komt. Elk tekent één ding.
 | `.citaatblok` | een blok dat in de bron als citaat is opgemaakt | geen aanhalingstekens erbij: dat zou tekst toevoegen |
 | `.pullcitaat` | een citaat uit de tekst, groot gezet | het enige element dat tekst herhaalt, en dus nooit zonder toestemming |
 | `.is-gesplitst-kop` / `--staart` | de twee helften van een gesplitst blok | zet de zetmotor |
+| `.vetkop--rapport` | een alinea die volledig vetgezet is en als tussenkop werkt, gezet mét de lucht van een kop | alleen bij `vetkop: als-kop`; de letter verandert niet |
 | `.is-eerste-in-kader` | het eerste blok van een kader; bovenmarge vervalt | zet de zetmotor |
 
 ### Exhibit en beeld
@@ -292,6 +311,43 @@ de inhoudsopgave. Zie §7d.
 | `.colofon` | de regels van het colofon, klein en onderaan |
 | `.omslag--achter` | het achterblad: hetzelfde vlak als de omslag, met het merk onderaan |
 | `.pagina[data-blanco]` | een blanco pagina die een katern afmaakt. Geen folio, geen kopregel |
+
+---
+
+## 5a. Wat "past" betekent, en wat het niet betekent
+
+Twee metingen, en het verschil ertussen kostte hele pagina's.
+
+`past(kader)` vraagt of er nog plek is en meet `scrollHeight` tegen
+`clientHeight`. Dat getal telt mee wat geen letter is: de ondermarge van
+het laatste kind, en het verschil tussen een regelbox en de letters
+erin. Voor die vraag is dat de goede meting — je wilt niet dat een
+alinea tegen de onderrand aankruipt.
+
+`knippunt` vraagt waar de knip komt en meet de tekstrechthoeken van een
+`Range`. Dat getal telt alleen letters.
+
+Zolang die twee hetzelfde zeggen is er niets aan de hand. Zeggen ze iets
+anders, dan ontstond dit: een alinea van vijftien regels in vijftien
+regels ruimte stak er 2 px uit — regelbox, geen letter. `past` zei
+"vol", dus ging het blok naar de splitser; die zei "past heel" en gaf
+geen knippunt terug; en zonder knippunt verhuist het hele blok. Vijftien
+regels wit achter, midden in een lopend hoofdstuk, zonder klacht en
+zonder klip. Gemeten op het AS-IS-rapport: pagina 18, blok b0072.
+
+Vandaar een derde meting, `inktBuitenKader`, en die staat op precies één
+plek: het moment waarop een blok heel zou verhuizen. Hij meet hetzelfde
+als de splitser — de diepste tekstrechthoek, plus de onderkant van wat
+inkt draagt zonder tekst te zijn: een beeld, een streep, een tabel. En
+één uitzondering: een blok dat zelf een vlak draagt — een paneel met een
+achtergrond, een citaat met een streep — wordt op zijn border box
+beoordeeld, want daar is de rand wél te zien. Valt er niets buiten, dan
+blijft het blok staan.
+
+Lukt het ondanks alles niet, dan is er een klacht `gat-in-de-pagina` met
+het aantal regels wit erin. Dat is geen zetprobleem meer: het blok past
+niet en is niet te splitsen — een figuur van driekwart pagina, een tabel
+die niet breekt — en de keuze wat er dan gebeurt hoort bij de gebruiker.
 
 ---
 
@@ -727,6 +783,7 @@ Eén map per rapport. Wat er in staat en wie het schrijft:
   "taal": "nl",
   "model": "breed",            "register": "helder",
   "formaat": "sfnl",           "opener": "nummer",
+  "kopregel": "beide",         "vetkop": "binden",
   "dichtheid": "gemiddeld",    "bandhoogte": 232,
   "dubbelzijdig": true,        "omslag": true,
   "inhoudsopgave": true,       "inhoudDiepte": 2,
@@ -753,6 +810,8 @@ veiligste stand:
 |---|---|---|
 | `taal` | `"nl"` | de taal waarin het rapport gezet wordt, als ISO-code. Stuurt de afbreking én de woorden die de skill zelf toevoegt. Elke code mag; er is geen lijst om tegen te toetsen. Op de opdrachtregel `--taal`. Zie §9b |
 | `hoofdstuknummers` | `true` | `true` (de skill telt zelf), `false` (geen kicker en geen watermerkcijfer) of `"uit-bron"` (geen kicker, wél een cijfer, en dat cijfer uit de kop). De koptekst verandert in geen van de drie |
+| `kopregel` | `"beide"` | `beide` (verso de rapporttitel, recto de hoofdstuknaam), `rapport` of `hoofdstuk` (één naam op beide zijden), of `geen`. Op een pagina die met een hoofdstukopener begint staat hij nooit — welke opener het ook is, en dat is geen stand maar een regel: daar staat de titel zelf al |
+| `vetkop` | `"binden"` | wat er gebeurt met een alinea die volledig vetgezet is en zich als tussenkop gedraagt. `binden` houdt hem bij zijn tekst en laat hem verder zoals hij in Word stond; `als-kop` geeft hem daarnaast de lucht van een tussenkop; `laten` doet niets, en dan kan er weer een alleen onderaan een pagina komen te staan. In de eerste twee standen draagt hij `data-bindt` in de markup |
 | `omslagveld` | `"oranje"` | het kleurveld van de omslag: `oranje`, `verloop`, `navy`, `violet`, `mint` of `wit`. Gaat vóór het register; zie `rapport-vormentaal.md` §7 |
 | `elementen` | alles `false` | welke van de vier pagina's van het achterwerk erin komen. Zie §7d |
 | `drukklaar` + `katern` | `false`, `4` | of het aantal pagina's moet uitkomen op de pers, en op welk katern. Zie §7e |
@@ -813,10 +872,11 @@ signaal draagt een `groep`:
 In `signalen.json` staan ze in één lijst, met de vormbesluiten vooraan;
 de uitvoer van het script noemt ze apart onder `vormbesluiten`.
 
-De zes vormbesluiten komen alle zes uit één rapport — Engels, 18.043
+Zes van de zeven vormbesluiten komen uit één rapport — Engels, 18.043
 woorden, 522 blokken, 72 eindnoten, vijf bijlagen, zes figuren waarvan
 vier EMF — en ze waren daar alle zes bij het inlezen al te zien. Zie
-`rapport-vormentaal.md` §13.
+`rapport-vormentaal.md` §13. Het zevende, `vetregel-als-kop`, komt uit
+het AS-IS-rapport dat later langskwam.
 
 | soort | wat het ziet | waar de detectie ophoudt |
 |---|---|---|
@@ -826,8 +886,9 @@ vier EMF — en ze waren daar alle zes bij het inlezen al te zien. Zie
 | `beeld-niet-renderbaar` | een beeldformaat dat Chromium niet toont: EMF, WMF, TIFF, EPS, WDP, HDP, PICT | op de extensie; wat er ín het bestand zit, wordt niet gelezen |
 | `beeld-buiten-de-stroom` | media in het `.docx` die door geen enkel blok wordt genoemd — een tekstvak, SmartArt, een figuur in de koptekst | het zegt dat het er is, niet waar het hoort; dat staat nergens in het bestand |
 | `kop-zonder-inhoud` | een kop met niets eronder | meldt **niet** als er een diepere kop volgt — dat is de gewone hoofdstukkop met zijn eerste sectiekop. Zonder die toets gaf het Engelse rapport zes treffers waarvan er één echt was. Twee koppen op het bovenste niveau achter elkaar tellen ook niet: dat is de deeltitel |
+| `vetregel-als-kop` | een alinea die volledig vetgezet is, korter dan 72 tekens, zonder afsluitend leesteken, met een gewone alinea eronder | álle runs met tekst moeten vet zijn — één woord in romein en het is een alinea met nadruk erin. Een noot in de regel sluit hem uit, en een vetgezette regel als laatste blok van een sectie ook: dat is een slotregel en geen kop. Gemeten op het AS-IS-rapport: 28 treffers op 471 blokken, geen valse |
 
-**Elk van de zes komt hoogstens één keer in de lijst**, met zijn
+**Elk van de zeven komt hoogstens één keer in de lijst**, met zijn
 treffers erin. Over vier EMF-figuren valt één besluit te nemen; vier losse regels
 maken van een besluit een lijst, en een lijst wordt overgeslagen. De eis
 die het zwaarst weegt is dat er geen valse bij zitten: een signaallijst
@@ -840,6 +901,15 @@ achttien voorstellen als daarvoor.
 beslissen", elk met wat er gezien is en wat ermee gebeurt, en met één of
 twee voorbeelden uit het document erbij. Zijn er geen bevindingen, dan is
 er geen blok.
+
+**Twee van de zeven hebben een tweede poort achter de widget, en dat is
+met opzet.** `kop-zonder-inhoud` en `vetregel-als-kop` gaan niet alleen
+over de intake: als er in stap 2 niets met ze gebeurt, komt het defect
+tachtig pagina's later terug op de pagina. `qa_rapport.py` meet ze daar
+alsnog — `kop-alleen-op-pagina` voor de eerste, `losse-kop` voor de
+tweede — en die twee blokkeren. Een signaal dat je kunt negeren is geen
+signaal; op het AS-IS-rapport is precies dat gebeurd, en de laatste
+pagina van dat rapport was een titel met 638 pt wit eronder.
 
 ---
 
@@ -948,7 +1018,7 @@ het attribuut te onderscheiden.
 | `widget.py <werkmap>` | de ontwerpwidget voor dít rapport: alle vormbesluiten op één pagina, en alleen wat de bron werkelijk heeft. **Het verplichte beginpunt** | |
 | `citaten.py <werkmap> --naar <stijl>` | het omzettingsplan voor de verwijzingen in `citaten.json`. Draait vóór `bouw.py` | |
 | `tekstcheck.py <html>` | staat er nog precies wat er stond | **ja** |
-| `qa_rapport.py <html>` | veertien metingen; zes ervan blokkeren | **ja** |
+| `qa_rapport.py <html>` | zestien metingen; acht ervan blokkeren | **ja** |
 | `render.py <html>` | contactbladen per twaalf spreads, of één spread, of één pagina | |
 | `keuzekaart.py` | de drie keuzekaarten opnieuw bouwen. Onderhoud | |
 | `artboards.py <html>` | het gezette rapport uit elkaar halen tot `.dc.html`-artboards plus `canvas.json`. `bouw.py` draait hem zelf | |
