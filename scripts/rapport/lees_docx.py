@@ -658,9 +658,8 @@ def lees_markdown(pad: Path) -> tuple[list, dict, dict]:
             continue
         m = re.match(r"^(#{1,6})\s+(.*)$", kaal)
         if m:
-            blokken.append({"soort": "kop", "niveau": len(m.group(1)),
-                            "tekst": m.group(2).strip(),
-                            "runs": _md_runs(m.group(2).strip()), "stijl": ""})
+            blokken.append(_md_blok("kop", m.group(2).strip(),
+                                    niveau=len(m.group(1))))
             i += 1
             continue
         m = re.match(r"^!\[(.*?)\]\((.+?)\)\s*$", kaal)
@@ -675,8 +674,7 @@ def lees_markdown(pad: Path) -> tuple[list, dict, dict]:
             while j < n and regels[j].strip().startswith("|"):
                 cel = [c.strip() for c in regels[j].strip().strip("|").split("|")]
                 if not re.match(r"^[\s:|-]+$", regels[j].strip().strip("|")):
-                    rijen.append({"cellen": [{"delen": [{"runs": _md_runs(c), "tekst": c}],
-                                              "tekst": c, "span": 1} for c in cel],
+                    rijen.append({"cellen": [_md_cel(c) for c in cel],
                                   "kop": len(rijen) == 0})
                 j += 1
             blokken.append({"soort": "tabel", "rijen": rijen})
@@ -701,15 +699,12 @@ def lees_markdown(pad: Path) -> tuple[list, dict, dict]:
                 delen.append(regels[i].strip())
                 i += 1
             tekst = " ".join(delen)
-            blokken.append({"soort": "lijst", "geordend": geordend,
-                            "niveau": 1 if inspring >= 2 else 0,
-                            "tekst": tekst,
-                            "runs": _md_runs(tekst), "stijl": ""})
+            blokken.append(_md_blok("lijst", tekst, geordend=geordend,
+                                    niveau=1 if inspring >= 2 else 0))
             continue
         if kaal.startswith(">"):
             tekst = re.sub(r"^>\s?", "", kaal)
-            blokken.append({"soort": "citaat", "tekst": tekst,
-                            "runs": _md_runs(tekst), "stijl": ""})
+            blokken.append(_md_blok("citaat", tekst))
             i += 1
             continue
         stuk = [kaal]
@@ -719,8 +714,7 @@ def lees_markdown(pad: Path) -> tuple[list, dict, dict]:
             stuk.append(regels[i].strip())
             i += 1
         tekst = " ".join(stuk)
-        blokken.append({"soort": "alinea", "tekst": tekst,
-                        "runs": _md_runs(tekst), "stijl": ""})
+        blokken.append(_md_blok("alinea", tekst))
     return blokken, {}, {}
 
 
@@ -739,6 +733,35 @@ def _md_runs(tekst: str) -> list:
     if pos < len(rest):
         runs.append({"t": rest[pos:]})
     return runs or [{"t": tekst}]
+
+
+def _md_cel(tekst: str) -> dict:
+    """Eén tabelcel, met de tekst uit de runs. Zie `_md_blok`."""
+    runs = _md_runs(tekst)
+    kaal = "".join(r.get("t", "") for r in runs)
+    return {"delen": [{"runs": runs, "tekst": kaal}], "tekst": kaal, "span": 1}
+
+
+def _md_blok(soort: str, tekst: str, **extra) -> dict:
+    """Een markdownblok, met de tekst uit de runs en niet uit de bron.
+
+    `_md_runs` haalt de nadrukmarkering weg — `**zo**` wordt een vette
+    run met `zo` erin — maar `tekst` hield de sterretjes. Dat veld is de
+    vingerafdruk waar `tekstcheck.py` op controleert, dus elke alinea met
+    één vetgezet of cursief woord kwam als `gewijzigd` terug en
+    blokkeerde de oplevering. Op een markdownbron met vier vetgezette
+    tussenkopjes waren dat vier valse blokkades.
+
+    De tekst komt nu uit de runs, en dan zeggen de twee hetzelfde. Wat er
+    niet gebeurt is de sterretjes laten staan: die staan niet op de
+    pagina, dus horen ze niet in de vingerafdruk van wat op de pagina
+    hoort te staan.
+    """
+    runs = _md_runs(tekst)
+    blok = {"soort": soort, "tekst": "".join(r.get("t", "") for r in runs),
+            "runs": runs, "stijl": ""}
+    blok.update(extra)
+    return blok
 
 
 # =====================================================================

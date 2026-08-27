@@ -931,7 +931,16 @@ erbij, zodat de som met een eigen aanname over te doen is. Tussen 6 en 8 pt heet
 wordt niet beoordeeld; dat staat er als `figuur-zonder-detail`.
 
 De rest is een aanwijzing: kijk ernaar en beslis. Voor `vulgraad`, `tekstwand` en `lege-kantlijn`
-weegt de render zwaarder dan het getal. Let bij `vulgraad` op één geval dat er sinds kort vaker
+weegt de render zwaarder dan het getal.
+
+Eén aanwijzing is nieuw en het is er een die je op de render niet ziet: **`vreemd-teken`** — een
+teken dat Lato en Montserrat niet hebben. Chromium zet het dan in een systeemletter, zonder
+melding en zonder leeg vlak. Op het echte rapport stonden er 27 aankruishokjes uit SegoeUISymbol
+op één bijlagepagina en twee pijlen uit Arial op een andere, in een rapport dat verder helemaal in
+Lato staat. Kijk of het teken daar hoort: een aankruishokje in een invulbijlage hoort er, en dan
+is de vraag of je om een variant vraagt die de huisletter wél heeft. De lijst waarop dit gemeten
+wordt is een heuristiek — welke tekens een letter dekt, is in de browser niet te lezen — en dat is
+de reden dat het geen blokkade is. Let bij `vulgraad` op één geval dat er sinds kort vaker
 in zit: de pagina die een gepromoveerd beeld achterlaat, blijft half gevuld. Dat is de prijs van
 een zetting die één keer vooruit loopt, en het is geen fout om te repareren.
 

@@ -1018,7 +1018,7 @@ het attribuut te onderscheiden.
 | `widget.py <werkmap>` | de ontwerpwidget voor dít rapport: alle vormbesluiten op één pagina, en alleen wat de bron werkelijk heeft. **Het verplichte beginpunt** | |
 | `citaten.py <werkmap> --naar <stijl>` | het omzettingsplan voor de verwijzingen in `citaten.json`. Draait vóór `bouw.py` | |
 | `tekstcheck.py <html>` | staat er nog precies wat er stond | **ja** |
-| `qa_rapport.py <html>` | zestien metingen; acht ervan blokkeren | **ja** |
+| `qa_rapport.py <html>` | zestien metingen; acht ervan blokkeren. `losse-kop` en `kop-alleen-op-pagina` zijn de twee die een overgeslagen besluit uit stap 2 terugvinden; `vreemd-teken` is een aanwijzing die je op de render niet ziet | **ja** |
 | `render.py <html>` | contactbladen per twaalf spreads, of één spread, of één pagina | |
 | `keuzekaart.py` | de drie keuzekaarten opnieuw bouwen. Onderhoud | |
 | `artboards.py <html>` | het gezette rapport uit elkaar halen tot `.dc.html`-artboards plus `canvas.json`. `bouw.py` draait hem zelf | |

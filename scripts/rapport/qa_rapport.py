@@ -140,7 +140,7 @@ METING = r"""(cfg) => {
                beeld: [],
                beeldOngemeten: [], contrast: [], maten: {}, inhoud: [],
                legeKantlijn: 0, kantlijnPaginas: 0, tekstwand: 0,
-               accentmerken: []};
+               accentmerken: [], vreemdTeken: []};
 
   const paginas = Array.from(document.querySelectorAll('.pagina'));
 
@@ -435,6 +435,40 @@ METING = r"""(cfg) => {
   });
   uit.tekstwand = Math.max(uit.tekstwand, wandreeks);
 
+  // Een teken dat Lato en Montserrat niet hebben.
+  //
+  // Chromium valt dan stil terug op een systeemletter, en dat is geen
+  // foutmelding en geen leeg vlak: het teken staat er, in een andere
+  // letter, en op een contactblad zie je het niet. Gemeten op het
+  // AS-IS-rapport: 27 keer een aankruishokje uit SegoeUISymbol op
+  // pagina 67 en twee pijlen uit Arial op pagina 71, in een rapport dat
+  // verder helemaal in Lato staat.
+  //
+  // De lijst is een heuristiek en dat staat er zo bij: welke tekens een
+  // letter dekt, is in de browser niet te lezen zonder het fontbestand
+  // te ontleden. Wat hier staat zijn de klassen die een broodletter
+  // gewoonlijk níét dekt — hokjes, vinkjes, pijlen, bollen, sterren,
+  // emoji — plus de tekens die op het proefrapport werkelijk zijn
+  // teruggevallen. Vandaar een aanwijzing en geen blokkade: het is de
+  // gebruiker die weet of dat hokje daar hoort.
+  const VREEMD = /[\u2190-\u21FF\u2460-\u24FF\u25A0-\u27BF\u2B00-\u2BFF\uFE0F]|[\uD83C-\uD83E][\uDC00-\uDFFF]/gu;
+  const tellingen = {};
+  for (const el of document.querySelectorAll('.pagina .kader, .pagina .voetnoten, '
+                                             + '.pagina .kantlijn')) {
+    const treffers = (el.textContent || '').match(VREEMD);
+    if (!treffers) continue;
+    const pag = el.closest('.pagina');
+    const nr = paginas.indexOf(pag) + 1;
+    for (const t of treffers) {
+      const sleutel = t + '|' + nr;
+      tellingen[sleutel] = (tellingen[sleutel] || 0) + 1;
+    }
+  }
+  for (const sleutel of Object.keys(tellingen)) {
+    const deel = sleutel.split('|');
+    uit.vreemdTeken.push({teken: deel[0], pagina: +deel[1], aantal: tellingen[sleutel]});
+  }
+
   // Lettergroottes en te kleine tekst.
   document.querySelectorAll('.pagina p, .pagina li, .pagina td, .pagina th, ' +
       '.pagina h1, .pagina h2, .pagina h3, .pagina span, .pagina figcaption')
@@ -635,6 +669,18 @@ def beoordeel(m: dict) -> dict:
     # "Een kop blijft bij zijn tekst" is een regel van de zetmotor; staat
     # er toch een kop als laatste in zijn kolom, dan heeft die regel niet
     # gewerkt en is dat een defect. Vandaar kritiek en niet aanwijzing.
+    if m.get("vreemdTeken"):
+        soorten = sorted({v["teken"] for v in m["vreemdTeken"]})
+        aanwijzing.append({
+            "soort": "vreemd-teken", "aantal": len(m["vreemdTeken"]),
+            "tekens": soorten[:10],
+            "waar": m["vreemdTeken"][:8],
+            "wat": "een teken dat Lato en Montserrat niet hebben. Chromium zet het "
+                   "in een systeemletter, zonder melding en zonder leeg vlak — op "
+                   "een contactblad zie je het niet, op papier wel. Kijk of het "
+                   "teken daar hoort; zo ja, vraag om een variant die de letter wél "
+                   "heeft, of laat het staan met de wetenschap dat het afwijkt"})
+
     if m["losseKop"]:
         kritiek.append({"soort": "losse-kop", "aantal": len(m["losseKop"]),
                         "waar": m["losseKop"][:6],
