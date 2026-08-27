@@ -1,5 +1,5 @@
 ---
-name: infographic
+name: sfnl-infographic
 description: >
   Bouw een losse infographic in de huisstijl van Social Finance NL: zonder titel, zonder
   omlijning, als SVG of als kant-en-klare PowerPoint-slide — blanco, in de contentzone van een
@@ -12,11 +12,11 @@ description: >
   van deze cijfers", "zet dit in een plaatje", "visualiseer dit", "svg in onze stijl", of
   wanneer iemand een los beeld wil dat in een deck, rapport, Word-document of mail wordt
   geplakt. Het beeld gaat ook rechtstreeks de zusterskills in: als exhibit in een
-  HTML-document van `ontwerp-documenten`, als figuur in een gezet rapport van
-  `rapport-deliverable`, of op een slide van `slides`. Voor een hele presentatie
-  gebruik je `slides`, voor kort drukwerk `ontwerp-documenten`, voor een lang
-  rapport `rapport-deliverable`, voor een rapportspread in Affinity `ontwerp-met-affinity`, en
-  voor een dashboard in de browser `online-design` en voor een werkdocument in Word
+  HTML-document van `sfnl-documenten`, als figuur in een gezet rapport van
+  `sfnl-rapport-deliverable`, of op een slide van `sfnl-slides`. Voor een hele presentatie
+  gebruik je `sfnl-slides`, voor kort drukwerk `sfnl-documenten`, voor een lang
+  rapport `sfnl-rapport-deliverable`, voor een rapportspread in Affinity `sfnl-affinity`, en
+  voor een dashboard in de browser `sfnl-online-design` en voor een werkdocument in Word
   `sfnl-word`.
 ---
 
@@ -50,7 +50,7 @@ is dus `${CLAUDE_PLUGIN_ROOT}/reference/infographic-vormentaal.md`, en `svg.py` 
 `${CLAUDE_PLUGIN_ROOT}/scripts/infographic/`.
 
 **Deze skill deelt zijn plugin met drie andere**, en dat verandert twee dingen ten opzichte van
-de losse versie. De scripts van `slides` liggen ernaast in `${CLAUDE_PLUGIN_ROOT}/scripts/`,
+de losse versie. De scripts van `sfnl-slides` liggen ernaast in `${CLAUDE_PLUGIN_ROOT}/scripts/`,
 dus de PowerPoint-route van stap 4B is er altijd en er is niets op te zoeken. En de huisstijl-
 letters liggen er ook: `assets/documenten/fonts/` draagt Montserrat en Lato als woff2 voor de
 drukroutes, en `svg.py` leest diezelfde bestanden als metriekbron. De regelafbreking is dus
@@ -119,7 +119,7 @@ Weet je een antwoord al uit de opdracht, sla die vraag over. Vraag nooit iets wa
   (vormentaal §1).
 
   **En vraag dóór als die plek een van de zusterskills is.** Komt het beeld in een document van
-  `ontwerp-documenten` of in een rapport van `rapport-deliverable`, dan is dit niet alleen
+  `sfnl-documenten` of in een rapport van `sfnl-rapport-deliverable`, dan is dit niet alleen
   een vraag over de titel maar over het **canvas en de maatladder**: het kader daar is 680, 537
   of 325 px breed, en een beeld dat op 960 pt is getekend krimpt daarin met factor 1,9 — zijn
   labels van 11 pt komen op 5,9 pt uit, onder de leesvloer, zonder dat er iets in de markup
@@ -156,7 +156,7 @@ plattegrond.
      PowerPoint zelf te bewerken. Welk vlak dat wordt, staat in vraag 2: het blanco canvas is
      niet de enige plek waar een infographic op een slide past, en het is vaak de slechtste.
    - *Exhibit in een document of rapport* — het beeld komt in een HTML-document van
-     `ontwerp-documenten` of in een gezet rapport van `rapport-deliverable`. Dat is nog steeds
+     `sfnl-documenten` of in een gezet rapport van `sfnl-rapport-deliverable`. Dat is nog steeds
      een SVG, maar op het canvas van die route en met hún maatladder, en de oplevering is een
      fragment of een figuren-regel in plaats van een los bestand. Kies dit zodra de gebruiker
      zegt dat het beeld in zo'n stuk komt te staan; de rest van de keten staat in
@@ -1005,7 +1005,7 @@ plaatsen:
 
 | doel | oplevering | waarom |
 |---|---|---|
-| `document` | een `.beeldkader` met de SVG **inline** | de artboards van `ontwerp-documenten` zijn met de hand gecomponeerde HTML; tekst blijft tekst en de PDF houdt hem selecteerbaar |
+| `document` | een `.beeldkader` met de SVG **inline** | de artboards van `sfnl-documenten` zijn met de hand gecomponeerde HTML; tekst blijft tekst en de PDF houdt hem selecteerbaar |
 | `rapport` | een **PNG op 2×** plus de regel voor de `figuren`-JSON | `bouw.py` plaatst beeld als `<img src>` uit die JSON; factor 2 is bedoeld voor 192 dpi en blijft onder de krimpgrens van 2,5 |
 | `slide` | een **PNG op 2×** met de breedte in inches erbij | om te plakken. Wil je een slide die in PowerPoint bewerkbaar blijft, dan is dat route 4B en niet dit |
 
@@ -1286,9 +1286,9 @@ en de maatladder komen van de container, niet van dit beeld, en `insluiten.py` r
 past. Bouw je op `CANVAS["breed"]` en plaats je het achteraf, dan gaat er een letter door de
 vloer en ziet niemand het tot het gedrukt is.
 
-**Een deck of document dat een figuur nodig heeft**, komt de andere kant op. `slides`
-escaleert naar deze skill boven twaalf onderdelen op een slide, `ontwerp-documenten` bij een
-beeld dat rekent (§11 van zijn vormentaal), en `rapport-deliverable` bij een figuur die
+**Een deck of document dat een figuur nodig heeft**, komt de andere kant op. `sfnl-slides`
+escaleert naar deze skill boven twaalf onderdelen op een slide, `sfnl-documenten` bij een
+beeld dat rekent (§11 van zijn vormentaal), en `sfnl-rapport-deliverable` bij een figuur die
 uitgerekend moet worden. In alle drie de gevallen begin je hier bij stap 1, met één verschil:
 **de bewering ligt al vast.** Die staat in de titel van de slide of in de kop van de pagina, dus
 de vraag uit de intake is al beantwoord en er komt geen tweede bewering op het beeld — geen
@@ -1296,12 +1296,12 @@ drager en geen sluitregel, tenzij de figuur zonder echt niets zegt.
 
 ## Wat deze skill niet is
 
-Voor een hele presentatie gebruik je **slides**: dat is de skill met het sjabloon, de
+Voor een hele presentatie gebruik je **sfnl-slides**: dat is de skill met het sjabloon, de
 layouts, de titelmodus en de deck-brede besluiten. Voor kort drukwerk in HTML —
-een uitnodiging, een executive summary, een spread — **ontwerp-documenten**, en voor een
-afgerond Word-rapport dat drukklaar moet **rapport-deliverable**; dat zijn de twee zusterskills
-in deze plugin. Voor een rapportspread in Affinity gebruik je **ontwerp-met-affinity**, en voor een
-dashboard of een interactief overzicht in de browser **online-design**, en voor een werkdocument
+een uitnodiging, een executive summary, een spread — **sfnl-documenten**, en voor een
+afgerond Word-rapport dat drukklaar moet **sfnl-rapport-deliverable**; dat zijn de twee zusterskills
+in deze plugin. Voor een rapportspread in Affinity gebruik je **sfnl-affinity**, en voor een
+dashboard of een interactief overzicht in de browser **sfnl-online-design**, en voor een werkdocument
 in Word **sfnl-word**. Deze skill is voor het losse beeld dat in een van die zes komt te staan.
 
 Gaat het om een echte reeks over tijd, een verdeling van meer dan zes categorieën of een

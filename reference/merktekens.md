@@ -435,4 +435,4 @@ een rapport werkt hij, en de kleurdiscipline erin is voorbeeldig — sky is een 
 een geaggregeerd effect, emerald een financiële baat, blauw een stakeholder, en dat houdt hij
 zeventig blokken lang vast. Maar hij is geen slide voor een presentatie en hij hoort niet in
 `assets/maatstaf/`, want als lat voor tekstlast is hij het tegendeel van wat §13 vraagt. Wie hem
-nabouwt bouwt een rapportpagina, en dan is `ontwerp-met-affinity` de skill.
+nabouwt bouwt een rapportpagina, en dan is `sfnl-affinity` de skill.

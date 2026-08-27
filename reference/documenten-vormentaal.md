@@ -313,7 +313,7 @@ hier omdat ze allemaal, stuk voor stuk, de eerste inval zijn.
 Geen paginabibliotheek en geen sjablonen. `stijl.css` geeft het kader, het raster, de maatladder,
 de kleurregels en de merktekens; wat je ermee bouwt is elke pagina opnieuw jouw beslissing.
 
-Dat is een keuze en hij komt uit dezelfde meting als bij `slides`: een route waarin de vorm
+Dat is een keuze en hij komt uit dezelfde meting als bij `sfnl-slides`: een route waarin de vorm
 uit een catalogus wordt gekozen, levert documenten op die geen van alle fout zijn en geen van
 alle goed. Wie zo bouwt, kiest niet meer maar vult in.
 

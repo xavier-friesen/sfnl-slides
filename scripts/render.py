@@ -145,7 +145,7 @@ def render_deck(
     width: int = DEFAULT_WIDTH,
     height: int = DEFAULT_HEIGHT,
 ) -> list[Path]:
-    """Export slides to PNG. `slides` is a list of 1-based slide numbers."""
+    """Export slides to PNG. `sfnl-slides` is a list of 1-based slide numbers."""
     import pythoncom
 
     deck = Path(pptx_path).resolve()

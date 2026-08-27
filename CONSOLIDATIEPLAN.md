@@ -53,23 +53,23 @@ letterfamilie of het logo staat.
 
 ## De namen
 
-De plugin is de namespace, dus een skill wordt aangeroepen als `sfnl-design:slides`. De prefix
+De plugin is de namespace, dus een skill wordt aangeroepen als `sfnl-design:sfnl-slides`. De prefix
 hoefde niet twee keer.
 
 | nu | wordt |
 |---|---|
 | plugin `sfnl-slides` | `sfnl-design` |
-| `sfnl-slides` | `slides` |
-| `sfnl-design-documents` | `ontwerp-documenten` |
-| `sfnl-rapport-opmaak` | `rapport-deliverable` |
-| `sfnl-infographic` | `infographic` |
-| `sfnl-rapport` (org-sync) | `ontwerp-met-affinity` |
+| `sfnl-slides` | `sfnl-slides` (ongewijzigd) |
+| `sfnl-design-documents` | `sfnl-documenten` |
+| `sfnl-rapport-opmaak` | `sfnl-rapport-deliverable` |
+| `sfnl-infographic` | `sfnl-infographic` (ongewijzigd) |
+| `sfnl-rapport` (org-sync) | `sfnl-affinity` |
 | — nieuw | `sfnl-word` |
-| — nieuw | `online-design` |
-| `sfnl-presentation-fixer` (org-sync) | `deck-check` |
+| — nieuw | `sfnl-online-design` |
+| `sfnl-presentation-fixer` (org-sync) | `sfnl-deck-check` |
 
 `rapport` alleen zei niet genoeg — het kon zowel de zetroute als de Affinity-route zijn, dus
-`rapport-deliverable` tegenover `ontwerp-met-affinity`. `online-design` in plaats van `scherm`,
+`sfnl-rapport-deliverable` tegenover `sfnl-affinity`. `sfnl-online-design` in plaats van `scherm`,
 want dat laatste zegt niets tegen wie de skill nog niet kent. En `sfnl-word` houdt zijn prefix:
 het is de enige naam die tegen een bestaande skill aan schuurt (`docx` van Anthropic doet iets
 anders maar heet bijna hetzelfde).
@@ -83,15 +83,15 @@ zijn over alle geïnstalleerde skills samen, dus bezet en verboden: `design`, `d
 
 | skill | status | wat er verandert |
 |---|---|---|
-| `slides` | blijft | beleid komt uit `reference/`, niet uit de skill |
-| `ontwerp-documenten` | blijft | de twee uitbestedingsregels gaan naar de nieuwe skills wijzen |
-| `rapport-deliverable` | blijft | de zetroute, ongewijzigd van werking |
-| `infographic` | al binnen | gedaan in 1.6.0, met `samenstellen.md` en `insluiten.py` |
-| `ontwerp-met-affinity` | verhuist | houdt alleen de Affinity-uitvoering over; maten uit de stramienen |
+| `sfnl-slides` | blijft | beleid komt uit `reference/`, niet uit de skill |
+| `sfnl-documenten` | blijft | de twee uitbestedingsregels gaan naar de nieuwe skills wijzen |
+| `sfnl-rapport-deliverable` | blijft | de zetroute, ongewijzigd van werking |
+| `sfnl-infographic` | al binnen | gedaan in 1.6.0, met `samenstellen.md` en `insluiten.py` |
+| `sfnl-affinity` | verhuist | houdt alleen de Affinity-uitvoering over; maten uit de stramienen |
 | `sfnl-word` | nieuw | de snelle route: tussenproducten, notities, korte analyses |
-| `online-design` | nieuw | HTML dat meegroeit: dashboard, interactief overzicht, artifact |
-| `deck-check` | verhuist | leest het beleid van `slides`, houdt zijn eigen tekstregels |
-| `sfnl-design` (skill) | vervalt | opgesplitst in `sfnl-word` en `online-design` |
+| `sfnl-online-design` | nieuw | HTML dat meegroeit: dashboard, interactief overzicht, artifact |
+| `sfnl-deck-check` | verhuist | leest het beleid van `sfnl-slides`, houdt zijn eigen tekstregels |
+| `sfnl-design` (skill) | vervalt | opgesplitst in `sfnl-word` en `sfnl-online-design` |
 | `sfnl-html-to-pdf` | vervalt | al opgeslokt door `scripts/gedeeld/naar_pdf.py` |
 | `sfnl-excel`, `sfnl-projectplanner` | blijven buiten | ander vak; wel kleuren uit `merk.md` |
 | `sfnl-projectpagina`, `sfnl-referentieslides` | blijven buiten | schrijfskills; vorm uitbesteden aan `sfnl-word` |
@@ -110,18 +110,18 @@ Erin: notitie, memo, korte analyse, verslag, gespreksnotitie, tussenproduct. Gee
 één vraag als er iets echt ontbreekt, anders bouwen.
 
 **De sluitregel is verplicht** en staat onder elke oplevering: *dit is een werkdocument; moet het
-naar buiten, dan wordt het mooier met `ontwerp-documenten` (kort drukwerk, 210 × 275 met snijrand)
-of `rapport-deliverable` (een lang stuk door de zetmotor)*. Zonder die regel wordt de snelle route
+naar buiten, dan wordt het mooier met `sfnl-documenten` (kort drukwerk, 210 × 275 met snijrand)
+of `sfnl-rapport-deliverable` (een lang stuk door de zetmotor)*. Zonder die regel wordt de snelle route
 de gewone route en gaat er een `.docx` naar een fonds.
 
 Eén risico erbij gemeld: een korte analyse die je mailt wil soms PDF zijn. `sfnl-word` krijgt
 daarom een optionele PDF-druk, maar de vorm blijft die van een werkdocument. De opwaardeerroute is
 niet de PDF-knop.
 
-### 2. `ontwerp-met-affinity` voert uit wat de andere skills bepalen
+### 2. `sfnl-affinity` voert uit wat de andere skills bepalen
 
 In de bronskill staan nu eigen maten: 420 × 275 mm, eigen raster, eigen kleurregels, eigen
-typografie. Dat is dezelfde 210 × 275 als `ontwerp-documenten`, maar als spread — twee bestanden
+typografie. Dat is dezelfde 210 × 275 als `sfnl-documenten`, maar als spread — twee bestanden
 die hetzelfde blad beschrijven en dus uit elkaar gaan lopen.
 
 Wat hij leest, afhankelijk van de vraag: een spread of casespread → `reference/rapport-stramien.md`;
@@ -133,7 +133,7 @@ Wat hij zelf houdt: de SDK-preamble en de leesplicht daarvan, de scriptbibliothe
 beoordeling — dat is hier het equivalent van de renderloop.
 
 Wat hij niet doet: een rapport zetten. Loopt het over meer dan een paar pagina's, dan is de
-zetmotor van `rapport-deliverable` beter dan de hand, en dat zegt de skill dan ook.
+zetmotor van `sfnl-rapport-deliverable` beter dan de hand, en dat zegt de skill dan ook.
 
 **En hij is niet aan één paginatype gebonden.** De bronskill droeg een compleet uitgewerkte
 casespread — vijf blokken in vaste volgorde, zeven paspoortvelden, vijf fondsarchetypes. Dat is
@@ -147,9 +147,9 @@ navy niet op elk gekleurd vlak kan. Opnieuw gemeten na de paletmigratie en uitge
 paringstabel in `merk.md` §1 — navy op royal haalt 2,70 en navy op violet 2,86, dus daar staat
 wit; op oranje, grapefruit, emerald en sky staat navy.
 
-### 3. `deck-check` hoort bij `slides`, maar niet in hetzelfde bestand
+### 3. `sfnl-deck-check` hoort bij `sfnl-slides`, maar niet in hetzelfde bestand
 
-Eigen bestand, zelfde familie. `slides` is 836 regels en de fixer 511; samen wordt dat
+Eigen bestand, zelfde familie. `sfnl-slides` is 836 regels en de fixer 511; samen wordt dat
 onleesbaar. En het triggersignaal is een ander: "bouw een deck" tegenover "hier is een deck, check
 het", en één description die beide dekt laat de bouwroute vuren op een upload.
 
@@ -167,7 +167,7 @@ Wat gedeeld wordt is het **beleid**, en daar loopt een scherpe grens:
 
 Bij twijfel: houden. Een regel kwijtraken is erger dan een regel dubbel hebben.
 
-### 4. `online-design` krijgt een harde grens
+### 4. `sfnl-online-design` krijgt een harde grens
 
 Eén pagina, geen buildstap, geen backend. Dit is de skill die het meest gevoelig is voor scope
 creep richting "bouw een React-app", en dat is softwareontwikkeling en geen huisstijlopdracht.
@@ -206,11 +206,11 @@ kleur, blijft dat verschil staan.
 |---|---|---|
 | kleuren, letters, logo | vijf scripts, `stijl.css`, `rapport.css`, twee stramienen | `merk.md` + `merk.py` → `merk.css` |
 | preflight | vier stuks: root, `documenten/`, `infographic/`, `rapport/` | gedeelde kern plus dunne wrappers die hun eigen eisen toevoegen |
-| browserlaag | `scripts/documenten/_browser.py` | `scripts/gedeeld/browser.py`, ook voor `online-design` |
+| browserlaag | `scripts/documenten/_browser.py` | `scripts/gedeeld/browser.py`, ook voor `sfnl-online-design` |
 | metingfonts (`.ttf`, leeg) | `assets/fonts/`, met twee finders: `find_font_file()` in `_deck.py`, `vind_font()` in `svg.py` | één finder in `scripts/gedeeld/fonts.py` |
-| insluitfonts (`.woff2`) | `assets/documenten/fonts/` | blijven staan; `online-design` importeert ze |
-| visuele tweede lezer | `agents/deck-visual-reviewer.md`, alleen decks | zelfde rol voor `ontwerp-documenten`, `rapport-deliverable` en `online-design` |
-| `requirements.txt` | de kop zegt "dependencies for the sfnl-powerpoint scripts" — een andere plugin | rechttrekken, plus wat `sfnl-word` en `online-design` nodig hebben |
+| insluitfonts (`.woff2`) | `assets/documenten/fonts/` | blijven staan; `sfnl-online-design` importeert ze |
+| visuele tweede lezer | `agents/deck-visual-reviewer.md`, alleen decks | zelfde rol voor `sfnl-documenten`, `sfnl-rapport-deliverable` en `sfnl-online-design` |
+| `requirements.txt` | de kop zegt "dependencies for the sfnl-powerpoint scripts" — een andere plugin | rechttrekken, plus wat `sfnl-word` en `sfnl-online-design` nodig hebben |
 | keuzekaarten | drie `keuzekaart.py`'s | **blijven apart.** Ze zijn werkelijk verschillend |
 
 ## Wat het Word-sjabloon oplevert
@@ -254,22 +254,22 @@ Nagemeten op `assets/word/SFNL_Word_sjabloon.dotx` — dit wordt `reference/word
 |---|---|---|
 | **F1** | Merkfeiten op één plek: `merk.md` (gedaan), `merk.py`, gegenereerde `merk.css`, de vijf nieuwe hexwaarden door de vijf scripts en twee stylesheets, de contrastgetallen in de vormentalen, de synccheck in preflight | in uitvoering |
 | **F2** | `sfnl-word`: `word-stramien.md` uit het sjabloon, `scripts/word/`, de snelroute, de brede trigger, het Gotham-besluit, de verplichte sluitregel | in uitvoering |
-| **F3** | `ontwerp-met-affinity`: bron naar binnen, eigen maten eruit, de twee stramienen erin, alleen de SDK-laag over | in uitvoering |
-| **F4** | `online-design`: `online-vormentaal.md` met de donkeremodus-meting, `scripts/online/`, de renderloop in beide thema's, de harde grens | in uitvoering |
-| **F6** | `deck-check`: bron naar binnen, dubbel beleid eruit, de tekstregels compleet erin | in uitvoering |
+| **F3** | `sfnl-affinity`: bron naar binnen, eigen maten eruit, de twee stramienen erin, alleen de SDK-laag over | in uitvoering |
+| **F4** | `sfnl-online-design`: `online-vormentaal.md` met de donkeremodus-meting, `scripts/online/`, de renderloop in beide thema's, de harde grens | in uitvoering |
+| **F6** | `sfnl-deck-check`: bron naar binnen, dubbel beleid eruit, de tekstregels compleet erin | in uitvoering |
 | **F7** | Hernoemen en 2.0.0: de vier bestaande skills, de plugin, alle kruisverwijzingen, README, `plugin.json`, `marketplace.json` | na F1–F6 |
 | **F5** | Intrekken uit de org-sync: `sfnl-design` en `sfnl-html-to-pdf` | **niet vanuit deze repo** |
 
 F5 staat onderaan en met opzet los: die twee skills staan in de org-skillbibliotheek en niet in
 deze repo, dus intrekken gebeurt in de beheeromgeving van de organisatie. Doe het pas nadat
-`sfnl-word` en `online-design` geïnstalleerd zijn, want tot dat moment is `sfnl-design` de enige
+`sfnl-word` en `sfnl-online-design` geïnstalleerd zijn, want tot dat moment is `sfnl-design` de enige
 route naar Word en naar een dashboard.
 
 ## Openstaand
 
-- **De naamgeving is nog niet één conventie.** `ontwerp-documenten` en `ontwerp-met-affinity`
-  beschrijven de handeling, `rapport-deliverable` het product, `online-design` het medium, en
-  `slides`, `infographic` en `deck-check` staan er zonder voorvoegsel. Dat is te verdedigen — elke
+- **De naamgeving is nog niet één conventie.** `sfnl-documenten` en `sfnl-affinity`
+  beschrijven de handeling, `sfnl-rapport-deliverable` het product, `sfnl-online-design` het medium, en
+  `sfnl-slides`, `sfnl-infographic` en `sfnl-deck-check` staan er zonder voorvoegsel. Dat is te verdedigen — elke
   naam zegt wat hij doet — maar het is geen stelsel. Als er één van moet komen, is dat één commit
   extra en het moment is F7.
 - **`agents/deck-visual-reviewer.md` voor de andere media** is benoemd maar niet ingepland.

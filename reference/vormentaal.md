@@ -484,7 +484,7 @@ Een eigen vorm erft geen regelafstand en geen alinea-afstand. Zet beide, en deck
   uit de lijn.
 
 Drie regels over de tekens zelf. Ze stonden hier niet en kwamen uit de opschoningsroute
-(`deck-check`), die ze mechanisch toepast; ze horen hier omdat ze over zetting gaan en niet over
+(`sfnl-deck-check`), die ze mechanisch toepast; ze horen hier omdat ze over zetting gaan en niet over
 opschonen. De titel en de subtitel staan los daarvan in `voice.md` (kapitalen, geen punt, geen
 uitroepteken; de subtitel in zinsvorm).
 
@@ -743,7 +743,7 @@ navigatie.
 | schachtdikte | 1,5pt. 1,0 leest als een schets, 2,0 gaat met de kop van 18pt concurreren |
 | maat naast een kop van 18pt | 0,72 in; in een rij 0,60; als drager van de slide 1,10 |
 | ondergrens | 0,44 in — daaronder lopen de lijnen in elkaar en is een streep of een label beter |
-| bovengrens onderdelen | 12; daarboven is het een tekening en hoort het in `infographic` |
+| bovengrens onderdelen | 12; daarboven is het een tekening en hoort het in `sfnl-infographic` |
 | vulling | geen, met één uitzondering: één gevulde stip als het centrum iets betekent |
 
 **De hue: navy, tenzij de kleur iets codeert.** Een icoonlijn van 1,5pt in oranje haalt 2,6 op wit

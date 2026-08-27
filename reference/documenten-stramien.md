@@ -233,7 +233,7 @@ niet.
 | `.titelbalk` | een titel op een aflopende band bovenaan — de dektitel op pagina 1, of een hoofdstuknaam | zet `--balk` op de `.pagina`, niet op de balk. `data-veld` kiest de kleur én de inkt |
 | `.beeldkader` | de gereserveerde plek voor een infographic of foto | verhouding inline met `aspect-ratio`; zonder opgaaf 3:2 |
 | `.beeldkader--leeg` | er hoort hier beeld en het is er nog niet | met `data-wat="…"`; `qa_document.py` telt wat je hebt laten staan |
-| `.omslag` + `__boven/__midden/__onder`, `__titel`, `__onderschrift`, `__regel` | het voorblad | het enige paginatype met een eigen klasse, gedeeld met `rapport-deliverable`. Drie zones met een vaste rangorde; zie *Het voorblad* |
+| `.omslag` + `__boven/__midden/__onder`, `__titel`, `__onderschrift`, `__regel` | het voorblad | het enige paginatype met een eigen klasse, gedeeld met `sfnl-rapport-deliverable`. Drie zones met een vaste rangorde; zie *Het voorblad* |
 
 Structuur en zetting:
 
@@ -268,7 +268,7 @@ vragenvuur.
 
 | opening | hoe je hem bouwt |
 |---|---|
-| **voorblad** | een hele pagina, gebouwd met `.omslag` — het enige paginatype met een eigen klasse, en hetzelfde merkteken dat `rapport-deliverable` voor zijn omslag gebruikt. Zie *Het voorblad* hieronder |
+| **voorblad** | een hele pagina, gebouwd met `.omslag` — het enige paginatype met een eigen klasse, en hetzelfde merkteken dat `sfnl-rapport-deliverable` voor zijn omslag gebruikt. Zie *Het voorblad* hieronder |
 | **titelbalk** | `<header class="titelbalk" data-veld="oranje">` als broer van de zetspiegel, en `--balk` op de `.pagina` |
 | **gewoon titel** | `.titel` in de zetspiegel, met `.streep` eronder |
 

@@ -22,7 +22,7 @@ aan te pas komt én die je op geen enkele render ziet:
 * **wit-op-oranje** — dezelfde meting, met een eigen naam en een eigen reden.
   `merk.md` §4 staat wit op oranje in drukwerk uitdrukkelijk toe, en dat is de
   ene plek waar 2,51 een merkbesluit is in plaats van een fout. Op een scherm
-  erft `online-design` die uitzondering niet, en dan is het handig dat de
+  erft `sfnl-online-design` die uitzondering niet, en dan is het handig dat de
   melding dát zegt in plaats van alleen een getal.
 * **klip** — tekst die door `overflow: hidden` of `clip` wegvalt en die niemand
   kan terugscrollen. Er is dus tekst verdwenen.
@@ -401,7 +401,7 @@ METING = r"""(inv) => {
         uit.bevindingen.push({soort: 'wit-op-oranje', ernst: 'critical', el: naam,
           wat: `${naam} zet witte tekst op een oranje vlak: ${slechtste.toFixed(2)}. ` +
                `merk.md §4 staat dat in drukwerk toe (de lessenband van de ` +
-               `casespread doet het), maar op een scherm erft online-design die ` +
+               `casespread doet het), maar op een scherm erft sfnl-online-design die ` +
                `uitzondering niet — hier is 4,5 voor lopende tekst en 3,0 voor ` +
                `grote tekst een blokkade. Navy op oranje haalt 6,29`,
           tekst: tekst.slice(0, 50)});

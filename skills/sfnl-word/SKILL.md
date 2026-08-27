@@ -12,8 +12,8 @@ description: >
   niet gedrukt hoeft te worden, en op het aanleveren van een `.docx` of `.dotx` waarvan de
   opmaak op SFNL moet lijken. Werkt alleen in Claude Code, want hij leunt op scripts en het
   Word-sjabloon. Een echt drukwerkstuk — uitnodiging, one-pager, executive summary — is
-  `ontwerp-documenten`; een lang aangeleverd rapport is `rapport-deliverable`; een presentatie
-  is `slides`; één los beeld is `infographic`.
+  `sfnl-documenten`; een lang aangeleverd rapport is `sfnl-rapport-deliverable`; een presentatie
+  is `sfnl-slides`; één los beeld is `sfnl-infographic`.
 ---
 
 # SFNL-word
@@ -257,8 +257,8 @@ suggestie, niet weggelaten omdat het gesprek al lang is. Er is geen stand waarin
 overslaat.
 
 > Dit is een werkdocument. Moet het naar buiten, dan wordt het mooier met
-> `ontwerp-documenten` (kort drukwerk, 210 × 275 mm met snijrand) of met
-> `rapport-deliverable` (een lang stuk door de zetmotor).
+> `sfnl-documenten` (kort drukwerk, 210 × 275 mm met snijrand) of met
+> `sfnl-rapport-deliverable` (een lang stuk door de zetmotor).
 
 De reden dat dit een regel is en geen beleefdheid: zonder die regel wordt de snelle route de
 gewone route. Iemand vraagt een notitie, krijgt een net `.docx`, vindt het goed genoeg, en
@@ -322,19 +322,19 @@ terug met andere stijlen erin.
 ## Wat deze skill niet is
 
 - **Geen drukwerk.** Een uitnodiging, een one-pager, een executive summary of een
-  programmaboekje is een vast blad met een snijrand, en dat is `ontwerp-documenten`. Het
+  programmaboekje is een vast blad met een snijrand, en dat is `sfnl-documenten`. Het
   verschil is niet de kwaliteit maar het formaat: dit is A4 met 25,4 mm marges rondom, en dat
   is briefpapier.
 - **Geen rapport.** Loopt het over meer dan een paar pagina's, of is de tekst al geschreven en
-  moet hij alleen nog gezet worden, dan is de zetmotor van `rapport-deliverable` beter dan de
+  moet hij alleen nog gezet worden, dan is de zetmotor van `sfnl-rapport-deliverable` beter dan de
   hand.
-- **Geen presentatie.** Een deck, slides of een pitch is `slides`.
+- **Geen presentatie.** Een deck, slides of een pitch is `sfnl-slides`.
 - **Geen los beeld.** Eén infographic die in een deck, een mail of dit document wordt geplakt,
-  is `infographic`. Deze skill zet geen beeld in het document: een `.docx` met een ingesloten
+  is `sfnl-infographic`. Deze skill zet geen beeld in het document: een `.docx` met een ingesloten
   SVG is geen werkdocument meer, en een PNG erin maakt het bestand groot en de tekst
   onbewerkbaar rond het beeld.
 - **Geen dashboard.** Iets interactiefs dat in de browser blijft en meegroeit met het scherm,
-  is `online-design`.
+  is `sfnl-online-design`.
 - **Geen Excel.** Een rekenmodel, een businesscase of een planner is `sfnl-excel` of
   `sfnl-projectplanner`. Een tabel van vier rijen in een notitie hoort hier; een tabel waar
   iemand in gaat rekenen hoort daar.

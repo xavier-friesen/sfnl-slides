@@ -5,7 +5,7 @@
 
 **Deze map heet `documenten/` maar is inmiddels van drie skills.** Naast `fonts.css` voor de
 twee HTML-drukroutes zijn de losse woff2-bestanden hiernaast de **metriekbron** van
-`infographic`: `vind_font()` in `scripts/infographic/svg.py` leest ze met fontTools, want
+`sfnl-infographic`: `vind_font()` in `scripts/infographic/svg.py` leest ze met fontTools, want
 een woff2 is een gecomprimeerde TrueType. Daardoor breekt een infographic uit de doos op echte
 metriek af, ook op een machine zonder systeemfonts en zonder netwerk, en `render_svg.py` sluit
 `fonts.css` in zodat zijn render dezelfde letters zet als een document. Twee dingen om te weten

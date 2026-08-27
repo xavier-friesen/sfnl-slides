@@ -1,4 +1,4 @@
-# De maatstaf voor `online-design`
+# De maatstaf voor `sfnl-online-design`
 
 Eén gebouwd SFNL-scherm, gerenderd in beide thema's op twee breedtes. Dit is waar de lat ligt.
 
@@ -59,7 +59,7 @@ letters, en het is uit het fragment in één opdracht terug te maken.
   wanneer het geen grafiek is maar een kerncijfer: dat staat in de `dataviz`-skill. Wat je hier
   ziet zijn de SFNL-parameters in die methode.
 - **Geen drukwerk.** Dit scherm drukt netjes af via `scripts/gedeeld/naar_pdf.py`, en dat is een
-  afdruk van een scherm. Moet het gedrukt worden, dan is dat `ontwerp-documenten` — daar zit de
+  afdruk van een scherm. Moet het gedrukt worden, dan is dat `sfnl-documenten` — daar zit de
   snijrand, het formaat en de katernsom.
 
 ## Wat er op de renders is gerepareerd, en in welke ronde

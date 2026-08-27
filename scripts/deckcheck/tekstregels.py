@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""De tekstregels van `deck-check`: wat er aan een regel tekst verandert, en wat niet.
+"""De tekstregels van `sfnl-deck-check`: wat er aan een regel tekst verandert, en wat niet.
 
 Dit is de kern van de skill en de enige plek waar hij staat. `reference/voice.md` zegt
 wat er op een slide hóórt te staan (titels in kapitalen zonder punt, typografische

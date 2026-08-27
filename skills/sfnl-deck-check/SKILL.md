@@ -1,5 +1,5 @@
 ---
-name: deck-check
+name: sfnl-deck-check
 description: >
   Controleer en schoon een bestaande PowerPoint van Social Finance NL op: tekst,
   interpunctie, spelling, consistentie en huisstijl, en lever een opgeschoond .pptx
@@ -10,7 +10,7 @@ description: >
   hier", of iets met SFNL of Social Finance NL combineert met nakijken, controleren,
   opschonen of corrigeren. Ook bij een deck dat niet uit het SFNL-sjabloon komt.
   **Niet** voor het maken van een deck: "maak een presentatie", "bouw een deck",
-  "nieuwe slides" en "voeg een slide toe" gaan naar de skill `slides`, die een deck
+  "nieuwe slides" en "voeg een slide toe" gaan naar de skill `sfnl-slides`, die een deck
   uit het sjabloon bouwt. Deze skill verandert tekst en meldt vorm; hij ontwerpt niets.
 ---
 
@@ -296,7 +296,7 @@ eenvormigheid over de deck.
 
 **En hier repareer je niets zonder te vragen.** Zie je een compositie die anders moet, dan is
 dat een herbouw en geen opschoning: meld het, met de slide erbij en wat er zou moeten gebeuren,
-en laat de gebruiker kiezen. Zegt hij ja, dan is `slides` aan zet — die skill bouwt de
+en laat de gebruiker kiezen. Zegt hij ja, dan is `sfnl-slides` aan zet — die skill bouwt de
 contentzone en kent de vormentaal die erbij hoort. Deze skill verandert geen geometrie, geen
 kleur, geen maat en geen layout.
 
@@ -338,7 +338,7 @@ geen ervan gaat over vormgeving — dat oordeel komt van de render.
 3. **`qa_text.py` meldt een `critical`** op het opgeschoonde deck: een restplaceholder, een
    `{{MARKER}}`, een sjabloonprompt, een slide zonder inhoud, Gotham Bold in de contentzone, of
    autofit die de tekst stil mag krimpen. Dat laatste is geen opschoningsvraag maar een
-   bouwvraag; meld het en laat de gebruiker kiezen of `slides` het repareert.
+   bouwvraag; meld het en laat de gebruiker kiezen of `sfnl-slides` het repareert.
 4. **Er staat een open opmerking in het bestand.** Dat blokkeert de oplevering niet, maar het
    blokkeert wél de bewering dat het deck klaar is: noem ze, met slide en tekst, en zeg dat er
    iemand over moet beslissen.
@@ -356,7 +356,7 @@ opschonen is geen probleem; blind opschonen zonder het te zeggen is dat wel.
 ## Wat deze skill niet is
 
 - **Geen bouwskill.** Een deck maken, slides toevoegen, een contentzone componeren: dat is
-  `slides` (het bestand heet nu nog `skills/slides/SKILL.md`), die uit het sjabloon bouwt
+  `sfnl-slides` (het bestand heet nu nog `skills/sfnl-slides/SKILL.md`), die uit het sjabloon bouwt
   en de vormentaal uitvoert. Vraagt de gebruiker om nieuwe
   slides, dan verwijs je daarnaar in plaats van hier iets te tekenen.
 - **Geen vormgevingspolitie.** Er komt geen script dat compositie afkeurt. De vlaggen zijn

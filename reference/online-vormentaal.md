@@ -542,7 +542,7 @@ Geen dashboardbibliotheek en geen sjablonen. `assets/online/stijl.css` geeft de 
 thema's, het raster, de maatladder, de kleurregels en de merktekens; wat je ermee bouwt is elke
 keer opnieuw jouw beslissing. Er zit geen `.kpi-rij` in en geen `.sidebar`.
 
-Dat is dezelfde keuze als bij `slides` en `ontwerp-documenten`, en hij komt uit dezelfde meting:
+Dat is dezelfde keuze als bij `sfnl-slides` en `sfnl-documenten`, en hij komt uit dezelfde meting:
 een route waarin de vorm uit een catalogus wordt gekozen, levert pagina's op die geen van alle fout
 zijn en geen van alle goed. Wie zo bouwt, kiest niet meer maar vult in.
 

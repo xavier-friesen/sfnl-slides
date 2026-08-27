@@ -40,7 +40,7 @@ deck.pdf
 !assets/proeven/*.png
 !assets/keuzekaarten/*.png
 
-# Hetzelfde voor ontwerp-documenten: de maatstaf zijn vier gerenderde pagina's plus het
+# Hetzelfde voor sfnl-documenten: de maatstaf zijn vier gerenderde pagina's plus het
 # contactblad, en de keuzekaart is het beeld dat bij het vragenvuur meegaat. Beide worden
 # uit stijl.css gerenderd en beide horen in de repo, want anders stuurt de skill een
 # bestand mee dat er niet is.
@@ -54,7 +54,7 @@ deck.pdf
 !assets/infographic/maatstaf/*.png
 !assets/infographic/vormen/*.png
 
-# En hetzelfde voor rapport-deliverable: vier gezette pagina's als maatstaf en drie
+# En hetzelfde voor sfnl-rapport-deliverable: vier gezette pagina's als maatstaf en drie
 # keuzekaarten die met het vragenvuur meegaan. De kaarten worden door keuzekaart.py uit
 # dezelfde pijplijn gebouwd als een echt rapport, dus ze horen in de repo — anders stuurt
 # de skill drie bestanden mee die er niet zijn, en dat is precies het beeld waar de

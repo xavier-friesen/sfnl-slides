@@ -16,7 +16,7 @@ oplevering zegt, en alle drie zijn ze van een andere laag:
   andere host, en zonder internet valt de pagina terug op Helvetica.
 
 Wat hier met opzet níet in staat: `node` en de canvashelper van de
-`design`-skill. Die route hoort bij `ontwerp-documenten`, waar een pagina een
+`design`-skill. Die route hoort bij `sfnl-documenten`, waar een pagina een
 blad is dat je met de muis kunt aanschuiven. Een scherm lever je op als één
 bestand of als artifact.
 
@@ -108,7 +108,7 @@ def main() -> int:
     def regel(naam: str, ok: bool, extra: str = "") -> None:
         print(f"  {'ja ' if ok else 'NEE'}  {naam:<14} {extra}")
 
-    print("preflight — online-design\n")
+    print("preflight — sfnl-online-design\n")
     regel("renderer", r["renderer"]["ok"], r["renderer"]["info"])
     regel("merkblok", r["merkblok"]["ok"], r["merkblok"]["info"])
     regel("letters", r["letters"]["ok"], f"{r['letters']['kb']} kB ingesloten")

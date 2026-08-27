@@ -10,7 +10,7 @@ zetmotor te openen.
 
 Dit script maakt van het ene het andere. Elke `.pagina` uit het gebouwde
 rapport wordt een artboard in precies dezelfde vorm die
-`ontwerp-documenten` gebruikt — dezelfde `<x-dc>`-omhulling, dezelfde
+`sfnl-documenten` gebruikt — dezelfde `<x-dc>`-omhulling, dezelfde
 `<helmet>` met de stijl erin, dezelfde `canvas.json`. Dat is met opzet:
 de twee routes leveren hetzelfde soort ding op en een pagina uit een
 rapport hoort in hetzelfde canvas te kunnen liggen als een pagina uit een

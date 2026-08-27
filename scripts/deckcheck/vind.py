@@ -13,7 +13,7 @@ PowerPoint-plugin schrijft het actieve document naar een vaste map (en zet soms
 `CLAUDE_PPTX_PATH`), Claude.ai en Cowork zetten een upload in `/mnt/user-data/uploads/`,
 en in een projectmap ligt hij gewoon ergens. Wie dat niet in één keer nakijkt, vraagt de
 gebruiker om een bestand dat hij al heeft aangeleverd. Dat is de eerste stap van
-`deck-check` en de reden dat hij mechanisch is.
+`sfnl-deck-check` en de reden dat hij mechanisch is.
 
 De uitkomst is compacte JSON:
 

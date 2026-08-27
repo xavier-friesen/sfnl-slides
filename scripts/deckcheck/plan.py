@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""PLAN en GLOBAL van `deck-check`: lees de deck, schrijf niets, plan alles.
+"""PLAN en GLOBAL van `sfnl-deck-check`: lees de deck, schrijf niets, plan alles.
 
 Usage:
     python plan.py <deck.pptx>

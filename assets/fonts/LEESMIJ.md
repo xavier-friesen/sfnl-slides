@@ -40,7 +40,7 @@ Twee dingen om te weten:
   de fonts wél goed zette.
 - **Gotham Bold zal vrijwel nooit meetbaar zijn.** Titelregels worden daar dus geschat.
   Dat is te dragen zolang je het tekenbudget van de titel aanhoudt — op 24pt Gotham Bold over
-  12,52 in gaat er ongeveer 48 tekens op een regel (`skills/slides/SKILL.md`, stap 2) — en
+  12,52 in gaat er ongeveer 48 tekens op een regel (`skills/sfnl-slides/SKILL.md`, stap 2) — en
   een titel korter schrijft in plaats van een font te verkleinen.
 
 Ontbreken de fonts op een Linux-machine, dan substitueert de renderer ze. Een

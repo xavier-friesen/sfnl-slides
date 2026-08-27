@@ -126,7 +126,7 @@ def main() -> int:
     def regel(naam: str, ok: bool, extra: str = "") -> None:
         print(f"  {'ja ' if ok else 'NEE'}  {naam:<16} {extra}")
 
-    print("preflight — ontwerp-documenten\n")
+    print("preflight — sfnl-documenten\n")
     regel("node", r["node"]["ok"], f"{r['node']['versie']} {r['node']['pad'] or ''}")
     regel("renderer", r["renderer"]["ok"], r["renderer"]["info"])
     regel("design-helper", r["design_helper"]["ok"], r["design_helper"]["pad"] or

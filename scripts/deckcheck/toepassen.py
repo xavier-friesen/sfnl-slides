@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""APPLY van `deck-check`: voer het plan uit en lever de twee bestanden op.
+"""APPLY van `sfnl-deck-check`: voer het plan uit en lever de twee bestanden op.
 
 Usage:
     python toepassen.py <deck.pptx> --plan plan.json --uit opgeschoond.pptx \

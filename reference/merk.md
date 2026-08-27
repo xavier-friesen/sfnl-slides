@@ -188,7 +188,7 @@ eigen bovenop.
   kunnen volgen — daar staat navy, en anders staat het niet op oranje.
 - **Op een scherm geldt die uitzondering niet.** Op papier kun je 2,51 verdedigen als merkteken:
   de lezer houdt het blad zelf schuiner, groter of dichterbij. In een browser met een screenreader
-  en een toetsenbord is het een toegankelijkheidsfout die niemand voor je opvangt. `online-design`
+  en een toetsenbord is het een toegankelijkheidsfout die niemand voor je opvangt. `sfnl-online-design`
   erft de uitzondering daarom niet, en daar is 4,5 voor lopende tekst en 3,0 voor grote tekst een
   blokkade en geen aanwijzing.
 

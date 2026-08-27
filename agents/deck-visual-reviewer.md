@@ -342,9 +342,9 @@ deze vraag apart staat.
 Zeg ook wat je zou meenemen: welke slide is de sterkste van dit deck, en waarom. Dat maakt het
 oordeel navolgbaar en het geeft de bouwer de vorm waar hij naartoe kan werken.
 
-### 8. Escalatie naar `infographic`
+### 8. Escalatie naar `sfnl-infographic`
 
-Er is een tweede skill die één beeld op maat bouwt, `infographic`. Die kost een aparte
+Er is een tweede skill die één beeld op maat bouwt, `sfnl-infographic`. Die kost een aparte
 ronde en een aparte agent, dus hij wordt nooit ongevraagd ingezet en er is geen bovengrens per
 deck. Jij stelt hem niet in werking; je wijst kandidaten aan en de skill legt het aan de
 gebruiker voor, met de kosten erbij.

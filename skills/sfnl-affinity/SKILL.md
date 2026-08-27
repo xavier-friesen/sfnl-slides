@@ -1,5 +1,5 @@
 ---
-name: ontwerp-met-affinity
+name: sfnl-affinity
 description: >
   Bouw en beoordeel drukwerk in de huisstijl van Social Finance NL rechtstreeks in Affinity
   (Publisher, Designer of Photo) via de Affinity MCP-connector — een rapportpagina, een
@@ -14,9 +14,9 @@ description: >
   combineert met Affinity, en op de situatie dat er een Affinity-document open staat en er
   iets aan het formaat, het raster of de opmaak moet gebeuren. Vereist dat
   Affinity draait op de machine van de gebruiker (versie april 2026 of later) met MCP aan;
-  draait het niet, dan is er geen route en bied je `ontwerp-documenten` aan. Voor PowerPoint
-  ga je naar `slides`, voor drukwerk in HTML naar `ontwerp-documenten`, voor een lang
-  aangeleverd rapport naar `rapport-deliverable`, voor één los beeld naar `infographic`.
+  draait het niet, dan is er geen route en bied je `sfnl-documenten` aan. Voor PowerPoint
+  ga je naar `sfnl-slides`, voor drukwerk in HTML naar `sfnl-documenten`, voor een lang
+  aangeleverd rapport naar `sfnl-rapport-deliverable`, voor één los beeld naar `sfnl-infographic`.
 ---
 
 # Ontwerp met Affinity
@@ -75,7 +75,7 @@ de instellingen. De tools heten `mcp__Affinity__*` en moeten mogelijk eerst via 
 worden geladen.
 
 Krijg je een foutmelding dat de app niet draait of dat MCP uitstaat, dan is er geen route. Meld
-dat, en bied `ontwerp-documenten` aan — **niet als tweede keus maar als het antwoord op een
+dat, en bied `sfnl-documenten` aan — **niet als tweede keus maar als het antwoord op een
 andere vraag.** Die route levert bewerkbaar HTML plus een PDF met de letters ingesloten en een
 canvas om met de muis aan te schuiven; deze route levert een Affinity-bestand dat de gebruiker
 zelf verder opmaakt. Wie het eerste wil, wil deze skill niet.
@@ -503,7 +503,7 @@ zoek het op voordat je het toezegt, en zeg anders dat de gebruiker het bij de ex
 ## Wat deze skill niet is
 
 - **Geen zetmachine.** Dit is het grote punt. Loopt het stuk over meer dan een paar pagina's,
-  dan is de zetmotor van `rapport-deliverable` beter dan de hand, en dat is geen kwestie van
+  dan is de zetmotor van `sfnl-rapport-deliverable` beter dan de hand, en dat is geen kwestie van
   smaak. Die motor splitst een alinea op de regelgrens, houdt weduwen en wezen tegen, houdt een
   kop bij zijn tekst, zet een voetnoot op de pagina waar zijn verwijzing staat, en levert een
   inhoudsopgave met paginanummers die uit de zetting komen in plaats van uit een schatting. Dat
@@ -511,11 +511,11 @@ zoek het op voordat je het toezegt, en zeg anders dat de gebruiker het bij de ex
   pagina coördinaten plaatst. Zeg het met zoveel woorden tegen de gebruiker: voor een lang
   rapport is Affinity de verkeerde route, en hij verliest er kwaliteit op in plaats van dat hij
   hem wint.
-- **Geen presentatie.** Een deck, slides of een pitch is `slides`.
+- **Geen presentatie.** Een deck, slides of een pitch is `sfnl-slides`.
 - **Geen HTML-drukwerk.** Een uitnodiging, one-pager of executive summary die bewerkbaar moet
-  zijn en als PDF de deur uit gaat, is `ontwerp-documenten` — ook wanneer Affinity niet draait.
+  zijn en als PDF de deur uit gaat, is `sfnl-documenten` — ook wanneer Affinity niet draait.
 - **Geen los beeld.** Eén infographic die in een deck, een rapport of een mail wordt geplakt, is
-  `infographic`.
+  `sfnl-infographic`.
 - **Geen schrijfopdracht.** Is er nog geen tekst, alleen een idee of een stapel notities, dan is
   schrijven de opdracht en niet de opmaak. Een spread opmaken uit niets betekent dat het model
   de inhoud verzint.
