@@ -395,6 +395,7 @@ class Stroom:
         #: terechtkomen.
         self.bronregels: set = set()
         self.extra_beeld: dict = {}
+        self.beeld_geplaatst: set = set()
         self.beeld_zonder_plek: list = []
         self.paginateksten: dict = {}
         self.paginas_zonder_tekst: list = []
@@ -681,16 +682,43 @@ class Stroom:
                     and self.o.get("noten") == "eindnoot-hoofdstuk"):
                 self.regels.append(self._notenblok(self.L["noten_hoofdstuk"]))
 
+            # Een lijst en een bronnenlijst worden in één keer verzet:
+            # `_lijst` en `_bronnenlijst` eten de hele reeks op en geven
+            # de nieuwe index terug. Dat betekende dat een aangeleverd
+            # beeld dat achter een lijstregel hoorde nergens terechtkwam
+            # — niet geplaatst, en ook niet gemeld, want de melding hing
+            # aan een ontbrekende `na` en die stond er wél. Op de
+            # maatstafzetting was dat precies het geval: het beeld hoorde
+            # achter de laatste bullet en de vier pagina's kwamen eruit
+            # zonder figuur. Vandaar dat de reeks nu wordt onthouden en
+            # het beeld erachteraan komt.
             if b["id"] in self.bronregels:
+                begin = i
                 i = self._bronnenlijst(blokken, i)
+                self._beeld_na_reeks(blokken[begin:i])
                 continue
             if soort == "lijst":
+                begin = i
                 i = self._lijst(blokken, i)
+                self._beeld_na_reeks(blokken[begin:i])
                 continue
             self.regels.append(self._blok(b))
             for extra in self.extra_beeld.get(b["id"], []):
                 self.regels.append(self._aangeleverd_beeld(extra))
+                self.beeld_geplaatst.add(id(extra))
             i += 1
+
+        # En dan de vangnetmelding: een aangeleverd beeld dat een `na`
+        # heeft die in het document niet voorkomt, of dat langs een blok
+        # is gevallen dat de stroom anders verwerkt. Zonder deze telling
+        # verdwijnt zo'n figuur stil, en dat is de faalwijze die deze
+        # skill nergens toestaat: de gebruiker heeft een bestand
+        # aangeleverd en krijgt een rapport zonder.
+        for na, items in self.extra_beeld.items():
+            for item in items:
+                if id(item) not in self.beeld_geplaatst:
+                    self.beeld_zonder_plek.append(
+                        f'{item.get("bestand", "?")} (na {na})')
 
         # Wat er aan het eind nog open staat.
         if self.o.get("noten") in ("eindnoot-hoofdstuk", "eindnoot-rapport"):
@@ -806,6 +834,18 @@ class Stroom:
         self.regels.append(
             f'<div class="bronnenlijst" data-stijl="{stijl}">{"".join(regels)}</div>')
         return j
+
+    def _beeld_na_reeks(self, reeks: list) -> None:
+        """De beelden die achter een blok uit deze reeks horen, erachteraan.
+
+        In leesvolgorde, en achter de hele reeks in plaats van tussen twee
+        lijstregels: een figuur midden in een opsomming breekt de lijst in
+        twee stukken en dat is een andere lijst dan de auteur schreef.
+        """
+        for blok in reeks:
+            for extra in self.extra_beeld.get(blok["id"], []):
+                self.regels.append(self._aangeleverd_beeld(extra))
+                self.beeld_geplaatst.add(id(extra))
 
     def _aangeleverd_beeld(self, item: dict) -> str:
         """Een beeld dat de gebruiker apart heeft aangeleverd.

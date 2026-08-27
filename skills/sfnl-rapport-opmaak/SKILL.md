@@ -522,6 +522,14 @@ er niet is, betekent bronregels schrijven, en dat doet deze skill niet.
     waar het hoort.** Een figuur zonder plek wordt niet geplaatst en komt in het bouwverslag als
     `beeld_zonder_plek` terug — raden is hier hetzelfde als verzinnen.
 
+    **Kijk naar dat getal, ook als je het niet verwacht.** `beeld_zonder_plek` telt nu ook een
+    figuur waarvan de `na` wél bestaat maar die er niet in is gekomen. Dat kon: een `na` die naar
+    een lijstregel wees, viel langs de stroom heen en de figuur verdween zonder melding. Dat is
+    gerepareerd — een beeld achter een lijstregel komt achter de hele lijst te staan, want een
+    figuur tussen twee bullets breekt de lijst in twee stukken — en er staat nu een vangnet
+    achter: elk aangeleverd beeld dat niet geplaatst is, wordt geteld. `beeld_ingesloten` in het
+    verslag hoort gelijk te zijn aan het aantal regels in `beeld.json` min dat getal.
+
 17. **Het beeldpad** (`beeldmap`) — alleen bij `aangeleverd`.
 
 18. **De omslagtekst** — titel, ondertitel, opdrachtgever, datum, woordelijk van de gebruiker.
