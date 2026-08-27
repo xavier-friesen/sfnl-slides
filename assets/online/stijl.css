@@ -837,7 +837,11 @@ a:hover { text-decoration-color: var(--inkt); }
   text-align: right;
   font-variant-numeric: lining-nums tabular-nums;
 }
-.tabel tbody tr:last-child td { border-bottom: 0; }
+/* De laatste rij draagt geen regel — ook zijn rijkop niet. Zonder die tweede
+   selector staat er onder het laatste rijlabel een stompje lijn en onder de
+   getallen ernaast niets; op de render van de maatstaf was dat te zien. */
+.tabel tbody tr:last-child td,
+.tabel tbody tr:last-child th { border-bottom: 0; }
 
 /* 7.10 De koprand — wat op een scherm in de plaats komt van de omslag en de
    titelbalk. Eén band bovenaan met de titel en het merk erin. Hij loopt tot de

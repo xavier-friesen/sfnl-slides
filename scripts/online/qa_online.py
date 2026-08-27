@@ -19,6 +19,11 @@ aan te pas komt én die je op geen enkele render ziet:
   tekst) in één van de twee thema's. Op papier kun je 2,51 als merkteken
   verdedigen; op een scherm met een schermlezer en een toetsenbord niet. Dit is
   een harde grens en geen aanwijzing.
+* **wit-op-oranje** — dezelfde meting, met een eigen naam en een eigen reden.
+  `merk.md` §4 staat wit op oranje in drukwerk uitdrukkelijk toe, en dat is de
+  ene plek waar 2,51 een merkbesluit is in plaats van een fout. Op een scherm
+  erft `online-design` die uitzondering niet, en dan is het handig dat de
+  melding dát zegt in plaats van alleen een getal.
 * **klip** — tekst die door `overflow: hidden` of `clip` wegvalt en die niemand
   kan terugscrollen. Er is dus tekst verdwenen.
 
@@ -86,6 +91,15 @@ STANDEN = (("licht", "light", None),
 VLOER_TEKST = 13.0
 VLOER_CAPS = 11.5
 
+#: Wat de meting in de browser van buiten meekrijgt: de twee vloeren, en de
+#: drie merkkleuren die hij bij naam nodig heeft voor de wit-op-oranje-toets.
+#: Uit merk.py, want een toets met zijn eigen kopie van het palet toetst op een
+#: gegeven moment die kopie.
+INVARIANTEN = {"tekst": VLOER_TEKST, "caps": VLOER_CAPS,
+               "wit": list(merk_rgb("wit")),
+               "oranje": list(merk_rgb("oranje")),
+               "grapefruit": list(merk_rgb("grapefruit"))}
+
 EMOJI = re.compile(
     "[\U0001F300-\U0001FAFF\U00002600-\U000027BF\U0001F1E6-\U0001F1FF]")
 
@@ -93,8 +107,15 @@ EMOJI = re.compile(
 # De meting in de browser
 # ---------------------------------------------------------------------------
 
-METING = r"""(vloeren) => {
-  const vloerTekst = vloeren.tekst, vloerCaps = vloeren.caps;
+METING = r"""(inv) => {
+  const vloerTekst = inv.tekst, vloerCaps = inv.caps;
+  // De drie merkwaarden die deze meting bij naam nodig heeft, aangeleverd uit
+  // merk.py. Ze staan hier niet als hexwaarde: dan zou deze toets zijn eigen
+  // kopie van het palet bijhouden en op een gegeven moment die kopie toetsen.
+  const WIT = inv.wit, ORANJE = inv.oranje, GRAPEFRUIT = inv.grapefruit;
+  const dichtbij = (a, b, marge) => a && b
+    && Math.abs(a[0] - b[0]) <= marge && Math.abs(a[1] - b[1]) <= marge
+    && Math.abs(a[2] - b[2]) <= marge;
   // --- kleur, en al het rekenwerk erop -------------------------------------
   // Eén pixel op een canvas normaliseert elke kleursyntaxis die de browser
   // kent, inclusief de `color(srgb …)` waar color-mix() naar computeert.
@@ -366,7 +387,25 @@ METING = r"""(vloeren) => {
         }
       }
       uit.kleuren.push({el: naam, px, kleur: cs.color, verhouding: slechtste});
-      if (slechtste < drempel) {
+
+      // Wit op oranje krijgt zijn eigen melding, en niet omdat de generieke
+      // contrasttoets hem zou missen — 2,51 zakt onder 4,5 én onder 3,0, dus
+      // hij komt er sowieso uit. Het is omdat `merk.md` §4 hier een
+      // uitzondering toestaat die op een scherm níet geldt, en dat is precies
+      // het soort regel dat iemand per ongeluk uit het drukwerk overneemt.
+      // Met de reden erbij is de melding een antwoord; zonder is hij een getal.
+      const opOranje = g.kleuren.some(c => dichtbij(c, ORANJE, 14)
+                                        || dichtbij(c, GRAPEFRUIT, 14));
+      const isWit = dichtbij(vg0, WIT, 12);
+      if (isWit && opOranje) {
+        uit.bevindingen.push({soort: 'wit-op-oranje', ernst: 'critical', el: naam,
+          wat: `${naam} zet witte tekst op een oranje vlak: ${slechtste.toFixed(2)}. ` +
+               `merk.md §4 staat dat in drukwerk toe (de lessenband van de ` +
+               `casespread doet het), maar op een scherm erft online-design die ` +
+               `uitzondering niet — hier is 4,5 voor lopende tekst en 3,0 voor ` +
+               `grote tekst een blokkade. Navy op oranje haalt 6,29`,
+          tekst: tekst.slice(0, 50)});
+      } else if (slechtste < drempel) {
         uit.bevindingen.push({soort: 'contrast', ernst: 'critical', el: naam,
           wat: `${naam} haalt ${slechtste.toFixed(2)} op zijn grond (${tegen}) — ` +
                `de drempel voor ${groot ? 'grote tekst' : 'lopende tekst'} op ` +
@@ -560,7 +599,8 @@ def _op_de_lijn(c: tuple[float, float, float], pal: dict, marge: float = 14.0) -
 
     Dat is de mechanische vorm van de regel uit `merk.md` §4: een tint is een
     percentage van een merkkleur, geen nieuwe kleur. `color-mix(in srgb, wit 8%,
-    navy)` ligt exact op het lijnstuk wit–navy; `#3A7BD5` ligt nergens.
+    navy)` ligt exact op het lijnstuk wit–navy; een willekeurig ander blauw ligt
+    nergens.
     """
     waarden = list(pal.values())
     for i, a in enumerate(waarden):
@@ -600,9 +640,7 @@ def toets(html: Path, breedtes: list[int]) -> dict:
             for breed in breedtes:
                 page.set_viewport_size({"width": breed, "height": 1000})
                 page.wait_for_timeout(140)
-                ruw.append((naam, breed,
-                            page.evaluate(METING, {"tekst": VLOER_TEKST,
-                                                   "caps": VLOER_CAPS})))
+                ruw.append((naam, breed, page.evaluate(METING, INVARIANTEN)))
             ctx.close()
 
     bev: list[dict] = []

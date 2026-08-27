@@ -1,0 +1,222 @@
+<header class="koprand koprand--accent">
+  <div class="dek">
+    <div class="rij" style="justify-content: space-between; align-items: center;">
+      <p class="logo">
+        <span class="logo__vorm"><span class="logo__cirkel"></span><span class="logo__vierkant"></span></span>
+        <span class="logo__woord">Social&nbsp;Finance <span class="logo__nl">NL</span></span>
+      </p>
+      <button class="thema" type="button" data-thema aria-pressed="false">Donker</button>
+    </div>
+  </div>
+</header>
+
+<main class="dek" id="inhoud">
+
+  <p class="kicker">Outcomesfonds Jeugd &middot; stand per 30 juni 2026</p>
+  <h1 class="titel">Drie van de vier gemeenten halen hun uitstroomdoel, de vierde loopt een kwartaal achter</h1>
+  <hr class="streep" style="margin: 16px 0 var(--sprong);">
+  <p class="tekst leesmaat"><b>De uitbetaling volgt de uitstroom en niet de inspanning.</b>
+    Het fonds betaalt per deelnemer die twaalf maanden aan het werk blijft. Dat maakt de
+    stand van dit kwartaal een stand van gerealiseerde uitstroom, en niet van gestarte
+    trajecten &mdash; die laatste lopen op alle vier de plekken voor.</p>
+
+  <!-- De kerncijfers. Drie kaarten, en drie omdat er drie feiten zijn:
+       hoeveel mensen, hoeveel geld eruit, hoeveel geld erin gebleven. -->
+  <section aria-labelledby="kerncijfers" style="margin-top: var(--sprong-groot);">
+    <h2 class="kop" id="kerncijfers">De stand in drie getallen</h2>
+    <div class="raster raster--gelijk" style="--kolom-min: 250px; margin-top: var(--sprong);">
+
+      <div class="kaart">
+        <p class="label">Deelnemers in traject</p>
+        <p class="cijfer" style="margin-top: 10px;">418</p>
+        <p class="klein" style="margin-top: 10px;">Van de 450 die in de businesscase
+          stonden. 32 plekken staan open in Tilburg.</p>
+      </div>
+
+      <div class="kaart">
+        <p class="label">Uitbetaalde outcomes</p>
+        <p class="cijfer" style="margin-top: 10px;">3,1<span class="eenheid">mln</span></p>
+        <p class="klein" style="margin-top: 10px;">Van de 4,6 mln die het fonds voor de
+          hele looptijd heeft gereserveerd, over 187 bevestigde uitstromen.</p>
+      </div>
+
+      <div class="kaart">
+        <p class="label">Vermeden kosten, gemeten</p>
+        <p class="cijfer" style="margin-top: 10px;">5,4<span class="eenheid">mln</span></p>
+        <p class="klein" style="margin-top: 10px;">Uitkering, schuldhulp en jeugdzorg over
+          24 maanden, tegen de controlegroep van het CBS.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- De grafiek. Vorm: een reeks over tijd, dus een lijn. De vormmethode is
+       die van de dataviz-skill; wat hier van SFNL is, zijn de twee reekskleuren
+       en de houder die de letters uit de SVG houdt. -->
+  <section aria-labelledby="verloop" style="margin-top: var(--sprong-groot);">
+    <h2 class="kop" id="verloop">Bevestigde uitstroom tegen het streefpad</h2>
+
+    <div class="tweeluik" style="--verdeling: 3fr 2fr; margin-top: var(--sprong);">
+      <figure style="margin: 0;">
+        <ul class="legenda" style="margin-bottom: var(--sprong-klein);">
+          <li><span class="stip" style="color: var(--reeks-1);"></span> Streefpad</li>
+          <li><span class="stip" style="color: var(--reeks-2);"></span> Bevestigd</li>
+        </ul>
+
+        <div class="grafiek">
+          <div class="grafiek__y">
+            <span>240</span><span>180</span><span>120</span><span>60</span><span>0</span>
+          </div>
+
+          <div class="grafiek__plot">
+            <svg viewBox="0 0 100 100" preserveAspectRatio="none" role="img"
+                 aria-labelledby="verlooptitel">
+              <title id="verlooptitel">Lijngrafiek: het streefpad loopt van 30 in Q2 2025
+                naar 225 in Q2 2026; de bevestigde uitstroom loopt van 22 naar 187 en blijft
+                vanaf Q1 2026 achter op het pad.</title>
+
+              <!-- Het raster. Recessief, en het draagt geen getallen: die staan
+                   in HTML links, op de maatladder. -->
+              <g stroke="var(--rasterlijn)" stroke-width="1" vector-effect="non-scaling-stroke">
+                <line x1="0" y1="0"   x2="100" y2="0"></line>
+                <line x1="0" y1="25"  x2="100" y2="25"></line>
+                <line x1="0" y1="50"  x2="100" y2="50"></line>
+                <line x1="0" y1="75"  x2="100" y2="75"></line>
+              </g>
+              <line x1="0" y1="100" x2="100" y2="100" stroke="var(--inkt)"
+                    stroke-width="1.5" vector-effect="non-scaling-stroke"></line>
+
+              <!-- Streefpad: 30, 75, 130, 180, 225 van 240 -->
+              <polyline fill="none" stroke="var(--reeks-1)" stroke-width="2"
+                        stroke-linejoin="round" vector-effect="non-scaling-stroke"
+                        points="0,87.5 25,68.75 50,45.83 75,25 100,6.25"></polyline>
+              <!-- Bevestigd: 22, 68, 121, 158, 187 van 240 -->
+              <polyline fill="none" stroke="var(--reeks-2)" stroke-width="2"
+                        stroke-linejoin="round" vector-effect="non-scaling-stroke"
+                        points="0,90.83 25,71.67 50,49.58 75,34.17 100,22.08"></polyline>
+            </svg>
+
+            <!-- De punten en de twee eindlabels staan in HTML, dus ze houden
+                 hun maat en hun ronde vorm als de plot uitrekt. -->
+            <span class="grafiek__punt" style="--x: 0%;   --y: 12.5%; color: var(--reeks-1);"></span>
+            <span class="grafiek__punt" style="--x: 25%;  --y: 31.25%; color: var(--reeks-1);"></span>
+            <span class="grafiek__punt" style="--x: 50%;  --y: 54.17%; color: var(--reeks-1);"></span>
+            <span class="grafiek__punt" style="--x: 75%;  --y: 75%; color: var(--reeks-1);"></span>
+            <span class="grafiek__punt" style="--x: 100%; --y: 93.75%; color: var(--reeks-1);"></span>
+
+            <span class="grafiek__punt" style="--x: 0%;   --y: 9.17%; color: var(--reeks-2);"></span>
+            <span class="grafiek__punt" style="--x: 25%;  --y: 28.33%; color: var(--reeks-2);"></span>
+            <span class="grafiek__punt" style="--x: 50%;  --y: 50.42%; color: var(--reeks-2);"></span>
+            <span class="grafiek__punt" style="--x: 75%;  --y: 65.83%; color: var(--reeks-2);"></span>
+            <span class="grafiek__punt" style="--x: 100%; --y: 77.92%; color: var(--reeks-2);"></span>
+          </div>
+
+          <div class="grafiek__x">
+            <span>Q2&nbsp;25</span><span>Q3&nbsp;25</span><span>Q4&nbsp;25</span>
+            <span>Q1&nbsp;26</span><span>Q2&nbsp;26</span>
+          </div>
+        </div>
+
+        <figcaption class="bron" style="margin-top: var(--sprong-klein);">
+          Bevestigde uitstroom = twaalf maanden aaneengesloten werk, vastgesteld door de
+          onafhankelijke assessor. Streefpad uit de businesscase van maart 2025.
+          Peildatum 30 juni 2026.
+        </figcaption>
+      </figure>
+
+      <div class="stapel stapel--ruim">
+        <div class="paneel paneel--mint">
+          <p class="label">Wat de lijn zegt</p>
+          <p class="tekst" style="margin-top: 10px;">Tot Q4 2025 liep bevestigd bijna
+            gelijk met het pad. Het gat van 38 uitstromen is in twee kwartalen ontstaan
+            en zit vrijwel volledig bij één gemeente.</p>
+        </div>
+        <dl class="paspoort">
+          <dt>Looptijd</dt><dd>apr 2025 &ndash; mrt 2028</dd>
+          <dt>Investeerders</dt><dd>Vier, waarvan twee vermogensfondsen</dd>
+          <dt>Assessor</dt><dd>[NAAM ASSESSOR]</dd>
+          <dt>Volgende meting</dt><dd>30 september 2026</dd>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <!-- De tabel. Vier gemeenten, en dezelfde vier feiten per gemeente: dan is
+       het een tabel en geen rij kaarten. -->
+  <section aria-labelledby="pergemeente" style="margin-top: var(--sprong-groot);">
+    <h2 class="kop" id="pergemeente">Per gemeente</h2>
+
+    <div class="filterrij" role="group" aria-label="Filter op status">
+      <button class="knop" type="button" aria-pressed="true">Alle vier</button>
+      <button class="knop" type="button" aria-pressed="false">Op pad</button>
+      <button class="knop" type="button" aria-pressed="false">Achter</button>
+    </div>
+
+    <p class="label" id="tabeltitel" style="margin-top: var(--sprong-klein);">
+      Deelnemers, bevestigde uitstroom en uitbetaling per gemeente</p>
+
+    <div class="tabelhouder" tabindex="0" role="region"
+         aria-label="Tabel per gemeente, horizontaal schuifbaar">
+      <table class="tabel" aria-labelledby="tabeltitel">
+        <thead>
+          <tr>
+            <th scope="col">Gemeente</th>
+            <th scope="col" class="getal">Deelnemers</th>
+            <th scope="col" class="getal">Bevestigd</th>
+            <th scope="col" class="getal">Doel Q2</th>
+            <th scope="col" class="getal">Uitbetaald</th>
+            <th scope="col">Stand</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">Tilburg</th>
+            <td class="getal">96</td><td class="getal">61</td><td class="getal">56</td>
+            <td class="getal">&euro;&nbsp;1,02 mln</td>
+            <td><span class="chip chip--goed">Op pad</span></td>
+          </tr>
+          <tr>
+            <th scope="row">Zaanstad</th>
+            <td class="getal">112</td><td class="getal">58</td><td class="getal">54</td>
+            <td class="getal">&euro;&nbsp;0,97 mln</td>
+            <td><span class="chip chip--goed">Op pad</span></td>
+          </tr>
+          <tr>
+            <th scope="row">Leeuwarden</th>
+            <td class="getal">104</td><td class="getal">47</td><td class="getal">45</td>
+            <td class="getal">&euro;&nbsp;0,78 mln</td>
+            <td><span class="chip chip--goed">Op pad</span></td>
+          </tr>
+          <tr>
+            <th scope="row">Heerlen</th>
+            <td class="getal">106</td><td class="getal">21</td><td class="getal">70</td>
+            <td class="getal">&euro;&nbsp;0,35 mln</td>
+            <td><span class="chip chip--let-op">Kwartaal achter</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="bron" style="margin-top: var(--sprong-klein);">
+      Uitbetaald is cumulatief vanaf de start. Doel Q2 is het streefpad uit de
+      businesscase, niet het contractuele minimum. Op een smal scherm schuift de
+      tabel horizontaal.
+    </p>
+  </section>
+
+  <section style="margin-top: var(--sprong-groot);">
+    <blockquote class="uitspraak">Het gat zit niet in de instroom maar in de nazorg
+      na maand negen &mdash; precies waar het contract niets over zegt.</blockquote>
+    <p class="klein leesmaat" style="margin-top: var(--sprong-klein);">
+      Kwartaalgesprek met de uitvoerder in Heerlen, 12 juni 2026.</p>
+  </section>
+
+  <hr class="haarlijn">
+
+  <footer>
+    <p class="klein">Social Finance NL &middot; kwartaalstand Outcomesfonds Jeugd &middot;
+      opgesteld 3 juli 2026. Cijfers onder embargo tot de fondsvergadering van
+      [DATUM FONDSVERGADERING].</p>
+  </footer>
+
+</main>
