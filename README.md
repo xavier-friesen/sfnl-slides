@@ -78,15 +78,40 @@ beslissen.
 - **De dichtheid is een knop en geen grens.** Ruim, gemiddeld of dicht: 284, 295 of 318 woorden
   per tekstpagina, gemeten. De letter verandert niet mee — alleen het aantal regels in de
   zetspiegel en de lucht tussen de blokken.
+- **Een kop blijft bij zijn tekst, ook als het in Word geen kop was.** Een alinea die volledig
+  vetgezet is, kort, en met gewone tekst eronder, doet op de pagina het werk van een tussenkop.
+  Alle drie de kop-blijft-bij-zijn-tekst-regels keken naar een kopstijl en zagen hem dus niet: op
+  een rapport van 81 pagina's stonden er drie van de 28 als laatste regel van hun pagina, met hun
+  tekst op de volgende, en geen enkele meting zag het. Ze worden nu gemarkeerd bij het inlezen,
+  gebonden bij het zetten, en gemeten bij de controle — waar `losse-kop` van aanwijzing naar
+  blokkade is gegaan, want dit is een belofte van de zetmotor en geen kwestie van smaak.
+- **De kopregel is een besluit geworden**, met vier standen, en hij staat nooit op de pagina waar
+  een hoofdstuk begint: daar zei hij in cursief grijs precies wat de titel eronder in 20 pt zegt.
+  De bovenmarge is van 20 naar 25 mm gegaan omdat er tussen die kopregel en de eerste tekstregel
+  21 px stond — minder dan één regel, en op een pagina die met een sectiekop begint stonden er
+  twee koppen tegen elkaar aan met een streep ertussen. Dat kostte één regel per pagina, en die is
+  terugverdiend met het volgende punt: hetzelfde rapport blijft op 81 pagina's.
+- **Een blok dat past, blijft staan.** `past` mat `scrollHeight` en rekende de ondermarge mee; de
+  splitser meet de tekstrechthoeken. Een alinea van vijftien regels in vijftien regels ruimte stak
+  er 2 px uit — regelbox, geen letter — waarop `past` "vol" zei, de splitser "past heel", en het
+  hele blok verhuisde. Vijftien regels wit achter, midden in een hoofdstuk, zonder klacht en
+  zonder klip. Er is nu een derde meting die hetzelfde meet als de splitser, en waar het ondanks
+  alles niet lukt is er een klacht `gat-in-de-pagina` met het aantal regels erin.
 - **De vraag of er beeld in mag, wordt expliciet gesteld**, ook als er beeld in het Word-document
   zit. Bij apart aangeleverde figuren koppelt een `beeld.json` elk bestand aan een blok; een
   figuur zonder plek wordt niet geplaatst maar gemeld.
-- **De intake begint bij wat er aan het document zelf is gezien.** `lees_docx.py` meldt zes
+- **De intake begint bij wat er aan het document zelf is gezien.** `lees_docx.py` meldt zeven
   vormbesluiten bij het inlezen — de bron is niet Nederlands, de koppen beginnen bij niveau 2, ze
   nummeren zichzelf, een figuur is EMF en toont dus niet in een browser, er zit media buiten de
-  tekststroom, een kop heeft geen inhoud. Vijf van de zes problemen van het eerste echte Engelse
-  rapport waren hiermee vóór het bouwen te zien. `widget.py` zet ze bovenaan, met daaronder de
-  vormbesluiten; de uitvoer is de `ontwerp.json` die de gebruiker terugplakt.
+  tekststroom, een kop heeft geen inhoud, er staan vetgezette regels die als tussenkop werken.
+  Vijf van de zes problemen van het eerste echte Engelse rapport waren hiermee vóór het bouwen te
+  zien. `widget.py` zet ze bovenaan, met daaronder de vijfentwintig vormbesluiten; de uitvoer is
+  de `ontwerp.json` die de gebruiker terugplakt, en de skill zegt met zoveel woorden dat er geen
+  vormbesluit door `AskUserQuestion` gaat zolang dat script draait.
+- **Twee van die zeven hebben een tweede poort.** Gebeurt er met `kop-zonder-inhoud` of
+  `vetregel-als-kop` niets, dan komt het defect tachtig pagina's later terug op de pagina, en dan
+  blokkeert de controle het alsnog. Op het rapport waar dit uit komt was de laatste pagina een
+  bijlagetitel met 638 pt wit eronder, en de inhoudsopgave wees ernaar.
 - **De taal is een vormbesluit en geen instelling achteraf.** `lang` bepaalt met welk woordenboek
   Chromium afbreekt en dus waar elke regel valt. Eén omzetting ná het zetten maakte drie alinea's
   een regel langer, en die regels vielen weg onder de `overflow: hidden` van het kader — tekst weg
@@ -127,11 +152,15 @@ past, past niet, en dat hoort te blijken.
 - **`qa_document.py` meet wat stil misgaat**: tekst die door `overflow: hidden` is weggevallen, een
   element dat over de snijrand steekt, een gat van 300 px in het midden van een pagina, wit op
   oranje op contrast 2,6. Drie ervan blokkeren; de rest is een aanwijzing en de render beslist.
-- **Vijf besluiten vóór de eerste regel tekst**, met een gerenderde keuzekaart erbij: formaat,
-  omvang (van één pagina tot zestien, of laat het uit de inhoud volgen), kleurregister, tekst
-  tegenover beeld, en de opening — komt de dektitel op een heel voorblad, in een aflopende
-  titelbalk, of gewoon in de zetspiegel. Hoe hóófdstukken openen is
-  een andere vraag en die staat in de outline, want hij bestaat pas vanaf acht pagina's.
+- **Tien vragen vóór de eerste regel tekst, en ze staan op één scherm.** `widget.py` genereert een
+  formulier met de vijf opdrachtvragen als vrije velden en de vijf vormbesluiten als knoppen, met
+  een schets die meebeweegt en de katernsom eronder zodra het gedrukt wordt: formaat, omvang (van
+  één pagina tot zestien, of laat het uit de inhoud volgen), kleurregister, tekst tegenover beeld,
+  en de opening — komt de dektitel op een heel voorblad, in een aflopende titelbalk, of gewoon in
+  de zetspiegel. Hoe hóófdstukken openen is een andere vraag en die staat in de outline, want hij
+  bestaat pas vanaf acht pagina's. Dit ging eerst in twee rondes `AskUserQuestion` van vier
+  knoppen, en dan zie je het geheel op geen enkel moment; de skill zegt nu met zoveel woorden dat
+  daar geen vormbesluit meer door gaat.
 - **Ruimte voor een infographic** is een merkteken, geen losse div: `.beeldkader` houdt de
   verhouding vast, en een kader waar het beeld nog niet in zit staat er zichtbaar leeg bij in
   plaats van als witruimte mee te lezen.
@@ -152,6 +181,7 @@ Civitates. Wat er in `reference/documenten-stramien.md` staat met "gemeten" erna
 
 ```bash
 python scripts/documenten/preflight.py
+python scripts/documenten/widget.py <werkmap> --titel "Uitnodiging"
 python scripts/documenten/bouw.py <werkmap> --uit uitnodiging.html --titel "Uitnodiging"
 python scripts/documenten/render.py <werkmap>/uitnodiging.html
 python scripts/documenten/qa_document.py <werkmap>/uitnodiging.html

@@ -73,9 +73,30 @@
    --------------------------------------------------------------- */
 
 .pagina[data-soort="rapport"] {
-  --r-marge-boven:  76px;   /* 20 mm */
+  /* 25 mm, en dat was 20. De kopregel staat in deze marge, op een vaste
+     42 px van de snijrand, en op 20 mm bleef er tussen de haarlijn en
+     de eerste tekstregel 21 px over — minder dan één regel. Op een
+     pagina die met lopende tekst begint valt dat nog mee; op een pagina
+     die met een sectiekop of een tabelkop begint staan er twee koppen
+     tegen elkaar aan met een streep ertussen. En eronder bijschuiven
+     kan niet: `.is-eerste-in-kader` zet de bovenmarge van het eerste
+     blok op nul, want anders staat de eerste regel van deze pagina niet
+     op dezelfde hoogte als die van de pagina ernaast.
+
+     Op 25 mm is de lucht 41 px, bijna twee regels in het brede model.
+     Dat is de afstand die de kopregel in het drukwerk van Bain en het
+     MGI heeft, en het is de reden dat je hem daar niet ziet totdat je
+     hem nodig hebt. De prijs is één regel per pagina, want de
+     zetspiegel is een geheel aantal regels en de ondermarge blijft
+     staan: nagemeten op het AS-IS-rapport werden 83 pagina's er 85. */
+  --r-marge-boven:  96px;   /* 25 mm */
   --r-marge-binnen: 82px;   /* 22 mm — de rugzijde */
   --r-marge-buiten: 62px;   /* 16 mm */
+
+  /* De hoogte van de kopregel boven de snijrand. Vast, en dus niet
+     afgeleid van de bovenmarge: was hij dat wel, dan schoof hij mee
+     omlaag met elke ruimere marge en bleef de lucht eronder gelijk. */
+  --r-kopregel-top: 42px;   /* 11 mm van de snijrand */
 
   --r-goot: 30px;           /* gemeten: 23,5 pt tussen twee kolommen */
 
@@ -83,7 +104,7 @@
      model en het formaat; `--r-regels` is wat de dichtheidsknop ervan
      maakt. Twee variabelen dus, want anders kan de knop het modelgetal
      niet verschuiven zonder het te overschrijven. */
-  --r-basisregels: 50;
+  --r-basisregels: 49;
   --r-regels: var(--r-basisregels);
 
   /* De lucht tussen blokken, in regels. Niet de afstand tussen alinea's:
@@ -129,11 +150,11 @@
    precies vijf regels. Vijf erbij dus, niet vier en niet zes: op vier
    blijft er 17 px onbenut onderaan en op zes valt de folio in de
    snijrand. */
-.pagina[data-soort="rapport"][data-formaat="a4"] { --r-basisregels: 55; }
+.pagina[data-soort="rapport"][data-formaat="a4"] { --r-basisregels: 54; }
 
 /* De liggende A4 is een bijlageformaat: één brede kolom haalt daar 120
    tekens en dat leest niet, dus daar is dubbel de enige zetting. */
-.pagina[data-soort="rapport"][data-formaat="a4-liggend"] { --r-basisregels: 36; }
+.pagina[data-soort="rapport"][data-formaat="a4-liggend"] { --r-basisregels: 35; }
 
 /* De zetspiegel van een rapport. Anders dan die van stijl.css: de
    marges zijn asymmetrisch en ze spiegelen per zijde. `--balk` telt nog
@@ -222,9 +243,9 @@
   --sprong-klein: 22px;
   --sprong: 44px;
   --sprong-groot: 66px;
-  --r-basisregels: 39;   /* 39 x 22 = 858 px; de rest is ondermarge */
+  --r-basisregels: 38;   /* 38 x 22 = 836 px; de rest is ondermarge */
 }
-.pagina[data-model="breed"][data-formaat="a4"] { --r-basisregels: 43; }
+.pagina[data-model="breed"][data-formaat="a4"] { --r-basisregels: 42; }
 
 /* De brede kolom staat midden in de zetspiegel en niet tegen de
    binnenmarge aan. Hij is tien van de twaalf rasterkolommen, 537 van de
@@ -298,7 +319,7 @@
   --sprong-klein: 17.33px;
   --sprong: 34.66px;
   --sprong-groot: 52px;
-  --r-basisregels: 50;
+  --r-basisregels: 49;
 }
 
 /* --- de dichtheidsknop -------------------------------------------- *
@@ -501,6 +522,29 @@
   font-weight: 700;
   line-height: var(--r-body);
   margin: calc(var(--regel) * 1.2) 0 0;
+}
+
+/* Een vetgezette regel die in Word geen kop was maar er op de pagina
+   wel een is. Twee standen, en de tweede is deze klasse.
+
+   `binden` — de default — laat de regel staan zoals hij in Word stond
+   en zet er alleen `data-bindt` op, zodat de zetmotor hem bij zijn
+   tekst houdt. Dan verandert er aan de pagina niets behalve dat de
+   regel niet meer alleen onderaan kan komen te staan.
+
+   `als-kop` geeft hem daarnaast de lucht van een run-in kop. Niet de
+   maat: de regel staat al op broodmaat en vet, en groter zetten zou een
+   niveau suggereren dat de auteur niet heeft gekozen. Wat erbij komt is
+   de sprong erboven — want een tussenkop zonder lucht erboven leest als
+   de eerste regel van de alinea ervoor. De sprong eronder blijft nul,
+   want de tekst eronder hoort erbij.
+
+   `!important` op de bovenmarge zou hier fout zijn: bovenaan een kader
+   moet `.is-eerste-in-kader` deze sprong juist wegdrukken, en die regel
+   staat hierboven met een hogere soortelijkheid. */
+.vetkop--rapport {
+  margin-top: calc(var(--regel) * var(--r-lucht));
+  margin-bottom: 0;
 }
 
 /* Niveau 4 — de run-in kop. Direct boven de alinea waar hij bij hoort,
@@ -1170,7 +1214,7 @@
 
 .rapport-kopregel {
   position: absolute;
-  top: calc(var(--r-marge-boven) - 34px);
+  top: var(--r-kopregel-top);
   left: var(--r-marge-binnen);
   right: var(--r-marge-buiten);
   margin: 0;
@@ -1450,7 +1494,15 @@
 /* Het hele blad. De pagina draagt dan het kleurveld en de titel staat
    onderin — dat is waar het oog hem zoekt wanneer hij omslaat. */
 .pagina[data-opener="blad"] > .zetspiegel--rapport { justify-content: flex-end; }
-.pagina[data-opener="blad"] .opener { margin-bottom: 0; }
+
+/* De titel hangt onderaan, en dan is de ondermarge de enige lucht die
+   er tussen de titel en de folio staat. Op het scheidingsblad van de
+   bijlagen was dat 46 px: het woord "Bijlagen" stond op dezelfde hoogte
+   als het paginanummer een halve pagina naar rechts, en dat leest als
+   twee dingen die tegen elkaar aan zijn geschoven in plaats van als een
+   titel die ergens staat. Twee regels lucht eronder tilt hem er vanaf
+   zonder de compositie te veranderen. */
+.pagina[data-opener="blad"] .opener { margin-bottom: calc(var(--regel) * 2); }
 .pagina[data-opener="blad"] .opener__titel {
   font-size: var(--m-display);
 }

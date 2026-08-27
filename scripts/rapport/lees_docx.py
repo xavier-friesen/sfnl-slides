@@ -658,9 +658,8 @@ def lees_markdown(pad: Path) -> tuple[list, dict, dict]:
             continue
         m = re.match(r"^(#{1,6})\s+(.*)$", kaal)
         if m:
-            blokken.append({"soort": "kop", "niveau": len(m.group(1)),
-                            "tekst": m.group(2).strip(),
-                            "runs": _md_runs(m.group(2).strip()), "stijl": ""})
+            blokken.append(_md_blok("kop", m.group(2).strip(),
+                                    niveau=len(m.group(1))))
             i += 1
             continue
         m = re.match(r"^!\[(.*?)\]\((.+?)\)\s*$", kaal)
@@ -675,8 +674,7 @@ def lees_markdown(pad: Path) -> tuple[list, dict, dict]:
             while j < n and regels[j].strip().startswith("|"):
                 cel = [c.strip() for c in regels[j].strip().strip("|").split("|")]
                 if not re.match(r"^[\s:|-]+$", regels[j].strip().strip("|")):
-                    rijen.append({"cellen": [{"delen": [{"runs": _md_runs(c), "tekst": c}],
-                                              "tekst": c, "span": 1} for c in cel],
+                    rijen.append({"cellen": [_md_cel(c) for c in cel],
                                   "kop": len(rijen) == 0})
                 j += 1
             blokken.append({"soort": "tabel", "rijen": rijen})
@@ -701,15 +699,12 @@ def lees_markdown(pad: Path) -> tuple[list, dict, dict]:
                 delen.append(regels[i].strip())
                 i += 1
             tekst = " ".join(delen)
-            blokken.append({"soort": "lijst", "geordend": geordend,
-                            "niveau": 1 if inspring >= 2 else 0,
-                            "tekst": tekst,
-                            "runs": _md_runs(tekst), "stijl": ""})
+            blokken.append(_md_blok("lijst", tekst, geordend=geordend,
+                                    niveau=1 if inspring >= 2 else 0))
             continue
         if kaal.startswith(">"):
             tekst = re.sub(r"^>\s?", "", kaal)
-            blokken.append({"soort": "citaat", "tekst": tekst,
-                            "runs": _md_runs(tekst), "stijl": ""})
+            blokken.append(_md_blok("citaat", tekst))
             i += 1
             continue
         stuk = [kaal]
@@ -719,8 +714,7 @@ def lees_markdown(pad: Path) -> tuple[list, dict, dict]:
             stuk.append(regels[i].strip())
             i += 1
         tekst = " ".join(stuk)
-        blokken.append({"soort": "alinea", "tekst": tekst,
-                        "runs": _md_runs(tekst), "stijl": ""})
+        blokken.append(_md_blok("alinea", tekst))
     return blokken, {}, {}
 
 
@@ -739,6 +733,35 @@ def _md_runs(tekst: str) -> list:
     if pos < len(rest):
         runs.append({"t": rest[pos:]})
     return runs or [{"t": tekst}]
+
+
+def _md_cel(tekst: str) -> dict:
+    """Eén tabelcel, met de tekst uit de runs. Zie `_md_blok`."""
+    runs = _md_runs(tekst)
+    kaal = "".join(r.get("t", "") for r in runs)
+    return {"delen": [{"runs": runs, "tekst": kaal}], "tekst": kaal, "span": 1}
+
+
+def _md_blok(soort: str, tekst: str, **extra) -> dict:
+    """Een markdownblok, met de tekst uit de runs en niet uit de bron.
+
+    `_md_runs` haalt de nadrukmarkering weg — `**zo**` wordt een vette
+    run met `zo` erin — maar `tekst` hield de sterretjes. Dat veld is de
+    vingerafdruk waar `tekstcheck.py` op controleert, dus elke alinea met
+    één vetgezet of cursief woord kwam als `gewijzigd` terug en
+    blokkeerde de oplevering. Op een markdownbron met vier vetgezette
+    tussenkopjes waren dat vier valse blokkades.
+
+    De tekst komt nu uit de runs, en dan zeggen de twee hetzelfde. Wat er
+    niet gebeurt is de sterretjes laten staan: die staan niet op de
+    pagina, dus horen ze niet in de vingerafdruk van wat op de pagina
+    hoort te staan.
+    """
+    runs = _md_runs(tekst)
+    blok = {"soort": soort, "tekst": "".join(r.get("t", "") for r in runs),
+            "runs": runs, "stijl": ""}
+    blok.update(extra)
+    return blok
 
 
 # =====================================================================
@@ -1081,6 +1104,32 @@ def _documentsignalen(blokken: list, beelden: dict, losse_media: list) -> list:
                        "eruit valt — dat laatste is een tekstwijziging en gaat "
                        "langs stap 3"})
 
+    # -- vetgezette regels die als tussenkop werken ------------------------
+    # `_vetkoppen` heeft ze al gemarkeerd, want de zetmotor moet ze bij
+    # hun tekst houden en dat is geen keuze. Wat hier gevraagd wordt is
+    # iets anders: worden ze óók als kop gezét. Dat is een vormbesluit met
+    # twee redelijke antwoorden, en het is er een die je vooraf neemt en
+    # niet tachtig pagina's later.
+    vet = [b for b in blokken if b.get("vetkop")]
+    if vet:
+        uit.append({
+            "id": "", "groep": "vormbesluit", "soort": "vetregel-als-kop",
+            "aantal": len(vet),
+            "voorbeelden": [b["tekst"].strip()[:60] for b in vet[:4]],
+            "wat": _tel(len(vet), "alinea is", "alinea's zijn")
+                   + " volledig vetgezet, korter dan "
+                   + f"{VETKOP_MAX} tekens en zonder punt aan het eind, met een "
+                     "gewone alinea eronder. In Word zijn het alinea's; op de "
+                     "pagina doen ze het werk van een tussenkop.",
+            "voor de vorm": "Ze blijven in elk geval bij hun tekst — dat regelt de "
+                            "zetmotor en het is geen keuze. Wat wél een keuze is: of "
+                            "ze de maat en de lucht van een kop krijgen, of dat ze "
+                            "vetgezette alinea's blijven zoals in Word.",
+            "besluit": "`vetkop` in ontwerp.json: `binden` (default, alleen bij hun "
+                       "tekst houden), `als-kop` (ook als tussenkop zetten) of "
+                       "`laten` (niets doen — dan kan er weer een alleen onderaan "
+                       "een pagina komen te staan)"})
+
     return uit
 
 
@@ -1149,6 +1198,56 @@ def apparaat(blokken: list, noten: dict) -> dict:
     return uit
 
 
+#: Een alinea die volledig vetgezet is en zich als tussenkop gedraagt.
+#: Word kent daar geen stijl voor: de auteur zet de regel vet en gaat
+#: verder. Op de pagina is het een kop — de lezer ziet er een — en voor
+#: de zetting is het er geen, want `data-kop` komt van een kopstijl.
+#:
+#: Gemeten op het AS-IS-rapport: 28 van zulke regels op 471 blokken, en
+#: drie ervan stonden na het zetten als laatste regel van hun pagina met
+#: hun tekst op de volgende. Geen enkele controle zag het: `qa_rapport.py`
+#: keek naar `data-kop` en dat stond er niet op.
+#:
+#: De grenzen zijn zo gekozen dat er niets valselijk in valt. Alle runs
+#: met tekst moeten vet zijn, de regel mag niet op leestekens eindigen
+#: die een zin afmaken, hij is korter dan de drempel, en er moet een
+#: gewone alinea onder staan — een vetgezette regel als laatste blok van
+#: een sectie is een slotregel en geen kop.
+VETKOP_MAX = 72
+
+
+def _vetkoppen(blokken: list) -> int:
+    """Markeer alinea's die zich als tussenkop gedragen. Levert het aantal.
+
+    Dit verandert de tekst niet en het verandert de opmaak niet: het zet
+    één vlag, en `bouw.py` maakt daar `data-bindt` van zodat de zetmotor
+    de regel bij zijn tekst houdt. Of hij óók als kop gezet wordt, is een
+    vormbesluit (`vetkop` in `ontwerp.json`) en staat hier los van.
+    """
+    gevonden = 0
+    for i, b in enumerate(blokken):
+        if b.get("soort") != "alinea" or b.get("beeld"):
+            continue
+        tekst = (b.get("tekst") or "").strip()
+        if not tekst or len(tekst) > VETKOP_MAX:
+            continue
+        if tekst[-1] in ".!?,;":
+            continue
+        runs = [r for r in b.get("runs", []) if (r.get("t") or "").strip()]
+        if not runs or not all(r.get("vet") for r in runs):
+            continue
+        if any(r.get("voetnoot") for r in b.get("runs", [])):
+            continue
+        volgend = next((v for v in blokken[i + 1:]
+                        if v.get("soort") != "leeg"), None)
+        if not volgend or volgend.get("soort") not in ("alinea", "lijst",
+                                                       "citaat", "tabel", "beeld"):
+            continue
+        b["vetkop"] = True
+        gevonden += 1
+    return gevonden
+
+
 def bouw_document(blokken: list, noten: dict, kern: dict,
                   beelden: dict, bron: Path) -> dict:
     schoon: list = []
@@ -1178,6 +1277,8 @@ def bouw_document(blokken: list, noten: dict, kern: dict,
             schoon[i - 1]["bijschrift_id"] = b["id"]
             b["hoort_bij"] = schoon[i - 1]["id"]
 
+    vetkoppen = _vetkoppen(schoon)
+
     titel = kern.get("titel") or next(
         (b["tekst"] for b in schoon if b["soort"] == "titel"), None) or next(
         (b["tekst"] for b in schoon if b["soort"] == "kop" and b["niveau"] == 1), None)
@@ -1199,6 +1300,7 @@ def bouw_document(blokken: list, noten: dict, kern: dict,
             "tabellen": sum(1 for b in schoon if b["soort"] == "tabel"),
             "beelden": sum(1 for b in schoon if b.get("beeld")),
             "voetnoten": len(noten),
+            "vetkoppen": vetkoppen,
             "tekens": tekens,
             "woorden": sum(len(b.get("tekst", "").split()) for b in schoon),
         },
