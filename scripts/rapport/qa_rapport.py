@@ -136,10 +136,11 @@ KLIP_LUCHT = 1.0
 
 METING = r"""(cfg) => {
   const uit = {paginas: [], klip: [], klipMarge: [], overloop: [], teKlein: [],
-               leegKader: [], wees: [], losseKop: [], beeld: [],
+               leegKader: [], wees: [], losseKop: [], kopAlleen: [],
+               beeld: [],
                beeldOngemeten: [], contrast: [], maten: {}, inhoud: [],
                legeKantlijn: 0, kantlijnPaginas: 0, tekstwand: 0,
-               accentmerken: []};
+               accentmerken: [], vreemdTeken: []};
 
   const paginas = Array.from(document.querySelectorAll('.pagina'));
 
@@ -322,13 +323,58 @@ METING = r"""(cfg) => {
         uit.wees.push({pagina: nr, bron: eerste.getAttribute('data-bron') || '',
                        soort: 'weduwe'});
       }
-      if (laatste && laatste.hasAttribute('data-kop')) {
-        uit.losseKop.push({pagina: nr, kop: (laatste.textContent || '').slice(0, 60)});
+      // Een kop als laatste element van zijn kolom. `data-bindt` telt
+      // hier mee: een vetgezette regel die als tussenkop werkt, is voor
+      // de lezer een kop, en dat hij in Word een alinea was ziet niemand
+      // terug. Zonder die tweede helft zag deze meting op het
+      // AS-IS-rapport nul terwijl er drie stonden.
+      if (laatste && (laatste.hasAttribute('data-kop')
+                      || laatste.hasAttribute('data-bindt'))) {
+        uit.losseKop.push({pagina: nr,
+                           soort: laatste.hasAttribute('data-kop') ? 'kop' : 'vetregel',
+                           kop: (laatste.textContent || '').slice(0, 60)});
       }
     });
 
     if (leeg) {
       uit.leegKader.push({pagina: nr, leeg: leeg, van: kaders.length});
+    }
+
+    // Een pagina die niets anders draagt dan een kop. De uiterste vorm
+    // van hetzelfde defect, en hij staat apart omdat de oorzaak anders
+    // is: de kop hééft geen tekst onder zich, en dan valt er niets te
+    // verhuizen. Het is een `kop-zonder-inhoud` uit `signalen.json`
+    // waar in stap 2 niets mee is gebeurd. Gemeten op het
+    // AS-IS-rapport: "Annex 5. References" stond als enige op de
+    // laatste pagina, 638 pt wit eronder, en de inhoudsopgave wees
+    // ernaar.
+    if (kaders.length) {
+      const soortOpener = p.getAttribute('data-opener') || '';
+      const dragend = Array.from(p.querySelectorAll('.kader > *'));
+      const alleenKoppen = dragend.length && dragend.every(
+        (el) => el.hasAttribute('data-kop') || el.hasAttribute('data-bindt'));
+      // Een hoofdstukblad hóórt alleen een titel te dragen; daar is de
+      // lege pagina de vorm. De nummer- en bandvariant niet: die zetten
+      // de titel boven de tekst, en zonder tekst blijft er een pagina
+      // over met een titel en verder niets. Gemeten op het
+      // AS-IS-rapport: "Annex 5. References" was de laatste pagina van
+      // het rapport, leeg op de titel na.
+      // `[data-plek="opener"]` bestaat alleen op een heel blad. De
+      // nummervariant — en dat is de default — landt in
+      // `[data-plek="kop"]`, dus die moest er apart bij: zonder deze
+      // tweede helft zag de meting de laatste pagina van het
+      // AS-IS-rapport niet, want die was precies zo'n pagina.
+      const kopOpener = p.querySelector('.paginakop .opener, [data-plek="kop"] .opener');
+      const kaleOpener = (!!opener || !!kopOpener)
+                         && soortOpener !== 'blad' && soortOpener !== 'omslag'
+                         && !dragend.length;
+      if (alleenKoppen || kaleOpener) {
+        uit.kopAlleen.push({
+          pagina: nr,
+          soort: kaleOpener ? 'opener-zonder-tekst' : 'kop-zonder-tekst',
+          kop: ((dragend[0] || kopOpener || opener || {}).textContent || '')
+               .replace(/\s+/g, ' ').trim().slice(0, 60)});
+      }
     }
     const vulgraad = ruimte ? gevuld / ruimte : (opener ? 1 : 0);
 
@@ -388,6 +434,40 @@ METING = r"""(cfg) => {
     });
   });
   uit.tekstwand = Math.max(uit.tekstwand, wandreeks);
+
+  // Een teken dat Lato en Montserrat niet hebben.
+  //
+  // Chromium valt dan stil terug op een systeemletter, en dat is geen
+  // foutmelding en geen leeg vlak: het teken staat er, in een andere
+  // letter, en op een contactblad zie je het niet. Gemeten op het
+  // AS-IS-rapport: 27 keer een aankruishokje uit SegoeUISymbol op
+  // pagina 67 en twee pijlen uit Arial op pagina 71, in een rapport dat
+  // verder helemaal in Lato staat.
+  //
+  // De lijst is een heuristiek en dat staat er zo bij: welke tekens een
+  // letter dekt, is in de browser niet te lezen zonder het fontbestand
+  // te ontleden. Wat hier staat zijn de klassen die een broodletter
+  // gewoonlijk níét dekt — hokjes, vinkjes, pijlen, bollen, sterren,
+  // emoji — plus de tekens die op het proefrapport werkelijk zijn
+  // teruggevallen. Vandaar een aanwijzing en geen blokkade: het is de
+  // gebruiker die weet of dat hokje daar hoort.
+  const VREEMD = /[\u2190-\u21FF\u2460-\u24FF\u25A0-\u27BF\u2B00-\u2BFF\uFE0F]|[\uD83C-\uD83E][\uDC00-\uDFFF]/gu;
+  const tellingen = {};
+  for (const el of document.querySelectorAll('.pagina .kader, .pagina .voetnoten, '
+                                             + '.pagina .kantlijn')) {
+    const treffers = (el.textContent || '').match(VREEMD);
+    if (!treffers) continue;
+    const pag = el.closest('.pagina');
+    const nr = paginas.indexOf(pag) + 1;
+    for (const t of treffers) {
+      const sleutel = t + '|' + nr;
+      tellingen[sleutel] = (tellingen[sleutel] || 0) + 1;
+    }
+  }
+  for (const sleutel of Object.keys(tellingen)) {
+    const deel = sleutel.split('|');
+    uit.vreemdTeken.push({teken: deel[0], pagina: +deel[1], aantal: tellingen[sleutel]});
+  }
 
   // Lettergroottes en te kleine tekst.
   document.querySelectorAll('.pagina p, .pagina li, .pagina td, .pagina th, ' +
@@ -585,10 +665,34 @@ def beoordeel(m: dict) -> dict:
         aanwijzing.append({"soort": "wees", "aantal": len(m["wees"]),
                            "waar": m["wees"][:6],
                            "wat": "een alinea begint of eindigt met één losse regel"})
+    # Een losse kop is geen kwestie van smaak maar een gebroken belofte.
+    # "Een kop blijft bij zijn tekst" is een regel van de zetmotor; staat
+    # er toch een kop als laatste in zijn kolom, dan heeft die regel niet
+    # gewerkt en is dat een defect. Vandaar kritiek en niet aanwijzing.
+    if m.get("vreemdTeken"):
+        soorten = sorted({v["teken"] for v in m["vreemdTeken"]})
+        aanwijzing.append({
+            "soort": "vreemd-teken", "aantal": len(m["vreemdTeken"]),
+            "tekens": soorten[:10],
+            "waar": m["vreemdTeken"][:8],
+            "wat": "een teken dat Lato en Montserrat niet hebben. Chromium zet het "
+                   "in een systeemletter, zonder melding en zonder leeg vlak — op "
+                   "een contactblad zie je het niet, op papier wel. Kijk of het "
+                   "teken daar hoort; zo ja, vraag om een variant die de letter wél "
+                   "heeft, of laat het staan met de wetenschap dat het afwijkt"})
+
     if m["losseKop"]:
-        aanwijzing.append({"soort": "losse-kop", "aantal": len(m["losseKop"]),
-                           "waar": m["losseKop"][:6],
-                           "wat": "een kop staat als laatste in zijn kolom"})
+        kritiek.append({"soort": "losse-kop", "aantal": len(m["losseKop"]),
+                        "waar": m["losseKop"][:6],
+                        "wat": "een kop of vetgezette tussenkop staat als laatste "
+                               "in zijn kolom, met zijn tekst op de volgende pagina"})
+    if m.get("kopAlleen"):
+        kritiek.append({"soort": "kop-alleen-op-pagina",
+                        "aantal": len(m["kopAlleen"]),
+                        "waar": m["kopAlleen"][:6],
+                        "wat": "deze pagina draagt niets dan een kop. Die kop heeft "
+                               "in de bron niets onder zich — zie kop-zonder-inhoud "
+                               "in signalen.json — en dat besluit is niet genomen"})
 
     slap = [p for p in m["paginas"]
             if p["vulgraad"] < 0.7 and not p["opener"] and not p.get("blanco")

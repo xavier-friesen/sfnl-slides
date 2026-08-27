@@ -164,15 +164,15 @@ streepjes, een alinea van 280 woorden. **Die houd je vast en leg je nog niet voo
 van 74 tekens is een probleem in `dubbel` en niet in `breed`. En of ze überhaupt worden
 voorgelegd hangt aan `herindelen`, dat in stap 2 wordt besloten en standaard op nee staat.
 
-### De zes documentsignalen, en die zijn nú aan de beurt
+### De zeven documentsignalen, en die zijn nú aan de beurt
 
 De signalen met `groep: "vormbesluit"` staan apart in de uitvoer onder `vormbesluiten`, en ze
 zijn van een andere orde. Ze gaan niet over één blok maar over het document als geheel, ze
 vragen geen wijziging aan de tekst, en er valt niets aan uit te stellen: **het zijn besluiten
-die vaststaan vóórdat er gezet wordt.** Ze komen alle zes uit één rapport — Engels, 18.043
+die vaststaan vóórdat er gezet wordt.** Zes ervan komen uit één rapport — Engels, 18.043
 woorden, 522 blokken, 72 eindnoten, vijf bijlagen, zes figuren waarvan vier EMF. Ze waren daar
 alle zes bij het inlezen te zien, en ze kostten pas tijd toen ze tachtig gezette pagina's later
-in de visuele loop bovenkwamen.
+in de visuele loop bovenkwamen. Het zevende komt uit het AS-IS-rapport dat later langskwam.
 
 | soort | wat er gezien is | wat je ermee doet |
 |---|---|---|
@@ -181,13 +181,20 @@ in de visuele loop bovenkwamen.
 | `kop-nummert-zichzelf` | een heel kopniveau draagt zijn eigen nummer | zet `hoofdstuknummers` op `"uit-bron"`. Anders staat er "3  3.2 Werkwijze" op de pagina en in de inhoudsopgave |
 | `beeld-niet-renderbaar` | een beeldformaat dat een browser niet toont — EMF, WMF, TIFF, EPS | vraag om png of svg, en zeg in welke maat. Zo'n figuur komt niet als foutmelding op de pagina maar als een leeg vlak, en dat valt op als de drukker belt. Omzetten gebeurt vóór het bouwen |
 | `beeld-buiten-de-stroom` | media in het `.docx` die door geen enkel blok wordt genoemd: een tekstvak, SmartArt, een figuur in de koptekst | vraag of ze meemoeten en achter welk blok. Waar ze horen staat nergens in het bestand, dus raden is hier hetzelfde als verzinnen |
-| `kop-zonder-inhoud` | een kop met niets eronder | vraag of hij blijft staan of samengaat met de volgende. Hem weghalen is een tekstwijziging en gaat langs stap 3 |
+| `kop-zonder-inhoud` | een kop met niets eronder | vraag of hij blijft staan of samengaat met de volgende. Hem weghalen is een tekstwijziging en gaat langs stap 3. **Doe hier iets mee**: gebeurt er niets, dan staat die kop straks alleen op een pagina en blokkeert `qa_rapport.py` met `kop-alleen-op-pagina` |
+| `vetregel-als-kop` | alinea's die volledig vetgezet zijn, kort, zonder afsluitend leesteken, met gewone tekst eronder — in Word alinea's, op de pagina tussenkoppen | zet `vetkop` in stap 2. Ze blijven in elk geval bij hun tekst; de keuze is of ze óók als kop gezet worden |
 
 **De widget legt ze voor, en jij noemt ze in stap 1 ook.** `widget.py` zet ze bovenaan onder
 "Dit moet je eerst beslissen", elk met wat er gezien is en één of twee voorbeelden uit het
 document; dat is de plek waar ze beslist worden. Noem ze in dezelfde adem als de telling, want
-twee van de zes — de taal en `hoofdstuknummers` — sturen een besluit dat eronder in de widget
-staat, en de vier andere vragen iets wat geen enkel formulier kan vragen.
+drie van de zeven — de taal, `hoofdstuknummers` en `vetkop` — sturen een besluit dat eronder in
+de widget staat, en de vier andere vragen iets wat geen enkel formulier kan vragen.
+
+**Twee van de zeven hebben een tweede poort, en die blokkeert.** Gebeurt er in stap 2 niets met
+`kop-zonder-inhoud` of `vetregel-als-kop`, dan komt het defect tachtig pagina's later terug op de
+pagina, en dan meldt `qa_rapport.py` het als `kop-alleen-op-pagina` of `losse-kop`. Op het echte
+rapport is precies dat gebeurd: de laatste pagina was "Annex 5. References" met 638 pt wit
+eronder, en de inhoudsopgave wees ernaar.
 
 **Staat er niets in `vormbesluiten`, dan zeg je daar niets over.** Een lijst met "geen
 bevindingen" erboven kost aandacht en geeft er niets voor terug. Op het Nederlandse proefdocument
@@ -226,18 +233,18 @@ valt: zonder `ontwerp.json` is elk gebouwd rapport een gok met tachtig pagina's 
 
 ## Stap 2 — De widget, en dit is de eerste poort
 
-**Drieëntwintig besluiten**, en er wordt niets gebouwd voordat ze er zijn. Wie eerst bouwt en dan
+**Vijfentwintig besluiten**, en er wordt niets gebouwd voordat ze er zijn. Wie eerst bouwt en dan
 vraagt, moet zestig pagina's opnieuw zetten.
 
 `widget.py` geeft onder `besluiten` terug wat hij werkelijk heeft gevraagd, en daar staat een
-hoger getal: 28 op een schoon document, 24 op een document zonder noten of bronnenlijst. Dat is
+hoger getal: 30 op een schoon document, 26 op een document zonder noten of bronnenlijst. Dat is
 geen tegenspraak maar een andere telling — hij telt de sleutels die in `ontwerp.json` komen te
 staan, en de lijst hieronder telt de vragen. De vier omslagregels zijn hier één vraag, de diepte
 hoort bij de inhoudsopgave, en het katern bij `drukklaar`. Wat de bron niet heeft valt in beide
 tellingen weg en staat in `weggelaten`.
 
-Drieëntwintig is te veel voor een gesprek. `AskUserQuestion` neemt er vier per keer, dus dat
-worden zes rondes, en na de tweede weet niemand meer wat er in de eerste is gekozen. Daarom is de widget hier
+Vijfentwintig is te veel voor een gesprek. `AskUserQuestion` neemt er vier per keer, dus dat
+worden zeven rondes, en na de tweede weet niemand meer wat er in de eerste is gekozen. Daarom is de widget hier
 geen hulpmiddel maar **het beginpunt**: na het inlezen draai je hem, altijd, en er gebeurt daarna
 niets tot de ingevulde `ontwerp.json` terug is.
 
@@ -287,14 +294,32 @@ heeft aangevinkt en daarna gevraagd wordt of hij het zeker weet, neemt hetzelfde
 en de tweede keer met minder aandacht. Vraag alleen door als de widget en het document elkaar
 tegenspreken, en zeg dan wat je ziet.
 
-**De terugvalroute blijft bestaan, maar hij is de uitzondering en niet de tweede optie.** Draait
-`widget.py` niet, dan stel je dezelfde besluiten met `AskUserQuestion`, vier per ronde, in deze
-volgorde: het rapport (taal, model, register, formaat), de pagina (dichtheid, opener, omslag,
-inhoudsopgave), de nummering en de omslag (dubbelzijdig, hoofdstuknummers, omslagveld) met de
-omslagtekst erbij in proza, het apparaat (noten, bronnenlijst, citaatstijl, bijlagen), het beeld
-en het achterwerk (beeld, elementen), en de drukker met de twee toestemmingen (drukklaar,
-katern, herindelen, beeldtekst). De poort blijft één poort: er wordt niets gebouwd voordat alle
-zes rondes binnen zijn.
+### `AskUserQuestion` stelt hier geen vormbesluit. Niet één.
+
+Dit is de regel die het vaakst wordt overtreden, en hij is expliciet omdat een model dat een
+vragenlijst ziet, naar het vragenwidget grijpt. **Zolang `widget.py` draait, gaat er geen enkel
+vormbesluit door `AskUserQuestion`** — niet als losse vraag, niet in vier rondes, niet als
+samenvatting achteraf, en ook niet "even ter bevestiging" nadat de widget al terug is. Een
+gebruiker die `breed` heeft aangevinkt en daarna gevraagd wordt of hij het zeker weet, neemt
+hetzelfde besluit twee keer en de tweede keer met minder aandacht.
+
+Waar `AskUserQuestion` wél voor is in deze skill: de acht vragen hierboven, de wijzigingsvoorstellen
+van stap 3, en wat er tijdens de visuele loop bovenkomt. Dat zijn allemaal vragen die de widget
+niet kán stellen omdat het antwoord niet in het document staat.
+
+**De terugvalroute bestaat, en hij begint met een fout uit het script.** Draait `widget.py` niet —
+hij eindigt met een niet-nul afsluitcode of hij schrijft geen HTML — dan **zet je die foutmelding
+woordelijk in je bericht aan de gebruiker** en stel je dezelfde besluiten met `AskUserQuestion`,
+vier per ronde, in deze volgorde: het rapport (taal, model, register, formaat), de pagina
+(dichtheid, opener, kopregel, omslag), de inhoudsopgave en de nummering (inhoudsopgave,
+dubbelzijdig, hoofdstuknummers, omslagveld) met de omslagtekst erbij in proza, het apparaat
+(noten, bronnenlijst, citaatstijl, bijlagen), het beeld en het achterwerk (beeld, vetkop,
+elementen), en de drukker met de twee toestemmingen (drukklaar, katern, herindelen, beeldtekst).
+De poort blijft één poort: er wordt niets gebouwd voordat alle zes rondes binnen zijn.
+
+Zonder die foutmelding is er geen terugvalroute. "De widget leek me omslachtig" is er geen, en
+"de gebruiker antwoordt sneller op knoppen" ook niet: zeven rondes knoppen is precies wat deze
+widget vervangt.
 
 Verandert er een optie in de skill, dan bouw je de kaarten opnieuw met
 `python "${CLAUDE_PLUGIN_ROOT}/scripts/rapport/keuzekaart.py"` — onderhoud, geen bouwstap.
@@ -381,9 +406,9 @@ niet gebeurt is het besluit per hoofdstuk opnieuw nemen.
 
    | | regels | gemeten op het proefrapport |
    |---|---|---|
-   | `ruim` | 47 | 39 pagina's, 284 woorden per tekstpagina |
-   | `gemiddeld` — default | 50 | 35 pagina's, 295 woorden per tekstpagina |
-   | `dicht` | 53 | 35 pagina's, 318 woorden per tekstpagina |
+   | `ruim` | 46 | 39 pagina's, 284 woorden per tekstpagina |
+   | `gemiddeld` — default | 49 | 35 pagina's, 295 woorden per tekstpagina |
+   | `dicht` | 52 | 35 pagina's, 318 woorden per tekstpagina |
 
    **Zeg erbij dat het verschil klein is** — 12 procent tussen de uitersten. Wie een rapport
    substantieel korter wil, verandert het model en niet de dichtheid: `dubbel` scheelt 40
@@ -396,6 +421,22 @@ niet gebeurt is het besluit per hoofdstuk opnieuw nemen.
    Default is **`nummer`**: kicker, titel en het hoofdstukcijfer ernaast, buiten het kader, en het
    kost geen pagina. `band` kost een kwart pagina per hoofdstuk, `blad` een hele. Zie
    `openers.png`.
+
+6a. **De kopregel** (`kopregel`). `beide` (default), `hoofdstuk`, `rapport` of `geen`. De regel in
+   kleine cursieve letters bovenaan elke pagina, met een haarlijn ernaast. Bij `beide` draagt de
+   verso de rapporttitel en de recto de hoofdstuknaam — één naam per zijde, aan de buitenkant,
+   zodat een lezer die halverwege opent allebei weet zonder dat er twee namen naast elkaar staan.
+
+   **Dat is een keuze en geen gegeven, en dat was het niet.** Een rapport dat in één zitting
+   wordt gelezen heeft geen navigatie nodig; dan zegt die regel op elke pagina hetzelfde en is
+   `geen` de rustigere pagina. `rapport` en `hoofdstuk` zetten één naam op beide zijden:
+   bruikbaar in een rapport zonder hoofdstukken, of als de titel op elke pagina van belang is.
+
+   **Op een pagina die met een hoofdstukopener begint staat hij nooit**, en dát is geen stand
+   maar een regel. Daar staat de titel zelf al, in 20 pt, en de kopregel eromheen zei precies
+   hetzelfde in cursief grijs met een streep eronder — op elke hoofdstukpagina van elk rapport
+   dat met de default is gebouwd. De band- en de bladopener onderdrukten hem al; de
+   nummervariant nu ook.
 
 7. **De omslag.** Wel of niet. Default is **wel**. Zonder omslag komt de titel uit het
    brondocument gewoon in de stroom te staan als hoofdstuktitel — dan gaat er geen tekst
@@ -481,9 +522,33 @@ er niet is, betekent bronregels schrijven, en dat doet deze skill niet.
     waar het hoort.** Een figuur zonder plek wordt niet geplaatst en komt in het bouwverslag als
     `beeld_zonder_plek` terug — raden is hier hetzelfde als verzinnen.
 
+    **Kijk naar dat getal, ook als je het niet verwacht.** `beeld_zonder_plek` telt nu ook een
+    figuur waarvan de `na` wél bestaat maar die er niet in is gekomen. Dat kon: een `na` die naar
+    een lijstregel wees, viel langs de stroom heen en de figuur verdween zonder melding. Dat is
+    gerepareerd — een beeld achter een lijstregel komt achter de hele lijst te staan, want een
+    figuur tussen twee bullets breekt de lijst in twee stukken — en er staat nu een vangnet
+    achter: elk aangeleverd beeld dat niet geplaatst is, wordt geteld. `beeld_ingesloten` in het
+    verslag hoort gelijk te zijn aan het aantal regels in `beeld.json` min dat getal.
+
 17. **Het beeldpad** (`beeldmap`) — alleen bij `aangeleverd`.
 
 18. **De omslagtekst** — titel, ondertitel, opdrachtgever, datum, woordelijk van de gebruiker.
+
+18a. **Vetgezette tussenkopjes** (`vetkop`). `binden` (default), `als-kop` of `laten`. Alleen
+   gevraagd als de bron ze heeft — dan staat `vetregel-als-kop` in de signalen met het aantal
+   erbij.
+
+   Een alinea die volledig vetgezet is, korter dan 72 tekens, zonder punt aan het eind en met een
+   gewone alinea eronder, doet op de pagina het werk van een tussenkop. In Word is het een
+   alinea, en dat verschil zag de zetting: alle drie de kop-blijft-bij-zijn-tekst-regels keken
+   naar een kopstijl. Op het AS-IS-rapport stonden er zo drie van de 28 als laatste regel van hun
+   pagina, met hun tekst op de volgende.
+
+   **Dat gebeurt niet meer, en dat is geen keuze.** In `binden` en `als-kop` dragen ze
+   `data-bindt` en houdt de zetmotor ze bij hun tekst. Wat je hier kiest is of ze óók de lucht
+   van een tussenkop krijgen (`als-kop`) of vetgezette alinea's blijven zoals in Word (`binden`).
+   De letter verandert in geen van de twee, en de tekst al helemaal niet. `laten` bestaat om de
+   oude zetting terug te kunnen halen en is er nooit de betere van.
 
 ### Het achterwerk, de drukker en de twee toestemmingen
 
@@ -707,12 +772,18 @@ gebouwd. Blijkt het verkeerd, dan zet je het om en **bouw je opnieuw**.
 - **`afbreking`** — staat die op `false`, dan is het uitvullen vervallen en is de tekst vlaggend
   links. Meld dat, met de reden: dat is de zetting van Bain, BMC en MGI, dus het is geen
   noodgreep, maar het is wel een andere zetting dan het SFNL-drukwerk.
-- **`klachten`** — wat de zetmotor niet heeft kunnen oplossen. Er zijn er drie soorten:
+- **`klachten`** — wat de zetmotor niet heeft kunnen oplossen. Er zijn er vijf soorten:
   `te-groot-voor-kader` (een blok past niet in een heel kader), `te-breed` (een tabel is breder
-  dan de zetspiegel en is in de breedte gedwongen, dus de cellen breken af), en `lus` (de zetting
-  kwam niet tot een eind). Alle drie zijn inhoudelijke problemen: leg voor wat er met dat blok
-  moet gebeuren. Staat `herindelen` op nee, dan is dat geen voorstel maar een vraag — het blok
-  past niet, en de gebruiker beslist wat daaraan gebeurt.
+  dan de zetspiegel en is in de breedte gedwongen, dus de cellen breken af), `lus` (de zetting
+  kwam niet tot een eind), `kop-verhuisd` (een kop met te weinig tekst eronder is samen met zijn
+  tekst naar de volgende pagina gegaan — dat is de regel die werkt en geen probleem), en
+  **`gat-in-de-pagina`** (een blok paste niet meer en was niet te splitsen, dus het verhuisde
+  heel; er staat bij hoeveel regels wit er achterbleven). Op die laatste let je: boven de tien
+  regels is het een halve pagina wit midden in een hoofdstuk, en dat is het geval dat op de
+  proefdruk bovenkwam als "de tekst zegt 'de figuur hieronder' en dan komt er een halve pagina
+  wit". Het is aan de zetting niet te repareren — het blok past niet — dus leg de keuze voor: het
+  beeld kleiner, het beeld over de volle breedte, of de alinea ervoor korter. Staat `herindelen`
+  op nee, dan is dat geen voorstel maar een vraag.
 - **`citaten_omgezet`** en **`citaten_niet_gekoppeld`** — hoeveel verwijzingen zijn gelijkgetrokken
   en hoeveel er zijn blijven staan omdat er geen bronregel bij te vinden was. Het tweede getal
   hoort bij de oplevering, met de verwijzingen erbij: ze staan er nog precies zoals de auteur ze
@@ -818,6 +889,10 @@ Wat je in de eerste ronde zelf gaat zien, en wat geen script voor je oplost:
 - **Een pagina met een halve kolom wit die geen hoofdstukeinde is.** Daar paste een figuur of een
   tabel niet meer. `qa_rapport.py` meet het als `vulgraad`; de gemiddelde vulgraad van een gezond
   rapport ligt tussen 0,75 en 0,90.
+- **De bovenkant van een pagina die met een kop begint.** Dat is de plek waar deze skill twee
+  keer is misgegaan, dus kijk er apart naar: staat er lucht tussen de kopregel en de kop, en zegt
+  de kopregel iets anders dan de kop eronder. Op een hoofdstukpagina hoort er geen kopregel te
+  staan; staat hij er wel, dan is er iets mis met de opener en niet met de kopregel.
 - **Een exhibit dat los van zijn tekst is komen te staan.**
 - **Een omslag die niet klopt.** Dat is de enige pagina die met de hand gecomponeerd is en de
   enige waar je vrij bent, dus daar kijk je apart naar. Kijk ook of het veld doet wat het moet
@@ -836,7 +911,7 @@ python "$S/render.py" werkmap/rapport.html --spread 7      # één spread op lee
 python "$S/render.py" werkmap/rapport.html --pagina 14     # één pagina op ware maat
 ```
 
-`qa_rapport.py` is geen poort maar het meet veertien dingen. **Zes blokkeren.** Vijf ervan zijn
+`qa_rapport.py` is geen poort maar het meet zestien dingen. **Acht blokkeren.** Zeven ervan zijn
 metingen waar geen interpretatie aan te pas komt:
 
 - **`klip`** — een kader snijdt zijn inhoud af. Er is tekst weg.
@@ -846,6 +921,15 @@ metingen waar geen interpretatie aan te pas komt:
   láátste kader is een hoofdstukeinde en hoort zo; dit is de stroom die in de verkeerde orde is
   gevuld.
 - **`contrast`** — lopende tekst onder de leesbaarheidsdrempel.
+- **`losse-kop`** — een kop of een vetgezette tussenkop staat als laatste in zijn kolom, met zijn
+  tekst op de volgende pagina. Dit was een aanwijzing en is het niet meer: "een kop blijft bij
+  zijn tekst" is een belofte van de zetmotor, dus is een treffer hier geen kwestie van smaak maar
+  een regel die niet gewerkt heeft. Staat er een, kijk dan of het een vetgezette regel is
+  (`soort: vetregel`) en of `vetkop` op `laten` staat — dan is het dát besluit en niet de motor.
+- **`kop-alleen-op-pagina`** — deze pagina draagt niets dan een kop. Dan is er niets te
+  verhuizen: de kop heeft in de bron niets onder zich, en `kop-zonder-inhoud` stond in
+  `signalen.json`. Dit is de meting die zegt dat er in stap 2 een besluit is overgeslagen. Op het
+  AS-IS-rapport: "Annex 5. References", laatste pagina, 638 pt wit eronder.
 
 De zesde is **`figuur-te-klein`**: de tekst ín een aangeleverd beeld komt onder de 6 pt uit
 doordat het beeld in de kolom is teruggeschaald. Die staat apart omdat er één aanname in zit —
@@ -855,7 +939,16 @@ erbij, zodat de som met een eigen aanname over te doen is. Tussen 6 en 8 pt heet
 wordt niet beoordeeld; dat staat er als `figuur-zonder-detail`.
 
 De rest is een aanwijzing: kijk ernaar en beslis. Voor `vulgraad`, `tekstwand` en `lege-kantlijn`
-weegt de render zwaarder dan het getal. Let bij `vulgraad` op één geval dat er sinds kort vaker
+weegt de render zwaarder dan het getal.
+
+Eén aanwijzing is nieuw en het is er een die je op de render niet ziet: **`vreemd-teken`** — een
+teken dat Lato en Montserrat niet hebben. Chromium zet het dan in een systeemletter, zonder
+melding en zonder leeg vlak. Op het echte rapport stonden er 27 aankruishokjes uit SegoeUISymbol
+op één bijlagepagina en twee pijlen uit Arial op een andere, in een rapport dat verder helemaal in
+Lato staat. Kijk of het teken daar hoort: een aankruishokje in een invulbijlage hoort er, en dan
+is de vraag of je om een variant vraagt die de huisletter wél heeft. De lijst waarop dit gemeten
+wordt is een heuristiek — welke tekens een letter dekt, is in de browser niet te lezen — en dat is
+de reden dat het geen blokkade is. Let bij `vulgraad` op één geval dat er sinds kort vaker
 in zit: de pagina die een gepromoveerd beeld achterlaat, blijft half gevuld. Dat is de prijs van
 een zetting die één keer vooruit loopt, en het is geen fout om te repareren.
 
@@ -913,7 +1006,9 @@ beter. Bouw het niet stilletjes om — leg het voor, met beide contactbladen erb
   woordelijk gelijk aan het brondocument." Staat `noten` op `geen`, dan zeg je er in dezelfde adem
   bij hoeveel noten er niet in het rapport staan — dat is het enige stuk brontekst dat vervalt, en
   het vervalt omdat de gebruiker daarom heeft gevraagd.
-- **Wat de opmaak heeft toegevoegd**, geteld per soort.
+- **Wat de opmaak heeft toegevoegd**, geteld per soort. Staat `kopregel` op `geen`, zeg dat er dan
+  bij: dat is een pagina zonder navigatie, en het is een besluit dat de gebruiker in de widget
+  heeft genomen en misschien niet meer weet.
 - **Hoeveel tekst er op de pagina's achterin staat en van wie die is.** Dit staat apart van de
   vorige, want het is het enige toegevoegde dat uit hele alinea's bestaat: "over ons, het colofon
   en het achterblad staan erin, 34 stukken tekst, allemaal aangeleverd door jou" — of, als jij ze
@@ -937,7 +1032,7 @@ beter. Bouw het niet stilletjes om — leg het voor, met beide contactbladen erb
 
 ## Wat blokkeert
 
-Elf dingen. Verder blokkeert er niets op vormgeving; dat oordeel komt van de render.
+Dertien dingen. Verder blokkeert er niets op vormgeving; dat oordeel komt van de render.
 
 1. `preflight.py` vindt geen browser. Er is dan geen route.
 2. `lees_docx.py` leest nul blokken, of nul koppen in een document met hoofdstukken.
@@ -959,6 +1054,12 @@ Elf dingen. Verder blokkeert er niets op vormgeving; dat oordeel komt van de ren
 11. **`qa_rapport.py` meldt `contrast`** — lopende tekst onder de leesbaarheidsdrempel.
     Merktekens in het accent staan apart geteld als `accentmerken` en blokkeren niet; zie
     `rapport-vormentaal.md` §4.
+12. **`qa_rapport.py` meldt `losse-kop`** — een kop of een vetgezette tussenkop staat als laatste
+    in zijn kolom. De regel "een kop blijft bij zijn tekst" heeft daar niet gewerkt.
+13. **`qa_rapport.py` meldt `kop-alleen-op-pagina`** — een pagina draagt niets dan een kop. Dat is
+    een `kop-zonder-inhoud` uit stap 1 waar in stap 2 niets mee is gebeurd, en het is de enige
+    blokkade in deze lijst die je niet met opmaak oplost: er moet een besluit over die kop
+    komen.
 
 ---
 

@@ -131,6 +131,15 @@ STANDAARD_ONTWERP = {
     "formaat": "sfnl",
     "opener": "nummer",
     "dichtheid": "gemiddeld",
+    # De kopregel: `beide` (verso de rapporttitel, recto de hoofdstuknaam),
+    # `rapport`, `hoofdstuk` of `geen`. Een rapport dat in één zitting
+    # gelezen wordt heeft geen navigatie nodig; dan is de kopregel een
+    # streep die op elke pagina hetzelfde zegt.
+    "kopregel": "beide",
+    # Wat er gebeurt met een alinea die volledig vetgezet is en zich als
+    # tussenkop gedraagt: `binden` (bij zijn tekst houden, verder niets),
+    # `als-kop` (ook als tussenkop zetten) of `laten`.
+    "vetkop": "binden",
     "bandhoogte": 232,
     "dubbelzijdig": True,
     "omslag": True,
@@ -386,6 +395,7 @@ class Stroom:
         #: terechtkomen.
         self.bronregels: set = set()
         self.extra_beeld: dict = {}
+        self.beeld_geplaatst: set = set()
         self.beeld_zonder_plek: list = []
         self.paginateksten: dict = {}
         self.paginas_zonder_tekst: list = []
@@ -672,16 +682,43 @@ class Stroom:
                     and self.o.get("noten") == "eindnoot-hoofdstuk"):
                 self.regels.append(self._notenblok(self.L["noten_hoofdstuk"]))
 
+            # Een lijst en een bronnenlijst worden in één keer verzet:
+            # `_lijst` en `_bronnenlijst` eten de hele reeks op en geven
+            # de nieuwe index terug. Dat betekende dat een aangeleverd
+            # beeld dat achter een lijstregel hoorde nergens terechtkwam
+            # — niet geplaatst, en ook niet gemeld, want de melding hing
+            # aan een ontbrekende `na` en die stond er wél. Op de
+            # maatstafzetting was dat precies het geval: het beeld hoorde
+            # achter de laatste bullet en de vier pagina's kwamen eruit
+            # zonder figuur. Vandaar dat de reeks nu wordt onthouden en
+            # het beeld erachteraan komt.
             if b["id"] in self.bronregels:
+                begin = i
                 i = self._bronnenlijst(blokken, i)
+                self._beeld_na_reeks(blokken[begin:i])
                 continue
             if soort == "lijst":
+                begin = i
                 i = self._lijst(blokken, i)
+                self._beeld_na_reeks(blokken[begin:i])
                 continue
             self.regels.append(self._blok(b))
             for extra in self.extra_beeld.get(b["id"], []):
                 self.regels.append(self._aangeleverd_beeld(extra))
+                self.beeld_geplaatst.add(id(extra))
             i += 1
+
+        # En dan de vangnetmelding: een aangeleverd beeld dat een `na`
+        # heeft die in het document niet voorkomt, of dat langs een blok
+        # is gevallen dat de stroom anders verwerkt. Zonder deze telling
+        # verdwijnt zo'n figuur stil, en dat is de faalwijze die deze
+        # skill nergens toestaat: de gebruiker heeft een bestand
+        # aangeleverd en krijgt een rapport zonder.
+        for na, items in self.extra_beeld.items():
+            for item in items:
+                if id(item) not in self.beeld_geplaatst:
+                    self.beeld_zonder_plek.append(
+                        f'{item.get("bestand", "?")} (na {na})')
 
         # Wat er aan het eind nog open staat.
         if self.o.get("noten") in ("eindnoot-hoofdstuk", "eindnoot-rapport"):
@@ -798,6 +835,18 @@ class Stroom:
             f'<div class="bronnenlijst" data-stijl="{stijl}">{"".join(regels)}</div>')
         return j
 
+    def _beeld_na_reeks(self, reeks: list) -> None:
+        """De beelden die achter een blok uit deze reeks horen, erachteraan.
+
+        In leesvolgorde, en achter de hele reeks in plaats van tussen twee
+        lijstregels: een figuur midden in een opsomming breekt de lijst in
+        twee stukken en dat is een andere lijst dan de auteur schreef.
+        """
+        for blok in reeks:
+            for extra in self.extra_beeld.get(blok["id"], []):
+                self.regels.append(self._aangeleverd_beeld(extra))
+                self.beeld_geplaatst.add(id(extra))
+
     def _aangeleverd_beeld(self, item: dict) -> str:
         """Een beeld dat de gebruiker apart heeft aangeleverd.
 
@@ -833,10 +882,39 @@ class Stroom:
         return self._alinea(b)
 
     def _alinea(self, b: dict) -> str:
+        """Een alinea, en soms een tussenkop die er in Word geen was.
+
+        `lees_docx.py` markeert een alinea die volledig vetgezet is, kort
+        is en een gewone alinea onder zich heeft als `vetkop`. Wat daar
+        hier mee gebeurt hangt aan één besluit met drie standen, en de
+        eerste twee dragen allebei `data-bindt` — dat is het attribuut
+        waaraan `paginator.js` de regel "een kop blijft bij zijn tekst"
+        ook voor deze regels ophangt.
+
+          binden   (default) alleen bij zijn tekst houden; de regel
+                   blijft een vetgezette alinea, precies zoals in Word
+          als-kop  óók als tussenkop zetten: de maat en de lucht van een
+                   run-in kop
+          laten    niets — dan kan er weer een alleen onderaan een
+                   pagina komen te staan
+
+        `data-bindt` en niet `data-kop`: aan `data-kop` hangt de
+        inhoudsopgave, en een vetgezette regel is geen sectie.
+        """
         inhoud = self._runs(b["runs"])
-        klasse = "chapeau--rapport" if b.get("chapeau") else ""
+        klassen = []
+        if b.get("chapeau"):
+            klassen.append("chapeau--rapport")
+        stand = self.o.get("vetkop") or "binden"
+        bindt = None
+        if b.get("vetkop") and stand in ("binden", "als-kop"):
+            bindt = "vetkop"
+            if stand == "als-kop":
+                klassen.append("vetkop--rapport")
+        klasse = " ".join(klassen)
         return (f'<p{" class=" + chr(34) + klasse + chr(34) if klasse else ""}'
-                f'{_attr(data_bron=b["id"], data_deel=b.get("deel"))}>{inhoud}</p>')
+                f'{_attr(data_bron=b["id"], data_deel=b.get("deel"), data_bindt=bindt)}'
+                f'>{inhoud}</p>')
 
     def _kop(self, b: dict) -> str:
         niveau = b.get("niveau", 2)
@@ -1403,6 +1481,7 @@ def zet(werk_html: Path, ontwerp: dict, rondes: int = 4) -> tuple[str, dict]:
         # eindnootmodus staan ze al als blok in de stroom.
         "notenOpPagina": ontwerp.get("noten") == "voetnoot",
         "rapporttitel": ontwerp.get("rapporttitel") or "",
+        "kopregel": ontwerp.get("kopregel") or "beide",
         # Het woord boven de bijlagen in de inhoudsopgave. `paginator.js`
         # heeft er een Nederlandse terugval voor; die staat er goed, maar
         # in een Engels rapport is hij fout. Hier komt hij uit dezelfde
