@@ -549,8 +549,14 @@ def body(kop: dict, blokken: list[dict], rels: Rels) -> tuple[str, dict]:
         uit.append(alinea(runs(kop["ondertitel"], rels), "Ondertitel"))
         tel("ondertitel")
 
+    #: Het `numId` van het vorige blok, of None als dat geen lijst was. Alleen
+    #: nodig voor de samensmelting die hieronder bij `soort == "lijst"` staat.
+    vorige_num: str | None = None
+
     for b in blokken:
         soort = b["soort"]
+        if soort != "lijst":
+            vorige_num = None
         if soort == "kop":
             uit.append(alinea(runs(b["tekst"], rels), f"Kop{b['niveau']}"))
             tel(f"kop{b['niveau']}")
@@ -561,6 +567,28 @@ def body(kop: dict, blokken: list[dict], rels: Rels) -> tuple[str, dict]:
             num = NUM_DECIMAAL if b["geordend"] else NUM_STREEPJE
             extra = (f'<w:numPr><w:ilvl w:val="{b["ilvl"]}"/>'
                      f'<w:numId w:val="{num}"/></w:numPr>')
+            # Twee lijsten achter elkaar smelten samen, en dat is op de pagina
+            # te zien en in de XML niet. `Lijstalinea` draagt
+            # `contextualSpacing`, en dat haalt de alinea-afstand weg tussen
+            # alinea's van dezelfde stijl -- ook tussen het laatste item van
+            # de ene lijst en het eerste van de volgende. Nagemeten op de
+            # proefnotitie: drie genummerde punten en twee streepjes lazen als
+            # één lijst met twee soorten opsommingstekens.
+            #
+            # `w:spacing w:before` erbij zetten helpt niet, en dat is de val:
+            # `contextualSpacing` is geen waarde die je overschrijft maar een
+            # schakelaar die de afstand negeert. Eerst gemeten met alleen de
+            # spacing erin -- de XML klopte, de pagina veranderde niet. Dus
+            # moet de schakelaar zelf om, met `w:val="0"`.
+            #
+            # En die schakelaar geldt voor beide kanten, dus toen hij omging
+            # kreeg dat ene item ook zijn onderruimte terug en stond er
+            # ineens lucht tussen het eerste en het tweede streepje. Vandaar
+            # `after="0"` erbij: alleen de bovenkant hoort open te gaan.
+            if vorige_num is not None and vorige_num != num and not b["ilvl"]:
+                extra += (f'<w:spacing w:before="{NA_ALINEA}" w:after="0"/>'
+                          '<w:contextualSpacing w:val="0"/>')
+            vorige_num = num
             uit.append(alinea(runs(b["tekst"], rels), "Lijstalinea", extra))
             tel("lijst" + ("-genummerd" if b["geordend"] else ""))
             if b["ilvl"]:

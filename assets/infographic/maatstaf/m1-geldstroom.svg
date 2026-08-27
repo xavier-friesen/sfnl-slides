@@ -1,27 +1,27 @@
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="960pt" height="320pt" viewBox="0 0 960 320">
   <desc>Waar 1,2 miljoen euro werkkapitaal naartoe gaat: vier posten, elk met zijn aandeel, als stroom getekend.</desc>
-  <text id="Drager-0" x="30" font-family="Montserrat Light, Montserrat, sans-serif" font-weight="300" font-size="40" fill="#F87F4F" xml:space="preserve"><tspan x="30" y="128.74">€ 1,2 mln</tspan></text>
-  <text id="Drager-1" x="30" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="13" fill="#201B5C" fill-opacity="0.65" xml:space="preserve"><tspan x="30" y="157.11">werkkapitaal, drie jaar</tspan></text>
-  <line id="Aanhef-streep" x1="30" y1="70" x2="220" y2="70" stroke="#F87F4F" stroke-width="2"/>
-  <text id="Aanhef-0" x="30" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="10" fill="#201B5C" fill-opacity="0.55" letter-spacing="1.5" xml:space="preserve"><tspan x="30" y="57.19">WAAR HET GELD HEEN GAAT</tspan></text>
-  <rect id="Bronbalk" x="230" y="96" width="9" height="148" fill="#F87F4F"/>
-  <path id="Stroom-1" d="M 239 96.0 C 468.5 96.0 468.5 96.0 698 96.0 L 698 144.9 C 468.5 144.9 468.5 173.0 239 173.0 Z" fill="#F87F4F" fill-opacity="0.3"/>
-  <rect id="Uitbalk-1" x="698" y="96" width="9" height="48.88" fill="#F87F4F"/>
-  <text id="Post-1-naam-0" x="719" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="16" fill="#201B5C" xml:space="preserve"><tspan x="719" y="116.22">Begeleiding op de</tspan><tspan x="719" y="134.14">werkvloer</tspan></text>
-  <text id="Post-1-deel-0" x="690" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#201B5C" text-anchor="end" xml:space="preserve"><tspan x="690" y="124.1">52%</tspan></text>
-  <path id="Stroom-2" d="M 239 173.0 C 468.5 173.0 468.5 162.9 698 162.9 L 698 187.3 C 468.5 187.3 468.5 211.4 239 211.4 Z" fill="#201B5C" fill-opacity="0.16"/>
-  <rect id="Uitbalk-2" x="698" y="162.88" width="9" height="24.44" fill="#201B5C"/>
-  <text id="Post-2-naam-0" x="719" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#201B5C" xml:space="preserve"><tspan x="719" y="178.76">Taal en basisvaardigheden</tspan></text>
-  <text id="Post-2-deel-0" x="690" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#201B5C" text-anchor="end" xml:space="preserve"><tspan x="690" y="178.76">26%</tspan></text>
-  <path id="Stroom-3" d="M 239 211.4 C 468.5 211.4 468.5 205.3 698 205.3 L 698 218.5 C 468.5 218.5 468.5 232.2 239 232.2 Z" fill="#201B5C" fill-opacity="0.16"/>
-  <rect id="Uitbalk-3" x="698" y="205.32" width="9" height="13.16" fill="#201B5C"/>
-  <text id="Post-3-naam-0" x="719" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#201B5C" xml:space="preserve"><tspan x="719" y="215.56">Coördinatie en meting</tspan></text>
-  <text id="Post-3-deel-0" x="690" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#201B5C" text-anchor="end" xml:space="preserve"><tspan x="690" y="215.56">14%</tspan></text>
-  <path id="Stroom-4" d="M 239 232.2 C 468.5 232.2 468.5 236.5 698 236.5 L 698 244.0 C 468.5 244.0 468.5 244.0 239 244.0 Z" fill="#201B5C" fill-opacity="0.16"/>
-  <rect id="Uitbalk-4" x="698" y="236.48" width="9" height="7.52" fill="#201B5C"/>
-  <text id="Post-4-naam-0" x="719" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#201B5C" xml:space="preserve"><tspan x="719" y="243.9">Terug naar de investeerder</tspan></text>
-  <text id="Post-4-deel-0" x="690" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#201B5C" text-anchor="end" xml:space="preserve"><tspan x="690" y="243.9">8%</tspan></text>
-  <line id="Slotstreep" x1="30" y1="274" x2="930" y2="274" stroke="#201B5C" stroke-width="0.75" stroke-opacity="0.2"/>
-  <text id="Sluitregel-0" x="30" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="13" fill="#201B5C" xml:space="preserve"><tspan x="30" y="300.31"><tspan font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600">Ruim de helft</tspan> gaat naar begeleiding op de werkvloer, want daar wordt het resultaat gehaald.</tspan></text>
-  <text id="Bron-0" x="680" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="10" fill="#201B5C" fill-opacity="0.7" xml:space="preserve"><tspan x="680" y="297.47">Begroting Social Finance NL, 2026. Prijspeil 2026.</tspan></text>
+  <text id="Drager-0" x="30" font-family="Montserrat Light, Montserrat, sans-serif" font-weight="300" font-size="40" fill="#FF7F40" xml:space="preserve"><tspan x="30" y="128.74">€ 1,2 mln</tspan></text>
+  <text id="Drager-1" x="30" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="13" fill="#21145F" fill-opacity="0.65" xml:space="preserve"><tspan x="30" y="157.11">werkkapitaal, drie jaar</tspan></text>
+  <line id="Aanhef-streep" x1="30" y1="70" x2="220" y2="70" stroke="#FF7F40" stroke-width="2"/>
+  <text id="Aanhef-0" x="30" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="10" fill="#21145F" fill-opacity="0.55" letter-spacing="1.5" xml:space="preserve"><tspan x="30" y="57.19">WAAR HET GELD HEEN GAAT</tspan></text>
+  <rect id="Bronbalk" x="230" y="96" width="9" height="148" fill="#FF7F40"/>
+  <path id="Stroom-1" d="M 239 96.0 C 468.5 96.0 468.5 96.0 698 96.0 L 698 144.9 C 468.5 144.9 468.5 173.0 239 173.0 Z" fill="#FF7F40" fill-opacity="0.3"/>
+  <rect id="Uitbalk-1" x="698" y="96" width="9" height="48.88" fill="#FF7F40"/>
+  <text id="Post-1-naam-0" x="719" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="16" fill="#21145F" xml:space="preserve"><tspan x="719" y="116.22">Begeleiding op de</tspan><tspan x="719" y="134.14">werkvloer</tspan></text>
+  <text id="Post-1-deel-0" x="690" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#21145F" text-anchor="end" xml:space="preserve"><tspan x="690" y="124.1">52%</tspan></text>
+  <path id="Stroom-2" d="M 239 173.0 C 468.5 173.0 468.5 162.9 698 162.9 L 698 187.3 C 468.5 187.3 468.5 211.4 239 211.4 Z" fill="#21145F" fill-opacity="0.16"/>
+  <rect id="Uitbalk-2" x="698" y="162.88" width="9" height="24.44" fill="#21145F"/>
+  <text id="Post-2-naam-0" x="719" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#21145F" xml:space="preserve"><tspan x="719" y="178.76">Taal en basisvaardigheden</tspan></text>
+  <text id="Post-2-deel-0" x="690" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#21145F" text-anchor="end" xml:space="preserve"><tspan x="690" y="178.76">26%</tspan></text>
+  <path id="Stroom-3" d="M 239 211.4 C 468.5 211.4 468.5 205.3 698 205.3 L 698 218.5 C 468.5 218.5 468.5 232.2 239 232.2 Z" fill="#21145F" fill-opacity="0.16"/>
+  <rect id="Uitbalk-3" x="698" y="205.32" width="9" height="13.16" fill="#21145F"/>
+  <text id="Post-3-naam-0" x="719" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#21145F" xml:space="preserve"><tspan x="719" y="215.56">Coördinatie en meting</tspan></text>
+  <text id="Post-3-deel-0" x="690" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#21145F" text-anchor="end" xml:space="preserve"><tspan x="690" y="215.56">14%</tspan></text>
+  <path id="Stroom-4" d="M 239 232.2 C 468.5 232.2 468.5 236.5 698 236.5 L 698 244.0 C 468.5 244.0 468.5 244.0 239 244.0 Z" fill="#21145F" fill-opacity="0.16"/>
+  <rect id="Uitbalk-4" x="698" y="236.48" width="9" height="7.52" fill="#21145F"/>
+  <text id="Post-4-naam-0" x="719" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#21145F" xml:space="preserve"><tspan x="719" y="243.9">Terug naar de investeerder</tspan></text>
+  <text id="Post-4-deel-0" x="690" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#21145F" text-anchor="end" xml:space="preserve"><tspan x="690" y="243.9">8%</tspan></text>
+  <line id="Slotstreep" x1="30" y1="274" x2="930" y2="274" stroke="#21145F" stroke-width="0.75" stroke-opacity="0.2"/>
+  <text id="Sluitregel-0" x="30" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="13" fill="#21145F" xml:space="preserve"><tspan x="30" y="300.31"><tspan font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600">Ruim de helft</tspan> gaat naar begeleiding op de werkvloer, want daar wordt het resultaat gehaald.</tspan></text>
+  <text id="Bron-0" x="680" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="10" fill="#21145F" fill-opacity="0.7" xml:space="preserve"><tspan x="680" y="297.47">Begroting Social Finance NL, 2026. Prijspeil 2026.</tspan></text>
 </svg>

@@ -104,10 +104,18 @@ schuiven marginaal en alle conclusies die erop staan houden:
 De oude waarde 6,4 die in `rapport-vormentaal.md` §4 stond voor navy-op-oranje was niet
 reproduceerbaar; de gemeten verhouding was 5,93 en is nu 6,29.
 
-De renders in `assets/maatstaf/`, `assets/proeven/` en `assets/*/maatstaf/` zijn met de oude
-waarden gebouwd. Ze blijven staan: het verschil is onder de drempel waarop je een maatstaf
-opnieuw zou zetten, en waar de proeven over contrast gaan staat de meting eronder en niet de
-kleur zelf.
+De maatstaven zijn deels opnieuw gezet en deels niet, en dat verschil zit in de vraag of het
+bouwscript nog in de repo staat.
+
+**Opnieuw gezet:** alles in `assets/infographic/`. De bouwscripts staan in
+`assets/infographic/voorbeeld/`, dus hergenereren is gratis en exact — het bleek zuiver een
+paletwissel, 24 regels per SVG en geen enkele vormverandering. Een maatstaf die het oude oranje
+toont, leert de verkeerde kleur, dus daar was geen reden om hem te laten staan.
+
+**Blijven staan:** de PNG's in `assets/maatstaf/` en `assets/proeven/`. Die komen uit gerenderde
+decks waarvan de bron niet in de repo zit, dus ze zijn niet exact te hergenereren. Voor de
+proeven maakt het bovendien niets uit: daar staat de meting onder het beeld, en de meting is de
+uitspraak — niet de kleur op de plaat.
 
 ---
 

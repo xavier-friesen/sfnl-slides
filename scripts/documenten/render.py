@@ -31,6 +31,17 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from _browser import browser, wacht_op_letters  # noqa: E402
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "gedeeld"))
+from merk import HEX, rgb  # noqa: E402
+
+#: De chroom van het contactblad — het label boven de renders en de schaduw
+#: eronder — draagt de merkinkt en hoort dus uit de merklaag te komen. Stond
+#: hier tot 27 augustus 2026 hardgecodeerd, en dat was ná de paletmigratie de
+#: navy uit `merk.VERVANGEN`: het contactblad waarop je de kleur beoordeelt,
+#: gaf zelf de oude waarde af.
+_NAVY = HEX["navy"]
+_NAVY_RGB = ", ".join(str(k) for k in rgb(_NAVY))
+
 TAFEL = "#E7E6EA"
 
 
@@ -78,15 +89,15 @@ def _spreads(page, maten: list[dict], uit: Path, schaal: float) -> list[str]:
     browser om zou de webfonts opnieuw moeten oplossen.
     """
     css = """
-      body { background: %s; margin: 0; padding: 26px; }
+      body { background: %(tafel)s; margin: 0; padding: 26px; }
       .vel { display: block !important; padding: 0 !important; }
       .contact { display: flex; flex-direction: column; gap: 30px; align-items: center; }
-      .spread { display: flex; gap: 2px; box-shadow: 0 2px 16px rgba(32,27,92,.20); }
+      .spread { display: flex; gap: 2px; box-shadow: 0 2px 16px rgba(%(navy_rgb)s,.20); }
       .spread .pagina { box-shadow: none !important; }
       .merk { font: 600 13px/1 -apple-system, system-ui, sans-serif;
-              color: #201B5C; opacity: .62; letter-spacing: .06em;
+              color: %(navy)s; opacity: .62; letter-spacing: .06em;
               margin: 0 0 -18px; align-self: flex-start; }
-    """ % TAFEL
+    """ % {"tafel": TAFEL, "navy": _NAVY, "navy_rgb": _NAVY_RGB}
     page.add_style_tag(content=css)
     page.evaluate("""(n) => {
         const paginas = Array.from(document.querySelectorAll('.pagina'));

@@ -40,6 +40,16 @@ HIER = Path(__file__).resolve().parent
 sys.path.insert(0, str(HIER.parent / "documenten"))
 from _browser import browser, wacht_op_letters  # noqa: E402
 
+sys.path.insert(0, str(HIER.parent / "gedeeld"))
+from merk import HEX, rgb  # noqa: E402
+
+#: De chroom van het contactblad draagt de merkinkt en hoort dus uit de
+#: merklaag te komen. Stond hier tot 27 augustus 2026 hardgecodeerd, en dat
+#: was ná de paletmigratie de navy uit `merk.VERVANGEN`: het contactblad
+#: waarop je de kleur beoordeelt, gaf zelf de oude waarde af.
+_NAVY = HEX["navy"]
+_NAVY_RGB = ", ".join(str(k) for k in rgb(_NAVY))
+
 TAFEL = "#E7E6EA"
 PER_BLAD = 12          # spreads per contactblad
 
@@ -116,12 +126,12 @@ def _tafel(page) -> None:
       .contact {{ display: flex; flex-wrap: wrap; gap: 26px 22px;
                   align-items: flex-start; justify-content: flex-start; }}
       .kaart {{ display: flex; flex-direction: column; gap: 5px; }}
-      .spread {{ display: flex; gap: 2px; box-shadow: 0 2px 12px rgba(32,27,92,.22);
+      .spread {{ display: flex; gap: 2px; box-shadow: 0 2px 12px rgba({navy_rgb},.22);
                  background: #fff; }}
       .spread .pagina {{ box-shadow: none !important; margin: 0 !important; }}
       .merk {{ font: 600 12px/1 -apple-system, system-ui, sans-serif;
-               color: #201B5C; opacity: .6; letter-spacing: .05em; }}
-    """)
+               color: {navy}; opacity: .6; letter-spacing: .05em; }}
+    """.format(navy=_NAVY, navy_rgb=_NAVY_RGB))
 
 
 def _bouw_spreads(page, paren: list[list[int]], eerstenr: int, groot: bool) -> None:

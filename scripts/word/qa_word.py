@@ -95,10 +95,16 @@ def _merkkleuren() -> tuple[dict[str, str], dict[str, str]]:
     """De merkkleuren en de achterhaalde waarden, uit `merk.py`.
 
     Twee dingen, want een harde kleur in de body is niet één fout maar drie
-    verschillende. `#C00000` is geen merkkleur. `#21145F` is dat wel, maar
-    hoort uit de stijl te komen. En `#201B5C` is de waarde die de plugin
-    tot 27 augustus 2026 rendeerde: dat is de oude navy, en die aanwijzing
-    is preciezer dan "geen merkkleur".
+    verschillende. Een willekeurige rode waarde is geen merkkleur. De navy
+    uit `KLEUREN` is dat wel, maar hoort uit de stijl te komen. En de navy
+    uit `VERVANGEN` is de waarde die de plugin tot 27 augustus 2026
+    rendeerde, en die aanwijzing is preciezer dan "geen merkkleur".
+
+    De waarden staan hier met opzet niet als hexcijfers in de tekst. De
+    grep-check van `preflight.py` kijkt naar het bestand en niet naar de
+    Python-structuur, dus een hexwaarde in een docstring is voor die check
+    niet van een hexwaarde in code te onderscheiden — en dat hoort zo, want
+    anders is de volgende die er één in een commentaar zet ook vrij.
     """
     hex_naar_naam: dict[str, str] = {}
     achterhaald: dict[str, str] = {}
