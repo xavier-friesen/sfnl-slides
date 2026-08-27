@@ -249,6 +249,17 @@ def deck_to_pdf(deck: Path, out: Path) -> tuple[Path, bool]:
     aanroep. Hergebruikt zolang hij jonger is dan de deck — dus na een fixronde en
     herpack wordt hij opnieuw gemaakt, en `--slides 7` op een deck van veertig slides
     kost geen tweede conversie.
+
+    **Jonger betekent strikt jonger, en dat is een reparatie.** De test stond op
+    `>=`, en de mtime van een bestand heeft op de meeste bestandssystemen een
+    granulariteit van één seconde. Wie een deck herbouwt en binnen diezelfde
+    seconde rendert, krijgt dan de PDF van vóór de herbouw terug — met
+    `pdf_cached: true` erbij, dus het staat er zelfs eerlijk in terwijl je naar
+    het verkeerde bestand kijkt. Precies het geval dat in een fixronde optreedt,
+    want daar volgen bouw en render elkaar zo snel op. Nu geldt de PDF alleen als
+    fris wanneer hij strikt jonger is; bij gelijke mtime wordt er opnieuw
+    geconverteerd. Dat kost soms een conversie die niet nodig was, en dat is de
+    goede kant om fout te zitten.
     """
     sys.path.insert(0, str(Path(__file__).resolve().parent / "office"))
     from soffice import run_soffice, soffice_binary as resolve
@@ -258,7 +269,7 @@ def deck_to_pdf(deck: Path, out: Path) -> tuple[Path, bool]:
 
     out.mkdir(parents=True, exist_ok=True)
     pdf = out / (deck.stem + ".pdf")
-    if pdf.exists() and pdf.stat().st_mtime >= deck.stat().st_mtime:
+    if pdf.exists() and pdf.stat().st_mtime > deck.stat().st_mtime:
         return pdf, True
 
     result = run_soffice(

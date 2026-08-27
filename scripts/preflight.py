@@ -82,6 +82,8 @@ a real interpreter (python3, python, py -3) and use its full path everywhere; th
 from __future__ import annotations
 
 import argparse
+import json
+import subprocess
 import importlib
 import shutil
 import sys
@@ -327,7 +329,14 @@ def probe_soffice() -> dict:
 #: stylesheet. Wat er bewust NIET in staat is gebouwde uitvoer — de `.dc.html`-
 #: artboards en de maatstaf-SVG's dragen hun kleuren omdat ze gerenderd zijn, en
 #: die renders horen niet bij elke paletwijziging opnieuw gezet te worden.
-MERK_GEZOCHT = (("scripts", "*.py"), ("assets", "*.css"))
+#: De artboards staan erbij, en dat is een reparatie. Ze vielen buiten de poort
+#: omdat ze "gebouwde uitvoer" leken, en dat was maar half waar: een `.dc.html`
+#: draagt een gestempelde stylesheet met het `:root`-blok erin, en die veroudert
+#: net zo goed als een `.css`. Gemeten na de paletmigratie van 27 augustus 2026:
+#: `assets/documenten/voorbeeld-navy/Main.dc.html` droeg nog de vijf oude
+#: waarden, en de maatstaf-PNG die eruit komt toont dus het oude navy — een
+#: voorbeeld dat de verkeerde kleur leert, en de poort keek er niet naar.
+MERK_GEZOCHT = (("scripts", "*.py"), ("assets", "*.css"), ("assets", "*.dc.html"))
 
 #: Wat de grep niet aanrekent. `merk.py` en `merk.css` zijn de bron zelf, en wit
 #: is de enige merkwaarde die geen besluit is: hij staat in de renderlaag als
@@ -405,6 +414,78 @@ def check_raster() -> str | None:
     return None
 
 
+#: Wat een OS-pakketbeheerder moet leveren en pip niet kan. Dit is de lijst die
+#: in een container of op een verse Debian ontbreekt, en waarvan het ontbreken
+#: zich voordoet als iets anders:
+#:
+#: * `libreoffice-writer` — zonder deze laadt soffice geen enkele .docx, ook het
+#:   sjabloon niet, en meldt `source file could not be loaded` met exitcode 0.
+#: * `libreoffice-impress` — zelfde verhaal voor een .pptx. Dit is de fout die
+#:   `probe_soffice()` hierboven opving, en de reden dat die proef bestaat.
+#: * `poppler-utils` — levert `pdftoppm`. Zonder hem is er een PDF en geen PNG,
+#:   dus dan kijk je naar de PDF en dat kan ook; niet blokkerend.
+#:
+#: Op een laptop met LibreOffice uit de .dmg of .msi is dit alles al aanwezig:
+#: die installers leveren de hele suite. Het gesplitste geval bestaat op Debian
+#: en Ubuntu, en in containers met een uitgeklede LibreOffice — en dat laatste
+#: is precies waar deze plugin vaak draait.
+OS_PAKKETTEN = ("libreoffice-writer", "libreoffice-impress", "poppler-utils")
+
+
+def _pip(*pakketten: str) -> bool:
+    r = subprocess.run([sys.executable, "-m", "pip", "install", "-q",
+                        "--break-system-packages", *pakketten],
+                       capture_output=True, text=True)
+    return r.returncode == 0
+
+
+def herstel() -> dict:
+    """Zet erbij wat te installeren is, en zeg wat een mens moet doen.
+
+    Twee soorten ontbrekende dingen, en ze vragen iets anders. pip-pakketten
+    kan dit script zelf halen. OS-pakketten alleen wanneer er een apt is en
+    het script mag installeren; anders is de enige juiste uitkomst een
+    opdrachtregel die de gebruiker zelf uitvoert. Nooit stil doorgaan alsof
+    het gelukt is.
+    """
+    uit: dict = {"pip": {}, "os": {}, "handmatig": []}
+
+    mist_pip = [naam for naam, ok in check_imports(REQUIRED).items() if not ok]
+    mist_pip += [naam for naam, ok in check_imports(OPTIONAL).items() if not ok]
+    if mist_pip:
+        uit["pip"] = {"geprobeerd": mist_pip, "gelukt": _pip(*mist_pip)}
+
+    apt = shutil.which("apt-get")
+    nodig = []
+    if not check_soffice():
+        nodig += ["libreoffice-writer", "libreoffice-impress"]
+    else:
+        probe = probe_soffice()
+        if probe.get("ok") is False:
+            nodig += ["libreoffice-impress", "libreoffice-writer"]
+    if not check_raster():
+        nodig.append("poppler-utils")
+    nodig = sorted(set(nodig))
+
+    if not nodig:
+        uit["os"] = {"nodig": [], "detail": "niets te doen"}
+    elif apt:
+        r = subprocess.run([apt, "install", "-y", "-qq", *nodig],
+                           capture_output=True, text=True)
+        uit["os"] = {"nodig": nodig, "gelukt": r.returncode == 0,
+                     "detail": (r.stderr or "").strip()[:300]}
+        if r.returncode != 0:
+            uit["handmatig"].append("sudo apt-get install -y " + " ".join(nodig))
+    else:
+        uit["os"] = {"nodig": nodig, "gelukt": False,
+                     "detail": "geen apt-get op deze machine"}
+        uit["handmatig"].append(
+            "installeer LibreOffice compleet (de .dmg of .msi levert de hele "
+            "suite) en poppler-utils, of hun equivalent voor deze pakketbeheerder: "
+            + ", ".join(nodig))
+    return uit
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
@@ -412,7 +493,15 @@ def main() -> None:
         action="store_true",
         help="accepted for symmetry with the other scripts; output is always JSON",
     )
-    parser.parse_args()
+    parser.add_argument(
+        "--herstel", action="store_true",
+        help="zet erbij wat te installeren is, en zeg wat een mens zelf moet doen",
+    )
+    args = parser.parse_args()
+
+    if args.herstel:
+        print(json.dumps({"herstel": herstel()}, indent=2, ensure_ascii=False))
+        print(file=sys.stderr)
 
     emit, font_report = deck_helpers()
 

@@ -182,6 +182,21 @@ Bouw met `execute_script`, zonder `module.exports`. Eén betekenisvolle stap per
 stap 6. Een betekenisvolle stap is: de vlakken, of de linkerpagina, of het tekstblok — niet
 "de hele spread".
 
+**En hier zit een knipplaats die je moet kennen, want anders werkt "in stappen" niet.** Of
+`execute_script` zijn state tussen aanroepen vasthoudt, is niet gedocumenteerd en in deze plugin
+niet vastgesteld. Ga er dus van uit dat hij dat **niet** doet: elke aanroep begint schoon. Dat
+heeft twee gevolgen die je anders pas merkt als het misgaat.
+
+Een herhaalde `const M = {…}` in een tweede aanroep gooit een fout als de state wél blijft staan,
+en een verwijzing naar `M` gooit een fout als hij dat niet doet. Daar is één vorm die in beide
+gevallen werkt: **zet het definitieblok — `M`, `T`, `K`, de keuringslus en de helpers — boven élke
+aanroep, en laat elke aanroep zijn eigen `doc` opnieuw verkrijgen.** Dus niet één script dat je in
+stukken knipt, maar per stap één zelfstandig script met dezelfde kop. Dat kost wat herhaling in de
+aanroepen en het is de enige vorm die niet van een aanname afhangt.
+
+Merk je dat de state wél blijft staan — een tweede aanroep die `M` nog kent — dan mag je de kop
+weglaten. Meld dat dan, want het is een feit over de SDK dat dit bestand nog niet heeft.
+
 Het stramien is een richtlijn en geen keurslijf. Vaste posities houden pagina's onderling
 herkenbaar; past de inhoud er niet in, dan mag je schuiven — bewust, in stappen van een hele
 rastereenheid, en met de melding erbij wat je hebt verschoven en waarom. **Wat je nooit doet is
@@ -190,7 +205,9 @@ en dan is de kopij weg zonder dat iemand het ziet.
 
 Voor de pagina's waarvoor geen bouwscript bestaat — de hoofdstukopener, de tekstpagina, de
 visualpagina — componeer je de vorm zelf uit dezelfde primitieven, met de klassen en merktekens
-van `rapport-stramien.md` §5 en de drie openers van §7 als wat je natekent. Leg die keuzes vast
+van `rapport-stramien.md` §5 en de drie openers van §7 als wat je natekent. Voor een
+casespread staat het inhoudscontract in §7f: vijf blokken in vaste volgorde, zeven
+paspoortvelden, drie kerncijfers, en de tekenbudgetten per veld. Leg die keuzes vast
 in de projectmap, zodat ze de volgende keer navolgbaar zijn.
 
 ## Stap 6 — De renderloop, en die is niet overslaanbaar
@@ -236,7 +253,8 @@ Het script is niet aan één paginatype gebonden. Secties 1 tot 6 zijn het appar
 de maatladder, de kleuren, het document, de letters en de primitieven — en die staan er voor elke
 pagina hetzelfde. Sectie 7 is de kopij en sectie 8 de compositie, en dáár verschilt een
 hoofdstukopener van een tekstpagina van een uitnodiging. Welke paginatypes er zijn en wat ze
-dragen, staat in `reference/rapport-stramien.md` §7 en `reference/documenten-stramien.md`; deze
+dragen, staat in `reference/rapport-stramien.md` §5 (de klassen), §7 (de hoofdstukopeners) en
+§7f (het paginatype casespread, met zijn inhoudscontract), plus `reference/documenten-stramien.md`; deze
 skill schrijft ze niet voor.
 
 ```javascript
@@ -283,10 +301,20 @@ const T = {
 // waarde daar op en verzin er geen. Welke kleur het register van deze spread
 // draagt, staat in rapport-stramien.md §6.
 const K = {
-  inkt:     null,   // merk.md §1 — de inkt
-  papier:   null,   // merk.md §1
-  accent:   null,   // merk.md §1 — draagt geen lopende tekst, zie de vormentaal §4
-  register: null,   // de accentkleur van het register, rapport-stramien.md §6
+  inkt:      null,  // merk.md §1 — de inkt op papier
+  papier:    null,  // merk.md §1
+  accent:    null,  // merk.md §1 — draagt geen lopende tekst, zie de vormentaal §4
+  register:  null,  // de accentkleur van het register, rapport-stramien.md §6
+  // De inkt die op een GEKLEURD vlak komt, en dat is niet vanzelf `inkt`.
+  // Dit slot stond er niet en dat was een val met een getal eronder: op het
+  // register `contrast` is de kleur violet, en navy op violet haalt 2,86 —
+  // precies de paring die merk.md §1 als de val aanwijst. Wie hier `inkt`
+  // invulde, zette onleesbare tekst op een vlak dat er goed uitzag.
+  //
+  // Zoek hem op in de paringstabel van merk.md §1, of laat hem uitrekenen met
+  // `python scripts/gedeeld/merk.py --inkt-op <kleur>`. Op oranje, grapefruit,
+  // emerald en sky is het navy; op royal, violet en navy is het wit.
+  inktOpVlak: null,
 };
 // De poort. Zonder deze lus bouw je op geraden getallen.
 (function keuring(o, pad) {
@@ -386,7 +414,7 @@ function lines(t, w, corps) { return Math.max(1, Math.ceil(t.length / Math.floor
 // opschuift. En elke regelschatting houdt een handmatige overschrijving naast
 // zich, want `lines()` schat en de render beslist.
 const KOPIJ = {
-  /* de velden van dit paginatype; zie rapport-stramien.md §7 */
+  /* de velden van dit paginatype; zie rapport-stramien.md §7f */
   regelsOverschrijving: null,   // per veld dat de schatting misrekent
 };
 

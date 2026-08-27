@@ -76,6 +76,7 @@ from xml.sax.saxutils import escape
 # Word-sjabloon: een SVG naast een Word-document had daardoor een ander oranje.
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "scripts" / "gedeeld"))
 import merk  # noqa: E402
+from fonts import kies_beste as _kies_beste  # noqa: E402
 
 PT_PER_INCH = 72.0
 PX_PER_PT = 96.0 / 72.0
@@ -298,9 +299,13 @@ CONTAINER = {
 #: afgeleid te zijn van de kleur die er werkelijk staat.
 OP_WIT = {naam: merk.contrast(hex_, "wit") for naam, hex_ in HEX.items() if naam != "wit"}
 
-#: Tekstkleur op een VOLLE vulling.
-OP_VOL = {"navy": "wit", "royal": "wit", "zwartblauw": "wit",
-          "oranje": "navy", "grapefruit": "navy", "sky": "navy", "emerald": "navy"}
+#: Tekstkleur op een VOLLE vulling. Uitgerekend en niet opgezocht: als tabel
+#: ontbrak `violet` hier net zo goed als in `scripts/shapes.py`, en dan geeft
+#: `tekst_op("violet")` navy op een vlak dat 2,86 haalt. `zwartblauw` staat er
+#: los bij, want dat is het `dk1`-slot van het PowerPoint-sjabloon en geen
+#: merkkleur.
+OP_VOL = {naam: merk.inkt_op(naam) for naam in merk.HEX if naam != "wit"}
+OP_VOL["zwartblauw"] = "wit"
 
 #: Boven deze maat leest een cijfer als vorm en mag wit ook op een lichte hue.
 DISPLAY_VLOER = 40.0
@@ -363,6 +368,8 @@ VERBODEN = ("Gotham",)
 #: De plugin-map. `scripts/infographic/svg.py` ligt twee mappen diep, dus dit is de
 #: wortel waar `assets/` en de andere skills onder hangen.
 WORTEL = Path(__file__).resolve().parents[2]
+
+sys.path.insert(0, str(WORTEL / "scripts" / "gedeeld"))
 
 #: De letters die de plugin zélf meedraagt, en waar ze vandaan komen.
 #:
@@ -435,9 +442,19 @@ def vind_font(familie: str) -> str | None:
     infographic ook op een kale machine op echte metriek breekt; hij dekt de
     latin-subset, dus alles wat een SFNL-infographic zet behalve het promillageteken.
     """
-    for kand in _fontbestand_kandidaten(familie):
-        if Path(kand).is_file() and Path(kand).suffix.lower() in (".ttf", ".otf", ""):
-            return kand
+    # De keuze uit de kandidaten gaat door `scripts/gedeeld/fonts.py` en niet
+    # meer door `sorted()`. Dat laatste was fout en de fout was onzichtbaar: in
+    # een map met `LatoLight-Italic.ttf` en `LatoLight-Regular.ttf` sorteert
+    # `Italic` vooraan, dus de meting liep op de cursief -- 6,3 procent smaller
+    # dan de romein, meer dan de veiligheidsmarge van 3,5 procent, en met het
+    # teken de verkeerde kant op. En `preflight.py` meldde er `meting_echt:
+    # true` bij, dus een schatting kreeg de status van bewijs.
+    beste = _kies_beste([k for k in _fontbestand_kandidaten(familie)
+                         if Path(k).is_file()
+                         and Path(k).suffix.lower() in (".ttf", ".otf", "")],
+                        familie)
+    if beste:
+        return str(beste)
     eigen = _ingesloten(familie)
     if eigen:
         return str(eigen)

@@ -350,11 +350,34 @@ merkkleur brengt zo'n paar mee:
 
 **Drie slots halen het wel, en het zijn royal, oranje en emerald.** Alle paren:
 CVD-scheiding het slechtst op emerald ↔ oranje met ΔE 14,5 (deutan) — boven het doel van 8 — en
-op normaal zicht 25,6, ruim boven 15. Dat geldt in beide thema's, want het zijn dezelfde hexwaarden.
+op normaal zicht 25,6, ruim boven 15.
+
+**Dat geldt in beide thema's, en alleen voor de onderlinge scheiding.** De ΔE tussen twee reeksen
+hangt aan hun eigen hexwaarden en die veranderen niet met het thema. Het contrast van elke reeks
+tégen de grond doet dat wél, en dat klapt om: royal haalt 5,85 op wit en 2,70 op navy, emerald
+1,98 op wit en 7,99 op navy. Een set van drie die onderling even goed scheidt, oogt daarom in de
+twee thema's ongelijk — en in tegengestelde richting. Wie de reeksen even luid wil hebben, moet
+per thema iets anders doen: op licht is emerald de zwakste van de drie en op donker is royal het.
+Dit is precies de fout die je maakt als je "dezelfde hexwaarden" als antwoord op de hele vraag
+leest. Zie §2 voor de omgeklapte rangorde.
 
 > **Een vierde categorie is geen vierde kleur.** Hij valt in "overig", of het worden kleine
 > veelvouden, of het is een andere vorm. Dat is niet een SFNL-beperking die je omzeilt maar een
 > eigenschap van een palet met vier blauwen en twee warme kleuren.
+
+**En vier ítems is een andere vraag dan vier categorieën.** Dit is de vraag die een echte opdracht
+oplevert en die hier eerst niet stond. Vier uitvoerders, zes gemeenten, vijf gemeenten met een
+score: dat zijn geen categorieën maar waarden op één as, en ze dragen allemaal dezelfde grootheid.
+Dan heb je geen vier kleuren nodig maar **één**, want de kleur codeert niets — de lengte doet dat.
+
+De toets is één vraag: **codeert de kleur iets wat de vorm niet al zegt?** Zo nee, dan is het één
+hue met een direct label per spoor, en gaat het derde slot naar iets waar er werkelijk drie zijn.
+Nagemeten op een dashboard met vier uitvoerders: vier hues gaven vier keer hetzelfde te lezen, en
+één hue met de doellijn erdoor gaf de vergelijking die de lezer zocht.
+
+Een categorie is het pas als de kleur op meer dan één plek dezelfde betekenis draagt — drie
+standpunten die ook in de tekst en in een tabel terugkomen, drie fasen die door de hele pagina
+lopen. Dat rechtvaardigt een slot; vier balken naast elkaar niet.
 
 ### Wat er blijft staan als WARN, en wat dat verplicht
 

@@ -121,11 +121,24 @@ uitspraak — niet de kleur op de plaat.
 
 ## 2. De letters
 
-| familie | gewichten | licentie | mag mee in de plugin |
+| familie | gewichten die de huisstijl gebruikt | licentie | mag mee in de plugin |
 |---|---|---|---|
 | Gotham | Bold | commercieel, Hoefler&Co | **nooit** |
 | Montserrat | 300 Light, 600 SemiBold, 700 Bold, 800 ExtraBold | SIL OFL 1.1 | ja, met `OFL-Montserrat.txt` erbij |
-| Lato | 300 Light, 400, 700, plus 300 en 400 cursief | SIL OFL 1.1 | ja, met `OFL-Lato.txt` erbij |
+| Lato | 300 Light, 400, **600 Semibold**, 700, plus 300 en 400 cursief | SIL OFL 1.1 | ja, met `OFL-Lato.txt` erbij |
+
+**Welke snedes de plugin meelevert is een kortere lijst dan deze**, en dat verschil is een
+valkuil. `assets/documenten/fonts/` draagt Lato 300, 400, 700 en twee cursieven, plus Montserrat
+als variabele snede — genoeg voor alles wat in HTML en drukwerk wordt ingesloten. **Lato Semibold
+zit er niet bij**, en die wordt wél gevraagd: `aanhef()` in `scripts/shapes.py` zet de aanhef van
+een run-in kop erin, omdat dat dezelfde gewichtssprong maakt als Montserrat SemiBold binnen
+dezelfde letterbouw en x-hoogte.
+
+Dat is geen fout in `aanhef()` — op een SFNL-machine staat de volledige Lato-familie en dan komt
+de snede er gewoon. Het betekent wél dat de *meting* hem hier niet kan vinden, en dat de renderer
+hem substitueert. Wie een aanhef beoordeelt op een render uit deze plugin, beoordeelt dus een
+vervangende snede; `preflight.py` meldt per familie welk bestand het heeft gevonden, en dat is de
+plek om te kijken voordat je een gewichtsverschil een vormoordeel geeft.
 
 **Gotham is de merkletter en reist nooit mee.** Op een SFNL-machine staat hij; in een sandbox, in
 een browser en op de machine van een klant niet. Elke route die hem zou willen gebruiken, neemt

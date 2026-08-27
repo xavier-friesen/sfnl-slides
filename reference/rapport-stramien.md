@@ -220,6 +220,54 @@ Lopende tekst 8 pt; apparaat — noten, bronregels, kopregel, bijschrift —
 7 pt, en dat is de gemeten norm (MGI zet voetnoten op 7 pt, Bain op 6,2);
 een gespatieerd kapitaallabel 6 pt.
 
+### 4a. De interlinies, en waar ze staan
+
+De maatladder hierboven geeft zes corpsen en geen enkele interlinie, en dat was een gat: een
+zetmotor die niet in HTML werkt — de Affinity-route — heeft per rol een regelafstand nodig en kan
+die niet uit een `line-height` van een browser halen. Ze staan hieronder zoals `rapport.css` ze
+werkelijk zet, gemeten en niet gekozen.
+
+| rol | corps px | interlinie px | factor | waar het staat in `rapport.css` |
+|---|---|---|---|---|
+| display | 56 | 57,1 | 1,02 | `.omslag__titel` |
+| titel | 26,67 | 28,8 | 1,08 | `.opener__titel` |
+| kop | 16 | 19,5 | 1,22 | `.sectiekop` |
+| brood | 13,33 | **17,33** | 1,30 | `--r-body` in de modellen `kantlijn` en `dubbel` |
+| brood in `breed` | 14,67 | **22** | 1,50 | `--r-body` in `breed` |
+| klein | 10,67 | 14 | 1,31 | `--r-klein` |
+| noot | 9,33 | 12,5 | 1,34 | `.voetnoot`, `.kantnoot`, `.exhibit__noot`, `.exhibit__bron` |
+
+Twee dingen om te weten. De **factor loopt op naarmate het corps kleiner wordt** — 1,02 op de
+omslagtitel tegen 1,34 op de noot — en dat is geen inconsistentie maar de gewone typografische
+regel: een grote letter heeft relatief minder lucht nodig dan een kleine. En de interlinie van het
+brood is de enige die aan het **model** hangt en niet aan de rol, want de zetspiegelhoogte is een
+geheel aantal broodregels; verzet je die, dan verschuift het aantal regels per pagina mee.
+
+`.hoofdstuktitel` staat op 1,14 en niet op 1,08, en dat is met opzet: die staat op een heel blad
+met veel lucht eromheen, waar een strakkere interlinie de titel als een blok laat lezen in plaats
+van als een regelval.
+
+### 4b. De folio en de rasterdichtheid
+
+Twee getallen die de Affinity-route nodig heeft en die nergens stonden.
+
+| wat | waarde | herkomst |
+|---|---|---|
+| folio, hoogte boven de snijlijn | `marge-onder − 46 px` | `.rapport-folio` in `rapport.css`; op `sfnl`/`dubbel` is dat 94 − 46 = **48 px**, ofwel 12,7 mm |
+| kopregel, hoogte onder de snijlijn | **42 px** (11 mm) | `--r-kopregel-top`, en die is vast over alle formaten |
+| rasterdichtheid van het document | **300 dpi** | besluit, geen meting — zie hieronder |
+
+De folio hangt dus aan de **ondermarge** en niet aan de snijlijn, en die ondermarge is uitgerekend
+en verschilt per formaat en model. Op `sfnl`/`breed` is hij 107 − 46 = 61 px. Wie hem op een vaste
+afstand van de snijlijn zet, laat hem op twee modellen naast elkaar op verschillende hoogte staan.
+
+**De 300 dpi is een besluit en staat hier zodat het één keer genomen is.** Voor de HTML-route doet
+het niets: die levert vectorPDF en de dichtheid is dan niet gedefinieerd. Voor de Affinity-route
+wél, want daar bepaalt hij de pixelmaat van het documentcanvas en dus de schaalfactor waarmee elke
+maat uit dit stramien wordt omgerekend. 300 is de dichtheid waarop offsetdrukwerk wordt aangeleverd
+en waarop een geplaatst rasterbeeld nog scherp is; 150 haalt dat niet en 600 verdubbelt de
+bestandsgrootte zonder dat een drukker het verschil kan afdrukken.
+
 ---
 
 ## 5. De klassen
@@ -730,6 +778,81 @@ staat één keer, in `documenten-stramien.md` §1a, en geldt voor beide
 drukroutes.
 
 ---
+
+## 7f. Het paginatype casespread
+
+Dit stond in de Affinity-bronskill en viel bij het herschrijven weg, en dat was het grootste
+inhoudelijke verlies van die operatie: het is een **contract** en geen opmaak. Twee agents vonden
+het onafhankelijk terug als gat. Het staat hier omdat het aan de maten hangt en niet aan de
+uitvoeringslaag — of je de spread in Affinity of in HTML zet, dit blijft gelijk.
+
+**De vijf blokken staan in een vaste volgorde en op een vaste plek.** Dat is de hele reden dat
+cases naast elkaar te leggen zijn: een lezer die drie cases doorbladert, vindt hetzelfde antwoord
+op dezelfde plek. Kop in kapitalen, het nummer hangt links in een kolom van 30 breed, geen lijn
+eronder. Welke vijf het zijn hangt aan het rapport — in het Civitates-rapport waren het
+fondsopzet, waarom pooled funding, governancekeuzes, wat het bracht, en lessen — maar dát het vijf
+zijn en dat ze niet van volgorde wisselen, is het contract.
+
+**Het fondspaspoort is zeven regels en die blijven staan, ook leeg.**
+
+| | veld |
+|---|---|
+| 1 | thema |
+| 2 | geografische scope |
+| 3 | oprichtingsjaar |
+| 4 | type financiers |
+| 5 | besluitvorming |
+| 6 | fondsmanagement |
+| 7 | beheerkosten |
+
+Bij beheerkosten vul je alleen wat openbaar is. Ontbreekt het cijfer, dan blijft het veld staan met
+**"Niet openbaar"** erin. Dat is geen invuloefening maar de kern van het paspoort: zo blijft het
+raster over de cases heel, en ziet de lezer dat de vraag is gesteld en niet dat hij is overgeslagen.
+
+**Drie kerncijfers**, en dat zijn jaarlijks budget, ticketgrootte en aantal financiers. Het derde
+draagt geen eenheidslabel.
+
+**De regelopbouw van het paspoort is een rekensom en geen tabel.** Label op `ry`, waarde op
+`ry + 16`, en de rijhoogte volgt de tekst: `pitch = 16 + regels × 16 + 6`. Twee regels geeft 54,
+drie regels 70. Reken het aantal regels uit de tekstlengte en niet uit een vaste tabel, anders
+schuift een lange waarde over het volgende label.
+
+**En de strook is een doorlopende kolom.** Loopt hij tegen de folio aan, verklein dan eerst de
+tussenruimte tussen de feitenregels van 6 naar 4, en pas daarna de bronregel. De folio verschuift
+niet: beide folio's van een spread horen op dezelfde hoogte, en dat is §4b.
+
+### Capaciteit, en de tekenbudgetten
+
+Ongeveer **700 tot 750 woorden gesprek per spread**, verdeeld over vier antwoorden van drie tot
+vier alinea's. Loopt een interview daar ruim over, dan krijgt die case **drie pagina's**: een
+paspoortpagina plus twee gesprekspagina's, met de lessenband op de laatste.
+
+De tekstkaders kappen te lange kopij af **zonder waarschuwing**, en dat is de reden dat hier
+tekenaantallen staan in plaats van "houd het kort". Als vertrekpunt, en te controleren op de
+render:
+
+| veld | tekens |
+|---|---|
+| fondsnaam | max 28 per regel |
+| intro | 180–240 |
+| contextregel | 120–160 |
+| antwoord per kolom | 850–1000 |
+| lessenkop | 30–45 |
+| lessentekst | 180–230 |
+
+### Twee dingen die hier met opzet niet staan
+
+**De coördinatentabel niet.** Die is gemeten op één spread — de Civitates-casespread op
+420 × 275 mm — en hij is de opmaak van dat ene paginatype en niet een feit over het stramien. Hij
+hoort in het bouwscript van de route die hem zet, met de maten uit dit bestand erin. Zou hij hier
+staan, dan was hij binnen één rapport verouderd.
+
+**De archetypetabel niet, nog niet.** Vijf fondsarchetypes met elk een kleur en een verplichte
+tekstkleur erbij. De paring is het punt en niet de kleur: op royal en violet komt **wit**, want
+navy haalt daar 2,70 en 2,86. Die regel staat nu generiek in `merk.md` §1 en is uitgerekend door
+`merk.inkt_op()`, dus de veiligheid zit er al in. Welke vijf archetypes er zijn en welke kleur elk
+draagt, is een besluit over het rapport en niet over het stramien; wie ze weer nodig heeft, legt ze
+vast in de projectmap van dat rapport.
 
 ## 8. Wat de zetmotor toevoegt aan de markup
 

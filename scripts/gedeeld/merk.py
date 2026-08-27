@@ -72,7 +72,14 @@ EINDE = "/* merk:einde */"
 #: waarden daaruit. Twee keer hetzelfde `:root` stempelen zou de vraag
 #: openlaten welke van de twee de bron is.
 GESTEMPELD = (WORTEL / "assets" / "documenten" / "stijl.css",
-              WORTEL / "assets" / "online" / "stijl.css")
+              WORTEL / "assets" / "online" / "stijl.css",
+              # Een artboard dat zijn eigen tokens draagt, hoort er ook bij. Dit
+              # voorblad had een losse kopie van het `:root`-blok en die stond na
+              # de paletmigratie van 27 augustus 2026 nog op de oude vijf
+              # waarden -- dus de maatstaf-PNG eruit toonde het oude navy, en een
+              # voorbeeld dat de verkeerde kleur leert is erger dan geen
+              # voorbeeld.
+              WORTEL / "assets" / "documenten" / "voorbeeld-navy" / "Main.dc.html")
 
 
 # --------------------------------------------------------------------- kleur
@@ -251,6 +258,42 @@ def mag_zin_dragen(kleur: str, achter: str = "wit") -> bool:
 # --------------------------------------------------------------------- css
 
 
+def inkt_op(kleur: str) -> str:
+    """`"navy"` of `"wit"` — welke inkt hoort op dit vlak. Uitgerekend, niet opgezocht.
+
+    Dit stond twee keer als tabel in de plugin, in `scripts/shapes.py` en in
+    `scripts/infographic/svg.py`, en in beide ontbrak `violet`. `shapes.py` viel
+    daarop stil terug op navy — en navy op violet haalt 2,86, precies de paring
+    die `merk.md` §1 als de val aanwijst. Een tabel die de kleuren niet volgt,
+    loopt uit de pas zodra er een kleur bijkomt of verandert; een berekening
+    niet.
+
+    De regel: de inkt met de hoogste verhouding wint. Bij navy is dat een vlak
+    dat licht genoeg is, bij wit een vlak dat donker genoeg is, en er is geen
+    derde geval.
+
+    >>> inkt_op("oranje"), inkt_op("emerald"), inkt_op("sky")
+    ('navy', 'navy', 'navy')
+    >>> inkt_op("royal"), inkt_op("violet"), inkt_op("navy")
+    ('wit', 'wit', 'wit')
+    >>> inkt_op("wit")
+    'navy'
+
+    En de twee vlakken waar het misging, met hun cijfers:
+
+    >>> round(contrast("navy", "violet"), 2), round(contrast("wit", "violet"), 2)
+    (2.86, 5.52)
+    >>> round(contrast("navy", "royal"), 2), round(contrast("wit", "royal"), 2)
+    (2.7, 5.85)
+    """
+    return "navy" if contrast("navy", kleur) >= contrast("wit", kleur) else "wit"
+
+
+def haalt_drempel(kleur: str, achter: str, groot: bool = False) -> bool:
+    """Haalt deze combinatie de WCAG-drempel? 3,0 voor grote tekst, anders 4,5."""
+    return contrast(kleur, achter) >= (3.0 if groot else 4.5)
+
+
 def _regel(naam: str, waarde: str, uitleg: str = "", breedte: int = 14) -> str:
     kop = f"  --{naam}:".ljust(breedte + 5)
     stuk = f"{kop}{waarde};"
@@ -398,9 +441,17 @@ def main() -> int:
                     help="merk.css schrijven en de stylesheets stempelen")
     ap.add_argument("--check", action="store_true",
                     help="alleen melden wat uit de pas loopt; schrijft niets")
+    ap.add_argument("--inkt-op", metavar="KLEUR",
+                    help="welke inkt op dit vlak hoort: navy of wit, uitgerekend")
     ap.add_argument("--contrast", nargs=2, metavar=("A", "B"),
                     help="de WCAG-verhouding tussen twee merknamen of hexwaarden")
     a = ap.parse_args()
+
+    if a.inkt_op:
+
+        print(inkt_op(a.inkt_op))
+
+        return 0
 
     if a.contrast:
         print(f"{a.contrast[0]} op {a.contrast[1]}: "

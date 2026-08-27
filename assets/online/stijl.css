@@ -694,7 +694,23 @@ a:hover { text-decoration-color: var(--inkt); }
 }
 .paneel--mint   { background: var(--tint-mint); }
 .paneel--oranje { background: var(--tint-oranje); }
-.paneel--royal  { background: var(--tint-royal); }
+/* Royal is het enige tintpaneel dat zijn stille inkt niet kan dragen, en dat
+   is met opzet een uitzondering en geen algemene regel. Nagemeten met
+   `merk.contrast()`: navy op 70 procent over periwinkel haalt 4,00 en de
+   drempel voor lopende tekst is 4,5. De drie andere tinten halen het wel —
+   oranje 5,51, emerald 5,80, navy-tint 5,86 — want die zijn veel lichter.
+   Op donker is er geen probleem: daar haalt wit op 70 procent over het
+   royale vlak 5,07.
+
+   Dus zet dit paneel de stille inkt om naar de volle inkt: 7,20 in licht.
+   `.paneel--vol` doet hetzelfde voor het accentvlak; dat dit paneel het niet
+   deed was een gat en geen keuze — het kwam boven op een echt dashboard,
+   niet op de maatstaf, want daar staat geen stille tekst in een royaal
+   paneel. */
+.paneel--royal {
+  background: var(--tint-royal);
+  --inkt-stil: var(--inkt);
+}
 .kaart {
   background: transparent;
   border: var(--haarlijn) solid var(--lijn);
@@ -743,9 +759,25 @@ a:hover { text-decoration-color: var(--inkt); }
    paren. */
 .paspoort {
   display: grid;
-  grid-template-columns: max-content 1fr;
+  /* `max-content` op de labelkolom betekent: word zo breed als het langste
+     label ook nodig heeft, en wrap nooit. In een paneel in een smalle kolom
+     duwt één label van drie woorden daarmee het hele document breder dan het
+     venster — gemeten op een echt dashboard: 54 px horizontale overloop, en
+     `qa_online.py` meldde het als `horizontaal`. De maatstaf verbergt het,
+     want daar is elk label één woord.
+
+     `minmax(min-content, max-content)` houdt het gedrag dat je wil — de
+     kolom is zo smal als het label toelaat — maar geeft hem toestemming om
+     te wrappen zodra de ruimte er niet is. Onder de smalste stand valt de
+     lijst terug op één kolom, want twee kolommen van elk vijf tekens is geen
+     lijst meer. */
+  grid-template-columns: minmax(min-content, max-content) 1fr;
   gap: 6px var(--goot);
   margin: 0;
+}
+@media (max-width: 30rem) {
+  .paspoort { grid-template-columns: 1fr; gap: 2px; }
+  .paspoort dd { margin-bottom: 6px; }
 }
 .paspoort dt {
   font-family: var(--display);

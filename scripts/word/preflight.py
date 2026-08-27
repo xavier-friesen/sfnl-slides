@@ -32,6 +32,7 @@ from __future__ import annotations
 import argparse
 import json
 import shutil
+import tempfile
 import subprocess
 import sys
 import zipfile
@@ -49,6 +50,44 @@ sys.path.insert(0, str(WORTEL / "scripts" / "gedeeld"))
 NODIG = ("word/styles.xml", "word/theme/theme1.xml", "word/numbering.xml",
          "word/settings.xml", "word/header2.xml", "word/footer2.xml",
          "word/media/image2.png")
+
+
+GEEN_FILTER = "source file could not be loaded"
+
+
+def _proef_writer(exe: str | None) -> dict:
+    """Zet het sjabloon echt om naar PDF. `{"ran", "ok", "detail"}`.
+
+    Het oordeel hangt aan de vraag of er een PDF staat, en niet aan de
+    exitcode: die is 0 ook wanneer LibreOffice niets heeft omgezet. Kost hier
+    ongeveer twee seconden, een keer per sessie.
+    """
+    if not exe:
+        return {"ran": False, "ok": False, "detail": "geen soffice gevonden"}
+    if not SJABLOON.is_file():
+        return {"ran": False, "ok": False,
+                "detail": "geen sjabloon om de proef mee te doen"}
+    with tempfile.TemporaryDirectory() as tmp:
+        doel = Path(tmp) / "proef"
+        doel.mkdir()
+        try:
+            r = subprocess.run(
+                [exe, "-env:UserInstallation=file://" + str(Path(tmp) / "profiel"),
+                 "--headless", "--convert-to", "pdf", "--outdir", str(doel),
+                 str(SJABLOON)],
+                capture_output=True, text=True, timeout=180)
+        except (OSError, subprocess.SubprocessError) as e:
+            return {"ran": False, "ok": False, "detail": f"soffice liep niet af: {e}"}
+        pdfs = list(doel.glob("*.pdf"))
+        if pdfs:
+            return {"ran": True, "ok": True, "detail": "het sjabloon werd een pdf"}
+        melding = ((r.stdout or "") + (r.stderr or "")).strip()
+        hint = ("libreoffice-writer ontbreekt naast libreoffice-core"
+                if GEEN_FILTER in melding else
+                "geen pdf en geen bekende melding")
+        return {"ran": True, "ok": False,
+                "detail": f"soffice zette het sjabloon niet om: {hint}. "
+                          f"Exitcode {r.returncode} zegt hier niets."}
 
 
 def main() -> int:
@@ -71,9 +110,24 @@ def main() -> int:
         uit["sjabloon"] = None
         uit["sjabloon_mist"] = list(NODIG)
 
-    # 3. De renderer.
+    # 3. De renderer, en die wordt geprobeerd en niet aangenomen.
+    #
+    # `shutil.which("soffice")` is hier geen antwoord, en dat is een keer duur
+    # geweest. Op Debian en Ubuntu kan `libreoffice-core` alleen geinstalleerd
+    # staan, zonder `libreoffice-writer`. Dan bestaat `soffice`, staat hij op
+    # PATH, en meldt een which-check een renderer -- maar er is geen
+    # importfilter voor een .docx, en `--convert-to pdf` antwoordt
+    # `Error: source file could not be loaded` MET EXITCODE 0. Op de
+    # aanwezigheid van het binary kun je dus niets bouwen.
+    #
+    # `scripts/preflight.py` had dit al opgelost voor de deckroute, met
+    # `probe_soffice()` en een lege pptx. Die les was niet meegereisd naar deze
+    # route, en dat kostte een halve dag zoeken op een sjabloon dat "niet
+    # geladen" kon worden terwijl er niets mee was. Dus: hier dezelfde proef,
+    # met het echte sjabloon, want dat is precies het bestand dat straks
+    # omgezet moet worden.
     exe = shutil.which("soffice") or shutil.which("libreoffice")
-    uit["renderer"] = exe
+    uit["renderer_gevonden"] = exe
     if exe:
         try:
             r = subprocess.run([exe, "--version"], capture_output=True,
@@ -81,6 +135,11 @@ def main() -> int:
             uit["renderer_versie"] = (r.stdout or r.stderr).strip().split("\n")[0]
         except (OSError, subprocess.SubprocessError) as e:
             uit["renderer_versie"] = f"niet op te vragen: {e}"
+    uit["renderer_proef"] = _proef_writer(exe)
+    # `renderer` is voortaan het antwoord op "kan deze machine een document
+    # omzetten", en niet op "staat er een binary". Een consument die hierop
+    # keek, keek op het verkeerde.
+    uit["renderer"] = exe if uit["renderer_proef"].get("ok") else None
     # pdftoppm is geen eis maar het scheelt: zonder een PDF-naar-PNG-stap kijk
     # je naar de PDF zelf, en dat kan ook.
     uit["pdf_naar_png"] = shutil.which("pdftoppm")
@@ -121,9 +180,15 @@ def main() -> int:
               f"{', '.join(uit['sjabloon_mist'])}. Controleer of de checkout "
               "compleet is.", file=sys.stderr)
     if not uit["renderer"]:
-        print("\nGeen LibreOffice: dan bouw je blind. Het document is dan niet "
-              "visueel geverifieerd, en dat hoort bij de oplevering te worden "
-              "gezegd.", file=sys.stderr)
+        proef = uit.get("renderer_proef", {})
+        print("\nGeen werkende LibreOffice: dan bouw je blind. Het document is "
+              "dan niet visueel geverifieerd, en dat hoort bij de oplevering te "
+              f"worden gezegd.\n  {proef.get('detail', '')}", file=sys.stderr)
+        if uit.get("renderer_gevonden"):
+            print("  Let op: soffice staat er WEL. Dat is de val -- het binary "
+                  "bestaat en converteert niets. Op Debian of Ubuntu: "
+                  "`apt-get install libreoffice-writer`, of draai "
+                  "`python scripts/preflight.py --herstel`.", file=sys.stderr)
     if not uit["merk_py"]:
         print("\nGeen merk.py: de letterfamilies staan daar en nergens anders "
               "(reference/merk.md §5). Zonder hem valt het Gotham-besluit "
