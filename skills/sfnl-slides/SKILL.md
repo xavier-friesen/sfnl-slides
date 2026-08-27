@@ -700,6 +700,15 @@ haalde, en wat het beeld zou moeten doen — stel je de escalatie voor met de ko
 extra ronde en een aparte agent per beeld), en wacht je op ja of nee. Bij nee herontwerp je de
 slide zelf met het repertoire, en zeg je bij oplevering dat die slide de zwakste is gebleven.
 
+Bij ja: die skill zit in dezelfde plugin en gebruikt dezelfde `shapes.py`, hetzelfde sjabloon en
+dezelfde layouts. Twee dingen geef je mee. **Welk vlak** — de contentzone van layout 19 is 12,52
+× 5,00 in en dat is precies `CANVAS["contentzone"]` van die skill, dus een beeld dat je daar
+neerlegt hoeft niet te schalen; een kolom van een tweeluik (21 of 22) is staand en vraagt een
+andere vorm. En **de titel**, want die draagt de bewering: idx 0 is "de bewering van de slide,
+ALL CAPS", en dat blijft zo. Een infographic die zijn eigen bewering nog eens op displaymaat
+eronder zet, herhaalt de titel — dus zeg dat de slide de bewering al draagt en dat het beeld
+alleen de figuur is. Zie `reference/samenstellen.md` §3.
+
 Als de loop schoon is, doe je één keer de beslistoets uit `adviesvorm.md` §5: de titelrij
 hardop, de kneep per slide, en de vraag of de ontvanger met alleen deze deck het besluit kan
 nemen. Wat daar sneuvelt is een contentfout en gaat terug naar de outline, niet naar de opmaak.

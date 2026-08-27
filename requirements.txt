@@ -60,3 +60,19 @@ playwright>=1.40
 # die weet hoe breed een woord is, dus anders dan bij
 # sfnl-design-documents is er hier geen "zonder renderer bouw je blind"-
 # route: zonder browser is er geen route. `preflight.py` blokkeert erop.
+
+# --- sfnl-infographic ---
+#
+# fontTools leest de fontbestanden waarmee svg.py de regelafbreking rekent, en
+# instantieert het variabele Montserrat op 300 en 600. Zonder deze module is de
+# afbreking een schatting: compositie en kleur beoordeel je dan gewoon op de
+# render, regelval en blokhoogte niet.
+fonttools>=4.40
+
+# En brotli hoort erbij, want de letters die de plugin meedraagt zijn woff2 —
+# dezelfde bestanden die assets/documenten/fonts/fonts.css insluit. Een woff2 is
+# brotli-gecomprimeerd, dus zonder deze module krijgt fontTools hem niet open en
+# zakt de meting stil terug op een schatting terwijl er niets ontbreekt om naar
+# te wijzen. Daarom meet scripts/infographic/preflight.py de metriek echt na in
+# plaats van te melden dat er een bestand staat.
+brotli>=1.0

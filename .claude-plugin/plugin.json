@@ -1,7 +1,7 @@
 {
   "name": "sfnl-slides",
-  "version": "1.4.0",
-  "description": "Drie skills die dezelfde regel volgen: de vorm is een ontwerpbeslissing en geen invuloefening, en de render is de enige vormbeoordeling. `sfnl-slides` bouwt een deck uit het officiele sjabloon. `sfnl-design-documents` bouwt kort drukwerk in HTML — een uitnodiging, een executive summary, een spread — op een vast blad met een snijrand. `sfnl-rapport-opmaak` maakt van een afgerond Word-rapport een drukklaar rapport van twintig tot honderdvijftig pagina's, met een eigen zetmotor die op de regelgrens splitst, en met de harde belofte dat er geen woord aan de tekst verandert: elke inhoudelijke wijziging die de vorm zou willen, wordt expliciet gevraagd, en `tekstcheck.py` controleert achteraf karakter voor karakter. Vier layoutmodellen, vier kleurregisters, drie hoofdstukopeners — alle drie met een gerenderde keuzekaart — plus drie dichtheden, voet- of eindnoten naast een opgemaakte bronnenlijst, verwijzingen die gelijkgetrokken en gelogd worden, bijlagen met een eigen scheidingsblad, een taal die de afbreking en de labels stuurt, en een intakewidget die begint bij wat er aan het document zelf is gezien. Elke oplevering is het HTML-bestand, de PDF en de artboards voor het designcanvas. Geen patroonbibliotheek in geen van de drie.",
+  "version": "1.6.0",
+  "description": "Vier skills die dezelfde regel volgen: de vorm is een ontwerpbeslissing en geen invuloefening, en de render is de enige vormbeoordeling. `sfnl-slides` bouwt een deck uit het officiele sjabloon. `sfnl-design-documents` bouwt kort drukwerk in HTML — een uitnodiging, een executive summary, een spread — op een vast blad met een snijrand. `sfnl-rapport-opmaak` maakt van een afgerond Word-rapport een drukklaar rapport van twintig tot honderdvijftig pagina's, met een eigen zetmotor die op de regelgrens splitst, en met de harde belofte dat er geen woord aan de tekst verandert. `sfnl-infographic` bouwt het losse beeld dat in alle drie kan komen te staan: zonder titel en zonder omlijning, als SVG, als PowerPoint-slide, of als exhibit op het canvas en de maatladder van de route die hem plaatst. Die vier staan in een plugin omdat ze samengesteld worden en niet naast elkaar: ze delen de huisstijlletters, het voorblad, de canvasroute en de OOXML-primitieven, en `reference/samenstellen.md` beschrijft de ketens. Een infographic die een document of rapport in gaat, komt langs een poort die drie dingen narekent die je op de render van het beeld zelf niet ziet: maten die door de leesvloer zakken, een aanhef of bronregel die herhaalt wat de pagina al zegt, en dood wit dat als gereserveerde ruimte de pagina in gaat. Geen patroonbibliotheek in geen van de vier.",
   "author": {
     "name": "Social Finance NL",
     "email": "info@socialfinancenl.nl"
@@ -40,6 +40,11 @@
     "artboard",
     "pdf",
     "drukklaar",
-    "canvas"
+    "canvas",
+    "infographic",
+    "svg",
+    "exhibit",
+    "dataviz",
+    "visual"
   ]
 }

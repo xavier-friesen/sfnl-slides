@@ -1,6 +1,6 @@
 # sfnl-slides
 
-Drie skills die dezelfde regel volgen: de vorm is een ontwerpbeslissing en geen invuloefening, en
+Vier skills die dezelfde regel volgen: de vorm is een ontwerpbeslissing en geen invuloefening, en
 de render is de enige vormbeoordeling.
 
 | skill | wat je ermee maakt |
@@ -8,9 +8,17 @@ de render is de enige vormbeoordeling.
 | **`sfnl-slides`** | een SFNL-deck uit het officiële `.potx`-sjabloon |
 | **`sfnl-design-documents`** | kort drukwerk in HTML: een uitnodiging, een executive summary, een proposal, een spread |
 | **`sfnl-rapport-opmaak`** | een afgerond Word-rapport van twintig tot honderdvijftig pagina's, opgemaakt zonder één woord aan de tekst te veranderen |
+| **`sfnl-infographic`** | het losse beeld dat in alle drie kan komen te staan: geen titel, geen omlijning, als SVG, als PowerPoint-slide, of als exhibit op het kader van de route die hem plaatst |
 
-De plugin blijft `sfnl-slides` heten, ook nu er drie skills in zitten: dat is de naam waarmee hij
+De plugin blijft `sfnl-slides` heten, ook nu er vier skills in zitten: dat is de naam waarmee hij
 geïnstalleerd staat, en hernoemen zou iedereen tot opnieuw installeren dwingen.
+
+**Ze staan in één plugin omdat ze samengesteld worden, niet omdat ze op elkaar lijken.** Dat is
+het verschil met vier losse skills die dezelfde kleuren gebruiken: ze delen de huisstijlletters,
+het voorblad, de canvasroute en de OOXML-primitieven, dus een infographic die in een document
+komt te staan hoeft niet opnieuw uitgevonden te worden — hij wordt gebouwd op het canvas en de
+maatladder van dat document. `reference/samenstellen.md` beschrijft wat gedeeld is en welke
+ketens er zijn.
 
 ## sfnl-rapport-opmaak — een aangeleverd rapport opmaken
 
@@ -204,6 +212,52 @@ Deze plugin neemt de dunne laag mee en laat de vormgevingspolitie liggen.
 | Scripts | ± 18.100 regels | ± 13.600 regels |
 | Skills | vijf | één |
 
+## sfnl-infographic — het losse beeld
+
+Een visual die ergens ánders in komt te staan. Geen titel, geen oranje dash, geen kader: die
+draagt de container. Wat overblijft is de compositie, en die is elke keer een ontwerpbeslissing.
+
+- **Het vormenwoordenboek is de kern.** Zesenveertig vormen op één blad, structureel getekend en
+  geordend naar de vraag die ze beantwoorden, met een vormtoets ernaast die per vorm zegt wat hij
+  aan gegevens eist. Zonder dat blad kiest een bouwer wat er het eerst opkomt, en dat is een rij
+  kaarten — de enige vorm waarin geen enkele meting iets bepaalt.
+- **Een figuur of een rooster, en dat onderscheid loopt door de hele skill.** In een figuur
+  bepaalt een meting een lengte, een x, een dikte of een hoek; verandert het getal, dan verandert
+  de tekening. In een rooster niet. Vijfenveertig van de zesenveertig vormen zijn een figuur, en
+  de stappen zijn erop gebouwd dat dat de gewone uitkomst is.
+- **Drie schetsen vóór er gebouwd wordt.** Ze kosten een tiende van één gebouwde infographic en
+  ze worden op een canvas voorgelegd, met per concept vier regels: de plattegrond, welke meting
+  welke maat bepaalt, wat de boodschap draagt, en wat het kost.
+- **Vier routes.** Een SVG, een PowerPoint-slide op layout 19, 17, 21 of 22, een native grafiek
+  of tabel als de telling daarop uitkomt, en een exhibit op het kader van een zusterskill.
+- **De letters worden gemeten, niet geschat.** De plugin draagt Montserrat en Lato zelf mee, dus
+  de regelafbreking klopt op een kale machine zonder netwerk. Hetzelfde bestand rendert de PNG's.
+
+```bash
+python scripts/infographic/preflight.py --herstel
+python scripts/infographic/render_svg.py uitvoer/*.svg --wit --schaal 1 --knijp
+python scripts/infographic/insluiten.py uitvoer/beeld.svg --doel document --kader breed
+```
+
+Die laatste is de poort naar de andere drie skills, en hij toetst drie dingen die je op de render
+van het beeld zelf niet ziet.
+
+- **De maten.** Een SVG schaalt alles mee, ook zijn letters. Een band van 960 × 320 pt krimpt in
+  het documentkader van 680 px met factor 0,53 en zet daarmee een voetnoot van 10 pt op 5,31 pt.
+  Hetzelfde beeld gebouwd op `CANVAS["doc-breed"]` haalt factor 1,0 — en de gebouwde pagina komt
+  schoon door `qa_document.py` waar de eerste versie er elf `critical` opleverde.
+- **De omlijsting.** Een los beeld draagt zijn eigen aanhef en bronregel, want er is niets
+  anders. Een exhibit staat onder een kop en boven een bijschrift, dus alles wat het beeld
+  daarvan herhaalt is een tweede stem. De labels bij de elementen zijn geen dubbeling en blijven
+  staan: direct labelen gaat voor.
+- **Het dode wit.** De verhouding van het kader komt uit de `viewBox`, dus een canvas dat voor 70
+  procent gevuld is, reserveert 30 procent witruimte op de pagina — onzichtbaar in het beeld,
+  zichtbaar op papier. `pas_hoogte(c, vormen)` zet de hoogte op de compositie.
+
+Wat de eerste twee scheidt staat in `reference/samenstellen.md`: een exhibit rekent in de px van
+zijn container en niet in punten, want het meetapparaat van die container leest de opgegeven maat
+en niet de gerenderde.
+
 ## Installeren
 
 Deze plugin woont in zijn eigen repo en staat daar op de root, dus rechtstreeks vanaf git:
@@ -259,6 +313,15 @@ assets/sfnl-sjabloon.potx       het geprunde sjabloon, 5,5 MB
 assets/maatstaf/                veertien slides: tien uit winnende decks, vier reconstructies
 assets/proeven/                 de kleur- en gevuldheidsproef, met de metingen eronder
 assets/keuzekaarten/            de keuzekaart die bij het vragenvuur meegaat
+skills/sfnl-infographic/        de beeldroute: intake, vormtoets, schetsen, vier bouwroutes
+reference/infographic-vormentaal.md  de maatstaf voor een titelloos, kaderloos beeld
+reference/infographic-vormkeuze.md   de vormtoets: wat elke vorm eist en hoeveel erin past
+assets/infographic/vormen/      het vormenwoordenboek: zesenveertig vormen op één blad
+assets/infographic/maatstaf/    vijf afgemaakte infographics plus de drie schetsen
+assets/infographic/voorbeeld/   hun bouwscripts, met in elke docstring wat er misging
+scripts/infographic/            svg.py, schets.py, render_svg.py, insluiten.py, blanco.py
+reference/samenstellen.md       wat de vier skills delen en welke ketens er zijn
+scripts/gedeeld/                wat meer dan één skill gebruikt: canvas, drukwerk, naar_pdf
 scripts/                        de dunne laag
 ```
 

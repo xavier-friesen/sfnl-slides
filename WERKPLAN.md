@@ -203,6 +203,11 @@ poortwaarschuwingen. Dus:
 De skill meldt dan wat er aan de hand is, stelt de escalatie voor met de kosten erbij, en wacht op
 ja of nee. Bij nee herontwerpt hij de slide zelf met het repertoire uit stap 2.
 
+**Nagekomen in ronde 8:** die escalatie wees naar een skill buiten deze plugin, en dat is de
+reden dat hij in de praktijk zelden landde. `sfnl-infographic` staat er nu in, met dezelfde
+`shapes.py`, hetzelfde sjabloon en dezelfde layouts, dus de escalatie blijft binnen één plugin
+en de vraag "wat geef je mee" heeft een antwoord: het vlak en de titel.
+
 Raakt: `skills/sfnl-slides/SKILL.md`.
 
 ### 7. Testrondes
@@ -446,8 +451,162 @@ ontbrekende glyph", geen precisiecijfer. En de test die het meeste zou zeggen �
 verse deck dingen die de bouwer zelf op het contactblad miste — vraagt een omgeving met
 `python-pptx` en een pdf-naar-png-omzetter, en die was er niet.
 
+## Ronde 8 — `sfnl-infographic` in de plugin, en de skills samenstelbaar
+
+Werklijn E hierboven eindigde in een escalatie naar een skill die niet in deze plugin zat. Dat
+werkte in theorie: de deckskill stelde de escalatie voor, de gebruiker zei ja, en dan moest er
+een skill worden aangeroepen die zijn eigen kopie van de huisstijl droeg, zijn eigen fontzoeker
+had en de deckscripts met een glob over `~/.claude/plugins/**` probeerde te vinden. Wat er in
+de praktijk gebeurde is wat er altijd gebeurt bij een verwijzing naar iets dat er niet staat:
+de bouwer viel terug op de SVG-route omdat de PowerPoint-route "niet beschikbaar" leek, terwijl
+`shapes.py` en het sjabloon een map hoger lagen.
+
+Deze ronde zet die skill in de plugin en gebruikt wat er al stond. Vier dingen zijn gemeten en
+niet aangenomen.
+
+**1. De letters zijn nu echt gemeten.** `assets/documenten/fonts/` draagt Montserrat en Lato als
+woff2 voor de HTML-drukroutes, en `svg.py` leest diezelfde bestanden. Een woff2 is een
+gecomprimeerde TrueType, dus fontTools leest hem — met `brotli` erbij, want zonder die module
+krijg je het bestand niet open en zakt de meting stil terug op een schatting. Dat is de reden
+dat `preflight.py` niet meldt *of er een fontbestand is* maar of de meting echt is.
+
+Eén ding was daarbij niet vanzelf goed. Montserrat komt als één variabel bestand over het bereik
+300–800, en zijn standaardinstantie is `wght=100`. Wie de `hmtx` rauw leest, meet dus Thin: de
+`e` is daar 587/1000 tegen 597 op Light en 622 op SemiBold. Gemeten op een regel van 46 tekens is
+dat 18,4 pt verschil tussen Light en SemiBold, bijna vijf procent — genoeg om een regel te laat
+te laten afbreken. `_metriek()` instantieert daarom op het gevraagde gewicht.
+
+En de onbekende-tekenschatting is omgedraaid. Een teken dat niet in de latin-subset zit — in de
+praktijk alleen het promillageteken — kreeg de breedte van een spatie, 3,20 pt op 16 pt. Dat is
+de verkeerde kant op: het teken is bijna drie keer zo breed, dus zo'n regel brak te laat af. Nu
+is de schatting de breedte van een cijfer, 9,60 pt.
+
+**En de maatstaf zelf was fout, wat het bewijs is dat dit geen decimalenwerk is.** De vijf
+maatstaven zijn opnieuw gebouwd met de echte metriek, en `m1-geldstroom` verandert zichtbaar: de
+drager stond er als `€ 1,2` / `mln` op twee regels, en de bronregel liep ook over twee regels.
+Beide passen op één regel — met de geschatte, ruime metriek paste "€ 1,2 mln" op 40 pt niet in
+zijn blok van 240 pt, dus brak `regels_van()` hem af. Het beeld dat de skill als norm meestuurde
+had dus een gebroken drager, en dat is precies het defect waar §4 van zijn eigen vormentaal tegen
+waarschuwt. De PNG's in `assets/infographic/maatstaf/` zijn opnieuw gerenderd.
+
+**2. De render haalt de letters niet meer bij Google Fonts.** `render_svg.py` sluit `fonts.css`
+in, hetzelfde bestand dat de documentenroute gebruikt, en om dezelfde drie redenen die in
+`assets/documenten/fonts/LEESMIJ.md` staan. Zonder internet viel de render terug op Helvetica en
+beoordeelde je de verkeerde regelval — precies de meting die dat bestand liet maken. En Chromium
+wordt opgezocht met `scripts/documenten/_browser.py`, want op een machine met
+`PLAYWRIGHT_BROWSERS_PATH` klopt het buildnummer van de pip-versie bijna nooit en faalt
+`launch()` met een melding die eruitziet alsof er geen browser is.
+
+**3. Eén canvashelper-zoeker in plaats van twee.** `zoek_helper()` staat nu in
+`scripts/gedeeld/canvas.py` en beide skills gebruiken hem. Er stonden twee versies van, en ze
+waren niet gelijk: de documentenversie sorteerde de treffers alfabetisch en nam de laatste, dus
+van `bundled-skills/3b10cbb2/` en `bundled-skills/ea784c4b/` won de tweede op zijn eerste
+letter en niet omdat hij bij deze sessie hoorde. Een oude payload betekent een canvas op een
+verouderde editor, en dat merk je pas als iemand erin klikt. De gedeelde versie sorteert op
+skillversie en daarbinnen op uitpaktijd.
+
+**4. Het samenstellen is een script en geen alinea.** Alle drie de containers zeiden al wanneer
+er een infographic nodig is — `vormentaal.md` boven twaalf onderdelen, `documenten-vormentaal.md`
+§11, `rapport-vormentaal.md` onder "Geen infographics ontwerpen" — maar geen van de drie zei
+**hoe**, en daar zit het defect. Een SVG schaalt álles mee, ook zijn letters. Gemeten op
+`m1-geldstroom.svg`: een band van 960 × 320 pt krimpt in het documentkader van 680 px met factor
+0,53 en zet daarmee een voetnoot van 10 pt op 5,31 pt, onder de leesvloer van 8, zonder dat er
+iets in de markup fout staat.
+
+De reparatie is het canvas en niet het kader. `svg.py` heeft nu zes canvassen met de breedte van
+de doelkaders — `doc-breed`, `doc-kolom2`, `doc-kolom3`, `rap-breed`, `rap-kolom`, `rap-dubbel` —
+en `Maten.voor("document")` en `Maten.voor("rapport")` voor de maatladder van de container, want
+een beeld dat zijn eigen 16 pt meeneemt zet een zevende maat op een pagina die er zes heeft.
+`insluiten.py` is de poort: hij leest de `viewBox` en alle `font-size`-waarden, rekent de factor
+uit en weigert onder de vloer.
+
+**En daar kwam de eenheid uit, wat pas op de gebouwde pagina bleek.** De eerste versie van deze
+zes canvassen stond in punten — 510 × 279 voor het documentkader — met de gedachte dat 510 pt en
+680 px hetzelfde fysieke formaat zijn en de SVG dus 1:1 rendert. Dat is ook waar, en het is
+irrelevant: **het meetapparaat van de containers leest de opgegeven maat en niet de gerenderde.**
+De `te-klein`-regel van `qa_document.py` neemt `getComputedStyle(el).fontSize`, en dat getal
+staat in het lokale coördinatenstelsel van de SVG; een `viewBox` die de inhoud opschaalt, ziet
+die regel niet. De gebouwde documentpagina gaf elf `critical` — acht keer `te-klein: tspan staat
+op 10 px (7,5 pt)` op tekst die op de render 13,33 px was, plus `letterfamilies: 3` — en geen
+van de elf was een echt defect.
+
+Dus staan de zes canvassen nu in px met de px-ladder van hun route, precies zoals
+`documenten-stramien.md` §5b altijd al voorschreef ("`viewBox` even breed als het kader in px")
+en §11 punt 2 bedoelde met "de maatladder geldt ook binnen de SVG". `Canvas` draagt daarvoor een
+`eenheid`, `Maten.voor()` zet hem, `schrijf()` weigert een canvas en maten die niet
+overeenkomen, en de drie drempels die in punten staan — het dragerwindow van 28 tot 40, de
+kopvloer van 18, de displayvloer van 40 — rekenen mee. Zonder die omrekening zou een lichte hue
+op een px-canvas ineens tekst van 13,5 pt mogen dragen waar de regel 18 pt eist.
+
+De derde melding was de letterfamilie. `svg.py` schrijft `font-family="Lato Light, Lato,
+sans-serif"` en `qa_document.py` telt de eerste naam als familie, dus stonden er drie families op
+een pagina die er twee mag hebben. `insluiten.py` haalt de snede uit de naam: het gewicht draagt
+hem al en `fonts.css` declareert `'Lato'` op 300, dus de letter blijft exact dezelfde.
+
+Nagemeten na die drie reparaties: hetzelfde beeld op `doc-breed` haalt factor 1,0, en de
+gebouwde documentpagina komt door `qa_document.py` met **geen bevindingen**.
+
+**En toen bleek de pagina nog twee dingen te dragen die niemand had geteld.** Allebei zijn ze
+onzichtbaar zolang je naar de infographic kijkt, en allebei zichtbaar zodra hij op de pagina
+staat — precies het soort defect waar een poort voor is en een render niet.
+
+Het eerste is de **omlijsting**. Een los beeld hoort een aanhef te dragen en een bronregel; dat
+staat zo in de inventaris onder "Wat er op het vlak komt", en het klopt, want er is niets anders
+dat ze draagt. In een exhibit is er wel iets anders: de pagina heeft een kop, en onder het kader
+staat een bijschrift. Op de proefpagina stond de kop "De inleg gaat voor de helft naar
+begeleiding" en daaronder in het beeld "WAAR DE INLEG HEEN GAAT", en de bronregel stond twee
+keer. `insluiten.py` vergelijkt nu de tekst op het beeld met `--pagina` en `--bijschrift`, en
+hij kent het verschil tussen omlijsting en elementlabel: de rol volgt uit de attributen
+(kapitalen met letterspatiëring, dekking 0,70, een maat in het dragerwindow) en niet uit de naam,
+en hij blokkeert alleen op de omlijsting. Dat onderscheid kwam uit een valse melding: de eerste
+versie vlagde het staaflabel "Begeleiding op de werkvloer" omdat de chapeau diezelfde woorden
+gebruikte — maar direct labelen is vormentaal §9 en staat boven deze toets.
+
+Het tweede is het **dode wit onderin**. Op een los beeld is dat de eerste bevinding van de
+renderloop en zie je het gewoon. In een `.beeldkader` niet: de verhouding van het kader komt uit
+de `viewBox`, dus een canvas dat voor 70 procent gevuld is reserveert 30 procent wit op de
+pagina. De proef stond op `doc-breed` met zijn defaulthoogte van 372 px terwijl de compositie tot
+260 kwam, en die 111 px stonden als niets midden in een zetspiegel. `pas_hoogte(c, vormen)` zet
+de hoogte op de inhoud plus één marge — 372 naar 179 — en `wit_onder()` in `svg.py` is de enige
+plek waar de regel staat, zodat de waarschuwing in `schrijf()` en de poort in `insluiten.py` niet
+uit elkaar kunnen lopen. Eén ondermarge telt niet als dood wit; dat was de eerste versie van de
+regel wél, en die stelde dan voor de hoogte te veranderen naar precies dezelfde hoogte.
+
+Wat er daarna gebeurt, lijkt een terugslag en is het niet: `qa_document.py` meldt over de pagina
+"de inhoud houdt op 57 procent van de zetspiegel op". Het wit is van onzichtbaar in het beeld
+naar zichtbaar op de pagina verplaatst, en daar is het een paginabesluit — meer inhoud of een
+kortere pagina — in plaats van een gat waar niemand naar kijkt.
+
+**Wat de proef nog opleverde.** De PowerPoint-route is end-to-end nagelopen op layout 19, en dat
+bracht twee fouten in de SKILL aan het licht die er van de losse versie in zaten. De eerste is
+luid: `Deck` heeft geen `sluit` en wél een `kop`, precies omgekeerd aan wat er stond, dus een
+`TypeError` op de eerste regel van het bouwscript. De tweede is stil en erger. `svg.py` rekent
+de dekking als breuk (`0.16`) en `shapes.py` in OOXML-honderdduizendsten (`16000`); met de
+verkeerde eenheid wordt `int(0.16)` nul, dus `<a:alpha val="0"/>`, dus een vorm die volledig
+doorzichtig op de slide staat. Drie van de vier staven waren er niet en `pack.py` valideerde
+schoon. Nu weigert `_clr()` een alpha tussen 0 en 1000 en zegt in de foutmelding welke van de
+twee lagen je vermoedelijk voor je had. Twee lagen met een eigen eenheid mag; een eenheid die
+stil een onzichtbare vorm oplevert niet.
+
+Raakt: `skills/sfnl-infographic/`, `scripts/infographic/`, `assets/infographic/`,
+`reference/infographic-*.md`, `reference/samenstellen.md`, `scripts/gedeeld/canvas.py`,
+`scripts/documenten/preflight.py`, `scripts/shapes.py`, en de kruisverwijzing in de drie andere
+SKILL's.
+
 ## Openstaand
 
+- **De exhibitroute is één keer gedraaid, op één kader.** De keten is end-to-end gebouwd voor
+  `document`/`breed`: infographic op `doc-breed`, door `insluiten.py`, als `.beeldkader` in een
+  `.dc.html`, door `bouw.py` en `render.py`, en schoon door `qa_document.py`. Wat niet gemeten
+  is: de vier andere kaders, en de rapportroute voorbij de `figuren`-regel — `bouw.py` van de
+  rapportskill heeft die JSON nog niet met een beeld uit dit script verwerkt.
+- **Er is geen maatstaf voor de exhibitroute.** De vijf maatstaven staan alle vijf op een los
+  canvas; een infographic op `doc-breed` of `rap-kolom` naast de pagina waar hij in staat, is
+  het beeld dat een bouwer nodig heeft om te zien wat 10 pt brood in een figuur doet. Dat is een
+  render en een LEESMIJ-alinea, geen nieuw mechanisme.
+- **De PowerPoint-route is gerenderd via LibreOffice met gesubstitueerde fonts.** De compositie
+  is daarmee geldig beoordeeld, de regelval indicatief. Dat is de bekende beperking van deze
+  renderroute en niet nieuw, maar het geldt dus ook voor de proef van ronde 8.
 - **De blinde vergelijking met twee juryleden is niet gedraaid.** Beide juryagents zijn
   afgebroken op een spend limit, halverwege deck A en deck B. De decks en renders staan klaar in
   `/home/user/werk-jury/` (A = nieuw leave-behind, B = het oude werksessie-deck, C = nieuw

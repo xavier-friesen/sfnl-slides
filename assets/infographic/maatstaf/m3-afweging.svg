@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="960pt" height="320pt" viewBox="0 0 960 320">
+  <desc>Drie kostenposten tegenover drie opbrengstposten aan weerszijden van één nullijn, met het saldo als drager.</desc>
+  <text id="Aanhef-0" x="30" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="10" fill="#201B5C" fill-opacity="0.55" letter-spacing="1.5" xml:space="preserve"><tspan x="30" y="33.19">WAT HET KOST, EN WAT HET OPLEVERT</tspan></text>
+  <text id="Kop-kost-0" x="190" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="18" fill="#F95D63" xml:space="preserve"><tspan x="190" y="74.53">KOSTEN</tspan></text>
+  <text id="Kop-baat-0" x="494" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="18" fill="#6AC6BA" xml:space="preserve"><tspan x="494" y="74.53">OPBRENGSTEN</tspan></text>
+  <rect id="Kost-0-staaf" x="326.64" y="106" width="153.36" height="13" fill="#F95D63"/>
+  <rect id="Baat-0-staaf" x="480" y="106" width="172.03" height="13" fill="#6AC6BA"/>
+  <text id="Kost-0-naam-0" x="468" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="13" fill="#201B5C" fill-opacity="0.75" text-anchor="end" xml:space="preserve"><tspan x="468" y="103.31">Begeleiding op de werkvloer</tspan></text>
+  <text id="Baat-0-naam-0" x="492" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="13" fill="#201B5C" fill-opacity="0.75" xml:space="preserve"><tspan x="492" y="103.31">Uitkeringen die wegvallen</tspan></text>
+  <text id="Kost-0-getal-0" x="318.64" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#201B5C" text-anchor="end" xml:space="preserve"><tspan x="318.64" y="116.94">€ 0,62 mln</tspan></text>
+  <text id="Baat-0-getal-0" x="660.03" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#201B5C" xml:space="preserve"><tspan x="660.03" y="116.94">€ 0,70 mln</tspan></text>
+  <rect id="Kost-1-staaf" x="403.32" y="136" width="76.68" height="13" fill="#F95D63"/>
+  <rect id="Baat-1-staaf" x="480" y="136" width="72.75" height="13" fill="#6AC6BA"/>
+  <text id="Kost-1-naam-0" x="468" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="13" fill="#201B5C" fill-opacity="0.75" text-anchor="end" xml:space="preserve"><tspan x="468" y="133.31">Taal en basisvaardigheden</tspan></text>
+  <text id="Baat-1-naam-0" x="492" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="13" fill="#201B5C" fill-opacity="0.75" xml:space="preserve"><tspan x="492" y="133.31">Minder zorgkosten</tspan></text>
+  <text id="Kost-1-getal-0" x="395.32" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#201B5C" text-anchor="end" xml:space="preserve"><tspan x="395.32" y="146.94">€ 0,31 mln</tspan></text>
+  <text id="Baat-1-getal-0" x="560.75" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#201B5C" xml:space="preserve"><tspan x="560.75" y="146.94">€ 0,30 mln</tspan></text>
+  <rect id="Kost-2-staaf" x="438.71" y="166" width="41.29" height="13" fill="#F95D63"/>
+  <rect id="Baat-2-staaf" x="480" y="166" width="45.22" height="13" fill="#6AC6BA"/>
+  <text id="Kost-2-naam-0" x="468" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="13" fill="#201B5C" fill-opacity="0.75" text-anchor="end" xml:space="preserve"><tspan x="468" y="163.31">Coördinatie en meting</tspan></text>
+  <text id="Baat-2-naam-0" x="492" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="13" fill="#201B5C" fill-opacity="0.75" xml:space="preserve"><tspan x="492" y="163.31">Belasting en premies</tspan></text>
+  <text id="Kost-2-getal-0" x="430.71" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#201B5C" text-anchor="end" xml:space="preserve"><tspan x="430.71" y="176.94">€ 0,17 mln</tspan></text>
+  <text id="Baat-2-getal-0" x="533.22" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#201B5C" xml:space="preserve"><tspan x="533.22" y="176.94">€ 0,18 mln</tspan></text>
+  <line id="Totaalstreep" x1="204.68" y1="204" x2="774" y2="204" stroke="#201B5C" stroke-width="0.75" stroke-opacity="0.3"/>
+  <rect id="Totaal-kost" x="208.68" y="212" width="271.32" height="17" fill="#F95D63"/>
+  <rect id="Totaal-baat" x="480" y="212" width="290" height="17" fill="#6AC6BA"/>
+  <text id="Totaal-kost-label-0" x="208.68" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="9" fill="#201B5C" fill-opacity="0.45" letter-spacing="1.35" xml:space="preserve"><tspan x="208.68" y="203.27">TOTAAL</tspan></text>
+  <text id="Totaal-baat-label-0" x="770" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="9" fill="#201B5C" fill-opacity="0.45" letter-spacing="1.35" text-anchor="end" xml:space="preserve"><tspan x="770" y="203.27">TOTAAL</tspan></text>
+  <text id="Totaal-kost-getal-0" x="200.68" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="16" fill="#201B5C" text-anchor="end" xml:space="preserve"><tspan x="200.68" y="227.7">€ 1,10 mln</tspan></text>
+  <text id="Totaal-baat-getal-0" x="778" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="16" fill="#201B5C" xml:space="preserve"><tspan x="778" y="227.7">€ 1,18 mln</tspan></text>
+  <line id="Nullijn" x1="480" y1="88" x2="480" y2="231" stroke="#201B5C" stroke-width="1" stroke-opacity="0.45"/>
+  <line id="Slotstreep" x1="30" y1="245" x2="930" y2="245" stroke="#201B5C" stroke-width="0.75" stroke-opacity="0.2"/>
+  <text id="Drager-0" x="30" font-family="Montserrat Light, Montserrat, sans-serif" font-weight="300" font-size="36" fill="#6AC6BA" xml:space="preserve"><tspan x="30" y="288.07">+ € 0,08 mln</tspan></text>
+  <text id="Drager-1" x="30" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="13" fill="#201B5C" fill-opacity="0.65" xml:space="preserve"><tspan x="30" y="313.63">saldo over drie jaar, per cohort van 120</tspan></text>
+  <text id="Sluitregel-0" x="330" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="13" fill="#201B5C" xml:space="preserve"><tspan x="330" y="273.31"><tspan font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600">De opbrengst valt bij de gemeente</tspan>, de kosten bij de</tspan><tspan x="330" y="287.87">uitvoerder. Resultaatfinanciering brengt die twee bij elkaar.</tspan></text>
+  <text id="Bron-0" x="690" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="10" fill="#201B5C" fill-opacity="0.7" xml:space="preserve"><tspan x="690" y="270.47">Doorrekening SFNL, 2026. Prijspeil 2026.</tspan></text>
+</svg>

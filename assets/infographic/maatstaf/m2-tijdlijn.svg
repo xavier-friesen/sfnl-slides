@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="960pt" height="320pt" viewBox="0 0 960 320">
+  <desc>Zes momenten in een Social Impact Bond, op schaal over vier jaar, met de twee wachtperiodes als maatbalk.</desc>
+  <text id="Aanhef-0" x="30" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="10" fill="#201B5C" fill-opacity="0.55" letter-spacing="1.5" xml:space="preserve"><tspan x="30" y="33.19">VIER JAAR TUSSEN INLEG EN AFREKENING</tspan></text>
+  <text id="Drager-0" x="930" font-family="Montserrat Light, Montserrat, sans-serif" font-weight="300" font-size="40" fill="#F87F4F" text-anchor="end" xml:space="preserve"><tspan x="930" y="54.74">33 maanden</tspan></text>
+  <text id="Drager-1" x="930" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="13" fill="#201B5C" fill-opacity="0.65" text-anchor="end" xml:space="preserve"><tspan x="930" y="79.11">tussen inleg en de eerste euro terug</tspan></text>
+  <line id="As" x1="30" y1="150" x2="930" y2="150" stroke="#201B5C" stroke-width="0.75" stroke-opacity="0.25"/>
+  <line id="Jaar-2025-tik" x1="259.79" y1="145" x2="259.79" y2="155" stroke="#201B5C" stroke-width="0.75" stroke-opacity="0.25"/>
+  <text id="Jaar-2025-0" x="259.79" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="9" fill="#201B5C" fill-opacity="0.4" letter-spacing="1.35" text-anchor="middle" xml:space="preserve"><tspan x="259.79" y="170.27">2025</tspan></text>
+  <line id="Jaar-2026-tik" x1="489.57" y1="145" x2="489.57" y2="155" stroke="#201B5C" stroke-width="0.75" stroke-opacity="0.25"/>
+  <text id="Jaar-2026-0" x="489.57" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="9" fill="#201B5C" fill-opacity="0.4" letter-spacing="1.35" text-anchor="middle" xml:space="preserve"><tspan x="489.57" y="170.27">2026</tspan></text>
+  <line id="Jaar-2027-tik" x1="719.36" y1="145" x2="719.36" y2="155" stroke="#201B5C" stroke-width="0.75" stroke-opacity="0.25"/>
+  <text id="Jaar-2027-0" x="719.36" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="9" fill="#201B5C" fill-opacity="0.4" letter-spacing="1.35" text-anchor="middle" xml:space="preserve"><tspan x="719.36" y="170.27">2027</tspan></text>
+  <line id="Steel-0" x1="30" y1="150" x2="30" y2="116" stroke="#F87F4F" stroke-width="1"/>
+  <circle id="Stip-0" cx="30" cy="150" r="7" fill="#F87F4F" stroke="#F87F4F" stroke-width="1.2"/>
+  <text id="Moment-0-0" x="26" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="18" fill="#F87F4F" xml:space="preserve"><tspan x="26" y="92.53">Contract</tspan></text>
+  <text id="Moment-0-1" x="26" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="13" fill="#201B5C" fill-opacity="0.7" xml:space="preserve"><tspan x="26" y="111.47">€ 1,2 mln ingelegd</tspan></text>
+  <line id="Steel-1" x1="68.3" y1="150" x2="68.3" y2="184" stroke="#201B5C" stroke-width="1" stroke-opacity="0.35"/>
+  <circle id="Stip-1" cx="68.3" cy="150" r="4" fill="#201B5C" fill-opacity="0.18" stroke="#201B5C" stroke-width="1.2"/>
+  <text id="Moment-1-0" x="64.3" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="18" fill="#201B5C" xml:space="preserve"><tspan x="64.3" y="206.53">Start</tspan></text>
+  <text id="Moment-1-1" x="64.3" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="13" fill="#201B5C" fill-opacity="0.7" xml:space="preserve"><tspan x="64.3" y="225.47">eerste 40 deelnemers</tspan></text>
+  <line id="Steel-2" x1="183.19" y1="150" x2="183.19" y2="116" stroke="#201B5C" stroke-width="1" stroke-opacity="0.35"/>
+  <circle id="Stip-2" cx="183.19" cy="150" r="5" fill="#201B5C" fill-opacity="0.18" stroke="#201B5C" stroke-width="1.2"/>
+  <text id="Moment-2-0" x="179.19" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="18" fill="#201B5C" xml:space="preserve"><tspan x="179.19" y="92.53">Cohort vol</tspan></text>
+  <text id="Moment-2-1" x="179.19" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="13" fill="#201B5C" fill-opacity="0.7" xml:space="preserve"><tspan x="179.19" y="111.47">120 deelnemers</tspan></text>
+  <line id="Steel-3" x1="412.98" y1="150" x2="412.98" y2="184" stroke="#201B5C" stroke-width="1" stroke-opacity="0.35"/>
+  <circle id="Stip-3" cx="412.98" cy="150" r="6" fill="#201B5C" fill-opacity="0.18" stroke="#201B5C" stroke-width="1.2"/>
+  <text id="Moment-3-0" x="408.98" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="18" fill="#201B5C" xml:space="preserve"><tspan x="408.98" y="206.53">Meting</tspan></text>
+  <text id="Moment-3-1" x="408.98" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="13" fill="#201B5C" fill-opacity="0.7" xml:space="preserve"><tspan x="408.98" y="225.47">71 van 120 aan het werk</tspan></text>
+  <line id="Steel-4" x1="527.87" y1="150" x2="527.87" y2="116" stroke="#F87F4F" stroke-width="1"/>
+  <circle id="Stip-4" cx="527.87" cy="150" r="7" fill="#F87F4F" stroke="#F87F4F" stroke-width="1.2"/>
+  <text id="Moment-4-0" x="523.87" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="18" fill="#F87F4F" xml:space="preserve"><tspan x="523.87" y="92.53">Betaling</tspan></text>
+  <text id="Moment-4-1" x="523.87" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="13" fill="#201B5C" fill-opacity="0.7" xml:space="preserve"><tspan x="523.87" y="111.47">€ 0,9 mln</tspan></text>
+  <line id="Steel-5" x1="930" y1="150" x2="930" y2="184" stroke="#201B5C" stroke-width="1" stroke-opacity="0.35"/>
+  <circle id="Stip-5" cx="930" cy="150" r="5" fill="#201B5C" fill-opacity="0.18" stroke="#201B5C" stroke-width="1.2"/>
+  <text id="Moment-5-0" x="930" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="18" fill="#201B5C" text-anchor="end" xml:space="preserve"><tspan x="930" y="206.53">Afrekening</tspan></text>
+  <text id="Moment-5-1" x="930" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="13" fill="#201B5C" fill-opacity="0.7" text-anchor="end" xml:space="preserve"><tspan x="930" y="225.47">restbetaling</tspan></text>
+  <path id="Stilte-0" d="M 183.19 252 L 412.98 252" fill="none" stroke="#201B5C" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <line id="Stilte-0-links" x1="183.19" y1="247" x2="183.19" y2="257" stroke="#201B5C" stroke-width="1"/>
+  <line id="Stilte-0-rechts" x1="412.98" y1="247" x2="412.98" y2="257" stroke="#201B5C" stroke-width="1"/>
+  <text id="Stilte-0-label-0" x="183.19" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="13" fill="#201B5C" fill-opacity="0.7" xml:space="preserve"><tspan x="183.19" y="276.31">12 maanden wachten op de meting</tspan></text>
+  <path id="Stilte-1" d="M 527.87 252 L 930.0 252" fill="none" stroke="#201B5C" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <line id="Stilte-1-links" x1="527.87" y1="247" x2="527.87" y2="257" stroke="#201B5C" stroke-width="1"/>
+  <line id="Stilte-1-rechts" x1="930" y1="247" x2="930" y2="257" stroke="#201B5C" stroke-width="1"/>
+  <text id="Stilte-1-label-0" x="527.87" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="13" fill="#201B5C" fill-opacity="0.7" xml:space="preserve"><tspan x="527.87" y="276.31">21 maanden tot de afrekening</tspan></text>
+  <text id="Bron-0" x="30" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="10" fill="#201B5C" fill-opacity="0.7" xml:space="preserve"><tspan x="30" y="315.47">Monitoring Zaanstad, peildatum 1 juli 2026. Bedragen in prijspeil 2024.</tspan></text>
+</svg>
