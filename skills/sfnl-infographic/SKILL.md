@@ -298,6 +298,12 @@ De grens ligt bij de herhaling. Staat het getal van de drager ergens anders op h
 dan draagt hij niet maar herhaalt hij, en dan gaat er één van de twee uit. Dat is nagemeten op
 een waterval waar links `41` op displaymaat stond en boven de laatste staaf `41` op 18pt.
 
+**Deze inventaris geldt voor een beeld dat alleen staat.** Wordt het een exhibit in een document
+of een rapport, dan verschuift punt 3, 5 en 6 naar de container — die draagt de bron in zijn
+bijschrift, de bewering in zijn kop, en de nuance in de alinea eronder. De herhalingsgrens
+hierboven geldt dan niet alleen binnen het beeld maar tussen het beeld en zijn omgeving, en dat
+is de eerste vraag van stap 4D. Punt 1, 2 en 4 blijven onverkort op het beeld staan.
+
 Een titel boven het beeld staat er niet in, een ondertitel eronder niet, en een inleidende
 alinea onder de tekening ook niet. Die draagt de container. Wil de gebruiker er tóch een
 kopregel op, dan vraagt hij daarom en dan geldt vormentaal §1 punt 3.
@@ -904,12 +910,77 @@ Een exhibit staat al binnen de zetspiegel van zijn pagina, dus die witruimte is 
 binnenmarge telt er bovenop en duwt de figuur zichtbaar naar binnen. Houd het op ongeveer 10 px,
 of nul waar de figuur zijn eigen lucht heeft. Volvlakken mogen nog steeds afbloeden.
 
+### Wat de container al draagt
+
+**Dit is de vraag die je in deze route als eerste stelt, en het is niet dezelfde vraag als bij
+een los beeld.** De inventaris onder "Wat er op het vlak komt" is geschreven voor een beeld dat
+alleen staat: daar hóórt een aanhef op, en een bronregel, en soms een drager, want er is niets
+anders dat ze draagt. Hier is er wel iets anders. De pagina heeft een kop, meestal een chapeau,
+en onder het kader een bijschrift; een rapport-exhibit heeft daarnaast `.exhibit__nr`,
+`.exhibit__titel` en `.exhibit__eenheid`. Elk element dat je van dat rijtje op het beeld herhaalt,
+is een tweede stem over hetzelfde.
+
+Loop deze vier langs vóór je bouwt, en schrijf per rij op wie hem draagt:
+
+| wat | in een los beeld | in een exhibit | waarom |
+|---|---|---|---|
+| de **aanhef** boven de figuur | vaak, als kapitaallabel | **de pagina**, in zijn kop | de kop staat er hoe dan ook, en hij staat groter. Een kapitaalregel eronder die hetzelfde zegt, leest als een tweede titel |
+| de **bronregel** | ja, zodra er cijfers op staan | **het bijschrift** onder het kader | daar hoort hij (`documenten-vormentaal.md`: "de herkomst staat in het bijschrift, niet in het beeld") en daar wordt hij ook meegenomen als het beeld verandert |
+| de **drager** op displaymaat | als de figuur de bewering niet zelf draagt | **bijna nooit** | de kop van de pagina draagt de bewering al, in woorden. Zie besluit 1 |
+| de **sluitregel** onderaan | als de figuur het half zegt | **de tekst onder het kader** | dat is een alinea en geen regel in een beeld, en hij is dan te redigeren zonder de SVG opnieuw te bouwen |
+
+**Wat wél op het beeld blijft, hoe vaak de pagina het ook noemt: de labels bij de elementen.**
+Direct labelen is vormentaal §9 en het staat boven deze afweging — een figuur die zijn eigen
+staven niet meer benoemt, is geen figuur meer. Dat de chapeau "begeleiding op de werkvloer"
+noemt en het staaflabel ook, is geen dubbeling maar de pagina die beschrijft wat de figuur laat
+zien.
+
+`insluiten.py` toetst dit, en hij kent het verschil: geef `--pagina` (de `.dc.html` waar het
+beeld in komt) en `--bijschrift` mee, dan leest hij wat de omgeving zegt en vergelijkt hij dat
+per tekstelement. Hij leidt de rol af uit de attributen en niet uit de naam — kapitalen met
+letterspatiëring zijn een aanhef, dekking 0,70 is een bronregel, een maat in het dragerwindow is
+een drager — en **hij blokkeert alleen op die drie**. Elementlabels die overlappen meldt hij als
+regel om te bekijken, niet om weg te halen.
+
+### En de hoogte volgt de compositie
+
+**Dood wit onderin is in deze route iets anders dan op een los beeld, en daarom staat het hier
+apart.** Op een los beeld zie je het op de render en verklein je het canvas — dat is de eerste
+bevinding van stap 5. In een `.beeldkader` zie je het niet: de verhouding van het kader komt uit
+de `viewBox`, dus een canvas dat voor 70 procent gevuld is, reserveert 30 procent wit op de
+pagina. Dat wit staat er niet omdat iemand het koos maar omdat de default van het canvas
+`doc-breed` 372 px hoog is, en het duwt de tekst eronder weg.
+
+Dus zet je de hoogte op de inhoud, met één regel, ná het componeren:
+
+```python
+c = pas_hoogte(c, vormen)              # 372 -> 179
+schrijf("uitvoer/exhibit.svg", c, vormen)
+```
+
+De breedte blijft staan — die is van de container. Alleen de hoogte beweegt, en dat is precies
+wat `documenten-vormentaal.md` §11 punt 1 voorschrijft. `schrijf()` meldt het zelf als je het
+vergeet, en `insluiten.py` blokkeert erop; ze gebruiken dezelfde regel, dus een waarschuwing die
+je in de bouw negeert komt bij de poort terug. Eén ondermarge telt niet als dood wit, want die
+hoort erbij.
+
+Nagemeten op de proefpagina: het canvas ging van 372 naar 179 px, en de 111 px die daarmee
+verdween zat als niets midden in een zetspiegel. Verwacht daarbij één ding: `qa_document.py`
+kan daarná over de pagina gaan klagen ("de inhoud houdt op 57 procent van de zetspiegel op"). Dat
+is geen terugslag maar de bedoeling — het wit is van onzichtbaar in het beeld naar zichtbaar op
+de pagina gegaan, en dáár is het een paginabesluit: meer inhoud, of een kortere pagina.
+
 Renderen doe je zoals in 4A. En dan de stap die deze route eigen is:
 
 ```bash
 python ${CLAUDE_PLUGIN_ROOT}/scripts/infographic/insluiten.py uitvoer/exhibit.svg \
-    --doel document --kader breed --uit uitvoer/fragment.html
+    --doel document --kader breed --uit uitvoer/fragment.html \
+    --pagina werk/Main.dc.html --bijschrift "..."
 ```
+
+**Geef `--pagina` en `--bijschrift` mee.** Zonder die twee weet het script niet wat de container
+zegt en slaat het de dubbelingstoets over; het meldt dat dan ook, in plaats van te doen alsof er
+niets aan de hand is. Bestaat de pagina nog niet, geef dan in elk geval het bijschrift.
 
 `insluiten.py` leest de `viewBox` en alle `font-size`-waarden uit de SVG, rekent uit wat er met
 die maten gebeurt in het kader van de bestemming, en **weigert** als de kleinste tekst door de
@@ -1143,12 +1214,23 @@ Sla stap 2 dus niet over om tijd te winnen.
     hoek, een aantal. Vind je er geen en heeft het rooster de conceptkeuze niet gewonnen, dan
     is de vorm onderweg weggezakt en bouw je hem terug. Bij een gekozen rooster is dit geen
     blokkade, maar noem je bij de oplevering wat het beeld daardoor niet zegt.
-12. **Een exhibit geplaatst zonder de maten na te rekenen.** Gaat het beeld in een document of
-    een rapport, dan is `insluiten.py` de poort en niet een controle achteraf. Weigert hij, dan
-    bouw je opnieuw op het canvas van de bestemming; `--toch` bestaat om een grensgeval bewust
-    door te laten en niet om een meting te overrulen. Dit is het defect dat pas op papier
-    zichtbaar is, en dat is precies waarom het hier staat.
-13. **Het eindbeeld gebouwd als `.dc.html` in plaats van als SVG.** Het canvas is een
+12. **Een exhibit geplaatst zonder `insluiten.py` erover.** Gaat het beeld in een document of
+    een rapport, dan is dat de poort en niet een controle achteraf. Hij toetst drie dingen, en
+    alle drie zijn het defecten die je op de render van het beeld zelf niet ziet: de maten die
+    door de leesvloer zakken, de omlijsting die herhaalt wat de pagina al zegt, en het dode wit
+    onder de compositie dat als gereserveerde ruimte de pagina in gaat. Weigert hij, dan bouw je
+    opnieuw; `--toch` bestaat om een grensgeval bewust door te laten en niet om een meting te
+    overrulen, en dan noem je het bij de oplevering.
+13. **Een aanhef of bronregel op een exhibit terwijl de pagina ze draagt.** Dit is de fout die je
+    meeneemt en niet maakt: in een los beeld horen ze er juist op. Twee stemmen over hetzelfde is
+    er een te veel, en de container wint — die staat er hoe dan ook en hij staat groter. De
+    labels bij de elementen zijn hier geen dubbeling en blijven staan (stap 4D).
+14. **Een exhibitcanvas op zijn defaulthoogte.** `doc-breed` is 372 px hoog omdat dat de
+    verhouding van het gemeten voorbeeld is, niet omdat jouw compositie zo hoog is. Wat je niet
+    vult, wordt witruimte op de pagina die niemand heeft gekozen, en die zie je op de render van
+    het beeld niet omdat de leegte binnen het kader valt. `pas_hoogte(c, vormen)` na het
+    componeren, en dan opnieuw schrijven.
+15. **Het eindbeeld gebouwd als `.dc.html` in plaats van als SVG.** Het canvas is een
     opleverblad en geen tekenprogramma. Bouw je erin, dan valt de contrasttoets weg, de echte
     fontmetriek, en de SVG die in Affinity opengaat — en je krijgt er een render voor terug die
     van de SVG niet te onderscheiden is. Dit is nagemeten (stap 6). Het canvas draagt de SVG en

@@ -546,6 +546,37 @@ hem al en `fonts.css` declareert `'Lato'` op 300, dus de letter blijft exact dez
 Nagemeten na die drie reparaties: hetzelfde beeld op `doc-breed` haalt factor 1,0, en de
 gebouwde documentpagina komt door `qa_document.py` met **geen bevindingen**.
 
+**En toen bleek de pagina nog twee dingen te dragen die niemand had geteld.** Allebei zijn ze
+onzichtbaar zolang je naar de infographic kijkt, en allebei zichtbaar zodra hij op de pagina
+staat — precies het soort defect waar een poort voor is en een render niet.
+
+Het eerste is de **omlijsting**. Een los beeld hoort een aanhef te dragen en een bronregel; dat
+staat zo in de inventaris onder "Wat er op het vlak komt", en het klopt, want er is niets anders
+dat ze draagt. In een exhibit is er wel iets anders: de pagina heeft een kop, en onder het kader
+staat een bijschrift. Op de proefpagina stond de kop "De inleg gaat voor de helft naar
+begeleiding" en daaronder in het beeld "WAAR DE INLEG HEEN GAAT", en de bronregel stond twee
+keer. `insluiten.py` vergelijkt nu de tekst op het beeld met `--pagina` en `--bijschrift`, en
+hij kent het verschil tussen omlijsting en elementlabel: de rol volgt uit de attributen
+(kapitalen met letterspatiëring, dekking 0,70, een maat in het dragerwindow) en niet uit de naam,
+en hij blokkeert alleen op de omlijsting. Dat onderscheid kwam uit een valse melding: de eerste
+versie vlagde het staaflabel "Begeleiding op de werkvloer" omdat de chapeau diezelfde woorden
+gebruikte — maar direct labelen is vormentaal §9 en staat boven deze toets.
+
+Het tweede is het **dode wit onderin**. Op een los beeld is dat de eerste bevinding van de
+renderloop en zie je het gewoon. In een `.beeldkader` niet: de verhouding van het kader komt uit
+de `viewBox`, dus een canvas dat voor 70 procent gevuld is reserveert 30 procent wit op de
+pagina. De proef stond op `doc-breed` met zijn defaulthoogte van 372 px terwijl de compositie tot
+260 kwam, en die 111 px stonden als niets midden in een zetspiegel. `pas_hoogte(c, vormen)` zet
+de hoogte op de inhoud plus één marge — 372 naar 179 — en `wit_onder()` in `svg.py` is de enige
+plek waar de regel staat, zodat de waarschuwing in `schrijf()` en de poort in `insluiten.py` niet
+uit elkaar kunnen lopen. Eén ondermarge telt niet als dood wit; dat was de eerste versie van de
+regel wél, en die stelde dan voor de hoogte te veranderen naar precies dezelfde hoogte.
+
+Wat er daarna gebeurt, lijkt een terugslag en is het niet: `qa_document.py` meldt over de pagina
+"de inhoud houdt op 57 procent van de zetspiegel op". Het wit is van onzichtbaar in het beeld
+naar zichtbaar op de pagina verplaatst, en daar is het een paginabesluit — meer inhoud of een
+kortere pagina — in plaats van een gat waar niemand naar kijkt.
+
 **Wat de proef nog opleverde.** De PowerPoint-route is end-to-end nagelopen op layout 19, en dat
 bracht twee fouten in de SKILL aan het licht die er van de losse versie in zaten. De eerste is
 luid: `Deck` heeft geen `sluit` en wél een `kop`, precies omgekeerd aan wat er stond, dus een

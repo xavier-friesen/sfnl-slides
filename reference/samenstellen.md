@@ -95,6 +95,55 @@ en `qa_document.py` telt de **eerste** naam als familie. Zo staan er drie famili
 waar de regel er twee toestaat. `insluiten.py` haalt de snede uit de naam; het gewicht draagt
 hem al en `fonts.css` declareert `'Lato'` op 300, dus de letter blijft exact dezelfde.
 
+### Twee dingen die je op de render van het beeld zelf niet ziet
+
+Deze twee zijn de reden dat `insluiten.py` een poort is en geen rapportje. Ze zijn allebei
+onzichtbaar zolang je naar de infographic kijkt, en allebei zichtbaar zodra hij op de pagina
+staat — en dan is het te laat om er nog een ontwerpbesluit van te maken.
+
+**1. De omlijsting die de container al draagt.** Een los beeld heeft een aanhef nodig, een
+bronregel, soms een drager: er is niets anders dat ze draagt. Een exhibit staat onder een kop,
+boven een bijschrift, naast een chapeau. Alles wat het beeld daarvan herhaalt is een tweede stem.
+
+| wat | in een los beeld | in een exhibit |
+|---|---|---|
+| de aanhef boven de figuur | vaak, als kapitaallabel | de pagina, in zijn kop |
+| de bronregel | ja, zodra er cijfers op staan | het bijschrift onder het kader |
+| de drager op displaymaat | als de figuur de bewering niet zelf draagt | bijna nooit |
+| de sluitregel | als de figuur het half zegt | de alinea onder het kader |
+| **de labels bij de elementen** | **ja** | **ja — hier verandert niets** |
+
+Die laatste rij is de belangrijkste. Direct labelen is vormentaal §9 en het staat boven deze
+afweging: een figuur die zijn eigen staven niet meer benoemt, is geen figuur meer. Dat de
+chapeau "begeleiding op de werkvloer" noemt en het staaflabel ook, is de pagina die beschrijft
+wat de figuur laat zien.
+
+`insluiten.py` leidt de rol af uit de attributen en niet uit de naam — kapitalen met
+letterspatiëring zijn een aanhef, dekking 0,70 is een bronregel, een maat in het dragerwindow is
+een drager — en blokkeert alleen op die drie. Geef hem `--pagina` en `--bijschrift`; zonder die
+twee kan hij niets vergelijken en zegt hij dat. Nagemeten op de proefpagina: de eerste versie had
+een aanhef die de kop herhaalde en een bronregel die het bijschrift herhaalde, en het staaflabel
+werd terecht niet gevlagd.
+
+**2. Het dode wit onder de compositie.** Op een los beeld zie je een leeg onderstuk op de render
+en verklein je het canvas. In een `.beeldkader` zie je het niet: de verhouding van het kader komt
+uit de `viewBox`, dus een canvas dat voor 70 procent gevuld is reserveert 30 procent wit op de
+pagina — wit dat er staat omdat `doc-breed` nu eenmaal 372 px hoog is, en dat de tekst eronder
+wegduwt.
+
+`pas_hoogte(c, vormen)` zet de hoogte op de compositie plus één marge, ná het componeren. De
+breedte blijft staan, want die is van de container; alleen de hoogte beweegt, precies zoals
+`documenten-vormentaal.md` §11 punt 1 voorschrijft. `schrijf()` waarschuwt tijdens het bouwen en
+`insluiten.py` blokkeert bij de poort, en ze gebruiken dezelfde functie — `wit_onder()` in
+`svg.py` — zodat een waarschuwing die je in de bouw negeert bij de poort terugkomt.
+
+Nagemeten: het canvas van de proef ging van 372 naar 179 px, en die 111 px stonden als niets
+midden in een zetspiegel. Verwacht daarna één ding dat op een terugslag lijkt en het niet is:
+`qa_document.py` kan over de pagina gaan klagen ("de inhoud houdt op 57 procent van de zetspiegel
+op"). Het wit is van onzichtbaar in het beeld naar zichtbaar op de pagina verplaatst, en daar is
+het een paginabesluit — meer inhoud of een kortere pagina — in plaats van een gat waar niemand
+naar kijkt.
+
 ```bash
 python ${CLAUDE_PLUGIN_ROOT}/scripts/infographic/insluiten.py exhibit.svg \
     --doel document --kader breed --uit fragment.html

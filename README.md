@@ -209,15 +209,24 @@ python scripts/infographic/render_svg.py uitvoer/*.svg --wit --schaal 1 --knijp
 python scripts/infographic/insluiten.py uitvoer/beeld.svg --doel document --kader breed
 ```
 
-Die laatste is de poort naar de andere drie skills. Hij leest de `viewBox` en alle
-`font-size`-waarden uit de SVG, rekent uit wat er met die maten gebeurt in het kader van de
-bestemming, en weigert als de kleinste tekst door de leesvloer zakt. Gemeten: een band van
-960 × 320 pt krimpt in het documentkader van 680 px met factor 0,53, en zet daarmee een voetnoot
-van 10 pt op 5,31 pt — een defect dat pas op papier zichtbaar is. Hetzelfde beeld gebouwd op
-`CANVAS["doc-breed"]` haalt factor 1,0, en de gebouwde pagina komt schoon door `qa_document.py`
-waar de eerste versie er elf `critical` opleverde. Wat die twee scheidt staat in
-`reference/samenstellen.md`: een exhibit rekent in de px van zijn container en niet in punten,
-want het meetapparaat van die container leest de opgegeven maat en niet de gerenderde.
+Die laatste is de poort naar de andere drie skills, en hij toetst drie dingen die je op de render
+van het beeld zelf niet ziet.
+
+- **De maten.** Een SVG schaalt alles mee, ook zijn letters. Een band van 960 × 320 pt krimpt in
+  het documentkader van 680 px met factor 0,53 en zet daarmee een voetnoot van 10 pt op 5,31 pt.
+  Hetzelfde beeld gebouwd op `CANVAS["doc-breed"]` haalt factor 1,0 — en de gebouwde pagina komt
+  schoon door `qa_document.py` waar de eerste versie er elf `critical` opleverde.
+- **De omlijsting.** Een los beeld draagt zijn eigen aanhef en bronregel, want er is niets
+  anders. Een exhibit staat onder een kop en boven een bijschrift, dus alles wat het beeld
+  daarvan herhaalt is een tweede stem. De labels bij de elementen zijn geen dubbeling en blijven
+  staan: direct labelen gaat voor.
+- **Het dode wit.** De verhouding van het kader komt uit de `viewBox`, dus een canvas dat voor 70
+  procent gevuld is, reserveert 30 procent witruimte op de pagina — onzichtbaar in het beeld,
+  zichtbaar op papier. `pas_hoogte(c, vormen)` zet de hoogte op de compositie.
+
+Wat de eerste twee scheidt staat in `reference/samenstellen.md`: een exhibit rekent in de px van
+zijn container en niet in punten, want het meetapparaat van die container leest de opgegeven maat
+en niet de gerenderde.
 
 ## Installeren
 

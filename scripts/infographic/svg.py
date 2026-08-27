@@ -902,6 +902,79 @@ def svg(c: Canvas, vormen: list[Vorm], *, beschrijving: str = "",
     return "\n".join(delen) + "\n"
 
 
+#: De binnenmarge van de exhibitroute, per eenheid. Klein, want de zetspiegel van de
+#: container draagt de witruimte al -- de 30 pt uit vormentaal §2 is er voor een beeld dat
+#: zelf de hele slide vult.
+BINNENMARGE = {"pt": 12.0, "px": 10.0}
+
+#: Hoeveel leegte er onder de compositie mag blijven bovenop die ene marge, als deel van
+#: de canvashoogte. Alles daarboven is dood wit.
+WIT_SPELING = 0.05
+
+
+def wit_onder(hoogte: float, onderkant: float, eenheid: str) -> tuple[float, float, bool]:
+    """(leeg, overtollig, in orde) -- hoeveel wit er onder de compositie staat.
+
+    Eén marge hoort er te zijn en telt dus niet als dood wit; dat is de fout die de eerste
+    versie van deze regel maakte -- die vlagde een canvas dat net met `pas_hoogte()` op maat
+    was gebracht, en stelde voor de hoogte te veranderen naar precies dezelfde hoogte.
+
+    Deze functie is de enige plek waar de regel staat. `schrijf()` gebruikt hem tijdens het
+    bouwen en `insluiten.py` bij het insluiten, en die twee moeten hetzelfde zeggen: een
+    waarschuwing die je in de bouw negeert omdat de poort hem straks anders beoordeelt, is
+    geen waarschuwing.
+    """
+    leeg = max(0.0, hoogte - onderkant)
+    overtollig = max(0.0, leeg - BINNENMARGE.get(eenheid, 12.0))
+    return leeg, overtollig, overtollig <= hoogte * WIT_SPELING
+
+
+def bodem(vormen: list[Vorm]) -> float:
+    """De onderkant van de compositie: de laagste `y_onder` van alle vormen.
+
+    `pad()` en `cirkel()` hebben geen doos, dus die tellen niet mee -- staat je figuur
+    grotendeels in paden, lees dit dan als een ondergrens en niet als de waarheid.
+    """
+    return max((v.y_onder for v in vormen if v.y_onder), default=0.0)
+
+
+def dood_wit(c: Canvas, vormen: list[Vorm]) -> float:
+    """Hoeveel leegte er onder de compositie overblijft, in de eenheid van het canvas."""
+    return max(0.0, c.h - bodem(vormen))
+
+
+def pas_hoogte(c: Canvas, vormen: list[Vorm], marge: float | None = None) -> Canvas:
+    """Hetzelfde canvas, maar zo hoog als de compositie plus één marge.
+
+    **Dit is de reparatie voor dood wit onderin, en in de exhibitroute is hij verplicht.**
+    Op een los beeld zie je een leeg onderstuk op de render en verklein je het canvas met
+    de hand -- dat is stap 5, eerste bevinding. In een `.beeldkader` zie je het niet: de
+    verhouding van het kader komt uit de `viewBox`, dus een canvas dat 70 procent gevuld
+    is, reserveert op de pagina 30 procent wit dat niemand heeft gekozen en dat de tekst
+    eronder wegduwt. Nagemeten op de eerste gebouwde documentpagina: 372 px kader met een
+    compositie tot 302, dus 70 px dood wit midden in een zetspiegel.
+
+    De canvasbreedte blijft staan -- die is van de container. Alleen de hoogte beweegt, en
+    dat is precies wat `documenten-vormentaal.md` §11 punt 1 voorschrijft: "meer hoogte
+    nodig: laat de `viewBox` in de hoogte groeien en houd de breedte gelijk."
+
+        c = CANVAS["doc-breed"]
+        m = Maten.voor("document")
+        vormen = [...]
+        c = pas_hoogte(c, vormen)          # 372 -> 312
+        schrijf("uitvoer/exhibit.svg", c, vormen)
+
+    `marge` is standaard de binnenmarge van deze route: 10 in px, 12 in punten. Geef een
+    eigen getal als je compositie onderaan zijn eigen lucht heeft.
+    """
+    if marge is None:
+        marge = BINNENMARGE.get(c.eenheid, 12.0)
+    h = round(bodem(vormen) + marge, 2)
+    if h <= 0:
+        raise ValueError("geen enkele vorm heeft een doos, dus de hoogte is niet te meten")
+    return Canvas(c.naam, c.w, h, c.schaal, c.achtergrond, c.eenheid)
+
+
 def buiten_canvas(c: Canvas, vormen: list[Vorm]) -> list[str]:
     """Namen van vormen die buiten het canvas vallen, aan welke kant dan ook.
 
@@ -941,6 +1014,20 @@ def schrijf(pad_: str | Path, c: Canvas, vormen: list[Vorm], *,
     over = buiten_canvas(c, vormen)
     if over:
         print("BUITEN HET CANVAS: " + " | ".join(over))
+    # Dood wit onderin is de eerste bevinding van de renderloop, en op een los beeld zie je
+    # hem daar ook. In een `.beeldkader` niet: daar wordt de leegte gereserveerde ruimte op
+    # de pagina. Dus meldt `schrijf()` hem zelf, met dezelfde regel als `insluiten.py`.
+    onder = bodem(vormen)
+    if onder:
+        leeg, over, ok = wit_onder(c.h, onder, c.eenheid)
+        if not ok:
+            wat = ("een exhibit reserveert dat als witruimte op de pagina"
+                   if c.eenheid == "px" else
+                   "maak het canvas korter of zet er meer in -- nooit de blokken hoger")
+            print(f"DOOD WIT: {leeg:.0f}{c.eenheid} onder de compositie "
+                  f"({leeg / c.h:.0%} van het canvas, {over:.0f} meer dan één marge). "
+                  f"{wat}. `pas_hoogte(c, vormen)` geeft "
+                  f"{onder + BINNENMARGE.get(c.eenheid, 12.0):.0f}.")
     ontbreekt = [f for f in FAMILIES if not vind_font(f)]
     if ontbreekt:
         print(f"LET OP: geen fontbestand voor {', '.join(ontbreekt)} -- de afbreking is "

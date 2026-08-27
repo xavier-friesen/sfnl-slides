@@ -555,6 +555,14 @@ in een kader van 680 px met factor 0,53 en zet zijn 10pt-voetnoot op 5,31 pt. Wa
 is een `.beeldkader` met de SVG inline, klaar om in het artboard te zetten, en de meting die
 eronder hoort. Zie `reference/samenstellen.md` §2.
 
+**En zeg erbij wat déze pagina al draagt.** Het beeld dat terugkomt hoort geen aanhef en geen
+bronregel te hebben, want jouw kop en jouw `figcaption` dragen die — en in een los beeld horen
+ze er juist wel op, dus zonder dat je het zegt komen ze mee. Hetzelfde geldt voor de hoogte: geef
+door dat het kader zijn verhouding uit de `viewBox` krijgt, dus dat een beeld dat zijn canvas
+niet vult, hier witruimte reserveert die de tekst eronder wegduwt. `insluiten.py` toetst allebei
+en blokkeert erop, maar dat is de vangnetlaag; het scheelt een ronde als het meteen goed gevraagd
+is.
+
 ### 4. Bouwen
 
 ```bash
