@@ -4,10 +4,13 @@ Usage:
     python preflight.py
     python preflight.py --json
 
-Run this FIRST, once per session. It answers two questions in one go:
+Run this FIRST, once per session. It answers three questions in one go:
 
   1. Are the Python packages the scripts need importable?
   2. Is there a renderer, so the visual loop can actually run?
+  3. Staat de merklaag gelijk met zichzelf — `assets/gedeeld/merk.css` zoals
+     `scripts/gedeeld/merk.py` hem zou schrijven, en geen merkkleur die ergens
+     anders nog als hexwaarde staat?
 
 Output:
 
@@ -16,6 +19,7 @@ Output:
       "deps":      {"pptx": true, "lxml": true, "defusedxml": true, ...},
       "renderers": {"powerpoint_com": true, "soffice": null, "soffice_probe": {...},
                     "pdf_to_png": null},
+      "merk":      {"klopt": true, "uit_de_pas": [], "hardgecodeerd": [], ...},
       "verdict":   "full" | "qa-only",
       "missing":   [...],
       "remediation": [...]
@@ -39,6 +43,23 @@ Vijf scripts haalden ze aan als "de poort in QA-only-modus" en de bouwer ging op
 poort vertrouwen die niet bestond. De repo zet zelf "Poorten: twee, en beide zijn een
 mens" — het vragenvuur en de outline, geen mechanische poort — dus ze
 zijn opgeruimd in plaats van geschreven.
+
+`merk.klopt: false` is een fout en niet een waarschuwing, en hij staat daarom in
+`missing`. Twee dingen kunnen hem zetten. `uit_de_pas` betekent dat `merk.css` of het
+gestempelde blok in `stijl.css` niet is wat `merk.py` zou schrijven; dan draait er
+gerenderd werk op een ander palet dan de merklaag zegt, en `python
+scripts/gedeeld/merk.py --css` zet het recht. `hardgecodeerd` betekent dat een script of
+een stylesheet een merkkleur als hexwaarde bij zich draagt in plaats van hem uit de
+merklaag te halen; dat is de duplicaat waarmee de vijf verkeerde waarden van vóór 27
+augustus 2026 hebben kunnen blijven staan, en de remedie is de waarde daar weghalen en
+niet hier de melding.
+
+Twee dingen zijn met opzet geen fout. `#FFFFFF` wordt niet geteld: wit is de enige
+merkwaarde die geen besluit is, en hij staat in renderinfrastructuur die geen kleur
+kiest. En `verouderd` — een hexwaarde die vóór de paletmigratie een merkkleur wás — staat
+apart in de remediatie en blokkeert niet: het zijn geen merkwaarden meer, dus de melding
+is een vondst en geen eis. Ze zitten in de renderoverlay en in de contactbladen, waar geen
+kleur van een oplevering uit komt.
 
 Exit code is ALWAYS 0, including when everything is missing: the JSON is the answer, and
 "no renderer" is a valid answer that the caller has to read and act on, not a crash. Do
@@ -287,6 +308,96 @@ def probe_soffice() -> dict:
         }
 
 
+# ---------------------------------------------------------------------------
+# De merklaag: staat ze gelijk met zichzelf?
+#
+# Dit is de mechanische helft van de toets die `reference/merk.md` bovenaan stelt:
+# een kleurwaarde staat één keer. De andere helft — staat er een puntgrootte in
+# merk.md — is een leesvraag en die staat hier niet.
+#
+# De check bestaat omdat het één keer echt is misgegaan. Vijf van de zes accenten
+# in deze repo waren andere kleuren dan het themapalet van het Word-sjabloon, en
+# ze stonden in zeven bestanden. Wie dat rechtzet vergeet er één, en dan is er
+# geen manier om dat te merken: een oranje dat 3 procent afwijkt ziet er op een
+# render precies zo uit als een oranje dat klopt. Vandaar: hergenereren en
+# vergelijken, en daarnaast grepen naar de waarden zelf.
+# ---------------------------------------------------------------------------
+
+#: Waar een merkkleur niet als hexwaarde mag staan: elk script en elke
+#: stylesheet. Wat er bewust NIET in staat is gebouwde uitvoer — de `.dc.html`-
+#: artboards en de maatstaf-SVG's dragen hun kleuren omdat ze gerenderd zijn, en
+#: die renders horen niet bij elke paletwijziging opnieuw gezet te worden.
+MERK_GEZOCHT = (("scripts", "*.py"), ("assets", "*.css"))
+
+#: Wat de grep niet aanrekent. `merk.py` en `merk.css` zijn de bron zelf, en wit
+#: is de enige merkwaarde die geen besluit is: hij staat in de renderlaag als
+#: achtergrond van een contactblad, en daar kiest niemand een kleur.
+MERK_EIGEN = ("merk.py", "merk.css")
+MERK_UITGEZONDERD = ("#FFFFFF",)
+
+
+def check_merk() -> dict:
+    """`{"gemeten", "klopt", "uit_de_pas", "hardgecodeerd", "verouderd"}`.
+
+    `gemeten: False` betekent dat er niet gekeken is — `merk.py` niet
+    importeerbaar — en dat is niet hetzelfde als `klopt: True`. Zonder dat
+    onderscheid zou een verplaatste merklaag lezen als een merklaag die klopt.
+    """
+    import re
+
+    wortel = Path(__file__).resolve().parent.parent
+    sys.path.insert(0, str(wortel / "scripts" / "gedeeld"))
+    try:
+        import merk
+    except Exception as fout:  # noqa: BLE001 - elk falen is hier "niet gemeten"
+        return {"gemeten": False, "klopt": None, "uit_de_pas": [],
+                "hardgecodeerd": [], "verouderd": [],
+                "hint": f"scripts/gedeeld/merk.py was niet te importeren ({fout}). "
+                        "Over de merklaag is hiermee niets gezegd."}
+
+    hoort_bij = {h.upper(): n for n, h in merk.HEX.items()
+                 if h.upper() not in MERK_UITGEZONDERD}
+    oud = {h.upper(): n for h, n in merk.VERVANGEN.items()}
+    patroon = re.compile("|".join(re.escape(h) for h in (*hoort_bij, *oud)),
+                         re.IGNORECASE)
+
+    hard: list[dict] = []
+    verouderd: list[dict] = []
+    for map_, glob_ in MERK_GEZOCHT:
+        for pad in sorted((wortel / map_).rglob(glob_)):
+            if pad.name in MERK_EIGEN:
+                continue
+            try:
+                regels = pad.read_text(encoding="utf-8").splitlines()
+            except (OSError, UnicodeDecodeError):
+                continue
+            # Het gestempelde blok is de merklaag zelf, woordelijk. Dat het daar
+            # staat is het punt; of het klopt gaat via `merk.verschillen()`, dat
+            # het hergenereert in plaats van ernaar te kijken.
+            binnen = False
+            for nr, regel in enumerate(regels, 1):
+                if merk.BEGIN in regel:
+                    binnen = True
+                elif merk.EINDE in regel:
+                    binnen = False
+                    continue
+                if binnen:
+                    continue
+                for m in patroon.finditer(regel):
+                    h = m.group(0).upper()
+                    vondst = {"waar": f"{pad.relative_to(wortel).as_posix()}:{nr}",
+                              "hex": m.group(0),
+                              "kleur": hoort_bij.get(h) or oud[h]}
+                    (hard if h in hoort_bij else verouderd).append(vondst)
+
+    uit_de_pas = merk.verschillen()
+    return {"gemeten": True,
+            "klopt": not uit_de_pas and not hard,
+            "uit_de_pas": uit_de_pas,
+            "hardgecodeerd": hard,
+            "verouderd": verouderd}
+
+
 def check_raster() -> str | None:
     for name in RASTER_TOOLS:
         if shutil.which(name):
@@ -311,6 +422,7 @@ def main() -> None:
     com = check_powerpoint_com()
     soffice = check_soffice()
     raster = check_raster()
+    merk = check_merk()
 
     # Het binary vinden is niet hetzelfde als kunnen renderen: zie `probe_soffice`. Bij
     # `ran: False` is er niet geprobeerd, en dan blijft de aanwezigheid van het binary
@@ -380,6 +492,41 @@ def main() -> None:
             "bekend dát hij bestaat: " + probe["detail"]
         )
 
+    # De merklaag. Dit blokkeert wél, en het staat daarom in `missing`: een
+    # gerenderd blad op een ander palet dan de merklaag zegt, is een blad in een
+    # huisstijl die niet bestaat, en dat is aan de render niet te zien.
+    if merk["gemeten"] and not merk["klopt"]:
+        missing.append("merklaag")
+        for regel in merk["uit_de_pas"]:
+            remediation.append(regel)
+        if merk["hardgecodeerd"]:
+            plekken = ", ".join(f"{v['waar']} ({v['kleur']})"
+                                for v in merk["hardgecodeerd"][:6])
+            meer = len(merk["hardgecodeerd"]) - 6
+            remediation.append(
+                f"{len(merk['hardgecodeerd'])}x een merkkleur als hexwaarde buiten de "
+                f"merklaag: {plekken}" + (f" en nog {meer}" if meer > 0 else "")
+                + ". Haal de waarde daar weg: een script leest hem uit "
+                  "`scripts/gedeeld/merk.py`, een stylesheet uit "
+                  "`assets/gedeeld/merk.css`. Zo lang hij op twee plekken staat, "
+                  "kan hij op één plek verouderen — dat is precies hoe vijf van de "
+                  "zes accenten tot 27 augustus 2026 naast het Word-sjabloon konden "
+                  "staan"
+            )
+    elif not merk["gemeten"]:
+        remediation.append(merk["hint"])
+    if merk["verouderd"]:
+        # Geen `missing`-item: dit zijn geen merkwaarden meer. Wel te weten, want
+        # het zijn de resten van de paletmigratie en ze zien eruit als een kleur
+        # die klopt.
+        remediation.append(
+            "hexwaarden van vóór de paletmigratie van 27 augustus 2026, nog aanwezig in "
+            + ", ".join(f"{v['waar']} ({v['hex']}, was {v['kleur']})"
+                        for v in merk["verouderd"])
+            + ". Ze blokkeren niets: er komt geen kleur van een oplevering uit deze "
+              "plekken. Wie ze opruimt, laat ze de waarde uit merk.py lezen"
+        )
+
     fonts = font_report(MEASURED_FAMILIES)
     if fonts["missing"]:
         # Geen `missing`-item: dit blokkeert niets. Maar het bepaalt wél hoe je een
@@ -421,6 +568,9 @@ def main() -> None:
                 else ("libreoffice" if libreoffice_usable else None),
                 "fonts_substituted": (not com) and libreoffice_usable,
             },
+            # Staat de merklaag gelijk met zichzelf: merk.css zoals merk.py hem zou
+            # schrijven, en geen merkkleur die ergens anders als hexwaarde staat.
+            "merk": merk,
             # Welke merkfonts te MÉTEN zijn op deze machine (niet: wat de renderer ziet).
             # Zonder deze regel las een lege `fonts_measured` in de QA als "de fonts staan
             # er niet", terwijl het ook een ontbrekende Pillow kan zijn — of, op een

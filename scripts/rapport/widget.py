@@ -62,6 +62,13 @@ HIER = Path(__file__).resolve().parent
 WORTEL = HIER.parent.parent
 FONTS = WORTEL / "assets" / "documenten" / "fonts" / "fonts.css"
 
+# De merkwaarden komen uit de merklaag en staan hier niet. De widget is een
+# HTML-pagina en geen rapport, dus hij kan `stijl.css` niet gebruiken — maar
+# het veld in de preview hoort wél dezelfde kleur te hebben als het veld op de
+# omslag, anders kiest de gebruiker een kleur die hij niet krijgt.
+sys.path.insert(0, str(WORTEL / "scripts" / "gedeeld"))
+from merk import css_variabelen  # noqa: E402
+
 
 def _esc(t) -> str:
     return html.escape(str(t or ""), quote=True)
@@ -75,16 +82,19 @@ SJABLOON = """<!doctype html>
 <title>Ontwerp — {titel}</title>
 <style>
 {fonts}
+{merk}
+/* Wat alleen de widget nodig heeft. De kleuren, het verloop en de letters
+   staan in het merkblok hierboven; dit zijn de drie waarden die van dit
+   formulier zijn en van niets anders: navy op alpha voor een haarlijn en
+   voor een stille regel, en de tafel waarop de kaarten liggen. */
 :root {{
-  --navy: #201B5C; --oranje: #F87F4F; --emerald: #6AC6BA; --violet: #6B5DAE;
-  --mint: #E0F4F1; --tint: #F4F3F7; --lijn: rgba(32,27,92,.16);
-  --zacht: rgba(32,27,92,.70);
-  --display: 'Montserrat', system-ui, sans-serif;
-  --brood: 'Lato', system-ui, sans-serif;
+  --lijn:  rgba(var(--navy-rgb), .16);
+  --zacht: rgba(var(--navy-rgb), .70);
+  --tafel: #EFEEF2;
 }}
 * {{ box-sizing: border-box; }}
 body {{
-  margin: 0; padding: 28px 30px 60px; background: #EFEEF2; color: var(--navy);
+  margin: 0; padding: 28px 30px 60px; background: var(--tafel); color: var(--navy);
   font-family: var(--brood); font-weight: 300; font-size: 15px; line-height: 1.5;
 }}
 h1 {{ font-family: var(--display); font-weight: 800; font-size: 27px;
@@ -98,7 +108,7 @@ h2 {{ font-family: var(--display); font-weight: 800; font-size: 13px;
 .blad {{ display: grid; grid-template-columns: minmax(0,1fr) 330px; gap: 34px;
         align-items: start; max-width: 1180px; }}
 .kaart {{ background: #fff; padding: 20px 22px 22px; margin-bottom: 16px;
-         box-shadow: 0 1px 3px rgba(32,27,92,.10); }}
+         box-shadow: 0 1px 3px rgba(var(--navy-rgb),.10); }}
 .toelicht {{ margin: 0 0 16px; font-size: 12.5px; line-height: 1.5;
             color: var(--zacht); max-width: 74ch; }}
 .rij {{ display: grid; grid-template-columns: 172px minmax(0,1fr); gap: 12px 16px;
@@ -120,7 +130,7 @@ h2 {{ font-family: var(--display); font-weight: 800; font-size: 13px;
 .opt.wijs span {{ border-color: var(--oranje);
                  box-shadow: inset 0 -3px 0 var(--oranje); }}
 .stip {{ display: inline-block; width: 10px; height: 10px; border-radius: 50%;
-        margin-right: 7px; border: 1px solid rgba(32,27,92,.28); }}
+        margin-right: 7px; border: 1px solid rgba(var(--navy-rgb),.28); }}
 .uitleg {{ grid-column: 2; font-size: 12.5px; color: var(--zacht);
           line-height: 1.5; margin: -8px 0 0; }}
 .slot {{ font-size: 12.5px; color: var(--zacht); line-height: 1.5;
@@ -170,7 +180,7 @@ select {{ padding: 7px 10px; border: 1px solid var(--lijn); font-family: var(--b
    kopieerknop eronder weg en dat is de enige knop die telt. */
 .zij {{ position: sticky; top: 24px; max-height: calc(100vh - 48px);
        overflow-y: auto; }}
-.preview {{ background: #fff; padding: 18px; box-shadow: 0 1px 3px rgba(32,27,92,.10); }}
+.preview {{ background: #fff; padding: 18px; box-shadow: 0 1px 3px rgba(var(--navy-rgb),.10); }}
 .schetsen {{ display: grid; grid-template-columns: 92px minmax(0,1fr);
             gap: 16px; align-items: start; }}
 figure {{ margin: 0; }}
@@ -192,17 +202,17 @@ figcaption {{ margin-top: 7px; font-size: 11.5px; line-height: 1.35;
         background: var(--oranje); }}
 .band::after {{ content: ""; position: absolute; width: 150%; height: 150%;
                left: -60%; top: -95%; border-radius: 50%;
-               background: rgba(32,27,92,.10); }}
+               background: rgba(var(--navy-rgb),.10); }}
 .zetspiegel {{ position: absolute; inset: 7.3% 5.9% 9.3% 7.8%; display: flex; gap: 3.8%; }}
 .kolom {{ background: repeating-linear-gradient(
-            transparent 0 3px, rgba(32,27,92,.30) 3px 4px); flex: 1; }}
+            transparent 0 3px, rgba(var(--navy-rgb),.30) 3px 4px); flex: 1; }}
 .kant {{ flex: 0 0 21.5%; background: repeating-linear-gradient(
-           transparent 0 4px, rgba(32,27,92,.14) 4px 5px); }}
+           transparent 0 4px, rgba(var(--navy-rgb),.14) 4px 5px); }}
 .folio {{ position: absolute; bottom: 3.6%; right: 5.9%; width: 8%; height: 1.4%;
          background: var(--oranje); }}
 .meting {{ margin-top: 14px; font-size: 12.5px; line-height: 1.45; }}
 .meting b {{ font-family: var(--display); font-weight: 700; }}
-.let {{ margin-top: 10px; padding: 9px 11px; background: var(--tint);
+.let {{ margin-top: 10px; padding: 9px 11px; background: var(--navy-tint);
        font-size: 12.5px; line-height: 1.45; }}
 
 /* --- de uitvoer ---------------------------------------------------- */
@@ -273,12 +283,12 @@ const MAAT = {maten};
 //: Wat de schets van de omslag laat zien. Dezelfde zes velden als in
 //: `bouw.py`; het verloop is het huisverloop uit stijl.css.
 const VELD = {{
-  oranje:  {{vlak: '#F87F4F', inkt: '#201B5C'}},
-  verloop: {{vlak: 'linear-gradient(150deg, #F87F4F 0%, #F95D63 100%)', inkt: '#201B5C'}},
-  navy:    {{vlak: '#201B5C', inkt: '#FFFFFF'}},
-  violet:  {{vlak: '#6B5DAE', inkt: '#FFFFFF'}},
-  mint:    {{vlak: '#E0F4F1', inkt: '#201B5C'}},
-  wit:     {{vlak: '#FFFFFF', inkt: '#201B5C'}},
+  oranje:  {{vlak: 'var(--oranje)',    inkt: 'var(--navy)'}},
+  verloop: {{vlak: 'var(--verloop)',   inkt: 'var(--navy)'}},
+  navy:    {{vlak: 'var(--navy)',      inkt: 'var(--wit)'}},
+  violet:  {{vlak: 'var(--violet)',    inkt: 'var(--wit)'}},
+  mint:    {{vlak: 'var(--mint-tint)', inkt: 'var(--navy)'}},
+  wit:     {{vlak: 'var(--wit)',       inkt: 'var(--navy)'}},
 }};
 
 const EXTRA = ['overOns', 'team', 'colofon', 'achterblad'];
@@ -350,7 +360,7 @@ function ververs() {{
   const band = document.getElementById('p-band');
   band.hidden = o.opener !== 'band';
   const kleur = {{helder: 'var(--oranje)', diep: 'var(--navy)',
-                 zacht: 'var(--mint)', contrast: 'var(--violet)'}};
+                 zacht: 'var(--mint-tint)', contrast: 'var(--violet)'}};
   band.style.background = kleur[o.register] || 'var(--oranje)';
   zet.style.paddingTop = o.opener === 'band' ? '17%' : '0';
 
@@ -446,14 +456,16 @@ MATEN = {
 }
 
 #: De kleur onder elke omslagknop. Alleen om de knop te laten zien wat
-#: hij kiest; het echte veld staat in `stijl.css`.
+#: hij kiest; het echte veld staat in `stijl.css`. Als variabele en niet als
+#: waarde, want de stip hoort dezelfde kleur te hebben als het blad — en die
+#: komt uit het merkblok dat bovenaan de widget staat.
 VELDKLEUREN = {
-    "oranje": "#F87F4F",
-    "verloop": "linear-gradient(150deg, #F87F4F 0%, #F95D63 100%)",
-    "navy": "#201B5C",
-    "violet": "#6B5DAE",
-    "mint": "#E0F4F1",
-    "wit": "#FFFFFF",
+    "oranje": "var(--oranje)",
+    "verloop": "var(--verloop)",
+    "navy": "var(--navy)",
+    "violet": "var(--violet)",
+    "mint": "var(--mint-tint)",
+    "wit": "var(--wit)",
 }
 
 
@@ -1247,6 +1259,7 @@ def main() -> int:
     uit = a.uit or (a.werkmap / "ontwerpwidget.html")
     uit.write_text(SJABLOON.format(
         titel=_esc(doc.get("titel") or a.werkmap.name),
+        merk=css_variabelen(),
         intro=_esc(intro), tel=_esc(telregel), secties=secties, fonts=fonts,
         maten=json.dumps(MATEN, ensure_ascii=False),
     ), encoding="utf-8")

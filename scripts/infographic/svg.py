@@ -65,10 +65,17 @@ import os
 import platform
 import re
 import subprocess
+import sys
 from dataclasses import dataclass
 from functools import lru_cache
 from pathlib import Path
 from xml.sax.saxutils import escape
+
+# De merkwaarden en de contrastmeting komen uit de merklaag. Dit bestand rekende
+# ze zelf uit, en dat was tot 27 augustus 2026 een ander palet dan het
+# Word-sjabloon: een SVG naast een Word-document had daardoor een ander oranje.
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "scripts" / "gedeeld"))
+import merk  # noqa: E402
 
 PT_PER_INCH = 72.0
 PX_PER_PT = 96.0 / 72.0
@@ -266,16 +273,17 @@ MAX_TEKENS_PER_REGEL = 95
 
 # ---------------------------------------------------------------- kleur
 
-HEX = {
-    "navy":        "#201B5C",
-    "oranje":      "#F87F4F",
-    "grapefruit":  "#F95D63",
-    "royal":       "#3B62C1",
-    "sky":         "#45B6E2",
-    "emerald":     "#6AC6BA",
-    "wit":         "#FFFFFF",
-    "zwartblauw":  "#233348",
-}
+#: De hues die deze laag kan tekenen. Zeven komen uit `scripts/gedeeld/merk.py`
+#: en staan daar één keer; welke zeven het zijn is wel van deze laag, want een
+#: infographic tekent geen tint en geen paginaveld.
+#:
+#: `zwartblauw` is geen merkkleur en staat daarom hier: het is het `dk1`-slot van
+#: het PowerPoint-sjabloon, waar het voetnootgrijs uit voortkomt (zie
+#: `scripts/shapes.py` onder LUM). Het staat er zodat een beeld dat naast dat
+#: grijs komt te liggen dezelfde ondertoon kan pakken.
+HEX = {naam: merk.HEX[naam] for naam in
+       ("navy", "oranje", "grapefruit", "royal", "sky", "emerald", "wit")}
+HEX["zwartblauw"] = "#233348"
 
 #: Dekking die van een hue een container maakt in plaats van een kleur. Per hue
 #: gekalibreerd -- navy is veel donkerder dan emerald. Gemeten in de winnende SFNL-decks.
@@ -284,9 +292,11 @@ CONTAINER = {
     "emerald": 0.10, "grapefruit": 0.09, "oranje": 0.12,
 }
 
-#: WCAG-contrast op wit, uitgerekend.
-OP_WIT = {"navy": 15.30, "royal": 5.67, "grapefruit": 3.10,
-          "oranje": 2.58, "sky": 2.32, "emerald": 2.02, "zwartblauw": 12.60}
+#: WCAG-contrast op wit, uitgerekend en niet overgeschreven. Overgeschreven was
+#: het namelijk fout: navy stond op 15,30 en haalt 15,79, en zwartblauw stond op
+#: 12,60 en haalt 12,82. Zo'n getal draagt een weigering hieronder, dus het hoort
+#: afgeleid te zijn van de kleur die er werkelijk staat.
+OP_WIT = {naam: merk.contrast(hex_, "wit") for naam, hex_ in HEX.items() if naam != "wit"}
 
 #: Tekstkleur op een VOLLE vulling.
 OP_VOL = {"navy": "wit", "royal": "wit", "zwartblauw": "wit",
@@ -894,10 +904,10 @@ def svg(c: Canvas, vormen: list[Vorm], *, beschrijving: str = "",
     if raster:                                           # alleen om zelf te kijken
         for x in range(0, int(c.w) + 1, 20):
             delen.append(f'  <line x1="{x}" y1="0" x2="{x}" y2="{_n(c.h)}" '
-                         'stroke="#F95D63" stroke-width="0.25" stroke-opacity="0.4"/>')
+                         f'stroke="{HEX["grapefruit"]}" stroke-width="0.25" stroke-opacity="0.4"/>')
         for y in range(0, int(c.h) + 1, 20):
             delen.append(f'  <line x1="0" y1="{y}" x2="{_n(c.w)}" y2="{y}" '
-                         'stroke="#F95D63" stroke-width="0.25" stroke-opacity="0.4"/>')
+                         f'stroke="{HEX["grapefruit"]}" stroke-width="0.25" stroke-opacity="0.4"/>')
     delen.append("</svg>")
     return "\n".join(delen) + "\n"
 

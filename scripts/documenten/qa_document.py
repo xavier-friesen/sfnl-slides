@@ -42,14 +42,18 @@ from _browser import browser, wacht_op_letters  # noqa: E402
 
 #: Het palet. Alles wat een element als kleur of vulling draagt hoort hier te
 #: staan, op de tinten van diezelfde kleuren na — die worden apart herkend.
-PALET = {
-    "navy": (32, 27, 92), "oranje": (248, 127, 79), "wit": (255, 255, 255),
-    "grapefruit": (249, 93, 99), "emerald": (106, 198, 186), "royal": (59, 98, 193),
-    "sky": (69, 182, 226), "violet": (107, 93, 174),
-    "mint-tint": (224, 244, 241), "periwinkel": (160, 173, 226),
-    "oranje-tint": (255, 223, 208), "navy-tint": (244, 243, 247),
-    "grijs": (242, 242, 242),
-}
+#:
+#: Uit `scripts/gedeeld/merk.py` en niet uit een eigen lijst. Die eigen lijst
+#: heeft er gestaan, met de vijf waarden van vóór 27 augustus 2026 erin, en toen
+#: was deze meting het tegendeel van wat ze moet zijn: het merkoranje van het
+#: Word-sjabloon week 15 op het blauwkanaal af van het oranje dat hier stond, en
+#: dat is meer dan de marge van `_dichtbij`. De poort meldde dus "kleur buiten
+#: het palet" over de merkkleur zelf, op elk document. Een toets die zijn eigen
+#: kopie van de waarheid bijhoudt, toetst op een gegeven moment die kopie.
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "gedeeld"))
+from merk import KLEUREN, rgb  # noqa: E402
+
+PALET = {naam: rgb(naam) for naam in KLEUREN}
 
 #: Ondergrens voor lopende tekst. 8 pt bij 96 dpi is 10,67 px. Het SFNL-rapport
 #: zet zijn brood op 10 pt (13,33 px); 8 pt is de bijschriftmaat en daaronder

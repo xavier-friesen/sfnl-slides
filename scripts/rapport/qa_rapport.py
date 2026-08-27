@@ -507,7 +507,7 @@ METING = r"""(cfg) => {
 
       // Onder de drempel, en dan is de vraag wát het is.
       //
-      // Oranje op wit haalt 2,58 en emerald 2,1. Dat is te weinig voor
+      // Oranje op wit haalt 2,51 en emerald 1,98. Dat is te weinig voor
       // een regel tekst en ruim genoeg voor een merkteken van één of
       // twee tekens dat je moet kunnen vínden, niet lezen: een
       // lijstnummer, een nootcijfer, een gespatieerd kapitaallabel. Die
@@ -765,7 +765,7 @@ def beoordeel(m: dict) -> dict:
         klein.append({"soort": "accentmerken", "aantal": len(m["accentmerken"]),
                       "waar": m["accentmerken"][:4],
                       "wat": "merktekens in het accent onder de tekstdrempel. Dat is "
-                             "een keuze en geen fout — oranje op wit haalt 2,58 — "
+                             "een keuze en geen fout — oranje op wit haalt 2,51 — "
                              "maar het staat hier zodat het een keuze blijft"})
 
     maten = sorted(float(k) for k in m["maten"])

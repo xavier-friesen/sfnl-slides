@@ -51,6 +51,18 @@
      contrast  violet als hoofdaccent, oranje als tweede. Het register
                van de casespread.
 
+   GEEN MERKWAARDE IN DIT BESTAND. De kleuren, het huisverloop en de
+   letterstapels komen uit `assets/gedeeld/merk.css`, gegenereerd uit
+   `scripts/gedeeld/merk.py`, en ze komen hier binnen via het gestempelde
+   blok in §1 van `stijl.css` — die stylesheet gaat hier altijd aan
+   vooraf, dus staat elke `var(--oranje)` hieronder al klaar. Wat de vier
+   kleurregisters in §13 dóen met die kleuren is wél van dit bestand: dat
+   is een regel per medium en die hoort niet in de merklaag. Een kleur op
+   alpha schrijf je als `rgba(var(--navy-rgb), .22)` en nooit met de
+   cijfers zelf; die drieling stond hier vierentwintig keer, met een navy,
+   een oranje en een emerald van vóór de paletmigratie van 27 augustus
+   2026 erin. Zie `reference/merk.md`.
+
    Alle maten in px bij 96 dpi. Waar "gemeten" staat, komt het getal uit
    het SFNL-jaarrapport 2025, uit de casespread Civitates, of uit een
    nagemeten rapport van Bain, BMC of het McKinsey Global Institute —
@@ -128,8 +140,8 @@
   --r-accent-2: var(--navy);
   --r-tint: var(--navy-tint);
   --r-watermerk: var(--oranje-tint);
-  --r-watermerk-lijn: rgba(248, 127, 79, .62);
-  --r-lijn: rgba(32, 27, 92, .22);
+  --r-watermerk-lijn: rgba(var(--oranje-rgb), .62);
+  --r-lijn: rgba(var(--navy-rgb), .22);
 }
 
 /* Een rasterkolom breed, voor wie iets buiten de kaders wil zetten.
@@ -551,7 +563,7 @@
    met een merkteken in het accent ervoor.
 
    Bij MGI is deze kop zélf oranje, en dat was ook de eerste zetting
-   hier. Nagemeten haalt oranje op wit een contrast van 2,58, en dat is
+   hier. Nagemeten haalt oranje op wit een contrast van 2,51, en dat is
    onder de 4,5 die een regel lopende tekst nodig heeft. Een run-in kop
    is een hele zin en dus lopende tekst. Dus: de letter is navy en het
    accent zit in het vierkantje ervoor. Wat er niet gebeurt is het
@@ -709,7 +721,7 @@
   font-weight: 300;
   font-size: var(--m-klein);
   line-height: var(--r-klein);
-  color: rgba(32, 27, 92, .62);
+  color: rgba(var(--navy-rgb), .62);
   margin: 0 0 calc(var(--regel) * .7);
 }
 
@@ -723,7 +735,7 @@
   font-weight: 300;
   font-size: 9.33px;
   line-height: 12.5px;
-  color: rgba(32, 27, 92, .62);
+  color: rgba(var(--navy-rgb), .62);
   margin: calc(var(--regel) * .45) 0 0;
   text-align: left;
   hyphens: none;
@@ -753,7 +765,7 @@
   font-weight: 300;
   font-size: var(--m-klein);
   line-height: var(--r-klein);
-  color: rgba(32, 27, 92, .62);
+  color: rgba(var(--navy-rgb), .62);
   margin: calc(var(--regel) * .4) 0 0;
   text-align: left;
   hyphens: none;
@@ -768,7 +780,7 @@
   font-weight: 300;
   font-size: var(--m-klein);
   line-height: var(--r-klein);
-  color: rgba(32, 27, 92, .62);
+  color: rgba(var(--navy-rgb), .62);
   margin: calc(var(--regel) * var(--r-lucht)) 0;
   padding-left: 14px;
   border-left: 2px solid var(--r-accent);
@@ -786,7 +798,7 @@
   display: flex; align-items: center; justify-content: center;
   font-family: var(--display); font-weight: 700; font-size: 11px;
   letter-spacing: .1em; text-transform: uppercase;
-  color: rgba(32, 27, 92, .5); text-align: center; padding: 12px;
+  color: rgba(var(--navy-rgb), .5); text-align: center; padding: 12px;
 }
 
 
@@ -892,7 +904,7 @@
   font-weight: 300;
   font-size: 9.33px;
   line-height: 12.5px;
-  color: rgba(32, 27, 92, .7);
+  color: rgba(var(--navy-rgb), .7);
   text-align: left;
   hyphens: none;
 }
@@ -1013,7 +1025,7 @@
   font-weight: 300;
   font-size: 9.33px;
   line-height: 12.5px;
-  color: rgba(32, 27, 92, .72);
+  color: rgba(var(--navy-rgb), .72);
   margin: 0 0 3px;
   padding-left: 14px;
   text-indent: -14px;
@@ -1225,7 +1237,7 @@
   font-size: var(--m-klein);
   line-height: var(--r-klein);
   letter-spacing: .02em;
-  color: rgba(32, 27, 92, .58);
+  color: rgba(var(--navy-rgb), .58);
   display: flex;
   justify-content: flex-end;
   gap: 8px;
@@ -1578,7 +1590,7 @@
   padding-left: var(--r-kolom);
   margin-bottom: calc(var(--regel) * .3);
 }
-.inhoud__regel[data-niveau="2"] .inhoud__nr { color: rgba(32, 27, 92, .72); }
+.inhoud__regel[data-niveau="2"] .inhoud__nr { color: rgba(var(--navy-rgb), .72); }
 .inhoud__regel[data-niveau="1"] { margin-top: calc(var(--regel) * .7); }
 .inhoud__regel[data-niveau="1"] .inhoud__naam,
 .inhoud__regel[data-niveau="1"] .inhoud__folio { font-weight: 700; }
@@ -1600,8 +1612,8 @@
   --r-accent-2: var(--navy);
   --r-tint: var(--navy-tint);
   --r-watermerk: var(--oranje-tint);
-  --r-watermerk-lijn: rgba(248, 127, 79, .62);
-  --r-lijn: rgba(32, 27, 92, .22);
+  --r-watermerk-lijn: rgba(var(--oranje-rgb), .62);
+  --r-lijn: rgba(var(--navy-rgb), .22);
 }
 
 /* diep — hetzelfde op de tekstpagina's, maar de hoofdstukken openen op
@@ -1612,8 +1624,8 @@
   --r-accent-2: var(--navy);
   --r-tint: var(--navy-tint);
   --r-watermerk: var(--oranje-tint);
-  --r-watermerk-lijn: rgba(248, 127, 79, .62);
-  --r-lijn: rgba(32, 27, 92, .22);
+  --r-watermerk-lijn: rgba(var(--oranje-rgb), .62);
+  --r-lijn: rgba(var(--navy-rgb), .22);
 }
 .pagina[data-register="diep"][data-opener="blad"] {
   --papier: var(--navy);
@@ -1633,15 +1645,15 @@
   --r-accent-2: var(--navy);
   --r-tint: var(--mint-tint);
   --r-watermerk: #CDEBE5;
-  --r-watermerk-lijn: rgba(106, 198, 186, .78);
-  --r-lijn: rgba(32, 27, 92, .18);
+  --r-watermerk-lijn: rgba(var(--emerald-rgb), .78);
+  --r-lijn: rgba(var(--navy-rgb), .18);
 }
 .pagina[data-register="zacht"] .rapport-folio::before { background: var(--oranje); }
 .pagina[data-register="zacht"][data-opener="blad"] {
   --papier: var(--mint-tint);
-  --r-tint: rgba(32, 27, 92, .07);
-  --r-watermerk: rgba(32, 27, 92, .09);
-  --r-watermerk-lijn: rgba(32, 27, 92, .3);
+  --r-tint: rgba(var(--navy-rgb), .07);
+  --r-watermerk: rgba(var(--navy-rgb), .09);
+  --r-watermerk-lijn: rgba(var(--navy-rgb), .3);
 }
 .pagina[data-register="zacht"] .opener-band { background: var(--mint-tint); color: var(--navy); }
 
@@ -1654,8 +1666,8 @@
   --r-accent-2: var(--oranje);
   --r-tint: #EEEBF6;
   --r-watermerk: #DCD5EE;
-  --r-watermerk-lijn: rgba(107, 93, 174, .58);
-  --r-lijn: rgba(107, 93, 174, .28);
+  --r-watermerk-lijn: rgba(var(--violet-rgb), .58);
+  --r-lijn: rgba(var(--violet-rgb), .28);
 }
 .pagina[data-register="contrast"][data-opener="blad"] {
   --papier: var(--violet);
@@ -1829,7 +1841,7 @@
   font-size: var(--m-klein);
   line-height: var(--r-klein);
   margin: 2px 0 0;
-  color: rgba(32, 27, 92, .68);
+  color: rgba(var(--navy-rgb), .68);
 }
 .lid__mail { font-variant-numeric: tabular-nums; }
 
@@ -1847,7 +1859,7 @@
   line-height: var(--r-klein);
   margin: 0;
   max-width: var(--k6);
-  color: rgba(32, 27, 92, .78);
+  color: rgba(var(--navy-rgb), .78);
 }
 
 /* De blanco pagina die een katern afmaakt. Er staat niets op, en dat is

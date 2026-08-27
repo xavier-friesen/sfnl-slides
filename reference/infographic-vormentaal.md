@@ -170,16 +170,23 @@ staat als tekstkleur op wit**, niet alleen als vulling. Een gekleurde letter is 
 gevuld blok en zegt hetzelfde.
 
 Contrast op wit, uitgerekend. `svg.py` dwingt dit af en weigert een te kleine letter in een
-lichte hue:
+lichte hue. De getallen staan hier ter oriëntatie en niet als bron: `svg.py` rekent ze bij het
+importeren uit met `scripts/gedeeld/merk.py`, dus ze kunnen niet meer uit de pas lopen met de
+kleur die er werkelijk staat. Na te rekenen met `python scripts/gedeeld/merk.py --contrast
+oranje wit`.
 
 | kleur | op wit | mag dragen |
 |---|---|---|
-| navy | 15,3 | alles, ook een alinea |
-| royal | 5,7 | alles, ook een alinea |
+| navy | 15,8 | alles, ook een alinea |
+| royal | 5,9 | alles, ook een alinea |
 | grapefruit | 3,1 | een kop vanaf 18pt |
-| oranje | 2,6 | displaymaat, of een kop vanaf 18pt |
+| oranje | 2,5 | displaymaat, of een kop vanaf 18pt |
 | sky | 2,3 | idem |
 | emerald | 2,0 | idem |
+
+Ze stonden hier als 15,3 / 5,7 / 2,6, en dat waren de verhoudingen van het palet van vóór 27
+augustus 2026. Geen enkele rij in de kolom "mag dragen" is erdoor veranderd; zie
+`reference/merk.md` §1 voor de verschuiving per rol.
 
 Op een volle vulling: wit op navy en royal, navy op de lichte accenten. Eén uitzondering, en
 alleen voor de grootste drager: op 40pt mag wit ook op emerald, oranje en sky, want daar leest

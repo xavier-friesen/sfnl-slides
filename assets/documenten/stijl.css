@@ -19,42 +19,94 @@
    ===================================================================== */
 
 /* ---------------------------------------------------------------
-   1. Merkwaarden
+   1. Merkwaarden — uit reference/merk.md, en niet uit dit bestand.
+
+   Het blok tussen de merktekens hieronder is GEGENEREERD door
+   `python scripts/gedeeld/merk.py --css` en is woordelijk het `:root`-blok
+   uit `assets/gedeeld/merk.css`. Een kleurwaarde die je hier verandert,
+   verandert niet mee in `scripts/gedeeld/merk.py`; `scripts/preflight.py`
+   hergenereert dit blok, vergelijkt het en meldt elk verschil.
+
+   Tot 27 augustus 2026 stonden de waarden hier zelf, en toen bleken vijf
+   ervan andere kleuren dan het themapalet van `SFNL_Word_sjabloon.dotx`
+   — het bestand waaruit elke kleurkiezer in Word en PowerPoint bij SFNL
+   zijn waarden neemt. Ze staan nu allemaal op de sjabloonwaarde. Welke
+   vijf het waren, hoeveel ze verschoven en wat dat met de
+   contrastverhoudingen deed, staat in `reference/merk.md` §1; geen
+   enkele vormregel hieronder is erdoor veranderd, en dat is nagemeten.
+
+   Waarom een gestempeld blok en geen `@import url("../gedeeld/merk.css")`:
+   `bouw.py` plakt deze stylesheet als tekst achter `fonts.css` in één
+   `<style>`-blok, en de CSS-parser laat een `@import` vallen die niet
+   vooraan de stylesheet staat — dan zouden alle kleuren zonder melding
+   ongedefinieerd zijn. En een relatieve URL in een `<style>` wordt tegen
+   het document opgelost en niet tegen de stylesheet, dus het pad klopt
+   alleen toevallig, per map waarin het document belandt.
+   --------------------------------------------------------------- */
+
+/* merk:begin — gegenereerd door scripts/gedeeld/merk.py --css */
+:root {
+  /* Uit het themapalet van SFNL_Word_sjabloon.dotx: dat sjabloon is de
+     merkbron en niet deze plugin. Zie reference/merk.md §1. */
+  --navy:          #21145F;     /* accent3 — de inkt. Lopende tekst is nooit puur zwart */
+  --oranje:        #FF7F40;     /* accent1 — het accent. Labels, de streep, de badge */
+  --wit:           #FFFFFF;     /* accent6 — het papier */
+  --grapefruit:    #FF595A;     /* accent2 — het tweede eind van het verloop; alarm, nadruk */
+  --emerald:       #66C9BA;     /* accent4 — positief, uitkomst */
+  --royal:         #425CC7;     /* accent5, hlink — secundaire data, en de hyperlink */
+
+  /* Niet in het themapalet, dus gemeten uit het drukwerk. */
+  --sky:           #45B6E2;     /* tertiaire data */
+  --violet:        #6B5DAE;     /* de casespread; een heel paneel of een rail */
+  --grijs:         #F2F2F2;     /* een kaartvulling */
+  --mint-tint:     #E0F4F1;     /* een hele pagina of een paneel in emerald */
+  --periwinkel:    #A0ADE2;     /* het interviewpaneel */
+  --oranje-tint:   #FFDFD0;     /* het watermerkcijfer */
+  --navy-tint:     #F4F3F7;     /* een stille container */
+
+  /* De twee rollen. Per pagina overschreven; dit is waar ze op
+     uitkomen als niemand iets overschrijft. */
+  --papier:        var(--wit);
+  --inkt:          var(--navy);
+
+  /* Dezelfde kleuren als drieling, voor alpha: schrijf
+     rgba(var(--navy-rgb), .16) en nooit de cijfers zelf. */
+  --navy-rgb:          33, 20, 95;
+  --oranje-rgb:        255, 127, 64;
+  --wit-rgb:           255, 255, 255;
+  --grapefruit-rgb:    255, 89, 90;
+  --emerald-rgb:       102, 201, 186;
+  --royal-rgb:         66, 92, 199;
+  --sky-rgb:           69, 182, 226;
+  --violet-rgb:        107, 93, 174;
+  --grijs-rgb:         242, 242, 242;
+  --mint-tint-rgb:     224, 244, 241;
+  --periwinkel-rgb:    160, 173, 226;
+  --oranje-tint-rgb:   255, 223, 208;
+  --navy-tint-rgb:     244, 243, 247;
+
+  /* Het huisverloop. Er is er één en die is gemeten; een tweede
+     verloop is een tweede huisstijl. */
+  --verloop:       linear-gradient(150deg, var(--oranje) 0%, var(--grapefruit) 100%);
+
+  /* De letterstapels. De familie is invariant, de maat staat per
+     medium in de vormentaal van dat medium en dus niet hier.
+     Gotham reist nooit mee; de terugval is Montserrat SemiBold. */
+  --display:       'Montserrat', 'Helvetica Neue', Arial, sans-serif;
+  --brood:         'Lato', 'Helvetica Neue', Arial, sans-serif;
+}
+/* merk:einde */
+
+/* ---------------------------------------------------------------
+   1a. De maten van dít medium.
+
+   Alles hierboven is invariant; alles hieronder is gemeten aan gedrukte
+   documenten van vier tot zestien pagina's en geldt daarom alleen hier.
+   Een rapport van tachtig pagina's heeft een andere maatladder, en die
+   staat in `assets/rapport/rapport.css`.
    --------------------------------------------------------------- */
 
 :root {
-  /* Kern. Deze vijf staan vast en worden nooit per document gekozen. */
-  --navy:        #201B5C;
-  --oranje:      #F87F4F;
-  --wit:         #FFFFFF;
-  --papier:      #FFFFFF;
-  --inkt:        #201B5C;   /* lopende tekst; nooit puur zwart */
-
-  /* Accenten. Ten hoogste een daarvan naast oranje in een document. */
-  --grapefruit:  #F95D63;
-  --emerald:     #6AC6BA;
-  --royal:       #3B62C1;
-  --sky:         #45B6E2;
-  --violet:      #6B5DAE;   /* gemeten uit de casespread */
-
-  /* Tinten. Gemeten uit de vlakken in het rapport, niet berekend. */
-  --mint-tint:      #E0F4F1;   /* emerald als paginaveld */
-  --periwinkel:     #A0ADE2;   /* royal als paneelveld  */
-  --oranje-tint:    #FFDFD0;   /* oranje als watermerk  */
-  --navy-tint:      #F4F3F7;
-  --grijs:          #F2F2F2;
-
-  /* Het huisverloop. Eén verloop, gemeten van #FF7F40 naar #FF5F55 op
-     de omslag en op de kaartenrij van het rapport 2025. Wie een tweede
-     verloop verzint, verzint een tweede huisstijl. */
-  --verloop: linear-gradient(150deg, var(--oranje) 0%, var(--grapefruit) 100%);
-
-  /* Letters. Gotham Bold is gelicentieerd en staat niet op het web;
-     Montserrat ExtraBold is de substituut die het drukwerk zelf al
-     gebruikt (gemeten in de casespread). Lato is de brood-letter. */
-  --display: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;
-  --brood:   'Lato', 'Helvetica Neue', Arial, sans-serif;
-
   /* De maatladder. Vier rollen, en de body staat op 10/13 pt — de
      gemeten zetting van het rapport. 10 pt is 13,33 px bij 96 dpi. */
   --m-body:     13.33px;   /* 10 pt  */
@@ -187,8 +239,8 @@ a:hover { color: var(--grapefruit); }
 /* Kleurvelden. Het veld bepaalt papier en inkt in één keer, zodat de
    contrastregel niet per element opnieuw genomen wordt.
 
-   Op oranje is de inkt navy en niet wit, en dat is nagemeten: wit haalt 2,6 op
-   oranje en 2,8 op het verloop, navy haalt er 6,4. Een kop van 40 px in wit
+   Op oranje is de inkt navy en niet wit, en dat is nagemeten: wit haalt 2,51 op
+   oranje en 2,8 op het verloop, navy haalt er 6,29. Een kop van 40 px in wit
    staat prima op oranje — het SFNL-drukwerk doet dat op elke omslag — maar een
    alinea van 10 pt in wit op oranje is de eerste plek waar een document er
    goedkoop uit gaat zien. Wil je het hele veld in wit, dan zet je dat er
@@ -589,9 +641,9 @@ a:hover { color: var(--grapefruit); }
   background: var(--grijs);
   color: var(--navy);
 }
-/* Let op de tekstkleur op oranje. Wit haalt 2,6 op oranje en 2,8 op het
+/* Let op de tekstkleur op oranje. Wit haalt 2,51 op oranje en 2,8 op het
    verloop, en dat draagt geen gelezen regel: het is genoeg voor een kop vanaf
-   16 px en te weinig voor een alinea van 10 pt. Navy haalt er 6,4. Daarom is
+   16 px en te weinig voor een alinea van 10 pt. Navy haalt er 6,29. Daarom is
    navy hier de inkt en is wit de uitzondering die je per element zet, voor een
    kop of een getal op displaymaat. Op navy en violet is het andersom. */
 .paneel[data-veld="oranje"]  { background: var(--oranje);      color: var(--navy); }
@@ -610,7 +662,7 @@ a:hover { color: var(--grapefruit); }
   border-radius: var(--ronding);
   padding: 20px 20px 22px;
   background: var(--wit);
-  box-shadow: inset 0 0 0 1px rgba(32, 27, 92, 0.16);
+  box-shadow: inset 0 0 0 1px rgba(var(--navy-rgb), 0.16);
 }
 
 /* 8.11 De ronde foto — het portret dat over de rand van een paneel
@@ -709,11 +761,11 @@ a:hover { color: var(--grapefruit); }
 .beeldkader--leeg {
   background:
     linear-gradient(to top right, transparent calc(50% - 0.5px),
-      rgba(32, 27, 92, .18) 50%, transparent calc(50% + 0.5px)),
+      rgba(var(--navy-rgb), .18) 50%, transparent calc(50% + 0.5px)),
     linear-gradient(to bottom right, transparent calc(50% - 0.5px),
-      rgba(32, 27, 92, .18) 50%, transparent calc(50% + 0.5px)),
+      rgba(var(--navy-rgb), .18) 50%, transparent calc(50% + 0.5px)),
     var(--navy-tint);
-  box-shadow: inset 0 0 0 1px rgba(32, 27, 92, .22);
+  box-shadow: inset 0 0 0 1px rgba(var(--navy-rgb), .22);
 }
 .beeldkader--leeg::after {
   content: attr(data-wat);
@@ -873,7 +925,7 @@ a:hover { color: var(--grapefruit); }
 }
 .tabel td {
   padding: 7px 10px 7px 0;
-  border-bottom: 1px solid rgba(32, 27, 92, 0.14);
+  border-bottom: 1px solid rgba(var(--navy-rgb), 0.14);
   vertical-align: top;
 }
 .tabel tr:last-child td { border-bottom: 0; }
@@ -896,5 +948,5 @@ a:hover { color: var(--grapefruit); }
    artboard heeft dit geen effect, want daar is de pagina de wereld. */
 @media screen {
   .vel { display: flex; flex-direction: column; align-items: center; gap: 28px; padding: 28px 0; }
-  .vel > .pagina { box-shadow: 0 2px 18px rgba(32, 27, 92, 0.18); }
+  .vel > .pagina { box-shadow: 0 2px 18px rgba(var(--navy-rgb), 0.18); }
 }

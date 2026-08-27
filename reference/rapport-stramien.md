@@ -358,10 +358,21 @@ al het andere leest die vijf.
 
 | register | `--r-accent` | `--r-accent-2` | `--r-tint` | `--r-watermerk` | de opener |
 |---|---|---|---|---|---|
-| `helder` | oranje `#F87F4F` | navy | navy-tint `#F4F3F7` | oranje-tint `#FFDFD0` | wit |
+| `helder` | oranje | navy | navy-tint | oranje-tint | wit |
 | `diep` | oranje | navy | navy-tint | oranje-tint | navy blad, witte inkt |
-| `zacht` | emerald `#6AC6BA` | navy | mint-tint `#E0F4F1` | `#CDEBE5` | mint blad |
-| `contrast` | violet `#6B5DAE` | oranje | `#EEEBF6` | `#DCD5EE` | violet blad, witte inkt |
+| `zacht` | emerald | navy | mint-tint | `#CDEBE5` | mint blad |
+| `contrast` | violet | oranje | `#EEEBF6` | `#DCD5EE` | violet blad, witte inkt |
+
+De namen zijn die van `reference/merk.md` §1 en de waarden staan daar. Ze
+stonden hier ook, en dat is precies hoe twee ervan konden verouderen: het
+oranje en het emerald in deze tabel waren op 27 augustus 2026 nog de
+plugin-waarden en niet die van het Word-sjabloon. Wat een register met die
+kleuren dóet is wél van dit bestand — dat is een regel per medium.
+
+De drie waarden die er nog wél staan zijn geen merkkleuren maar tinten van
+dít register, en ze staan alleen in `rapport.css`: `#CDEBE5` is de mint-vlek
+onder het hoofdstukcijfer in `zacht`, `#EEEBF6` en `#DCD5EE` zijn de
+violet-tinten van `contrast`.
 
 De vijfde is `--r-watermerk-lijn`: de contourkleur van het open
 hoofdstukcijfer. `--r-watermerk` is de dichte vlek van de eerste
@@ -1053,11 +1064,14 @@ levert iets op wat de opdrachtgever niet kan openen op de manier waarop
 hij het gaat lezen; wie het oplevert zonder artboards, levert iets op
 waar niemand meer iets aan kan verschuiven.
 
-Twee van de drie modules staan in `scripts/gedeeld` omdat de
-documentenroute ze net zo hard nodig heeft:
+Twee van die drie opleveringen komen uit een module in `scripts/gedeeld`,
+omdat de documentenroute er dezelfde vraag over stelt. De merklaag staat
+er om een andere reden: die is van álle routes, en een kleurwaarde hoort
+op één plek te staan.
 
 | module | wat | van wie |
 |---|---|---|
+| `gedeeld/merk.py` | de kleuren, de letters en `contrast()`; `--css` schrijft `assets/gedeeld/merk.css` en stempelt §1 van `stijl.css` | alle routes |
 | `gedeeld/drukwerk.py` | de katernsom: komt dit aantal pagina's uit op de pers | beide drukroutes |
 | `gedeeld/naar_pdf.py` | het document printen op de bladmaat die het zelf zegt | beide drukroutes |
 | `gedeeld/canvas.py` | de artboards in spreads neerleggen: 1 alleen, dan 2-3, 4-5 | beide drukroutes |
