@@ -75,6 +75,7 @@ schuiven marginaal en alle conclusies die erop staan houden:
 | grapefruit op wit | 3,10 | **3,08** | alleen grote tekst, en dan nog met tegenzin |
 | emerald op wit | 2,02 | **1,98** | emerald draagt nooit tekst |
 | royal op wit | 5,67 | **5,85** | royal mag een zin dragen |
+| wit op oranje | 2,58 | **2,51** | toegestaan in drukwerk, gebonden — zie §4 |
 
 De oude waarde 6,4 die in `rapport-vormentaal.md` §4 stond voor navy-op-oranje was niet
 reproduceerbaar; de gemeten verhouding was 5,93 en is nu 6,29.
@@ -142,7 +143,21 @@ eigen bovenop.
   hetzelfde zeggen.
 - **Geen benaderde waarde.** `#F87F4F` is niet oranje meer, `#FF8040` is het nooit geweest, en
   "ongeveer oranje" bestaat niet. Wat hier niet staat, is geen merkkleur.
-- **Oranje draagt geen lopende tekst.** 2,51 op wit. Navy op een oranje vlak wel, 6,29.
+- **Oranje draagt geen lopende tekst, en wit op oranje is de ene uitzondering.** Oranje als inkt
+  op wit haalt 2,51 en dat is nooit goed. Op een oranje vlak haalt navy 6,29, en dat is de gewone
+  route. Wit op datzelfde vlak haalt **ook** 2,51 — de verhouding is symmetrisch, dus wit op
+  oranje is precies zo zwak als oranje op wit — en het is desondanks toegestaan, want het
+  gedrukte werk doet het: de lessentekst in de lessenband van de casespread staat wit op oranje.
+
+  Het is dus een merkbesluit en geen toegankelijk contrast, en daarom is het gebonden. Alleen in
+  drukwerk. Alleen voor korte tekst op display- of leadmaat, in een band of een paneel. Nooit voor
+  een getal, een bronregel, een voetnoot of iets anders dat gelezen móet worden om het stuk te
+  kunnen volgen — daar staat navy, en anders staat het niet op oranje.
+- **Op een scherm geldt die uitzondering niet.** Op papier kun je 2,51 verdedigen als merkteken:
+  de lezer houdt het blad zelf schuiner, groter of dichterbij. In een browser met een screenreader
+  en een toetsenbord is het een toegankelijkheidsfout die niemand voor je opvangt. `online-design`
+  erft de uitzondering daarom niet, en daar is 4,5 voor lopende tekst en 3,0 voor grote tekst een
+  blokkade en geen aanwijzing.
 
 ---
 
