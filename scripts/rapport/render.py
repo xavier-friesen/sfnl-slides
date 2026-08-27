@@ -126,12 +126,12 @@ def _tafel(page) -> None:
       .contact {{ display: flex; flex-wrap: wrap; gap: 26px 22px;
                   align-items: flex-start; justify-content: flex-start; }}
       .kaart {{ display: flex; flex-direction: column; gap: 5px; }}
-      .spread {{ display: flex; gap: 2px; box-shadow: 0 2px 12px rgba({navy_rgb},.22);
+      .spread {{ display: flex; gap: 2px; box-shadow: 0 2px 12px rgba({_NAVY_RGB},.22);
                  background: #fff; }}
       .spread .pagina {{ box-shadow: none !important; margin: 0 !important; }}
       .merk {{ font: 600 12px/1 -apple-system, system-ui, sans-serif;
-               color: {navy}; opacity: .6; letter-spacing: .05em; }}
-    """.format(navy=_NAVY, navy_rgb=_NAVY_RGB))
+               color: {_NAVY}; opacity: .6; letter-spacing: .05em; }}
+    """)
 
 
 def _bouw_spreads(page, paren: list[list[int]], eerstenr: int, groot: bool) -> None:

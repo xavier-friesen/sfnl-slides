@@ -245,12 +245,23 @@ a:hover { color: var(--grapefruit); }
    alinea van 10 pt in wit op oranje is de eerste plek waar een document er
    goedkoop uit gaat zien. Wil je het hele veld in wit, dan zet je dat er
    expliciet bij met data-inkt="wit", en dan is het een keuze. */
-.pagina[data-veld="oranje"]  { --papier: var(--oranje);     --inkt: var(--navy); }
-.pagina[data-veld="verloop"] { background: var(--verloop);  --inkt: var(--navy); }
-.pagina[data-veld="navy"]    { --papier: var(--navy);       --inkt: var(--wit);  }
-.pagina[data-veld="mint"]    { --papier: var(--mint-tint);  --inkt: var(--navy); }
-.pagina[data-veld="violet"]  { --papier: var(--violet);     --inkt: var(--wit);  }
-.pagina[data-veld="navy-tint"] { --papier: var(--navy-tint); --inkt: var(--navy); }
+/* Het attribuut staat er twee keer, en dat is geen typefout. `data-veld` is een
+   besluit over déze pagina; een kleurregister is een stand van het hele
+   document. Beide zetten `--papier`, en met gelijke specificiteit wint wie
+   later in het bestand staat — dat zijn de registers, honderden regels
+   verderop. Gevolg, gemeten op een rapport van 47 pagina's: een achterblad met
+   `data-veld="oranje"` in de markup kwam er in het register `zacht` mint uit,
+   en in `helder` oranje. Hetzelfde bestand, twee uitkomsten, en niets klaagde.
+
+   Het tweede attribuut tilt de specificiteit één stap op, zodat een expliciet
+   veld het altijd van een register wint. Dat is de goede rangorde: wie op één
+   pagina een kleur aanwijst, heeft dat gezien; een register is een default. */
+.pagina[data-veld="oranje"][data-veld]  { --papier: var(--oranje);     --inkt: var(--navy); }
+.pagina[data-veld="verloop"][data-veld] { background: var(--verloop);  --inkt: var(--navy); }
+.pagina[data-veld="navy"][data-veld]    { --papier: var(--navy);       --inkt: var(--wit);  }
+.pagina[data-veld="mint"][data-veld]    { --papier: var(--mint-tint);  --inkt: var(--navy); }
+.pagina[data-veld="violet"][data-veld]  { --papier: var(--violet);     --inkt: var(--wit);  }
+.pagina[data-veld="navy-tint"][data-veld] { --papier: var(--navy-tint); --inkt: var(--navy); }
 
 .pagina[data-inkt="wit"]  { --inkt: var(--wit);  }
 .pagina[data-inkt="navy"] { --inkt: var(--navy); }

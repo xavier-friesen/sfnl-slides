@@ -1259,13 +1259,21 @@
    allebei zonder dat er twee namen naast elkaar staan te dringen.
    Twee namen op één regel was de eerste zetting, en op de verso zag dat
    eruit als een kopregel die niet was afgemaakt. */
+.rapport-kopregel [data-plek="links"] { display: none; }   /* default = recto */
 .pagina[data-zijde="recto"] .rapport-kopregel [data-plek="links"],
 .pagina[data-zijde="verso"] .rapport-kopregel [data-plek="rechts"] { display: none; }
+.pagina[data-zijde="verso"] .rapport-kopregel [data-plek="links"] { display: revert; }
 .pagina[data-zijde="verso"] .rapport-kopregel .streepje { order: 2; }
 
 .rapport-folio {
   position: absolute;
-  bottom: calc(var(--r-marge-onder) - 46px);
+  /* De som kan negatief worden, en dan valt de folio van het blad. Gemeten bij
+     `dichtheid: dicht`: de ondermarge krimpt daar zo ver dat `marge-onder - 46`
+     onder nul komt, en dan stond de folio 5 px ónder de bladrand — op álle
+     pagina's afgesneden, en geen van de zestien metingen zag het, want binnen
+     het DOM was er niets weggevallen. `max()` zet een bodem van 8 px: liever
+     een folio die iets te hoog staat dan een die er niet is. */
+  bottom: max(8px, calc(var(--r-marge-onder) - 46px));
   font-family: var(--display);
   font-weight: 700;
   font-size: var(--m-klein);
@@ -1275,8 +1283,15 @@
   z-index: 2;
   font-variant-numeric: tabular-nums;
 }
-.pagina[data-zijde="recto"] .rapport-folio { right: var(--r-marge-buiten); }
-.pagina[data-zijde="verso"] .rapport-folio { left: var(--r-marge-buiten); }
+/* Zonder `data-zijde` gedraagt een pagina zich als recto — dat staat zo in §1
+   van het stramien en het gold hier niet. De folio stond dan op `left: 0`,
+   tegen de snijrand, en in de kopregel stonden beide namen omdat ook die
+   alleen mét `data-zijde` een kant kiest. Dat treft precies de enkelzijdige
+   oplevering: `dubbelzijdig: false` zet geen zijde, en dan is elke pagina
+   stuk. Recto is nu de default en verso is de uitzondering. */
+.rapport-folio { right: var(--r-marge-buiten); left: auto; }
+.pagina[data-zijde="recto"] .rapport-folio { right: var(--r-marge-buiten); left: auto; }
+.pagina[data-zijde="verso"] .rapport-folio { left: var(--r-marge-buiten); right: auto; }
 
 /* Het streepje voor de folio, in het accent. Klein, en het is het enige
    gekleurde element op een gewone tekstpagina — dat maakt het een
