@@ -16,7 +16,7 @@ en is met `scripts/rapport/qa_rapport.py --alles` te herhalen.
 
 ## 1. Het kader
 
-Anders dan bij `sfnl-design-documents`, en dat is een besluit: een
+Anders dan bij `ontwerp-documenten`, en dat is een besluit: een
 document van vier pagina's ligt plat, een rapport van tachtig zit in een
 rug.
 
@@ -290,7 +290,7 @@ Wat er bovenop `stijl.css` bij komt. Elk tekent één ding.
 | `.scheiding__streep` | de streep op het scheidingsblad van de bijlagen, vier rasterkolommen breed |
 | `.opener-band` | de aflopende band; `--balk` op de `.pagina` |
 | `.inhoud`, `.inhoud__regel`, `.inhoud__nr`, `.inhoud__naam`, `.inhoud__leader`, `.inhoud__folio` | de inhoudsopgave. De puntenlijn is een lijnelement en geen reeks punten, want punten zouden als toegevoegde tekst opduiken |
-| `.omslag`, `.omslag__boven/__midden/__onder`, `.omslag__titel`, `.omslag__onderschrift`, `.omslag__regel` | de omslag. Het component staat in `stijl.css` §8.16, want `sfnl-design-documents` bouwt zijn voorblad met hetzelfde merkteken; `rapport.css` §14 zet er alleen de rapportmaat op — `--m-omslag-onderschrift` op 22 px en `--omslag-maat` op acht kolommen |
+| `.omslag`, `.omslag__boven/__midden/__onder`, `.omslag__titel`, `.omslag__onderschrift`, `.omslag__regel` | de omslag. Het component staat in `stijl.css` §8.16, want `ontwerp-documenten` bouwt zijn voorblad met hetzelfde merkteken; `rapport.css` §14 zet er alleen de rapportmaat op — `--m-omslag-onderschrift` op 22 px en `--omslag-maat` op acht kolommen |
 | `.kantnoot` | een kanttekening in de kantlijn, met een streepje erboven |
 | `.voetnoot` | een noot aan de voet, of in de kantlijn in het kantlijnmodel |
 | `.paneel--rapport` | een gekleurd vlak met een blok tekst |
@@ -692,7 +692,7 @@ Twee sleutels: `drukklaar` (standaard `false`) en `katern` (standaard
 `4`). Op de opdrachtregel is `drukklaar` de vlag `--drukklaar`.
 
 De rekensom zelf staat niet hier maar in `scripts/gedeeld/drukwerk.py`,
-en die module is **van beide drukskills tegelijk**: `sfnl-design-documents`
+en die module is **van beide drukskills tegelijk**: `ontwerp-documenten`
 stelt bij kort drukwerk dezelfde vraag en krijgt hetzelfde antwoord. Een
 gebonden of geniet drukwerk wordt per vel gedrukt en een dubbelgevouwen
 vel is vier pagina's, dus een rapport van 49 pagina's wordt hoe dan ook
@@ -843,7 +843,7 @@ bepalen of de skill iets mág vragen. `herindelen: false` betekent dat
 stap 3 van de skill overgeslagen wordt; `beeldtekst: false` betekent dat
 de tekst in een figuur blijft staan zoals hij staat. In deze route is
 beeld een rasterbestand uit de docx en is die tekst praktisch
-onbereikbaar, dus het is vooral een afspraak — in `sfnl-design-documents`
+onbereikbaar, dus het is vooral een afspraak — in `ontwerp-documenten`
 bijt dezelfde regel harder, want daar staat de SVG inline in de markup.
 Dezelfde twee woorden in beide skills, met opzet.
 
@@ -1041,7 +1041,7 @@ En één script dat hier niet staat maar wel meedoet:
 | `scripts/gedeeld/drukwerk.py` | de katernsom: komt dit aantal pagina's uit op de pers, en zo niet, hoeveel erbij of eraf. `bouw.py` leest hem via `vul_aan_tot_katern` |
 
 Die staat in `gedeeld/` en niet in `rapport/` omdat hij **van beide
-drukskills tegelijk** is: `sfnl-design-documents` stelt dezelfde vraag
+drukskills tegelijk** is: `ontwerp-documenten` stelt dezelfde vraag
 over kort drukwerk en hoort hetzelfde antwoord te krijgen. Hij rekent en
 hij beslist niet; los te draaien met `python drukwerk.py 45`.
 

@@ -1,4 +1,4 @@
-# Werkplan — sfnl-slides visueel aantrekkelijker maken
+# Werkplan — slides visueel aantrekkelijker maken
 
 Status: **in uitvoering, go gegeven.** Stap 0 tot en met 6 zijn uitgevoerd (commits `25f099e`
 tot `313dc1b`), inclusief de vier reconstructies in `assets/maatstaf/`, het nieuwe
@@ -96,7 +96,7 @@ een Lato-gewicht. Beslissende test: dezelfde zin in beide varianten renderen en 
 Raakt: `scripts/shapes.py` (`aanhef()` bakt de oude regel in, docstring inclusief de
 maatstaf-meting; `run()` krijgt de guard), `reference/vormentaal.md` §9 (waar de oude regel
 expliciet staat aanbevolen), de annotatie bij `assets/maatstaf/04`,
-`reference/adviesvorm.md` §4, `agents/deck-visual-reviewer.md`, `skills/sfnl-slides/SKILL.md`.
+`reference/adviesvorm.md` §4, `agents/deck-visual-reviewer.md`, `skills/slides/SKILL.md`.
 Beide patronen worden repobreed opgezocht: een regel die op één plek verandert en op drie andere
 blijft staan, komt terug.
 
@@ -119,7 +119,7 @@ wie alleen dat heeft bouwt kaarten met tekst — ook als het onderwerp iets ande
   huisstijl eruit loopt.
 
 Raakt: `scripts/shapes.py` (hoofdmoot), `reference/vormentaal.md` §12 (wanneer een vorm een zin
-vervangt — positie op schaal is de kern), `skills/sfnl-slides/SKILL.md` stap 3.4.
+vervangt — positie op schaal is de kern), `skills/slides/SKILL.md` stap 3.4.
 
 ### 3. Werklijn A — het beeldbesluit en de tekstlast per register
 Niet "minder tekst", maar: er komt een moment waarop iemand kiest tussen tekst en beeld, en die
@@ -134,7 +134,7 @@ bijgeleverde decks. Plus: repeterende aanhef op elke kolom betekent dat die labe
 zijn en de vorm een tabel. En de bandregel scherper, met erbij wat er in plaats van de band
 afsluit.
 
-Raakt: `skills/sfnl-slides/SKILL.md` stap 2, `reference/vormentaal.md` §10 en een nieuwe
+Raakt: `skills/slides/SKILL.md` stap 2, `reference/vormentaal.md` §10 en een nieuwe
 paragraaf over tekstlast per register.
 
 ### 4. Werklijn D — de intake en de vijf besluiten
@@ -143,7 +143,7 @@ stijl gekozen wordt in plaats van waar hij impliciet ontstaat: elk besluit krijg
 default met de gevolgen erbij, en er komt een zesde bij — **de dichtheid** (spreekdeck of
 leave-behind). De zes worden bij de outline als één blok voorgelegd. Geen vijfde intakevraag.
 
-Raakt: `skills/sfnl-slides/SKILL.md` stap 1 en 2.
+Raakt: `skills/slides/SKILL.md` stap 1 en 2.
 
 ### 5. Werklijn C — meten waar meten eerlijk is
 Veel van wat deze decks lelijk maakt is niet in een drempel te vatten, dus geen poort die doet
@@ -183,9 +183,9 @@ En de kant die wél oordeelt versterken: `deck-visual-reviewer` scherper op teks
 beter af waren, en op "ziet dit er aantrekkelijk uit" in plaats van alleen "is dit correct".
 
 Raakt: een nieuw QA-script in `scripts/`, `scripts/preflight.py` (inclusief de foutieve
-renderermelding), `agents/deck-visual-reviewer.md`, `skills/sfnl-slides/SKILL.md` stap 5.
+renderermelding), `agents/deck-visual-reviewer.md`, `skills/slides/SKILL.md` stap 5.
 
-### 6. Werklijn E — escalatie naar `sfnl-infographic`
+### 6. Werklijn E — escalatie naar `infographic`
 Geen bovengrens per deck, nooit ongevraagd.
 
 **De aanleiding komt primair van het oog, niet van de telling.** De eerdere formulering — drie of
@@ -204,11 +204,11 @@ De skill meldt dan wat er aan de hand is, stelt de escalatie voor met de kosten 
 ja of nee. Bij nee herontwerpt hij de slide zelf met het repertoire uit stap 2.
 
 **Nagekomen in ronde 8:** die escalatie wees naar een skill buiten deze plugin, en dat is de
-reden dat hij in de praktijk zelden landde. `sfnl-infographic` staat er nu in, met dezelfde
+reden dat hij in de praktijk zelden landde. `infographic` staat er nu in, met dezelfde
 `shapes.py`, hetzelfde sjabloon en dezelfde layouts, dus de escalatie blijft binnen één plugin
 en de vraag "wat geef je mee" heeft een antwoord: het vlak en de titel.
 
-Raakt: `skills/sfnl-slides/SKILL.md`.
+Raakt: `skills/slides/SKILL.md`.
 
 ### 7. Testrondes
 1. Herbouw de werksessie uit dezelfde inhoud, volgens de skill zoals hij dan is, zonder extra
@@ -451,7 +451,7 @@ ontbrekende glyph", geen precisiecijfer. En de test die het meeste zou zeggen �
 verse deck dingen die de bouwer zelf op het contactblad miste — vraagt een omgeving met
 `python-pptx` en een pdf-naar-png-omzetter, en die was er niet.
 
-## Ronde 8 — `sfnl-infographic` in de plugin, en de skills samenstelbaar
+## Ronde 8 — `infographic` in de plugin, en de skills samenstelbaar
 
 Werklijn E hierboven eindigde in een escalatie naar een skill die niet in deze plugin zat. Dat
 werkte in theorie: de deckskill stelde de escalatie voor, de gebruiker zei ja, en dan moest er
@@ -588,7 +588,7 @@ schoon. Nu weigert `_clr()` een alpha tussen 0 en 1000 en zegt in de foutmelding
 twee lagen je vermoedelijk voor je had. Twee lagen met een eigen eenheid mag; een eenheid die
 stil een onzichtbare vorm oplevert niet.
 
-Raakt: `skills/sfnl-infographic/`, `scripts/infographic/`, `assets/infographic/`,
+Raakt: `skills/infographic/`, `scripts/infographic/`, `assets/infographic/`,
 `reference/infographic-*.md`, `reference/samenstellen.md`, `scripts/gedeeld/canvas.py`,
 `scripts/documenten/preflight.py`, `scripts/shapes.py`, en de kruisverwijzing in de drie andere
 SKILL's.

@@ -8,7 +8,7 @@ komen uit `slideMaster2.xml`, waar ze als `Picture 4` en `Slide Number Placehold
 Een slide op layout 17 erft ze dus allebei, en dat is op de render te zien en niet in de XML
 van de slide.
 
-`add_slide.py --no-page-number` uit de sfnl-slides plugin zet precies de vlag die je hier
+`add_slide.py --no-page-number` uit de sfnl-design plugin zet precies de vlag die je hier
 nodig hebt (`showMasterSp="0"` op de layout), maar weigert op layout 17: die vlag haalt álle
 mastervormen weg, dus ook het logo, en voor een deck is dat vrijwel nooit de bedoeling. Voor
 een losse infographic ís het de bedoeling.

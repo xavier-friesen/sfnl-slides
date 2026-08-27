@@ -1,5 +1,5 @@
 ---
-name: sfnl-slides
+name: slides
 description: >
   Bouw een PowerPoint-deck in de huisstijl van Social Finance NL uit het officiële sjabloon,
   waarbij je de compositie per slide zelf ontwerpt in plaats van uit een patroonbibliotheek te
@@ -25,7 +25,7 @@ Lees deze dingen, in deze volgorde, en lees ze één keer voor de hele deck en n
 **Alle paden in dit document staan vanaf de plugin-map**, dus `${CLAUDE_PLUGIN_ROOT}` — niet vanaf
 de map waarin dit bestand staat en niet vanaf het project. `reference/vormentaal.md` is dus
 `${CLAUDE_PLUGIN_ROOT}/reference/vormentaal.md`. Dat geldt niet alleen voor de scripts: een
-bouwer die de leeslijst vanaf `skills/sfnl-slides/` probeerde te openen, vond geen van de vier
+bouwer die de leeslijst vanaf `skills/slides/` probeerde te openen, vond geen van de vier
 documenten en moest de repo doorzoeken voordat hij aan stap 1 kon beginnen.
 
 1. `reference/vormentaal.md` — de maatstaf. Wat een SFNL-slide goed maakt.
@@ -680,7 +680,7 @@ tekstvak met de hand op om een afbreking te repareren — dat vak staat dan in d
 ruim. De cover is de gevoeligste plek, want daar staat de dektitel op één regel in een vak van
 5,33 in dat je zelf op maat hebt gezet, en geen script rekent hem na.
 
-### Escalatie naar `sfnl-infographic`
+### Escalatie naar `infographic`
 
 Er is een tweede skill die één beeld op maat bouwt. Die kost een aparte ronde en een aparte
 agent, dus je zet hem nooit ongevraagd in en er is geen bovengrens per deck.

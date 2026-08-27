@@ -37,17 +37,17 @@ rapportje: hij geeft exitcode 1 en levert het fragment niet.
 
 De drie bestemmingen, en ze verschillen echt
 --------------------------------------------
-* **`document`** — `sfnl-design-documents`. De artboards zijn met de hand gecomponeerde
+* **`document`** — `ontwerp-documenten`. De artboards zijn met de hand gecomponeerde
   HTML, dus de SVG gaat er **inline** in, in een `.beeldkader` met de verhouding inline.
   Zo doet `assets/documenten/voorbeeld/Geldstroom.dc.html` het ook. Tekst blijft tekst en
   de PDF houdt hem selecteerbaar.
-* **`rapport`** — `sfnl-rapport-opmaak`. Daar plaatst `bouw.py` beeld als `<img src>` uit
+* **`rapport`** — `rapport-deliverable`. Daar plaatst `bouw.py` beeld als `<img src>` uit
   de `figuren`-JSON, dus hier is de oplevering een **PNG op 2x** plus de regel voor die
   JSON. Factor 2 is bedoeld -- een bitmap wordt op het dubbele geëxporteerd om op 192 dpi
   te drukken -- en blijft onder de krimpgrens van 2,5 uit `rapport-stramien.md` §7c.
-* **`slide`** — `sfnl-slides`. Een PNG op 2x om in een deck te plakken. Wil je een beeld
+* **`slide`** — `slides`. Een PNG op 2x om in een deck te plakken. Wil je een beeld
   dat in PowerPoint zelf bewerkbaar blijft, dan is dit script het verkeerde gereedschap:
-  dan bouw je de slide met stap 4B van `sfnl-infographic`.
+  dan bouw je de slide met stap 4B van `infographic`.
 
 Het script schrijft niets in het doelbestand. Het levert het fragment of de JSON-regel op
 stdout of in een bestand, en de plaatsing blijft een besluit van de route die hem plaatst.

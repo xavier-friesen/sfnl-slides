@@ -4,7 +4,7 @@
     python preflight.py            # kijken
     python preflight.py --herstel  # ontbrekende pakketten erbij zetten
 
-Wat er sinds de plugin niet meer gezocht hoeft te worden: de scripts van `sfnl-slides`.
+Wat er sinds de plugin niet meer gezocht hoeft te worden: de scripts van `slides`.
 Die staan in dezelfde plugin, één map hoger, dus de PowerPoint-route is er altijd. De
 eerste versie van dit script zocht ze met een glob over `~/.claude/plugins/**`, en dat is
 precies zo betrouwbaar als het klinkt: buiten een geïnstalleerde plugin vond hij niets en
@@ -83,7 +83,7 @@ def main() -> int:
         uit["renderer_fout"] = str(e)[:200]
     uit["renderer"] = renderer
 
-    # De PowerPoint-route van stap 4B loopt op de scripts van sfnl-slides. Die staan in
+    # De PowerPoint-route van stap 4B loopt op de scripts van slides. Die staan in
     # deze plugin, dus dit is een bestaanscontrole en geen zoekactie.
     slides = WORTEL / "scripts"
     uit["sfnl_slides_scripts"] = str(slides) if (slides / "shapes.py").is_file() else None

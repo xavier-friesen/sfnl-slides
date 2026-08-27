@@ -1,5 +1,5 @@
 ---
-name: sfnl-design-documents
+name: ontwerp-documenten
 description: >
   Ontwerp en bouw een drukklaar document in de huisstijl van Social Finance NL — een uitnodiging,
   een samenvatting, een executive summary, een proposal, een programmaboekje of een
@@ -10,8 +10,8 @@ description: >
   "spread", "magazine", "drukklaar", "printklaar", of elk verzoek dat SFNL of Social Finance NL
   combineert met een document dat pagina's heeft en er goed uit moet zien. Werkt alleen in
   Claude Code, want hij leunt op scripts, een browser en de `design`-skill. Voor een PowerPoint
-  ga je naar `sfnl-slides`, voor één los beeld naar `sfnl-infographic`, voor een
-  Affinity-rapportspread naar `sfnl-rapport`.
+  ga je naar `slides`, voor één los beeld naar `infographic`, voor een
+  Affinity-rapportspread naar `ontwerp-met-affinity`.
 ---
 
 # SFNL-design-documents
@@ -368,7 +368,7 @@ Dan per pagina:
   dus een staafdiagram zou een verschil suggereren dat er niet is" is een reden; "past niet" is
   dat niet, want een reden die op elke pagina past beslist niets. Wordt het een infographic, zet
   dan hier in één zin wat het beeld moet laten zien — dat is de opdracht die je straks aan het
-  `.beeldkader` of aan `sfnl-infographic` meegeeft.
+  `.beeldkader` of aan `infographic` meegeeft.
 - **Tekst** — letterlijk zoals hij op de pagina komt, inclusief cijfers, eenheid en bron.
 - **Herkomst** — achter elke inhoudelijke regel `[brief]`, `[dossier]` of `[aanname]`. Een aanname
   mag nooit als vaststelling op de pagina. Zet alle aannames als lijstje onder de outline.
@@ -466,7 +466,7 @@ elke pagina opnieuw jouw beslissing.
 
 **Op één pagina geldt dat niet, en dat is het voorblad.** `.omslag` is het enige paginatype met
 een eigen klasse, want elk document heeft er precies één en het zegt elke keer dezelfde vier
-dingen. Het is hetzelfde merkteken waarmee `sfnl-rapport-opmaak` zijn omslag zet — één component
+dingen. Het is hetzelfde merkteken waarmee `rapport-deliverable` zijn omslag zet — één component
 in `stijl.css` §8.16, niet twee handgecomponeerde voorbladen die uit elkaar lopen. Zie
 *Het voorblad* hieronder. `documenten-stramien.md` heeft de volledige lijst met per stuk
 wat het codeert.
@@ -481,7 +481,7 @@ nooit als variabele, anders kan de gebruiker hem niet ter plekke overtypen.
 
 Dit is de enige pagina die je niet vrij componeert, en dat is opzet. Elk document heeft precies
 één voorblad, elk voorblad zegt dezelfde vier dingen, en de rangorde daartussen hoort niet per
-document opnieuw verzonnen te worden. `sfnl-rapport-opmaak` had dat al opgelost; hier gaat het
+document opnieuw verzonnen te worden. `rapport-deliverable` had dat al opgelost; hier gaat het
 langs precies dezelfde weg, met hetzelfde merkteken uit dezelfde `stijl.css`. Twee gerenderde
 voorbeelden: `assets/documenten/maatstaf/01-omslag.png` op het huisverloop, met de markup in
 `assets/documenten/voorbeeld/Main.dc.html`, en `maatstaf/07-voorblad-navy.png` in het
@@ -589,7 +589,7 @@ Zo lees je op de render dat er beeld hoort, in plaats van dat het als witruimte 
    kortere formulering. `beeldtekst: nee` is de stand; toestemming vraag je per beeld en je
    noteert hem bij die pagina in de outline.
 
-**Wanneer je escaleert naar `sfnl-infographic`.** Die skill bouwt één beeld op maat, met een
+**Wanneer je escaleert naar `infographic`.** Die skill bouwt één beeld op maat, met een
 eigen compositieronde en een eigen renderloop, en levert SVG die je hier inplakt. De aanleiding
 komt van het oog en niet van een telling: je hebt het beeld zelf geprobeerd, het haalde de ronde
 niet, of dezelfde pagina komt voor de tweede keer terug als tekstwand. Meld dan wat er aan de
@@ -597,7 +597,7 @@ hand is — welke pagina, waarom je herontwerp het niet haalde, en wat het beeld
 stel de escalatie voor met de kosten erbij, en wacht op ja of nee. Bij nee zet je een
 `beeldkader--leeg` neer met wat erin hoort, zodat de gebruiker ziet wat er open staat.
 
-**En bij ja: geef het kader mee, niet alleen de opdracht.** `sfnl-infographic` zit in dezelfde
+**En bij ja: geef het kader mee, niet alleen de opdracht.** `infographic` zit in dezelfde
 plugin en heeft de kaders van deze route als canvas klaarstaan — `doc-breed` voor de volle
 zetspiegel (680 px), `doc-kolom2` voor één van twee (325), `doc-kolom3` voor één van drie (207)
 — plus `Maten.voor("document")` voor de maatladder van §3 hierboven. Zeg dus welk kader het
@@ -780,13 +780,13 @@ naar het contactblad, want de paren zijn dan andere paren.
 ## Wat deze skill niet is
 
 - **Geen presentatie.** Vraagt de gebruiker een deck, slides of een pitch, ga dan naar
-  `sfnl-slides`.
+  `slides`.
 - **Geen los beeld.** Eén infographic die in een deck of een mail wordt geplakt, is
-  `sfnl-infographic`.
-- **Geen Affinity.** Moet het drukwerk in Affinity worden opgemaakt, dan is dat `sfnl-rapport`.
-- **Geen Word.** Een brief of een document dat de klant zelf verder typt, is de `docx`-route van
-  `sfnl-design`.
-- **Geen dashboard.** Iets interactiefs dat in de browser blijft, is `sfnl-design`.
+  `infographic`.
+- **Geen Affinity.** Moet het drukwerk in Affinity worden opgemaakt, dan is dat `ontwerp-met-affinity`.
+- **Geen Word.** Een brief of een document dat de klant zelf verder typt, is `sfnl-word`.
+- **Geen dashboard.** Iets interactiefs dat in de browser blijft en meegroeit met het venster, is
+  `online-design`.
 - **Geen schrijfopdracht.** Is er nog geen tekst — alleen een idee, of een stapel losse notities
   — dan is het schrijven de opdracht en niet de opmaak. Dat is `sfnl-writer`, en die levert de
   tekst waar deze skill de vorm omheen zet. Een document opmaken uit niets betekent dat het model

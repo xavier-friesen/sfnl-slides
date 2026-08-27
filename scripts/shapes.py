@@ -35,7 +35,7 @@ elementvolgorde, `lnSpc` 112%, en de contrastregels. Een eigen vorm is geen acht
 
 Waarom dit bestaat
 ------------------
-De eerste deck die met sfnl-slides gebouwd werd, had op vier contentslides 31 gevulde
+De eerste deck die met slides gebouwd werd, had op vier contentslides 31 gevulde
 rechthoeken, nul gekleurde letters en niets groter dan 19pt. Dat kwam niet doordat de bouwer
 geen smaak had, maar doordat de bouwlaag die hij ad hoc schreef `<a:ln><a:noFill/>` op elke
 vorm hardcodeerde en zijn lichte vullingen met `lumMod` maakte. Twee van de mooiste slides in
@@ -214,7 +214,7 @@ def _clr(hue: str, alpha: int | None = None) -> str:
     dan `alpha` (`sjabloon.md`, Volgorde binnen de XML).
 
     De alpha is een **honderdduizendste**: `7000` is 7 procent en `100000` is dekkend. Dat
-    is de OOXML-eenheid en die staat vast. `svg.py` van `sfnl-infographic` rekent met een
+    is de OOXML-eenheid en die staat vast. `svg.py` van `infographic` rekent met een
     breuk tussen 0 en 1, en die twee lagen worden nu door twee skills gebruikt -- dus een
     breuk die hier binnenkomt is niet zeldzaam maar te verwachten. Zonder de grens
     hieronder was `("navy", 0.16)` geldige invoer: `int(0.16)` is 0, dus
@@ -226,7 +226,7 @@ def _clr(hue: str, alpha: int | None = None) -> str:
         raise ValueError(
             f"alpha {alpha} is geen OOXML-alpha. Deze laag rekent in honderdduizendsten, "
             f"dus 7 procent is 7000 en niet 0,07. Kwam dit uit svg.py van "
-            f"sfnl-infographic, die rekent met een breuk: vermenigvuldig met 100000, of "
+            f"infographic, die rekent met een breuk: vermenigvuldig met 100000, of "
             f"gebruik `\"container:{hue}\"` voor de gekalibreerde containerdekking."
         )
     slot = HUE.get(hue, hue)
@@ -1026,7 +1026,7 @@ ICOON_PT = 1.5
 ICOON_MIN = 0.44
 
 #: Boven dit aantal onderdelen is het geen icoon meer maar een tekening, en dan hoort het in
-#: `sfnl-infographic` en niet op een slide naast een kop van 18pt.
+#: `infographic` en niet op een slide naast een kop van 18pt.
 ICOON_MAX_DELEN = 12
 
 
@@ -1077,7 +1077,7 @@ def icoon(naam: str, x: float, y: float, d: float, delen, *,
 
     * onder `ICOON_MIN` (0,44 in) lopen de lijnen in elkaar; dan is een streep of een
       kapitaallabel het betere merkteken
-    * boven `ICOON_MAX_DELEN` (12) is het een tekening, en die hoort in `sfnl-infographic`
+    * boven `ICOON_MAX_DELEN` (12) is het een tekening, en die hoort in `infographic`
     * een gevulde vorm anders dan `("stip", ...)` bestaat hier niet: een icoon is lijnwerk
       (§8), en een gevuld icoon concurreert met de dragers op de slide
 
@@ -1096,7 +1096,7 @@ def icoon(naam: str, x: float, y: float, d: float, delen, *,
         raise ValueError(
             f"{len(delen)} onderdelen is geen icoon meer maar een tekening (max "
             f"{ICOON_MAX_DELEN}). Laat weg wat de betekenis niet draagt, of bouw het als "
-            "losse infographic met `sfnl-infographic`."
+            "losse infographic met `infographic`."
         )
     u = d / raster                       # inch per rastereenheid
     def px(gx):

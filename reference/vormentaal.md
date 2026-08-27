@@ -743,7 +743,7 @@ navigatie.
 | schachtdikte | 1,5pt. 1,0 leest als een schets, 2,0 gaat met de kop van 18pt concurreren |
 | maat naast een kop van 18pt | 0,72 in; in een rij 0,60; als drager van de slide 1,10 |
 | ondergrens | 0,44 in — daaronder lopen de lijnen in elkaar en is een streep of een label beter |
-| bovengrens onderdelen | 12; daarboven is het een tekening en hoort het in `sfnl-infographic` |
+| bovengrens onderdelen | 12; daarboven is het een tekening en hoort het in `infographic` |
 | vulling | geen, met één uitzondering: één gevulde stip als het centrum iets betekent |
 
 **De hue: navy, tenzij de kleur iets codeert.** Een icoonlijn van 1,5pt in oranje haalt 2,6 op wit

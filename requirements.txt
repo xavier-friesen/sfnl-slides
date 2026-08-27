@@ -31,19 +31,19 @@ pytest>=8.0
 # thumbnail.py composes the labelled contact sheet from the rendered PNGs.
 pillow>=10.0
 
-# --- sfnl-design-documents ---
+# --- ontwerp-documenten ---
 
 # De renderloop en alle metingen van het documentskill draaien in een echte browser:
 # render.py maakt de PNG's en het contactblad, qa_document.py meet overloop, klipping
 # en gaten in het DOM zelf. Zonder dit bouw je blind, en dat is een andere manier
-# van bouwen — zie "Zonder renderer" in skills/sfnl-design-documents/SKILL.md.
+# van bouwen — zie "Zonder renderer" in skills/ontwerp-documenten/SKILL.md.
 #
 # Staat er al een Chromium op de machine (PLAYWRIGHT_BROWSERS_PATH), dan zoekt
 # scripts/documenten/_browser.py hem op, ook als het buildnummer niet bij deze
 # pip-versie hoort. Anders: python3 -m playwright install chromium
 playwright>=1.40
 
-# --- sfnl-rapport-opmaak ---
+# --- rapport-deliverable ---
 #
 # Deze skill heeft geen eigen afhankelijkheden bovenop wat er hierboven al
 # staat, en dat is opzet.
@@ -58,10 +58,10 @@ playwright>=1.40
 # Wat de skill wél nodig heeft is `playwright` hierboven, en die is hier
 # geen luxe. Een alinea op een regelgrens splitsen kan alleen een engine
 # die weet hoe breed een woord is, dus anders dan bij
-# sfnl-design-documents is er hier geen "zonder renderer bouw je blind"-
+# ontwerp-documenten is er hier geen "zonder renderer bouw je blind"-
 # route: zonder browser is er geen route. `preflight.py` blokkeert erop.
 
-# --- sfnl-infographic ---
+# --- infographic ---
 #
 # fontTools leest de fontbestanden waarmee svg.py de regelafbreking rekent, en
 # instantieert het variabele Montserrat op 300 en 600. Zonder deze module is de

@@ -563,13 +563,13 @@ Deze skill zet een aangeleverd rapport op. Wat hij niet doet:
 - **Niet redigeren.** Een tekst korter en scherper maken is
   `sfnl-tekst-scherpen`.
 - **Geen infographics ontwerpen.** Een figuur die uitgerekend moet
-  worden, is `sfnl-infographic`, en die levert SVG die hier in een
+  worden, is `infographic`, en die levert SVG die hier in een
   exhibit past.
 - **Geen Affinity.** Moet het rapport in Affinity worden opgemaakt, dan
-  is dat `sfnl-rapport`.
+  is dat `ontwerp-met-affinity`.
 - **Geen kort drukwerk.** Een uitnodiging, een one-pager, een executive
   summary van vier pagina's: dat componeer je per pagina en dat is
-  `sfnl-design-documents`.
+  `ontwerp-documenten`.
 - **Geen Word terug.** De oplevering is HTML en PDF. Een rapport dat de
   klant zelf verder typt, is een ander product.
 - **Geen afloop en geen snijtekens.** Het aantal pagina's rekent

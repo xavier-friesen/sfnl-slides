@@ -5,7 +5,7 @@ Vier dingen, en ze zijn niet allemaal even hard:
 
 * **Chromium** — hard nodig. Zonder browser is er geen zetting: het
   splitsen van een alinea op een regelgrens kan alleen een engine die
-  weet hoe breed een woord is. Anders dan bij `sfnl-design-documents`
+  weet hoe breed een woord is. Anders dan bij `ontwerp-documenten`
   is er hier dus geen "zonder renderer bouw je blind"-route — er is
   helemaal geen route.
 * **De ingesloten letters** — zonder die valt het rapport terug op

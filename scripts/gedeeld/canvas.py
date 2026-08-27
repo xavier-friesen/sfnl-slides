@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """De pagina's op het canvas neerleggen zoals een lezer ze ziet.
 
-Van beide drukroutes. `sfnl-design-documents` componeert zijn artboards
-met de hand en `sfnl-rapport-opmaak` leidt ze af uit een gezet rapport,
+Van beide drukroutes. `ontwerp-documenten` componeert zijn artboards
+met de hand en `rapport-deliverable` leidt ze af uit een gezet rapport,
 maar de vraag waar ze op het canvas komen te liggen is dezelfde, en het
 antwoord ook: **in spreads.**
 

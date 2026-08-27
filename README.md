@@ -1,26 +1,38 @@
-# sfnl-slides
+# sfnl-design
 
-Vier skills die dezelfde regel volgen: de vorm is een ontwerpbeslissing en geen invuloefening, en
+Acht skills die dezelfde regel volgen: de vorm is een ontwerpbeslissing en geen invuloefening, en
 de render is de enige vormbeoordeling.
 
 | skill | wat je ermee maakt |
 |---|---|
-| **`sfnl-slides`** | een SFNL-deck uit het officiële `.potx`-sjabloon |
-| **`sfnl-design-documents`** | kort drukwerk in HTML: een uitnodiging, een executive summary, een proposal, een spread |
-| **`sfnl-rapport-opmaak`** | een afgerond Word-rapport van twintig tot honderdvijftig pagina's, opgemaakt zonder één woord aan de tekst te veranderen |
-| **`sfnl-infographic`** | het losse beeld dat in alle drie kan komen te staan: geen titel, geen omlijning, als SVG, als PowerPoint-slide, of als exhibit op het kader van de route die hem plaatst |
+| **`slides`** | een SFNL-deck uit het officiële `.potx`-sjabloon |
+| **`ontwerp-documenten`** | kort drukwerk in HTML: een uitnodiging, een executive summary, een proposal, een spread |
+| **`rapport-deliverable`** | een afgerond Word-rapport van twintig tot honderdvijftig pagina's, opgemaakt zonder één woord aan de tekst te veranderen |
+| **`infographic`** | het losse beeld dat in alle andere routes kan komen te staan: geen titel, geen omlijning, als SVG, als PowerPoint-slide, of als exhibit op het kader van de route die hem plaatst |
+| **`sfnl-word`** | de snelle route: een notitie, een memo, een korte analyse — een tussenproduct in Word waar iemand in doortypt |
+| **`online-design`** | HTML dat een scherm is en geen blad: een dashboard of interactief overzicht dat meegroeit, gemeten in beide themastanden |
+| **`ontwerp-met-affinity`** | drukwerk opmaken in Affinity, met de maten uit de stramienen en niet uit de skill |
+| **`deck-check`** | een bestaand deck opschonen en nakijken, op het beleid van `slides` |
 
-De plugin blijft `sfnl-slides` heten, ook nu er vier skills in zitten: dat is de naam waarmee hij
-geïnstalleerd staat, en hernoemen zou iedereen tot opnieuw installeren dwingen.
+**De plugin heette tot 1.6.0 `sfnl-slides`.** Met vier skills was die naam nog te verdedigen; met
+acht is hij misleidend, want dan zoekt iemand een designplugin en slaat de slidesplugin over. Bij
+2.0.0 is hij daarom `sfnl-design` geworden, en de skills hebben hun `sfnl-`-voorvoegsel afgelegd:
+de plugin is de namespace, dus een skill spreek je aan als `sfnl-design:slides`. Dat kost iedereen
+één keer opnieuw installeren. De repo blijft `xavier-friesen/sfnl-slides` heten — dat is de
+git-URL waarmee de marketplace is toegevoegd, en die hernoemen kost meer dan hij oplevert.
+
+`sfnl-word` houdt zijn voorvoegsel wel, en met opzet: het is de enige naam die tegen een bestaande
+skill aan schuurt.
 
 **Ze staan in één plugin omdat ze samengesteld worden, niet omdat ze op elkaar lijken.** Dat is
-het verschil met vier losse skills die dezelfde kleuren gebruiken: ze delen de huisstijlletters,
+het verschil met acht losse skills die dezelfde kleuren gebruiken: ze delen de merklaag, de
+huisstijlletters,
 het voorblad, de canvasroute en de OOXML-primitieven, dus een infographic die in een document
 komt te staan hoeft niet opnieuw uitgevonden te worden — hij wordt gebouwd op het canvas en de
 maatladder van dat document. `reference/samenstellen.md` beschrijft wat gedeeld is en welke
 ketens er zijn.
 
-## sfnl-rapport-opmaak — een aangeleverd rapport opmaken
+## rapport-deliverable — een aangeleverd rapport opmaken
 
 De andere twee skills componeren elke pagina zelf. Deze doet iets anders: hij neemt een tekst die
 al af is en laat hem door een systeem lopen. Bij tachtig pagina's kun je niet meer per pagina
@@ -136,7 +148,7 @@ python scripts/rapport/render.py werk/rapport.html
 python scripts/rapport/qa_rapport.py werk/rapport.html
 ```
 
-## sfnl-design-documents — drukwerk in HTML
+## ontwerp-documenten — drukwerk in HTML
 
 Een document is een reeks vaste bladen met een snijrand, geen scherm dat meegroeit. Wat er niet op
 past, past niet, en dat hoort te blijken.
@@ -169,7 +181,7 @@ past, past niet, en dat hoort te blijken.
   opnieuw een beslissing.
 - **Op één pagina geldt dat niet, en dat is het voorblad.** `.omslag` is het enige paginatype met
   een eigen klasse: drie zones met een vaste rangorde, vier velden die woordelijk van de
-  gebruiker komen, en het is hetzelfde component waarmee `sfnl-rapport-opmaak` zijn omslag zet.
+  gebruiker komen, en het is hetzelfde component waarmee `rapport-deliverable` zijn omslag zet.
   Het staat daarom in `stijl.css` en niet in de rapportlaag; `rapport.css` zet er twee
   maatvariabelen op en verder niets. Vóór dat component bestond, leverden twee handgecomponeerde
   voorbladen twee verschillende maatladders op. Het kleurveld is een regel en geen smaak: een
@@ -187,7 +199,7 @@ python scripts/documenten/render.py <werkmap>/uitnodiging.html
 python scripts/documenten/qa_document.py <werkmap>/uitnodiging.html
 ```
 
-## sfnl-slides — een deck uit het sjabloon
+## slides — een deck uit het sjabloon
 
 ### Waarom deze route naast `sfnl-powerpoint` bestaat
 
@@ -204,7 +216,7 @@ Claude gewoon liet ontwerpen.
 
 Deze plugin neemt de dunne laag mee en laat de vormgevingspolitie liggen.
 
-| | `sfnl-powerpoint` | `sfnl-slides` |
+| | `sfnl-powerpoint` | `slides` |
 |---|---|---|
 | Vorm per slide | gekozen uit tien patronen, vastgelegd in een spec | zelf gecomponeerd tijdens het bouwen |
 | Poorten | outline, spec, QA-drempels | twee, en beide zijn een mens: het vragenvuur en de outline |
@@ -212,7 +224,7 @@ Deze plugin neemt de dunne laag mee en laat de vormgevingspolitie liggen.
 | Scripts | ± 18.100 regels | ± 13.600 regels |
 | Skills | vijf | één |
 
-## sfnl-infographic — het losse beeld
+## infographic — het losse beeld
 
 Een visual die ergens ánders in komt te staan. Geen titel, geen oranje dash, geen kader: die
 draagt de container. Wat overblijft is de compositie, en die is elke keer een ontwerpbeslissing.
@@ -258,22 +270,146 @@ Wat de eerste twee scheidt staat in `reference/samenstellen.md`: een exhibit rek
 zijn container en niet in punten, want het meetapparaat van die container leest de opgegeven maat
 en niet de gerenderde.
 
+## De merklaag — de kleurwaarde staat één keer
+
+`reference/merk.md` is de enige plek in de repo waar een kleurwaarde, een letterfamilie of het
+logo staat. `scripts/gedeeld/merk.py` is de machineleesbare vorm ervan, en
+`assets/gedeeld/merk.css` wordt daaruit gestempeld.
+
+De regel eronder: **een kleurwaarde staat één keer, een kleurregel staat per medium.** Een rapport
+en een PowerPoint horen verschillende maatladders te hebben — die zijn aan verschillend drukwerk
+gemeten — maar hun oranje niet. De toets is mechanisch en `preflight.py` doet hem: staat er een
+merk-hexwaarde in een script of een stylesheet buiten de merklaag, dan blokkeert dat; staat er een
+puntgrootte in `merk.md`, dan hoort die daar niet.
+
+- **Het Word-sjabloon is de merkbron, en de plugin is daarop aangepast.** Vijf van de zes accenten
+  stonden naast het sjabloon: oranje ging van `#F87F4F` naar `#FF7F40`, navy van `#201B5C` naar
+  `#21145F`, en zo ook grapefruit, emerald en royal. Navy stond 26 keer in `styles.xml` van het
+  sjabloon, dus dat was geen uitschieter in één stijl. Geen enkele vormregel veranderde erdoor:
+  oranje op wit ging van 2,58 naar 2,51 en haalt dus nog steeds geen van beide drempels, navy op
+  oranje van 5,93 naar 6,29.
+- **Wat de fase rechtvaardigde zat in `qa_document.py`.** Daar stond het hele palet een tweede
+  keer, als rgb-drielingen. Na de migratie meldde die poort op élk document "kleur buiten het
+  palet: rgb(255, 127, 64)" — het merkoranje zelf. Twee kopieën van dezelfde waarheid, en de ene
+  keurde de andere af.
+- **Welke tekstkleur op welk vlak staat, is geen smaak.** `merk.md` §1 heeft de paringstabel met
+  alle verhoudingen. De val zit in de twee donkere vlakken: navy op royal haalt 2,70 en navy op
+  violet 2,86, dus daar staat wit — en dat is precies de fout die je maakt als je "navy is de
+  inkt" als regel toepast in plaats van als vertrekpunt.
+- **Eén uitzondering, en die is gebonden.** Wit op oranje haalt dezelfde 2,51 als oranje op wit,
+  want de verhouding is symmetrisch. Het mag toch, want het gedrukte werk doet het — maar alleen
+  in drukwerk, alleen voor korte tekst op display- of leadmaat, en nooit voor een getal of een
+  bronregel. Op een scherm geldt de uitzondering niet.
+
+## sfnl-word — de snelle route
+
+Snel en Word zijn dezelfde as en niet twee assen. Een tussenproduct is per definitie een document
+waar iemand in doortypt, en dat is precies wat Word is en wat HTML en PDF niet zijn. De
+formaatkeuze doet daarmee het werk dat anders een disciplineoordeel had moeten doen: een lichte
+route naast een strenge wint normaal zodra iemand haast heeft, maar deze wint alleen waar hij het
+juiste formaat is.
+
+Geen intakewidget, geen outline-poort, geen renderloop van drie ronden — wél het document één keer
+openen en bekijken voordat je oplevert. En een verplichte sluitregel: *dit is een werkdocument;
+moet het naar buiten, dan wordt het mooier met `ontwerp-documenten` of `rapport-deliverable`*.
+Zonder die regel wordt de snelle route de gewone route en gaat er een `.docx` naar een fonds.
+
+`reference/word-stramien.md` is het sjabloon nagemeten. Wat daar het meest uitmaakt:
+
+- **Alle stijl-id's zijn Nederlands** — `Standaard`, `Kop1`–`Kop9`, `Titel`, `TableGrid1`. Dit is
+  de belangrijkste bouwersval: `w:pStyle w:val="Heading1"` valt stil terug op `Standaard`, en
+  `qa_word.py` blokkeert erop.
+- **`Kop1` vraagt Gotham Bold Regular**, een licentiefont. Op een SFNL-machine staat het, in een
+  sandbox en op de machine van een klant niet, en dan substitueert Word stil. De skill maakt daar
+  een expliciet besluit van met Montserrat SemiBold als terugval, en noemt bij de oplevering welke
+  van de twee in het bestand staat.
+- **Het blad is geen echte A4** — `pgSz` is 209,90 × 297,03 mm — dus reken de zetspiegel uit
+  `pgSz` en niet uit "A4 min marges". Dat is 159,10 mm en niet 159,20.
+- **Het sjabloon is een stijlendrager en geen voorbeeldpagina**: het bevat één lege alinea, en die
+  staat op 11 pt met directe opmaak. Wie erin begint te typen, typt in 11 pt.
+- **Twee lijsten achter elkaar smelten samen**, en dat is op de pagina te zien en in de XML niet.
+  `Lijstalinea` draagt `contextualSpacing`, en dat is geen waarde die je overschrijft maar een
+  schakelaar die de afstand negeert — `w:spacing w:before` erbij zetten verandert niets.
+
+## online-design — het scherm
+
+Een blad is vast en een scherm groeit mee, en dat is niet één instelling verschil. `ontwerp-documenten`
+weigert een dashboard met zoveel woorden; deze route is de andere helft van die zin.
+
+- **Donkere modus is een vormbesluit en geen instelling.** Navy wordt de grond, wit de inkt, en die
+  verhouding blijft exact 15,79 beide kanten op. Maar daarachter **klapt de rangorde om**: royal en
+  violet dragen op wit een alinea (5,85 en 5,52) en zakken op navy naar 2,70 en 2,86; emerald, sky
+  en oranje mogen op wit geen letter dragen (1,98, 2,32, 2,51) en halen op navy 7,99, 6,80 en 6,29.
+  Daaruit volgt de regel: behalve navy en wit is er **geen merkkleur die in beide thema's een regel
+  kan dragen**, dus oranje draagt op een scherm nooit een gelezen regel.
+- **De volle merkvlakken wisselen niet mee met het thema** — oranje is licht in beide standen, dus
+  de inkt erop is navy in beide — en dat is het anker tussen de twee.
+- **De breedte groeit, de maatladder niet.** Zes maten vast in px, de leesmaat op ongeveer 70
+  tekens, en geen `clamp()` op de viewport voor tekst: een maat die van de vensterbreedte afhangt
+  geeft twee hiërarchieën en valt niet na te meten.
+- **Toegankelijkheid is hier een blokkade en geen aanwijzing.** Op papier kun je 2,51 verdedigen als
+  merkteken; in een browser met een screenreader vangt niemand het voor je op.
+- **`dataviz` is ingebed en niet overschreven.** Met de validator van die skill gemeten draagt het
+  palet **drie categorieën en geen vier**: royal, oranje en emerald halen alle checks, en elke
+  vierde merkkleur brengt een paar onder de zichtvloer mee.
+- **De grens is hard**: één pagina, geen buildstap, geen backend. Dit is de route die het meest
+  gevoelig is voor scope creep richting "bouw een React-app", en dat is softwareontwikkeling en
+  geen huisstijlopdracht.
+
+## ontwerp-met-affinity — uitvoeren wat de stramienen bepalen
+
+Deze skill draagt geen eigen maten, en dat is een besluit. Er stond een eigen bladmaat, een eigen
+raster, een eigen kleurtabel en een eigen typografieladder, en die beschreven hetzelfde blad als de
+stramienen — twee bestanden over één blad lopen na de eerste correctie uit elkaar, en dan is
+onduidelijk welk van de twee het drukwerk is.
+
+Wat overblijft is de laag die nergens anders staat: de SDK lezen voordat je hem gebruikt, de
+scriptbibliotheek vóór en ná, van de eenheid van het stramien naar die van het document komen, de
+plekken waar de SDK stil iets anders doet dan je denkt, en `render_spread` als enige vormoordeel.
+Het bouwscript heeft alle maten op `null` staan met een keuringslus die faalt met het pad van de
+eerste ontbrekende sleutel: een geraden maat is in Affinity niet van een opgezochte te
+onderscheiden, en op de render al helemaal niet.
+
+Wat hij niet doet is een rapport zetten. Loopt het over meer dan een paar pagina's, dan is de
+zetmotor van `rapport-deliverable` beter dan de hand.
+
+## deck-check — een bestaand deck opschonen
+
+De tegenhanger van `slides`, en een eigen bestand omdat het triggersignaal een ander is: "bouw een
+deck" tegenover "hier is een deck, check het". Eén description die beide dekt laat de bouwroute
+vuren op een upload.
+
+Wat gedeeld wordt is het beleid. Het eigen typografiebeleid van de bronskill is eruit en wordt nu
+gelezen uit `reference/sjabloon.md` en `reference/vormentaal.md` — twee definities van "wat mag op
+een SFNL-slide" is er één te veel. Drie regels in dat blok bleken bovendien niet dubbel maar fout,
+en zouden als tweede definitie van de huisstijl zijn meegereisd: de bron zette de subtitel in
+kapitalen waar `voice.md` zinsvorm eist, schreef een eigen navy en puur zwart voor de body, en
+handhaafde posities op vaste centimeters. Deck-check schrijft nu geen kleur, font, maat of
+geometrie meer — alleen tekst — en vergelijkt een placeholder met dezelfde placeholder in zijn
+eigen layout, wat ook werkt op decks van buiten het sjabloon.
+
+Wat compleet is gebleven, is de kern die nergens anders staat: de bestandsdetectie vóór alles, de
+PLAN → GLOBAL → APPLY-werkwijze met haar read-only en write-only fasen, de roldetectie, de Do Not
+Touch-lijst, en alle acht tekstregelgroepen — eindinterpunctie, slashspatiëring, dubbele spaties,
+interpunctiespatiëring, kapitalisatie, bullets, aanhalingstekens en streepjes. Wat de bron zei en
+de referenties niet, is winst en staat nu in `vormentaal.md` §9.
+
 ## Installeren
 
 Deze plugin woont in zijn eigen repo en staat daar op de root, dus rechtstreeks vanaf git:
 
 ```
 /plugin marketplace add xavier-friesen/sfnl-slides
-/plugin install sfnl-slides@sfnl
+/plugin install sfnl-design@sfnl
 ```
 
 De marketplace heet `sfnl` — de organisatie, niet de plugin — dus de plugin heet overal
-`sfnl-slides@sfnl`. Werk je in de monorepo waar `sfnl-slides` naast `sfnl-powerpoint` staat, dan
+`sfnl-design@sfnl`. Werk je in de monorepo waar deze plugin naast `sfnl-powerpoint` staat, dan
 wijst de marketplace in die repo-root met een relatief pad naar beide plugins:
 
 ```
 /plugin marketplace add .
-/plugin install sfnl-slides
+/plugin install sfnl-design
 ```
 
 **Bijwerken naar een nieuwe versie gaat niet vanzelf.** Auto-update staat voor een eigen
@@ -281,27 +417,30 @@ marketplace standaard uit, dus een geïnstalleerde kopie blijft op zijn versie s
 
 ```
 /plugin marketplace update sfnl
-/plugin install sfnl-slides@sfnl
+/plugin install sfnl-design@sfnl
 /reload-plugins
 ```
 
 Zet auto-update aan via `/plugin` → Marketplaces → Enable auto-update, of org-breed met
 `"autoUpdate": true` op de `extraKnownMarketplaces`-regel in managed settings.
 
-Daarna is `/sfnl-slides` het commando. Beide plugins kunnen naast elkaar geïnstalleerd staan;
-ze delen geen bestanden en importeren niet over de grens.
+Daarna spreek je een skill aan als `/sfnl-design:slides` — de plugin is de namespace. Beide
+plugins kunnen naast elkaar geïnstalleerd staan; ze delen geen bestanden en importeren niet over
+de grens.
+
+Stond `sfnl-slides` er al, dan verdwijnt die niet van zichzelf: `/plugin` → Marketplaces →
+`sfnl` → verwijder de oude plugin, dan de nieuwe installeren. Twee kopieën naast elkaar geeft
+twee skills die op hetzelfde triggeren.
 
 ## Wat er in zit
 
 ```
-skills/sfnl-slides/SKILL.md     de route: vragenvuur, outline, zes bouwstappen, de loop
-skills/sfnl-rapport-opmaak/     de zetroute: inlezen, vormbesluiten, wijzigingsvoorstellen, zetten
-reference/rapport-vormentaal.md de maatstaf: de metingen aan Bain, BMC en MGI, de weigerlijst
-reference/rapport-stramien.md   de feiten: raster, vier modellen, vier registers, klassenlijst
-assets/rapport/rapport.css      de rapportlaag boven stijl.css
-assets/rapport/keuzekaarten/    drie gerenderde keuzekaarten: modellen, registers, openers
-assets/rapport/maatstaf/        vier gezette pagina's als maatstaf
-scripts/rapport/                de zetmotor en de checks
+reference/merk.md               de merklaag: kleuren, letters, logo, de paringstabel, de weigerlijst
+scripts/gedeeld/merk.py         de machineleesbare vorm; --css stempelt assets/gedeeld/merk.css
+reference/samenstellen.md       wat de skills delen en welke ketens er zijn
+scripts/gedeeld/                canvas, drukwerk, naar_pdf, merk — wat meer dan één skill gebruikt
+
+skills/slides/                  de deckroute: vragenvuur, outline, zes bouwstappen, de loop
 reference/vormentaal.md         de maatstaf in proza — waar de lat ligt
 reference/adviesvorm.md         de laag erboven — antwoord voorop, exhibitcraft, weigerlijst
 reference/sjabloon.md           geometrie, layouts, placeholderdozen, negen valkuilen
@@ -313,16 +452,48 @@ assets/sfnl-sjabloon.potx       het geprunde sjabloon, 5,5 MB
 assets/maatstaf/                veertien slides: tien uit winnende decks, vier reconstructies
 assets/proeven/                 de kleur- en gevuldheidsproef, met de metingen eronder
 assets/keuzekaarten/            de keuzekaart die bij het vragenvuur meegaat
-skills/sfnl-infographic/        de beeldroute: intake, vormtoets, schetsen, vier bouwroutes
+
+skills/deck-check/              de opschoonroute: vind, PLAN, GLOBAL, APPLY, logboek
+scripts/deckcheck/              vind.py, tekstregels.py, plan.py, toepassen.py
+
+skills/ontwerp-documenten/      de drukwerkroute in HTML: widget, compositie, render, QA
+reference/documenten-vormentaal.md  de maatstaf, plus achttien dingen die het door een model
+reference/documenten-stramien.md    de feiten: bladmaten, raster, maatladder, merktekens
+assets/documenten/stijl.css     het kader, het raster, twintig merktekens, het voorblad
+assets/documenten/fonts/        de huisstijlletters als woff2, ingesloten via fonts.css
+assets/documenten/maatstaf/     vijf gebouwde pagina's als contactblad
+scripts/documenten/             bouw, render, qa_document, widget, _browser
+
+skills/rapport-deliverable/     de zetroute: inlezen, vormbesluiten, wijzigingsvoorstellen, zetten
+reference/rapport-vormentaal.md de maatstaf: de metingen aan Bain, BMC en MGI, de weigerlijst
+reference/rapport-stramien.md   de feiten: raster, vier modellen, vier registers, klassenlijst
+assets/rapport/rapport.css      de rapportlaag boven stijl.css
+assets/rapport/keuzekaarten/    drie gerenderde keuzekaarten: modellen, registers, openers
+assets/rapport/maatstaf/        vier gezette pagina's als maatstaf
+scripts/rapport/                de zetmotor en de checks, met paginator.js
+
+skills/infographic/             de beeldroute: intake, vormtoets, schetsen, vier bouwroutes
 reference/infographic-vormentaal.md  de maatstaf voor een titelloos, kaderloos beeld
 reference/infographic-vormkeuze.md   de vormtoets: wat elke vorm eist en hoeveel erin past
 assets/infographic/vormen/      het vormenwoordenboek: zesenveertig vormen op één blad
 assets/infographic/maatstaf/    vijf afgemaakte infographics plus de drie schetsen
 assets/infographic/voorbeeld/   hun bouwscripts, met in elke docstring wat er misging
 scripts/infographic/            svg.py, schets.py, render_svg.py, insluiten.py, blanco.py
-reference/samenstellen.md       wat de vier skills delen en welke ketens er zijn
-scripts/gedeeld/                wat meer dan één skill gebruikt: canvas, drukwerk, naar_pdf
-scripts/                        de dunne laag
+
+skills/sfnl-word/               de snelle route naar een werkdocument in Word
+reference/word-stramien.md      het sjabloon nagemeten: blad, stijlen, letters, valkuilen
+assets/word/                    het SFNL-Word-sjabloon zelf
+scripts/word/                   bouw.py, qa_word.py, preflight.py
+
+skills/online-design/           de schermroute: één pagina, beide thema's, harde grens
+reference/online-vormentaal.md  de maatstaf voor een scherm, met de donkeremodus-meting
+assets/online/stijl.css         de schermlaag boven merk.css, met zestien merktekens
+assets/online/maatstaf/         het dashboard dat de lat is, met zijn LEESMIJ
+scripts/online/                 bouw.py, render.py, qa_online.py, preflight.py
+
+skills/ontwerp-met-affinity/    de Affinity-laag: SDK, eenheden, valkuilen, render_spread
+
+scripts/                        de dunne laag voor de deckroute
 ```
 
 ## De dunne laag
@@ -372,6 +543,6 @@ en zegt bij oplevering letterlijk dat het deck niet visueel geverifieerd is.
 ## Ontwerp
 
 Waarom deze route bestaat, wat er meegaat en wat er blijft liggen, staat vast in
-`docs/superpowers/specs/2026-07-31-sfnl-slides-design.md`. Dat document hoort bij de
+`docs/superpowers/specs/2026-07-31-slides-design.md`. Dat document hoort bij de
 vergelijking tussen beide routes en blijft daarom in de monorepo staan; het reist niet mee met
 deze plugin-repo.

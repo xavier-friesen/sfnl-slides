@@ -356,7 +356,7 @@ opschonen is geen probleem; blind opschonen zonder het te zeggen is dat wel.
 ## Wat deze skill niet is
 
 - **Geen bouwskill.** Een deck maken, slides toevoegen, een contentzone componeren: dat is
-  `slides` (het bestand heet nu nog `skills/sfnl-slides/SKILL.md`), die uit het sjabloon bouwt
+  `slides` (het bestand heet nu nog `skills/slides/SKILL.md`), die uit het sjabloon bouwt
   en de vormentaal uitvoert. Vraagt de gebruiker om nieuwe
   slides, dan verwijs je daarnaar in plaats van hier iets te tekenen.
 - **Geen vormgevingspolitie.** Er komt geen script dat compositie afkeurt. De vlaggen zijn

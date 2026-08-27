@@ -6,7 +6,8 @@ en houdt ze in de pas:
 
 1. **Het losse HTML-bestand** — alle pagina's onder elkaar in één bewerkbaar
    bestand met `@page` erin, dat in een browser opent en via
-   `sfnl-html-to-pdf` een PDF wordt. Dat is wat de gebruiker overhoudt.
+   `scripts/gedeeld/naar_pdf.py` een PDF wordt. Dat is wat de gebruiker
+   overhoudt.
 2. **`canvas.json`** — de plaatsing van de artboards op het design-canvas, als
    spreads: pagina 1 alleen rechts, daarna 2-3, 4-5. Dat is hoe een lezer een
    document ziet, en het is de enige manier om twee tegenover elkaar liggende

@@ -53,7 +53,7 @@ achteraan -- een tweede run op een bestaande map verdubbelt alles wat er al ston
     python m5_powerpoint.py --uit ./uitvoer
 
 `--plugin` was hier verplicht toen deze skill los stond: de deckscripts lagen ergens anders
-en je moest zeggen waar. Sinds `sfnl-infographic` in dezelfde plugin zit als `sfnl-slides`
+en je moest zeggen waar. Sinds `infographic` in dezelfde plugin zit als `slides`
 liggen ze twee mappen hoger, dus dat is nu de standaardwaarde en de vlag is er alleen nog
 om naar een andere checkout te wijzen.
 """

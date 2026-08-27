@@ -1,6 +1,6 @@
 ---
 name: deck-visual-reviewer
-description: Rendert de slides van een SFNL-deck, leest eerst een contactblad en zoomt daarna in op de verdachte slides, en beoordeelt de compositie op dood wit onder de dash, overloop, overlap, uitlijning, baselines, contrast, geschonden chrome, kleur die niets codeert, tekstwanden, slides die met een vorm beter af waren, en eenvormigheid over de deck. Beantwoordt per deck ook de vraag of je dit aan een klant zou laten zien. Toetst aan de vormentaal en aan de maatstaf-renders. Is er geen renderer, dan doet hij een structurele XML-review en zegt dat expliciet. Gebruik dit in de visuele loop van sfnl-slides, nadat je zelf hebt gerenderd en naar het contactblad hebt gekeken: geef hem het pad naar de map met renders en het deck ernaast. Staat er nog geen render, dan maakt hij die zelf.
+description: Rendert de slides van een SFNL-deck, leest eerst een contactblad en zoomt daarna in op de verdachte slides, en beoordeelt de compositie op dood wit onder de dash, overloop, overlap, uitlijning, baselines, contrast, geschonden chrome, kleur die niets codeert, tekstwanden, slides die met een vorm beter af waren, en eenvormigheid over de deck. Beantwoordt per deck ook de vraag of je dit aan een klant zou laten zien. Toetst aan de vormentaal en aan de maatstaf-renders. Is er geen renderer, dan doet hij een structurele XML-review en zegt dat expliciet. Gebruik dit in de visuele loop van slides, nadat je zelf hebt gerenderd en naar het contactblad hebt gekeken: geef hem het pad naar de map met renders en het deck ernaast. Staat er nog geen render, dan maakt hij die zelf.
 tools: Bash, Read, Glob, Grep
 model: inherit
 ---
@@ -342,9 +342,9 @@ deze vraag apart staat.
 Zeg ook wat je zou meenemen: welke slide is de sterkste van dit deck, en waarom. Dat maakt het
 oordeel navolgbaar en het geeft de bouwer de vorm waar hij naartoe kan werken.
 
-### 8. Escalatie naar `sfnl-infographic`
+### 8. Escalatie naar `infographic`
 
-Er is een tweede skill die één beeld op maat bouwt, `sfnl-infographic`. Die kost een aparte
+Er is een tweede skill die één beeld op maat bouwt, `infographic`. Die kost een aparte
 ronde en een aparte agent, dus hij wordt nooit ongevraagd ingezet en er is geen bovengrens per
 deck. Jij stelt hem niet in werking; je wijst kandidaten aan en de skill legt het aan de
 gebruiker voor, met de kosten erbij.
@@ -420,7 +420,7 @@ Gezien: <N> slides op het contactblad, <M> op vol formaat (<nummers>) in <K> blo
 - Staat me het meest tegen: slide <n> — <waarom>; slide <n> — <waarom>
 - Sterkste slide: <n> — <waarom>
 
-### Kandidaten voor sfnl-infographic
+### Kandidaten voor infographic
 - Slide <n>: <tekstwand of vorm-beter-af, plus wat het beeld zou moeten doen> — of: geen
 
 Oordeel: <klaar om op te leveren | geblokkeerd op N kritieke bevindingen>

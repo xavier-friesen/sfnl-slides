@@ -1,10 +1,17 @@
-# Samenstellen — de vier skills aan elkaar schakelen
+# Samenstellen — de skills aan elkaar schakelen
 
-Vier skills, één plugin, en dat is geen administratieve keuze. `sfnl-slides` bouwt een deck,
-`sfnl-design-documents` kort drukwerk in HTML, `sfnl-rapport-opmaak` een gezet rapport, en
-`sfnl-infographic` het losse beeld dat in alle drie kan komen te staan. Ze delen hun letters,
-hun kleuren, hun canvasroute en een deel van hun scripts, en de meeste echte opdrachten raken er
-meer dan één.
+Acht skills, één plugin, en dat is geen administratieve keuze. Vier ervan componeren: `slides`
+bouwt een deck, `ontwerp-documenten` kort drukwerk in HTML, `rapport-deliverable` een gezet
+rapport, en `infographic` het losse beeld dat in alle drie kan komen te staan. Twee leveren een
+ander formaat: `sfnl-word` een werkdocument, `online-design` een scherm. En twee doen iets met
+wat er al ligt: `ontwerp-met-affinity` voert in Affinity uit wat de stramienen bepalen, en
+`deck-check` schoont een bestaand deck op.
+
+Ze delen hun merklaag, hun letters, hun canvasroute, hun PDF-stap en een deel van hun scripts, en
+de meeste echte opdrachten raken er meer dan één. **De merkfeiten staan één keer**, in
+`reference/merk.md` en `scripts/gedeeld/merk.py`: de kleurwaarde staat één keer, de kleurregel per
+medium. Wat per medium verschilt — de maatladder, het raster, de kleurregisters, de vulgraad —
+staat in de vormentaal van dát medium en hoort daar te verschillen.
 
 Dit document beschrijft **wat er gedeeld is** en **welke ketens er zijn**. Het is bedoeld om
 gelezen te worden op het moment dat een opdracht over de grens van één skill heen gaat — niet
@@ -16,14 +23,14 @@ vooraf, en niet als vervanging van de SKILL van de route waar je in zit.
 
 | wat | waar | wie gebruikt het |
 |---|---|---|
-| de huisstijlletters als woff2 | `assets/documenten/fonts/` | `sfnl-design-documents` en `sfnl-rapport-opmaak` sluiten ze in met `fonts.css`; `sfnl-infographic` leest dezelfde bestanden als metriekbron en zet ze in zijn render |
-| de fontbestanden voor de deckmeting | `assets/fonts/` | `sfnl-slides` (`_deck.py`, `find_font_file`) en `sfnl-infographic` (`svg.py`, `vind_font`) — een volledige statische snede hier gaat vóór het ingesloten subset |
-| het voorblad | `.omslag` in `assets/documenten/stijl.css` §8.16 | `sfnl-design-documents` en `sfnl-rapport-opmaak`, met één maatladder |
-| de canvasroute | `scripts/gedeeld/canvas.py` | alle vier. `leg_neer()` legt pagina's in spreads neer, `zoek_helper()` vindt `seed-canvas.mjs` van de design-skill |
+| de huisstijlletters als woff2 | `assets/documenten/fonts/` | `ontwerp-documenten` en `rapport-deliverable` sluiten ze in met `fonts.css`; `infographic` leest dezelfde bestanden als metriekbron en zet ze in zijn render |
+| de fontbestanden voor de deckmeting | `assets/fonts/` | `slides` (`_deck.py`, `find_font_file`) en `infographic` (`svg.py`, `vind_font`) — een volledige statische snede hier gaat vóór het ingesloten subset |
+| het voorblad | `.omslag` in `assets/documenten/stijl.css` §8.16 | `ontwerp-documenten` en `rapport-deliverable`, met één maatladder |
+| de canvasroute | `scripts/gedeeld/canvas.py` | de vier compositieroutes. `leg_neer()` legt pagina's in spreads neer, `zoek_helper()` vindt `seed-canvas.mjs` van de design-skill |
 | de drukwerkrekensom | `scripts/gedeeld/drukwerk.py` | de twee drukroutes: een veelvoud van vier pagina's |
 | HTML naar PDF | `scripts/gedeeld/naar_pdf.py` | de twee drukroutes |
-| het SFNL-sjabloon | `assets/sfnl-sjabloon.potx` | `sfnl-slides`, en `sfnl-infographic` in zijn PowerPoint-route |
-| de OOXML-primitieven | `scripts/shapes.py`, `scripts/office/` | `sfnl-slides`, en `sfnl-infographic` in zijn PowerPoint-route |
+| het SFNL-sjabloon | `assets/sfnl-sjabloon.potx` | `slides`, en `infographic` in zijn PowerPoint-route |
+| de OOXML-primitieven | `scripts/shapes.py`, `scripts/office/` | `slides`, en `infographic` in zijn PowerPoint-route |
 
 **Eén zoekactie hoort maar één keer te bestaan.** `zoek_helper()` is daar het voorbeeld van, en
 het is er een met een geschiedenis: er stonden twee versies van, in de documentenskill en in de
@@ -155,7 +162,7 @@ python ${CLAUDE_PLUGIN_ROOT}/scripts/infographic/insluiten.py exhibit.svg \
 plaatsen. Dat is geen inconsistentie om weg te poetsen, het is hoe die routes werken:
 
 * **document** — een `.beeldkader` met de SVG **inline**, met de verhouding inline op het kader.
-  De artboards van `sfnl-design-documents` zijn met de hand gecomponeerde HTML, dus dat kan, en
+  De artboards van `ontwerp-documenten` zijn met de hand gecomponeerde HTML, dus dat kan, en
   het is beter: tekst blijft tekst en de PDF houdt hem selecteerbaar.
   `assets/documenten/voorbeeld/Geldstroom.dc.html` doet het zo.
 * **rapport** — een **PNG op 2×** plus de regel voor de `figuren`-JSON. `bouw.py` plaatst beeld
@@ -164,7 +171,7 @@ plaatsen. Dat is geen inconsistentie om weg te poetsen, het is hoe die routes we
   zetmotor een beeld naar de volle zetspiegel promoveert (`rapport-stramien.md` §7c). Geef
   `--na <blok-id>` mee; `lees_docx.py` geeft die id's.
 * **slide** — een PNG op 2× om te plakken. Wil je een slide die in PowerPoint bewerkbaar blijft,
-  dan is dat stap 4B van `sfnl-infographic` en niet dit script.
+  dan is dat stap 4B van `infographic` en niet dit script.
 
 **Het bijschrift is van de container.** In een document staat de herkomst in de `figcaption`
 onder het kader, in een rapport in `.exhibit__titel` en `.exhibit__bron`. Zet er dus geen tweede
@@ -178,11 +185,11 @@ De andere kant op, en alle drie de containers zeggen zelf wanneer:
 
 | route | de grens | staat in |
 |---|---|---|
-| `sfnl-slides` | boven twaalf onderdelen op een slide is het een tekening | `vormentaal.md`, bovengrens onderdelen |
-| `sfnl-design-documents` | een beeld dat rekent — een verhouding, een volgorde, een afstand | `documenten-vormentaal.md` §11 |
-| `sfnl-rapport-opmaak` | een figuur die uitgerekend moet worden | `rapport-vormentaal.md`, "Geen infographics ontwerpen" |
+| `slides` | boven twaalf onderdelen op een slide is het een tekening | `vormentaal.md`, bovengrens onderdelen |
+| `ontwerp-documenten` | een beeld dat rekent — een verhouding, een volgorde, een afstand | `documenten-vormentaal.md` §11 |
+| `rapport-deliverable` | een figuur die uitgerekend moet worden | `rapport-vormentaal.md`, "Geen infographics ontwerpen" |
 
-Je begint dan bij stap 1 van `sfnl-infographic`, met één verschil dat de hele intake korter
+Je begint dan bij stap 1 van `infographic`, met één verschil dat de hele intake korter
 maakt: **de bewering ligt al vast.** Die staat in de titel van de slide of in de kop van de
 pagina. De eerste vraag van de intake is dus al beantwoord, en er komt geen tweede bewering op
 het beeld — geen drager en geen sluitregel, tenzij de figuur zonder die regel niets zegt. Dat is
@@ -215,7 +222,7 @@ samenvoegen is geprobeerd op de kleinste plek waar het kon — het eindbeeld van
 als `.dc.html`-artboard bouwen in plaats van als SVG — en het antwoord was nee: de twee renders
 waren niet van elkaar te onderscheiden, en wat de canvasversie inleverde was de contrasttoets,
 de echte fontmetriek en een bestand dat in Affinity opengaat. Dat staat als blokkade 13 in
-`skills/sfnl-infographic/SKILL.md`.
+`skills/infographic/SKILL.md`.
 
 **De schrijfwijze van de vullingen.** In `svg.py` is het `vulling=container("emerald")` en
 `lijn_=`; in `shapes.py` `vulling="container:emerald"` en `lijn=`. Twee lagen, twee conventies.

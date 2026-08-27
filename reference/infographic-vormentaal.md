@@ -4,7 +4,7 @@ Dit is de maatstaf voor een losse SFNL-infographic: een visual zonder titel en z
 die in iets anders komt te staan. Geordend van meeste naar minste effect, zodat je je eigen
 compositie eraan kunt toetsen.
 
-De basis is `reference/vormentaal.md` van de sfnl-slides plugin. Die regels zijn nagemeten op
+De basis is `reference/vormentaal.md` van de sfnl-design plugin. Die regels zijn nagemeten op
 vijf decks die een blinde vergelijking wonnen en op één die het niet haalde, en ze gelden hier
 onverkort. Wat hieronder staat is wat er ánders is zodra de titel wegvalt en het kader wegvalt,
 plus wat er op de renders van deze skill zelf is nagemeten.
