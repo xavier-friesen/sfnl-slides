@@ -150,11 +150,11 @@ titel: Uitkoopregeling Zuid-Limburg
 ondertitel: Tussenproduct — grondslag voor het gesprek van [DATUM]
 ---
 
-# Waar we staan             → Kop1, 22 pt
+# Waar we staan             → Kop2, 14 pt Montserrat Light
 Lopende tekst.              → Standaard, Lato Light 12 pt
 
-## De drie routes           → Kop2, 18 pt Montserrat Light
-### Wat we nog niet weten   → Kop3, 12 pt navy — let op, even groot als de tekst
+## De drie routes           → Kop3, 12 pt navy — even groot als de tekst
+### Wat we nog niet weten   → Kop4, 12 pt navy
 
 - een punt                  → streepje in Lato Light (numId 2)
 1. een genummerd punt       → decimaal (numId 6)
@@ -174,10 +174,21 @@ Lopende tekst.              → Standaard, Lato Light 12 pt
 Vier dingen om te weten terwijl je schrijft, en ze komen alle vier uit de meting in
 `word-stramien.md`:
 
-1. **De kopladder is 28 – 11 – 22 – 18 – 12 pt en houdt daar op.** `Kop3` tot `Kop7` zijn even
-   groot als de lopende tekst en `Kop8`/`Kop9` zijn kleiner. Meer dan `Kop1` en `Kop2` onder de
-   titel valt niet meer als hiërarchie te zien. Heb je een vierde niveau nodig, dan heb je een
-   indeling nodig en geen stijl.
+1. **`Kop1` is de titelrang en geen sectiekop, dus `#` uit je bron wordt een `Kop2`.** Een
+   werkdocument heeft één ding op dat niveau en dat is de titel; alles daaronder is een sectie.
+   De ladder die de lezer ziet is dus **28 voor de titel, 11 voor de ondertitelregel, 14 voor een
+   sectie en 12 voor een subsectie**, met het brood ook op 12.
+
+   Dat was niet zo, en het defect was op de pagina te zien en in de XML niet: `#` werd een `Kop1`
+   van 22 pt, en op een gespreksnotitie van drie pagina's stonden er vier van — elk zo luid als de
+   titel, dus vier titels op één stuk. `bouw.py` verzet daarom twee maten in de kopie van
+   `styles.xml` (`Kop2` van 18 naar 14, en `Kop3`/`Kop4` op 12 ingeschreven in plaats van geërfd)
+   en meldt dat per bouw in het verslag. De meting staat in `word-stramien.md` §7b.
+
+   Praktisch: **twee niveaus onder de titel is het maximum dat als hiërarchie leest.** `Kop3` is
+   even groot als de lopende tekst en onderscheidt zich door zijn familie en door navy, niet door
+   zijn corps. Heb je een derde niveau nodig, dan heb je meestal geen niveau nodig maar een tweede
+   sectie.
 2. **Nest geen opsommingen.** Niveau 2 is een `o` in Courier New — een tweede letter op de
    pagina. Eén niveau is wat het sjabloon aankan.
 3. **`Duidelijkcitaat` is het enige merkteken dat uit een stijl komt.** De twee oranje lijnen
@@ -214,7 +225,7 @@ Wat je in de eerste ronde zelf gaat zien, en wat geen script voor je oplost:
 - **Een tabelkolom die te smal is voor zijn kortste inhoud.** `bouw.py` verdeelt de kolommen
   naar de langste cel, met 12 % als bodem en 50 % als plafond. Klopt dat niet voor jouw tabel,
   dan is de tabel te breed voor A4 en horen er kolommen af of moet de tabel liggend.
-- **Een `Kop3` die niet als kop leest.** Zie stap 1, punt 1. Maak er een `Kop2` van of laat de
+- **Een `Kop3` die niet als kop leest.** Zie stap 1, punt 1 — hij is even groot als de tekst. Maak er een `Kop2` van of laat de
   kop weg.
 - **Een tabel die over een paginagrens breekt.** De kopregel gaat mee (`w:tblHeader`), maar een
   rij van vier regels die op de laatste regel van de pagina begint, leest slecht. Zet er een

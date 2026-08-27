@@ -60,9 +60,9 @@ erbuiten valt wordt lopende tekst — er is geen stille interpretatie:
     ondertitel: …            -> Ondertitel
     ---
 
-    # kop                    -> Kop1   (22 pt, Gotham of Montserrat SemiBold)
-    ## kop                   -> Kop2   (18 pt Montserrat Light)
-    ### kop                  -> Kop3   (12 pt Montserrat Light, navy)
+    # kop                    -> Kop2   (14 pt Montserrat Light)
+    ## kop                   -> Kop3   (12 pt Montserrat Light, navy)
+    ### kop                  -> Kop4   (12 pt Montserrat Light, navy)
     gewone regel(s)          -> Standaard
     - punt                   -> Lijstalinea + numId 2 (streepje in Lato Light)
       - punt                 -> niveau 2; dat is een `o` in Courier New, dus liever niet
@@ -124,6 +124,19 @@ NUM_DECIMAAL = 6
 
 #: 8 pt in twips. Zie de docstring: `Standaard` heeft geen alinea-afstand.
 NA_ALINEA = 160
+
+#: De kopladder van dít medium, in halve punten (`w:sz` rekent in halve punten).
+#: Het sjabloon levert Kop2 op 18 pt en dat is te luid voor een werkdocument van
+#: twee of drie pagina's: 18 tegen een brood van 12 is een sprong van anderhalf,
+#: en op een notitie waar drie of vier secties op één blad staan leest dat als
+#: een rapportkop. Op 14 pt houdt de kop zijn rang en neemt hij geen regel meer
+#: dan hij nodig heeft. Kop3 en Kop4 staan in het sjabloon al op 12 en blijven
+#: daar; ze onderscheiden zich van het brood door hun familie (Montserrat Light
+#: tegen Lato Light) en door navy, niet door hun corps.
+#:
+#: Kop1 staat er niet in, en dat is het besluit eronder: Kop1 is de titelrang en
+#: geen sectiekop. Zie `titelrang_alleen` en §7 van het stramien.
+KOPLADDER = {"Kop2": 28, "Kop3": 24, "Kop4": 24}
 
 #: 1,15 × interlinie in 240sten van een regel, met `lineRule="auto"`. De
 #: zetspiegel is 159,1 mm en dat is gemeten 84 tekens per regel op 12 pt, met
@@ -558,8 +571,9 @@ def body(kop: dict, blokken: list[dict], rels: Rels) -> tuple[str, dict]:
         if soort != "lijst":
             vorige_num = None
         if soort == "kop":
-            uit.append(alinea(runs(b["tekst"], rels), f"Kop{b['niveau']}"))
-            tel(f"kop{b['niveau']}")
+            uit.append(alinea(runs(b["tekst"], rels),
+                              f"Kop{kopstijl_niveau(b['niveau'])}"))
+            tel(f"kop{kopstijl_niveau(b['niveau'])}")
         elif soort == "alinea":
             uit.append(alinea(runs(b["tekst"], rels)))
             tel("alinea")
@@ -633,6 +647,63 @@ def patch_standaard(styles: str) -> tuple[str, bool]:
     return styles[:m.start(2)] + blok + styles[m.end(2):], True
 
 
+#: Kop1 is de titelrang en geen sectiekop. Een werkdocument heeft één ding op
+#: dat niveau en dat is de titel; alles daaronder is een sectie. Vóór dit besluit
+#: werd `#` een Kop1 van 22 pt, en op een notitie van drie pagina's stonden er dan
+#: vier van, elk zo luid als de titel — vier titels op één stuk. De body begint
+#: daarom bij Kop2, en `#` uit de bron komt daar terecht.
+#:
+#: Kop9 is de bodem van het sjabloon, dus dieper dan dat schuift niet mee; wie
+#: zes niveaus diep schrijft heeft een ander probleem dan een kopstijl.
+TITELRANG = 1
+DIEPSTE_KOP = 9
+
+
+def kopstijl_niveau(bronniveau: int) -> int:
+    """`#` wordt Kop2, `##` wordt Kop3. Zie `TITELRANG`."""
+    return min(bronniveau + TITELRANG, DIEPSTE_KOP)
+
+
+def patch_kopladder(styles: str) -> tuple[str, dict[str, int]]:
+    """Zet de corpsen van Kop2 tot Kop4 op de maten van `KOPLADDER`.
+
+    Anders dan `patch_standaard` gaat dit niet om een ontbrekende eigenschap
+    maar om een die er al staat: elke kopstijl heeft een `w:sz` in zijn `rPr`,
+    en die wordt overschreven. `w:szCs` gaat mee, want anders wijkt de
+    complex-script-variant af en dat is precies het soort verschil dat je pas
+    ziet als er een keer een euroteken of een aanhalingsteken anders valt.
+
+    Levert per gewijzigde stijl de nieuwe maat in punten, zodat het verslag kan
+    zeggen wat er is verzet in plaats van dat het gebeurd is.
+    """
+    verzet: dict[str, int] = {}
+    for stijl, halve in KOPLADDER.items():
+        m = re.search(rf'(<w:style [^>]*w:styleId="{stijl}">)(.*?)(</w:style>)',
+                      styles, re.S)
+        if not m:
+            continue
+        blok = m.group(2)
+        nieuw_blok, n = re.subn(r'<w:sz w:val="\d+"/>',
+                                f'<w:sz w:val="{halve}"/>', blok)
+        nieuw_blok, n2 = re.subn(r'<w:szCs w:val="\d+"/>',
+                                 f'<w:szCs w:val="{halve}"/>', nieuw_blok)
+        if not (n or n2):
+            # Kop3 tot Kop7 dragen in het sjabloon geen eigen `w:sz` en erven
+            # hun corps van `docDefaults`. Dat komt nu op 12 pt uit en dat is de
+            # bedoeling, maar een geërfde maat is geen belofte: verzet iemand
+            # ooit de standaardmaat, dan schuift de hele kopladder mee zonder
+            # dat er iets aan de koppen is veranderd. Daarom wordt hij hier
+            # ingeschreven in plaats van overschreven.
+            maat = f'<w:sz w:val="{halve}"/><w:szCs w:val="{halve}"/>'
+            if "<w:rPr>" in nieuw_blok:
+                nieuw_blok = nieuw_blok.replace("</w:rPr>", maat + "</w:rPr>", 1)
+            else:
+                nieuw_blok = nieuw_blok + f"<w:rPr>{maat}</w:rPr>"
+        styles = styles[:m.start(2)] + nieuw_blok + styles[m.end(2):]
+        verzet[stijl] = halve // 2
+    return styles, verzet
+
+
 def bouw(bron: Path, uit: Path, kop1: str = "auto",
          sjabloon: Path = SJABLOON) -> dict:
     if not sjabloon.is_file():
@@ -679,6 +750,7 @@ def bouw(bron: Path, uit: Path, kop1: str = "auto",
             f'"{gevraagd}"')
 
     styles, gepatcht = patch_standaard(styles)
+    styles, kopladder = patch_kopladder(styles)
 
     ct = orig["[Content_Types].xml"].decode("utf-8")
     if "wordprocessingml.template.main+xml" not in ct:
@@ -733,6 +805,9 @@ def bouw(bron: Path, uit: Path, kop1: str = "auto",
             "standaard_alinea_afstand": (
                 f"after={NA_ALINEA}tw line={REGELAFSTAND}"
                 if gepatcht else "niet gezet: Standaard had al een pPr"),
+            "kopladder": ({f"{k} -> {v} pt" for k, v in kopladder.items()}
+                          and {k: f"{v} pt" for k, v in kopladder.items()}
+                          or "niet verzet: geen kopstijl met een w:sz gevonden"),
             "core_leeggemaakt": True,
         },
         "hyperlinks": len(rels.nieuw),

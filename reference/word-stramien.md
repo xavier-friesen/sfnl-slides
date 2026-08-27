@@ -99,7 +99,7 @@ terug op `Standaard`, zonder foutmelding, en je ziet het pas aan de regelval.
 | `Titel` | Title | Montserrat SemiBold | 28 pt | `#21145F` | spatiëring −0,5 pt, `kern 28`, `contextualSpacing` |
 | `Ondertitel` | Subtitle | Montserrat Light | 11 pt | `#21145F` | spatiëring +0,75 pt, 8 pt eronder |
 | `Kop1` | heading 1 | **Gotham Bold Regular** | 22 pt | `#21145F` | vet, spatiëring **+1,0 pt**, 12 pt erboven, `keepNext`+`keepLines` |
-| `Kop2` | heading 2 | Montserrat Light | 18 pt | `#21145F` | 2 pt erboven, `keepNext`+`keepLines` |
+| `Kop2` | heading 2 | Montserrat Light | **14 pt** (sjabloon: 18) | `#21145F` | 2 pt erboven, `keepNext`+`keepLines` |
 | `Kop3` | heading 3 | Montserrat Light | **12 pt** | `#21145F` (accent3) | 2 pt erboven |
 | `Kop4` | heading 4 | Montserrat Light | **12 pt** | `#21145F` | cursief |
 | `Kop5`, `Kop6` | heading 5, 6 | Montserrat Light | **12 pt** | `#21145F` | — |
@@ -125,7 +125,8 @@ themekleur `hyperlink`, enkel onderstreept), `TableGrid1` en `Tabelraster`.
 1. **`Kop3` tot en met `Kop7` zijn even groot als de lopende tekst.** Geen `w:sz`, dus 12 pt
    uit `docDefaults`. Het onderscheid met een alinea is dan alleen de navy kleur en bij `Kop4`
    en `Kop7` de cursief. `Kop8` en `Kop9` zijn met 10,5 pt zelfs *kleiner* dan de tekst
-   eronder. Praktisch: **de kopladder is 28 – 11 – 22 – 18 – 12**, en houdt daarmee op. Meer dan
+   eronder. Praktisch: **de kopladder van het sjabloon is 28 – 11 – 22 – 18 – 12**, en houdt
+   daarmee op — maar `bouw.py` verzet er twee van, zie hieronder. Meer dan
    drie niveaus onder de titel valt niet meer als hiërarchie te zien; wie een vierde niveau
    nodig heeft, heeft een indeling nodig en geen stijl.
 2. **Alleen `Kop3` is aan het thema gebonden.** `#21145F` staat 26 keer in `styles.xml`, en
@@ -277,6 +278,31 @@ Wat de bouwroute **niet** bijzet:
 - **Geen `w:evenAndOddHeaders`.** Dat zou `footer1` tot leven brengen en de voettekst op
   linkerpagina's veranderen. Een werkdocument wordt enkelzijdig gelezen.
 - **Geen ingesloten letters.** Zie §8.
+
+## 7b. De kopladder die deze route werkelijk zet
+
+Het sjabloon is niet gewijzigd; `bouw.py` schrijft twee dingen om in `styles.xml` van de kopie.
+Beide staan als constante in `KOPLADDER` en worden per bouw in het verslag gemeld, zodat er geen
+maat verzet wordt die niemand heeft gezien.
+
+| stijl | sjabloon | deze route | waarom |
+|---|---|---|---|
+| `Kop2` | 18 pt | **14 pt** | 18 tegen een brood van 12 is een sprong van anderhalf. Op een notitie van twee of drie pagina's, waar drie of vier secties op één blad staan, leest dat als een rapportkop. Op 14 houdt de kop zijn rang en neemt hij geen regel meer dan hij nodig heeft |
+| `Kop3`, `Kop4` | erven 12 pt | **12 pt, ingeschreven** | de maat verandert niet, de herkomst wel. Ze droegen geen eigen `w:sz` en erfden van `docDefaults`; verzet iemand ooit de standaardmaat, dan schuift de hele kopladder mee zonder dat er aan de koppen iets is veranderd |
+
+**En `Kop1` is de titelrang en geen sectiekop.** Een werkdocument heeft één ding op dat niveau en
+dat is de titel; alles daaronder is een sectie. `#` uit de bron wordt daarom een `Kop2`, `##` een
+`Kop3`, en zo verder tot de bodem van het sjabloon bij `Kop9`.
+
+Dat was niet zo, en het defect was op de pagina te zien en in de XML niet: `#` werd een `Kop1` van
+22 pt, en op een gespreksnotitie van drie pagina's stonden er vier van — elk zo luid als de titel,
+dus vier titels op één stuk. De ladder die de lezer nu ziet is 28 voor de titel, 11 voor de
+ondertitelregel, 14 voor een sectie en 12 voor een subsectie, met het brood ook op 12.
+
+Wat daaruit volgt voor `Kop3`: die is even groot als de lopende tekst en onderscheidt zich door
+zijn familie (Montserrat Light tegen Lato Light) en door navy, niet door zijn corps. Dat is een
+smalle marge en het is een bewuste keuze. Wie een derde niveau nodig heeft dat écht als kop moet
+lezen, heeft meestal geen derde niveau nodig maar een tweede sectie.
 
 ## 8. De letters, en waarom Gotham het probleem is
 
