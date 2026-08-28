@@ -27,8 +27,19 @@ aan te pas komt én die je op geen enkele render ziet:
 * **klip** — tekst die door `overflow: hidden` of `clip` wegvalt en die niemand
   kan terugscrollen. Er is dus tekst verdwenen.
 
-De rest is een aanwijzing: kijk ernaar en beslis. Twee daarvan staan er omdat de
+De rest is een aanwijzing: kijk ernaar en beslis. Vier daarvan staan er omdat de
 opdracht ze noemt en ze niet blokkeren, met de reden erbij:
+
+* **vlak-thema** en **vlak-stil** — een vlak dat zich van de grond eróchter
+  scheidt in het ene thema en niet in het andere, of in geen van beide. Dit is
+  de meting die de structuurlaag nodig heeft: een `.vlak`, een `.paneel` of een
+  trede draagt geen tekst van zichzelf, dus de contrasttoets ziet hem niet, en
+  of hij zichtbaar is hangt aan een grond die met het thema omklapt. De twee
+  vloeren staan in `VLOER_VLAK` en ze zijn níet gelijk — zie daar.
+* **trapstap** — twee opeenvolgende treden van een tinttrap die minder dan 1,30
+  van elkaar verschillen. Dan staan er vier vlakken en leest de lezer er twee,
+  en op de render zie je dat niet, want je weet niet hoeveel treden er hadden
+  moeten staan.
 
 * **grond** — de body draagt geen eigen achtergrond. De pagina rendert dan
   gewoon, maar hij leent zijn grond van wat erachter staat, en in een
@@ -90,6 +101,17 @@ STANDEN = (("licht", "light", None),
 #: 35 cm en een scherm op 50 tot 70.
 VLOER_TEKST = 13.0
 VLOER_CAPS = 11.5
+
+#: Wanneer scheidt een vlak zich van de grond eronder? Twee getallen en niet
+#: één, en dat is de hele reden dat deze meting bestaat. `online-vormentaal.md`
+#: §2 heeft ze gemeten: op wit scheiden de vier huistinten zich met 1,10 tot
+#: 1,26 en dat is duidelijk te zien, want het verschil zit in de hue. Op navy
+#: werkt dat niet — daar kwam een tint van 16 procent uit op 1,25 tot 1,33 en
+#: dat was op de render niet te zien; op 32 procent is het 1,69 tot 1,91 en dan
+#: is het een paneel. Dezelfde verhouding is bij lage luminantie dus mínder
+#: waard, en één vloer voor beide thema's zou of het lichte thema te streng
+#: keuren of het donkere te soepel.
+VLOER_VLAK = {"licht": 1.07, "donker": 1.25}
 
 #: Wat de meting in de browser van buiten meekrijgt: de twee vloeren, en de
 #: drie merkkleuren die hij bij naam nodig heeft voor de wit-op-oranje-toets.
@@ -206,7 +228,7 @@ METING = r"""(inv) => {
 
   const uit = {tokens: {}, bevindingen: [], maten: {}, families: {},
                kleuren: [], grond: null, inkt: null, schuift: 0, breedste: [],
-               teksten: 0, cssfout: null};
+               teksten: 0, cssfout: null, vlakken: [], trap: []};
 
   // --- 1. De tokens ---------------------------------------------------------
   // Elke custom property die ergens in een stylesheet wordt gedeclareerd,
@@ -301,13 +323,58 @@ METING = r"""(inv) => {
   }
 
   // --- 4. Per element ------------------------------------------------------
-  document.querySelectorAll('*').forEach(el => {
+  /* De index in de documentvolgorde is de identiteit van een element over de
+     vier standen heen. Naam alleen is dat niet: op een dashboard staan er acht
+     `div.kaart` en dan zou de Python-kant hun metingen op één hoop gooien. De
+     volgorde van `querySelectorAll('*')` is deterministisch en de DOM is in
+     alle vier de standen dezelfde, dus de index klopt. */
+  const alle = Array.from(document.querySelectorAll('*'));
+  const idxVan = new Map(alle.map((e, i) => [e, i]));
+  alle.forEach((el, idx) => {
     const cs = getComputedStyle(el);
     if (cs.display === 'none' || cs.visibility === 'hidden') return;
     const r = el.getBoundingClientRect();
     if (r.width === 0 && r.height === 0) return;
     const naam = naamVan(el);
     const tekst = eigenTekst(el);
+
+    /* 4a0. Het vlak: scheidt een veld zich van de grond eróchter?
+
+       Dit is de meting die de structuurlaag nodig heeft en die er niet was.
+       Een `.vlak`, een `.paneel` of een trede draagt geen tekst van zichzelf,
+       dus de contrasttoets hieronder ziet hem niet — en of hij zichtbaar is,
+       hangt aan de grond waar hij op ligt en die klapt om met het thema. Een
+       veld dat in het lichte thema een sectie omvat en in het donkere met de
+       pagina samenvalt, ziet niemand: in de stand waarin je kijkt klopt het.
+       De vergelijking over de standen gebeurt in Python. */
+    const eigenBg = pixel(cs.backgroundColor);
+    const heeftBeeld = cs.backgroundImage && cs.backgroundImage !== 'none';
+    /* Buiten het venster geparkeerd telt niet mee. De sprongkoppeling staat
+       op `left: -9999px` tot iemand hem met Tab bereikt, en zijn vulling is
+       met opzet de grond zelf — die zou hier anders als eerste bevinding
+       uitkomen, en dan meldt deze toets een merkteken dat klopt. */
+    const buiten = r.right < 0 || r.bottom < 0 || r.left > innerWidth;
+    if ((heeftBeeld || (eigenBg && eigenBg[3] > 0.004))
+        && r.width >= 60 && r.height >= 24 && !buiten
+        && el !== document.body && el.parentElement && !el.closest('svg')) {
+      const eigen = grondVan(el).kleuren[0];
+      const achter = grondVan(el.parentElement).kleuren[0];
+      if (eigen && achter) {
+        uit.vlakken.push({idx, el: naam, scheiding: contrast(eigen, achter)});
+      }
+    }
+
+    /* 4a1. De treden van een tinttrap, per groep. Twee treden naast elkaar die
+       minder verschillen dan de grond en een tintpaneel, zijn geen twee treden.
+       De vergelijking gebeurt in 5f, als alle treden binnen zijn. */
+    const trapklasse = (el.classList ? Array.from(el.classList) : [])
+      .find(c => /^trap-(vol|sterk|half|licht)$/.test(c));
+    if (trapklasse && el.parentElement) {
+      const eigen = grondVan(el).kleuren[0];
+      if (eigen) uit.trap.push({stap: trapklasse.slice(5), el: naam,
+                                groep: idxVan.get(el.parentElement),
+                                kleur: eigen.slice(0, 3)});
+    }
 
     // 4a. Klipping. Alleen waar de richting werkelijk `hidden` of `clip` is:
     // een houder met `overflow-x: auto` is de reparatie en niet het defect,
@@ -577,6 +644,39 @@ METING = r"""(inv) => {
            `op geen enkele render`});
   }
 
+  /* 5f. De treden van een tinttrap, per groep waarin ze samen staan.
+
+     De vloer is 1,30, en dat getal komt uit `online-vormentaal.md` §2: een
+     tintpaneel dat zich met 1,25 tot 1,33 van zijn grond scheidde, bleek op de
+     render van de maatstaf onzichtbaar. Twee treden die minder dan dat
+     verschillen, zijn één vlak met een naad erin — en op de render zie je het
+     niet, want je weet niet hoeveel treden er hadden moeten staan. De gemeten
+     trap haalt 1,85 · 1,59 · 1,38 op licht en 1,71 · 1,68 · 1,55 op donker. */
+  {
+    const orde = ['vol', 'sterk', 'half', 'licht'];
+    const groepen = new Map();
+    for (const s of uit.trap) {
+      if (!groepen.has(s.groep)) groepen.set(s.groep, {});
+      groepen.get(s.groep)[s.stap] = s;
+    }
+    for (const [, treden] of groepen) {
+      const aanwezig = orde.filter(k => treden[k]);
+      if (aanwezig.length < 2) continue;
+      for (let i = 1; i < aanwezig.length; i++) {
+        const a = treden[aanwezig[i - 1]], b = treden[aanwezig[i]];
+        const c = contrast(a.kleur, b.kleur);
+        if (c < 1.30) {
+          uit.bevindingen.push({soort: 'trapstap', ernst: 'warn', el: b.el,
+            wat: `de treden \`${a.stap}\` en \`${b.stap}\` van de tinttrap ` +
+                 `verschillen ${c.toFixed(2)} van elkaar (${a.el} naast ${b.el}). ` +
+                 `Onder 1,30 is dat de band waarin een tintpaneel op de maatstaf ` +
+                 `onzichtbaar bleek: dan staan er vier vlakken en leest de lezer ` +
+                 `er twee. Sla een trede over of neem een andere hue`});
+        }
+      }
+    }
+  }
+
   // 5e. Emoji.
   const emo = (document.body.innerText || '')
     .match(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/gu);
@@ -691,6 +791,41 @@ def toets(html: Path, breedtes: list[int]) -> dict:
                            f"{'; '.join(uit_de_pas[:4])}. Dan ziet iemand met een "
                            f"donker systeem iets anders dan iemand die de schakelaar "
                            f"heeft gebruikt"})
+
+    # --- de vlakken, over de twee thema's heen ------------------------------
+    # Dit is een cross-standmeting en daarom staat hij hier en niet in de
+    # browser: of een veld zichtbaar is, weet je pas als je het in béide
+    # thema's hebt gezien. Een `.vlak` dat op licht een sectie omvat en op
+    # donker met de pagina samenvalt, is in de stand waarin je kijkt in orde.
+    velden: dict[tuple[int, str], dict[str, float]] = {}
+    for naam, _breed, m in ruw:
+        thema = "donker" if naam.startswith("donker") else "licht"
+        for v in m.get("vlakken", []):
+            rij = velden.setdefault((v["idx"], v["el"]), {})
+            rij[thema] = max(rij.get(thema, 0.0), v["scheiding"])
+    for (_idx, el), rij in sorted(velden.items()):
+        licht, donker = rij.get("licht"), rij.get("donker")
+        if licht is None or donker is None:
+            continue
+        licht_ok = licht >= VLOER_VLAK["licht"]
+        donker_ok = donker >= VLOER_VLAK["donker"]
+        getallen = (f"licht {licht:.2f} (vloer {VLOER_VLAK['licht']:.2f}), "
+                    f"donker {donker:.2f} (vloer {VLOER_VLAK['donker']:.2f})")
+        if licht_ok and not donker_ok:
+            bev.append({"ernst": "warn", "soort": "vlak-thema", "standen": ["donker"],
+                        "wat": f"{el} scheidt zich op licht van zijn grond en op donker "
+                               f"niet — {getallen}. Op een navygrond is dezelfde "
+                               f"verhouding minder waard; een tint die op wit werkt, "
+                               f"heeft op navy ongeveer het dubbele nodig"})
+        elif donker_ok and not licht_ok:
+            bev.append({"ernst": "warn", "soort": "vlak-thema", "standen": ["licht"],
+                        "wat": f"{el} scheidt zich op donker van zijn grond en op licht "
+                               f"niet — {getallen}"})
+        elif not licht_ok and not donker_ok:
+            bev.append({"ernst": "warn", "soort": "vlak-stil", "standen": ["licht", "donker"],
+                        "wat": f"{el} draagt een eigen achtergrond die in geen van beide "
+                               f"thema's van zijn grond scheidt — {getallen}. Dan staat "
+                               f"er een vlak in de markup dat op de pagina niet bestaat"})
 
     # --- de rest, per stand, en daarna samengevoegd ------------------------
     per_bevinding: dict[tuple, dict] = {}

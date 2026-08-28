@@ -62,6 +62,13 @@ deck.pdf
 !assets/rapport/maatstaf/*.png
 !assets/rapport/keuzekaarten/*.png
 
+# En voor sfnl-online-design: de maatstaf is een gebouwd scherm, gerenderd in beide thema's
+# op twee breedtes, plus het contactblad waarop je die vier naast elkaar legt. Dat contactblad
+# is waar de LEESMIJ van die map je heen stuurt, dus zonder deze uitzondering wijst hij naar
+# een bestand dat er niet is. Het gebouwde HTML blijft er wel buiten: dat is 247 kB waarvan
+# 197 kB ingesloten letters, en het is uit het fragment in een opdracht terug te maken.
+!assets/online/maatstaf/png/*.png
+
 # Decks en sjablonen blijven buiten de repo, behalve het meegeleverde sjabloon in assets/.
 *.potx
 *.pptx

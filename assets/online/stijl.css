@@ -160,8 +160,39 @@
   --tint-navy:    var(--navy-tint);     /* 1,10 */
   --tint-royal:   var(--periwinkel);    /* 2,19 */
 
+  /* -- Het sectievlak (§7.17). Woordelijk dezelfde waarde als `--grond-op`, en
+        toch een eigen token. Dat is geen slordigheid maar noodzaak: `.vlak`
+        zet `--grond-op` voor zijn kinderen om naar de grond, en een element
+        kan geen eigenschap lezen uit een custom property die het op zichzelf
+        overschrijft. Zou `.vlak` zijn eigen vulling uit `--grond-op` halen,
+        dan werd het vlak de kleur van de pagina. -- */
+  --vlak: var(--navy-tint);             /* 1,10 tegen de grond */
+
+  /* -- De tinttrap: vier treden van één hue, voor verschillen bínnen één
+        categorie. De trap mengt met de grónd, dus dezelfde declaratie geeft op
+        licht een menging met wit en op donker een menging met navy. Daaruit
+        volgt dat de hue per thema verschilt — een donkere hue op licht, een
+        lichte op donker — want de rangorde klapt om (§1 hierboven en
+        `online-vormentaal.md` §2). Blauw blijft blauw.
+
+        Licht, royal over wit, tegen de grond gemeten:
+        vol 5,85 · sterk 3,16 · half 1,99 · licht 1,44, en tussen de treden
+        1,85 · 1,59 · 1,38. De inkt is navy vanaf `sterk` (5,00 · 7,93 ·
+        10,96); op `vol` is het wit (5,85), want navy haalt er 2,70. -- */
+  --trap-rgb:        var(--royal-rgb);
+  --trap-inkt:       var(--navy);   /* op half en licht: 7,93 en 10,96 */
+  --trap-vol-inkt:   var(--wit);    /* op vol: 5,85; navy haalt er 2,70 */
+  --trap-sterk-inkt: var(--navy);   /* op sterk: 5,00 */
+  /* De vier treden zélf staan hier niet als token, en dat is nagemeten en
+     geen slordigheid. Een custom property wordt gesubstitueerd op het
+     element waar hij gedeclareerd staat, dus `--trap-half: rgba(var(--trap-rgb),
+     .45)` op `:root` bevriest de hue op `:root` — en dan doet `.trap--emerald`
+     verderop niets, zonder melding en zonder dat de pagina anders rendert dan
+     hij al deed. De alpha staat daarom in de klassen (§7.18), waar hij tegen
+     de geërfde `--trap-rgb` wordt opgelost. */
+
   /* -- De reekskleuren voor een grafiek. Drie slots, en waarom er
-        geen vier zijn staat in `online-vormentaal.md` §6: elke vierde
+        geen vier zijn staat in `online-vormentaal.md` §5: elke vierde
         merkkleur levert een paar onder de normale-zichtvloer van 15
         (royal↔violet 6,9 · oranje↔grapefruit 8,7 · sky↔emerald 9,4).
         De vormmethode voor de grafiek zelf is die van de
@@ -197,6 +228,18 @@
     --tint-mint:    rgba(var(--emerald-rgb), .32);     /* 1,91; wit erop 8,26 */
     --tint-navy:    rgba(var(--wit-rgb), .16);         /* 1,60; wit erop 9,84 */
     --tint-royal:   rgba(var(--periwinkel-rgb), .32);  /* 1,88; wit erop 8,39 */
+    --vlak: rgba(var(--wit-rgb), .10);                 /* 1,32 tegen de grond */
+    /* De trap draagt op donker de lichte hue van dezelfde familie, want royal
+       over navy komt niet verder dan 2,70 · 1,96 · 1,51 · 1,24 en dat is geen
+       trap. Periwinkel over navy: 7,20 · 4,20 · 2,50 · 1,61, tussen de treden
+       1,71 · 1,68 · 1,55. De inkt is wit vanaf `half` (6,31 en 9,81); op `vol`
+       is het navy (7,20). `sterk` draagt op donker géén tekst — navy haalt er
+       4,20 en wit 3,76, en dat is de enige trede in de hele trap waar geen van
+       beide inkten 4,5 haalt. Zie `online-vormentaal.md` §5. */
+    --trap-rgb:   var(--periwinkel-rgb);
+    --trap-inkt:       var(--wit);
+    --trap-vol-inkt:   var(--navy);
+    --trap-sterk-inkt: var(--navy);
     --reeks-1: var(--royal);
     --reeks-2: var(--oranje);
     --reeks-3: var(--emerald);
@@ -225,6 +268,11 @@
   --tint-mint:    rgba(var(--emerald-rgb), .32);
   --tint-navy:    rgba(var(--wit-rgb), .16);
   --tint-royal:   rgba(var(--periwinkel-rgb), .32);
+  --vlak: rgba(var(--wit-rgb), .10);
+  --trap-rgb:   var(--periwinkel-rgb);
+  --trap-inkt:       var(--wit);
+  --trap-vol-inkt:   var(--navy);
+  --trap-sterk-inkt: var(--navy);
   --reeks-1: var(--royal);
   --reeks-2: var(--oranje);
   --reeks-3: var(--emerald);
@@ -567,7 +615,7 @@ a:hover { text-decoration-color: var(--inkt); }
    en per stuk is nagegaan of hij op een scherm nog klopt. Wat er niet
    staat, staat er met opzet niet — de kopregel, de folio, het
    watermerkcijfer en de omslag hangen alle vier aan een vast blad.
-   Zie `online-vormentaal.md` §7.
+   Zie `online-vormentaal.md` §8, en voor de structuurlaag §6.
    --------------------------------------------------------------- */
 
 /* 7.1 De streep en de haarlijn. Ongewijzigd overgenomen: het
@@ -865,6 +913,31 @@ a:hover { text-decoration-color: var(--inkt); }
   vertical-align: baseline;
 }
 .tabel td:last-child, .tabel th:last-child { padding-right: 0; }
+/* De sectiekoprij: één volle rij tussen de gewone rijen, en daarmee
+   worden twee tabellen één tabel zonder een tweede kop en zonder een
+   tweede blok. Merkteken 14 en 30 uit `merktekens.md`, en dat is geen
+   bijzonderheid maar een standaardvorm: drie van de elf geoogste decks
+   doen het, in één deck op zes slides.
+
+   Op een scherm is de vulling `--grond-op` (1,10 op licht, 1,32 op
+   donker) en niet een volle hue: een tabel staat vaak in een `.vlak`
+   of naast een kaart, en een verzadigde rij trekt daar de hele
+   aandacht uit de getallen. De `th` draagt `colspan` over alle
+   kolommen en `scope="colgroup"`. */
+.tabel tbody tr.sectie th {
+  background: var(--grond-op);
+  border-bottom: var(--haarlijn) solid var(--lijn);
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: var(--m-mini);
+  line-height: 1.4;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--inkt);
+  padding: 8px 12px 8px 0;
+}
+.tabel tbody tr.sectie + tr th,
+.tabel tbody tr.sectie + tr td { padding-top: 14px; }
 .tabel .getal {
   text-align: right;
   font-variant-numeric: lining-nums tabular-nums;
@@ -1143,6 +1216,229 @@ a:hover { text-decoration-color: var(--inkt); }
   cursor: pointer;
   min-height: 32px;
 }
+
+/* 7.17 De structuurlaag — het vlak, de scheiding, de rail en de lijn
+   ertussen.
+
+   Waarom deze vier er zijn, en het is één bevinding: een dashboard dat
+   alleen uit `.kaart` en `.paneel` bestaat, is een verzameling losse
+   kaarten. Op de renders van het proefdashboard en van de maatstaf
+   zelf staan vijf secties onder elkaar met niets tussen zich in dan
+   witruimte en een kop — op 1440 px is dat 2630 px pagina en op 420 px
+   4284 px, en er is geen enkel element dat zegt waar een sectie begint
+   en waar hij ophoudt. Dat is niet met méér kaarten op te lossen maar
+   met minder: één ding waar de kaarten in liggen.
+
+   Alle vier zijn geoogst uit het drukwerk, en per stuk staat erbij wat
+   het scherm er anders aan doet. Zie `online-vormentaal.md` §6.
+
+   7.17a Het vlak — een sectie die als één ding leest.
+
+   Uit merkteken 2 van `merktekens.md`, de kolomkopband: "twee kolommen
+   die samen één ding zijn". Op een blad is dat een band bóven de
+   kolommen; op een scherm is het een veld eróm heen, want een scherm
+   heeft geen paginagrens die het blok toch al afsluit.
+
+   Het vlak draagt dezelfde tint als `.paneel` — 1,10 op licht en 1,32
+   op donker — en dat is genoeg, want het is een groot oppervlak. Wat
+   erin ligt, moet dan wél een niveau opschuiven, en dat gebeurt hier
+   met één regel: binnen een vlak is `--grond-op` de grond van de
+   pagina. Een `.paneel` in een vlak keert dus terug naar wit (licht,
+   1,10) of naar navy (donker, 1,32), en een `.kaart` heeft niets nodig
+   want die draagt zijn haarlijn — navy .14 over het vlak is 1,32,
+   wit .26 over het vlak is 2,19.
+
+   Waarom `--vlak` een eigen token is en niet `--grond-op`: zie §1. */
+.vlak {
+  background: var(--vlak);
+  border-radius: var(--radius);
+  padding: var(--sprong);
+}
+/* Op de kale variant staat geen vulling, dus daar hoeft er binnenin
+   ook niets op te schuiven. Vandaar de `:not()` en niet een tweede
+   declaratie: een custom property is niet terug te zetten naar de
+   waarde van de wortel — `initial` maakt hem ongeldig en `revert`
+   gaat over oorsprongen en niet over selectoren. */
+.vlak:not(.vlak--kaal) { --grond-op: var(--grond); }
+/* Een vlak zonder vulling: alleen een haarlijn erboven en de ruimte
+   eronder. Voor een sectie die geen veld verdraagt omdat er al een
+   paneel in ligt, of voor de derde sectie op rij — drie velden onder
+   elkaar zijn geen structuur meer maar een streepjespatroon. */
+.vlak--kaal {
+  background: transparent;
+  border-top: var(--haarlijn) solid var(--lijn);
+  padding: var(--sprong) 0 0;
+}
+
+/* 7.17b De scheiding — de sectiekop met een lijn die doorloopt.
+
+   Uit de kopregel van het blad (`documenten/stijl.css` §8.1), waar een
+   haarlijn vanaf de tekst naar links doorloopt tot de marge. Hier
+   loopt hij naar rechts en draagt hij de sectiekop in plaats van het
+   paginanummer, want er is geen pagina om in te staan.
+
+   Dit is het goedkoopste structuurmiddel dat er is: het kost geen
+   vlak, geen kleur en geen verticale ruimte behalve de lijn zelf, en
+   het bindt een kop van vier woorden aan de volle breedte van het dek.
+   De lijn is `--lijn`: 1,33 op licht en 2,24 op donker, dezelfde twee
+   waarden als de tabelregel, en om dezelfde reden twee waarden (§1).
+
+   Zet er een `.kop`, een `.label` of een `.kicker` in. Zonder kind is
+   het een kale scheiding en dan is `.haarlijn` korter. */
+.scheiding {
+  display: flex;
+  align-items: center;
+  gap: var(--goot);
+  margin: 0 0 var(--sprong);
+}
+/* `0 1 auto` en niet `none`: een sectiekop van zes woorden moet op 420 px
+   kunnen afbreken. Met `flex: none` duwt hij het document breder dan het
+   venster en dan schuift de pagina horizontaal. */
+.scheiding > * { margin: 0; flex: 0 1 auto; }
+.scheiding::after {
+  content: "";
+  flex: 1 1 auto;
+  height: var(--haarlijn);
+  background: var(--lijn);
+}
+/* De lijn vóór de tekst in plaats van erna: voor een afsluiter, of
+   voor een sectie die rechts uitlijnt. */
+.scheiding--rechts { flex-direction: row-reverse; }
+.scheiding--rechts::after { order: -1; }
+/* Op een smal scherm past er naast een sectiekop van zes woorden geen
+   lijn meer, en dan viel hij weg — precies op de breedte waar de
+   pagina 3864 px lang is en de scheiding het hardst nodig is. Onder
+   560 px gaat de lijn dus onder de kop staan in plaats van ernaast. */
+@media (max-width: 560px) {
+  .scheiding { flex-wrap: wrap; gap: var(--sprong-klein); }
+  .scheiding::after { flex: 1 0 100%; }
+}
+
+/* 7.17c De rail — een streep langs een blok in plaats van eronder.
+
+   Uit merkteken 3, de gedraaide zijrail: "waar dit hele blok over
+   gaat, zonder er een titelregel aan te kosten". De draaiing komt niet
+   mee — gedraaide tekst herflowt niet, is met een schermlezer een
+   losse regel op de verkeerde plek, en op 420 px past hij niet. Wat
+   wel meekomt is de streep zelf: 3 px, dezelfde als `.streep`, langs
+   de linkerkant.
+
+   `.uitspraak` (§7.7) doet dit al voor één alinea; dit is hetzelfde
+   merkteken voor een heel blok, en het proefdashboard bouwde hem met
+   de hand omdat hij hier nog niet stond.
+
+   De rail staat in het accent, en dat is precies het werk dat oranje
+   op een scherm wél mag doen: hij markeert een begin en draagt geen
+   letter. Hij haalt 2,51 tegen wit en 6,29 tegen navy — onder 3,0 in
+   het lichte thema, en dat mag omdat hij niets codeert wat de tekst
+   niet zegt. Draagt de rail wél informatie — deze drie blokken horen
+   bij elkaar en die andere niet — dan is oranje de verkeerde drager en
+   gaat hij op `.rail--inkt`: 15,79 in beide thema's. */
+.rail {
+  border-left: 3px solid var(--accent);
+  padding-left: var(--sprong);
+}
+.rail--boven {
+  border-left: 0;
+  padding-left: 0;
+  border-top: 3px solid var(--accent);
+  padding-top: var(--sprong-klein);
+}
+.rail--inkt { border-color: currentColor; }
+
+/* 7.17d De lijn ertussen — kolommen en blokken die uit elkaar worden
+   gehouden zonder dat er een vlak omheen komt.
+
+   Uit merkteken 12, waar vier kolommen gescheiden zijn door verticale
+   lijnen. Op een scherm zit hier één ding aan vast dat op een blad
+   niet bestaat: **een verticale lijn tussen twee kolommen moet
+   horizontaal worden zodra de kolommen stapelen**, en dat kan alleen
+   als de kantelbreedte bekend is.
+
+   Daarom staat `.gescheiden` op `.stapel` en op `.tweeluik` en níet op
+   `.raster`. Een `.raster` is `auto-fit` met een minimumbreedte, dus
+   niemand — ook deze stylesheet niet — weet bij welke vensterbreedte
+   hij van drie naar twee naar één kolom valt. Een lijn die daar niet
+   mee omslaat, staat de helft van de tijd verkeerd. */
+.stapel.gescheiden > * + *,
+.tweeluik.gescheiden > * + * {
+  border-top: var(--haarlijn) solid var(--lijn);
+  padding-top: var(--sprong);
+}
+@media (min-width: 900px) {
+  .tweeluik.gescheiden > * + * {
+    border-top: 0;
+    padding-top: 0;
+    border-left: var(--haarlijn) solid var(--lijn);
+    padding-left: var(--goot);
+  }
+}
+
+/* 7.18 De tinttrap — vier treden van één hue.
+
+   Waarvoor hij is: verschillen bínnen één categorie. Het palet draagt
+   drie categorieën en geen vier (§1), maar vier uitvoerders, zes
+   gemeenten of vijf fasen zijn helemaal geen vier categorieën — het
+   zijn items van dezelfde soort. Dan codeert de hue de soort en de
+   trede de plaats, en de driecategoriegrens komt niet in zicht.
+
+   De trap mengt met de grond en niet met een vaste kleur, dus dezelfde
+   declaratie levert op licht een menging met wit en op donker een
+   menging met navy. De percentages zijn die van `merk.TINTTRAP`:
+   100, 70, 45 en 25.
+
+   Wanneer een trap en wanneer een tweede hue: zie
+   `online-vormentaal.md` §5. De korte versie: codeert de kleur iets
+   wat de vorm niet al zegt, dan is het een tweede hue; ordent hij
+   items van dezelfde soort, dan is het een trede.
+
+   De inkt hoort bij de trede en niet bij het thema, en gokken is hier
+   fout: op `vol` klapt hij om (licht wit op royal 5,85, donker navy op
+   periwinkel 7,20), en op donker draagt `sterk` géén tekst. Gebruik de
+   klassen, die zetten hem mee — inclusief `--inkt-stil`, want navy .70
+   over de trede `half` haalt 4,00 en dat is precies de blokkade die
+   `.paneel--royal` op een echt dashboard opleverde. */
+.trap-vol   { background: rgba(var(--trap-rgb), 1);   color: var(--trap-vol-inkt);
+              --inkt: var(--trap-vol-inkt);   --inkt-stil: var(--trap-vol-inkt); }
+.trap-sterk { background: rgba(var(--trap-rgb), .70); color: var(--trap-sterk-inkt);
+              --inkt: var(--trap-sterk-inkt); --inkt-stil: var(--trap-sterk-inkt); }
+.trap-half  { background: rgba(var(--trap-rgb), .45); color: var(--trap-inkt);
+              --inkt: var(--trap-inkt);       --inkt-stil: var(--trap-inkt); }
+.trap-licht { background: rgba(var(--trap-rgb), .25); color: var(--trap-inkt);
+              --inkt: var(--trap-inkt);       --inkt-stil: var(--trap-inkt); }
+
+/* De trap in een andere hue, op de houder van de vier treden.
+
+   Er verandert precies één inkt mee, en dat is nagemeten. Op donker is
+   de inkt van elke trap dezelfde — navy op `vol` en `sterk`, wit op
+   `half` en `licht` — want elke donkere trap loopt van een lichte hue
+   naar navy en kruist onderweg het midden. Op licht is alles navy
+   behalve `vol` van een dónkere hue: royal haalt daar 2,70 en violet
+   2,86, en die twee dragen dus wit. Voor oranje, emerald en sky is
+   `vol` op licht gewoon navy (6,29 · 7,99 · 6,80).
+
+   Royal en violet staan hier niet als modifier: die zijn de standaard
+   op licht en ze kunnen op donker geen trap dragen — royal over navy
+   komt niet verder dan 2,70 · 1,96 · 1,51 · 1,24. Een vijfde hue meet
+   je zelf na met `merk.tinttrap()` en `merk.inkt_op_tint()`. */
+/* Het trapvlakje — de trede als merkteken vóór een naam, zodat dezelfde
+   kleur op twee plekken hetzelfde item aanwijst: in de balk en in de
+   tabel. Twaalf px en niet acht zoals `.stip`, met een rand in `--rand`
+   (4,43 op licht, 3,80 op donker), want de onderste trede haalt 1,44
+   tegen de grond en dan is een vlakje van die maat er niet. Dat is de
+   reparatie die het proefdashboard met de hand vond, hier als regel. */
+.trapstip {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border: var(--haarlijn) solid var(--rand);
+  vertical-align: -1px;
+  flex: none;
+}
+
+.trap--oranje  { --trap-rgb: var(--oranje-rgb);  --trap-vol-inkt: var(--navy); }
+.trap--emerald { --trap-rgb: var(--emerald-rgb); --trap-vol-inkt: var(--navy); }
+.trap--sky     { --trap-rgb: var(--sky-rgb);     --trap-vol-inkt: var(--navy); }
 
 /* ---------------------------------------------------------------
    8. Drukken

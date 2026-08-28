@@ -10,10 +10,12 @@ omgekeerde waar. Een scherm groeit mee, dus er blijkt niets, en daarom moet je h
 wát er niet meegroeit. Dat is het hele onderwerp van dit bestand.
 
 De metingen komen uit twee bronnen. De contrastverhoudingen zijn gerekend met
-`contrast()` uit `scripts/gedeeld/merk.py`, dus ze zijn navertelbaar met één opdracht. De
-paletmetingen op de grafiek komen uit `scripts/validate_palette.js` van de `dataviz`-skill, met
-het SFNL-palet erin. En de vormbevindingen komen uit één gebouwd dashboard, dat in
-`assets/online/maatstaf/` staat.
+`contrast()`, `tint()` en `inkt_op_tint()` uit `scripts/gedeeld/merk.py`, dus ze zijn navertelbaar
+met één opdracht. De paletmetingen op de grafiek komen uit `scripts/validate_palette.js` van de
+`dataviz`-skill, met het SFNL-palet erin. En de vormbevindingen komen uit twee gebouwde dashboards:
+de maatstaf in `assets/online/maatstaf/`, en een proefdashboard uit een echte opdracht — dat laatste
+leverde §6 op, want daar bleek dat een pagina die alleen uit kaarten bestaat ook geen structuur
+heeft.
 
 ---
 
@@ -411,6 +413,95 @@ komt niet verder dan 2,70 boven navy en de eerstvolgende trede in dezelfde hue i
 En één ding dat níet in de trap mag: navy-tint als lichtste trede. Hij haalt 1,10 tegen wit en de
 vloer voor het lichte eind is 2,0. Dat viel op de validator door.
 
+### De tinttrap: vier treden van één hue, en waarvoor hij er is
+
+De ordinale trap hierboven codeert een **grootheid** en heeft drie treden. Wat er niet was, is het
+geval dat een echte opdracht bijna altijd oplevert: **verschillen binnen één categorie.** Vier
+uitvoerders, zes gemeenten, vijf fasen. Het palet draagt drie categorieën en geen vier, maar dat is
+hier de verkeerde meting, want dit zijn helemaal geen categorieën. Het zijn items van dezelfde
+soort, en dan codeert de hue de soort en de trede de plaats.
+
+De trap staat in `merk.TINTTRAP`: vier stappen, `vol` 100, `sterk` 70, `half` 45 en `licht` 25
+procent. In `stijl.css` §7.18 zijn dat de klassen `.trap-vol` tot `.trap-licht`, en ze mengen met
+de **grond** en niet met een vaste kleur — dus dezelfde declaratie geeft op licht een menging met
+wit en op donker een menging met navy.
+
+#### De trap is in de twee thema's niet dezelfde trap
+
+Dit is het gevolg dat je niet kunt wegontwerpen, en het is de omgeklapte rangorde van §2 in zijn
+scherpste vorm. Gemeten tegen de eigen grond, met tussen elke twee treden de onderlinge
+verhouding:
+
+| | `vol` | | `sterk` | | `half` | | `licht` |
+|---|---|---|---|---|---|---|---|
+| **licht** — royal over wit | **5,85** | 1,85 | **3,16** | 1,59 | **1,99** | 1,38 | **1,44** |
+| **donker** — periwinkel over navy | **7,20** | 1,71 | **4,20** | 1,68 | **2,50** | 1,55 | **1,61** |
+
+En dezelfde hue in het verkeerde thema, ter vergelijking:
+
+| | `vol` | `sterk` | `half` | `licht` | kleinste sprong |
+|---|---|---|---|---|---|
+| royal over **navy** | 2,70 | 1,96 | 1,51 | 1,24 | **1,22** |
+| emerald over **wit** | 1,98 | 1,60 | 1,35 | 1,17 | **1,15** |
+
+**Een donkere hue draagt op licht een trap en op donker niet; een lichte hue precies andersom.**
+Royal over navy komt niet verder dan 1,22 tussen twee treden en emerald over wit niet verder dan
+1,15 — en dat is de band waarin een tintpaneel op de maatstaf onzichtbaar bleek (§2). Daarom staat
+`--trap-rgb` per thema anders: royal op licht, periwinkel op donker. Blauw blijft blauw, de trap
+blijft een trap, en de hue verschuift binnen zijn eigen familie — precies zoals `--tint-royal` dat
+al deed.
+
+> **De hue van een trap is een themabesluit en geen ontwerpbesluit.** Wie één hue voor beide
+> thema's kiest, kiest er een die in één van de twee geen trap is.
+
+#### De dode band: één trede draagt geen tekst
+
+Op donker haalt de trede `sterk` navy 4,20 en wit 3,76. **Geen van beide inkten haalt 4,5**, en dat
+is geen slecht gekozen percentage maar een eigenschap van elke trap die van de grond naar de inkt
+loopt: ergens halverwege ligt een band waar beide uiteinden te ver weg zijn. Tegen een navygrond
+is die band precies 3,51 tot 4,50 — het product van de twee contrasten is daar 15,79, want dat is
+het contrast tussen navy en wit.
+
+Op licht komt hij niet voor, en ook dat is een meting en geen geluk: royal haalt zelf maar 5,85
+tegen wit, dus de trap is te kort om het midden te bereiken. Elke trede draagt daar navy (5,00 ·
+7,93 · 10,96), behalve `vol`, die wit draagt (5,85, want navy haalt er 2,70).
+
+Daaruit volgt de enige regel die je moet onthouden:
+
+> **Op een trede staat alleen tekst als je hem hebt nagemeten, en op `sterk` staat op donker geen
+> tekst.** Een balk, een blok of een vlakje heeft dat niet nodig: het label staat ernaast, en dat
+> was toch al verplicht (§5, kleur is nooit de enige codering).
+
+Gebruik `merk.inkt_op_tint()` voor een hue die hier niet staat en gok het niet. `stijl.css` zet de
+inkt mee met de klasse, inclusief `--inkt-stil` — want navy .70 over de trede `half` haalt 4,00, en
+dat is dezelfde blokkade die `.paneel--royal` op een echt dashboard opleverde.
+
+#### Wanneer een trap en wanneer een tweede hue
+
+Drie gevallen, en ze zijn uit elkaar te houden met één vraag: **wijst de kleur op meer dan één plek
+hetzelfde ding aan?**
+
+- **De kleur codeert iets wat de vorm niet zegt, en dat op meer dan één plek** — drie standpunten
+  die in de tekst, in een tabel en in een grafiek terugkomen. Dan is het een categorie en dan is
+  het een tweede hue. Er zijn er drie.
+- **Items van dezelfde soort, en de vorm zegt al hoeveel** — vier balken naast elkaar, elk met een
+  eigen lengte. Dan is het één hue en één tint. De trede zou een tweede ordening naast de lengte
+  suggereren en er is er maar één. Dit is het geval dat op een proefdashboard voorkwam en het
+  antwoord daar was één hue met de doellijn erdoor.
+- **Items van dezelfde soort zónder eigen lengte, of dezelfde items op twee plekken** — de
+  segmenten van een gestapelde balk, een rij vlakjes, een kolom in een tabel. Dan is het de trap.
+
+De maatstaf doet het derde geval: vier gemeenten als vier segmenten van één balk, en dezelfde vier
+treden als vlakje vóór de naam in de tabel eronder. **Een trede die maar op één plek voorkomt, is
+versiering.**
+
+En de bovengrens is vier. Onder `licht` (25 procent) wordt de sprong naar de volgende trede kleiner
+dan 1,38 op licht en 1,55 op donker, en dat loopt de band in waarin je twee treden als één vlak
+leest. Zijn er vijf items, dan is het geen trap maar een tabel, of het zijn er vier plus "overig".
+
+`qa_online.py` meet dit als `trapstap`: twee opeenvolgende treden onder 1,30 zijn een bevinding, in
+de stand waarin het misgaat.
+
 ### De rolverdeling, en die is niet van deze route
 
 Grapefruit is kost of waarschuwing, emerald is baat, navy is structuur en totaal, sky en royal zijn
@@ -442,7 +533,124 @@ draagt.
 
 ---
 
-## 6. Eén drager per scherm, en de eenheid is het scherm en niet de spread
+## 6. Structuur: hoe een dashboard één ding wordt en geen stapel losse kaarten
+
+Dit hoofdstuk komt uit één waarneming op vier renders. Een dashboard dat alleen uit `.kaart` en
+`.paneel` bestaat, is precies wat het is: een verzameling losse kaarten met koppen ertussen.
+
+De maatstaf zelf was daar het bewijs van, en een proefdashboard uit een echte opdracht ook. Beide
+hadden vijf secties onder elkaar met niets tussen zich in dan witruimte en een `h2`. Op 1440 px
+was dat 2029 en 2630 px pagina; op 420 px 3800 en 4284 px. Op die lengte is een kop van vier
+woorden geen grens: je scrollt eraan voorbij en je weet niet of het volgende blok bij het vorige
+hoort. En op donker is het erger dan op licht, want de kaartranden zijn er de enige lijnen en die
+zijn recessief.
+
+**De oplossing is niet meer kaarten maar minder: één ding waar de kaarten in liggen.** Vier
+middelen, alle vier geoogst uit het drukwerk, en per stuk staat erbij wat het scherm er anders aan
+doet. Ze staan in `stijl.css` §7.17.
+
+### Het vlak — een sectie die als één ding leest
+
+Uit merkteken 2 van `merktekens.md`, de kolomkopband: *twee kolommen die samen één ding zijn*. Op
+een blad is dat een band bóven de kolommen, en dat kan daar, want de paginagrens sluit het blok
+toch al af. Op een scherm is er geen paginagrens, dus wordt het een veld eróm heen: `.vlak`.
+
+De vulling is dezelfde tint als `.paneel` — 1,10 op licht en 1,32 op donker — en dat is genoeg,
+want het is een groot oppervlak. Wat erin ligt moet dan wél een niveau opschuiven, en dat gaat met
+één regel: **binnen een vlak is de grond van een paneel de grond van de pagina.** Een `.paneel` in
+een vlak keert dus terug naar wit (1,10) of naar navy (1,32), en een `.kaart` heeft niets nodig
+want die draagt zijn haarlijn: navy .14 over het vlak is 1,32, wit .26 over het vlak is 2,19.
+
+Twee dingen die je moet weten voordat je er drie neerzet:
+
+- **Twee velden op één pagina, hooguit drie.** Drie tintvlakken onder elkaar zijn geen structuur
+  meer maar een streepjespatroon, en dan is elk vlak weer even luid als de andere. Voor de derde
+  sectie is er `.vlak--kaal`: alleen een haarlijn erboven en de ruimte eronder.
+- **Een vlak is geen kaart die groter is geworden.** Er hoort meer dan één ding in. Eén paneel in
+  een vlak is twee randen om dezelfde inhoud.
+
+### De scheiding — de sectiekop met een lijn die doorloopt
+
+Uit de kopregel van het blad (`documenten/stijl.css` §8.1), waar een haarlijn vanaf de tekst naar
+links doorloopt tot de marge. Hier loopt hij naar rechts en draagt hij de sectiekop in plaats van
+het paginanummer, want er is geen pagina om in te staan.
+
+Dit is het goedkoopste structuurmiddel dat er is: het kost geen vlak, geen kleur en geen verticale
+ruimte behalve de lijn zelf, en het bindt een kop van vier woorden aan de volle breedte van het
+dek. De lijn is `--lijn` — 1,33 op licht en 2,24 op donker, dezelfde twee waarden als de tabelregel
+en om dezelfde reden twee waarden (§2).
+
+En één ding dat alleen op een scherm bestaat en dat de eerste render meteen liet zien: **op een
+smal scherm past er naast de kop geen lijn meer.** Op 420 px vulde `Bevestigde uitstroom tegen het
+streefpad` de hele regel en verdween de lijn — precies op de breedte waar de pagina 3900 px lang is
+en de scheiding het hardst nodig is. Onder 560 px gaat de lijn daarom ónder de kop staan.
+
+### De rail — een streep langs een blok in plaats van eronder
+
+Uit merkteken 3, de gedraaide zijrail: *waar dit hele blok over gaat, zonder er een titelregel aan
+te kosten.* De draaiing komt niet mee. Gedraaide tekst herflowt niet, een schermlezer maakt er een
+losse regel op de verkeerde plek van, en op 420 px past hij niet. Wat wél meekomt is de streep:
+3 px, dezelfde als `.streep`, langs de linkerkant.
+
+`.uitspraak` doet dit al voor één alinea; `.rail` is hetzelfde merkteken voor een heel blok. Het
+proefdashboard bouwde er een met de hand omdat de primitief niet bestond — dat is de betrouwbaarste
+aanwijzing dat er een gat zat.
+
+**De rail is het werk dat oranje op een scherm wél mag doen.** Hij haalt 2,51 tegen wit en 6,29
+tegen navy, dus onder 3,0 in het lichte thema, en dat mag omdat hij een begin markeert en niets
+codeert wat de tekst niet zegt. Draagt de rail wél informatie — deze drie blokken horen bij elkaar
+en die andere niet — dan is oranje de verkeerde drager en gaat hij op `.rail--inkt`: 15,79 in beide
+thema's.
+
+Waarvoor de rail beter is dan een paneel: een toelichting náást of ónder iets waar hij bij hoort.
+Op de maatstaf stond die toelichting eerst in een paneel van 400 px naast een plot van 330 px hoog,
+en dan is de onderste 200 px van die kolom leeg — op licht is dat wit en op donker een gat. Een
+rail bindt zonder een tweede vlak te kosten.
+
+### De lijn ertussen — en de enige regel die het scherm hier toevoegt
+
+Uit merkteken 12, waar vier kolommen door verticale lijnen zijn gescheiden. Op een scherm zit hier
+één ding aan vast dat op een blad niet bestaat:
+
+> **Een verticale lijn tussen twee kolommen moet horizontaal worden zodra de kolommen stapelen, en
+> dat kan alleen als de kantelbreedte bekend is.**
+
+Daarom staat `.gescheiden` op `.stapel` en op `.tweeluik` en **niet** op `.raster`. Een `.raster` is
+`auto-fit` met een minimumbreedte, dus niemand — ook `stijl.css` niet — weet bij welke
+vensterbreedte hij van drie naar twee naar één kolom valt. Een lijn die daar niet mee omslaat,
+staat de helft van de tijd verkeerd, en op de brede render zie je dat niet.
+
+Dit is ook het middel voor het kopblok: op de maatstaf staat de aanhef links en het paspoort rechts
+met een lijn ertussen. Zonder die lijn stond het paspoort ver rechts in een leeg veld en las het
+als een tweede blok.
+
+### De sectiekoprij in een tabel
+
+Uit merkteken 14 en 30: één volle rij tussen de gewone rijen, en daarmee worden twee tabellen één
+tabel zonder een tweede kop en zonder een tweede blok. Dat is geen bijzonderheid maar een
+standaardvorm — drie van de elf geoogste decks doen het, in één deck op zes slides.
+
+Wat het scherm eraan verandert is de vulling. In het drukwerk is die rij een volle hue; hier is hij
+`--grond-op` (1,10 en 1,32). Een tabel staat op een dashboard vaak in een vlak of naast een kaart,
+en een verzadigde rij trekt daar de hele aandacht uit de getallen. De `th` draagt `colspan` over
+alle kolommen en `scope="colgroup"`, anders leest een schermlezer hem als een gewone cel.
+
+### Wat hiervan gemeten wordt, en wat niet
+
+`qa_online.py` meet sinds deze ronde twee dingen die er niet waren, en beide om dezelfde reden: een
+vlak draagt geen tekst van zichzelf, dus de contrasttoets ziet het niet, en of het zichtbaar is
+hangt aan een grond die met het thema omklapt.
+
+- **`vlak-thema`** — een vlak dat zich in het ene thema van zijn grond scheidt en in het andere
+  niet. De vloeren zijn níet gelijk: 1,07 op licht en 1,25 op donker, en dat verschil komt recht uit
+  §2. Dezelfde verhouding is bij lage luminantie minder waard.
+- **`vlak-stil`** — een vlak dat zich in geen van beide thema's scheidt. Dan staat er een veld in de
+  markup dat op de pagina niet bestaat.
+
+Wat er niet gemeten wordt en dus op de render moet: hoevéél velden er staan, en of het vlak om de
+goede dingen heen staat. Drie vlakken op rij haalt elke toets.
+
+## 7. Eén drager per scherm, en de eenheid is het scherm en niet de spread
 
 De regel uit het drukwerk houdt: elk blok heeft één element dat de boodschap draagt en de rest is
 er om dat element te laten staan. Wat verandert is de eenheid waarop je beoordeelt. Op papier is
@@ -463,7 +671,7 @@ geschiedenis. `bouw.py` neemt hem uit de `<h1>` als je hem niet meegeeft.
 
 ---
 
-## 7. De merktekens, en wat er van het drukwerk overblijft
+## 8. De merktekens, en wat er van het drukwerk overblijft
 
 `assets/documenten/stijl.css` heeft twintig merktekens voor een blad, en `merktekens.md` er dertig
 uit elf decks. Per stuk nagegaan of hij op een scherm nog klopt.
@@ -473,6 +681,12 @@ het paneel, de kaart, de uitspraak, de bronregel, de chapeau, de aanhef in plaat
 opsomming, het paspoort (hier als `<dl>`, zodat een schermlezer de paren als paren leest), het
 zelfgetekende lijnicoon op het raster van 24, en de tabel met één lijn onder de kop en een
 haarlijn per rij.
+
+**Wat gewijzigd meekomt, en dat is de structuurlaag.** Vijf merktekens uit het drukwerk die op een
+scherm iets anders doen dan op een blad: het vlak (uit de kolomkopband), de scheiding (uit de
+kopregel), de rail (uit de gedraaide zijrail, zonder de draaiing), de lijn tussen kolommen (uit de
+gescheiden kolommen, met de kantelregel erbij) en de sectiekoprij in een tabel (met `--grond-op` in
+plaats van een volle hue). Per stuk staat in §6 wat er veranderde en waarom.
 
 **Wat niet meekomt, en waarom.**
 
@@ -491,7 +705,8 @@ haarlijn per rij.
 rij bóven de inhoud en niet een kolom ernaast, want een filter dat je moet zoeken is geen filter.
 De chip als tabelkolom (merkteken 7 uit `merktekens.md`, en op een scherm het merkteken dat het
 meeste werk doet). De tabelhouder die horizontaal schuift. De grafiekhouder van §5. De
-themaschakelaar. En `.alleen-lezer`, voor tekst die alleen een schermlezer krijgt.
+themaschakelaar. Het trapvlakje, dat dezelfde trede op twee plekken aanwijst (§5). En
+`.alleen-lezer`, voor tekst die alleen een schermlezer krijgt.
 
 **Twee dingen die op een blad geen aandacht vragen en hier wel.**
 
@@ -508,11 +723,11 @@ zelf.
 
 ---
 
-## 8. De weigerlijst
+## 9. De weigerlijst
 
-Twintig dingen. De eerste zes bestaan alleen op een scherm; de rest komt uit
-`documenten-vormentaal.md` §12 en geldt hier net zo goed. Ze staan er allemaal omdat ze de eerste
-inval zijn.
+Vierentwintig dingen. De eerste zes en de vier over structuur bestaan alleen op een scherm; de rest
+komt uit `documenten-vormentaal.md` §12 en geldt hier net zo goed. Ze staan er allemaal omdat ze de
+eerste inval zijn.
 
 1. **Een kleur die alleen binnen een `@media (prefers-color-scheme: dark)`-blok is gedefinieerd.**
    In de ongestempelde stand bestaat hij niet, de pagina rendert, en niemand ziet het. Dit
@@ -556,10 +771,21 @@ inval zijn.
     staat en vult dat in.
 20. **Een verzonnen feit waar een gat zat.** Zet er een zichtbare markering neer — `[DATUM]` — want
     die vindt de gebruiker wel en een plausibel getal niet.
+21. **Een pagina die alleen uit kaarten bestaat.** Vijf secties onder elkaar met niets tussen zich
+    in dan witruimte en een kop. Op 420 px is dat een lint van bijna 4000 px waarin geen enkel
+    element zegt waar een sectie begint. Zie §6.
+22. **Drie tintvlakken onder elkaar.** Dan is het geen structuur meer maar een streepjespatroon, en
+    is elk vlak weer even luid als de andere. De derde sectie krijgt `.vlak--kaal`.
+23. **Een lijn tussen kolommen op een `auto-fit`-raster.** Niemand weet bij welke breedte dat
+    raster stapelt, dus de lijn staat de helft van de tijd verkeerd — en op de brede render zie je
+    dat niet. Alleen op een `.tweeluik`, want daar is de kantelbreedte bekend. Zie §6.
+24. **Vier tinten van één hue als vier categorieën.** Een trap ordent items van dezelfde soort; hij
+    codeert geen verschillende dingen. En andersom: vier balken die elk hun eigen lengte al hebben,
+    krijgen één tint en geen trap. Zie §5.
 
 ---
 
-## 9. Wat er niet in staat
+## 10. Wat er niet in staat
 
 Geen dashboardbibliotheek en geen sjablonen. `assets/online/stijl.css` geeft de tokens voor beide
 thema's, het raster, de maatladder, de kleurregels en de merktekens; wat je ermee bouwt is elke
