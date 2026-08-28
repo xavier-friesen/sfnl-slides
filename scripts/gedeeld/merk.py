@@ -289,6 +289,73 @@ def inkt_op(kleur: str) -> str:
     return "navy" if contrast("navy", kleur) >= contrast("wit", kleur) else "wit"
 
 
+#: De tinttrap: vier stappen van dezelfde hue, gemengd met wit. Bedoeld voor het
+#: geval dat een palet van drie categorieën niet oplost — verschillen bínnen één
+#: categorie. Vier uitvoerders, zes gemeenten, vijf fasen: dat zijn geen
+#: categorieën maar waarden van hetzelfde soort, en dan codeert de hue de soort
+#: en de tint de plaats.
+#:
+#: De percentages zijn gekozen op de meting en niet op smaak. Vanaf `sterk` (70
+#: procent) haalt navy op elke hue ruim de 4,5 — royal 5,0, violet 5,3, oranje
+#: 8,2, emerald 9,8, sky 8,8 — dus binnen een trap hoeft de inkt niet mee te
+#: veranderen met de stap, en dat is precies wat een trap bruikbaar maakt.
+#:
+#: Twee uitzonderingen, en het zijn er echt maar twee. Op `vol` zijn royal (2,7)
+#: en violet (2,9) te donker voor navy, dus daar staat wit. En **navy als hue is
+#: de uitzondering op de hele regel**: die haalt op `sterk` maar 2,6, dus een
+#: navytrap draagt wit tot en met `sterk` en pas vanaf `half` navy. Gebruik
+#: `inkt_op_tint()` en gok het niet.
+TINTTRAP = {"vol": 1.0, "sterk": 0.70, "half": 0.45, "licht": 0.25}
+
+
+def tint(kleur: str, stap: str = "half") -> str:
+    """Een lichtere trap van dezelfde hue, als hex. Zie `TINTTRAP`.
+
+    >>> tint("royal", "vol"), tint("royal", "half")
+    ('#425CC7', '#AAB6E6')
+    >>> tint("oranje", "licht")
+    '#FFDFCF'
+
+    De trap is berekend en de huistinten zijn gemeten, en waar ze allebei
+    bestaan wint de gemeten. Dat ze dicht bij elkaar liggen is de bevestiging
+    dat de trap klopt: stap `half` van royal geeft `#AAB6E6` en de gemeten
+    periwinkel is `#A0ADE2`.
+
+    >>> abs(int(tint("royal", "half")[1:3], 16) - int(HEX["periwinkel"][1:3], 16)) <= 12
+    True
+    """
+    if stap not in TINTTRAP:
+        raise ValueError(f"onbekende stap {stap!r}; kies uit {sorted(TINTTRAP)}")
+    a = TINTTRAP[stap]
+    voor, achter = rgb(kleur), (255, 255, 255)
+    return "#%02X%02X%02X" % tuple(
+        round(voor[i] * a + achter[i] * (1 - a)) for i in range(3))
+
+
+def tinttrap(kleur: str) -> dict[str, str]:
+    """De hele trap voor één hue, van vol naar licht.
+
+    >>> list(tinttrap("emerald"))
+    ['vol', 'sterk', 'half', 'licht']
+    """
+    return {stap: tint(kleur, stap) for stap in TINTTRAP}
+
+
+def inkt_op_tint(kleur: str, stap: str = "half") -> str:
+    """De inkt op een trapstap. Vanaf `sterk` is dat altijd navy.
+
+    >>> inkt_op_tint("royal", "vol"), inkt_op_tint("royal", "sterk")
+    ('wit', 'navy')
+
+    Navy is de uitzondering: als hue is hij zo donker dat ook `sterk` nog wit
+    draagt, en pas `half` navy.
+
+    >>> inkt_op_tint("navy", "sterk"), inkt_op_tint("navy", "half")
+    ('wit', 'navy')
+    """
+    return inkt_op(tint(kleur, stap))
+
+
 def haalt_drempel(kleur: str, achter: str, groot: bool = False) -> bool:
     """Haalt deze combinatie de WCAG-drempel? 3,0 voor grote tekst, anders 4,5."""
     return contrast(kleur, achter) >= (3.0 if groot else 4.5)

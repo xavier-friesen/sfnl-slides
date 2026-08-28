@@ -676,6 +676,57 @@ a:hover { color: var(--grapefruit); }
   box-shadow: inset 0 0 0 1px rgba(var(--navy-rgb), 0.16);
 }
 
+/* 8.10a Het paneel met een overhangende titel — de titel hangt half in en
+   half boven het kader.
+
+   Hetzelfde mechanisme als de ronde foto van 8.11, die het drukwerk half
+   buiten zijn vlak zet: het bindt twee dingen aan elkaar die anders los
+   zouden staan. Hier is het de titel en het kader waar hij bij hoort.
+
+   Het is een nadrukmiddel en geen opmaak. Eén per pagina, op het paneel dat
+   de kern draagt; twee overhangende titels op één blad is er een te veel en
+   op een pagina met drie panelen is het ruis. Zie documenten-vormentaal.md
+   §11b.
+
+   De titel steekt met de helft van zijn regelhoogte boven de kaderrand uit,
+   dus de bovenmarge van het paneel is de gewone marge plus die helft --
+   anders schuift de eerste inhoudsregel mee omhoog. De titel draagt zijn
+   eigen achtergrond in de papierkleur, want hij moet de kaderrand doorbreken
+   en niet erop liggen; daardoor werkt hij ook op een gekleurd blad. */
+.paneel--overhang {
+  --overhang: 18px;
+  position: relative;
+  margin-top: var(--overhang);
+  padding-top: calc(26px + var(--overhang));
+}
+.paneel__overhangtitel {
+  position: absolute;
+  top: calc(var(--overhang) * -1);
+  left: 28px;
+  /* Geen `right`, en `fit-content` erbij: de achtergrond moet om de wóórden
+     liggen en niet over de volle kaderbreedte. Met een `right` werd het een
+     witte balk dwars over de bovenrand van het paneel — dat leest als een
+     tweede vlak in plaats van als een titel die de rand doorbreekt. Gemeten op
+     de proefpagina: 1000 px wit tegen 300 px tekst.
+     `max-width` houdt hem binnen het kader als de titel lang is. */
+  width: fit-content;
+  max-width: calc(100% - 56px);
+  margin: 0;
+  padding: 0 14px 0 0;
+  background: var(--papier);
+  color: var(--inkt);
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: var(--m-kop);
+  line-height: calc(var(--overhang) * 2);
+  letter-spacing: -.004em;
+}
+/* Op een paneel met een eigen veld hoort de titelachtergrond bij het blad en
+   niet bij het paneel -- hij doorbreekt de rand, dus hij staat op wat eromheen
+   ligt. Wie het paneel op een gekleurd blad zet, krijgt dat vanzelf goed omdat
+   --papier daar de bladkleur is. */
+.paneel--overhang > :first-child + * { margin-top: 0; }
+
 /* 8.11 De ronde foto — het portret dat over de rand van een paneel
    heen hangt. Gemeten: het rapport zet hem half buiten het vlak, en
    dat overlappen is precies wat hem uit de opmaaksjabloonlook haalt. */

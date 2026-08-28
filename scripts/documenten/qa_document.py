@@ -87,7 +87,35 @@ METING = r"""() => {
     if (!zs) uit.meldingen.push({soort: 'geen-zetspiegel', pagina: idx + 1});
     const p = {nr: idx + 1, w: Math.round(pr.width), h: Math.round(pr.height),
                formaat: pag.dataset.formaat || 'sfnl', overloop: [], klip: [],
-               regels: [], onderrand: 0, woorden: 0, schaduw: 0};
+               regels: [], onderrand: 0, woorden: 0, schaduw: 0, velden: []};
+
+    // Aflopende kleurvelden tellen. Een veld is een vlak dat over de volle
+    // breedte van het blad loopt, aan minstens één rand raakt, en een andere
+    // kleur heeft dan het papier. De pagina zelf telt mee zodra hij niet wit
+    // is. Zie `kleurveld-stapeling` in de beoordeling voor waarom dit een
+    // blokkade is en geen aanwijzing.
+    {
+      const pagKleur = getComputedStyle(pag).backgroundColor;
+      const wit = ['rgb(255, 255, 255)', 'rgba(0, 0, 0, 0)', 'transparent'];
+      const pagIsWit = wit.indexOf(pagKleur) !== -1;
+      if (!pagIsWit) p.velden.push({el: 'pagina', kleur: pagKleur, hoogte: p.h});
+      pag.querySelectorAll('*').forEach(el => {
+        const cs = getComputedStyle(el);
+        if (cs.display === 'none' || cs.visibility === 'hidden') return;
+        const bg = cs.backgroundColor;
+        const heeftVerloop = cs.backgroundImage && cs.backgroundImage !== 'none';
+        if (wit.indexOf(bg) !== -1 && !heeftVerloop) return;
+        if (bg === pagKleur && !heeftVerloop) return;
+        const r = el.getBoundingClientRect();
+        if (r.width < pr.width - 1.5) return;              // niet over de volle breedte
+        const raakt = (r.top <= pr.top + 1.5) || (r.bottom >= pr.bottom - 1.5);
+        if (!raakt) return;                                 // zweeft, dus geen veld
+        p.velden.push({el: el.className || el.tagName.toLowerCase(),
+                       kleur: heeftVerloop ? 'verloop' : bg,
+                       hoogte: Math.round(r.height),
+                       deel: Math.round(r.height / pr.height * 100)});
+      });
+    }
 
     pag.querySelectorAll('*').forEach(el => {
       const r = el.getBoundingClientRect();
@@ -346,6 +374,17 @@ def toets(html: Path) -> dict:
                                f"en de titel erin wordt afgesneden. Zet --balk op de "
                                f".pagina en niet op de balk zelf — de zetspiegel leest "
                                f"dezelfde waarde"})
+
+        if len(p.get("velden", [])) > 1:
+            bev.append({"ernst": "critical", "soort": "kleurveld-stapeling",
+                        "pagina": p["nr"], "velden": p["velden"],
+                        "wat": "twee of meer aflopende kleurvelden op één pagina. "
+                               "Een heel blad in een kleur is al de zwaarste "
+                               "vorm die dit drukwerk kent; er een tweede band "
+                               "overheen leggen maakt er drie oppervlakken van — "
+                               "veld, band en de tekst die op geen van beide "
+                               "meer thuishoort. Kleur één ding: het blad, of "
+                               "een kader. Zie documenten-vormentaal.md §12"})
         if p["schaduw"]:
             bev.append({"ernst": "warn", "soort": "schaduw", "pagina": p["nr"],
                         "wat": f"{p['schaduw']} element(en) met een slagschaduw. Op papier "
