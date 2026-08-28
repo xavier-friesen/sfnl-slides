@@ -75,10 +75,11 @@ Lees dit één keer voor de hele opdracht, niet per infographic:
    `schets.py` staan twee routes: `schets_vrij()` met zes figuurhelpers, en `schets()` met
    rijen en kolommen. De eerste is de gewone. Onderaan staat hoe de schetsen als canvas
    worden voorgelegd.
-5. `assets/infographic/maatstaf/` — vijf afgemaakte infographics. Dit **is** de norm voor het eindresultaat:
+5. `assets/infographic/maatstaf/` — zes afgemaakte infographics. Dit **is** de norm voor het eindresultaat:
    zo ziet een opgeleverde SFNL-infographic eruit. **Kijk naar één of twee**, en kies op vorm en
    register: `m1` sankey op wit, `m2` tijdlijn op schaal, `m3` divergerende staaf met twee
-   coderende hues, `m4` rasterplot op vierkant, `m5` waterval op een PowerPoint-slide. Lees ook
+   coderende hues, `m4` rasterplot op vierkant, `m5` waterval op een PowerPoint-slide, `m6`
+   verdeelde band met een tinttrap binnen één hue. Lees ook
    `assets/infographic/maatstaf/LEESMIJ.md` — daar staat in één alinea wat ze gemeen hebben.
 6. `assets/infographic/voorbeeld/*.py` — de bouwscripts. In elke docstring staat wat er in de eerste
    versie misging en waarom de tweede anders is. Lees er één, van het voorbeeld dat je bekeek.
@@ -251,8 +252,8 @@ verschil met wat de gebruiker in gedachten had pas op de render.
    met een haarlijn krijgt, niet dat de compositie een rij kaarten wordt. Een sankey met een
    gevulde kaart eronder is nog steeds een sankey. De plattegrond kies je in stap 2.
    - *Bijna helemaal wit* — geen vulling, alleen gekleurde koppen, haarlijnen en tekst. Het
-     lichte register, en waar SFNL-werk het sterkst in staat. Alle vijf de maatstaven staan
-     hierin en geen van de vijf heeft één containervulling. Dit is de default op papier en op
+     lichte register, en waar SFNL-werk het sterkst in staat. Alle zes de maatstaven staan
+     hierin en geen van de zes heeft één containervulling. Dit is de default op papier en op
      scherm.
    - *Kaarten* — containervullingen van 7 tot 12 procent met een haarlijn in de eigen hue. Op
      een slide met een projector achter je werkt dit beter dan het lichte register. Er is geen
@@ -597,6 +598,15 @@ kan zien waarom.
 4. **Het accent, en of er meer dan één is.** Volgt uit widget 2 vraag 2. Koos de gebruiker
    "kleur codeert categorieën", schrijf dan hier per hue in één woord op wat hij betekent, en
    beslis er daarna niet meer over.
+
+   **Zijn het geen categorieën maar items van dezelfde soort** — vier uitvoerders, zes
+   gemeenten, vijf fasen — dan hoort daar geen tweede hue bij maar een **tinttrap** binnen één
+   hue: `trap()` en `tint()` in `svg.py`, met `m6` als voorbeeld. Twee dingen om nu te
+   beslissen en niet later. Ten eerste: zeg in één woord wat *donkerder* betekent. Kun je dat
+   niet, dan liegt de trap, want hij suggereert een volgorde — vier uitvoerders op alfabet in
+   vier tinten is de valkuil. Ten tweede: hoeveel stappen. Het zijn er drie en alleen in navy
+   of zwartblauw, twee in royal en violet, geen in oranje, sky en emerald;
+   `svg.trap_draagt(hue)` rekent het uit en weigert er meer. Zie §6b van de vormentaal.
 5. **Wat de compositie afsluit.** Een volle band tegen de onderrand, een haarlijn boven een
    sluitregel, of niets omdat de laatste rij zelf de conclusie is. Een kader is het niet.
 

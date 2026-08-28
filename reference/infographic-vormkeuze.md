@@ -212,9 +212,9 @@ canvas dat de vorm wil.
 
 ---
 
-## Zeven valkuilen die de toets moet vangen
+## Acht valkuilen die de toets moet vangen
 
-**De kaartenrij als restcategorie, en dit is de veelvoorkomendste van de zeven.** Niemand kiest
+**De kaartenrij als restcategorie, en dit is de veelvoorkomendste van de acht.** Niemand kiest
 hem; hij blijft over. Het mechanisme is elke keer hetzelfde: de sankey valt af omdat de posten
 niet optellen, de tijdlijn omdat er geen echte datums zijn, de naaf omdat het canvas een band is
 — en het rooster valt nergens op af, want een rij dozen eist geen gegevens, past op elk vlak en
@@ -242,6 +242,17 @@ verhaal.
 
 **Een cyclus die geen cyclus is.** Een proces met een begin en een eind is een stroomschema.
 Teken er alleen een cirkel van als stap vier echt weer naar stap één leidt.
+
+**Een trap in tinten zonder rangorde.** Vier items van dezelfde soort — vier uitvoerders, zes
+gemeenten — vragen om een tinttrap in plaats van vier hues, en dat klopt. Maar een trap
+suggereert **volgorde**. Zet je de vier uitvoerders op alfabet in vier tinten, dan leest de lezer
+een rangorde die er niet is, en het beeld ziet er goed uit terwijl het liegt. De toets is dezelfde
+als bij elke andere kleur: *zeg in één woord wat donkerder betekent.* Kun je dat niet, dan gaat de
+trap eruit en staat er één hue. En kun je het wel, dan is de tweede vraag of de vorm het al zegt:
+bij gesorteerde staven zegt de lengte het, en dan is de trap versiering. Een trap verdient zijn
+plek waar de vorm alleen de plaats draagt — een kaart, een matrix, een rooster, een gestapelde
+band. Hoeveel stappen zo'n trap kan dragen staat in `reference/infographic-vormentaal.md` §6b, en
+het zijn er drie en alleen in navy.
 
 **Een vorm die is gekozen omdat hij nieuw is.** Zesenveertig vormen zijn een gereedschapskist,
 geen etalage. Een geordende staaf is vaak het juiste antwoord, en dat mag je opschrijven als

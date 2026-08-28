@@ -202,6 +202,111 @@ punt waar het om gaat. Sky en royal zijn vrij.
 inleg en de grootste post, de rest is navy op 16 procent. Dat is de enige reden dat er ergens
 meer dan één is, en de reden dat er meestal één is.
 
+## 6b. Een trap binnen één hue, voor verschil binnen één categorie
+
+Het palet draagt drie categorieën en geen vier. Dat is nagemeten met de validator van de
+`dataviz`-skill: royal, oranje en emerald halen alle checks, en elke vierde merkkleur brengt
+een paar onder de zichtvloer mee — royal↔violet 6,9, oranje↔grapefruit 8,7, sky↔emerald 9,4,
+tegen een vloer van 15. Na te rekenen met `svg.deltaE("royal", merk.HEX["violet"])`.
+
+Maar de opdracht die langskomt is meestal ook geen vier categorieën. Het zijn **vier items van
+dezelfde soort**: vier uitvoerders, zes gemeenten, vijf fasen, drie investeerders. Die dragen
+allemaal dezelfde grootheid. Een tweede hue zou daar een tweede soort suggereren die er niet is,
+en dan liegt de kleur. Voor dat geval is er de **tinttrap**: dezelfde hue, gemengd met wit, waarbij
+de hue de soort codeert en de tint de plaats binnen die soort. `trap()` in `svg.py`, met de
+waarden uit `merk.TINTTRAP`.
+
+### Hoeveel stappen een figuur werkelijk kan dragen: drie, en alleen in een donkere hue
+
+Vier stappen staan in `merk.py` en vier stappen haalt geen enkele hue. Gemeten met
+`validate_palette.py --ordinal --surface "#FFFFFF"`, twee toetsen: elke stap moet zelf boven
+2,0 contrast op het papier blijven (anders is het een leeg spoor en geen staaf), en twee
+opeenvolgende stappen moeten minstens 0,06 OKLCH L uit elkaar liggen (anders is het één vlek
+met een verloop). `svg.trap_draagt()` rekent beide uit; de tabel is de uitkomst, niet de bron.
+
+| hue | stappen | het lichtste dat nog mag | wat er stukloopt op de volgende stap |
+|---|---|---|---|
+| navy | **3** — vol, sterk, half | `half` 2,85 op wit | `licht` haalt 1,70 |
+| zwartblauw | **3** | `half` 2,54 | `licht` 1,61 |
+| royal | **2** — vol, sterk | `sterk` 3,16 | `half` 1,99, net onder |
+| violet | **2** | `sterk` 3,00 | `half` 1,94 |
+| grapefruit | 2 | `sterk` 2,25 | `half` 1,69 |
+| oranje | **1** | `vol` 2,51 | `sterk` 1,92 |
+| sky | **1** | `vol` 2,32 | `sterk` 1,79 |
+| emerald | **0** | — | `vol` haalt zelf maar 1,98 |
+
+Emerald op nul is geen fout in de tabel maar dezelfde meting die in §6 emerald verbiedt tekst te
+dragen onder 18pt: de volle kleur ligt al te dicht op het papier. Een volle emerald staaf mag;
+een lichtere emerald staaf ernaast is er geen tweede staaf maar een vlek.
+
+**Een tweede, onafhankelijke meting geeft hetzelfde antwoord.** Leg de navytrap langs de
+categorische toets in plaats van de ordinale — dus: kun je twee vlakken uit elkaar houden? — dan
+is het slechtste paar van drie stappen 18,8 en dat haalt de vloer van 15 ruim. Zet je de vierde
+stap erbij, dan zakt het slechtste paar naar 14,5 en valt het eronder. Royal komt op drie
+stappen uit op 13,1 en op twee op 15,6. Twee toetsen die niets van elkaar weten wijzen dezelfde
+grens aan, en dat is de reden om er iets van te geloven.
+
+De opeenvolgende afstanden zelf, ter oriëntatie (`svg.deltaE`, OKLab ×100): navy 23,9 / 18,8 /
+14,5 · royal 15,6 / 13,1 / 10,1 · grapefruit 9,8 / 9,4 / 8,2 · oranje 8,6 / 8,0 / 6,7 ·
+emerald 7,0 / 6,2 / 5,2. Een trap in een lichte hue is geen trap.
+
+**Praktisch: de trap is een navytrap.** Navy is de enige hue die er drie draagt en tegelijk de
+hue die in dit huis toch al structuur en totaal codeert. Dat is geen beperking maar de vorm van
+het antwoord: de trap zet zes gemeenten in navy en houdt oranje vrij voor het ene ding dat het
+accent is. Er is dus nog steeds **één accent naast navy** — een trap is geen tweede accent.
+
+### Wanneer een trap mag, en wanneer niet
+
+De toets uit §6 verandert niet: *codeert de kleur iets wat de vorm niet al zegt?* Wat daar bij
+een trap uit volgt, zijn drie gevallen en ze zijn scherp te scheiden.
+
+**Wel — de tint draagt de grootheid en de vorm draagt alleen de plaats.** Een kaart, een matrix,
+een rooster van tegels, een gestapelde band, een rij vlakken van gelijke maat. Daar zegt de vorm
+"waar" en verder niets, dus de tint zegt "hoeveel" en dat is nieuwe informatie. Dit is het geval
+waarvoor de trap bestaat.
+
+**Wel, maar zelden — de tint herhaalt een ordening die de figuur zelf al laat zien.** Een
+gesorteerde staafgrafiek: de lengte zegt het al. De trap voegt niets toe en is dus versiering,
+tenzij de figuur ook nog in zwart-wit of op een projector moet werken. Standaard: laat hem weg
+en gebruik één hue met een doellijn erdoor. Bij een gesorteerde staaf is dat de goede keuze en
+niet een gebrek aan fantasie.
+
+**Niet — de tint codeert identiteit zonder grootheid.** Vier uitvoerders op alfabet in vier
+tinten zetten liegt, want een trap suggereert **volgorde** en de lezer leest een rangorde die er
+niet is. Dit is de valkuil, en hij is verraderlijk omdat het beeld er goed uitziet. De regel:
+**een trap hoort bij een grootheid die werkelijk oploopt, of bij een sortering die de figuur zelf
+laat zien.** Kun je niet in één woord zeggen wat donkerder betekent, dan gaat de trap eruit en
+staat er één hue.
+
+**Wanneer dan een tweede hue?** Als de items van verschillende soort zijn en de lezer die
+soorten uit elkaar moet houden: kost tegenover baat, plan tegenover realisatie, uitvoerder
+tegenover gemeente. Dan codeert de hue de soort, en dan zijn er hoogstens drie. Hue en tint
+kunnen samen: twee soorten in twee hues, en binnen elke soort een trap — mits beide hues er een
+dragen, dus in de praktijk navy plus één.
+
+**En geen van beide** is nog steeds het gewone antwoord. Als lengte, positie of dikte de meting
+al draagt en er is één ding dat het accent verdient, dan is dat één hue plus oranje. De trap
+komt erbij wanneer de vorm de meting níet draagt.
+
+### Twee dingen die een trap altijd nodig heeft
+
+**Direct labelen, en dus geen legenda.** Dat staat al in §9 en het geldt hier dubbel: de vloer
+van 2,0 zegt dat de lezer de stappen als *meer of minder* kan zien, niet dat hij ze kan
+herkennen. Een legenda vraagt herkennen, en dat is een andere vloer (15 op `deltaE`, en die
+halen alleen navy en zwartblauw; `svg.trap_herkenbaar()` rekent het uit). De twee getallen
+lopen maar bij één hue uiteen: grapefruit mag twee stappen tekenen (2,25 op wit) en die twee
+liggen onderling 9,8 uit elkaar, dus zichtbaar als vlak en niet uit elkaar te houden als kleur.
+Een trap met een legenda is onleesbaar; een trap met labels erbij niet.
+
+**De inkt volgt niet de stap.** Vanaf `sterk` haalt navy op elke hue ruim de 4,5 — royal 5,0,
+violet 5,3, oranje 8,2, emerald 9,8, sky 8,8 — dus binnen een trap hoeft de tekstkleur niet mee
+te veranderen. Twee uitzonderingen, en het zijn er echt twee: op `vol` dragen royal en violet
+wit, en **navy als hue draagt wit tot en met `sterk`** (zwartblauw net zo) en pas vanaf `half`
+navy. Gebruik `merk.inkt_op_tint()` of `svg.tekst_op(tint(...))` en gok het niet.
+
+Uitgewerkt in `assets/infographic/maatstaf/m6-tinttrap`: vier uitvoerders in één navytrap van
+drie stappen, waar de breedte het deelnemersaantal draagt en de tint het plaatsingspercentage.
+
 ## 7. Een container is bijna wit, en een lijn maakt er een kaart van
 
 Een lichte vulling is `fill-opacity` op de volle kleur, per hue gekalibreerd: navy 0,07, royal
@@ -381,7 +486,8 @@ Noem het wel bij de oplevering, met de vraag of er een toelichtingsstand bij moe
 | stand | aantal hues | waar de hue zit | let op |
 |---|---|---|---|
 | één accent | navy plus één | in de letter én in één vulling | dezelfde hue betekent overal hetzelfde |
-| kleur codeert | navy plus twee tot vier | één per categorie, rol of fase | schrijf per hue in één woord op wat hij codeert; twee blokken die samen één werkstroom vormen krijgen nooit twee hues |
+| kleur codeert | navy plus twee of drie | één per categorie, rol of fase | schrijf per hue in één woord op wat hij codeert; twee blokken die samen één werkstroom vormen krijgen nooit twee hues. Drie is het plafond en dat is gemeten: elke vierde merkkleur brengt een paar onder de vloer van 15 mee — zie §6b |
+| trap binnen één hue | navy plus één accent, plus tinten | de tint codeert de plaats binnen één soort, niet de soort | alleen als "donkerder" in één woord te zeggen is; navy draagt drie stappen, royal en violet twee, de lichte hues geen — §6b |
 | monochroom | alleen navy | gewicht en maat doen het werk | container navy op 0,07; hiërarchie komt uit 18pt SemiBold tegen 16pt Light, en uit de drager |
 
 **Hoeveel vlak**

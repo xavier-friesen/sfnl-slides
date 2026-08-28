@@ -19,6 +19,8 @@ Wat deze laag voor je regelt
 ----------------------------
 * een lichte vulling is `fill-opacity` op de volle kleur, per hue gekalibreerd -- nooit een
   lichtere hex, want die leest als eigen kleur in plaats van als achtergrond
+* een tinttrap binnen één hue voor vier items van dezelfde soort, met de meting erbij van
+  hoeveel stappen die hue werkelijk draagt -- `trap()`, `tint()`, `trap_draagt()`
 * een lijn om een kaart krijgt dezelfde hue als de vulling
 * de tekstkleur die bij een vulling en een puntgrootte hoort, met het contrast uitgerekend
 * echte regelafbreking op de fontmetriek van Montserrat en Lato, dus `hoogte_van` klopt
@@ -34,7 +36,7 @@ ziet de verhouding zonder de getallen te lezen, en elke staaf draagt zijn eigen 
     import sys; sys.path.insert(0, "${CLAUDE_PLUGIN_ROOT}/scripts/infographic")
     from svg import (CANVAS, Canvas, Maten, blok, bron, cirkel, cols, container, drager,
                      hoogte_van, kop, label, lijn, op_schaal, pad, regels, schrijf, tekst,
-                     tekst_op, vlak)
+                     tekst_op, tint, trap, vlak)
 
     c = CANVAS["breed"]
     m = Maten(body=16, kop=18, drager=36, voetnoot=11)
@@ -313,6 +315,14 @@ DISPLAY_VLOER = 40.0
 KOP_VLOER = 18.0
 
 
+def _kleur(hue: str) -> str:
+    if hue.startswith("#"):
+        return hue
+    if hue not in HEX:
+        raise ValueError(f"onbekende kleur {hue!r}; kies uit {sorted(HEX)}")
+    return HEX[hue]
+
+
 def container(hue: str) -> tuple[str, str]:
     """De vulling die als achtergrond leest in plaats van als kleur."""
     if hue not in CONTAINER:
@@ -320,8 +330,195 @@ def container(hue: str) -> tuple[str, str]:
     return (hue, "container")
 
 
+# --- de tinttrap, en de twee vloeren eronder
+#
+# De trap is er voor de opdracht die het palet niet aankan. Het palet draagt drie
+# categorieën en geen vier -- elke vierde merkkleur brengt een paar onder de
+# zichtvloer mee (royal<->violet 6,9, oranje<->grapefruit 8,7, sky<->emerald 9,4,
+# tegen een vloer van 15) -- maar de opdracht die langskomt is meestal ook geen vier
+# categorieën. Het zijn vier items van dezelfde soort: vier uitvoerders, zes
+# gemeenten, vijf fasen. Dan codeert de hue de soort en de tint de plaats.
+#
+# Hoeveel stappen dat er zijn, is gemeten en niet gekozen, en het zijn er geen vier.
+# Zie `reference/infographic-vormentaal.md` §6b voor de tabel en voor wanneer een
+# trap wel en niet mag.
+
+#: De vloer waaronder een tintstap geen merkteken meer is: WCAG-contrast op het
+#: papier. Dit is de light-end-vloer van de ordinale toets in de dataviz-skill
+#: (`scripts/validate_palette.py --ordinal`) en niet de 4,5 van leesbare tekst --
+#: een staaf hoeft geen letter te zijn, hij moet als vlak van het papier te
+#: onderscheiden zijn. Onder deze grens is een stap geen lichtere staaf meer maar
+#: een leeg spoor, en dan liegt de figuur over hoeveel er staat.
+TRAP_VLOER = 2.0
+#: De tweede helft van diezelfde ordinale toets: het lichtheidsverschil tussen twee
+#: opeenvolgende stappen, in OKLCH L. Eronder is de trap geen trap meer maar één
+#: vlek met een verloop.
+TRAP_STAP_DL = 0.06
+#: De vloer voor een héél andere vraag, en daarom een apart getal: mag de lezer een
+#: item **herkennen** aan zijn tint? Dat is de categorische vloer van de
+#: dataviz-skill, OKLab dE x100 tussen twee vullingen. Een trap wordt hier niet op
+#: geweigerd -- een SFNL-infographic labelt direct en heeft geen legenda (§9), dus
+#: de lezer hoeft alleen "meer of minder" te zien en niet "welke". Gebruik
+#: `deltaE()` als je toch een legenda overweegt; haalt een paar de 15 niet, dan is
+#: die legenda niet leesbaar en verandert dat niets aan de trap zelf.
+TRAP_HERKENNING = 15.0
+
+
+def _oklab(kleur: str) -> tuple[float, float, float]:
+    """OKLab van een merknaam of hex. De transformatie van Björn Ottosson (2020).
+
+    Dezelfde math als `validate_palette.py` van de dataviz-skill, want de twee
+    vloeren hierboven komen daar vandaan en een vloer die je niet kunt narekenen is
+    een overgeschreven getal.
+    """
+    def _lin(k: float) -> float:
+        k /= 255
+        return k / 12.92 if k <= 0.04045 else ((k + 0.055) / 1.055) ** 2.4
+    r, g, b = (_lin(k) for k in merk.rgb(_kleur(kleur)))
+    l = (0.4122214708 * r + 0.5363325363 * g + 0.0514459929 * b) ** (1 / 3)
+    m = (0.2119034982 * r + 0.6806995451 * g + 0.1073969566 * b) ** (1 / 3)
+    s = (0.0883024619 * r + 0.2817188376 * g + 0.6299787005 * b) ** (1 / 3)
+    return (0.2104542553 * l + 0.7936177850 * m - 0.0040720468 * s,
+            1.9779984951 * l - 2.4285922050 * m + 0.4505937099 * s,
+            0.0259040371 * l + 0.7827717662 * m - 0.8086757660 * s)
+
+
+def deltaE(a: str, b: str) -> float:
+    """Het waarneembare verschil tussen twee vullingen: OKLab-afstand x100.
+
+    De schaal waarop de vloeren van de dataviz-skill staan: 15 om twee vlakken uit
+    elkaar te houden als categorie, 6 tot 8 als ondergrens onder kleurenblindheid.
+
+    >>> round(deltaE("royal", merk.HEX["violet"]), 1)   # waarom het palet er drie draagt
+    6.9
+    >>> round(deltaE(merk.tint("navy", "vol"), merk.tint("navy", "sterk")), 1)
+    23.9
+    """
+    x, y = _oklab(a), _oklab(b)
+    return 100 * sum((x[i] - y[i]) ** 2 for i in range(3)) ** 0.5
+
+
+def trap_draagt(hue: str, papier: str = "wit") -> int:
+    """Hoeveel stappen van `merk.TINTTRAP` leest deze hue op dit papier nog als merkteken?
+
+    Uitgerekend en niet opgezocht, om dezelfde reden als `OP_WIT` hierboven: een
+    tabel loopt uit de pas zodra er een kleur bijkomt of verschuift. Een stap telt
+    mee zolang hij zelf boven `TRAP_VLOER` blijft én ver genoeg van zijn buurman
+    ligt (`TRAP_STAP_DL`) -- de twee helften van de ordinale toets.
+
+    De uitkomst is het antwoord op de vraag waarvoor de trap is gebouwd -- hoeveel
+    stappen kan een figuur werkelijk dragen -- en het is niet vier. Gemeten op wit:
+
+    >>> trap_draagt("navy"), trap_draagt("zwartblauw")
+    (3, 3)
+    >>> trap_draagt("royal"), trap_draagt("grapefruit")
+    (2, 2)
+    >>> trap_draagt("oranje"), trap_draagt("sky"), trap_draagt("emerald")
+    (1, 1, 0)
+
+    Van de twee helften bijt op dit palet steeds het contrast het eerst; het
+    lichtheidsverschil valt er nooit als enige door. Dat is geen aanname maar wat
+    deze functie uitrekent -- staat er ooit een kleur bij waarvoor het andersom
+    ligt, dan zakt het getal hier vanzelf.
+
+    Emerald op nul is geen bug maar de meting: de volle kleur haalt 1,98 op wit en
+    zit daarmee zelf al onder de vloer. Dat is dezelfde grens die in
+    `reference/infographic-vormentaal.md` §6 emerald verbiedt tekst te dragen onder
+    18pt. Een volle emerald staaf mag; een lichtere emerald staaf ernaast niet.
+    """
+    n = 0
+    vorige: str | None = None
+    for stap in merk.TINTTRAP:                       # vol, sterk, half, licht
+        hex_ = merk.tint(_kleur(hue), stap)
+        if merk.contrast(hex_, papier) < TRAP_VLOER:
+            break
+        if vorige is not None and abs(_oklab(vorige)[0] - _oklab(hex_)[0]) < TRAP_STAP_DL:
+            break
+        n, vorige = n + 1, hex_
+    return n
+
+
+#: Hoeveel stappen elke hue draagt op wit. Alleen de twee donkerste hues halen drie.
+TRAP = {hue: trap_draagt(hue) for hue in HEX if hue != "wit"}
+
+
+def trap_herkenbaar(hue: str, n: int) -> bool:
+    """Kan de lezer deze stappen uit elkaar HOUDEN, zonder label ernaast?
+
+    Een andere vraag dan `trap_draagt()`, en daarom een ander getal. Die vraagt of
+    een stap van het papier te onderscheiden is; deze vraagt of twee stappen van
+    elkáár te onderscheiden zijn, wat een legenda eist. Een SFNL-infographic labelt
+    direct (§9) en heeft dus geen legenda, dus dit weigert niets -- het zegt alleen
+    of je er ooit een bij zou kunnen zetten.
+
+    >>> trap_herkenbaar("navy", 3), trap_herkenbaar("navy", 4)
+    (True, False)
+    >>> trap_herkenbaar("royal", 2), trap_herkenbaar("royal", 3)
+    (True, False)
+    """
+    stappen = [merk.tint(_kleur(hue), s) for s in list(merk.TINTTRAP)[:n]]
+    return all(deltaE(a, b) >= TRAP_HERKENNING
+               for i, a in enumerate(stappen) for b in stappen[i + 1:])
+
+
+def tint(hue: str, stap: str) -> tuple[str, str]:
+    """Eén stap van de tinttrap als vulling: `vlak(..., vulling=tint("navy", "sterk"))`.
+
+    De hex komt uit `scripts/gedeeld/merk.py` en staat daar één keer; deze laag
+    kiest alleen welke stap.
+    """
+    if stap not in merk.TINTTRAP:
+        raise ValueError(f"onbekende trapstap {stap!r}; kies uit {list(merk.TINTTRAP)}")
+    return (hue, stap)
+
+
+def trap(hue: str, n: int, *, papier: str = "wit",
+         oplopend: bool = False) -> list[tuple[str, str]]:
+    """`n` vullingen van dezelfde hue, donker naar licht. Voor één grootheid die oploopt.
+
+    Een trap is geen palet. Het palet draagt drie categorieën en geen vier, en de
+    opdracht die in de praktijk langskomt is meestal geen vier categorieën maar
+    vier items van dezelfde soort: vier uitvoerders, zes gemeenten, vijf fasen. Die
+    dragen allemaal dezelfde grootheid, dus een tweede hue zou een tweede soort
+    suggereren die er niet is. Een trap zegt in plaats daarvan "hetzelfde soort,
+    meer of minder".
+
+    Daarmee koopt hij één ding en kost hij één ding, en die twee horen bij elkaar:
+    hij kan verschil aanwijzen, en hij suggereert **volgorde**. Vier uitvoerders op
+    alfabet in vier tinten zetten liegt. Zie `reference/infographic-vormentaal.md`
+    §6b voor wanneer een trap wel en niet mag.
+
+    >>> trap("navy", 3)
+    [('navy', 'vol'), ('navy', 'sterk'), ('navy', 'half')]
+    >>> trap("navy", 3, oplopend=True)
+    [('navy', 'half'), ('navy', 'sterk'), ('navy', 'vol')]
+
+    Meer stappen dan de meting draagt is een weigering en geen waarschuwing, want
+    de stap die eronder valt is precies de stap die de lezer niet meer ziet:
+
+    >>> trap("oranje", 3)
+    Traceback (most recent call last):
+    ValueError: oranje draagt 1 trapstap op wit, geen 3 -- zie trap_draagt()
+    """
+    if n < 2:
+        raise ValueError(f"een trap van {n} is geen trap; gebruik de hue zelf")
+    draagt = trap_draagt(hue, papier)
+    if n > draagt:
+        raise ValueError(f"{hue} draagt {draagt} trapstap{'' if draagt == 1 else 'pen'} "
+                         f"op {papier}, geen {n} -- zie trap_draagt()")
+    stappen = [tint(hue, s) for s in list(merk.TINTTRAP)[:n]]
+    return stappen[::-1] if oplopend else stappen
+
+
 def _vulling(v) -> tuple[str | None, float]:
-    """Normaliseer een vulling naar (hue, dekking). None = geen vulling."""
+    """Normaliseer een vulling naar (hue, dekking). None = geen vulling.
+
+    Een trapstap komt er als hex uit en niet als naam plus dekking, en dat is het
+    verschil met een container: een container is dezelfde kleur op minder dekking
+    en blijft dus doorzichtig, een trapstap is een eigen dekkende kleur. Daardoor
+    krijgt een trapstap ook geen automatische haarlijn -- hij is een merkteken, geen
+    kaart.
+    """
     if v is None:
         return None, 0.0
     if isinstance(v, str):
@@ -329,15 +526,28 @@ def _vulling(v) -> tuple[str | None, float]:
     hue, dek = v
     if dek == "container":
         dek = CONTAINER[hue]
+    elif dek in merk.TINTTRAP:
+        return merk.tint(_kleur(hue), dek), 1.0
     return hue, float(dek)
 
 
 def tekst_op(vulling, pt: float = 0) -> str:
-    """Welke tekstkleur hoort op deze vulling, gegeven de puntgrootte."""
+    """Welke tekstkleur hoort op deze vulling, gegeven de puntgrootte.
+
+    Een trapstap valt hier niet buiten: `OP_VOL` is een tabel op merknaam en een
+    tint heeft er geen, dus de inkt wordt dan gemeten in plaats van opgezocht. Dat
+    is precies waar `merk.inkt_op_tint()` voor is, en het is de reden dat je hem
+    niet moet gokken -- op een navytrap draagt `sterk` nog wit en `half` navy.
+
+    >>> tekst_op(tint("navy", "sterk")), tekst_op(tint("navy", "half"))
+    ('wit', 'navy')
+    >>> tekst_op(tint("royal", "vol")), tekst_op(tint("royal", "sterk"))
+    ('wit', 'navy')
+    """
     hue, dek = _vulling(vulling)
     if hue in (None, "wit") or dek <= 0.20:
         return "navy"                                    # wit of container: navy
-    if OP_VOL[hue] == "wit":
+    if (OP_VOL[hue] if hue in OP_VOL else merk.inkt_op(hue)) == "wit":
         return "wit"
     if pt >= _in_eenheid(DISPLAY_VLOER):
         return "wit"                                     # het cijfer leest als vorm
@@ -349,10 +559,20 @@ def mag_dragen(hue: str, pt: float) -> bool:
 
     De vloer is 18 pt en die geldt fysiek, dus op een px-canvas is hij 24 -- anders zou
     een lichte hue er tekst van 13,5 pt mogen dragen. Zie `EENHEID`.
+
+    Welke hues vrijgesteld zijn, is gemeten en niet opgesomd: het zijn er precies
+    vier omdat die vier de 4,5 van WCAG AA op wit halen. Als lijst gaf dat dezelfde
+    uitkomst, maar een lijst kent geen trapstap -- en `sterk` van navy haalt 6,11
+    en mag dus net zo goed een label van 13 pt dragen.
+
+    >>> mag_dragen("navy", 11), mag_dragen("oranje", 11), mag_dragen("oranje", 18)
+    (True, False, True)
+    >>> mag_dragen(merk.tint("navy", "sterk"), 11)
+    True
     """
-    if hue in ("navy", "royal", "zwartblauw", "wit"):
+    if hue == "wit":
         return True
-    return pt >= _in_eenheid(KOP_VLOER)
+    return merk.contrast(_kleur(hue), "wit") >= 4.5 or pt >= _in_eenheid(KOP_VLOER)
 
 
 # ---------------------------------------------------------------- fontmetriek
@@ -683,14 +903,6 @@ class Vorm:
     x_links: float | None = None
     x_rechts: float | None = None
     y_boven: float | None = None
-
-
-def _kleur(hue: str) -> str:
-    if hue.startswith("#"):
-        return hue
-    if hue not in HEX:
-        raise ValueError(f"onbekende kleur {hue!r}; kies uit {sorted(HEX)}")
-    return HEX[hue]
 
 
 def vlak(naam: str, x: float, y: float, w: float, h: float, *,
