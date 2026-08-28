@@ -1668,6 +1668,15 @@ class Deck:
 # ---------------------------------------------------------------- wegschrijven
 
 def write(slide_pad: str | Path, vormen: list[str]) -> None:
+    """Schrijf de vormen vóór `</p:spTree>`, en klaag als er chrome onder verdwijnt.
+
+    De waarschuwing zit hier en niet in `vlak()`, want hier is bekend op welke slide en dus
+    op welke layout de vormen landen — en daarmee wélke chrome er onder ligt. Bovendien
+    komen groepen, contouren, beelden en met de hand geschreven XML allemaal langs deze ene
+    plek. Het is een waarschuwing en geen weigering: een vol vlak over de hele slide is bij
+    de uitspraakslide de bedoeling (`merktekens.md` §11). Wat een defect is, blokkeert
+    `qa_chrome.py` bij de oplevering.
+    """
     pad = Path(slide_pad)
     xml = pad.read_text(encoding="utf-8")
     if "</p:spTree>" not in xml:
@@ -1675,3 +1684,22 @@ def write(slide_pad: str | Path, vormen: list[str]) -> None:
     pad.write_text(xml.replace("</p:spTree>", "".join(vormen) + "</p:spTree>"),
                    encoding="utf-8")
     print(f"{pad.name}: {len(vormen)} vormen")
+    _waarschuw_chrome(pad, vormen)
+
+
+def _waarschuw_chrome(pad: Path, vormen: list[str]) -> None:
+    """De chrome-meting uit `chrome.py`, op stderr, op het moment van schrijven."""
+    try:
+        import chrome as _chrome
+
+        delen = pad.resolve().parts
+        if "ppt" not in delen:
+            return
+        wortel = Path(*delen[:delen.index("ppt")])
+        part = "/".join(delen[delen.index("ppt"):])
+        bevindingen = _chrome.dekt_chrome(wortel, part, vormen)
+    except Exception:
+        return
+    for bevinding in bevindingen:
+        merk = "LET OP" if bevinding["severity"] == "critical" else "let op"
+        print(f"{merk} {pad.name}: {bevinding['message']}", file=sys.stderr)

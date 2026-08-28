@@ -241,6 +241,11 @@ Waar je per slide naar kijkt:
 - **Chrome-integriteit.** Dash, logo, paginanummer. Ontbreekt het of staat het net anders dan
   op de andere slides, dan is de header nagetekend. Kritiek. Uitzondering: het blanco canvas
   draagt bewust geen titel en geen dash — daar is een nagetekende header juist de bevinding.
+  Ontbreekt het logo linksonder of het nummer rechtsonder terwijl de andere slides ze wél
+  dragen, dan is de oorzaak bijna altijd dat een vorm eroverheen ligt: de chrome staat in de
+  master en wordt eronder getekend. Meld het als bevinding met de vorm erbij die je verdenkt en
+  noem `qa_chrome.py`, dat de dekking narekent en de vorm bij naam noemt. Op een volledig
+  gevulde uitspraakslide horen ze bewust weg te zijn.
 - **Calibri.** Leest de tekst in een eigen vorm ineens als een andere letter dan de rest, dan
   mist die run een `<a:latin/>`. Placeholders erven hun font en gaan niet mis; eigen vormen
   vallen terug op Calibri.

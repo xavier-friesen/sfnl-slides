@@ -78,6 +78,33 @@ logo 0.36, 7.07 · 1.10 × 0.29     paginanummer 12.60, 7.12 · 0.62 × 0.24
 De linkermarge 0,36 lijnt uit met het logo en 0,48 met de contentlayouts. Staat de slide
 tussen contentslides, kies dan 0,48.
 
+## De chromeband
+
+**Onder 7,07 tekent de bouwer niets opaaks.** Het logo linksonder en het paginanummer
+rechtsonder zijn geen vormen op de slide en geen vormen op de layout: ze staan in
+`slideMaster2`, en masterchrome wordt ONDER alles getekend wat de layout en de bouwer erop
+zetten. Een opake vorm die tot onder 7,07 loopt wist het logo dus, zonder dat er iets aan de
+vorm te zien is en zonder dat de XML fout is. Nagemeten: een kaart van `y = 2,00` met
+`h = 5,40` loopt tot 7,40, en het logo is van de render verdwenen.
+
+De zonevloer ligt op 6,93 en de canvasvloer van layout 17 op 6,97; daaronder begint de band
+die van het sjabloon is:
+
+```
+logo 0.36-1.46 × 7.07-7.36        paginanummer 12.60-13.22 × 7.12-7.36
+```
+
+Op de fotodividers (6 t/m 16) en de sectieslides (25 t/m 30) staat daar het merkteken zonder
+woordmerk, respectievelijk op `0.15, 6.02 · 1.53 × 1.53` en `0.36, 6.47 · 1.23 × 0.65`; op de
+oranje outro (2 en 3) staat het volle witte logo rechtsonder op `10.58, 6.66 · 2.47 × 0.69`.
+De cover (1) draagt zijn logo in de witte kaart over het midden en heeft linksonder niets.
+
+`qa_chrome.py` telt het, en `shapes.write()` waarschuwt er al op het moment van schrijven.
+Eén uitzondering, en die is bewust: een vol vlak over de héle slide haalt logo én
+paginanummer weg, en bij de uitspraakslide is dat de bedoeling (`merktekens.md` §11). Dat is
+daarom een `warn` met die uitleg erbij; een vorm die de chrome maar gedeeltelijk afsnijdt is
+een `critical`, want dat is nooit bedoeld.
+
 ## Kolomrasters
 
 Voor eigen vormen in de contentzone:

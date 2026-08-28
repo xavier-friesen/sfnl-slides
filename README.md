@@ -528,6 +528,8 @@ keer in- en uitpakt, waar de huisstijlfonts staan.
 | `add_chart.py`, `add_table.py` | native grafiek en tabel, ná het inpakken |
 | `render.py`, `thumbnail.py` | slides naar PNG en een contactblad |
 | `qa_text.py` | hygiëne: restplaceholders, Calibri, harde hex, rechte apostrof |
+| `qa_chrome.py` | chrome-integriteit: dekt een eigen vorm het logo of het paginanummer af |
+| `chrome.py` | de meetlaag eronder, ook gebruikt door `shapes.write()` |
 | `keuzekaart.py` | onderhoud: bouwt de keuzekaart voor het vragenvuur uit de renders in `assets/` |
 | `qa_tellingen.py` | tellingen: maten per rol, bandfrequentie, exhibits bij cijfers, maatsprong, letterfamilies, hoge punt — plus woorden, registers en plattegrond als cijfer zonder oordeel |
 | `fit_title.py` | past een titel op één regel, gemeten met het echte font |
@@ -541,11 +543,12 @@ patroonbibliotheek, spec-contract en meting-op-maat.
 
 ## Wat blokkeert
 
-Zes dingen. Drie van de soort "het bestand is stuk" — het content-type staat niet op
+Zeven dingen. Drie van de soort "het bestand is stuk" — het content-type staat niet op
 `presentation.main`, `pack.py` meldt een schemafout, de grafieken zijn verdwenen na de laatste
-`pack` — en drie `critical`s uit een script: `qa_text.py`, `fit_title.py` en `qa_tellingen.py`.
-Wat daarin over vorm gaat is te tellen zonder interpretatie: de titelletter, één maat per rol,
-één letterfamilie per alinea, de hoge punt, en een titel die over zijn subtitel heen groeit.
+`pack` — en vier `critical`s uit een script: `qa_text.py`, `fit_title.py`, `qa_tellingen.py` en
+`qa_chrome.py`. Wat daarin over vorm gaat is te tellen zonder interpretatie: de titelletter, één
+maat per rol, één letterfamilie per alinea, de hoge punt, een titel die over zijn subtitel heen
+groeit, en een vorm die de geërfde chrome afdekt.
 `SKILL.md` somt ze op onder "Wat blokkeert".
 
 De vorm wordt beoordeeld op de render. Is er geen renderer, dan bouwt de skill conservatiever

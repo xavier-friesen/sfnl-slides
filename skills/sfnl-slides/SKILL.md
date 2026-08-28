@@ -352,7 +352,9 @@ vol vlak over de hele slide, verder niets: geen titel, geen kaart, geen toelicht
 enige plek waar een groot vol vlak los van de gevuldheidsregel staat, want er staat niets naast
 dat de aandacht moet delen (`vormentaal.md` §5). Bouw hem op layout 17 met één `drager()` — niet
 op layout 5, dat is het citaat over een foto met de oranje band eronder. Eén per deck, en alleen
-voor de vraag waar het werkelijk om gaat.
+voor de vraag waar het werkelijk om gaat. Dat volle vlak haalt logo én paginanummer weg, want
+die staan in de master en worden eronder getekend; op déze slide is dat de bedoeling
+(`merktekens.md` §11) en `qa_chrome.py` meldt hem daarom als `warn` en niet als `critical`.
 
 **Cover en slot.** Slide 1 is layout 1, het 2×2 kleurraster met de foto en de witte logokaart.
 Past de dektitel niet op de layoutmaat (`7.63, 5.79 · 5.33 × 0.56`, één regel), dan groei je dat
@@ -434,6 +436,14 @@ zijn hier een keer drie titels verdwenen.
 
 Dit is het werk. De zone is `x 0.48, y 1.93, b 12.52, h 5.00`, dus rechts 13,00 en onder 6,93.
 Daarbinnen ben je vrij.
+
+**Onder 7,07 tekent je niets opaaks.** Daar staat de geërfde chrome: het logo linksonder op
+`0.36, 7.07 · 1.10 × 0.29` en het paginanummer rechtsonder op `12.60, 7.12 · 0.62 × 0.24`.
+Beide komen uit `slideMaster2` en worden ÓNDER je vormen getekend, dus een opake kaart die tot
+7,40 loopt wist het logo — en er is niets aan die kaart te zien. Zo is het een keer misgegaan
+en geen enkele poort merkte het. `shapes.write()` waarschuwt nu op het moment van schrijven en
+`qa_chrome.py` blokkeert het bij de oplevering; de band staat in `sjabloon.md` onder De
+chromeband.
 
 **Eerst schetsen, dan bouwen.** Per contentslide noem je twee wezenlijk verschillende
 composities voor dezelfde boodschap en kies je met een reden die over de boodschap gaat
@@ -583,6 +593,7 @@ python $S/place_shapes.py unpacked/ppt/slides/slide7.xml --json '{"Kaart 2*": {"
 
 ```bash
 python $S/fit_title.py unpacked --mode a          # of --mode b, naar besluit 4
+python $S/qa_chrome.py unpacked                   # dekt een vorm het logo af?
 python $S/clean.py unpacked
 python $S/office/pack.py unpacked deck.pptx --original <plugin>/assets/sfnl-sjabloon.potx
 ```
@@ -594,6 +605,12 @@ onderkast, in modus B een titel over twee regels, en in modus A een gevulde subt
 laatste is een `critical` zodra de titel twee regels beslaat — de gegroeide titelbox loopt er
 dan over — en verder een `warn`, want in modus A schrijf je geen subtitel tenzij er een feit
 staat dat nergens anders past. Een lége subtitel is nooit een melding.
+
+`qa_chrome.py` kijkt per slide of een eigen vorm het logo of het paginanummer afdekt. Dat is de
+enige poort die naar de geërfde chrome kijkt, en hij draait hier omdat een `critical` een
+vormverandering is en dus vóór het inpakken hoort. Hij loopt ook over een ingepakte deck
+(`qa_chrome.py deck.pptx`), zodat je hem na `add_chart.py` en `add_table.py` nog eens kunt
+draaien: een tabel met `--box` die te laag staat doet precies hetzelfde.
 
 `clean.py` haalt lege placeholders eruit en normaliseert de XML. `pack.py` valideert tegen de
 OOXML-schema's; komt daar iets uit, dan repareer je dat vóór je verder gaat.
@@ -768,7 +785,7 @@ dat je niet hebt kunnen verifiëren noem je expliciet.
 
 ## Wat blokkeert
 
-Zes dingen. De eerste drie zijn van de soort "het bestand is stuk", en 4 tot 6 zijn een
+Zeven dingen. De eerste drie zijn van de soort "het bestand is stuk", en 4 tot 7 zijn een
 `critical` uit een script. Wat daarin over vorm gaat, staat er alleen omdat het te tellen is
 zonder interpretatie: Gotham Bold hoort niet in de contentzone, dezelfde rol staat niet op twee
 maten, een alinea draagt één letterfamilie, de hoge punt scheidt niets, en een titel die over de
@@ -787,6 +804,9 @@ komt van de render.
 6. `qa_tellingen.py` meldt een `critical`: dezelfde rol op twee maten, Montserrat en Lato in
    dezelfde alinea, of een hoge punt als scheiding binnen een regel. Alle drie zijn afwijkingen
    van een besluit uit de outline, niet oordelen over je compositie.
+7. `qa_chrome.py` meldt een `critical`: een eigen vorm dekt het logo linksonder of het
+   paginanummer rechtsonder af. Dat is geen vormoordeel maar een vormfout — de chrome staat in
+   de master en verdwijnt eronder. De fix is de vorm boven 7,07 houden.
 
 ## Zonder renderer
 
