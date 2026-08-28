@@ -4,10 +4,13 @@ Usage:
     python preflight.py
     python preflight.py --json
 
-Run this FIRST, once per session. It answers two questions in one go:
+Run this FIRST, once per session. It answers three questions in one go:
 
   1. Are the Python packages the scripts need importable?
   2. Is there a renderer, so the visual loop can actually run?
+  3. Staat de merklaag gelijk met zichzelf — `assets/gedeeld/merk.css` zoals
+     `scripts/gedeeld/merk.py` hem zou schrijven, en geen merkkleur die ergens
+     anders nog als hexwaarde staat?
 
 Output:
 
@@ -16,6 +19,8 @@ Output:
       "deps":      {"pptx": true, "lxml": true, "defusedxml": true, ...},
       "renderers": {"powerpoint_com": true, "soffice": null, "soffice_probe": {...},
                     "pdf_to_png": null},
+      "merk":      {"klopt": true, "uit_de_pas": [], "hardgecodeerd": [], ...},
+      "potx_thema": {"klopt": true, "verouderd": []},
       "verdict":   "full" | "qa-only",
       "missing":   [...],
       "remediation": [...]
@@ -40,6 +45,23 @@ poort vertrouwen die niet bestond. De repo zet zelf "Poorten: twee, en beide zij
 mens" — het vragenvuur en de outline, geen mechanische poort — dus ze
 zijn opgeruimd in plaats van geschreven.
 
+`merk.klopt: false` is een fout en niet een waarschuwing, en hij staat daarom in
+`missing`. Twee dingen kunnen hem zetten. `uit_de_pas` betekent dat `merk.css` of het
+gestempelde blok in `stijl.css` niet is wat `merk.py` zou schrijven; dan draait er
+gerenderd werk op een ander palet dan de merklaag zegt, en `python
+scripts/gedeeld/merk.py --css` zet het recht. `hardgecodeerd` betekent dat een script of
+een stylesheet een merkkleur als hexwaarde bij zich draagt in plaats van hem uit de
+merklaag te halen; dat is de duplicaat waarmee de vijf verkeerde waarden van vóór 27
+augustus 2026 hebben kunnen blijven staan, en de remedie is de waarde daar weghalen en
+niet hier de melding.
+
+Twee dingen zijn met opzet geen fout. `#FFFFFF` wordt niet geteld: wit is de enige
+merkwaarde die geen besluit is, en hij staat in renderinfrastructuur die geen kleur
+kiest. En `verouderd` — een hexwaarde die vóór de paletmigratie een merkkleur wás — staat
+apart in de remediatie en blokkeert niet: het zijn geen merkwaarden meer, dus de melding
+is een vondst en geen eis. Ze zitten in de renderoverlay en in de contactbladen, waar geen
+kleur van een oplevering uit komt.
+
 Exit code is ALWAYS 0, including when everything is missing: the JSON is the answer, and
 "no renderer" is a valid answer that the caller has to read and act on, not a crash. Do
 not gate a pipeline on this exit code — read `verdict`.
@@ -61,6 +83,8 @@ a real interpreter (python3, python, py -3) and use its full path everywhere; th
 from __future__ import annotations
 
 import argparse
+import json
+import subprocess
 import importlib
 import shutil
 import sys
@@ -287,11 +311,237 @@ def probe_soffice() -> dict:
         }
 
 
+# ---------------------------------------------------------------------------
+# De merklaag: staat ze gelijk met zichzelf?
+#
+# Dit is de mechanische helft van de toets die `reference/merk.md` bovenaan stelt:
+# een kleurwaarde staat één keer. De andere helft — staat er een puntgrootte in
+# merk.md — is een leesvraag en die staat hier niet.
+#
+# De check bestaat omdat het één keer echt is misgegaan. Vijf van de zes accenten
+# in deze repo waren andere kleuren dan het themapalet van het Word-sjabloon, en
+# ze stonden in zeven bestanden. Wie dat rechtzet vergeet er één, en dan is er
+# geen manier om dat te merken: een oranje dat 3 procent afwijkt ziet er op een
+# render precies zo uit als een oranje dat klopt. Vandaar: hergenereren en
+# vergelijken, en daarnaast grepen naar de waarden zelf.
+# ---------------------------------------------------------------------------
+
+#: Waar een merkkleur niet als hexwaarde mag staan: elk script en elke
+#: stylesheet. Wat er bewust NIET in staat is gebouwde uitvoer — de `.dc.html`-
+#: artboards en de maatstaf-SVG's dragen hun kleuren omdat ze gerenderd zijn, en
+#: die renders horen niet bij elke paletwijziging opnieuw gezet te worden.
+#: De artboards staan erbij, en dat is een reparatie. Ze vielen buiten de poort
+#: omdat ze "gebouwde uitvoer" leken, en dat was maar half waar: een `.dc.html`
+#: draagt een gestempelde stylesheet met het `:root`-blok erin, en die veroudert
+#: net zo goed als een `.css`. Gemeten na de paletmigratie van 27 augustus 2026:
+#: `assets/documenten/voorbeeld-navy/Main.dc.html` droeg nog de vijf oude
+#: waarden, en de maatstaf-PNG die eruit komt toont dus het oude navy — een
+#: voorbeeld dat de verkeerde kleur leert, en de poort keek er niet naar.
+MERK_GEZOCHT = (("scripts", "*.py"), ("assets", "*.css"), ("assets", "*.dc.html"))
+
+#: Wat de grep niet aanrekent. `merk.py` en `merk.css` zijn de bron zelf, en wit
+#: is de enige merkwaarde die geen besluit is: hij staat in de renderlaag als
+#: achtergrond van een contactblad, en daar kiest niemand een kleur.
+MERK_EIGEN = ("merk.py", "merk.css")
+MERK_UITGEZONDERD = ("#FFFFFF",)
+
+
+#: Het themapalet van het `.potx` is de derde plek waar merkkleuren staan, en de
+#: poort keek er niet naar. Gemeten na de paletmigratie van 27 augustus 2026:
+#: `theme1.xml` en `theme2.xml` droegen alle vijf de oude waarden, dus elk deck
+#: uit deze plugin rendeerde in het oude oranje — terwijl `preflight.py`
+#: `"klopt": true` meldde, want hij grepte scripts, stylesheets en artboards en
+#: niet het thema in een zipbestand. Dat is precies de soort blinde vlek die de
+#: merklaag moest opheffen.
+#:
+#: De slotindeling van het `.potx` is een ANDERE dan die van het Word-sjabloon:
+#: hier is navy `accent6` en `dk2`, royal `accent3`, emerald `accent5` en sky
+#: `accent4`. Daarom kijkt deze check naar de wáárden en niet naar de slots.
+POTX_THEMAS = ("ppt/theme/theme1.xml", "ppt/theme/theme2.xml")
+
+
+def check_potx_thema() -> dict:
+    """Draagt het themapalet van het sjabloon de huidige merkwaarden?
+
+    Alleen de vijf accenten die de migratie raakte; `theme3`/`theme4` zijn de
+    Office-standaardthema's en geen merk.
+    """
+    import re
+    import zipfile
+    wortel = Path(__file__).resolve().parent.parent
+    potx = wortel / "assets" / "sfnl-sjabloon.potx"
+    uit: dict = {"bestand": potx.exists(), "verouderd": [], "klopt": None}
+    if not potx.exists():
+        uit["detail"] = "geen sjabloon om te controleren"
+        return uit
+    sys.path.insert(0, str(wortel / "scripts" / "gedeeld"))
+    try:
+        import merk
+    except Exception as fout:  # noqa: BLE001
+        uit["detail"] = f"merk.py niet te importeren ({fout})"
+        return uit
+    oud = {h.lstrip("#").upper(): n for h, n in merk.VERVANGEN.items()}
+    try:
+        with zipfile.ZipFile(potx) as z:
+            aanwezig = set(z.namelist())
+            for naam in POTX_THEMAS:
+                if naam not in aanwezig:
+                    continue
+                s = z.read(naam).decode("utf-8", "replace")
+                m = re.search(r"<a:clrScheme.*?</a:clrScheme>", s, re.S)
+                if not m:
+                    continue
+                for c in re.finditer(r'val="([0-9A-Fa-f]{6})"', m.group(0)):
+                    h = c.group(1).upper()
+                    if h in oud:
+                        uit["verouderd"].append(
+                            {"waar": naam, "hex": "#" + h, "kleur": oud[h]})
+    except (OSError, zipfile.BadZipFile) as e:
+        uit["detail"] = f"sjabloon niet te lezen: {e}"
+        return uit
+    uit["klopt"] = not uit["verouderd"]
+    return uit
+
+
+def check_merk() -> dict:
+    """`{"gemeten", "klopt", "uit_de_pas", "hardgecodeerd", "verouderd"}`.
+
+    `gemeten: False` betekent dat er niet gekeken is — `merk.py` niet
+    importeerbaar — en dat is niet hetzelfde als `klopt: True`. Zonder dat
+    onderscheid zou een verplaatste merklaag lezen als een merklaag die klopt.
+    """
+    import re
+
+    wortel = Path(__file__).resolve().parent.parent
+    sys.path.insert(0, str(wortel / "scripts" / "gedeeld"))
+    try:
+        import merk
+    except Exception as fout:  # noqa: BLE001 - elk falen is hier "niet gemeten"
+        return {"gemeten": False, "klopt": None, "uit_de_pas": [],
+                "hardgecodeerd": [], "verouderd": [],
+                "hint": f"scripts/gedeeld/merk.py was niet te importeren ({fout}). "
+                        "Over de merklaag is hiermee niets gezegd."}
+
+    hoort_bij = {h.upper(): n for n, h in merk.HEX.items()
+                 if h.upper() not in MERK_UITGEZONDERD}
+    oud = {h.upper(): n for h, n in merk.VERVANGEN.items()}
+    patroon = re.compile("|".join(re.escape(h) for h in (*hoort_bij, *oud)),
+                         re.IGNORECASE)
+
+    hard: list[dict] = []
+    verouderd: list[dict] = []
+    for map_, glob_ in MERK_GEZOCHT:
+        for pad in sorted((wortel / map_).rglob(glob_)):
+            if pad.name in MERK_EIGEN:
+                continue
+            try:
+                regels = pad.read_text(encoding="utf-8").splitlines()
+            except (OSError, UnicodeDecodeError):
+                continue
+            # Het gestempelde blok is de merklaag zelf, woordelijk. Dat het daar
+            # staat is het punt; of het klopt gaat via `merk.verschillen()`, dat
+            # het hergenereert in plaats van ernaar te kijken.
+            binnen = False
+            for nr, regel in enumerate(regels, 1):
+                if merk.BEGIN in regel:
+                    binnen = True
+                elif merk.EINDE in regel:
+                    binnen = False
+                    continue
+                if binnen:
+                    continue
+                for m in patroon.finditer(regel):
+                    h = m.group(0).upper()
+                    vondst = {"waar": f"{pad.relative_to(wortel).as_posix()}:{nr}",
+                              "hex": m.group(0),
+                              "kleur": hoort_bij.get(h) or oud[h]}
+                    (hard if h in hoort_bij else verouderd).append(vondst)
+
+    uit_de_pas = merk.verschillen()
+    return {"gemeten": True,
+            "klopt": not uit_de_pas and not hard,
+            "uit_de_pas": uit_de_pas,
+            "hardgecodeerd": hard,
+            "verouderd": verouderd}
+
+
 def check_raster() -> str | None:
     for name in RASTER_TOOLS:
         if shutil.which(name):
             return name
     return None
+
+
+#: Wat een OS-pakketbeheerder moet leveren en pip niet kan. Dit is de lijst die
+#: in een container of op een verse Debian ontbreekt, en waarvan het ontbreken
+#: zich voordoet als iets anders:
+#:
+#: * `libreoffice-writer` — zonder deze laadt soffice geen enkele .docx, ook het
+#:   sjabloon niet, en meldt `source file could not be loaded` met exitcode 0.
+#: * `libreoffice-impress` — zelfde verhaal voor een .pptx. Dit is de fout die
+#:   `probe_soffice()` hierboven opving, en de reden dat die proef bestaat.
+#: * `poppler-utils` — levert `pdftoppm`. Zonder hem is er een PDF en geen PNG,
+#:   dus dan kijk je naar de PDF en dat kan ook; niet blokkerend.
+#:
+#: Op een laptop met LibreOffice uit de .dmg of .msi is dit alles al aanwezig:
+#: die installers leveren de hele suite. Het gesplitste geval bestaat op Debian
+#: en Ubuntu, en in containers met een uitgeklede LibreOffice — en dat laatste
+#: is precies waar deze plugin vaak draait.
+OS_PAKKETTEN = ("libreoffice-writer", "libreoffice-impress", "poppler-utils")
+
+
+def _pip(*pakketten: str) -> bool:
+    r = subprocess.run([sys.executable, "-m", "pip", "install", "-q",
+                        "--break-system-packages", *pakketten],
+                       capture_output=True, text=True)
+    return r.returncode == 0
+
+
+def herstel() -> dict:
+    """Zet erbij wat te installeren is, en zeg wat een mens moet doen.
+
+    Twee soorten ontbrekende dingen, en ze vragen iets anders. pip-pakketten
+    kan dit script zelf halen. OS-pakketten alleen wanneer er een apt is en
+    het script mag installeren; anders is de enige juiste uitkomst een
+    opdrachtregel die de gebruiker zelf uitvoert. Nooit stil doorgaan alsof
+    het gelukt is.
+    """
+    uit: dict = {"pip": {}, "os": {}, "handmatig": []}
+
+    mist_pip = [naam for naam, ok in check_imports(REQUIRED).items() if not ok]
+    mist_pip += [naam for naam, ok in check_imports(OPTIONAL).items() if not ok]
+    if mist_pip:
+        uit["pip"] = {"geprobeerd": mist_pip, "gelukt": _pip(*mist_pip)}
+
+    apt = shutil.which("apt-get")
+    nodig = []
+    if not check_soffice():
+        nodig += ["libreoffice-writer", "libreoffice-impress"]
+    else:
+        probe = probe_soffice()
+        if probe.get("ok") is False:
+            nodig += ["libreoffice-impress", "libreoffice-writer"]
+    if not check_raster():
+        nodig.append("poppler-utils")
+    nodig = sorted(set(nodig))
+
+    if not nodig:
+        uit["os"] = {"nodig": [], "detail": "niets te doen"}
+    elif apt:
+        r = subprocess.run([apt, "install", "-y", "-qq", *nodig],
+                           capture_output=True, text=True)
+        uit["os"] = {"nodig": nodig, "gelukt": r.returncode == 0,
+                     "detail": (r.stderr or "").strip()[:300]}
+        if r.returncode != 0:
+            uit["handmatig"].append("sudo apt-get install -y " + " ".join(nodig))
+    else:
+        uit["os"] = {"nodig": nodig, "gelukt": False,
+                     "detail": "geen apt-get op deze machine"}
+        uit["handmatig"].append(
+            "installeer LibreOffice compleet (de .dmg of .msi levert de hele "
+            "suite) en poppler-utils, of hun equivalent voor deze pakketbeheerder: "
+            + ", ".join(nodig))
+    return uit
 
 
 def main() -> None:
@@ -301,7 +551,15 @@ def main() -> None:
         action="store_true",
         help="accepted for symmetry with the other scripts; output is always JSON",
     )
-    parser.parse_args()
+    parser.add_argument(
+        "--herstel", action="store_true",
+        help="zet erbij wat te installeren is, en zeg wat een mens zelf moet doen",
+    )
+    args = parser.parse_args()
+
+    if args.herstel:
+        print(json.dumps({"herstel": herstel()}, indent=2, ensure_ascii=False))
+        print(file=sys.stderr)
 
     emit, font_report = deck_helpers()
 
@@ -311,6 +569,8 @@ def main() -> None:
     com = check_powerpoint_com()
     soffice = check_soffice()
     raster = check_raster()
+    merk = check_merk()
+    potx_thema = check_potx_thema()
 
     # Het binary vinden is niet hetzelfde als kunnen renderen: zie `probe_soffice`. Bij
     # `ran: False` is er niet geprobeerd, en dan blijft de aanwezigheid van het binary
@@ -380,6 +640,41 @@ def main() -> None:
             "bekend dát hij bestaat: " + probe["detail"]
         )
 
+    # De merklaag. Dit blokkeert wél, en het staat daarom in `missing`: een
+    # gerenderd blad op een ander palet dan de merklaag zegt, is een blad in een
+    # huisstijl die niet bestaat, en dat is aan de render niet te zien.
+    if merk["gemeten"] and not merk["klopt"]:
+        missing.append("merklaag")
+        for regel in merk["uit_de_pas"]:
+            remediation.append(regel)
+        if merk["hardgecodeerd"]:
+            plekken = ", ".join(f"{v['waar']} ({v['kleur']})"
+                                for v in merk["hardgecodeerd"][:6])
+            meer = len(merk["hardgecodeerd"]) - 6
+            remediation.append(
+                f"{len(merk['hardgecodeerd'])}x een merkkleur als hexwaarde buiten de "
+                f"merklaag: {plekken}" + (f" en nog {meer}" if meer > 0 else "")
+                + ". Haal de waarde daar weg: een script leest hem uit "
+                  "`scripts/gedeeld/merk.py`, een stylesheet uit "
+                  "`assets/gedeeld/merk.css`. Zo lang hij op twee plekken staat, "
+                  "kan hij op één plek verouderen — dat is precies hoe vijf van de "
+                  "zes accenten tot 27 augustus 2026 naast het Word-sjabloon konden "
+                  "staan"
+            )
+    elif not merk["gemeten"]:
+        remediation.append(merk["hint"])
+    if merk["verouderd"]:
+        # Geen `missing`-item: dit zijn geen merkwaarden meer. Wel te weten, want
+        # het zijn de resten van de paletmigratie en ze zien eruit als een kleur
+        # die klopt.
+        remediation.append(
+            "hexwaarden van vóór de paletmigratie van 27 augustus 2026, nog aanwezig in "
+            + ", ".join(f"{v['waar']} ({v['hex']}, was {v['kleur']})"
+                        for v in merk["verouderd"])
+            + ". Ze blokkeren niets: er komt geen kleur van een oplevering uit deze "
+              "plekken. Wie ze opruimt, laat ze de waarde uit merk.py lezen"
+        )
+
     fonts = font_report(MEASURED_FAMILIES)
     if fonts["missing"]:
         # Geen `missing`-item: dit blokkeert niets. Maar het bepaalt wél hoe je een
@@ -421,6 +716,10 @@ def main() -> None:
                 else ("libreoffice" if libreoffice_usable else None),
                 "fonts_substituted": (not com) and libreoffice_usable,
             },
+            # Staat de merklaag gelijk met zichzelf: merk.css zoals merk.py hem zou
+            # schrijven, en geen merkkleur die ergens anders als hexwaarde staat.
+            "merk": merk,
+            "potx_thema": potx_thema,
             # Welke merkfonts te MÉTEN zijn op deze machine (niet: wat de renderer ziet).
             # Zonder deze regel las een lege `fonts_measured` in de QA als "de fonts staan
             # er niet", terwijl het ook een ontbrekende Pillow kan zijn — of, op een

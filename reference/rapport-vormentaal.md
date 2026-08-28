@@ -143,7 +143,7 @@ heeft opgemaakt. De eerste vijf zijn de ernstige.
    gemarkeerd.
 10. **Meer dan zeven lettergroottes.** Wie een achtste nodig heeft, heeft
     een compositieprobleem. De ladder staat in `rapport-stramien.md`.
-11. **Oranje als inkt.** Oranje op wit haalt contrast 2,58 en dat draagt
+11. **Oranje als inkt.** Oranje op wit haalt contrast 2,51 en dat draagt
     geen regel tekst. Het draagt een streep, een vierkantje, een cijfer
     van twee tekens. Zie §4.
 12. **Een watermerkcijfer dat door zijn kader wordt afgesneden.**
@@ -208,10 +208,19 @@ heeft opgemaakt. De eerste vijf zijn de ernstige.
 Dit is het enige punt waarop de skill van het SFNL-drukwerk afwijkt, dus
 het staat hier met de meting erbij.
 
-Oranje `#F87F4F` op wit haalt een contrastverhouding van **2,58**. De
-drempel voor lopende tekst is 4,5 en voor grote tekst 3,0. Oranje haalt
-geen van beide. Navy op oranje haalt 6,4 — daarom staat er in het
-drukwerk navy *op* een oranje vlak, en niet oranje *op* wit.
+Oranje op wit haalt een contrastverhouding van **2,51**. De drempel voor
+lopende tekst is 4,5 en voor grote tekst 3,0. Oranje haalt geen van beide.
+Navy op oranje haalt **6,29** — daarom staat er in het drukwerk navy *op*
+een oranje vlak, en niet oranje *op* wit.
+
+Beide getallen zijn na te rekenen met `python scripts/gedeeld/merk.py
+--contrast oranje wit`, en dat is niet vanzelfsprekend: hier stond navy op
+oranje op 6,4 en die waarde was op geen enkel palet te reproduceren. Op het
+oranje van vóór 27 augustus 2026 was het 5,93, op het oranje van het
+Word-sjabloon is het 6,29. De hexwaarden zelf staan in `reference/merk.md`
+§1, met de verschuiving per rol en met wat de paletmigratie met elk van deze
+metingen deed. Geen enkele regel hieronder is erdoor veranderd: 2,51 en 2,58
+liggen beide onder 3,0, en 6,29 en 5,93 liggen beide boven 4,5.
 
 Wat daaruit volgt:
 
@@ -227,10 +236,11 @@ Wat daaruit volgt:
   contrastwaarde erbij. Ze blokkeren niet en ze verdwijnen niet uit het
   verslag. Zo blijft het een keuze in plaats van een ongeluk.
 - **Het oranje wordt niet donkerder gemaakt tot het haalt.** Een oranje
-  dat 4,5 haalt op wit zit rond `#A6421C` en dat is een andere kleur.
+  dat 4,5 haalt op wit zit rond `#A6421C` en dat is een andere kleur — het
+  staat niet in `merk.md` en is dus geen merkkleur.
 
-Voor het `zacht`-register geldt hetzelfde met emerald, dat op wit nog
-lager uitkomt.
+Voor het `zacht`-register geldt hetzelfde met emerald, dat op wit nog lager
+uitkomt: 1,98.
 
 ---
 
@@ -556,10 +566,10 @@ Deze skill zet een aangeleverd rapport op. Wat hij niet doet:
   worden, is `sfnl-infographic`, en die levert SVG die hier in een
   exhibit past.
 - **Geen Affinity.** Moet het rapport in Affinity worden opgemaakt, dan
-  is dat `sfnl-rapport`.
+  is dat `sfnl-affinity`.
 - **Geen kort drukwerk.** Een uitnodiging, een one-pager, een executive
   summary van vier pagina's: dat componeer je per pagina en dat is
-  `sfnl-design-documents`.
+  `sfnl-documenten`.
 - **Geen Word terug.** De oplevering is HTML en PDF. Een rapport dat de
   klant zelf verder typt, is een ander product.
 - **Geen afloop en geen snijtekens.** Het aantal pagina's rekent

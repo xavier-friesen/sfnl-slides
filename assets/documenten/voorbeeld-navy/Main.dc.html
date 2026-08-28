@@ -93,71 +93,59 @@
        1. Merkwaarden
        --------------------------------------------------------------- */
 
-    :root {
-      /* Kern. Deze vijf staan vast en worden nooit per document gekozen. */
-      --navy:        #201B5C;
-      --oranje:      #F87F4F;
-      --wit:         #FFFFFF;
-      --papier:      #FFFFFF;
-      --inkt:        #201B5C;   /* lopende tekst; nooit puur zwart */
+    /* merk:begin — gegenereerd door scripts/gedeeld/merk.py --css */
+:root {
+  /* Uit het themapalet van SFNL_Word_sjabloon.dotx: dat sjabloon is de
+     merkbron en niet deze plugin. Zie reference/merk.md §1. */
+  --navy:          #21145F;     /* accent3 — de inkt. Lopende tekst is nooit puur zwart */
+  --oranje:        #FF7F40;     /* accent1 — het accent. Labels, de streep, de badge */
+  --wit:           #FFFFFF;     /* accent6 — het papier */
+  --grapefruit:    #FF595A;     /* accent2 — het tweede eind van het verloop; alarm, nadruk */
+  --emerald:       #66C9BA;     /* accent4 — positief, uitkomst */
+  --royal:         #425CC7;     /* accent5, hlink — secundaire data, en de hyperlink */
 
-      /* Accenten. Ten hoogste een daarvan naast oranje in een document. */
-      --grapefruit:  #F95D63;
-      --emerald:     #6AC6BA;
-      --royal:       #3B62C1;
-      --sky:         #45B6E2;
-      --violet:      #6B5DAE;   /* gemeten uit de casespread */
+  /* Niet in het themapalet, dus gemeten uit het drukwerk. */
+  --sky:           #45B6E2;     /* tertiaire data */
+  --violet:        #6B5DAE;     /* de casespread; een heel paneel of een rail */
+  --grijs:         #F2F2F2;     /* een kaartvulling */
+  --mint-tint:     #E0F4F1;     /* een hele pagina of een paneel in emerald */
+  --periwinkel:    #A0ADE2;     /* het interviewpaneel */
+  --oranje-tint:   #FFDFD0;     /* het watermerkcijfer */
+  --navy-tint:     #F4F3F7;     /* een stille container */
 
-      /* Tinten. Gemeten uit de vlakken in het rapport, niet berekend. */
-      --mint-tint:      #E0F4F1;   /* emerald als paginaveld */
-      --periwinkel:     #A0ADE2;   /* royal als paneelveld  */
-      --oranje-tint:    #FFDFD0;   /* oranje als watermerk  */
-      --navy-tint:      #F4F3F7;
-      --grijs:          #F2F2F2;
+  /* De twee rollen. Per pagina overschreven; dit is waar ze op
+     uitkomen als niemand iets overschrijft. */
+  --papier:        var(--wit);
+  --inkt:          var(--navy);
 
-      /* Het huisverloop. Eén verloop, gemeten van #FF7F40 naar #FF5F55 op
-         de omslag en op de kaartenrij van het rapport 2025. Wie een tweede
-         verloop verzint, verzint een tweede huisstijl. */
-      --verloop: linear-gradient(150deg, var(--oranje) 0%, var(--grapefruit) 100%);
+  /* Dezelfde kleuren als drieling, voor alpha: schrijf
+     rgba(var(--navy-rgb), .16) en nooit de cijfers zelf. */
+  --navy-rgb:          33, 20, 95;
+  --oranje-rgb:        255, 127, 64;
+  --wit-rgb:           255, 255, 255;
+  --grapefruit-rgb:    255, 89, 90;
+  --emerald-rgb:       102, 201, 186;
+  --royal-rgb:         66, 92, 199;
+  --sky-rgb:           69, 182, 226;
+  --violet-rgb:        107, 93, 174;
+  --grijs-rgb:         242, 242, 242;
+  --mint-tint-rgb:     224, 244, 241;
+  --periwinkel-rgb:    160, 173, 226;
+  --oranje-tint-rgb:   255, 223, 208;
+  --navy-tint-rgb:     244, 243, 247;
 
-      /* Letters. Gotham Bold is gelicentieerd en staat niet op het web;
-         Montserrat ExtraBold is de substituut die het drukwerk zelf al
-         gebruikt (gemeten in de casespread). Lato is de brood-letter. */
-      --display: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;
-      --brood:   'Lato', 'Helvetica Neue', Arial, sans-serif;
+  /* Het huisverloop. Er is er één en die is gemeten; een tweede
+     verloop is een tweede huisstijl. */
+  --verloop:       linear-gradient(150deg, var(--oranje) 0%, var(--grapefruit) 100%);
 
-      /* De maatladder. Vier rollen, en de body staat op 10/13 pt — de
-         gemeten zetting van het rapport. 10 pt is 13,33 px bij 96 dpi. */
-      --m-body:     13.33px;   /* 10 pt  */
-      --r-body:     17.33px;   /* 13 pt regelafstand, ratio 1,30 */
-      --m-klein:    10.67px;   /* 8 pt — bijschrift, bron, label */
-      --r-klein:    14px;
-      --m-kop:      16px;      /* 12 pt — sectiekop */
-      --m-titel:    26.67px;   /* 20 pt — paginatitel */
-      --m-display:  56px;      /* omslag, hoofdstuknummer; vrij naar boven */
-
-      /* Het kader. Marge 15 mm rondom, onder ruimer voor de folio.
-         Gemeten: tekstkolom begint op 42,5 pt van de snijrand = 15 mm. */
-      --marge:        57px;    /* 15 mm */
-      --marge-onder:  64px;    /* 17 mm — de folio staat eronder */
-      --goot:         30px;    /* 8 mm — gemeten 23,5 pt tussen twee kolommen */
-
-      /* Het basisraster. Elke verticale sprong is een veelvoud van de
-         regelafstand, zodat tekst in twee kolommen op één lijn blijft. */
-      --regel:  17.33px;
-      --sprong-klein: 17.33px;
-      --sprong:       34.66px;
-      --sprong-groot: 52px;
-
-      /* Papiermaat. Wordt per formaat overschreven op .pagina. */
-      --breedte: 794px;
-      --hoogte:  1039px;
-
-      /* De hoogte van de titelbalk. Nul, want de meeste pagina's hebben er geen.
-         Zet hem op de .pagina die er wel een heeft — dan weten de balk én de
-         zetspiegel het allebei, en hoef je de maat maar op één plek te noemen. */
-      --balk: 0px;
-    }
+  /* De letterstapels. De familie is invariant, de maat staat per
+     medium in de vormentaal van dat medium en dus niet hier.
+     Gotham reist nooit mee; de terugval is Montserrat SemiBold. */
+  --display:       'Montserrat', 'Helvetica Neue', Arial, sans-serif;
+  --brood:         'Lato', 'Helvetica Neue', Arial, sans-serif;
+}
+/* merk:einde */
+    /* merk:einde */
 
     /* ---------------------------------------------------------------
        2. Grondslag

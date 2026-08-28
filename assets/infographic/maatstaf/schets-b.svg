@@ -1,24 +1,24 @@
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="960pt" height="320pt" viewBox="0 0 960 320">
   <desc>Wireframe: B — tijdlijn op schaal: afstand is de tijd</desc>
-  <text id="aanhef-rol-0" x="30" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="10" fill="#201B5C" fill-opacity="0.6" letter-spacing="1.5" xml:space="preserve"><tspan x="30" y="55.19">AANHEF</tspan></text>
-  <text id="drager-rol-0" x="930" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="10" fill="#201B5C" fill-opacity="0.6" letter-spacing="1.5" text-anchor="end" xml:space="preserve"><tspan x="930" y="55.19">DRAGER</tspan></text>
-  <line id="As" x1="30" y1="150" x2="930" y2="150" stroke="#201B5C" stroke-width="1" stroke-opacity="0.45"/>
-  <line id="Moment-1-tik" x1="30" y1="137" x2="30" y2="150" stroke="#201B5C" stroke-width="1" stroke-opacity="0.45"/>
-  <circle id="Moment-1" cx="30" cy="150" r="4.5" fill="#201B5C" fill-opacity="0.55"/>
-  <line id="Moment-2-tik" x1="130" y1="137" x2="130" y2="150" stroke="#201B5C" stroke-width="1" stroke-opacity="0.45"/>
-  <circle id="Moment-2" cx="130" cy="150" r="4.5" fill="#201B5C" fill-opacity="0.55"/>
-  <line id="Moment-3-tik" x1="430" y1="137" x2="430" y2="150" stroke="#201B5C" stroke-width="1" stroke-opacity="0.45"/>
-  <circle id="Moment-3" cx="430" cy="150" r="4.5" fill="#201B5C" fill-opacity="0.55"/>
-  <line id="Moment-4-tik" x1="730" y1="137" x2="730" y2="150" stroke="#201B5C" stroke-width="1" stroke-opacity="0.45"/>
-  <circle id="Moment-4" cx="730" cy="150" r="4.5" fill="#201B5C" fill-opacity="0.55"/>
-  <line id="Moment-5-tik" x1="855" y1="137" x2="855" y2="150" stroke="#201B5C" stroke-width="1" stroke-opacity="0.45"/>
-  <circle id="Moment-5" cx="855" cy="150" r="4.5" fill="#201B5C" fill-opacity="0.55"/>
-  <text id="moment-rol-0" x="24" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="10" fill="#201B5C" fill-opacity="0.6" letter-spacing="1.5" xml:space="preserve"><tspan x="24" y="181.19">MOMENT</tspan></text>
-  <text id="moment-rol-0" x="124" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="10" fill="#201B5C" fill-opacity="0.6" letter-spacing="1.5" xml:space="preserve"><tspan x="124" y="181.19">MOMENT</tspan></text>
-  <text id="moment-rol-0" x="424" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="10" fill="#201B5C" fill-opacity="0.6" letter-spacing="1.5" xml:space="preserve"><tspan x="424" y="181.19">MOMENT</tspan></text>
-  <text id="moment-rol-0" x="724" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="10" fill="#201B5C" fill-opacity="0.6" letter-spacing="1.5" xml:space="preserve"><tspan x="724" y="181.19">MOMENT</tspan></text>
-  <line id="Slotstreep" x1="30" y1="232" x2="930" y2="232" stroke="#201B5C" stroke-width="0.75" stroke-opacity="0.2"/>
-  <text id="sluitregel-rol-0" x="30" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="10" fill="#201B5C" fill-opacity="0.6" letter-spacing="1.5" xml:space="preserve"><tspan x="30" y="259.19">SLUITREGEL</tspan></text>
-  <text id="bronregel-rol-0" x="930" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="10" fill="#201B5C" fill-opacity="0.6" letter-spacing="1.5" text-anchor="end" xml:space="preserve"><tspan x="930" y="259.19">BRONREGEL</tspan></text>
-  <text id="Onderschrift-0" x="0" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="12" fill="#201B5C" fill-opacity="0.55" xml:space="preserve"><tspan x="0" y="317.36">B — tijdlijn op schaal: afstand is de tijd</tspan></text>
+  <text id="aanhef-rol-0" x="30" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="10" fill="#21145F" fill-opacity="0.6" letter-spacing="1.5" xml:space="preserve"><tspan x="30" y="55.19">AANHEF</tspan></text>
+  <text id="drager-rol-0" x="930" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="10" fill="#21145F" fill-opacity="0.6" letter-spacing="1.5" text-anchor="end" xml:space="preserve"><tspan x="930" y="55.19">DRAGER</tspan></text>
+  <line id="As" x1="30" y1="150" x2="930" y2="150" stroke="#21145F" stroke-width="1" stroke-opacity="0.45"/>
+  <line id="Moment-1-tik" x1="30" y1="137" x2="30" y2="150" stroke="#21145F" stroke-width="1" stroke-opacity="0.45"/>
+  <circle id="Moment-1" cx="30" cy="150" r="4.5" fill="#21145F" fill-opacity="0.55"/>
+  <line id="Moment-2-tik" x1="130" y1="137" x2="130" y2="150" stroke="#21145F" stroke-width="1" stroke-opacity="0.45"/>
+  <circle id="Moment-2" cx="130" cy="150" r="4.5" fill="#21145F" fill-opacity="0.55"/>
+  <line id="Moment-3-tik" x1="430" y1="137" x2="430" y2="150" stroke="#21145F" stroke-width="1" stroke-opacity="0.45"/>
+  <circle id="Moment-3" cx="430" cy="150" r="4.5" fill="#21145F" fill-opacity="0.55"/>
+  <line id="Moment-4-tik" x1="730" y1="137" x2="730" y2="150" stroke="#21145F" stroke-width="1" stroke-opacity="0.45"/>
+  <circle id="Moment-4" cx="730" cy="150" r="4.5" fill="#21145F" fill-opacity="0.55"/>
+  <line id="Moment-5-tik" x1="855" y1="137" x2="855" y2="150" stroke="#21145F" stroke-width="1" stroke-opacity="0.45"/>
+  <circle id="Moment-5" cx="855" cy="150" r="4.5" fill="#21145F" fill-opacity="0.55"/>
+  <text id="moment-rol-0" x="24" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="10" fill="#21145F" fill-opacity="0.6" letter-spacing="1.5" xml:space="preserve"><tspan x="24" y="181.19">MOMENT</tspan></text>
+  <text id="moment-rol-0" x="124" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="10" fill="#21145F" fill-opacity="0.6" letter-spacing="1.5" xml:space="preserve"><tspan x="124" y="181.19">MOMENT</tspan></text>
+  <text id="moment-rol-0" x="424" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="10" fill="#21145F" fill-opacity="0.6" letter-spacing="1.5" xml:space="preserve"><tspan x="424" y="181.19">MOMENT</tspan></text>
+  <text id="moment-rol-0" x="724" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="10" fill="#21145F" fill-opacity="0.6" letter-spacing="1.5" xml:space="preserve"><tspan x="724" y="181.19">MOMENT</tspan></text>
+  <line id="Slotstreep" x1="30" y1="232" x2="930" y2="232" stroke="#21145F" stroke-width="0.75" stroke-opacity="0.2"/>
+  <text id="sluitregel-rol-0" x="30" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="10" fill="#21145F" fill-opacity="0.6" letter-spacing="1.5" xml:space="preserve"><tspan x="30" y="259.19">SLUITREGEL</tspan></text>
+  <text id="bronregel-rol-0" x="930" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="10" fill="#21145F" fill-opacity="0.6" letter-spacing="1.5" text-anchor="end" xml:space="preserve"><tspan x="930" y="259.19">BRONREGEL</tspan></text>
+  <text id="Onderschrift-0" x="0" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="12" fill="#21145F" fill-opacity="0.55" xml:space="preserve"><tspan x="0" y="317.36">B — tijdlijn op schaal: afstand is de tijd</tspan></text>
 </svg>

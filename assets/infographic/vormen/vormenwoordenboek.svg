@@ -1,663 +1,663 @@
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="1482pt" height="1506pt" viewBox="0 0 1482 1506">
   <desc>Zesenveertig vormen, structureel, zonder kleur en zonder stijl, geordend naar de vraag die ze beantwoorden.</desc>
-  <rect id="tegel-0" x="0" y="0" width="232" height="176" fill="none" stroke="#201B5C" stroke-width="0.5"/>
-  <line id="as-y" x1="18" y1="16" x2="18" y2="120" stroke="#201B5C" stroke-width="0.75" stroke-opacity="0.3"/>
-  <line id="as-x" x1="18" y1="120" x2="214" y2="120" stroke="#201B5C" stroke-width="0.75" stroke-opacity="0.3"/>
-  <path id="lijn" d="M 18.0 62.8 L 50.7 76.3 L 83.3 57.6 L 116.0 70.1 L 148.7 45.1 L 181.3 51.4 L 214.0 30.6" fill="none" stroke="#201B5C" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-  <text id="cat-0-0" x="18" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#201B5C" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="18" y="137.35">VERANDERING</tspan></text>
-  <text id="naam-0-0" x="18" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#201B5C" xml:space="preserve"><tspan x="18" y="155.94">Lijn</tspan></text>
-  <text id="vraag-0-0" x="18" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#201B5C" fill-opacity="0.65" xml:space="preserve"><tspan x="18" y="172.42">hoe loopt dit over tijd</tspan></text>
-  <rect id="tegel-1" x="250" y="0" width="232" height="176" fill="none" stroke="#201B5C" stroke-width="0.5"/>
-  <line id="as-y" x1="268" y1="16" x2="268" y2="120" stroke="#201B5C" stroke-width="0.75" stroke-opacity="0.3"/>
-  <line id="as-x" x1="268" y1="120" x2="464" y2="120" stroke="#201B5C" stroke-width="0.75" stroke-opacity="0.3"/>
-  <rect id="k0" x="274.12" y="78.4" width="20.42" height="41.6" fill="#201B5C"/>
-  <rect id="k1" x="306.79" y="65.92" width="20.42" height="54.08" fill="#201B5C"/>
-  <rect id="k2" x="339.46" y="71.12" width="20.42" height="48.88" fill="#201B5C"/>
-  <rect id="k3" x="372.12" y="54.48" width="20.42" height="65.52" fill="#201B5C"/>
-  <rect id="k4" x="404.79" y="59.68" width="20.42" height="60.32" fill="#201B5C"/>
-  <rect id="k5" x="437.46" y="38.88" width="20.42" height="81.12" fill="#201B5C"/>
-  <text id="cat-1-0" x="268" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#201B5C" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="268" y="137.35">VERANDERING</tspan></text>
-  <text id="naam-1-0" x="268" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#201B5C" xml:space="preserve"><tspan x="268" y="155.94">Kolommen over tijd</tspan></text>
-  <text id="vraag-1-0" x="268" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#201B5C" fill-opacity="0.65" xml:space="preserve"><tspan x="268" y="172.42">hoeveel per periode</tspan></text>
-  <rect id="tegel-2" x="500" y="0" width="232" height="176" fill="none" stroke="#201B5C" stroke-width="0.5"/>
-  <line id="as-y" x1="518" y1="16" x2="518" y2="120" stroke="#201B5C" stroke-width="0.75" stroke-opacity="0.3"/>
-  <line id="as-x" x1="518" y1="120" x2="714" y2="120" stroke="#201B5C" stroke-width="0.75" stroke-opacity="0.3"/>
-  <path id="vl0" d="M 518.0 99.2 L 567.0 93.0 L 616.0 95.0 L 665.0 88.8 L 714.0 84.6 L 714.0 120.0 L 665.0 120.0 L 616.0 120.0 L 567.0 120.0 L 518.0 120.0 Z" fill="#201B5C" fill-opacity="0.7"/>
-  <path id="vl1" d="M 518.0 80.5 L 567.0 72.2 L 616.0 68.0 L 665.0 63.8 L 714.0 55.5 L 714.0 84.6 L 665.0 88.8 L 616.0 95.0 L 567.0 93.0 L 518.0 99.2 Z" fill="#201B5C" fill-opacity="0.48"/>
-  <path id="vl2" d="M 518.0 65.9 L 567.0 55.5 L 616.0 53.4 L 665.0 45.1 L 714.0 34.7 L 714.0 55.5 L 665.0 63.8 L 616.0 68.0 L 567.0 72.2 L 518.0 80.5 Z" fill="#201B5C" fill-opacity="0.26"/>
-  <text id="cat-2-0" x="518" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#201B5C" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="518" y="137.35">VERANDERING</tspan></text>
-  <text id="naam-2-0" x="518" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#201B5C" xml:space="preserve"><tspan x="518" y="155.94">Gestapeld vlak</tspan></text>
-  <text id="vraag-2-0" x="518" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#201B5C" fill-opacity="0.65" xml:space="preserve"><tspan x="518" y="172.42">hoe verschuift de opbouw</tspan></text>
-  <rect id="tegel-3" x="750" y="0" width="232" height="176" fill="none" stroke="#201B5C" stroke-width="0.5"/>
-  <line id="l" x1="768" y1="16" x2="768" y2="120" stroke="#201B5C" stroke-width="0.75" stroke-opacity="0.3"/>
-  <line id="r" x1="964" y1="16" x2="964" y2="120" stroke="#201B5C" stroke-width="0.75" stroke-opacity="0.3"/>
-  <line id="h0" x1="768" y1="94" x2="964" y2="47.2" stroke="#201B5C" stroke-width="1.2"/>
-  <circle id="p0a" cx="768" cy="94" r="2.4" fill="#201B5C"/>
-  <circle id="p0b" cx="964" cy="47.2" r="2.4" fill="#201B5C"/>
-  <line id="h1" x1="768" y1="73.2" x2="964" y2="62.8" stroke="#201B5C" stroke-width="1.2"/>
-  <circle id="p1a" cx="768" cy="73.2" r="2.4" fill="#201B5C"/>
-  <circle id="p1b" cx="964" cy="62.8" r="2.4" fill="#201B5C"/>
-  <line id="h2" x1="768" y1="55.52" x2="964" y2="88.8" stroke="#201B5C" stroke-width="1.2"/>
-  <circle id="p2a" cx="768" cy="55.52" r="2.4" fill="#201B5C"/>
-  <circle id="p2b" cx="964" cy="88.8" r="2.4" fill="#201B5C"/>
-  <line id="h3" x1="768" y1="36.8" x2="964" y2="30.56" stroke="#201B5C" stroke-width="1.2"/>
-  <circle id="p3a" cx="768" cy="36.8" r="2.4" fill="#201B5C"/>
-  <circle id="p3b" cx="964" cy="30.56" r="2.4" fill="#201B5C"/>
-  <text id="cat-3-0" x="768" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#201B5C" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="768" y="137.35">VERANDERING</tspan></text>
-  <text id="naam-3-0" x="768" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#201B5C" xml:space="preserve"><tspan x="768" y="155.94">Helling</tspan></text>
-  <text id="vraag-3-0" x="768" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#201B5C" fill-opacity="0.65" xml:space="preserve"><tspan x="768" y="172.42">wie ging vooruit, wie achteruit</tspan></text>
-  <rect id="tegel-4" x="1000" y="0" width="232" height="176" fill="none" stroke="#201B5C" stroke-width="0.5"/>
-  <line id="as" x1="1018" y1="120" x2="1214" y2="120" stroke="#201B5C" stroke-width="0.75" stroke-opacity="0.3"/>
-  <rect id="b0" x="1018" y="16" width="90.16" height="9" fill="#201B5C"/>
-  <rect id="b1" x="1041.52" y="32" width="117.6" height="9" fill="#201B5C"/>
-  <rect id="b2" x="1092.48" y="48" width="109.76" height="9" fill="#201B5C"/>
-  <rect id="b3" x="1125.8" y="64" width="49" height="9" fill="#201B5C"/>
-  <text id="cat-4-0" x="1018" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#201B5C" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="1018" y="137.35">VERANDERING</tspan></text>
-  <text id="naam-4-0" x="1018" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#201B5C" xml:space="preserve"><tspan x="1018" y="155.94">Priestley-tijdlijn</tspan></text>
-  <text id="vraag-4-0" x="1018" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#201B5C" fill-opacity="0.65" xml:space="preserve"><tspan x="1018" y="172.42">wat liep wanneer en hoe lang</tspan></text>
-  <rect id="tegel-5" x="1250" y="0" width="232" height="176" fill="none" stroke="#201B5C" stroke-width="0.5"/>
-  <line id="as" x1="1268" y1="68" x2="1464" y2="68" stroke="#201B5C" stroke-width="0.75" stroke-opacity="0.3"/>
-  <circle id="m0" cx="1268" cy="68" r="7" fill="#201B5C" fill-opacity="0.18" stroke="#201B5C" stroke-width="1"/>
-  <circle id="m1" cx="1285.64" cy="68" r="4" fill="#201B5C" fill-opacity="0.18" stroke="#201B5C" stroke-width="1"/>
-  <circle id="m2" cx="1334.64" cy="68" r="9" fill="#201B5C" fill-opacity="0.18" stroke="#201B5C" stroke-width="1"/>
-  <circle id="m3" cx="1385.6" cy="68" r="5" fill="#201B5C" fill-opacity="0.18" stroke="#201B5C" stroke-width="1"/>
-  <circle id="m4" cx="1464" cy="68" r="6" fill="#201B5C" fill-opacity="0.18" stroke="#201B5C" stroke-width="1"/>
-  <text id="cat-5-0" x="1268" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#201B5C" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="1268" y="137.35">VERANDERING</tspan></text>
-  <text id="naam-5-0" x="1268" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#201B5C" xml:space="preserve"><tspan x="1268" y="155.94">Cirkeltijdlijn</tspan></text>
-  <text id="vraag-5-0" x="1268" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#201B5C" fill-opacity="0.65" xml:space="preserve"><tspan x="1268" y="172.42">wanneer gebeurde het, en hoe groot</tspan></text>
-  <rect id="tegel-6" x="0" y="190" width="232" height="176" fill="none" stroke="#201B5C" stroke-width="0.5"/>
-  <rect id="k0" x="18" y="206" width="12" height="12" fill="#201B5C" fill-opacity="0.1"/>
-  <rect id="k1" x="32" y="206" width="12" height="12" fill="#201B5C" fill-opacity="0.4"/>
-  <rect id="k2" x="46" y="206" width="12" height="12" fill="#201B5C" fill-opacity="0.8"/>
-  <rect id="k3" x="60" y="206" width="12" height="12" fill="#201B5C" fill-opacity="0.2"/>
-  <rect id="k4" x="74" y="206" width="12" height="12" fill="#201B5C" fill-opacity="0.6"/>
-  <rect id="k5" x="88" y="206" width="12" height="12" fill="#201B5C" fill-opacity="0.06"/>
-  <rect id="k6" x="102" y="206" width="12" height="12" fill="#201B5C" fill-opacity="0.06"/>
-  <rect id="k7" x="116" y="206" width="12" height="12" fill="#201B5C" fill-opacity="0.3"/>
-  <rect id="k8" x="130" y="206" width="12" height="12" fill="#201B5C" fill-opacity="0.9"/>
-  <rect id="k9" x="144" y="206" width="12" height="12" fill="#201B5C" fill-opacity="0.5"/>
-  <rect id="k10" x="158" y="206" width="12" height="12" fill="#201B5C" fill-opacity="0.7"/>
-  <rect id="k11" x="172" y="206" width="12" height="12" fill="#201B5C" fill-opacity="0.15"/>
-  <rect id="k12" x="186" y="206" width="12" height="12" fill="#201B5C" fill-opacity="0.06"/>
-  <rect id="k13" x="200" y="206" width="12" height="12" fill="#201B5C" fill-opacity="0.06"/>
-  <rect id="k14" x="18" y="220" width="12" height="12" fill="#201B5C" fill-opacity="0.1"/>
-  <rect id="k15" x="32" y="220" width="12" height="12" fill="#201B5C" fill-opacity="0.4"/>
-  <rect id="k16" x="46" y="220" width="12" height="12" fill="#201B5C" fill-opacity="0.8"/>
-  <rect id="k17" x="60" y="220" width="12" height="12" fill="#201B5C" fill-opacity="0.2"/>
-  <rect id="k18" x="74" y="220" width="12" height="12" fill="#201B5C" fill-opacity="0.6"/>
-  <rect id="k19" x="88" y="220" width="12" height="12" fill="#201B5C" fill-opacity="0.06"/>
-  <rect id="k20" x="102" y="220" width="12" height="12" fill="#201B5C" fill-opacity="0.06"/>
-  <rect id="k21" x="116" y="220" width="12" height="12" fill="#201B5C" fill-opacity="0.3"/>
-  <rect id="k22" x="130" y="220" width="12" height="12" fill="#201B5C" fill-opacity="0.9"/>
-  <rect id="k23" x="144" y="220" width="12" height="12" fill="#201B5C" fill-opacity="0.5"/>
-  <rect id="k24" x="158" y="220" width="12" height="12" fill="#201B5C" fill-opacity="0.7"/>
-  <rect id="k25" x="172" y="220" width="12" height="12" fill="#201B5C" fill-opacity="0.15"/>
-  <rect id="k26" x="186" y="220" width="12" height="12" fill="#201B5C" fill-opacity="0.06"/>
-  <rect id="k27" x="200" y="220" width="12" height="12" fill="#201B5C" fill-opacity="0.06"/>
-  <rect id="k28" x="18" y="234" width="12" height="12" fill="#201B5C" fill-opacity="0.1"/>
-  <rect id="k29" x="32" y="234" width="12" height="12" fill="#201B5C" fill-opacity="0.4"/>
-  <rect id="k30" x="46" y="234" width="12" height="12" fill="#201B5C" fill-opacity="0.8"/>
-  <rect id="k31" x="60" y="234" width="12" height="12" fill="#201B5C" fill-opacity="0.2"/>
-  <rect id="k32" x="74" y="234" width="12" height="12" fill="#201B5C" fill-opacity="0.6"/>
-  <rect id="k33" x="88" y="234" width="12" height="12" fill="#201B5C" fill-opacity="0.06"/>
-  <rect id="k34" x="102" y="234" width="12" height="12" fill="#201B5C" fill-opacity="0.06"/>
-  <rect id="k35" x="116" y="234" width="12" height="12" fill="#201B5C" fill-opacity="0.3"/>
-  <rect id="k36" x="130" y="234" width="12" height="12" fill="#201B5C" fill-opacity="0.9"/>
-  <rect id="k37" x="144" y="234" width="12" height="12" fill="#201B5C" fill-opacity="0.5"/>
-  <rect id="k38" x="158" y="234" width="12" height="12" fill="#201B5C" fill-opacity="0.7"/>
-  <rect id="k39" x="172" y="234" width="12" height="12" fill="#201B5C" fill-opacity="0.15"/>
-  <rect id="k40" x="186" y="234" width="12" height="12" fill="#201B5C" fill-opacity="0.06"/>
-  <rect id="k41" x="200" y="234" width="12" height="12" fill="#201B5C" fill-opacity="0.06"/>
-  <rect id="k42" x="18" y="248" width="12" height="12" fill="#201B5C" fill-opacity="0.1"/>
-  <rect id="k43" x="32" y="248" width="12" height="12" fill="#201B5C" fill-opacity="0.4"/>
-  <rect id="k44" x="46" y="248" width="12" height="12" fill="#201B5C" fill-opacity="0.8"/>
-  <rect id="k45" x="60" y="248" width="12" height="12" fill="#201B5C" fill-opacity="0.2"/>
-  <rect id="k46" x="74" y="248" width="12" height="12" fill="#201B5C" fill-opacity="0.6"/>
-  <rect id="k47" x="88" y="248" width="12" height="12" fill="#201B5C" fill-opacity="0.06"/>
-  <rect id="k48" x="102" y="248" width="12" height="12" fill="#201B5C" fill-opacity="0.06"/>
-  <rect id="k49" x="116" y="248" width="12" height="12" fill="#201B5C" fill-opacity="0.3"/>
-  <rect id="k50" x="130" y="248" width="12" height="12" fill="#201B5C" fill-opacity="0.9"/>
-  <rect id="k51" x="144" y="248" width="12" height="12" fill="#201B5C" fill-opacity="0.5"/>
-  <rect id="k52" x="158" y="248" width="12" height="12" fill="#201B5C" fill-opacity="0.7"/>
-  <rect id="k53" x="172" y="248" width="12" height="12" fill="#201B5C" fill-opacity="0.15"/>
-  <rect id="k54" x="186" y="248" width="12" height="12" fill="#201B5C" fill-opacity="0.06"/>
-  <rect id="k55" x="200" y="248" width="12" height="12" fill="#201B5C" fill-opacity="0.06"/>
-  <rect id="k56" x="18" y="262" width="12" height="12" fill="#201B5C" fill-opacity="0.1"/>
-  <rect id="k57" x="32" y="262" width="12" height="12" fill="#201B5C" fill-opacity="0.4"/>
-  <rect id="k58" x="46" y="262" width="12" height="12" fill="#201B5C" fill-opacity="0.8"/>
-  <rect id="k59" x="60" y="262" width="12" height="12" fill="#201B5C" fill-opacity="0.2"/>
-  <rect id="k60" x="74" y="262" width="12" height="12" fill="#201B5C" fill-opacity="0.6"/>
-  <rect id="k61" x="88" y="262" width="12" height="12" fill="#201B5C" fill-opacity="0.06"/>
-  <rect id="k62" x="102" y="262" width="12" height="12" fill="#201B5C" fill-opacity="0.06"/>
-  <rect id="k63" x="116" y="262" width="12" height="12" fill="#201B5C" fill-opacity="0.3"/>
-  <rect id="k64" x="130" y="262" width="12" height="12" fill="#201B5C" fill-opacity="0.9"/>
-  <rect id="k65" x="144" y="262" width="12" height="12" fill="#201B5C" fill-opacity="0.5"/>
-  <rect id="k66" x="158" y="262" width="12" height="12" fill="#201B5C" fill-opacity="0.7"/>
-  <rect id="k67" x="172" y="262" width="12" height="12" fill="#201B5C" fill-opacity="0.15"/>
-  <rect id="k68" x="186" y="262" width="12" height="12" fill="#201B5C" fill-opacity="0.06"/>
-  <rect id="k69" x="200" y="262" width="12" height="12" fill="#201B5C" fill-opacity="0.06"/>
-  <text id="cat-6-0" x="18" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#201B5C" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="18" y="327.35">VERANDERING</tspan></text>
-  <text id="naam-6-0" x="18" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#201B5C" xml:space="preserve"><tspan x="18" y="345.94">Kalender-heatmap</tspan></text>
-  <text id="vraag-6-0" x="18" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#201B5C" fill-opacity="0.65" xml:space="preserve"><tspan x="18" y="362.42">wanneer is het druk</tspan></text>
-  <rect id="tegel-7" x="250" y="190" width="232" height="176" fill="none" stroke="#201B5C" stroke-width="0.5"/>
-  <line id="as0" x1="268" y1="310" x2="326.67" y2="310" stroke="#201B5C" stroke-width="0.6" stroke-opacity="0.3"/>
-  <path id="l0" d="M 268.0 283.2 L 287.6 265.3 L 307.1 274.2 L 326.7 247.4" fill="none" stroke="#201B5C" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-  <line id="as1" x1="336.67" y1="310" x2="395.33" y2="310" stroke="#201B5C" stroke-width="0.6" stroke-opacity="0.3"/>
-  <path id="l1" d="M 336.7 256.3 L 356.2 269.8 L 375.8 265.3 L 395.3 278.7" fill="none" stroke="#201B5C" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-  <line id="as2" x1="405.33" y1="310" x2="464" y2="310" stroke="#201B5C" stroke-width="0.6" stroke-opacity="0.3"/>
-  <path id="l2" d="M 405.3 292.1 L 424.9 278.7 L 444.4 256.3 L 464.0 234.0" fill="none" stroke="#201B5C" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-  <text id="cat-7-0" x="268" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#201B5C" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="268" y="327.35">VERANDERING</tspan></text>
-  <text id="naam-7-0" x="268" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#201B5C" xml:space="preserve"><tspan x="268" y="345.94">Kleine veelvouden</tspan></text>
-  <text id="vraag-7-0" x="268" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#201B5C" fill-opacity="0.65" xml:space="preserve"><tspan x="268" y="362.42">loopt het overal hetzelfde</tspan></text>
-  <rect id="tegel-8" x="500" y="190" width="232" height="176" fill="none" stroke="#201B5C" stroke-width="0.5"/>
-  <line id="as" x1="518" y1="206" x2="518" y2="310" stroke="#201B5C" stroke-width="0.75" stroke-opacity="0.3"/>
-  <rect id="s0" x="518" y="206" width="186.2" height="13.87" fill="#201B5C"/>
-  <rect id="s1" x="518" y="226.8" width="145.04" height="13.87" fill="#201B5C"/>
-  <rect id="s2" x="518" y="247.6" width="119.56" height="13.87" fill="#201B5C"/>
-  <rect id="s3" x="518" y="268.4" width="86.24" height="13.87" fill="#201B5C"/>
-  <rect id="s4" x="518" y="289.2" width="54.88" height="13.87" fill="#201B5C"/>
-  <text id="cat-8-0" x="518" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#201B5C" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="518" y="327.35">RANGSCHIKKING</tspan></text>
-  <text id="naam-8-0" x="518" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#201B5C" xml:space="preserve"><tspan x="518" y="345.94">Geordende staaf</tspan></text>
-  <text id="vraag-8-0" x="518" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#201B5C" fill-opacity="0.65" xml:space="preserve"><tspan x="518" y="362.42">wie is groot, wie klein</tspan></text>
-  <rect id="tegel-9" x="750" y="190" width="232" height="176" fill="none" stroke="#201B5C" stroke-width="0.5"/>
-  <line id="r0" x1="768" y1="218" x2="964" y2="218" stroke="#201B5C" stroke-width="0.6" stroke-opacity="0.3"/>
-  <circle id="d00" cx="807.2" cy="218" r="3.2" fill="#201B5C" fill-opacity="0.55" stroke="#201B5C" stroke-width="1"/>
-  <circle id="d01" cx="834.64" cy="218" r="3.2" fill="#201B5C" fill-opacity="0.55" stroke="#201B5C" stroke-width="1"/>
-  <circle id="d02" cx="848.36" cy="218" r="3.2" fill="#201B5C" fill-opacity="0.55" stroke="#201B5C" stroke-width="1"/>
-  <circle id="d03" cx="881.68" cy="218" r="3.2" fill="#201B5C" fill-opacity="0.55" stroke="#201B5C" stroke-width="1"/>
-  <circle id="d04" cx="918.92" cy="218" r="3.2" fill="#201B5C" fill-opacity="0.55" stroke="#201B5C" stroke-width="1"/>
-  <line id="r1" x1="768" y1="258" x2="964" y2="258" stroke="#201B5C" stroke-width="0.6" stroke-opacity="0.3"/>
-  <circle id="d10" cx="822.88" cy="258" r="3.2" fill="#201B5C" fill-opacity="0.55" stroke="#201B5C" stroke-width="1"/>
-  <circle id="d11" cx="838.56" cy="258" r="3.2" fill="#201B5C" fill-opacity="0.55" stroke="#201B5C" stroke-width="1"/>
-  <circle id="d12" cx="869.92" cy="258" r="3.2" fill="#201B5C" fill-opacity="0.55" stroke="#201B5C" stroke-width="1"/>
-  <line id="r2" x1="768" y1="298" x2="964" y2="298" stroke="#201B5C" stroke-width="0.6" stroke-opacity="0.3"/>
-  <circle id="d20" cx="791.52" cy="298" r="3.2" fill="#201B5C" fill-opacity="0.55" stroke="#201B5C" stroke-width="1"/>
-  <circle id="d21" cx="854.24" cy="298" r="3.2" fill="#201B5C" fill-opacity="0.55" stroke="#201B5C" stroke-width="1"/>
-  <circle id="d22" cx="891.48" cy="298" r="3.2" fill="#201B5C" fill-opacity="0.55" stroke="#201B5C" stroke-width="1"/>
-  <circle id="d23" cx="944.4" cy="298" r="3.2" fill="#201B5C" fill-opacity="0.55" stroke="#201B5C" stroke-width="1"/>
-  <text id="cat-9-0" x="768" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#201B5C" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="768" y="327.35">RANGSCHIKKING</tspan></text>
-  <text id="naam-9-0" x="768" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#201B5C" xml:space="preserve"><tspan x="768" y="345.94">Puntenstrook</tspan></text>
-  <text id="vraag-9-0" x="768" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#201B5C" fill-opacity="0.65" xml:space="preserve"><tspan x="768" y="362.42">waar zit de spreiding per groep</tspan></text>
-  <rect id="tegel-10" x="1000" y="190" width="232" height="176" fill="none" stroke="#201B5C" stroke-width="0.5"/>
-  <line id="as" x1="1018" y1="206" x2="1018" y2="310" stroke="#201B5C" stroke-width="0.75" stroke-opacity="0.3"/>
-  <line id="l0" x1="1018" y1="220" x2="1190.48" y2="220" stroke="#201B5C" stroke-width="1" stroke-opacity="0.55"/>
-  <circle id="k0" cx="1190.48" cy="220" r="4" fill="#201B5C"/>
-  <line id="l1" x1="1018" y1="245.33" x2="1147.36" y2="245.33" stroke="#201B5C" stroke-width="1" stroke-opacity="0.55"/>
-  <circle id="k1" cx="1147.36" cy="245.33" r="4" fill="#201B5C"/>
-  <line id="l2" x1="1018" y1="270.67" x2="1119.92" y2="270.67" stroke="#201B5C" stroke-width="1" stroke-opacity="0.55"/>
-  <circle id="k2" cx="1119.92" cy="270.67" r="4" fill="#201B5C"/>
-  <line id="l3" x1="1018" y1="296" x2="1086.6" y2="296" stroke="#201B5C" stroke-width="1" stroke-opacity="0.55"/>
-  <circle id="k3" cx="1086.6" cy="296" r="4" fill="#201B5C"/>
-  <text id="cat-10-0" x="1018" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#201B5C" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="1018" y="327.35">RANGSCHIKKING</tspan></text>
-  <text id="naam-10-0" x="1018" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#201B5C" xml:space="preserve"><tspan x="1018" y="345.94">Lolly</tspan></text>
-  <text id="vraag-10-0" x="1018" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#201B5C" fill-opacity="0.65" xml:space="preserve"><tspan x="1018" y="362.42">rangorde met weinig inkt</tspan></text>
-  <rect id="tegel-11" x="1250" y="190" width="232" height="176" fill="none" stroke="#201B5C" stroke-width="0.5"/>
-  <line id="as" x1="1268" y1="206" x2="1268" y2="310" stroke="#201B5C" stroke-width="0.75" stroke-opacity="0.3"/>
-  <line id="h0" x1="1311.12" y1="218" x2="1401.28" y2="218" stroke="#201B5C" stroke-width="1.2" stroke-opacity="0.45"/>
-  <circle id="a0" cx="1311.12" cy="218" r="4.2" fill="#201B5C" fill-opacity="0.3" stroke="#201B5C" stroke-width="1"/>
-  <circle id="b0" cx="1401.28" cy="218" r="4.2" fill="#201B5C"/>
-  <line id="h1" x1="1336.6" y1="244.67" x2="1436.56" y2="244.67" stroke="#201B5C" stroke-width="1.2" stroke-opacity="0.45"/>
-  <circle id="a1" cx="1336.6" cy="244.67" r="4.2" fill="#201B5C" fill-opacity="0.3" stroke="#201B5C" stroke-width="1"/>
-  <circle id="b1" cx="1436.56" cy="244.67" r="4.2" fill="#201B5C"/>
-  <line id="h2" x1="1362.08" y1="271.33" x2="1385.6" y2="271.33" stroke="#201B5C" stroke-width="1.2" stroke-opacity="0.45"/>
-  <circle id="a2" cx="1362.08" cy="271.33" r="4.2" fill="#201B5C" fill-opacity="0.3" stroke="#201B5C" stroke-width="1"/>
-  <circle id="b2" cx="1385.6" cy="271.33" r="4.2" fill="#201B5C"/>
-  <line id="h3" x1="1297.4" y1="298" x2="1354.24" y2="298" stroke="#201B5C" stroke-width="1.2" stroke-opacity="0.45"/>
-  <circle id="a3" cx="1297.4" cy="298" r="4.2" fill="#201B5C" fill-opacity="0.3" stroke="#201B5C" stroke-width="1"/>
-  <circle id="b3" cx="1354.24" cy="298" r="4.2" fill="#201B5C"/>
-  <text id="cat-11-0" x="1268" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#201B5C" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="1268" y="327.35">RANGSCHIKKING</tspan></text>
-  <text id="naam-11-0" x="1268" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#201B5C" xml:space="preserve"><tspan x="1268" y="345.94">Halter</tspan></text>
-  <text id="vraag-11-0" x="1268" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#201B5C" fill-opacity="0.65" xml:space="preserve"><tspan x="1268" y="362.42">hoeveel schoof elk op</tspan></text>
-  <rect id="tegel-12" x="0" y="380" width="232" height="176" fill="none" stroke="#201B5C" stroke-width="0.5"/>
-  <line id="lijn" x1="18" y1="453.2" x2="214" y2="453.2" stroke="#201B5C" stroke-width="1" stroke-opacity="0.5"/>
-  <circle id="m0" cx="37.6" cy="453.2" r="5" fill="#201B5C" fill-opacity="0.25" stroke="#201B5C" stroke-width="1"/>
-  <circle id="m1" cx="84.64" cy="453.2" r="5" fill="#201B5C" fill-opacity="0.25" stroke="#201B5C" stroke-width="1"/>
-  <circle id="m2" cx="119.92" cy="453.2" r="5" fill="#201B5C" fill-opacity="0.25" stroke="#201B5C" stroke-width="1"/>
-  <circle id="m3" cx="190.48" cy="453.2" r="15" fill="#201B5C" fill-opacity="0.85" stroke="#201B5C" stroke-width="1"/>
-  <text id="cat-12-0" x="18" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#201B5C" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="18" y="517.35">RANGSCHIKKING</tspan></text>
-  <text id="naam-12-0" x="18" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#201B5C" xml:space="preserve"><tspan x="18" y="535.94">Getallenlijn</tspan></text>
-  <text id="vraag-12-0" x="18" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#201B5C" fill-opacity="0.65" xml:space="preserve"><tspan x="18" y="552.42">waar staat elk op de schaal</tspan></text>
-  <rect id="tegel-13" x="250" y="380" width="232" height="176" fill="none" stroke="#201B5C" stroke-width="0.5"/>
-  <line id="as-y" x1="268" y1="396" x2="268" y2="500" stroke="#201B5C" stroke-width="0.75" stroke-opacity="0.3"/>
-  <line id="as-x" x1="268" y1="500" x2="464" y2="500" stroke="#201B5C" stroke-width="0.75" stroke-opacity="0.3"/>
-  <rect id="g00" x="281.45" y="456.94" width="38.43" height="43.06" fill="#201B5C"/>
-  <rect id="g01" x="281.45" y="428.24" width="38.43" height="28.7" fill="#201B5C" fill-opacity="0.45"/>
-  <rect id="g02" x="281.45" y="404.32" width="38.43" height="23.92" fill="#201B5C" fill-opacity="0.15"/>
-  <rect id="g10" x="346.78" y="463.64" width="38.43" height="36.36" fill="#201B5C"/>
-  <rect id="g11" x="346.78" y="431.11" width="38.43" height="32.53" fill="#201B5C" fill-opacity="0.45"/>
-  <rect id="g12" x="346.78" y="404.32" width="38.43" height="26.79" fill="#201B5C" fill-opacity="0.15"/>
-  <rect id="g20" x="412.12" y="471.3" width="38.43" height="28.7" fill="#201B5C"/>
-  <rect id="g21" x="412.12" y="436.85" width="38.43" height="34.44" fill="#201B5C" fill-opacity="0.45"/>
-  <rect id="g22" x="412.12" y="404.32" width="38.43" height="32.53" fill="#201B5C" fill-opacity="0.15"/>
-  <text id="cat-13-0" x="268" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#201B5C" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="268" y="517.35">DEEL VAN GEHEEL</tspan></text>
-  <text id="naam-13-0" x="268" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#201B5C" xml:space="preserve"><tspan x="268" y="535.94">Gestapelde kolom</tspan></text>
-  <text id="vraag-13-0" x="268" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#201B5C" fill-opacity="0.65" xml:space="preserve"><tspan x="268" y="552.42">waaruit is het totaal opgebouwd</tspan></text>
-  <rect id="tegel-14" x="500" y="380" width="232" height="176" fill="none" stroke="#201B5C" stroke-width="0.5"/>
-  <rect id="p00" x="518" y="404" width="101.92" height="16" fill="#201B5C"/>
-  <rect id="p01" x="619.92" y="404" width="60.76" height="16" fill="#201B5C" fill-opacity="0.45"/>
-  <rect id="p02" x="680.68" y="404" width="33.32" height="16" fill="#201B5C" fill-opacity="0.15"/>
-  <rect id="p10" x="518" y="433.33" width="74.48" height="16" fill="#201B5C"/>
-  <rect id="p11" x="592.48" y="433.33" width="86.24" height="16" fill="#201B5C" fill-opacity="0.45"/>
-  <rect id="p12" x="678.72" y="433.33" width="35.28" height="16" fill="#201B5C" fill-opacity="0.15"/>
-  <rect id="p20" x="518" y="462.67" width="119.56" height="16" fill="#201B5C"/>
-  <rect id="p21" x="637.56" y="462.67" width="43.12" height="16" fill="#201B5C" fill-opacity="0.45"/>
-  <rect id="p22" x="680.68" y="462.67" width="33.32" height="16" fill="#201B5C" fill-opacity="0.15"/>
-  <text id="cat-14-0" x="518" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#201B5C" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="518" y="517.35">DEEL VAN GEHEEL</tspan></text>
-  <text id="naam-14-0" x="518" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#201B5C" xml:space="preserve"><tspan x="518" y="535.94">Proportionele staaf</tspan></text>
-  <text id="vraag-14-0" x="518" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#201B5C" fill-opacity="0.65" xml:space="preserve"><tspan x="518" y="552.42">hoe is elk geheel verdeeld</tspan></text>
-  <rect id="tegel-15" x="750" y="380" width="232" height="176" fill="none" stroke="#201B5C" stroke-width="0.5"/>
-  <line id="as-y" x1="768" y1="396" x2="768" y2="500" stroke="#201B5C" stroke-width="0.75" stroke-opacity="0.3"/>
-  <line id="as-x" x1="768" y1="500" x2="964" y2="500" stroke="#201B5C" stroke-width="0.75" stroke-opacity="0.3"/>
-  <rect id="w0" x="774.53" y="435.52" width="26.13" height="64.48" fill="#201B5C"/>
-  <rect id="w1" x="813.73" y="418.88" width="26.13" height="16.64" fill="#201B5C" fill-opacity="0.45"/>
-  <line id="c1" x1="800.67" y1="435.52" x2="813.73" y2="435.52" stroke="#201B5C" stroke-width="0.6" stroke-opacity="0.3" stroke-dasharray="2 2"/>
-  <rect id="w2" x="852.93" y="418.88" width="26.13" height="29.12" fill="#201B5C" fill-opacity="0.45"/>
-  <line id="c2" x1="839.87" y1="448" x2="852.93" y2="448" stroke="#201B5C" stroke-width="0.6" stroke-opacity="0.3" stroke-dasharray="2 2"/>
-  <rect id="w3" x="892.13" y="448" width="26.13" height="16.64" fill="#201B5C" fill-opacity="0.45"/>
-  <line id="c3" x1="879.07" y1="448" x2="892.13" y2="448" stroke="#201B5C" stroke-width="0.6" stroke-opacity="0.3" stroke-dasharray="2 2"/>
-  <rect id="w4" x="931.33" y="464.64" width="26.13" height="35.36" fill="#201B5C"/>
-  <line id="c4" x1="918.27" y1="500" x2="931.33" y2="500" stroke="#201B5C" stroke-width="0.6" stroke-opacity="0.3" stroke-dasharray="2 2"/>
-  <text id="cat-15-0" x="768" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#201B5C" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="768" y="517.35">DEEL VAN GEHEEL</tspan></text>
-  <text id="naam-15-0" x="768" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#201B5C" xml:space="preserve"><tspan x="768" y="535.94">Waterval</tspan></text>
-  <text id="vraag-15-0" x="768" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#201B5C" fill-opacity="0.65" xml:space="preserve"><tspan x="768" y="552.42">wat bouwt op en wat gaat eraf</tspan></text>
-  <rect id="tegel-16" x="1000" y="380" width="232" height="176" fill="none" stroke="#201B5C" stroke-width="0.5"/>
-  <rect id="c0" x="1018" y="396" width="12.15" height="12.15" fill="#201B5C"/>
-  <rect id="c1" x="1037.6" y="396" width="12.15" height="12.15" fill="#201B5C"/>
-  <rect id="c2" x="1057.2" y="396" width="12.15" height="12.15" fill="#201B5C"/>
-  <rect id="c3" x="1076.8" y="396" width="12.15" height="12.15" fill="#201B5C"/>
-  <rect id="c4" x="1096.4" y="396" width="12.15" height="12.15" fill="#201B5C"/>
-  <rect id="c5" x="1116" y="396" width="12.15" height="12.15" fill="#201B5C"/>
-  <rect id="c6" x="1135.6" y="396" width="12.15" height="12.15" fill="#201B5C"/>
-  <rect id="c7" x="1155.2" y="396" width="12.15" height="12.15" fill="#201B5C"/>
-  <rect id="c8" x="1174.8" y="396" width="12.15" height="12.15" fill="#201B5C"/>
-  <rect id="c9" x="1194.4" y="396" width="12.15" height="12.15" fill="#201B5C"/>
-  <rect id="c10" x="1018" y="416.8" width="12.15" height="12.15" fill="#201B5C"/>
-  <rect id="c11" x="1037.6" y="416.8" width="12.15" height="12.15" fill="#201B5C"/>
-  <rect id="c12" x="1057.2" y="416.8" width="12.15" height="12.15" fill="#201B5C"/>
-  <rect id="c13" x="1076.8" y="416.8" width="12.15" height="12.15" fill="#201B5C"/>
-  <rect id="c14" x="1096.4" y="416.8" width="12.15" height="12.15" fill="#201B5C"/>
-  <rect id="c15" x="1116" y="416.8" width="12.15" height="12.15" fill="#201B5C"/>
-  <rect id="c16" x="1135.6" y="416.8" width="12.15" height="12.15" fill="#201B5C"/>
-  <rect id="c17" x="1155.2" y="416.8" width="12.15" height="12.15" fill="#201B5C"/>
-  <rect id="c18" x="1174.8" y="416.8" width="12.15" height="12.15" fill="#201B5C"/>
-  <rect id="c19" x="1194.4" y="416.8" width="12.15" height="12.15" fill="#201B5C"/>
-  <rect id="c20" x="1018" y="437.6" width="12.15" height="12.15" fill="#201B5C"/>
-  <rect id="c21" x="1037.6" y="437.6" width="12.15" height="12.15" fill="#201B5C"/>
-  <rect id="c22" x="1057.2" y="437.6" width="12.15" height="12.15" fill="#201B5C"/>
-  <rect id="c23" x="1076.8" y="437.6" width="12.15" height="12.15" fill="#201B5C"/>
-  <rect id="c24" x="1096.4" y="437.6" width="12.15" height="12.15" fill="#201B5C"/>
-  <rect id="c25" x="1116" y="437.6" width="12.15" height="12.15" fill="#201B5C"/>
-  <rect id="c26" x="1135.6" y="437.6" width="12.15" height="12.15" fill="#201B5C"/>
-  <rect id="c27" x="1155.2" y="437.6" width="12.15" height="12.15" fill="#201B5C"/>
-  <rect id="c28" x="1174.8" y="437.6" width="12.15" height="12.15" fill="#201B5C"/>
-  <rect id="c29" x="1194.4" y="437.6" width="12.15" height="12.15" fill="#201B5C"/>
-  <rect id="c30" x="1018" y="458.4" width="12.15" height="12.15" fill="#201B5C"/>
-  <rect id="c31" x="1037.6" y="458.4" width="12.15" height="12.15" fill="#201B5C" fill-opacity="0.15"/>
-  <rect id="c32" x="1057.2" y="458.4" width="12.15" height="12.15" fill="#201B5C" fill-opacity="0.15"/>
-  <rect id="c33" x="1076.8" y="458.4" width="12.15" height="12.15" fill="#201B5C" fill-opacity="0.15"/>
-  <rect id="c34" x="1096.4" y="458.4" width="12.15" height="12.15" fill="#201B5C" fill-opacity="0.15"/>
-  <rect id="c35" x="1116" y="458.4" width="12.15" height="12.15" fill="#201B5C" fill-opacity="0.15"/>
-  <rect id="c36" x="1135.6" y="458.4" width="12.15" height="12.15" fill="#201B5C" fill-opacity="0.15"/>
-  <rect id="c37" x="1155.2" y="458.4" width="12.15" height="12.15" fill="#201B5C" fill-opacity="0.15"/>
-  <rect id="c38" x="1174.8" y="458.4" width="12.15" height="12.15" fill="#201B5C" fill-opacity="0.15"/>
-  <rect id="c39" x="1194.4" y="458.4" width="12.15" height="12.15" fill="#201B5C" fill-opacity="0.15"/>
-  <rect id="c40" x="1018" y="479.2" width="12.15" height="12.15" fill="#201B5C" fill-opacity="0.15"/>
-  <rect id="c41" x="1037.6" y="479.2" width="12.15" height="12.15" fill="#201B5C" fill-opacity="0.15"/>
-  <rect id="c42" x="1057.2" y="479.2" width="12.15" height="12.15" fill="#201B5C" fill-opacity="0.15"/>
-  <rect id="c43" x="1076.8" y="479.2" width="12.15" height="12.15" fill="#201B5C" fill-opacity="0.15"/>
-  <rect id="c44" x="1096.4" y="479.2" width="12.15" height="12.15" fill="#201B5C" fill-opacity="0.15"/>
-  <rect id="c45" x="1116" y="479.2" width="12.15" height="12.15" fill="#201B5C" fill-opacity="0.15"/>
-  <rect id="c46" x="1135.6" y="479.2" width="12.15" height="12.15" fill="#201B5C" fill-opacity="0.15"/>
-  <rect id="c47" x="1155.2" y="479.2" width="12.15" height="12.15" fill="#201B5C" fill-opacity="0.15"/>
-  <rect id="c48" x="1174.8" y="479.2" width="12.15" height="12.15" fill="#201B5C" fill-opacity="0.15"/>
-  <rect id="c49" x="1194.4" y="479.2" width="12.15" height="12.15" fill="#201B5C" fill-opacity="0.15"/>
-  <text id="cat-16-0" x="1018" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#201B5C" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="1018" y="517.35">DEEL VAN GEHEEL</tspan></text>
-  <text id="naam-16-0" x="1018" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#201B5C" xml:space="preserve"><tspan x="1018" y="535.94">Rasterplot</tspan></text>
-  <text id="vraag-16-0" x="1018" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#201B5C" fill-opacity="0.65" xml:space="preserve"><tspan x="1018" y="552.42">hoeveel van de honderd</tspan></text>
-  <rect id="tegel-17" x="1250" y="380" width="232" height="176" fill="none" stroke="#201B5C" stroke-width="0.5"/>
-  <path id="d0" d="M 1366.0 404.3 A 43.68 43.68 0 0 1 1376.9 490.3 L 1372.5 473.2 A 26.0 26.0 0 0 0 1366.0 422.0 Z" fill="#201B5C" fill-opacity="0.85"/>
-  <path id="d1" d="M 1376.9 490.3 A 43.68 43.68 0 0 1 1322.4 450.7 L 1340.1 449.6 A 26.0 26.0 0 0 0 1372.5 473.2 Z" fill="#201B5C" fill-opacity="0.65"/>
-  <path id="d2" d="M 1322.4 450.7 A 43.68 43.68 0 0 1 1340.3 412.7 L 1350.7 427.0 A 26.0 26.0 0 0 0 1340.1 449.6 Z" fill="#201B5C" fill-opacity="0.45"/>
-  <path id="d3" d="M 1340.3 412.7 A 43.68 43.68 0 0 1 1366.0 404.3 L 1366.0 422.0 A 26.0 26.0 0 0 0 1350.7 427.0 Z" fill="#201B5C" fill-opacity="0.25"/>
-  <text id="cat-17-0" x="1268" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#201B5C" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="1268" y="517.35">DEEL VAN GEHEEL</tspan></text>
-  <text id="naam-17-0" x="1268" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#201B5C" xml:space="preserve"><tspan x="1268" y="535.94">Ring</tspan></text>
-  <text id="vraag-17-0" x="1268" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#201B5C" fill-opacity="0.65" xml:space="preserve"><tspan x="1268" y="552.42">hoe is het ene geheel verdeeld</tspan></text>
-  <rect id="tegel-18" x="0" y="570" width="232" height="176" fill="none" stroke="#201B5C" stroke-width="0.5"/>
-  <rect id="tm0" x="18" y="586" width="99.92" height="62.48" fill="#201B5C" fill-opacity="0.75"/>
-  <rect id="tm1" x="119.92" y="586" width="92.08" height="35.44" fill="#201B5C" fill-opacity="0.66"/>
-  <rect id="tm2" x="119.92" y="623.44" width="52.88" height="25.04" fill="#201B5C" fill-opacity="0.57"/>
-  <rect id="tm3" x="174.8" y="623.44" width="37.2" height="25.04" fill="#201B5C" fill-opacity="0.48"/>
-  <rect id="tm4" x="18" y="650.48" width="64.64" height="37.52" fill="#201B5C" fill-opacity="0.39"/>
-  <rect id="tm5" x="84.64" y="650.48" width="56.8" height="37.52" fill="#201B5C" fill-opacity="0.3"/>
-  <rect id="tm6" x="143.44" y="650.48" width="68.56" height="37.52" fill="#201B5C" fill-opacity="0.21"/>
-  <text id="cat-18-0" x="18" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#201B5C" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="18" y="707.35">DEEL VAN GEHEEL</tspan></text>
-  <text id="naam-18-0" x="18" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#201B5C" xml:space="preserve"><tspan x="18" y="725.94">Treemap</tspan></text>
-  <text id="vraag-18-0" x="18" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#201B5C" fill-opacity="0.65" xml:space="preserve"><tspan x="18" y="742.42">welke brokken zijn groot</tspan></text>
-  <rect id="tegel-19" x="250" y="570" width="232" height="176" fill="none" stroke="#201B5C" stroke-width="0.5"/>
-  <rect id="mk00" x="268" y="586" width="79.32" height="57.2" fill="#201B5C" fill-opacity="0.85"/>
-  <rect id="mk01" x="268" y="643.2" width="79.32" height="31.2" fill="#201B5C" fill-opacity="0.57"/>
-  <rect id="mk02" x="268" y="674.4" width="79.32" height="15.6" fill="#201B5C" fill-opacity="0.29"/>
-  <rect id="mk10" x="350.32" y="586" width="57.76" height="39.52" fill="#201B5C" fill-opacity="0.85"/>
-  <rect id="mk11" x="350.32" y="625.52" width="57.76" height="43.68" fill="#201B5C" fill-opacity="0.57"/>
-  <rect id="mk12" x="350.32" y="669.2" width="57.76" height="20.8" fill="#201B5C" fill-opacity="0.29"/>
-  <rect id="mk20" x="411.08" y="586" width="49.92" height="29.12" fill="#201B5C" fill-opacity="0.85"/>
-  <rect id="mk21" x="411.08" y="615.12" width="49.92" height="31.2" fill="#201B5C" fill-opacity="0.57"/>
-  <rect id="mk22" x="411.08" y="646.32" width="49.92" height="43.68" fill="#201B5C" fill-opacity="0.29"/>
-  <text id="cat-19-0" x="268" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#201B5C" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="268" y="707.35">DEEL VAN GEHEEL</tspan></text>
-  <text id="naam-19-0" x="268" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#201B5C" xml:space="preserve"><tspan x="268" y="725.94">Marimekko</tspan></text>
-  <text id="vraag-19-0" x="268" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#201B5C" fill-opacity="0.65" xml:space="preserve"><tspan x="268" y="742.42">twee verdelingen tegelijk</tspan></text>
-  <rect id="tegel-20" x="500" y="570" width="232" height="176" fill="none" stroke="#201B5C" stroke-width="0.5"/>
-  <rect id="t0" x="518" y="586" width="196" height="21" fill="#201B5C" fill-opacity="0.2"/>
-  <rect id="t1" x="539.56" y="612" width="152.88" height="21" fill="#201B5C" fill-opacity="0.4"/>
-  <rect id="t2" x="565.04" y="638" width="101.92" height="21" fill="#201B5C" fill-opacity="0.6"/>
-  <rect id="t3" x="586.6" y="664" width="58.8" height="21" fill="#201B5C" fill-opacity="0.8"/>
-  <text id="cat-20-0" x="518" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#201B5C" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="518" y="707.35">DEEL VAN GEHEEL</tspan></text>
-  <text id="naam-20-0" x="518" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#201B5C" xml:space="preserve"><tspan x="518" y="725.94">Trechter</tspan></text>
-  <text id="vraag-20-0" x="518" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#201B5C" fill-opacity="0.65" xml:space="preserve"><tspan x="518" y="742.42">waar valt het af</tspan></text>
-  <rect id="tegel-21" x="750" y="570" width="232" height="176" fill="none" stroke="#201B5C" stroke-width="0.5"/>
-  <line id="as" x1="866" y1="586" x2="866" y2="690" stroke="#201B5C" stroke-width="0.75" stroke-opacity="0.3"/>
-  <rect id="L0" x="785.64" y="586" width="80.36" height="15.29" fill="#201B5C" fill-opacity="0.45"/>
-  <rect id="R0" x="866" y="586" width="53.9" height="15.29" fill="#201B5C"/>
-  <rect id="L1" x="803.28" y="612" width="62.72" height="15.29" fill="#201B5C" fill-opacity="0.45"/>
-  <rect id="R1" x="866" y="612" width="69.58" height="15.29" fill="#201B5C"/>
-  <rect id="L2" x="819.94" y="638" width="46.06" height="15.29" fill="#201B5C" fill-opacity="0.45"/>
-  <rect id="R2" x="866" y="638" width="39.2" height="15.29" fill="#201B5C"/>
-  <rect id="L3" x="833.66" y="664" width="32.34" height="15.29" fill="#201B5C" fill-opacity="0.45"/>
-  <rect id="R3" x="866" y="664" width="50.96" height="15.29" fill="#201B5C"/>
-  <text id="cat-21-0" x="768" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#201B5C" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="768" y="707.35">GROOTTE</tspan></text>
-  <text id="naam-21-0" x="768" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#201B5C" xml:space="preserve"><tspan x="768" y="725.94">Gepaarde staaf</tspan></text>
-  <text id="vraag-21-0" x="768" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#201B5C" fill-opacity="0.65" xml:space="preserve"><tspan x="768" y="742.42">hoe verhoudt dit zich tot dat</tspan></text>
-  <rect id="tegel-22" x="1000" y="570" width="232" height="176" fill="none" stroke="#201B5C" stroke-width="0.5"/>
-  <circle id="s0" cx="1044" cy="664" r="26" fill="#201B5C" fill-opacity="0.22" stroke="#201B5C" stroke-width="1"/>
-  <circle id="s1" cx="1100" cy="672" r="18" fill="#201B5C" fill-opacity="0.22" stroke="#201B5C" stroke-width="1"/>
-  <circle id="s2" cx="1142" cy="678" r="12" fill="#201B5C" fill-opacity="0.22" stroke="#201B5C" stroke-width="1"/>
-  <circle id="s3" cx="1173" cy="683" r="7" fill="#201B5C" fill-opacity="0.22" stroke="#201B5C" stroke-width="1"/>
-  <text id="cat-22-0" x="1018" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#201B5C" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="1018" y="707.35">GROOTTE</tspan></text>
-  <text id="naam-22-0" x="1018" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#201B5C" xml:space="preserve"><tspan x="1018" y="725.94">Proportioneel symbool</tspan></text>
-  <text id="vraag-22-0" x="1018" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#201B5C" fill-opacity="0.65" xml:space="preserve"><tspan x="1018" y="742.42">hoeveel groter is het een</tspan></text>
-  <rect id="tegel-23" x="1250" y="570" width="232" height="176" fill="none" stroke="#201B5C" stroke-width="0.5"/>
-  <circle id="kop0" cx="1277.8" cy="617.2" r="5.5" fill="#201B5C"/>
-  <path id="romp0" d="M 1271.3 660.88 Q 1271.3 631.76 1277.8 631.76 Q 1284.3 631.76 1284.3 660.88 Z" fill="#201B5C"/>
-  <circle id="kop1" cx="1297.4" cy="617.2" r="5.5" fill="#201B5C"/>
-  <path id="romp1" d="M 1290.9 660.88 Q 1290.9 631.76 1297.4 631.76 Q 1303.9 631.76 1303.9 660.88 Z" fill="#201B5C"/>
-  <circle id="kop2" cx="1317" cy="617.2" r="5.5" fill="#201B5C"/>
-  <path id="romp2" d="M 1310.5 660.88 Q 1310.5 631.76 1317.0 631.76 Q 1323.5 631.76 1323.5 660.88 Z" fill="#201B5C"/>
-  <circle id="kop3" cx="1336.6" cy="617.2" r="5.5" fill="#201B5C"/>
-  <path id="romp3" d="M 1330.1 660.88 Q 1330.1 631.76 1336.6 631.76 Q 1343.1 631.76 1343.1 660.88 Z" fill="#201B5C"/>
-  <circle id="kop4" cx="1356.2" cy="617.2" r="5.5" fill="#201B5C"/>
-  <path id="romp4" d="M 1349.7 660.88 Q 1349.7 631.76 1356.2 631.76 Q 1362.7 631.76 1362.7 660.88 Z" fill="#201B5C"/>
-  <circle id="kop5" cx="1375.8" cy="617.2" r="5.5" fill="#201B5C"/>
-  <path id="romp5" d="M 1369.3 660.88 Q 1369.3 631.76 1375.8 631.76 Q 1382.3 631.76 1382.3 660.88 Z" fill="#201B5C"/>
-  <circle id="kop6" cx="1395.4" cy="617.2" r="5.5" fill="#201B5C"/>
-  <path id="romp6" d="M 1388.9 660.88 Q 1388.9 631.76 1395.4 631.76 Q 1401.9 631.76 1401.9 660.88 Z" fill="#201B5C"/>
-  <circle id="kop7" cx="1415" cy="617.2" r="5.5" fill="#201B5C" fill-opacity="0.16"/>
-  <path id="romp7" d="M 1408.5 660.88 Q 1408.5 631.76 1415.0 631.76 Q 1421.5 631.76 1421.5 660.88 Z" fill="#201B5C" fill-opacity="0.16"/>
-  <circle id="kop8" cx="1434.6" cy="617.2" r="5.5" fill="#201B5C" fill-opacity="0.16"/>
-  <path id="romp8" d="M 1428.1 660.88 Q 1428.1 631.76 1434.6 631.76 Q 1441.1 631.76 1441.1 660.88 Z" fill="#201B5C" fill-opacity="0.16"/>
-  <circle id="kop9" cx="1454.2" cy="617.2" r="5.5" fill="#201B5C" fill-opacity="0.16"/>
-  <path id="romp9" d="M 1447.7 660.88 Q 1447.7 631.76 1454.2 631.76 Q 1460.7 631.76 1460.7 660.88 Z" fill="#201B5C" fill-opacity="0.16"/>
-  <text id="cat-23-0" x="1268" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#201B5C" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="1268" y="707.35">GROOTTE</tspan></text>
-  <text id="naam-23-0" x="1268" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#201B5C" xml:space="preserve"><tspan x="1268" y="725.94">Isotype</tspan></text>
-  <text id="vraag-23-0" x="1268" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#201B5C" fill-opacity="0.65" xml:space="preserve"><tspan x="1268" y="742.42">hoeveel mensen zijn dit</tspan></text>
-  <rect id="tegel-24" x="0" y="760" width="232" height="176" fill="none" stroke="#201B5C" stroke-width="0.5"/>
-  <rect id="spoor0" x="18" y="783" width="196" height="14" fill="#201B5C" fill-opacity="0.1"/>
-  <rect id="waarde0" x="18" y="786" width="141.12" height="8" fill="#201B5C"/>
-  <line id="doel0" x1="184.6" y1="781" x2="184.6" y2="799" stroke="#201B5C" stroke-width="2"/>
-  <rect id="spoor1" x="18" y="821" width="196" height="14" fill="#201B5C" fill-opacity="0.1"/>
-  <rect id="waarde1" x="18" y="824" width="113.68" height="8" fill="#201B5C"/>
-  <line id="doel1" x1="116" y1="819" x2="116" y2="837" stroke="#201B5C" stroke-width="2"/>
-  <rect id="spoor2" x="18" y="859" width="196" height="14" fill="#201B5C" fill-opacity="0.1"/>
-  <rect id="waarde2" x="18" y="862" width="80.36" height="8" fill="#201B5C"/>
-  <line id="doel2" x1="139.52" y1="857" x2="139.52" y2="875" stroke="#201B5C" stroke-width="2"/>
-  <text id="cat-24-0" x="18" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#201B5C" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="18" y="897.35">GROOTTE</tspan></text>
-  <text id="naam-24-0" x="18" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#201B5C" xml:space="preserve"><tspan x="18" y="915.94">Bulletgrafiek</tspan></text>
-  <text id="vraag-24-0" x="18" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#201B5C" fill-opacity="0.65" xml:space="preserve"><tspan x="18" y="932.42">haalt het de norm</tspan></text>
-  <rect id="tegel-25" x="250" y="760" width="232" height="176" fill="none" stroke="#201B5C" stroke-width="0.5"/>
-  <path id="m1-0" d="M 291.1 857.1 A 74.88 74.88 0 0 1 440.9 857.1" fill="none" stroke="#201B5C" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
-  <path id="m0-68" d="M 291.1 857.1 A 74.88 74.88 0 0 1 406.1 793.9" fill="none" stroke="#201B5C" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
-  <line id="naald" x1="366" y1="857.12" x2="406.12" y2="793.9" stroke="#201B5C" stroke-width="1" stroke-opacity="0.3"/>
-  <text id="cat-25-0" x="268" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#201B5C" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="268" y="897.35">GROOTTE</tspan></text>
-  <text id="naam-25-0" x="268" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#201B5C" xml:space="preserve"><tspan x="268" y="915.94">Meter</tspan></text>
-  <text id="vraag-25-0" x="268" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#201B5C" fill-opacity="0.65" xml:space="preserve"><tspan x="268" y="932.42">hoe ver zijn we</tspan></text>
-  <rect id="tegel-26" x="500" y="760" width="232" height="176" fill="none" stroke="#201B5C" stroke-width="0.5"/>
-  <path id="ring0-5" d="M 616.0 805.1 L 635.8 816.6 L 635.8 839.4 L 616.0 850.9 L 596.2 839.4 L 596.2 816.6 Z" fill="none" stroke="#201B5C" stroke-width="0.6" stroke-linecap="round" stroke-linejoin="round"/>
-  <path id="ring1-0" d="M 616.0 782.2 L 655.6 805.1 L 655.6 850.9 L 616.0 873.8 L 576.4 850.9 L 576.4 805.1 Z" fill="none" stroke="#201B5C" stroke-width="0.6" stroke-linecap="round" stroke-linejoin="round"/>
-  <path id="web" d="M 616.0 788.6 L 640.6 813.8 L 645.3 844.9 L 616.0 846.3 L 594.2 840.6 L 589.1 812.4 Z" fill="#201B5C" fill-opacity="0.2" stroke="#201B5C" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-  <text id="cat-26-0" x="518" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#201B5C" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="518" y="897.35">GROOTTE</tspan></text>
-  <text id="naam-26-0" x="518" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#201B5C" xml:space="preserve"><tspan x="518" y="915.94">Radar</tspan></text>
-  <text id="vraag-26-0" x="518" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#201B5C" fill-opacity="0.65" xml:space="preserve"><tspan x="518" y="932.42">op welke assen scoort het</tspan></text>
-  <rect id="tegel-27" x="750" y="760" width="232" height="176" fill="none" stroke="#201B5C" stroke-width="0.5"/>
-  <line id="nul" x1="866" y1="776" x2="866" y2="880" stroke="#201B5C" stroke-width="0.75" stroke-opacity="0.3"/>
-  <rect id="d0" x="866" y="776" width="60.76" height="13.87" fill="#201B5C"/>
-  <rect id="d1" x="866" y="796.8" width="33.32" height="13.87" fill="#201B5C"/>
-  <rect id="d2" x="848.36" y="817.6" width="17.64" height="13.87" fill="#201B5C" fill-opacity="0.4"/>
-  <rect id="d3" x="821.9" y="838.4" width="44.1" height="13.87" fill="#201B5C" fill-opacity="0.4"/>
-  <rect id="d4" x="866" y="859.2" width="20.58" height="13.87" fill="#201B5C"/>
-  <text id="cat-27-0" x="768" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#201B5C" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="768" y="897.35">AFWIJKING</tspan></text>
-  <text id="naam-27-0" x="768" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#201B5C" xml:space="preserve"><tspan x="768" y="915.94">Divergerende staaf</tspan></text>
-  <text id="vraag-27-0" x="768" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#201B5C" fill-opacity="0.65" xml:space="preserve"><tspan x="768" y="932.42">wie zit boven en wie onder de norm</tspan></text>
-  <rect id="tegel-28" x="1000" y="760" width="232" height="176" fill="none" stroke="#201B5C" stroke-width="0.5"/>
-  <path id="vlak" d="M 1018.0 836.3 L 1050.7 822.8 L 1083.3 815.5 L 1116.0 830.1 L 1148.7 842.6 L 1181.3 834.2 L 1214.0 819.7 L 1214.0 828.0 L 1181.3 828.0 L 1148.7 828.0 L 1116.0 828.0 L 1083.3 828.0 L 1050.7 828.0 L 1018.0 828.0 Z" fill="#201B5C" fill-opacity="0.18"/>
-  <path id="ref" d="M 1018.0 828.0 L 1050.7 828.0 L 1083.3 828.0 L 1116.0 828.0 L 1148.7 828.0 L 1181.3 828.0 L 1214.0 828.0" fill="none" stroke="#201B5C" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/>
-  <path id="reeks" d="M 1018.0 836.3 L 1050.7 822.8 L 1083.3 815.5 L 1116.0 830.1 L 1148.7 842.6 L 1181.3 834.2 L 1214.0 819.7" fill="none" stroke="#201B5C" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-  <text id="cat-28-0" x="1018" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#201B5C" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="1018" y="897.35">AFWIJKING</tspan></text>
-  <text id="naam-28-0" x="1018" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#201B5C" xml:space="preserve"><tspan x="1018" y="915.94">Overschot en tekort</tspan></text>
-  <text id="vraag-28-0" x="1018" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#201B5C" fill-opacity="0.65" xml:space="preserve"><tspan x="1018" y="932.42">waar loopt het uit de pas</tspan></text>
-  <rect id="tegel-29" x="1250" y="760" width="232" height="176" fill="none" stroke="#201B5C" stroke-width="0.5"/>
-  <rect id="L0" x="1268" y="776" width="9" height="47.84" fill="#201B5C"/>
-  <rect id="L1" x="1268" y="830.08" width="9" height="31.2" fill="#201B5C"/>
-  <rect id="L2" x="1268" y="865.44" width="9" height="14.56" fill="#201B5C"/>
-  <rect id="R0" x="1455" y="776" width="9" height="29.12" fill="#201B5C"/>
-  <rect id="R1" x="1455" y="811.36" width="9" height="24.96" fill="#201B5C"/>
-  <rect id="R2" x="1455" y="840.48" width="9" height="20.8" fill="#201B5C"/>
-  <rect id="R3" x="1455" y="865.44" width="9" height="14.56" fill="#201B5C"/>
-  <path id="S0" d="M 1277 776.0 C 1366.0 776.0 1366.0 776.0 1455 776.0 L 1455 805.1 C 1366.0 805.1 1366.0 805.1 1277 805.1 Z" fill="#201B5C" fill-opacity="0.16"/>
-  <path id="S1" d="M 1277 776.0 C 1366.0 776.0 1366.0 811.4 1455 811.4 L 1455 836.3 C 1366.0 836.3 1366.0 801.0 1277 801.0 Z" fill="#201B5C" fill-opacity="0.16"/>
-  <path id="S2" d="M 1277 830.1 C 1366.0 830.1 1366.0 840.5 1455 840.5 L 1455 861.3 C 1366.0 861.3 1366.0 850.9 1277 850.9 Z" fill="#201B5C" fill-opacity="0.16"/>
-  <path id="S3" d="M 1277 865.4 C 1366.0 865.4 1366.0 865.4 1455 865.4 L 1455 880.0 C 1366.0 880.0 1366.0 880.0 1277 880.0 Z" fill="#201B5C" fill-opacity="0.16"/>
-  <text id="cat-29-0" x="1268" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#201B5C" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="1268" y="897.35">STROOM</tspan></text>
-  <text id="naam-29-0" x="1268" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#201B5C" xml:space="preserve"><tspan x="1268" y="915.94">Sankey</tspan></text>
-  <text id="vraag-29-0" x="1268" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#201B5C" fill-opacity="0.65" xml:space="preserve"><tspan x="1268" y="932.42">waar gaat het geld naartoe</tspan></text>
-  <rect id="tegel-30" x="0" y="950" width="232" height="176" fill="none" stroke="#201B5C" stroke-width="0.5"/>
-  <circle id="naaf" cx="116" cy="1018" r="21" fill="#201B5C" fill-opacity="0.12" stroke="#201B5C" stroke-width="1.6"/>
-  <line id="v0" x1="116" y1="997" x2="116" y2="988" stroke="#201B5C" stroke-width="1" stroke-opacity="0.55"/>
-  <circle id="n0" cx="116" cy="977" r="11" fill="none" stroke="#201B5C" stroke-width="1.2"/>
-  <line id="v1" x1="135.97" y1="1011.51" x2="188.28" y2="1008.73" stroke="#201B5C" stroke-width="1" stroke-opacity="0.55"/>
-  <circle id="n1" cx="198.74" cy="1005.33" r="11" fill="none" stroke="#201B5C" stroke-width="1.2"/>
-  <line id="v2" x1="128.34" y1="1034.99" x2="160.67" y2="1042.27" stroke="#201B5C" stroke-width="1" stroke-opacity="0.55"/>
-  <circle id="n2" cx="167.14" cy="1051.17" r="11" fill="none" stroke="#201B5C" stroke-width="1.2"/>
-  <line id="v3" x1="103.66" y1="1034.99" x2="71.33" y2="1042.27" stroke="#201B5C" stroke-width="1" stroke-opacity="0.55"/>
-  <circle id="n3" cx="64.86" cy="1051.17" r="11" fill="none" stroke="#201B5C" stroke-width="1.2"/>
-  <line id="v4" x1="96.03" y1="1011.51" x2="43.72" y2="1008.73" stroke="#201B5C" stroke-width="1" stroke-opacity="0.55"/>
-  <circle id="n4" cx="33.26" cy="1005.33" r="11" fill="none" stroke="#201B5C" stroke-width="1.2"/>
-  <text id="cat-30-0" x="18" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#201B5C" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="18" y="1087.35">STROOM</tspan></text>
-  <text id="naam-30-0" x="18" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#201B5C" xml:space="preserve"><tspan x="18" y="1105.94">Naaf</tspan></text>
-  <text id="vraag-30-0" x="18" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#201B5C" fill-opacity="0.65" xml:space="preserve"><tspan x="18" y="1122.42">wie hangt aan wie</tspan></text>
-  <rect id="tegel-31" x="250" y="950" width="232" height="176" fill="none" stroke="#201B5C" stroke-width="0.5"/>
-  <circle id="rand" cx="366" cy="1018" r="45.76" fill="none" stroke="#201B5C" stroke-width="0.75"/>
-  <path id="c03" d="M 409.7 1031.5 Q 366.0 1018.0 325.0 997.8" fill="none" stroke="#201B5C" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-  <path id="c14" d="M 373.8 1063.1 Q 366.0 1018.0 365.4 972.2" fill="none" stroke="#201B5C" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-  <path id="c25" d="M 329.3 1045.4 Q 366.0 1018.0 406.5 996.7" fill="none" stroke="#201B5C" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-  <path id="c02" d="M 409.7 1031.5 Q 366.0 1018.0 329.3 1045.4" fill="none" stroke="#201B5C" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-  <circle id="n0" cx="409.72" cy="1031.52" r="4" fill="#201B5C"/>
-  <circle id="n1" cx="373.78" cy="1063.09" r="4" fill="#201B5C"/>
-  <circle id="n2" cx="329.34" cy="1045.39" r="4" fill="#201B5C"/>
-  <circle id="n3" cx="324.96" cy="997.75" r="4" fill="#201B5C"/>
-  <circle id="n4" cx="365.43" cy="972.24" r="4" fill="#201B5C"/>
-  <circle id="n5" cx="406.52" cy="996.74" r="4" fill="#201B5C"/>
-  <text id="cat-31-0" x="268" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#201B5C" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="268" y="1087.35">STROOM</tspan></text>
-  <text id="naam-31-0" x="268" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#201B5C" xml:space="preserve"><tspan x="268" y="1105.94">Chord</tspan></text>
-  <text id="vraag-31-0" x="268" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#201B5C" fill-opacity="0.65" xml:space="preserve"><tspan x="268" y="1122.42">wie wisselt uit met wie</tspan></text>
-  <rect id="tegel-32" x="500" y="950" width="232" height="176" fill="none" stroke="#201B5C" stroke-width="0.5"/>
-  <path id="boog0" d="M 622.6 976.9 A 41.6 41.6 0 0 1 657.1 1011.4" fill="none" stroke="#201B5C" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-  <circle id="k0" cx="657.53" cy="1015.51" r="5" fill="#201B5C"/>
-  <path id="boog1" d="M 657.1 1024.6 A 41.6 41.6 0 0 1 622.6 1059.1" fill="none" stroke="#201B5C" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-  <circle id="k1" cx="618.49" cy="1059.53" r="5" fill="#201B5C"/>
-  <path id="boog2" d="M 609.4 1059.1 A 41.6 41.6 0 0 1 574.9 1024.6" fill="none" stroke="#201B5C" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-  <circle id="k2" cx="574.47" cy="1020.49" r="5" fill="#201B5C"/>
-  <path id="boog3" d="M 574.9 1011.4 A 41.6 41.6 0 0 1 609.4 976.9" fill="none" stroke="#201B5C" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-  <circle id="k3" cx="613.51" cy="976.47" r="5" fill="#201B5C"/>
-  <text id="cat-32-0" x="518" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#201B5C" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="518" y="1087.35">STROOM</tspan></text>
-  <text id="naam-32-0" x="518" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#201B5C" xml:space="preserve"><tspan x="518" y="1105.94">Cyclus</tspan></text>
-  <text id="vraag-32-0" x="518" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#201B5C" fill-opacity="0.65" xml:space="preserve"><tspan x="518" y="1122.42">wat herhaalt zich</tspan></text>
-  <rect id="tegel-33" x="750" y="950" width="232" height="176" fill="none" stroke="#201B5C" stroke-width="0.5"/>
-  <rect id="f0" x="768" y="1007" width="50.96" height="22" rx="11" ry="11" fill="#201B5C" fill-opacity="0.55"/>
-  <path id="f1" d="M 866.0 1003.0 L 888.5 1018.0 L 866.0 1033.0 L 843.5 1018.0 Z" fill="#201B5C" fill-opacity="0.16" stroke="#201B5C" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-  <rect id="f2" x="913.04" y="973.72" width="50.96" height="22" fill="none" stroke="#201B5C" stroke-width="1"/>
-  <rect id="f3" x="913.04" y="1040.28" width="50.96" height="22" fill="none" stroke="#201B5C" stroke-width="1"/>
-  <line id="p1" x1="818.96" y1="1018" x2="840.52" y2="1018" stroke="#201B5C" stroke-width="1" stroke-opacity="0.5"/>
-  <path id="p2" d="M 888.0 1018.0 Q 897.36 1018.0 913.04 984.72" fill="none" stroke="#201B5C" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-  <path id="p3" d="M 888.0 1018.0 Q 897.36 1018.0 913.04 1051.28" fill="none" stroke="#201B5C" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-  <text id="cat-33-0" x="768" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#201B5C" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="768" y="1087.35">STROOM</tspan></text>
-  <text id="naam-33-0" x="768" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#201B5C" xml:space="preserve"><tspan x="768" y="1105.94">Stroomschema</tspan></text>
-  <text id="vraag-33-0" x="768" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#201B5C" fill-opacity="0.65" xml:space="preserve"><tspan x="768" y="1122.42">hoe loopt het besluit</tspan></text>
-  <rect id="tegel-34" x="1000" y="950" width="232" height="176" fill="none" stroke="#201B5C" stroke-width="0.5"/>
-  <path id="ruit" d="M 1076.8 998.0 L 1096.8 1018.0 L 1076.8 1038.0 L 1056.8 1018.0 Z" fill="#201B5C" fill-opacity="0.16" stroke="#201B5C" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
-  <path id="pijl0" d="M 1096.8 1018.0 Q 1125.8 1018.0 1139.52 984.72" fill="none" stroke="#201B5C" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-  <rect id="uit0" x="1143.44" y="975.72" width="66.64" height="18" fill="#201B5C" fill-opacity="0.55" stroke="#201B5C" stroke-width="1"/>
-  <path id="pijl1" d="M 1096.8 1018.0 Q 1125.8 1018.0 1139.52 1051.28" fill="none" stroke="#201B5C" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-  <rect id="uit1" x="1143.44" y="1042.28" width="66.64" height="18" fill="#201B5C" fill-opacity="0.16" stroke="#201B5C" stroke-width="1"/>
-  <text id="cat-34-0" x="1018" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#201B5C" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="1018" y="1087.35">STROOM</tspan></text>
-  <text id="naam-34-0" x="1018" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#201B5C" xml:space="preserve"><tspan x="1018" y="1105.94">Beslisboom</tspan></text>
-  <text id="vraag-34-0" x="1018" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#201B5C" fill-opacity="0.65" xml:space="preserve"><tspan x="1018" y="1122.42">wat gebeurt er als</tspan></text>
-  <rect id="tegel-35" x="1250" y="950" width="232" height="176" fill="none" stroke="#201B5C" stroke-width="0.5"/>
-  <line id="baan0" x1="1268" y1="966" x2="1464" y2="966" stroke="#201B5C" stroke-width="0.5" stroke-opacity="0.3"/>
-  <rect id="s00" x="1271.92" y="973.63" width="43.12" height="17.33" fill="#201B5C" fill-opacity="0.2"/>
-  <rect id="s01" x="1346.4" y="973.63" width="47.04" height="17.33" fill="#201B5C" fill-opacity="0.2"/>
-  <line id="baan1" x1="1268" y1="1000.67" x2="1464" y2="1000.67" stroke="#201B5C" stroke-width="0.5" stroke-opacity="0.3"/>
-  <rect id="s10" x="1318.96" y="1008.29" width="39.2" height="17.33" fill="#201B5C" fill-opacity="0.38"/>
-  <rect id="s11" x="1393.44" y="1008.29" width="43.12" height="17.33" fill="#201B5C" fill-opacity="0.38"/>
-  <line id="baan2" x1="1268" y1="1035.33" x2="1464" y2="1035.33" stroke="#201B5C" stroke-width="0.5" stroke-opacity="0.3"/>
-  <rect id="s20" x="1366" y="1042.96" width="47.04" height="17.33" fill="#201B5C" fill-opacity="0.56"/>
-  <line id="onder" x1="1268" y1="1070" x2="1464" y2="1070" stroke="#201B5C" stroke-width="0.5" stroke-opacity="0.3"/>
-  <text id="cat-35-0" x="1268" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#201B5C" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="1268" y="1087.35">STROOM</tspan></text>
-  <text id="naam-35-0" x="1268" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#201B5C" xml:space="preserve"><tspan x="1268" y="1105.94">Zwembanen</tspan></text>
-  <text id="vraag-35-0" x="1268" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#201B5C" fill-opacity="0.65" xml:space="preserve"><tspan x="1268" y="1122.42">wie doet wat wanneer</tspan></text>
-  <rect id="tegel-36" x="0" y="1140" width="232" height="176" fill="none" stroke="#201B5C" stroke-width="0.5"/>
-  <circle id="v1" cx="94.28" cy="1208" r="37.44" fill="#201B5C" fill-opacity="0.16" stroke="#201B5C" stroke-width="1.2"/>
-  <circle id="v2" cx="137.72" cy="1208" r="37.44" fill="#201B5C" fill-opacity="0.16" stroke="#201B5C" stroke-width="1.2"/>
-  <text id="cat-36-0" x="18" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#201B5C" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="18" y="1277.35">VERBAND</tspan></text>
-  <text id="naam-36-0" x="18" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#201B5C" xml:space="preserve"><tspan x="18" y="1295.94">Venn, twee</tspan></text>
-  <text id="vraag-36-0" x="18" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#201B5C" fill-opacity="0.65" xml:space="preserve"><tspan x="18" y="1312.42">wat delen ze</tspan></text>
-  <rect id="tegel-37" x="250" y="1140" width="232" height="176" fill="none" stroke="#201B5C" stroke-width="0.5"/>
-  <circle id="v0" cx="366" cy="1194.27" r="31.2" fill="#201B5C" fill-opacity="0.13" stroke="#201B5C" stroke-width="1.2"/>
-  <circle id="v1" cx="348.53" cy="1224.22" r="31.2" fill="#201B5C" fill-opacity="0.13" stroke="#201B5C" stroke-width="1.2"/>
-  <circle id="v2" cx="383.47" cy="1224.22" r="31.2" fill="#201B5C" fill-opacity="0.13" stroke="#201B5C" stroke-width="1.2"/>
-  <text id="cat-37-0" x="268" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#201B5C" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="268" y="1277.35">VERBAND</tspan></text>
-  <text id="naam-37-0" x="268" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#201B5C" xml:space="preserve"><tspan x="268" y="1295.94">Venn, drie</tspan></text>
-  <text id="vraag-37-0" x="268" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#201B5C" fill-opacity="0.65" xml:space="preserve"><tspan x="268" y="1312.42">waar overlappen drie dingen</tspan></text>
-  <rect id="tegel-38" x="500" y="1140" width="232" height="176" fill="none" stroke="#201B5C" stroke-width="0.5"/>
-  <line id="kx" x1="564" y1="1208" x2="668" y2="1208" stroke="#201B5C" stroke-width="0.75" stroke-opacity="0.3"/>
-  <line id="ky" x1="616" y1="1156" x2="616" y2="1260" stroke="#201B5C" stroke-width="0.75" stroke-opacity="0.3"/>
-  <circle id="k0" cx="588.96" cy="1230.88" r="4" fill="#201B5C" fill-opacity="0.22"/>
-  <circle id="k1" cx="599.36" cy="1239.2" r="4" fill="#201B5C" fill-opacity="0.22"/>
-  <circle id="k2" cx="634.72" cy="1187.2" r="4" fill="#201B5C" fill-opacity="0.55"/>
-  <circle id="k3" cx="645.12" cy="1178.88" r="4" fill="#201B5C" fill-opacity="0.55"/>
-  <circle id="k4" cx="638.88" cy="1224.64" r="4" fill="#201B5C" fill-opacity="0.22"/>
-  <circle id="k5" cx="593.12" cy="1187.2" r="4" fill="#201B5C" fill-opacity="0.22"/>
-  <text id="cat-38-0" x="518" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#201B5C" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="518" y="1277.35">VERBAND</tspan></text>
-  <text id="naam-38-0" x="518" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#201B5C" xml:space="preserve"><tspan x="518" y="1295.94">Kwadrant</tspan></text>
-  <text id="vraag-38-0" x="518" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#201B5C" fill-opacity="0.65" xml:space="preserve"><tspan x="518" y="1312.42">wie zit in welke hoek</tspan></text>
-  <rect id="tegel-39" x="750" y="1140" width="232" height="176" fill="none" stroke="#201B5C" stroke-width="0.5"/>
-  <line id="as-y" x1="768" y1="1156" x2="768" y2="1260" stroke="#201B5C" stroke-width="0.75" stroke-opacity="0.3"/>
-  <line id="as-x" x1="768" y1="1260" x2="964" y2="1260" stroke="#201B5C" stroke-width="0.75" stroke-opacity="0.3"/>
-  <circle id="p0" cx="791.52" cy="1237.12" r="3" fill="#201B5C" fill-opacity="0.55" stroke="#201B5C" stroke-width="1"/>
-  <circle id="p1" cx="815.04" cy="1220.48" r="3" fill="#201B5C" fill-opacity="0.55" stroke="#201B5C" stroke-width="1"/>
-  <circle id="p2" cx="828.76" cy="1228.8" r="3" fill="#201B5C" fill-opacity="0.55" stroke="#201B5C" stroke-width="1"/>
-  <circle id="p3" cx="850.32" cy="1205.92" r="3" fill="#201B5C" fill-opacity="0.55" stroke="#201B5C" stroke-width="1"/>
-  <circle id="p4" cx="862.08" cy="1214.24" r="3" fill="#201B5C" fill-opacity="0.55" stroke="#201B5C" stroke-width="1"/>
-  <circle id="p5" cx="879.72" cy="1194.48" r="3" fill="#201B5C" fill-opacity="0.55" stroke="#201B5C" stroke-width="1"/>
-  <circle id="p6" cx="891.48" cy="1202.8" r="3" fill="#201B5C" fill-opacity="0.55" stroke="#201B5C" stroke-width="1"/>
-  <circle id="p7" cx="909.12" cy="1180.96" r="3" fill="#201B5C" fill-opacity="0.55" stroke="#201B5C" stroke-width="1"/>
-  <circle id="p8" cx="926.76" cy="1189.28" r="3" fill="#201B5C" fill-opacity="0.55" stroke="#201B5C" stroke-width="1"/>
-  <circle id="p9" cx="944.4" cy="1168.48" r="3" fill="#201B5C" fill-opacity="0.55" stroke="#201B5C" stroke-width="1"/>
-  <circle id="p10" cx="836.6" cy="1189.28" r="3" fill="#201B5C" fill-opacity="0.55" stroke="#201B5C" stroke-width="1"/>
-  <circle id="p11" cx="901.28" cy="1224.64" r="3" fill="#201B5C" fill-opacity="0.55" stroke="#201B5C" stroke-width="1"/>
-  <text id="cat-39-0" x="768" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#201B5C" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="768" y="1277.35">VERBAND</tspan></text>
-  <text id="naam-39-0" x="768" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#201B5C" xml:space="preserve"><tspan x="768" y="1295.94">Spreiding</tspan></text>
-  <text id="vraag-39-0" x="768" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#201B5C" fill-opacity="0.65" xml:space="preserve"><tspan x="768" y="1312.42">hangen deze twee samen</tspan></text>
-  <rect id="tegel-40" x="1000" y="1140" width="232" height="176" fill="none" stroke="#201B5C" stroke-width="0.5"/>
-  <line id="as-y" x1="1018" y1="1156" x2="1018" y2="1260" stroke="#201B5C" stroke-width="0.75" stroke-opacity="0.3"/>
-  <line id="as-x" x1="1018" y1="1260" x2="1214" y2="1260" stroke="#201B5C" stroke-width="0.75" stroke-opacity="0.3"/>
-  <circle id="b00" cx="1042.5" cy="1173.33" r="7" fill="#201B5C" fill-opacity="0.45"/>
-  <circle id="b01" cx="1091.5" cy="1173.33" r="3" fill="#201B5C" fill-opacity="0.45"/>
-  <circle id="b02" cx="1140.5" cy="1173.33" r="11" fill="#201B5C" fill-opacity="0.45"/>
-  <circle id="b03" cx="1189.5" cy="1173.33" r="5" fill="#201B5C" fill-opacity="0.45"/>
-  <circle id="b10" cx="1042.5" cy="1208" r="4" fill="#201B5C" fill-opacity="0.45"/>
-  <circle id="b11" cx="1091.5" cy="1208" r="9" fill="#201B5C" fill-opacity="0.45"/>
-  <circle id="b12" cx="1140.5" cy="1208" r="6" fill="#201B5C" fill-opacity="0.45"/>
-  <circle id="b13" cx="1189.5" cy="1208" r="13" fill="#201B5C" fill-opacity="0.45"/>
-  <circle id="b20" cx="1042.5" cy="1242.67" r="10" fill="#201B5C" fill-opacity="0.45"/>
-  <circle id="b21" cx="1091.5" cy="1242.67" r="5" fill="#201B5C" fill-opacity="0.45"/>
-  <circle id="b22" cx="1140.5" cy="1242.67" r="3" fill="#201B5C" fill-opacity="0.45"/>
-  <circle id="b23" cx="1189.5" cy="1242.67" r="7" fill="#201B5C" fill-opacity="0.45"/>
-  <text id="cat-40-0" x="1018" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#201B5C" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="1018" y="1277.35">VERBAND</tspan></text>
-  <text id="naam-40-0" x="1018" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#201B5C" xml:space="preserve"><tspan x="1018" y="1295.94">Bubbelmatrix</tspan></text>
-  <text id="vraag-40-0" x="1018" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#201B5C" fill-opacity="0.65" xml:space="preserve"><tspan x="1018" y="1312.42">waar zit het zwaartepunt</tspan></text>
-  <rect id="tegel-41" x="1250" y="1140" width="232" height="176" fill="none" stroke="#201B5C" stroke-width="0.5"/>
-  <rect id="h00" x="1268" y="1156" width="37.2" height="32.67" fill="#201B5C" fill-opacity="0.9"/>
-  <rect id="h01" x="1307.2" y="1156" width="37.2" height="32.67" fill="#201B5C" fill-opacity="0.6"/>
-  <rect id="h02" x="1346.4" y="1156" width="37.2" height="32.67" fill="#201B5C" fill-opacity="0.3"/>
-  <rect id="h03" x="1385.6" y="1156" width="37.2" height="32.67" fill="#201B5C" fill-opacity="0.15"/>
-  <rect id="h04" x="1424.8" y="1156" width="37.2" height="32.67" fill="#201B5C" fill-opacity="0.5"/>
-  <rect id="h10" x="1268" y="1190.67" width="37.2" height="32.67" fill="#201B5C" fill-opacity="0.4"/>
-  <rect id="h11" x="1307.2" y="1190.67" width="37.2" height="32.67" fill="#201B5C" fill-opacity="0.8"/>
-  <rect id="h12" x="1346.4" y="1190.67" width="37.2" height="32.67" fill="#201B5C" fill-opacity="0.55"/>
-  <rect id="h13" x="1385.6" y="1190.67" width="37.2" height="32.67" fill="#201B5C" fill-opacity="0.25"/>
-  <rect id="h14" x="1424.8" y="1190.67" width="37.2" height="32.67" fill="#201B5C" fill-opacity="0.7"/>
-  <rect id="h20" x="1268" y="1225.33" width="37.2" height="32.67" fill="#201B5C" fill-opacity="0.2"/>
-  <rect id="h21" x="1307.2" y="1225.33" width="37.2" height="32.67" fill="#201B5C" fill-opacity="0.35"/>
-  <rect id="h22" x="1346.4" y="1225.33" width="37.2" height="32.67" fill="#201B5C" fill-opacity="0.95"/>
-  <rect id="h23" x="1385.6" y="1225.33" width="37.2" height="32.67" fill="#201B5C" fill-opacity="0.6"/>
-  <rect id="h24" x="1424.8" y="1225.33" width="37.2" height="32.67" fill="#201B5C" fill-opacity="0.3"/>
-  <text id="cat-41-0" x="1268" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#201B5C" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="1268" y="1277.35">VERBAND</tspan></text>
-  <text id="naam-41-0" x="1268" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#201B5C" xml:space="preserve"><tspan x="1268" y="1295.94">Heatmap</tspan></text>
-  <text id="vraag-41-0" x="1268" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#201B5C" fill-opacity="0.65" xml:space="preserve"><tspan x="1268" y="1312.42">welk vak springt eruit</tspan></text>
-  <rect id="tegel-42" x="0" y="1330" width="232" height="176" fill="none" stroke="#201B5C" stroke-width="0.5"/>
-  <rect id="top" x="93.73" y="1346" width="44.55" height="16" fill="#201B5C"/>
-  <rect id="m0" x="38.85" y="1380.67" width="44.55" height="16" fill="#201B5C" fill-opacity="0.35"/>
-  <line id="v0" x1="61.12" y1="1380.67" x2="61.12" y2="1371.33" stroke="#201B5C" stroke-width="0.75" stroke-opacity="0.6"/>
-  <rect id="m1" x="93.73" y="1380.67" width="44.55" height="16" fill="#201B5C" fill-opacity="0.35"/>
-  <line id="v1" x1="116" y1="1380.67" x2="116" y2="1371.33" stroke="#201B5C" stroke-width="0.75" stroke-opacity="0.6"/>
-  <rect id="m2" x="148.61" y="1380.67" width="44.55" height="16" fill="#201B5C" fill-opacity="0.35"/>
-  <line id="v2" x1="170.88" y1="1380.67" x2="170.88" y2="1371.33" stroke="#201B5C" stroke-width="0.75" stroke-opacity="0.6"/>
-  <line id="balk" x1="61.12" y1="1371.33" x2="170.88" y2="1371.33" stroke="#201B5C" stroke-width="0.75" stroke-opacity="0.6"/>
-  <line id="stam" x1="116" y1="1362" x2="116" y2="1371.33" stroke="#201B5C" stroke-width="0.75" stroke-opacity="0.6"/>
-  <rect id="b0" x="19.04" y="1415.33" width="37.12" height="14" fill="none" stroke="#201B5C" stroke-width="1"/>
-  <rect id="b1" x="66.08" y="1415.33" width="37.12" height="14" fill="none" stroke="#201B5C" stroke-width="1"/>
-  <rect id="b2" x="128.8" y="1415.33" width="37.12" height="14" fill="none" stroke="#201B5C" stroke-width="1"/>
-  <rect id="b3" x="175.84" y="1415.33" width="37.12" height="14" fill="none" stroke="#201B5C" stroke-width="1"/>
-  <text id="cat-42-0" x="18" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#201B5C" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="18" y="1467.35">STRUCTUUR</tspan></text>
-  <text id="naam-42-0" x="18" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#201B5C" xml:space="preserve"><tspan x="18" y="1485.94">Boom</tspan></text>
-  <text id="vraag-42-0" x="18" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#201B5C" fill-opacity="0.65" xml:space="preserve"><tspan x="18" y="1502.42">hoe hangt het samen</tspan></text>
-  <rect id="tegel-43" x="250" y="1330" width="232" height="176" fill="none" stroke="#201B5C" stroke-width="0.5"/>
-  <path id="p0" d="M 366.0 1346.0 L 366.0 1346.0 L 390.5 1368.0 L 341.5 1368.0 Z" fill="#201B5C" fill-opacity="0.75"/>
-  <path id="p1" d="M 341.5 1372.0 L 390.5 1372.0 L 415.0 1394.0 L 317.0 1394.0 Z" fill="#201B5C" fill-opacity="0.58"/>
-  <path id="p2" d="M 317.0 1398.0 L 415.0 1398.0 L 439.5 1420.0 L 292.5 1420.0 Z" fill="#201B5C" fill-opacity="0.41"/>
-  <path id="p3" d="M 292.5 1424.0 L 439.5 1424.0 L 464.0 1446.0 L 268.0 1446.0 Z" fill="#201B5C" fill-opacity="0.24"/>
-  <text id="cat-43-0" x="268" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#201B5C" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="268" y="1467.35">STRUCTUUR</tspan></text>
-  <text id="naam-43-0" x="268" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#201B5C" xml:space="preserve"><tspan x="268" y="1485.94">Piramide</tspan></text>
-  <text id="vraag-43-0" x="268" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#201B5C" fill-opacity="0.65" xml:space="preserve"><tspan x="268" y="1502.42">wat rust waarop</tspan></text>
-  <rect id="tegel-44" x="500" y="1330" width="232" height="176" fill="none" stroke="#201B5C" stroke-width="0.5"/>
-  <rect id="laag0" x="518" y="1430" width="196" height="20" fill="#201B5C" fill-opacity="0.16"/>
-  <rect id="laag1" x="518" y="1404" width="148.96" height="20" fill="#201B5C" fill-opacity="0.38"/>
-  <rect id="laag2" x="518" y="1378" width="101.92" height="20" fill="#201B5C" fill-opacity="0.6"/>
-  <rect id="laag3" x="518" y="1352" width="58.8" height="20" fill="#201B5C" fill-opacity="0.82"/>
-  <text id="cat-44-0" x="518" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#201B5C" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="518" y="1467.35">STRUCTUUR</tspan></text>
-  <text id="naam-44-0" x="518" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#201B5C" xml:space="preserve"><tspan x="518" y="1485.94">Opbouw in lagen</tspan></text>
-  <text id="vraag-44-0" x="518" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#201B5C" fill-opacity="0.65" xml:space="preserve"><tspan x="518" y="1502.42">van inzet naar effect</tspan></text>
-  <rect id="tegel-45" x="750" y="1330" width="232" height="176" fill="none" stroke="#201B5C" stroke-width="0.5"/>
-  <line id="as-y" x1="768" y1="1346" x2="768" y2="1450" stroke="#201B5C" stroke-width="0.75" stroke-opacity="0.3"/>
-  <line id="as-x" x1="768" y1="1450" x2="964" y2="1450" stroke="#201B5C" stroke-width="0.75" stroke-opacity="0.3"/>
-  <rect id="h0" x="768" y="1435.44" width="23" height="14.56" fill="#201B5C" fill-opacity="0.55"/>
-  <rect id="h1" x="792.5" y="1418.8" width="23" height="31.2" fill="#201B5C" fill-opacity="0.55"/>
-  <rect id="h2" x="817" y="1392.8" width="23" height="57.2" fill="#201B5C" fill-opacity="0.55"/>
-  <rect id="h3" x="841.5" y="1360.56" width="23" height="89.44" fill="#201B5C" fill-opacity="0.55"/>
-  <rect id="h4" x="866" y="1375.12" width="23" height="74.88" fill="#201B5C" fill-opacity="0.55"/>
-  <rect id="h5" x="890.5" y="1404.24" width="23" height="45.76" fill="#201B5C" fill-opacity="0.55"/>
-  <rect id="h6" x="915" y="1422.96" width="23" height="27.04" fill="#201B5C" fill-opacity="0.55"/>
-  <rect id="h7" x="939.5" y="1437.52" width="23" height="12.48" fill="#201B5C" fill-opacity="0.55"/>
-  <text id="cat-45-0" x="768" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#201B5C" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="768" y="1467.35">VERDELING</tspan></text>
-  <text id="naam-45-0" x="768" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#201B5C" xml:space="preserve"><tspan x="768" y="1485.94">Histogram</tspan></text>
-  <text id="vraag-45-0" x="768" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#201B5C" fill-opacity="0.65" xml:space="preserve"><tspan x="768" y="1502.42">hoe is het verdeeld</tspan></text>
+  <rect id="tegel-0" x="0" y="0" width="232" height="176" fill="none" stroke="#21145F" stroke-width="0.5"/>
+  <line id="as-y" x1="18" y1="16" x2="18" y2="120" stroke="#21145F" stroke-width="0.75" stroke-opacity="0.3"/>
+  <line id="as-x" x1="18" y1="120" x2="214" y2="120" stroke="#21145F" stroke-width="0.75" stroke-opacity="0.3"/>
+  <path id="lijn" d="M 18.0 62.8 L 50.7 76.3 L 83.3 57.6 L 116.0 70.1 L 148.7 45.1 L 181.3 51.4 L 214.0 30.6" fill="none" stroke="#21145F" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <text id="cat-0-0" x="18" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#21145F" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="18" y="137.35">VERANDERING</tspan></text>
+  <text id="naam-0-0" x="18" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#21145F" xml:space="preserve"><tspan x="18" y="155.94">Lijn</tspan></text>
+  <text id="vraag-0-0" x="18" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#21145F" fill-opacity="0.65" xml:space="preserve"><tspan x="18" y="172.42">hoe loopt dit over tijd</tspan></text>
+  <rect id="tegel-1" x="250" y="0" width="232" height="176" fill="none" stroke="#21145F" stroke-width="0.5"/>
+  <line id="as-y" x1="268" y1="16" x2="268" y2="120" stroke="#21145F" stroke-width="0.75" stroke-opacity="0.3"/>
+  <line id="as-x" x1="268" y1="120" x2="464" y2="120" stroke="#21145F" stroke-width="0.75" stroke-opacity="0.3"/>
+  <rect id="k0" x="274.12" y="78.4" width="20.42" height="41.6" fill="#21145F"/>
+  <rect id="k1" x="306.79" y="65.92" width="20.42" height="54.08" fill="#21145F"/>
+  <rect id="k2" x="339.46" y="71.12" width="20.42" height="48.88" fill="#21145F"/>
+  <rect id="k3" x="372.12" y="54.48" width="20.42" height="65.52" fill="#21145F"/>
+  <rect id="k4" x="404.79" y="59.68" width="20.42" height="60.32" fill="#21145F"/>
+  <rect id="k5" x="437.46" y="38.88" width="20.42" height="81.12" fill="#21145F"/>
+  <text id="cat-1-0" x="268" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#21145F" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="268" y="137.35">VERANDERING</tspan></text>
+  <text id="naam-1-0" x="268" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#21145F" xml:space="preserve"><tspan x="268" y="155.94">Kolommen over tijd</tspan></text>
+  <text id="vraag-1-0" x="268" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#21145F" fill-opacity="0.65" xml:space="preserve"><tspan x="268" y="172.42">hoeveel per periode</tspan></text>
+  <rect id="tegel-2" x="500" y="0" width="232" height="176" fill="none" stroke="#21145F" stroke-width="0.5"/>
+  <line id="as-y" x1="518" y1="16" x2="518" y2="120" stroke="#21145F" stroke-width="0.75" stroke-opacity="0.3"/>
+  <line id="as-x" x1="518" y1="120" x2="714" y2="120" stroke="#21145F" stroke-width="0.75" stroke-opacity="0.3"/>
+  <path id="vl0" d="M 518.0 99.2 L 567.0 93.0 L 616.0 95.0 L 665.0 88.8 L 714.0 84.6 L 714.0 120.0 L 665.0 120.0 L 616.0 120.0 L 567.0 120.0 L 518.0 120.0 Z" fill="#21145F" fill-opacity="0.7"/>
+  <path id="vl1" d="M 518.0 80.5 L 567.0 72.2 L 616.0 68.0 L 665.0 63.8 L 714.0 55.5 L 714.0 84.6 L 665.0 88.8 L 616.0 95.0 L 567.0 93.0 L 518.0 99.2 Z" fill="#21145F" fill-opacity="0.48"/>
+  <path id="vl2" d="M 518.0 65.9 L 567.0 55.5 L 616.0 53.4 L 665.0 45.1 L 714.0 34.7 L 714.0 55.5 L 665.0 63.8 L 616.0 68.0 L 567.0 72.2 L 518.0 80.5 Z" fill="#21145F" fill-opacity="0.26"/>
+  <text id="cat-2-0" x="518" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#21145F" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="518" y="137.35">VERANDERING</tspan></text>
+  <text id="naam-2-0" x="518" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#21145F" xml:space="preserve"><tspan x="518" y="155.94">Gestapeld vlak</tspan></text>
+  <text id="vraag-2-0" x="518" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#21145F" fill-opacity="0.65" xml:space="preserve"><tspan x="518" y="172.42">hoe verschuift de opbouw</tspan></text>
+  <rect id="tegel-3" x="750" y="0" width="232" height="176" fill="none" stroke="#21145F" stroke-width="0.5"/>
+  <line id="l" x1="768" y1="16" x2="768" y2="120" stroke="#21145F" stroke-width="0.75" stroke-opacity="0.3"/>
+  <line id="r" x1="964" y1="16" x2="964" y2="120" stroke="#21145F" stroke-width="0.75" stroke-opacity="0.3"/>
+  <line id="h0" x1="768" y1="94" x2="964" y2="47.2" stroke="#21145F" stroke-width="1.2"/>
+  <circle id="p0a" cx="768" cy="94" r="2.4" fill="#21145F"/>
+  <circle id="p0b" cx="964" cy="47.2" r="2.4" fill="#21145F"/>
+  <line id="h1" x1="768" y1="73.2" x2="964" y2="62.8" stroke="#21145F" stroke-width="1.2"/>
+  <circle id="p1a" cx="768" cy="73.2" r="2.4" fill="#21145F"/>
+  <circle id="p1b" cx="964" cy="62.8" r="2.4" fill="#21145F"/>
+  <line id="h2" x1="768" y1="55.52" x2="964" y2="88.8" stroke="#21145F" stroke-width="1.2"/>
+  <circle id="p2a" cx="768" cy="55.52" r="2.4" fill="#21145F"/>
+  <circle id="p2b" cx="964" cy="88.8" r="2.4" fill="#21145F"/>
+  <line id="h3" x1="768" y1="36.8" x2="964" y2="30.56" stroke="#21145F" stroke-width="1.2"/>
+  <circle id="p3a" cx="768" cy="36.8" r="2.4" fill="#21145F"/>
+  <circle id="p3b" cx="964" cy="30.56" r="2.4" fill="#21145F"/>
+  <text id="cat-3-0" x="768" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#21145F" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="768" y="137.35">VERANDERING</tspan></text>
+  <text id="naam-3-0" x="768" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#21145F" xml:space="preserve"><tspan x="768" y="155.94">Helling</tspan></text>
+  <text id="vraag-3-0" x="768" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#21145F" fill-opacity="0.65" xml:space="preserve"><tspan x="768" y="172.42">wie ging vooruit, wie achteruit</tspan></text>
+  <rect id="tegel-4" x="1000" y="0" width="232" height="176" fill="none" stroke="#21145F" stroke-width="0.5"/>
+  <line id="as" x1="1018" y1="120" x2="1214" y2="120" stroke="#21145F" stroke-width="0.75" stroke-opacity="0.3"/>
+  <rect id="b0" x="1018" y="16" width="90.16" height="9" fill="#21145F"/>
+  <rect id="b1" x="1041.52" y="32" width="117.6" height="9" fill="#21145F"/>
+  <rect id="b2" x="1092.48" y="48" width="109.76" height="9" fill="#21145F"/>
+  <rect id="b3" x="1125.8" y="64" width="49" height="9" fill="#21145F"/>
+  <text id="cat-4-0" x="1018" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#21145F" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="1018" y="137.35">VERANDERING</tspan></text>
+  <text id="naam-4-0" x="1018" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#21145F" xml:space="preserve"><tspan x="1018" y="155.94">Priestley-tijdlijn</tspan></text>
+  <text id="vraag-4-0" x="1018" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#21145F" fill-opacity="0.65" xml:space="preserve"><tspan x="1018" y="172.42">wat liep wanneer en hoe lang</tspan></text>
+  <rect id="tegel-5" x="1250" y="0" width="232" height="176" fill="none" stroke="#21145F" stroke-width="0.5"/>
+  <line id="as" x1="1268" y1="68" x2="1464" y2="68" stroke="#21145F" stroke-width="0.75" stroke-opacity="0.3"/>
+  <circle id="m0" cx="1268" cy="68" r="7" fill="#21145F" fill-opacity="0.18" stroke="#21145F" stroke-width="1"/>
+  <circle id="m1" cx="1285.64" cy="68" r="4" fill="#21145F" fill-opacity="0.18" stroke="#21145F" stroke-width="1"/>
+  <circle id="m2" cx="1334.64" cy="68" r="9" fill="#21145F" fill-opacity="0.18" stroke="#21145F" stroke-width="1"/>
+  <circle id="m3" cx="1385.6" cy="68" r="5" fill="#21145F" fill-opacity="0.18" stroke="#21145F" stroke-width="1"/>
+  <circle id="m4" cx="1464" cy="68" r="6" fill="#21145F" fill-opacity="0.18" stroke="#21145F" stroke-width="1"/>
+  <text id="cat-5-0" x="1268" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#21145F" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="1268" y="137.35">VERANDERING</tspan></text>
+  <text id="naam-5-0" x="1268" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#21145F" xml:space="preserve"><tspan x="1268" y="155.94">Cirkeltijdlijn</tspan></text>
+  <text id="vraag-5-0" x="1268" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#21145F" fill-opacity="0.65" xml:space="preserve"><tspan x="1268" y="172.42">wanneer gebeurde het, en hoe groot</tspan></text>
+  <rect id="tegel-6" x="0" y="190" width="232" height="176" fill="none" stroke="#21145F" stroke-width="0.5"/>
+  <rect id="k0" x="18" y="206" width="12" height="12" fill="#21145F" fill-opacity="0.1"/>
+  <rect id="k1" x="32" y="206" width="12" height="12" fill="#21145F" fill-opacity="0.4"/>
+  <rect id="k2" x="46" y="206" width="12" height="12" fill="#21145F" fill-opacity="0.8"/>
+  <rect id="k3" x="60" y="206" width="12" height="12" fill="#21145F" fill-opacity="0.2"/>
+  <rect id="k4" x="74" y="206" width="12" height="12" fill="#21145F" fill-opacity="0.6"/>
+  <rect id="k5" x="88" y="206" width="12" height="12" fill="#21145F" fill-opacity="0.06"/>
+  <rect id="k6" x="102" y="206" width="12" height="12" fill="#21145F" fill-opacity="0.06"/>
+  <rect id="k7" x="116" y="206" width="12" height="12" fill="#21145F" fill-opacity="0.3"/>
+  <rect id="k8" x="130" y="206" width="12" height="12" fill="#21145F" fill-opacity="0.9"/>
+  <rect id="k9" x="144" y="206" width="12" height="12" fill="#21145F" fill-opacity="0.5"/>
+  <rect id="k10" x="158" y="206" width="12" height="12" fill="#21145F" fill-opacity="0.7"/>
+  <rect id="k11" x="172" y="206" width="12" height="12" fill="#21145F" fill-opacity="0.15"/>
+  <rect id="k12" x="186" y="206" width="12" height="12" fill="#21145F" fill-opacity="0.06"/>
+  <rect id="k13" x="200" y="206" width="12" height="12" fill="#21145F" fill-opacity="0.06"/>
+  <rect id="k14" x="18" y="220" width="12" height="12" fill="#21145F" fill-opacity="0.1"/>
+  <rect id="k15" x="32" y="220" width="12" height="12" fill="#21145F" fill-opacity="0.4"/>
+  <rect id="k16" x="46" y="220" width="12" height="12" fill="#21145F" fill-opacity="0.8"/>
+  <rect id="k17" x="60" y="220" width="12" height="12" fill="#21145F" fill-opacity="0.2"/>
+  <rect id="k18" x="74" y="220" width="12" height="12" fill="#21145F" fill-opacity="0.6"/>
+  <rect id="k19" x="88" y="220" width="12" height="12" fill="#21145F" fill-opacity="0.06"/>
+  <rect id="k20" x="102" y="220" width="12" height="12" fill="#21145F" fill-opacity="0.06"/>
+  <rect id="k21" x="116" y="220" width="12" height="12" fill="#21145F" fill-opacity="0.3"/>
+  <rect id="k22" x="130" y="220" width="12" height="12" fill="#21145F" fill-opacity="0.9"/>
+  <rect id="k23" x="144" y="220" width="12" height="12" fill="#21145F" fill-opacity="0.5"/>
+  <rect id="k24" x="158" y="220" width="12" height="12" fill="#21145F" fill-opacity="0.7"/>
+  <rect id="k25" x="172" y="220" width="12" height="12" fill="#21145F" fill-opacity="0.15"/>
+  <rect id="k26" x="186" y="220" width="12" height="12" fill="#21145F" fill-opacity="0.06"/>
+  <rect id="k27" x="200" y="220" width="12" height="12" fill="#21145F" fill-opacity="0.06"/>
+  <rect id="k28" x="18" y="234" width="12" height="12" fill="#21145F" fill-opacity="0.1"/>
+  <rect id="k29" x="32" y="234" width="12" height="12" fill="#21145F" fill-opacity="0.4"/>
+  <rect id="k30" x="46" y="234" width="12" height="12" fill="#21145F" fill-opacity="0.8"/>
+  <rect id="k31" x="60" y="234" width="12" height="12" fill="#21145F" fill-opacity="0.2"/>
+  <rect id="k32" x="74" y="234" width="12" height="12" fill="#21145F" fill-opacity="0.6"/>
+  <rect id="k33" x="88" y="234" width="12" height="12" fill="#21145F" fill-opacity="0.06"/>
+  <rect id="k34" x="102" y="234" width="12" height="12" fill="#21145F" fill-opacity="0.06"/>
+  <rect id="k35" x="116" y="234" width="12" height="12" fill="#21145F" fill-opacity="0.3"/>
+  <rect id="k36" x="130" y="234" width="12" height="12" fill="#21145F" fill-opacity="0.9"/>
+  <rect id="k37" x="144" y="234" width="12" height="12" fill="#21145F" fill-opacity="0.5"/>
+  <rect id="k38" x="158" y="234" width="12" height="12" fill="#21145F" fill-opacity="0.7"/>
+  <rect id="k39" x="172" y="234" width="12" height="12" fill="#21145F" fill-opacity="0.15"/>
+  <rect id="k40" x="186" y="234" width="12" height="12" fill="#21145F" fill-opacity="0.06"/>
+  <rect id="k41" x="200" y="234" width="12" height="12" fill="#21145F" fill-opacity="0.06"/>
+  <rect id="k42" x="18" y="248" width="12" height="12" fill="#21145F" fill-opacity="0.1"/>
+  <rect id="k43" x="32" y="248" width="12" height="12" fill="#21145F" fill-opacity="0.4"/>
+  <rect id="k44" x="46" y="248" width="12" height="12" fill="#21145F" fill-opacity="0.8"/>
+  <rect id="k45" x="60" y="248" width="12" height="12" fill="#21145F" fill-opacity="0.2"/>
+  <rect id="k46" x="74" y="248" width="12" height="12" fill="#21145F" fill-opacity="0.6"/>
+  <rect id="k47" x="88" y="248" width="12" height="12" fill="#21145F" fill-opacity="0.06"/>
+  <rect id="k48" x="102" y="248" width="12" height="12" fill="#21145F" fill-opacity="0.06"/>
+  <rect id="k49" x="116" y="248" width="12" height="12" fill="#21145F" fill-opacity="0.3"/>
+  <rect id="k50" x="130" y="248" width="12" height="12" fill="#21145F" fill-opacity="0.9"/>
+  <rect id="k51" x="144" y="248" width="12" height="12" fill="#21145F" fill-opacity="0.5"/>
+  <rect id="k52" x="158" y="248" width="12" height="12" fill="#21145F" fill-opacity="0.7"/>
+  <rect id="k53" x="172" y="248" width="12" height="12" fill="#21145F" fill-opacity="0.15"/>
+  <rect id="k54" x="186" y="248" width="12" height="12" fill="#21145F" fill-opacity="0.06"/>
+  <rect id="k55" x="200" y="248" width="12" height="12" fill="#21145F" fill-opacity="0.06"/>
+  <rect id="k56" x="18" y="262" width="12" height="12" fill="#21145F" fill-opacity="0.1"/>
+  <rect id="k57" x="32" y="262" width="12" height="12" fill="#21145F" fill-opacity="0.4"/>
+  <rect id="k58" x="46" y="262" width="12" height="12" fill="#21145F" fill-opacity="0.8"/>
+  <rect id="k59" x="60" y="262" width="12" height="12" fill="#21145F" fill-opacity="0.2"/>
+  <rect id="k60" x="74" y="262" width="12" height="12" fill="#21145F" fill-opacity="0.6"/>
+  <rect id="k61" x="88" y="262" width="12" height="12" fill="#21145F" fill-opacity="0.06"/>
+  <rect id="k62" x="102" y="262" width="12" height="12" fill="#21145F" fill-opacity="0.06"/>
+  <rect id="k63" x="116" y="262" width="12" height="12" fill="#21145F" fill-opacity="0.3"/>
+  <rect id="k64" x="130" y="262" width="12" height="12" fill="#21145F" fill-opacity="0.9"/>
+  <rect id="k65" x="144" y="262" width="12" height="12" fill="#21145F" fill-opacity="0.5"/>
+  <rect id="k66" x="158" y="262" width="12" height="12" fill="#21145F" fill-opacity="0.7"/>
+  <rect id="k67" x="172" y="262" width="12" height="12" fill="#21145F" fill-opacity="0.15"/>
+  <rect id="k68" x="186" y="262" width="12" height="12" fill="#21145F" fill-opacity="0.06"/>
+  <rect id="k69" x="200" y="262" width="12" height="12" fill="#21145F" fill-opacity="0.06"/>
+  <text id="cat-6-0" x="18" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#21145F" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="18" y="327.35">VERANDERING</tspan></text>
+  <text id="naam-6-0" x="18" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#21145F" xml:space="preserve"><tspan x="18" y="345.94">Kalender-heatmap</tspan></text>
+  <text id="vraag-6-0" x="18" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#21145F" fill-opacity="0.65" xml:space="preserve"><tspan x="18" y="362.42">wanneer is het druk</tspan></text>
+  <rect id="tegel-7" x="250" y="190" width="232" height="176" fill="none" stroke="#21145F" stroke-width="0.5"/>
+  <line id="as0" x1="268" y1="310" x2="326.67" y2="310" stroke="#21145F" stroke-width="0.6" stroke-opacity="0.3"/>
+  <path id="l0" d="M 268.0 283.2 L 287.6 265.3 L 307.1 274.2 L 326.7 247.4" fill="none" stroke="#21145F" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <line id="as1" x1="336.67" y1="310" x2="395.33" y2="310" stroke="#21145F" stroke-width="0.6" stroke-opacity="0.3"/>
+  <path id="l1" d="M 336.7 256.3 L 356.2 269.8 L 375.8 265.3 L 395.3 278.7" fill="none" stroke="#21145F" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <line id="as2" x1="405.33" y1="310" x2="464" y2="310" stroke="#21145F" stroke-width="0.6" stroke-opacity="0.3"/>
+  <path id="l2" d="M 405.3 292.1 L 424.9 278.7 L 444.4 256.3 L 464.0 234.0" fill="none" stroke="#21145F" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <text id="cat-7-0" x="268" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#21145F" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="268" y="327.35">VERANDERING</tspan></text>
+  <text id="naam-7-0" x="268" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#21145F" xml:space="preserve"><tspan x="268" y="345.94">Kleine veelvouden</tspan></text>
+  <text id="vraag-7-0" x="268" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#21145F" fill-opacity="0.65" xml:space="preserve"><tspan x="268" y="362.42">loopt het overal hetzelfde</tspan></text>
+  <rect id="tegel-8" x="500" y="190" width="232" height="176" fill="none" stroke="#21145F" stroke-width="0.5"/>
+  <line id="as" x1="518" y1="206" x2="518" y2="310" stroke="#21145F" stroke-width="0.75" stroke-opacity="0.3"/>
+  <rect id="s0" x="518" y="206" width="186.2" height="13.87" fill="#21145F"/>
+  <rect id="s1" x="518" y="226.8" width="145.04" height="13.87" fill="#21145F"/>
+  <rect id="s2" x="518" y="247.6" width="119.56" height="13.87" fill="#21145F"/>
+  <rect id="s3" x="518" y="268.4" width="86.24" height="13.87" fill="#21145F"/>
+  <rect id="s4" x="518" y="289.2" width="54.88" height="13.87" fill="#21145F"/>
+  <text id="cat-8-0" x="518" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#21145F" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="518" y="327.35">RANGSCHIKKING</tspan></text>
+  <text id="naam-8-0" x="518" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#21145F" xml:space="preserve"><tspan x="518" y="345.94">Geordende staaf</tspan></text>
+  <text id="vraag-8-0" x="518" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#21145F" fill-opacity="0.65" xml:space="preserve"><tspan x="518" y="362.42">wie is groot, wie klein</tspan></text>
+  <rect id="tegel-9" x="750" y="190" width="232" height="176" fill="none" stroke="#21145F" stroke-width="0.5"/>
+  <line id="r0" x1="768" y1="218" x2="964" y2="218" stroke="#21145F" stroke-width="0.6" stroke-opacity="0.3"/>
+  <circle id="d00" cx="807.2" cy="218" r="3.2" fill="#21145F" fill-opacity="0.55" stroke="#21145F" stroke-width="1"/>
+  <circle id="d01" cx="834.64" cy="218" r="3.2" fill="#21145F" fill-opacity="0.55" stroke="#21145F" stroke-width="1"/>
+  <circle id="d02" cx="848.36" cy="218" r="3.2" fill="#21145F" fill-opacity="0.55" stroke="#21145F" stroke-width="1"/>
+  <circle id="d03" cx="881.68" cy="218" r="3.2" fill="#21145F" fill-opacity="0.55" stroke="#21145F" stroke-width="1"/>
+  <circle id="d04" cx="918.92" cy="218" r="3.2" fill="#21145F" fill-opacity="0.55" stroke="#21145F" stroke-width="1"/>
+  <line id="r1" x1="768" y1="258" x2="964" y2="258" stroke="#21145F" stroke-width="0.6" stroke-opacity="0.3"/>
+  <circle id="d10" cx="822.88" cy="258" r="3.2" fill="#21145F" fill-opacity="0.55" stroke="#21145F" stroke-width="1"/>
+  <circle id="d11" cx="838.56" cy="258" r="3.2" fill="#21145F" fill-opacity="0.55" stroke="#21145F" stroke-width="1"/>
+  <circle id="d12" cx="869.92" cy="258" r="3.2" fill="#21145F" fill-opacity="0.55" stroke="#21145F" stroke-width="1"/>
+  <line id="r2" x1="768" y1="298" x2="964" y2="298" stroke="#21145F" stroke-width="0.6" stroke-opacity="0.3"/>
+  <circle id="d20" cx="791.52" cy="298" r="3.2" fill="#21145F" fill-opacity="0.55" stroke="#21145F" stroke-width="1"/>
+  <circle id="d21" cx="854.24" cy="298" r="3.2" fill="#21145F" fill-opacity="0.55" stroke="#21145F" stroke-width="1"/>
+  <circle id="d22" cx="891.48" cy="298" r="3.2" fill="#21145F" fill-opacity="0.55" stroke="#21145F" stroke-width="1"/>
+  <circle id="d23" cx="944.4" cy="298" r="3.2" fill="#21145F" fill-opacity="0.55" stroke="#21145F" stroke-width="1"/>
+  <text id="cat-9-0" x="768" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#21145F" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="768" y="327.35">RANGSCHIKKING</tspan></text>
+  <text id="naam-9-0" x="768" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#21145F" xml:space="preserve"><tspan x="768" y="345.94">Puntenstrook</tspan></text>
+  <text id="vraag-9-0" x="768" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#21145F" fill-opacity="0.65" xml:space="preserve"><tspan x="768" y="362.42">waar zit de spreiding per groep</tspan></text>
+  <rect id="tegel-10" x="1000" y="190" width="232" height="176" fill="none" stroke="#21145F" stroke-width="0.5"/>
+  <line id="as" x1="1018" y1="206" x2="1018" y2="310" stroke="#21145F" stroke-width="0.75" stroke-opacity="0.3"/>
+  <line id="l0" x1="1018" y1="220" x2="1190.48" y2="220" stroke="#21145F" stroke-width="1" stroke-opacity="0.55"/>
+  <circle id="k0" cx="1190.48" cy="220" r="4" fill="#21145F"/>
+  <line id="l1" x1="1018" y1="245.33" x2="1147.36" y2="245.33" stroke="#21145F" stroke-width="1" stroke-opacity="0.55"/>
+  <circle id="k1" cx="1147.36" cy="245.33" r="4" fill="#21145F"/>
+  <line id="l2" x1="1018" y1="270.67" x2="1119.92" y2="270.67" stroke="#21145F" stroke-width="1" stroke-opacity="0.55"/>
+  <circle id="k2" cx="1119.92" cy="270.67" r="4" fill="#21145F"/>
+  <line id="l3" x1="1018" y1="296" x2="1086.6" y2="296" stroke="#21145F" stroke-width="1" stroke-opacity="0.55"/>
+  <circle id="k3" cx="1086.6" cy="296" r="4" fill="#21145F"/>
+  <text id="cat-10-0" x="1018" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#21145F" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="1018" y="327.35">RANGSCHIKKING</tspan></text>
+  <text id="naam-10-0" x="1018" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#21145F" xml:space="preserve"><tspan x="1018" y="345.94">Lolly</tspan></text>
+  <text id="vraag-10-0" x="1018" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#21145F" fill-opacity="0.65" xml:space="preserve"><tspan x="1018" y="362.42">rangorde met weinig inkt</tspan></text>
+  <rect id="tegel-11" x="1250" y="190" width="232" height="176" fill="none" stroke="#21145F" stroke-width="0.5"/>
+  <line id="as" x1="1268" y1="206" x2="1268" y2="310" stroke="#21145F" stroke-width="0.75" stroke-opacity="0.3"/>
+  <line id="h0" x1="1311.12" y1="218" x2="1401.28" y2="218" stroke="#21145F" stroke-width="1.2" stroke-opacity="0.45"/>
+  <circle id="a0" cx="1311.12" cy="218" r="4.2" fill="#21145F" fill-opacity="0.3" stroke="#21145F" stroke-width="1"/>
+  <circle id="b0" cx="1401.28" cy="218" r="4.2" fill="#21145F"/>
+  <line id="h1" x1="1336.6" y1="244.67" x2="1436.56" y2="244.67" stroke="#21145F" stroke-width="1.2" stroke-opacity="0.45"/>
+  <circle id="a1" cx="1336.6" cy="244.67" r="4.2" fill="#21145F" fill-opacity="0.3" stroke="#21145F" stroke-width="1"/>
+  <circle id="b1" cx="1436.56" cy="244.67" r="4.2" fill="#21145F"/>
+  <line id="h2" x1="1362.08" y1="271.33" x2="1385.6" y2="271.33" stroke="#21145F" stroke-width="1.2" stroke-opacity="0.45"/>
+  <circle id="a2" cx="1362.08" cy="271.33" r="4.2" fill="#21145F" fill-opacity="0.3" stroke="#21145F" stroke-width="1"/>
+  <circle id="b2" cx="1385.6" cy="271.33" r="4.2" fill="#21145F"/>
+  <line id="h3" x1="1297.4" y1="298" x2="1354.24" y2="298" stroke="#21145F" stroke-width="1.2" stroke-opacity="0.45"/>
+  <circle id="a3" cx="1297.4" cy="298" r="4.2" fill="#21145F" fill-opacity="0.3" stroke="#21145F" stroke-width="1"/>
+  <circle id="b3" cx="1354.24" cy="298" r="4.2" fill="#21145F"/>
+  <text id="cat-11-0" x="1268" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#21145F" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="1268" y="327.35">RANGSCHIKKING</tspan></text>
+  <text id="naam-11-0" x="1268" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#21145F" xml:space="preserve"><tspan x="1268" y="345.94">Halter</tspan></text>
+  <text id="vraag-11-0" x="1268" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#21145F" fill-opacity="0.65" xml:space="preserve"><tspan x="1268" y="362.42">hoeveel schoof elk op</tspan></text>
+  <rect id="tegel-12" x="0" y="380" width="232" height="176" fill="none" stroke="#21145F" stroke-width="0.5"/>
+  <line id="lijn" x1="18" y1="453.2" x2="214" y2="453.2" stroke="#21145F" stroke-width="1" stroke-opacity="0.5"/>
+  <circle id="m0" cx="37.6" cy="453.2" r="5" fill="#21145F" fill-opacity="0.25" stroke="#21145F" stroke-width="1"/>
+  <circle id="m1" cx="84.64" cy="453.2" r="5" fill="#21145F" fill-opacity="0.25" stroke="#21145F" stroke-width="1"/>
+  <circle id="m2" cx="119.92" cy="453.2" r="5" fill="#21145F" fill-opacity="0.25" stroke="#21145F" stroke-width="1"/>
+  <circle id="m3" cx="190.48" cy="453.2" r="15" fill="#21145F" fill-opacity="0.85" stroke="#21145F" stroke-width="1"/>
+  <text id="cat-12-0" x="18" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#21145F" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="18" y="517.35">RANGSCHIKKING</tspan></text>
+  <text id="naam-12-0" x="18" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#21145F" xml:space="preserve"><tspan x="18" y="535.94">Getallenlijn</tspan></text>
+  <text id="vraag-12-0" x="18" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#21145F" fill-opacity="0.65" xml:space="preserve"><tspan x="18" y="552.42">waar staat elk op de schaal</tspan></text>
+  <rect id="tegel-13" x="250" y="380" width="232" height="176" fill="none" stroke="#21145F" stroke-width="0.5"/>
+  <line id="as-y" x1="268" y1="396" x2="268" y2="500" stroke="#21145F" stroke-width="0.75" stroke-opacity="0.3"/>
+  <line id="as-x" x1="268" y1="500" x2="464" y2="500" stroke="#21145F" stroke-width="0.75" stroke-opacity="0.3"/>
+  <rect id="g00" x="281.45" y="456.94" width="38.43" height="43.06" fill="#21145F"/>
+  <rect id="g01" x="281.45" y="428.24" width="38.43" height="28.7" fill="#21145F" fill-opacity="0.45"/>
+  <rect id="g02" x="281.45" y="404.32" width="38.43" height="23.92" fill="#21145F" fill-opacity="0.15"/>
+  <rect id="g10" x="346.78" y="463.64" width="38.43" height="36.36" fill="#21145F"/>
+  <rect id="g11" x="346.78" y="431.11" width="38.43" height="32.53" fill="#21145F" fill-opacity="0.45"/>
+  <rect id="g12" x="346.78" y="404.32" width="38.43" height="26.79" fill="#21145F" fill-opacity="0.15"/>
+  <rect id="g20" x="412.12" y="471.3" width="38.43" height="28.7" fill="#21145F"/>
+  <rect id="g21" x="412.12" y="436.85" width="38.43" height="34.44" fill="#21145F" fill-opacity="0.45"/>
+  <rect id="g22" x="412.12" y="404.32" width="38.43" height="32.53" fill="#21145F" fill-opacity="0.15"/>
+  <text id="cat-13-0" x="268" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#21145F" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="268" y="517.35">DEEL VAN GEHEEL</tspan></text>
+  <text id="naam-13-0" x="268" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#21145F" xml:space="preserve"><tspan x="268" y="535.94">Gestapelde kolom</tspan></text>
+  <text id="vraag-13-0" x="268" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#21145F" fill-opacity="0.65" xml:space="preserve"><tspan x="268" y="552.42">waaruit is het totaal opgebouwd</tspan></text>
+  <rect id="tegel-14" x="500" y="380" width="232" height="176" fill="none" stroke="#21145F" stroke-width="0.5"/>
+  <rect id="p00" x="518" y="404" width="101.92" height="16" fill="#21145F"/>
+  <rect id="p01" x="619.92" y="404" width="60.76" height="16" fill="#21145F" fill-opacity="0.45"/>
+  <rect id="p02" x="680.68" y="404" width="33.32" height="16" fill="#21145F" fill-opacity="0.15"/>
+  <rect id="p10" x="518" y="433.33" width="74.48" height="16" fill="#21145F"/>
+  <rect id="p11" x="592.48" y="433.33" width="86.24" height="16" fill="#21145F" fill-opacity="0.45"/>
+  <rect id="p12" x="678.72" y="433.33" width="35.28" height="16" fill="#21145F" fill-opacity="0.15"/>
+  <rect id="p20" x="518" y="462.67" width="119.56" height="16" fill="#21145F"/>
+  <rect id="p21" x="637.56" y="462.67" width="43.12" height="16" fill="#21145F" fill-opacity="0.45"/>
+  <rect id="p22" x="680.68" y="462.67" width="33.32" height="16" fill="#21145F" fill-opacity="0.15"/>
+  <text id="cat-14-0" x="518" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#21145F" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="518" y="517.35">DEEL VAN GEHEEL</tspan></text>
+  <text id="naam-14-0" x="518" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#21145F" xml:space="preserve"><tspan x="518" y="535.94">Proportionele staaf</tspan></text>
+  <text id="vraag-14-0" x="518" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#21145F" fill-opacity="0.65" xml:space="preserve"><tspan x="518" y="552.42">hoe is elk geheel verdeeld</tspan></text>
+  <rect id="tegel-15" x="750" y="380" width="232" height="176" fill="none" stroke="#21145F" stroke-width="0.5"/>
+  <line id="as-y" x1="768" y1="396" x2="768" y2="500" stroke="#21145F" stroke-width="0.75" stroke-opacity="0.3"/>
+  <line id="as-x" x1="768" y1="500" x2="964" y2="500" stroke="#21145F" stroke-width="0.75" stroke-opacity="0.3"/>
+  <rect id="w0" x="774.53" y="435.52" width="26.13" height="64.48" fill="#21145F"/>
+  <rect id="w1" x="813.73" y="418.88" width="26.13" height="16.64" fill="#21145F" fill-opacity="0.45"/>
+  <line id="c1" x1="800.67" y1="435.52" x2="813.73" y2="435.52" stroke="#21145F" stroke-width="0.6" stroke-opacity="0.3" stroke-dasharray="2 2"/>
+  <rect id="w2" x="852.93" y="418.88" width="26.13" height="29.12" fill="#21145F" fill-opacity="0.45"/>
+  <line id="c2" x1="839.87" y1="448" x2="852.93" y2="448" stroke="#21145F" stroke-width="0.6" stroke-opacity="0.3" stroke-dasharray="2 2"/>
+  <rect id="w3" x="892.13" y="448" width="26.13" height="16.64" fill="#21145F" fill-opacity="0.45"/>
+  <line id="c3" x1="879.07" y1="448" x2="892.13" y2="448" stroke="#21145F" stroke-width="0.6" stroke-opacity="0.3" stroke-dasharray="2 2"/>
+  <rect id="w4" x="931.33" y="464.64" width="26.13" height="35.36" fill="#21145F"/>
+  <line id="c4" x1="918.27" y1="500" x2="931.33" y2="500" stroke="#21145F" stroke-width="0.6" stroke-opacity="0.3" stroke-dasharray="2 2"/>
+  <text id="cat-15-0" x="768" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#21145F" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="768" y="517.35">DEEL VAN GEHEEL</tspan></text>
+  <text id="naam-15-0" x="768" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#21145F" xml:space="preserve"><tspan x="768" y="535.94">Waterval</tspan></text>
+  <text id="vraag-15-0" x="768" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#21145F" fill-opacity="0.65" xml:space="preserve"><tspan x="768" y="552.42">wat bouwt op en wat gaat eraf</tspan></text>
+  <rect id="tegel-16" x="1000" y="380" width="232" height="176" fill="none" stroke="#21145F" stroke-width="0.5"/>
+  <rect id="c0" x="1018" y="396" width="12.15" height="12.15" fill="#21145F"/>
+  <rect id="c1" x="1037.6" y="396" width="12.15" height="12.15" fill="#21145F"/>
+  <rect id="c2" x="1057.2" y="396" width="12.15" height="12.15" fill="#21145F"/>
+  <rect id="c3" x="1076.8" y="396" width="12.15" height="12.15" fill="#21145F"/>
+  <rect id="c4" x="1096.4" y="396" width="12.15" height="12.15" fill="#21145F"/>
+  <rect id="c5" x="1116" y="396" width="12.15" height="12.15" fill="#21145F"/>
+  <rect id="c6" x="1135.6" y="396" width="12.15" height="12.15" fill="#21145F"/>
+  <rect id="c7" x="1155.2" y="396" width="12.15" height="12.15" fill="#21145F"/>
+  <rect id="c8" x="1174.8" y="396" width="12.15" height="12.15" fill="#21145F"/>
+  <rect id="c9" x="1194.4" y="396" width="12.15" height="12.15" fill="#21145F"/>
+  <rect id="c10" x="1018" y="416.8" width="12.15" height="12.15" fill="#21145F"/>
+  <rect id="c11" x="1037.6" y="416.8" width="12.15" height="12.15" fill="#21145F"/>
+  <rect id="c12" x="1057.2" y="416.8" width="12.15" height="12.15" fill="#21145F"/>
+  <rect id="c13" x="1076.8" y="416.8" width="12.15" height="12.15" fill="#21145F"/>
+  <rect id="c14" x="1096.4" y="416.8" width="12.15" height="12.15" fill="#21145F"/>
+  <rect id="c15" x="1116" y="416.8" width="12.15" height="12.15" fill="#21145F"/>
+  <rect id="c16" x="1135.6" y="416.8" width="12.15" height="12.15" fill="#21145F"/>
+  <rect id="c17" x="1155.2" y="416.8" width="12.15" height="12.15" fill="#21145F"/>
+  <rect id="c18" x="1174.8" y="416.8" width="12.15" height="12.15" fill="#21145F"/>
+  <rect id="c19" x="1194.4" y="416.8" width="12.15" height="12.15" fill="#21145F"/>
+  <rect id="c20" x="1018" y="437.6" width="12.15" height="12.15" fill="#21145F"/>
+  <rect id="c21" x="1037.6" y="437.6" width="12.15" height="12.15" fill="#21145F"/>
+  <rect id="c22" x="1057.2" y="437.6" width="12.15" height="12.15" fill="#21145F"/>
+  <rect id="c23" x="1076.8" y="437.6" width="12.15" height="12.15" fill="#21145F"/>
+  <rect id="c24" x="1096.4" y="437.6" width="12.15" height="12.15" fill="#21145F"/>
+  <rect id="c25" x="1116" y="437.6" width="12.15" height="12.15" fill="#21145F"/>
+  <rect id="c26" x="1135.6" y="437.6" width="12.15" height="12.15" fill="#21145F"/>
+  <rect id="c27" x="1155.2" y="437.6" width="12.15" height="12.15" fill="#21145F"/>
+  <rect id="c28" x="1174.8" y="437.6" width="12.15" height="12.15" fill="#21145F"/>
+  <rect id="c29" x="1194.4" y="437.6" width="12.15" height="12.15" fill="#21145F"/>
+  <rect id="c30" x="1018" y="458.4" width="12.15" height="12.15" fill="#21145F"/>
+  <rect id="c31" x="1037.6" y="458.4" width="12.15" height="12.15" fill="#21145F" fill-opacity="0.15"/>
+  <rect id="c32" x="1057.2" y="458.4" width="12.15" height="12.15" fill="#21145F" fill-opacity="0.15"/>
+  <rect id="c33" x="1076.8" y="458.4" width="12.15" height="12.15" fill="#21145F" fill-opacity="0.15"/>
+  <rect id="c34" x="1096.4" y="458.4" width="12.15" height="12.15" fill="#21145F" fill-opacity="0.15"/>
+  <rect id="c35" x="1116" y="458.4" width="12.15" height="12.15" fill="#21145F" fill-opacity="0.15"/>
+  <rect id="c36" x="1135.6" y="458.4" width="12.15" height="12.15" fill="#21145F" fill-opacity="0.15"/>
+  <rect id="c37" x="1155.2" y="458.4" width="12.15" height="12.15" fill="#21145F" fill-opacity="0.15"/>
+  <rect id="c38" x="1174.8" y="458.4" width="12.15" height="12.15" fill="#21145F" fill-opacity="0.15"/>
+  <rect id="c39" x="1194.4" y="458.4" width="12.15" height="12.15" fill="#21145F" fill-opacity="0.15"/>
+  <rect id="c40" x="1018" y="479.2" width="12.15" height="12.15" fill="#21145F" fill-opacity="0.15"/>
+  <rect id="c41" x="1037.6" y="479.2" width="12.15" height="12.15" fill="#21145F" fill-opacity="0.15"/>
+  <rect id="c42" x="1057.2" y="479.2" width="12.15" height="12.15" fill="#21145F" fill-opacity="0.15"/>
+  <rect id="c43" x="1076.8" y="479.2" width="12.15" height="12.15" fill="#21145F" fill-opacity="0.15"/>
+  <rect id="c44" x="1096.4" y="479.2" width="12.15" height="12.15" fill="#21145F" fill-opacity="0.15"/>
+  <rect id="c45" x="1116" y="479.2" width="12.15" height="12.15" fill="#21145F" fill-opacity="0.15"/>
+  <rect id="c46" x="1135.6" y="479.2" width="12.15" height="12.15" fill="#21145F" fill-opacity="0.15"/>
+  <rect id="c47" x="1155.2" y="479.2" width="12.15" height="12.15" fill="#21145F" fill-opacity="0.15"/>
+  <rect id="c48" x="1174.8" y="479.2" width="12.15" height="12.15" fill="#21145F" fill-opacity="0.15"/>
+  <rect id="c49" x="1194.4" y="479.2" width="12.15" height="12.15" fill="#21145F" fill-opacity="0.15"/>
+  <text id="cat-16-0" x="1018" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#21145F" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="1018" y="517.35">DEEL VAN GEHEEL</tspan></text>
+  <text id="naam-16-0" x="1018" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#21145F" xml:space="preserve"><tspan x="1018" y="535.94">Rasterplot</tspan></text>
+  <text id="vraag-16-0" x="1018" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#21145F" fill-opacity="0.65" xml:space="preserve"><tspan x="1018" y="552.42">hoeveel van de honderd</tspan></text>
+  <rect id="tegel-17" x="1250" y="380" width="232" height="176" fill="none" stroke="#21145F" stroke-width="0.5"/>
+  <path id="d0" d="M 1366.0 404.3 A 43.68 43.68 0 0 1 1376.9 490.3 L 1372.5 473.2 A 26.0 26.0 0 0 0 1366.0 422.0 Z" fill="#21145F" fill-opacity="0.85"/>
+  <path id="d1" d="M 1376.9 490.3 A 43.68 43.68 0 0 1 1322.4 450.7 L 1340.1 449.6 A 26.0 26.0 0 0 0 1372.5 473.2 Z" fill="#21145F" fill-opacity="0.65"/>
+  <path id="d2" d="M 1322.4 450.7 A 43.68 43.68 0 0 1 1340.3 412.7 L 1350.7 427.0 A 26.0 26.0 0 0 0 1340.1 449.6 Z" fill="#21145F" fill-opacity="0.45"/>
+  <path id="d3" d="M 1340.3 412.7 A 43.68 43.68 0 0 1 1366.0 404.3 L 1366.0 422.0 A 26.0 26.0 0 0 0 1350.7 427.0 Z" fill="#21145F" fill-opacity="0.25"/>
+  <text id="cat-17-0" x="1268" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#21145F" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="1268" y="517.35">DEEL VAN GEHEEL</tspan></text>
+  <text id="naam-17-0" x="1268" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#21145F" xml:space="preserve"><tspan x="1268" y="535.94">Ring</tspan></text>
+  <text id="vraag-17-0" x="1268" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#21145F" fill-opacity="0.65" xml:space="preserve"><tspan x="1268" y="552.42">hoe is het ene geheel verdeeld</tspan></text>
+  <rect id="tegel-18" x="0" y="570" width="232" height="176" fill="none" stroke="#21145F" stroke-width="0.5"/>
+  <rect id="tm0" x="18" y="586" width="99.92" height="62.48" fill="#21145F" fill-opacity="0.75"/>
+  <rect id="tm1" x="119.92" y="586" width="92.08" height="35.44" fill="#21145F" fill-opacity="0.66"/>
+  <rect id="tm2" x="119.92" y="623.44" width="52.88" height="25.04" fill="#21145F" fill-opacity="0.57"/>
+  <rect id="tm3" x="174.8" y="623.44" width="37.2" height="25.04" fill="#21145F" fill-opacity="0.48"/>
+  <rect id="tm4" x="18" y="650.48" width="64.64" height="37.52" fill="#21145F" fill-opacity="0.39"/>
+  <rect id="tm5" x="84.64" y="650.48" width="56.8" height="37.52" fill="#21145F" fill-opacity="0.3"/>
+  <rect id="tm6" x="143.44" y="650.48" width="68.56" height="37.52" fill="#21145F" fill-opacity="0.21"/>
+  <text id="cat-18-0" x="18" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#21145F" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="18" y="707.35">DEEL VAN GEHEEL</tspan></text>
+  <text id="naam-18-0" x="18" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#21145F" xml:space="preserve"><tspan x="18" y="725.94">Treemap</tspan></text>
+  <text id="vraag-18-0" x="18" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#21145F" fill-opacity="0.65" xml:space="preserve"><tspan x="18" y="742.42">welke brokken zijn groot</tspan></text>
+  <rect id="tegel-19" x="250" y="570" width="232" height="176" fill="none" stroke="#21145F" stroke-width="0.5"/>
+  <rect id="mk00" x="268" y="586" width="79.32" height="57.2" fill="#21145F" fill-opacity="0.85"/>
+  <rect id="mk01" x="268" y="643.2" width="79.32" height="31.2" fill="#21145F" fill-opacity="0.57"/>
+  <rect id="mk02" x="268" y="674.4" width="79.32" height="15.6" fill="#21145F" fill-opacity="0.29"/>
+  <rect id="mk10" x="350.32" y="586" width="57.76" height="39.52" fill="#21145F" fill-opacity="0.85"/>
+  <rect id="mk11" x="350.32" y="625.52" width="57.76" height="43.68" fill="#21145F" fill-opacity="0.57"/>
+  <rect id="mk12" x="350.32" y="669.2" width="57.76" height="20.8" fill="#21145F" fill-opacity="0.29"/>
+  <rect id="mk20" x="411.08" y="586" width="49.92" height="29.12" fill="#21145F" fill-opacity="0.85"/>
+  <rect id="mk21" x="411.08" y="615.12" width="49.92" height="31.2" fill="#21145F" fill-opacity="0.57"/>
+  <rect id="mk22" x="411.08" y="646.32" width="49.92" height="43.68" fill="#21145F" fill-opacity="0.29"/>
+  <text id="cat-19-0" x="268" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#21145F" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="268" y="707.35">DEEL VAN GEHEEL</tspan></text>
+  <text id="naam-19-0" x="268" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#21145F" xml:space="preserve"><tspan x="268" y="725.94">Marimekko</tspan></text>
+  <text id="vraag-19-0" x="268" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#21145F" fill-opacity="0.65" xml:space="preserve"><tspan x="268" y="742.42">twee verdelingen tegelijk</tspan></text>
+  <rect id="tegel-20" x="500" y="570" width="232" height="176" fill="none" stroke="#21145F" stroke-width="0.5"/>
+  <rect id="t0" x="518" y="586" width="196" height="21" fill="#21145F" fill-opacity="0.2"/>
+  <rect id="t1" x="539.56" y="612" width="152.88" height="21" fill="#21145F" fill-opacity="0.4"/>
+  <rect id="t2" x="565.04" y="638" width="101.92" height="21" fill="#21145F" fill-opacity="0.6"/>
+  <rect id="t3" x="586.6" y="664" width="58.8" height="21" fill="#21145F" fill-opacity="0.8"/>
+  <text id="cat-20-0" x="518" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#21145F" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="518" y="707.35">DEEL VAN GEHEEL</tspan></text>
+  <text id="naam-20-0" x="518" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#21145F" xml:space="preserve"><tspan x="518" y="725.94">Trechter</tspan></text>
+  <text id="vraag-20-0" x="518" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#21145F" fill-opacity="0.65" xml:space="preserve"><tspan x="518" y="742.42">waar valt het af</tspan></text>
+  <rect id="tegel-21" x="750" y="570" width="232" height="176" fill="none" stroke="#21145F" stroke-width="0.5"/>
+  <line id="as" x1="866" y1="586" x2="866" y2="690" stroke="#21145F" stroke-width="0.75" stroke-opacity="0.3"/>
+  <rect id="L0" x="785.64" y="586" width="80.36" height="15.29" fill="#21145F" fill-opacity="0.45"/>
+  <rect id="R0" x="866" y="586" width="53.9" height="15.29" fill="#21145F"/>
+  <rect id="L1" x="803.28" y="612" width="62.72" height="15.29" fill="#21145F" fill-opacity="0.45"/>
+  <rect id="R1" x="866" y="612" width="69.58" height="15.29" fill="#21145F"/>
+  <rect id="L2" x="819.94" y="638" width="46.06" height="15.29" fill="#21145F" fill-opacity="0.45"/>
+  <rect id="R2" x="866" y="638" width="39.2" height="15.29" fill="#21145F"/>
+  <rect id="L3" x="833.66" y="664" width="32.34" height="15.29" fill="#21145F" fill-opacity="0.45"/>
+  <rect id="R3" x="866" y="664" width="50.96" height="15.29" fill="#21145F"/>
+  <text id="cat-21-0" x="768" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#21145F" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="768" y="707.35">GROOTTE</tspan></text>
+  <text id="naam-21-0" x="768" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#21145F" xml:space="preserve"><tspan x="768" y="725.94">Gepaarde staaf</tspan></text>
+  <text id="vraag-21-0" x="768" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#21145F" fill-opacity="0.65" xml:space="preserve"><tspan x="768" y="742.42">hoe verhoudt dit zich tot dat</tspan></text>
+  <rect id="tegel-22" x="1000" y="570" width="232" height="176" fill="none" stroke="#21145F" stroke-width="0.5"/>
+  <circle id="s0" cx="1044" cy="664" r="26" fill="#21145F" fill-opacity="0.22" stroke="#21145F" stroke-width="1"/>
+  <circle id="s1" cx="1100" cy="672" r="18" fill="#21145F" fill-opacity="0.22" stroke="#21145F" stroke-width="1"/>
+  <circle id="s2" cx="1142" cy="678" r="12" fill="#21145F" fill-opacity="0.22" stroke="#21145F" stroke-width="1"/>
+  <circle id="s3" cx="1173" cy="683" r="7" fill="#21145F" fill-opacity="0.22" stroke="#21145F" stroke-width="1"/>
+  <text id="cat-22-0" x="1018" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#21145F" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="1018" y="707.35">GROOTTE</tspan></text>
+  <text id="naam-22-0" x="1018" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#21145F" xml:space="preserve"><tspan x="1018" y="725.94">Proportioneel symbool</tspan></text>
+  <text id="vraag-22-0" x="1018" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#21145F" fill-opacity="0.65" xml:space="preserve"><tspan x="1018" y="742.42">hoeveel groter is het een</tspan></text>
+  <rect id="tegel-23" x="1250" y="570" width="232" height="176" fill="none" stroke="#21145F" stroke-width="0.5"/>
+  <circle id="kop0" cx="1277.8" cy="617.2" r="5.5" fill="#21145F"/>
+  <path id="romp0" d="M 1271.3 660.88 Q 1271.3 631.76 1277.8 631.76 Q 1284.3 631.76 1284.3 660.88 Z" fill="#21145F"/>
+  <circle id="kop1" cx="1297.4" cy="617.2" r="5.5" fill="#21145F"/>
+  <path id="romp1" d="M 1290.9 660.88 Q 1290.9 631.76 1297.4 631.76 Q 1303.9 631.76 1303.9 660.88 Z" fill="#21145F"/>
+  <circle id="kop2" cx="1317" cy="617.2" r="5.5" fill="#21145F"/>
+  <path id="romp2" d="M 1310.5 660.88 Q 1310.5 631.76 1317.0 631.76 Q 1323.5 631.76 1323.5 660.88 Z" fill="#21145F"/>
+  <circle id="kop3" cx="1336.6" cy="617.2" r="5.5" fill="#21145F"/>
+  <path id="romp3" d="M 1330.1 660.88 Q 1330.1 631.76 1336.6 631.76 Q 1343.1 631.76 1343.1 660.88 Z" fill="#21145F"/>
+  <circle id="kop4" cx="1356.2" cy="617.2" r="5.5" fill="#21145F"/>
+  <path id="romp4" d="M 1349.7 660.88 Q 1349.7 631.76 1356.2 631.76 Q 1362.7 631.76 1362.7 660.88 Z" fill="#21145F"/>
+  <circle id="kop5" cx="1375.8" cy="617.2" r="5.5" fill="#21145F"/>
+  <path id="romp5" d="M 1369.3 660.88 Q 1369.3 631.76 1375.8 631.76 Q 1382.3 631.76 1382.3 660.88 Z" fill="#21145F"/>
+  <circle id="kop6" cx="1395.4" cy="617.2" r="5.5" fill="#21145F"/>
+  <path id="romp6" d="M 1388.9 660.88 Q 1388.9 631.76 1395.4 631.76 Q 1401.9 631.76 1401.9 660.88 Z" fill="#21145F"/>
+  <circle id="kop7" cx="1415" cy="617.2" r="5.5" fill="#21145F" fill-opacity="0.16"/>
+  <path id="romp7" d="M 1408.5 660.88 Q 1408.5 631.76 1415.0 631.76 Q 1421.5 631.76 1421.5 660.88 Z" fill="#21145F" fill-opacity="0.16"/>
+  <circle id="kop8" cx="1434.6" cy="617.2" r="5.5" fill="#21145F" fill-opacity="0.16"/>
+  <path id="romp8" d="M 1428.1 660.88 Q 1428.1 631.76 1434.6 631.76 Q 1441.1 631.76 1441.1 660.88 Z" fill="#21145F" fill-opacity="0.16"/>
+  <circle id="kop9" cx="1454.2" cy="617.2" r="5.5" fill="#21145F" fill-opacity="0.16"/>
+  <path id="romp9" d="M 1447.7 660.88 Q 1447.7 631.76 1454.2 631.76 Q 1460.7 631.76 1460.7 660.88 Z" fill="#21145F" fill-opacity="0.16"/>
+  <text id="cat-23-0" x="1268" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#21145F" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="1268" y="707.35">GROOTTE</tspan></text>
+  <text id="naam-23-0" x="1268" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#21145F" xml:space="preserve"><tspan x="1268" y="725.94">Isotype</tspan></text>
+  <text id="vraag-23-0" x="1268" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#21145F" fill-opacity="0.65" xml:space="preserve"><tspan x="1268" y="742.42">hoeveel mensen zijn dit</tspan></text>
+  <rect id="tegel-24" x="0" y="760" width="232" height="176" fill="none" stroke="#21145F" stroke-width="0.5"/>
+  <rect id="spoor0" x="18" y="783" width="196" height="14" fill="#21145F" fill-opacity="0.1"/>
+  <rect id="waarde0" x="18" y="786" width="141.12" height="8" fill="#21145F"/>
+  <line id="doel0" x1="184.6" y1="781" x2="184.6" y2="799" stroke="#21145F" stroke-width="2"/>
+  <rect id="spoor1" x="18" y="821" width="196" height="14" fill="#21145F" fill-opacity="0.1"/>
+  <rect id="waarde1" x="18" y="824" width="113.68" height="8" fill="#21145F"/>
+  <line id="doel1" x1="116" y1="819" x2="116" y2="837" stroke="#21145F" stroke-width="2"/>
+  <rect id="spoor2" x="18" y="859" width="196" height="14" fill="#21145F" fill-opacity="0.1"/>
+  <rect id="waarde2" x="18" y="862" width="80.36" height="8" fill="#21145F"/>
+  <line id="doel2" x1="139.52" y1="857" x2="139.52" y2="875" stroke="#21145F" stroke-width="2"/>
+  <text id="cat-24-0" x="18" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#21145F" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="18" y="897.35">GROOTTE</tspan></text>
+  <text id="naam-24-0" x="18" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#21145F" xml:space="preserve"><tspan x="18" y="915.94">Bulletgrafiek</tspan></text>
+  <text id="vraag-24-0" x="18" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#21145F" fill-opacity="0.65" xml:space="preserve"><tspan x="18" y="932.42">haalt het de norm</tspan></text>
+  <rect id="tegel-25" x="250" y="760" width="232" height="176" fill="none" stroke="#21145F" stroke-width="0.5"/>
+  <path id="m1-0" d="M 291.1 857.1 A 74.88 74.88 0 0 1 440.9 857.1" fill="none" stroke="#21145F" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+  <path id="m0-68" d="M 291.1 857.1 A 74.88 74.88 0 0 1 406.1 793.9" fill="none" stroke="#21145F" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+  <line id="naald" x1="366" y1="857.12" x2="406.12" y2="793.9" stroke="#21145F" stroke-width="1" stroke-opacity="0.3"/>
+  <text id="cat-25-0" x="268" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#21145F" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="268" y="897.35">GROOTTE</tspan></text>
+  <text id="naam-25-0" x="268" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#21145F" xml:space="preserve"><tspan x="268" y="915.94">Meter</tspan></text>
+  <text id="vraag-25-0" x="268" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#21145F" fill-opacity="0.65" xml:space="preserve"><tspan x="268" y="932.42">hoe ver zijn we</tspan></text>
+  <rect id="tegel-26" x="500" y="760" width="232" height="176" fill="none" stroke="#21145F" stroke-width="0.5"/>
+  <path id="ring0-5" d="M 616.0 805.1 L 635.8 816.6 L 635.8 839.4 L 616.0 850.9 L 596.2 839.4 L 596.2 816.6 Z" fill="none" stroke="#21145F" stroke-width="0.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <path id="ring1-0" d="M 616.0 782.2 L 655.6 805.1 L 655.6 850.9 L 616.0 873.8 L 576.4 850.9 L 576.4 805.1 Z" fill="none" stroke="#21145F" stroke-width="0.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <path id="web" d="M 616.0 788.6 L 640.6 813.8 L 645.3 844.9 L 616.0 846.3 L 594.2 840.6 L 589.1 812.4 Z" fill="#21145F" fill-opacity="0.2" stroke="#21145F" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <text id="cat-26-0" x="518" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#21145F" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="518" y="897.35">GROOTTE</tspan></text>
+  <text id="naam-26-0" x="518" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#21145F" xml:space="preserve"><tspan x="518" y="915.94">Radar</tspan></text>
+  <text id="vraag-26-0" x="518" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#21145F" fill-opacity="0.65" xml:space="preserve"><tspan x="518" y="932.42">op welke assen scoort het</tspan></text>
+  <rect id="tegel-27" x="750" y="760" width="232" height="176" fill="none" stroke="#21145F" stroke-width="0.5"/>
+  <line id="nul" x1="866" y1="776" x2="866" y2="880" stroke="#21145F" stroke-width="0.75" stroke-opacity="0.3"/>
+  <rect id="d0" x="866" y="776" width="60.76" height="13.87" fill="#21145F"/>
+  <rect id="d1" x="866" y="796.8" width="33.32" height="13.87" fill="#21145F"/>
+  <rect id="d2" x="848.36" y="817.6" width="17.64" height="13.87" fill="#21145F" fill-opacity="0.4"/>
+  <rect id="d3" x="821.9" y="838.4" width="44.1" height="13.87" fill="#21145F" fill-opacity="0.4"/>
+  <rect id="d4" x="866" y="859.2" width="20.58" height="13.87" fill="#21145F"/>
+  <text id="cat-27-0" x="768" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#21145F" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="768" y="897.35">AFWIJKING</tspan></text>
+  <text id="naam-27-0" x="768" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#21145F" xml:space="preserve"><tspan x="768" y="915.94">Divergerende staaf</tspan></text>
+  <text id="vraag-27-0" x="768" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#21145F" fill-opacity="0.65" xml:space="preserve"><tspan x="768" y="932.42">wie zit boven en wie onder de norm</tspan></text>
+  <rect id="tegel-28" x="1000" y="760" width="232" height="176" fill="none" stroke="#21145F" stroke-width="0.5"/>
+  <path id="vlak" d="M 1018.0 836.3 L 1050.7 822.8 L 1083.3 815.5 L 1116.0 830.1 L 1148.7 842.6 L 1181.3 834.2 L 1214.0 819.7 L 1214.0 828.0 L 1181.3 828.0 L 1148.7 828.0 L 1116.0 828.0 L 1083.3 828.0 L 1050.7 828.0 L 1018.0 828.0 Z" fill="#21145F" fill-opacity="0.18"/>
+  <path id="ref" d="M 1018.0 828.0 L 1050.7 828.0 L 1083.3 828.0 L 1116.0 828.0 L 1148.7 828.0 L 1181.3 828.0 L 1214.0 828.0" fill="none" stroke="#21145F" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/>
+  <path id="reeks" d="M 1018.0 836.3 L 1050.7 822.8 L 1083.3 815.5 L 1116.0 830.1 L 1148.7 842.6 L 1181.3 834.2 L 1214.0 819.7" fill="none" stroke="#21145F" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <text id="cat-28-0" x="1018" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#21145F" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="1018" y="897.35">AFWIJKING</tspan></text>
+  <text id="naam-28-0" x="1018" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#21145F" xml:space="preserve"><tspan x="1018" y="915.94">Overschot en tekort</tspan></text>
+  <text id="vraag-28-0" x="1018" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#21145F" fill-opacity="0.65" xml:space="preserve"><tspan x="1018" y="932.42">waar loopt het uit de pas</tspan></text>
+  <rect id="tegel-29" x="1250" y="760" width="232" height="176" fill="none" stroke="#21145F" stroke-width="0.5"/>
+  <rect id="L0" x="1268" y="776" width="9" height="47.84" fill="#21145F"/>
+  <rect id="L1" x="1268" y="830.08" width="9" height="31.2" fill="#21145F"/>
+  <rect id="L2" x="1268" y="865.44" width="9" height="14.56" fill="#21145F"/>
+  <rect id="R0" x="1455" y="776" width="9" height="29.12" fill="#21145F"/>
+  <rect id="R1" x="1455" y="811.36" width="9" height="24.96" fill="#21145F"/>
+  <rect id="R2" x="1455" y="840.48" width="9" height="20.8" fill="#21145F"/>
+  <rect id="R3" x="1455" y="865.44" width="9" height="14.56" fill="#21145F"/>
+  <path id="S0" d="M 1277 776.0 C 1366.0 776.0 1366.0 776.0 1455 776.0 L 1455 805.1 C 1366.0 805.1 1366.0 805.1 1277 805.1 Z" fill="#21145F" fill-opacity="0.16"/>
+  <path id="S1" d="M 1277 776.0 C 1366.0 776.0 1366.0 811.4 1455 811.4 L 1455 836.3 C 1366.0 836.3 1366.0 801.0 1277 801.0 Z" fill="#21145F" fill-opacity="0.16"/>
+  <path id="S2" d="M 1277 830.1 C 1366.0 830.1 1366.0 840.5 1455 840.5 L 1455 861.3 C 1366.0 861.3 1366.0 850.9 1277 850.9 Z" fill="#21145F" fill-opacity="0.16"/>
+  <path id="S3" d="M 1277 865.4 C 1366.0 865.4 1366.0 865.4 1455 865.4 L 1455 880.0 C 1366.0 880.0 1366.0 880.0 1277 880.0 Z" fill="#21145F" fill-opacity="0.16"/>
+  <text id="cat-29-0" x="1268" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#21145F" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="1268" y="897.35">STROOM</tspan></text>
+  <text id="naam-29-0" x="1268" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#21145F" xml:space="preserve"><tspan x="1268" y="915.94">Sankey</tspan></text>
+  <text id="vraag-29-0" x="1268" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#21145F" fill-opacity="0.65" xml:space="preserve"><tspan x="1268" y="932.42">waar gaat het geld naartoe</tspan></text>
+  <rect id="tegel-30" x="0" y="950" width="232" height="176" fill="none" stroke="#21145F" stroke-width="0.5"/>
+  <circle id="naaf" cx="116" cy="1018" r="21" fill="#21145F" fill-opacity="0.12" stroke="#21145F" stroke-width="1.6"/>
+  <line id="v0" x1="116" y1="997" x2="116" y2="988" stroke="#21145F" stroke-width="1" stroke-opacity="0.55"/>
+  <circle id="n0" cx="116" cy="977" r="11" fill="none" stroke="#21145F" stroke-width="1.2"/>
+  <line id="v1" x1="135.97" y1="1011.51" x2="188.28" y2="1008.73" stroke="#21145F" stroke-width="1" stroke-opacity="0.55"/>
+  <circle id="n1" cx="198.74" cy="1005.33" r="11" fill="none" stroke="#21145F" stroke-width="1.2"/>
+  <line id="v2" x1="128.34" y1="1034.99" x2="160.67" y2="1042.27" stroke="#21145F" stroke-width="1" stroke-opacity="0.55"/>
+  <circle id="n2" cx="167.14" cy="1051.17" r="11" fill="none" stroke="#21145F" stroke-width="1.2"/>
+  <line id="v3" x1="103.66" y1="1034.99" x2="71.33" y2="1042.27" stroke="#21145F" stroke-width="1" stroke-opacity="0.55"/>
+  <circle id="n3" cx="64.86" cy="1051.17" r="11" fill="none" stroke="#21145F" stroke-width="1.2"/>
+  <line id="v4" x1="96.03" y1="1011.51" x2="43.72" y2="1008.73" stroke="#21145F" stroke-width="1" stroke-opacity="0.55"/>
+  <circle id="n4" cx="33.26" cy="1005.33" r="11" fill="none" stroke="#21145F" stroke-width="1.2"/>
+  <text id="cat-30-0" x="18" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#21145F" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="18" y="1087.35">STROOM</tspan></text>
+  <text id="naam-30-0" x="18" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#21145F" xml:space="preserve"><tspan x="18" y="1105.94">Naaf</tspan></text>
+  <text id="vraag-30-0" x="18" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#21145F" fill-opacity="0.65" xml:space="preserve"><tspan x="18" y="1122.42">wie hangt aan wie</tspan></text>
+  <rect id="tegel-31" x="250" y="950" width="232" height="176" fill="none" stroke="#21145F" stroke-width="0.5"/>
+  <circle id="rand" cx="366" cy="1018" r="45.76" fill="none" stroke="#21145F" stroke-width="0.75"/>
+  <path id="c03" d="M 409.7 1031.5 Q 366.0 1018.0 325.0 997.8" fill="none" stroke="#21145F" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path id="c14" d="M 373.8 1063.1 Q 366.0 1018.0 365.4 972.2" fill="none" stroke="#21145F" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path id="c25" d="M 329.3 1045.4 Q 366.0 1018.0 406.5 996.7" fill="none" stroke="#21145F" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path id="c02" d="M 409.7 1031.5 Q 366.0 1018.0 329.3 1045.4" fill="none" stroke="#21145F" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle id="n0" cx="409.72" cy="1031.52" r="4" fill="#21145F"/>
+  <circle id="n1" cx="373.78" cy="1063.09" r="4" fill="#21145F"/>
+  <circle id="n2" cx="329.34" cy="1045.39" r="4" fill="#21145F"/>
+  <circle id="n3" cx="324.96" cy="997.75" r="4" fill="#21145F"/>
+  <circle id="n4" cx="365.43" cy="972.24" r="4" fill="#21145F"/>
+  <circle id="n5" cx="406.52" cy="996.74" r="4" fill="#21145F"/>
+  <text id="cat-31-0" x="268" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#21145F" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="268" y="1087.35">STROOM</tspan></text>
+  <text id="naam-31-0" x="268" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#21145F" xml:space="preserve"><tspan x="268" y="1105.94">Chord</tspan></text>
+  <text id="vraag-31-0" x="268" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#21145F" fill-opacity="0.65" xml:space="preserve"><tspan x="268" y="1122.42">wie wisselt uit met wie</tspan></text>
+  <rect id="tegel-32" x="500" y="950" width="232" height="176" fill="none" stroke="#21145F" stroke-width="0.5"/>
+  <path id="boog0" d="M 622.6 976.9 A 41.6 41.6 0 0 1 657.1 1011.4" fill="none" stroke="#21145F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle id="k0" cx="657.53" cy="1015.51" r="5" fill="#21145F"/>
+  <path id="boog1" d="M 657.1 1024.6 A 41.6 41.6 0 0 1 622.6 1059.1" fill="none" stroke="#21145F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle id="k1" cx="618.49" cy="1059.53" r="5" fill="#21145F"/>
+  <path id="boog2" d="M 609.4 1059.1 A 41.6 41.6 0 0 1 574.9 1024.6" fill="none" stroke="#21145F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle id="k2" cx="574.47" cy="1020.49" r="5" fill="#21145F"/>
+  <path id="boog3" d="M 574.9 1011.4 A 41.6 41.6 0 0 1 609.4 976.9" fill="none" stroke="#21145F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle id="k3" cx="613.51" cy="976.47" r="5" fill="#21145F"/>
+  <text id="cat-32-0" x="518" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#21145F" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="518" y="1087.35">STROOM</tspan></text>
+  <text id="naam-32-0" x="518" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#21145F" xml:space="preserve"><tspan x="518" y="1105.94">Cyclus</tspan></text>
+  <text id="vraag-32-0" x="518" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#21145F" fill-opacity="0.65" xml:space="preserve"><tspan x="518" y="1122.42">wat herhaalt zich</tspan></text>
+  <rect id="tegel-33" x="750" y="950" width="232" height="176" fill="none" stroke="#21145F" stroke-width="0.5"/>
+  <rect id="f0" x="768" y="1007" width="50.96" height="22" rx="11" ry="11" fill="#21145F" fill-opacity="0.55"/>
+  <path id="f1" d="M 866.0 1003.0 L 888.5 1018.0 L 866.0 1033.0 L 843.5 1018.0 Z" fill="#21145F" fill-opacity="0.16" stroke="#21145F" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect id="f2" x="913.04" y="973.72" width="50.96" height="22" fill="none" stroke="#21145F" stroke-width="1"/>
+  <rect id="f3" x="913.04" y="1040.28" width="50.96" height="22" fill="none" stroke="#21145F" stroke-width="1"/>
+  <line id="p1" x1="818.96" y1="1018" x2="840.52" y2="1018" stroke="#21145F" stroke-width="1" stroke-opacity="0.5"/>
+  <path id="p2" d="M 888.0 1018.0 Q 897.36 1018.0 913.04 984.72" fill="none" stroke="#21145F" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+  <path id="p3" d="M 888.0 1018.0 Q 897.36 1018.0 913.04 1051.28" fill="none" stroke="#21145F" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+  <text id="cat-33-0" x="768" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#21145F" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="768" y="1087.35">STROOM</tspan></text>
+  <text id="naam-33-0" x="768" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#21145F" xml:space="preserve"><tspan x="768" y="1105.94">Stroomschema</tspan></text>
+  <text id="vraag-33-0" x="768" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#21145F" fill-opacity="0.65" xml:space="preserve"><tspan x="768" y="1122.42">hoe loopt het besluit</tspan></text>
+  <rect id="tegel-34" x="1000" y="950" width="232" height="176" fill="none" stroke="#21145F" stroke-width="0.5"/>
+  <path id="ruit" d="M 1076.8 998.0 L 1096.8 1018.0 L 1076.8 1038.0 L 1056.8 1018.0 Z" fill="#21145F" fill-opacity="0.16" stroke="#21145F" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path id="pijl0" d="M 1096.8 1018.0 Q 1125.8 1018.0 1139.52 984.72" fill="none" stroke="#21145F" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect id="uit0" x="1143.44" y="975.72" width="66.64" height="18" fill="#21145F" fill-opacity="0.55" stroke="#21145F" stroke-width="1"/>
+  <path id="pijl1" d="M 1096.8 1018.0 Q 1125.8 1018.0 1139.52 1051.28" fill="none" stroke="#21145F" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect id="uit1" x="1143.44" y="1042.28" width="66.64" height="18" fill="#21145F" fill-opacity="0.16" stroke="#21145F" stroke-width="1"/>
+  <text id="cat-34-0" x="1018" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#21145F" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="1018" y="1087.35">STROOM</tspan></text>
+  <text id="naam-34-0" x="1018" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#21145F" xml:space="preserve"><tspan x="1018" y="1105.94">Beslisboom</tspan></text>
+  <text id="vraag-34-0" x="1018" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#21145F" fill-opacity="0.65" xml:space="preserve"><tspan x="1018" y="1122.42">wat gebeurt er als</tspan></text>
+  <rect id="tegel-35" x="1250" y="950" width="232" height="176" fill="none" stroke="#21145F" stroke-width="0.5"/>
+  <line id="baan0" x1="1268" y1="966" x2="1464" y2="966" stroke="#21145F" stroke-width="0.5" stroke-opacity="0.3"/>
+  <rect id="s00" x="1271.92" y="973.63" width="43.12" height="17.33" fill="#21145F" fill-opacity="0.2"/>
+  <rect id="s01" x="1346.4" y="973.63" width="47.04" height="17.33" fill="#21145F" fill-opacity="0.2"/>
+  <line id="baan1" x1="1268" y1="1000.67" x2="1464" y2="1000.67" stroke="#21145F" stroke-width="0.5" stroke-opacity="0.3"/>
+  <rect id="s10" x="1318.96" y="1008.29" width="39.2" height="17.33" fill="#21145F" fill-opacity="0.38"/>
+  <rect id="s11" x="1393.44" y="1008.29" width="43.12" height="17.33" fill="#21145F" fill-opacity="0.38"/>
+  <line id="baan2" x1="1268" y1="1035.33" x2="1464" y2="1035.33" stroke="#21145F" stroke-width="0.5" stroke-opacity="0.3"/>
+  <rect id="s20" x="1366" y="1042.96" width="47.04" height="17.33" fill="#21145F" fill-opacity="0.56"/>
+  <line id="onder" x1="1268" y1="1070" x2="1464" y2="1070" stroke="#21145F" stroke-width="0.5" stroke-opacity="0.3"/>
+  <text id="cat-35-0" x="1268" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#21145F" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="1268" y="1087.35">STROOM</tspan></text>
+  <text id="naam-35-0" x="1268" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#21145F" xml:space="preserve"><tspan x="1268" y="1105.94">Zwembanen</tspan></text>
+  <text id="vraag-35-0" x="1268" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#21145F" fill-opacity="0.65" xml:space="preserve"><tspan x="1268" y="1122.42">wie doet wat wanneer</tspan></text>
+  <rect id="tegel-36" x="0" y="1140" width="232" height="176" fill="none" stroke="#21145F" stroke-width="0.5"/>
+  <circle id="v1" cx="94.28" cy="1208" r="37.44" fill="#21145F" fill-opacity="0.16" stroke="#21145F" stroke-width="1.2"/>
+  <circle id="v2" cx="137.72" cy="1208" r="37.44" fill="#21145F" fill-opacity="0.16" stroke="#21145F" stroke-width="1.2"/>
+  <text id="cat-36-0" x="18" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#21145F" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="18" y="1277.35">VERBAND</tspan></text>
+  <text id="naam-36-0" x="18" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#21145F" xml:space="preserve"><tspan x="18" y="1295.94">Venn, twee</tspan></text>
+  <text id="vraag-36-0" x="18" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#21145F" fill-opacity="0.65" xml:space="preserve"><tspan x="18" y="1312.42">wat delen ze</tspan></text>
+  <rect id="tegel-37" x="250" y="1140" width="232" height="176" fill="none" stroke="#21145F" stroke-width="0.5"/>
+  <circle id="v0" cx="366" cy="1194.27" r="31.2" fill="#21145F" fill-opacity="0.13" stroke="#21145F" stroke-width="1.2"/>
+  <circle id="v1" cx="348.53" cy="1224.22" r="31.2" fill="#21145F" fill-opacity="0.13" stroke="#21145F" stroke-width="1.2"/>
+  <circle id="v2" cx="383.47" cy="1224.22" r="31.2" fill="#21145F" fill-opacity="0.13" stroke="#21145F" stroke-width="1.2"/>
+  <text id="cat-37-0" x="268" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#21145F" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="268" y="1277.35">VERBAND</tspan></text>
+  <text id="naam-37-0" x="268" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#21145F" xml:space="preserve"><tspan x="268" y="1295.94">Venn, drie</tspan></text>
+  <text id="vraag-37-0" x="268" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#21145F" fill-opacity="0.65" xml:space="preserve"><tspan x="268" y="1312.42">waar overlappen drie dingen</tspan></text>
+  <rect id="tegel-38" x="500" y="1140" width="232" height="176" fill="none" stroke="#21145F" stroke-width="0.5"/>
+  <line id="kx" x1="564" y1="1208" x2="668" y2="1208" stroke="#21145F" stroke-width="0.75" stroke-opacity="0.3"/>
+  <line id="ky" x1="616" y1="1156" x2="616" y2="1260" stroke="#21145F" stroke-width="0.75" stroke-opacity="0.3"/>
+  <circle id="k0" cx="588.96" cy="1230.88" r="4" fill="#21145F" fill-opacity="0.22"/>
+  <circle id="k1" cx="599.36" cy="1239.2" r="4" fill="#21145F" fill-opacity="0.22"/>
+  <circle id="k2" cx="634.72" cy="1187.2" r="4" fill="#21145F" fill-opacity="0.55"/>
+  <circle id="k3" cx="645.12" cy="1178.88" r="4" fill="#21145F" fill-opacity="0.55"/>
+  <circle id="k4" cx="638.88" cy="1224.64" r="4" fill="#21145F" fill-opacity="0.22"/>
+  <circle id="k5" cx="593.12" cy="1187.2" r="4" fill="#21145F" fill-opacity="0.22"/>
+  <text id="cat-38-0" x="518" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#21145F" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="518" y="1277.35">VERBAND</tspan></text>
+  <text id="naam-38-0" x="518" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#21145F" xml:space="preserve"><tspan x="518" y="1295.94">Kwadrant</tspan></text>
+  <text id="vraag-38-0" x="518" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#21145F" fill-opacity="0.65" xml:space="preserve"><tspan x="518" y="1312.42">wie zit in welke hoek</tspan></text>
+  <rect id="tegel-39" x="750" y="1140" width="232" height="176" fill="none" stroke="#21145F" stroke-width="0.5"/>
+  <line id="as-y" x1="768" y1="1156" x2="768" y2="1260" stroke="#21145F" stroke-width="0.75" stroke-opacity="0.3"/>
+  <line id="as-x" x1="768" y1="1260" x2="964" y2="1260" stroke="#21145F" stroke-width="0.75" stroke-opacity="0.3"/>
+  <circle id="p0" cx="791.52" cy="1237.12" r="3" fill="#21145F" fill-opacity="0.55" stroke="#21145F" stroke-width="1"/>
+  <circle id="p1" cx="815.04" cy="1220.48" r="3" fill="#21145F" fill-opacity="0.55" stroke="#21145F" stroke-width="1"/>
+  <circle id="p2" cx="828.76" cy="1228.8" r="3" fill="#21145F" fill-opacity="0.55" stroke="#21145F" stroke-width="1"/>
+  <circle id="p3" cx="850.32" cy="1205.92" r="3" fill="#21145F" fill-opacity="0.55" stroke="#21145F" stroke-width="1"/>
+  <circle id="p4" cx="862.08" cy="1214.24" r="3" fill="#21145F" fill-opacity="0.55" stroke="#21145F" stroke-width="1"/>
+  <circle id="p5" cx="879.72" cy="1194.48" r="3" fill="#21145F" fill-opacity="0.55" stroke="#21145F" stroke-width="1"/>
+  <circle id="p6" cx="891.48" cy="1202.8" r="3" fill="#21145F" fill-opacity="0.55" stroke="#21145F" stroke-width="1"/>
+  <circle id="p7" cx="909.12" cy="1180.96" r="3" fill="#21145F" fill-opacity="0.55" stroke="#21145F" stroke-width="1"/>
+  <circle id="p8" cx="926.76" cy="1189.28" r="3" fill="#21145F" fill-opacity="0.55" stroke="#21145F" stroke-width="1"/>
+  <circle id="p9" cx="944.4" cy="1168.48" r="3" fill="#21145F" fill-opacity="0.55" stroke="#21145F" stroke-width="1"/>
+  <circle id="p10" cx="836.6" cy="1189.28" r="3" fill="#21145F" fill-opacity="0.55" stroke="#21145F" stroke-width="1"/>
+  <circle id="p11" cx="901.28" cy="1224.64" r="3" fill="#21145F" fill-opacity="0.55" stroke="#21145F" stroke-width="1"/>
+  <text id="cat-39-0" x="768" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#21145F" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="768" y="1277.35">VERBAND</tspan></text>
+  <text id="naam-39-0" x="768" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#21145F" xml:space="preserve"><tspan x="768" y="1295.94">Spreiding</tspan></text>
+  <text id="vraag-39-0" x="768" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#21145F" fill-opacity="0.65" xml:space="preserve"><tspan x="768" y="1312.42">hangen deze twee samen</tspan></text>
+  <rect id="tegel-40" x="1000" y="1140" width="232" height="176" fill="none" stroke="#21145F" stroke-width="0.5"/>
+  <line id="as-y" x1="1018" y1="1156" x2="1018" y2="1260" stroke="#21145F" stroke-width="0.75" stroke-opacity="0.3"/>
+  <line id="as-x" x1="1018" y1="1260" x2="1214" y2="1260" stroke="#21145F" stroke-width="0.75" stroke-opacity="0.3"/>
+  <circle id="b00" cx="1042.5" cy="1173.33" r="7" fill="#21145F" fill-opacity="0.45"/>
+  <circle id="b01" cx="1091.5" cy="1173.33" r="3" fill="#21145F" fill-opacity="0.45"/>
+  <circle id="b02" cx="1140.5" cy="1173.33" r="11" fill="#21145F" fill-opacity="0.45"/>
+  <circle id="b03" cx="1189.5" cy="1173.33" r="5" fill="#21145F" fill-opacity="0.45"/>
+  <circle id="b10" cx="1042.5" cy="1208" r="4" fill="#21145F" fill-opacity="0.45"/>
+  <circle id="b11" cx="1091.5" cy="1208" r="9" fill="#21145F" fill-opacity="0.45"/>
+  <circle id="b12" cx="1140.5" cy="1208" r="6" fill="#21145F" fill-opacity="0.45"/>
+  <circle id="b13" cx="1189.5" cy="1208" r="13" fill="#21145F" fill-opacity="0.45"/>
+  <circle id="b20" cx="1042.5" cy="1242.67" r="10" fill="#21145F" fill-opacity="0.45"/>
+  <circle id="b21" cx="1091.5" cy="1242.67" r="5" fill="#21145F" fill-opacity="0.45"/>
+  <circle id="b22" cx="1140.5" cy="1242.67" r="3" fill="#21145F" fill-opacity="0.45"/>
+  <circle id="b23" cx="1189.5" cy="1242.67" r="7" fill="#21145F" fill-opacity="0.45"/>
+  <text id="cat-40-0" x="1018" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#21145F" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="1018" y="1277.35">VERBAND</tspan></text>
+  <text id="naam-40-0" x="1018" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#21145F" xml:space="preserve"><tspan x="1018" y="1295.94">Bubbelmatrix</tspan></text>
+  <text id="vraag-40-0" x="1018" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#21145F" fill-opacity="0.65" xml:space="preserve"><tspan x="1018" y="1312.42">waar zit het zwaartepunt</tspan></text>
+  <rect id="tegel-41" x="1250" y="1140" width="232" height="176" fill="none" stroke="#21145F" stroke-width="0.5"/>
+  <rect id="h00" x="1268" y="1156" width="37.2" height="32.67" fill="#21145F" fill-opacity="0.9"/>
+  <rect id="h01" x="1307.2" y="1156" width="37.2" height="32.67" fill="#21145F" fill-opacity="0.6"/>
+  <rect id="h02" x="1346.4" y="1156" width="37.2" height="32.67" fill="#21145F" fill-opacity="0.3"/>
+  <rect id="h03" x="1385.6" y="1156" width="37.2" height="32.67" fill="#21145F" fill-opacity="0.15"/>
+  <rect id="h04" x="1424.8" y="1156" width="37.2" height="32.67" fill="#21145F" fill-opacity="0.5"/>
+  <rect id="h10" x="1268" y="1190.67" width="37.2" height="32.67" fill="#21145F" fill-opacity="0.4"/>
+  <rect id="h11" x="1307.2" y="1190.67" width="37.2" height="32.67" fill="#21145F" fill-opacity="0.8"/>
+  <rect id="h12" x="1346.4" y="1190.67" width="37.2" height="32.67" fill="#21145F" fill-opacity="0.55"/>
+  <rect id="h13" x="1385.6" y="1190.67" width="37.2" height="32.67" fill="#21145F" fill-opacity="0.25"/>
+  <rect id="h14" x="1424.8" y="1190.67" width="37.2" height="32.67" fill="#21145F" fill-opacity="0.7"/>
+  <rect id="h20" x="1268" y="1225.33" width="37.2" height="32.67" fill="#21145F" fill-opacity="0.2"/>
+  <rect id="h21" x="1307.2" y="1225.33" width="37.2" height="32.67" fill="#21145F" fill-opacity="0.35"/>
+  <rect id="h22" x="1346.4" y="1225.33" width="37.2" height="32.67" fill="#21145F" fill-opacity="0.95"/>
+  <rect id="h23" x="1385.6" y="1225.33" width="37.2" height="32.67" fill="#21145F" fill-opacity="0.6"/>
+  <rect id="h24" x="1424.8" y="1225.33" width="37.2" height="32.67" fill="#21145F" fill-opacity="0.3"/>
+  <text id="cat-41-0" x="1268" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#21145F" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="1268" y="1277.35">VERBAND</tspan></text>
+  <text id="naam-41-0" x="1268" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#21145F" xml:space="preserve"><tspan x="1268" y="1295.94">Heatmap</tspan></text>
+  <text id="vraag-41-0" x="1268" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#21145F" fill-opacity="0.65" xml:space="preserve"><tspan x="1268" y="1312.42">welk vak springt eruit</tspan></text>
+  <rect id="tegel-42" x="0" y="1330" width="232" height="176" fill="none" stroke="#21145F" stroke-width="0.5"/>
+  <rect id="top" x="93.73" y="1346" width="44.55" height="16" fill="#21145F"/>
+  <rect id="m0" x="38.85" y="1380.67" width="44.55" height="16" fill="#21145F" fill-opacity="0.35"/>
+  <line id="v0" x1="61.12" y1="1380.67" x2="61.12" y2="1371.33" stroke="#21145F" stroke-width="0.75" stroke-opacity="0.6"/>
+  <rect id="m1" x="93.73" y="1380.67" width="44.55" height="16" fill="#21145F" fill-opacity="0.35"/>
+  <line id="v1" x1="116" y1="1380.67" x2="116" y2="1371.33" stroke="#21145F" stroke-width="0.75" stroke-opacity="0.6"/>
+  <rect id="m2" x="148.61" y="1380.67" width="44.55" height="16" fill="#21145F" fill-opacity="0.35"/>
+  <line id="v2" x1="170.88" y1="1380.67" x2="170.88" y2="1371.33" stroke="#21145F" stroke-width="0.75" stroke-opacity="0.6"/>
+  <line id="balk" x1="61.12" y1="1371.33" x2="170.88" y2="1371.33" stroke="#21145F" stroke-width="0.75" stroke-opacity="0.6"/>
+  <line id="stam" x1="116" y1="1362" x2="116" y2="1371.33" stroke="#21145F" stroke-width="0.75" stroke-opacity="0.6"/>
+  <rect id="b0" x="19.04" y="1415.33" width="37.12" height="14" fill="none" stroke="#21145F" stroke-width="1"/>
+  <rect id="b1" x="66.08" y="1415.33" width="37.12" height="14" fill="none" stroke="#21145F" stroke-width="1"/>
+  <rect id="b2" x="128.8" y="1415.33" width="37.12" height="14" fill="none" stroke="#21145F" stroke-width="1"/>
+  <rect id="b3" x="175.84" y="1415.33" width="37.12" height="14" fill="none" stroke="#21145F" stroke-width="1"/>
+  <text id="cat-42-0" x="18" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#21145F" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="18" y="1467.35">STRUCTUUR</tspan></text>
+  <text id="naam-42-0" x="18" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#21145F" xml:space="preserve"><tspan x="18" y="1485.94">Boom</tspan></text>
+  <text id="vraag-42-0" x="18" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#21145F" fill-opacity="0.65" xml:space="preserve"><tspan x="18" y="1502.42">hoe hangt het samen</tspan></text>
+  <rect id="tegel-43" x="250" y="1330" width="232" height="176" fill="none" stroke="#21145F" stroke-width="0.5"/>
+  <path id="p0" d="M 366.0 1346.0 L 366.0 1346.0 L 390.5 1368.0 L 341.5 1368.0 Z" fill="#21145F" fill-opacity="0.75"/>
+  <path id="p1" d="M 341.5 1372.0 L 390.5 1372.0 L 415.0 1394.0 L 317.0 1394.0 Z" fill="#21145F" fill-opacity="0.58"/>
+  <path id="p2" d="M 317.0 1398.0 L 415.0 1398.0 L 439.5 1420.0 L 292.5 1420.0 Z" fill="#21145F" fill-opacity="0.41"/>
+  <path id="p3" d="M 292.5 1424.0 L 439.5 1424.0 L 464.0 1446.0 L 268.0 1446.0 Z" fill="#21145F" fill-opacity="0.24"/>
+  <text id="cat-43-0" x="268" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#21145F" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="268" y="1467.35">STRUCTUUR</tspan></text>
+  <text id="naam-43-0" x="268" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#21145F" xml:space="preserve"><tspan x="268" y="1485.94">Piramide</tspan></text>
+  <text id="vraag-43-0" x="268" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#21145F" fill-opacity="0.65" xml:space="preserve"><tspan x="268" y="1502.42">wat rust waarop</tspan></text>
+  <rect id="tegel-44" x="500" y="1330" width="232" height="176" fill="none" stroke="#21145F" stroke-width="0.5"/>
+  <rect id="laag0" x="518" y="1430" width="196" height="20" fill="#21145F" fill-opacity="0.16"/>
+  <rect id="laag1" x="518" y="1404" width="148.96" height="20" fill="#21145F" fill-opacity="0.38"/>
+  <rect id="laag2" x="518" y="1378" width="101.92" height="20" fill="#21145F" fill-opacity="0.6"/>
+  <rect id="laag3" x="518" y="1352" width="58.8" height="20" fill="#21145F" fill-opacity="0.82"/>
+  <text id="cat-44-0" x="518" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#21145F" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="518" y="1467.35">STRUCTUUR</tspan></text>
+  <text id="naam-44-0" x="518" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#21145F" xml:space="preserve"><tspan x="518" y="1485.94">Opbouw in lagen</tspan></text>
+  <text id="vraag-44-0" x="518" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#21145F" fill-opacity="0.65" xml:space="preserve"><tspan x="518" y="1502.42">van inzet naar effect</tspan></text>
+  <rect id="tegel-45" x="750" y="1330" width="232" height="176" fill="none" stroke="#21145F" stroke-width="0.5"/>
+  <line id="as-y" x1="768" y1="1346" x2="768" y2="1450" stroke="#21145F" stroke-width="0.75" stroke-opacity="0.3"/>
+  <line id="as-x" x1="768" y1="1450" x2="964" y2="1450" stroke="#21145F" stroke-width="0.75" stroke-opacity="0.3"/>
+  <rect id="h0" x="768" y="1435.44" width="23" height="14.56" fill="#21145F" fill-opacity="0.55"/>
+  <rect id="h1" x="792.5" y="1418.8" width="23" height="31.2" fill="#21145F" fill-opacity="0.55"/>
+  <rect id="h2" x="817" y="1392.8" width="23" height="57.2" fill="#21145F" fill-opacity="0.55"/>
+  <rect id="h3" x="841.5" y="1360.56" width="23" height="89.44" fill="#21145F" fill-opacity="0.55"/>
+  <rect id="h4" x="866" y="1375.12" width="23" height="74.88" fill="#21145F" fill-opacity="0.55"/>
+  <rect id="h5" x="890.5" y="1404.24" width="23" height="45.76" fill="#21145F" fill-opacity="0.55"/>
+  <rect id="h6" x="915" y="1422.96" width="23" height="27.04" fill="#21145F" fill-opacity="0.55"/>
+  <rect id="h7" x="939.5" y="1437.52" width="23" height="12.48" fill="#21145F" fill-opacity="0.55"/>
+  <text id="cat-45-0" x="768" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="8" fill="#21145F" fill-opacity="0.45" letter-spacing="1.2" xml:space="preserve"><tspan x="768" y="1467.35">VERDELING</tspan></text>
+  <text id="naam-45-0" x="768" font-family="Montserrat SemiBold, Montserrat, sans-serif" font-weight="600" font-size="13" fill="#21145F" xml:space="preserve"><tspan x="768" y="1485.94">Histogram</tspan></text>
+  <text id="vraag-45-0" x="768" font-family="Lato Light, Lato, sans-serif" font-weight="300" font-size="11" fill="#21145F" fill-opacity="0.65" xml:space="preserve"><tspan x="768" y="1502.42">hoe is het verdeeld</tspan></text>
 </svg>

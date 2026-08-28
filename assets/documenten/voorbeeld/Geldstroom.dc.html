@@ -21,55 +21,55 @@
             <defs>
               <marker id="pijl-o" viewBox="0 0 10 8" refX="9" refY="4"
                       markerWidth="8" markerHeight="6.4" orient="auto-start-reverse">
-                <path d="M0 0 L10 4 L0 8 z" fill="#F87F4F"/>
+                <path d="M0 0 L10 4 L0 8 z" fill="var(--oranje)"/>
               </marker>
               <marker id="pijl-e" viewBox="0 0 10 8" refX="9" refY="4"
                       markerWidth="8" markerHeight="6.4" orient="auto-start-reverse">
-                <path d="M0 0 L10 4 L0 8 z" fill="#6AC6BA"/>
+                <path d="M0 0 L10 4 L0 8 z" fill="var(--emerald)"/>
               </marker>
             </defs>
 
             <!-- Drie partijen, gelijke dozen op één lijn -->
             <g font-family="Montserrat, sans-serif" font-weight="700" font-size="13.33"
-               letter-spacing="1.4" fill="#201B5C" text-anchor="middle">
-              <rect x="0"   y="86" width="196" height="86" fill="#F4F3F7"/>
-              <rect x="242" y="86" width="196" height="86" fill="#F4F3F7"/>
-              <rect x="484" y="86" width="196" height="86" fill="#F4F3F7"/>
+               letter-spacing="1.4" fill="var(--navy)" text-anchor="middle">
+              <rect x="0"   y="86" width="196" height="86" fill="var(--navy-tint)"/>
+              <rect x="242" y="86" width="196" height="86" fill="var(--navy-tint)"/>
+              <rect x="484" y="86" width="196" height="86" fill="var(--navy-tint)"/>
               <text x="98"  y="126">GEMEENTE</text>
               <text x="340" y="126">ZORGSTELSEL</text>
               <text x="582" y="126">VERZEKERAAR</text>
             </g>
             <g font-family="Lato, sans-serif" font-weight="300" font-size="10.67"
-               fill="#201B5C" text-anchor="middle" opacity=".78">
+               fill="var(--navy)" text-anchor="middle" opacity=".78">
               <text x="98"  y="148">betaalt de preventie</text>
               <text x="340" y="148">minder opnames</text>
               <text x="582" y="148">houdt de besparing</text>
             </g>
 
             <!-- Heen: de investering, en wat hij oplevert -->
-            <line x1="200" y1="129" x2="234" y2="129" stroke="#F87F4F" stroke-width="2.4"
+            <line x1="200" y1="129" x2="234" y2="129" stroke="var(--oranje)" stroke-width="2.4"
                   marker-end="url(#pijl-o)"/>
-            <line x1="442" y1="129" x2="476" y2="129" stroke="#6AC6BA" stroke-width="2.4"
+            <line x1="442" y1="129" x2="476" y2="129" stroke="var(--emerald)" stroke-width="2.4"
                   marker-end="url(#pijl-e)"/>
             <g font-family="Montserrat, sans-serif" font-weight="700" font-size="16"
                text-anchor="middle">
-              <text x="217" y="62" fill="#F87F4F">&euro; 1</text>
-              <text x="459" y="62" fill="#6AC6BA">&euro; 3</text>
+              <text x="217" y="62" fill="var(--oranje)">&euro; 1</text>
+              <text x="459" y="62" fill="var(--emerald)">&euro; 3</text>
             </g>
 
             <!-- Terug: de route die er niet is -->
-            <path d="M582 186 L582 268 L98 268 L98 190" fill="none" stroke="#F95D63"
+            <path d="M582 186 L582 268 L98 268 L98 190" fill="none" stroke="var(--grapefruit)"
                   stroke-width="2" stroke-dasharray="7 6"/>
-            <g stroke="#F95D63" stroke-width="2.4" stroke-linecap="round">
+            <g stroke="var(--grapefruit)" stroke-width="2.4" stroke-linecap="round">
               <line x1="329" y1="259" x2="351" y2="277"/>
               <line x1="351" y1="259" x2="329" y2="277"/>
             </g>
             <text x="340" y="312" font-family="Montserrat, sans-serif" font-weight="700"
-                  font-size="10.67" letter-spacing="1.6" fill="#F95D63" text-anchor="middle">
+                  font-size="10.67" letter-spacing="1.6" fill="var(--grapefruit)" text-anchor="middle">
               GEEN ROUTE TERUG
             </text>
             <text x="340" y="336" font-family="Lato, sans-serif" font-weight="300"
-                  font-size="10.67" fill="#201B5C" opacity=".78" text-anchor="middle">
+                  font-size="10.67" fill="var(--navy)" opacity=".78" text-anchor="middle">
               De besparing blijft waar hij valt, dus de volgende investering komt er niet.
             </text>
           </svg>

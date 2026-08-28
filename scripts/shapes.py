@@ -35,7 +35,7 @@ elementvolgorde, `lnSpc` 112%, en de contrastregels. Een eigen vorm is geen acht
 
 Waarom dit bestaat
 ------------------
-De eerste deck die met sfnl-slides gebouwd werd, had op vier contentslides 31 gevulde
+De eerste deck die met slides gebouwd werd, had op vier contentslides 31 gevulde
 rechthoeken, nul gekleurde letters en niets groter dan 19pt. Dat kwam niet doordat de bouwer
 geen smaak had, maar doordat de bouwlaag die hij ad hoc schreef `<a:ln><a:noFill/>` op elke
 vorm hardcodeerde en zijn lichte vullingen met `lumMod` maakte. Twee van de mooiste slides in
@@ -74,6 +74,8 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+sys.path.insert(0, str(Path(__file__).resolve().parent / "gedeeld"))
+import merk as _merk  # noqa: E402
 
 EMU_PER_INCH = 914400
 
@@ -152,8 +154,14 @@ OP_WIT = {"navy": 15.30, "royal": 5.67, "grapefruit": 3.10,
 #: staat navy, want daar haalt wit 2.0 tot 3.1. Uitzondering: op displaymaat (>= 40pt)
 #: mag wit ook op de lichte accenten -- dan leest het cijfer als vorm en niet als tekst,
 #: en dat is wat de sterkste referentieslide doet. `tekst_op` dwingt dat af.
-OP_VOL = {"navy": "wit", "royal": "wit",
-          "oranje": "navy", "grapefruit": "navy", "sky": "navy", "emerald": "navy"}
+#: De tekstkleur op een volle vulling. Stond hier als tabel en dat was een
+#: onderhoudsval: `violet` ontbrak, en `tekst_op()` viel daarop stil terug op
+#: navy -- navy op violet haalt 2,86 en dat is precies de paring die
+#: `reference/merk.md` §1 als de val aanwijst. De tabel komt nu uit
+#: `merk.inkt_op()`, die hem per kleur uitrekent, dus hij kan niet meer uit de
+#: pas lopen met het palet.
+OP_VOL = {naam: _merk.inkt_op(naam) for naam in _merk.HEX
+          if naam not in ("wit",)}
 
 DISPLAY_VLOER = 40.0
 
@@ -193,7 +201,13 @@ def tekst_op(vulling: str | tuple, pt: float = 0) -> str:
         return "navy"                      # wit of een container: navy erop
     if pt >= DISPLAY_VLOER:
         return "wit"                       # displaymaat: wit mag op elke volle hue
-    return OP_VOL.get(hue, "navy")
+    # Geen `.get(hue, "navy")` meer. Een hue die hier niet in staat, is een hue
+    # die niet in het palet staat, en dan is navy geen antwoord maar een gok --
+    # zie de noot bij OP_VOL. `merk.inkt_op()` rekent hem alsnog uit als het een
+    # merkkleur is, en klaagt als het er geen is.
+    if hue in OP_VOL:
+        return OP_VOL[hue]
+    return _merk.inkt_op(hue)
 
 
 def _split(v):
@@ -226,7 +240,7 @@ def _clr(hue: str, alpha: int | None = None) -> str:
         raise ValueError(
             f"alpha {alpha} is geen OOXML-alpha. Deze laag rekent in honderdduizendsten, "
             f"dus 7 procent is 7000 en niet 0,07. Kwam dit uit svg.py van "
-            f"sfnl-infographic, die rekent met een breuk: vermenigvuldig met 100000, of "
+            f"infographic, die rekent met een breuk: vermenigvuldig met 100000, of "
             f"gebruik `\"container:{hue}\"` voor de gekalibreerde containerdekking."
         )
     slot = HUE.get(hue, hue)

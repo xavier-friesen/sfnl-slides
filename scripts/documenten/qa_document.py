@@ -42,14 +42,18 @@ from _browser import browser, wacht_op_letters  # noqa: E402
 
 #: Het palet. Alles wat een element als kleur of vulling draagt hoort hier te
 #: staan, op de tinten van diezelfde kleuren na — die worden apart herkend.
-PALET = {
-    "navy": (32, 27, 92), "oranje": (248, 127, 79), "wit": (255, 255, 255),
-    "grapefruit": (249, 93, 99), "emerald": (106, 198, 186), "royal": (59, 98, 193),
-    "sky": (69, 182, 226), "violet": (107, 93, 174),
-    "mint-tint": (224, 244, 241), "periwinkel": (160, 173, 226),
-    "oranje-tint": (255, 223, 208), "navy-tint": (244, 243, 247),
-    "grijs": (242, 242, 242),
-}
+#:
+#: Uit `scripts/gedeeld/merk.py` en niet uit een eigen lijst. Die eigen lijst
+#: heeft er gestaan, met de vijf waarden van vóór 27 augustus 2026 erin, en toen
+#: was deze meting het tegendeel van wat ze moet zijn: het merkoranje van het
+#: Word-sjabloon week 15 op het blauwkanaal af van het oranje dat hier stond, en
+#: dat is meer dan de marge van `_dichtbij`. De poort meldde dus "kleur buiten
+#: het palet" over de merkkleur zelf, op elk document. Een toets die zijn eigen
+#: kopie van de waarheid bijhoudt, toetst op een gegeven moment die kopie.
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "gedeeld"))
+from merk import KLEUREN, rgb  # noqa: E402
+
+PALET = {naam: rgb(naam) for naam in KLEUREN}
 
 #: Ondergrens voor lopende tekst. 8 pt bij 96 dpi is 10,67 px. Het SFNL-rapport
 #: zet zijn brood op 10 pt (13,33 px); 8 pt is de bijschriftmaat en daaronder
@@ -83,7 +87,35 @@ METING = r"""() => {
     if (!zs) uit.meldingen.push({soort: 'geen-zetspiegel', pagina: idx + 1});
     const p = {nr: idx + 1, w: Math.round(pr.width), h: Math.round(pr.height),
                formaat: pag.dataset.formaat || 'sfnl', overloop: [], klip: [],
-               regels: [], onderrand: 0, woorden: 0, schaduw: 0};
+               regels: [], onderrand: 0, woorden: 0, schaduw: 0, velden: []};
+
+    // Aflopende kleurvelden tellen. Een veld is een vlak dat over de volle
+    // breedte van het blad loopt, aan minstens één rand raakt, en een andere
+    // kleur heeft dan het papier. De pagina zelf telt mee zodra hij niet wit
+    // is. Zie `kleurveld-stapeling` in de beoordeling voor waarom dit een
+    // blokkade is en geen aanwijzing.
+    {
+      const pagKleur = getComputedStyle(pag).backgroundColor;
+      const wit = ['rgb(255, 255, 255)', 'rgba(0, 0, 0, 0)', 'transparent'];
+      const pagIsWit = wit.indexOf(pagKleur) !== -1;
+      if (!pagIsWit) p.velden.push({el: 'pagina', kleur: pagKleur, hoogte: p.h});
+      pag.querySelectorAll('*').forEach(el => {
+        const cs = getComputedStyle(el);
+        if (cs.display === 'none' || cs.visibility === 'hidden') return;
+        const bg = cs.backgroundColor;
+        const heeftVerloop = cs.backgroundImage && cs.backgroundImage !== 'none';
+        if (wit.indexOf(bg) !== -1 && !heeftVerloop) return;
+        if (bg === pagKleur && !heeftVerloop) return;
+        const r = el.getBoundingClientRect();
+        if (r.width < pr.width - 1.5) return;              // niet over de volle breedte
+        const raakt = (r.top <= pr.top + 1.5) || (r.bottom >= pr.bottom - 1.5);
+        if (!raakt) return;                                 // zweeft, dus geen veld
+        p.velden.push({el: el.className || el.tagName.toLowerCase(),
+                       kleur: heeftVerloop ? 'verloop' : bg,
+                       hoogte: Math.round(r.height),
+                       deel: Math.round(r.height / pr.height * 100)});
+      });
+    }
 
     pag.querySelectorAll('*').forEach(el => {
       const r = el.getBoundingClientRect();
@@ -342,6 +374,17 @@ def toets(html: Path) -> dict:
                                f"en de titel erin wordt afgesneden. Zet --balk op de "
                                f".pagina en niet op de balk zelf — de zetspiegel leest "
                                f"dezelfde waarde"})
+
+        if len(p.get("velden", [])) > 1:
+            bev.append({"ernst": "critical", "soort": "kleurveld-stapeling",
+                        "pagina": p["nr"], "velden": p["velden"],
+                        "wat": "twee of meer aflopende kleurvelden op één pagina. "
+                               "Een heel blad in een kleur is al de zwaarste "
+                               "vorm die dit drukwerk kent; er een tweede band "
+                               "overheen leggen maakt er drie oppervlakken van — "
+                               "veld, band en de tekst die op geen van beide "
+                               "meer thuishoort. Kleur één ding: het blad, of "
+                               "een kader. Zie documenten-vormentaal.md §12"})
         if p["schaduw"]:
             bev.append({"ernst": "warn", "soort": "schaduw", "pagina": p["nr"],
                         "wat": f"{p['schaduw']} element(en) met een slagschaduw. Op papier "

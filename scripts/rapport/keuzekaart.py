@@ -45,6 +45,14 @@ sys.path.insert(0, str(WORTEL / "scripts" / "documenten"))
 sys.path.insert(0, str(HIER))
 from _browser import browser, wacht_op_letters  # noqa: E402
 
+#: De tafel waarop de gerenderde pagina's liggen. Geen merkkleur maar de
+#: achtergrond van het beeld zelf, en dezelfde als die van `body` in `stijl.css`
+#: -- de kaart moet eruitzien als een pagina op een tafel en niet als een pagina
+#: in het niets. De merkkleuren staan hieronder als `var(--navy)` en
+#: `var(--oranje)`: deze CSS wordt achter de gebouwde stijl gezet, en die draagt
+#: het merkblok uit `scripts/gedeeld/merk.py` al. Een tweede oranje hier zou het
+#: oranje van de kaart laten afwijken van het oranje op de pagina eronder, en de
+#: kaart bestaat juist om te laten zien wat de zetmotor werkelijk doet.
 TAFEL = "#E7E6EA"
 
 #: Genoeg tekst om drie pagina's te vullen in elk model, met een kop, een
@@ -188,18 +196,18 @@ KAART_CSS = """
   /* Padding op de kaart zelf en niet op het lichaam: het beeld wordt van
      dit element genomen, en padding op het lichaam valt er dan buiten. */
   #kaart { display: inline-block; padding: 30px 34px 34px; }
-  .beeldrij { display: flex; gap: 2px; box-shadow: 0 3px 14px rgba(32,27,92,.24);
+  .beeldrij { display: flex; gap: 2px; box-shadow: 0 3px 14px rgba(var(--navy-rgb),.24);
               background: #fff; margin-bottom: 12px; }
   .beeldrij .pagina { box-shadow: none !important; margin: 0 !important; }
   h2 { font-family: Montserrat, system-ui, sans-serif; font-weight: 800;
-       font-size: 17px; color: #201B5C; margin: 0 0 3px; letter-spacing: -.01em; }
+       font-size: 17px; color: var(--navy); margin: 0 0 3px; letter-spacing: -.01em; }
   .maat { font-family: Montserrat, system-ui, sans-serif; font-weight: 700;
           font-size: 10px; letter-spacing: .1em; text-transform: uppercase;
-          color: #F87F4F; margin: 0 0 6px; }
-  p.uitleg { font-size: 12.5px; line-height: 16.5px; color: #201B5C; margin: 0; }
+          color: var(--oranje); margin: 0 0 6px; }
+  p.uitleg { font-size: 12.5px; line-height: 16.5px; color: var(--navy); margin: 0; }
   h1 { font-family: Montserrat, system-ui, sans-serif; font-weight: 800;
-       font-size: 24px; color: #201B5C; margin: 0 0 4px; }
-  .intro { font-size: 13px; line-height: 17px; color: #201B5C; opacity: .74;
+       font-size: 24px; color: var(--navy); margin: 0 0 4px; }
+  .intro { font-size: 13px; line-height: 17px; color: var(--navy); opacity: .74;
            margin: 0 0 26px; max-width: 900px; }
 """ % TAFEL
 

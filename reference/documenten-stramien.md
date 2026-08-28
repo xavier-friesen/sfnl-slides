@@ -156,38 +156,52 @@ licentietekst reist mee.
 
 ## 4. De kleuren
 
-| naam | hex | rol |
-|---|---|---|
-| navy | `#201B5C` | de inkt. Lopende tekst is nooit puur zwart |
-| oranje | `#F87F4F` | het accent. Labels, de streep, de badge |
-| wit | `#FFFFFF` | het papier |
-| grapefruit | `#F95D63` | het tweede eind van het verloop; alarm, nadruk |
-| emerald | `#6AC6BA` | positief, uitkomst |
-| royal | `#3B62C1` | secundaire data |
-| sky | `#45B6E2` | tertiaire data |
-| violet | `#6B5DAE` | gemeten uit de casespread; een heel paneel of een rail |
+**De waarden staan in `reference/merk.md` §1 en nergens anders.** Ze stonden hier ook, en dat
+is hoe vijf ervan konden verouderen: tot 27 augustus 2026 rendeerde deze plugin een ander
+oranje, grapefruit, navy, emerald en royal dan het themapalet van `SFNL_Word_sjabloon.dotx` —
+het bestand waaruit elke kleurkiezer in Word en PowerPoint bij SFNL zijn waarden neemt. Wat
+hieronder staat is wat een document met die kleuren dóet; dat is een regel per medium en die
+verandert niet mee.
 
-Tinten, gemeten uit de vlakken in het rapport en niet berekend:
+De namen, en welke rol ze in een gedrukt document hebben:
 
-| naam | hex | waar |
-|---|---|---|
-| mint-tint | `#E0F4F1` | een hele pagina of een paneel in emerald |
-| periwinkel | `#A0ADE2` | het interviewpaneel |
-| oranje-tint | `#FFDFD0` | het watermerkcijfer |
-| navy-tint | `#F4F3F7` | een stille container |
-| grijs | `#F2F2F2` | een kaartvulling |
+| naam | rol in een document |
+|---|---|
+| navy | de inkt. Lopende tekst is nooit puur zwart |
+| oranje | het accent. Labels, de streep, de badge |
+| wit | het papier |
+| grapefruit | het tweede eind van het verloop; alarm, nadruk |
+| emerald | positief, uitkomst |
+| royal | secundaire data |
+| sky | tertiaire data |
+| violet | een heel paneel of een rail |
+| mint-tint | een hele pagina of een paneel in emerald |
+| periwinkel | het interviewpaneel |
+| oranje-tint | het watermerkcijfer |
+| navy-tint | een stille container |
+| grijs | een kaartvulling |
 
-**Eén verloop, en het is gemeten.** `--verloop` loopt van oranje naar grapefruit onder 150 graden;
-op de omslag van het rapport 2025 meet dat `#FF7F40` naar `#FF5F55`. Wie een tweede verloop
-verzint, verzint een tweede huisstijl.
+Als CSS-variabele is de naam de variabele: `var(--navy)`, `var(--mint-tint)`. Ze komen uit
+`assets/gedeeld/merk.css`, dat gegenereerd is uit `scripts/gedeeld/merk.py` en dat als
+gestempeld blok in §1 van `stijl.css` staat. Voor een kleur op alpha is er een drieling:
+`rgba(var(--navy-rgb), .16)`, en nooit de cijfers zelf.
 
-**Contrast, en dit is de val die het vaakst toeslaat.** Wit haalt 2,6 op oranje en 2,8 op het
+**Eén verloop, en het is gemeten.** `--verloop` loopt van oranje naar grapefruit onder 150 graden.
+Op de omslag van het rapport 2025 begint dat verloop precies op de sjabloonwaarde van oranje en
+eindigt het op `#FF5F55`, iets roder dan grapefruit. Wie een tweede verloop verzint, verzint een
+tweede huisstijl.
+
+**Contrast, en dit is de val die het vaakst toeslaat.** Wit haalt 2,51 op oranje en 2,8 op het
 verloop. Dat draagt een kop van 40 px prima — elke SFNL-omslag doet dat — en het draagt geen
-alinea van 10 pt. Navy haalt 6,4 op oranje. Daarom is op `data-veld="oranje"` en
+alinea van 10 pt. Navy haalt 6,29 op oranje. Daarom is op `data-veld="oranje"` en
 `data-veld="verloop"` de inkt **navy**, en is wit de uitzondering die je per element zet. Wil je
 een heel veld in wit, dan zet je `data-inkt="wit"` op de pagina en dan is het een keuze.
 
 Op navy en violet is het andersom: daar is wit de inkt.
+
+Elke verhouding hier is na te rekenen met `python scripts/gedeeld/merk.py --contrast navy oranje`.
+Dat is niet voor de sier: de getallen in deze paragraaf stonden er als 2,6 en 6,4, en de 6,4 was
+op geen enkel palet reproduceerbaar.
 
 ---
 
@@ -219,7 +233,7 @@ niet.
 | `.titelbalk` | een titel op een aflopende band bovenaan — de dektitel op pagina 1, of een hoofdstuknaam | zet `--balk` op de `.pagina`, niet op de balk. `data-veld` kiest de kleur én de inkt |
 | `.beeldkader` | de gereserveerde plek voor een infographic of foto | verhouding inline met `aspect-ratio`; zonder opgaaf 3:2 |
 | `.beeldkader--leeg` | er hoort hier beeld en het is er nog niet | met `data-wat="…"`; `qa_document.py` telt wat je hebt laten staan |
-| `.omslag` + `__boven/__midden/__onder`, `__titel`, `__onderschrift`, `__regel` | het voorblad | het enige paginatype met een eigen klasse, gedeeld met `sfnl-rapport-opmaak`. Drie zones met een vaste rangorde; zie *Het voorblad* |
+| `.omslag` + `__boven/__midden/__onder`, `__titel`, `__onderschrift`, `__regel` | het voorblad | het enige paginatype met een eigen klasse, gedeeld met `sfnl-rapport-deliverable`. Drie zones met een vaste rangorde; zie *Het voorblad* |
 
 Structuur en zetting:
 
@@ -254,7 +268,7 @@ vragenvuur.
 
 | opening | hoe je hem bouwt |
 |---|---|
-| **voorblad** | een hele pagina, gebouwd met `.omslag` — het enige paginatype met een eigen klasse, en hetzelfde merkteken dat `sfnl-rapport-opmaak` voor zijn omslag gebruikt. Zie *Het voorblad* hieronder |
+| **voorblad** | een hele pagina, gebouwd met `.omslag` — het enige paginatype met een eigen klasse, en hetzelfde merkteken dat `sfnl-rapport-deliverable` voor zijn omslag gebruikt. Zie *Het voorblad* hieronder |
 | **titelbalk** | `<header class="titelbalk" data-veld="oranje">` als broer van de zetspiegel, en `--balk` op de `.pagina` |
 | **gewoon titel** | `.titel` in de zetspiegel, met `.streep` eronder |
 
@@ -394,11 +408,12 @@ gebouwde omslag zonder dat de markup er verkeerd uitzag.
 | `haal_fonts.py` | de letters opnieuw insluiten. Onderhoud |
 | `keuzekaart.py` | de keuzekaart voor het vragenvuur opnieuw renderen. Onderhoud |
 
-Drie modules staan in `scripts/gedeeld`, want de rapportroute stelt op
+Vier modules staan in `scripts/gedeeld`, want de rapportroute stelt op
 die punten dezelfde vraag en hoort hetzelfde antwoord te krijgen:
 
 | module | wat |
 |---|---|
+| `gedeeld/merk.py` | de kleuren, de letters en `contrast()`. `--css` schrijft `assets/gedeeld/merk.css` en stempelt §1 van `stijl.css`; `scripts/preflight.py` controleert dat |
 | `gedeeld/drukwerk.py` | de katernsom: komt dit aantal pagina's uit op de pers |
 | `gedeeld/naar_pdf.py` | het document printen op de bladmaat die het zelf zegt — marges op nul, `prefer_css_page_size`, achtergronden mee |
 | `gedeeld/canvas.py` | de artboards in spreads neerleggen: 1 alleen, dan 2-3, 4-5 |

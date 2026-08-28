@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Wat er verandert wanneer een document naar de drukker gaat.
 
-Dit bestand is van twee skills tegelijk. `sfnl-design-documents` maakt
-kort drukwerk en `sfnl-rapport-opmaak` maakt lange rapporten, en op dit
+Dit bestand is van twee skills tegelijk. `sfnl-documenten` maakt
+kort drukwerk en `sfnl-rapport-deliverable` maakt lange rapporten, en op dit
 punt stellen ze dezelfde vraag: het aantal pagina's moet uitkomen. De
 rekensom stond tot nu toe alleen in proza in
 `reference/documenten-stramien.md`, en werd door geen van beide routes

@@ -259,6 +259,48 @@ toch kan nagaan waar het vandaan komt.
 
 ---
 
+## 11b. Kleur een kader, niet het blad — en nooit twee velden op één pagina
+
+Een heel blad in een kleur is de zwaarste vorm die dit drukwerk kent. Het is niet verboden — een
+executive summary opent op navy en dat is een regel — maar het is een besluit dat je één keer per
+pagina neemt, en meestal helemaal niet.
+
+**Twee aflopende kleurvelden op één pagina is een blokkade.** Gemeten op een executive summary van
+vier pagina's: de laatste pagina was navy over het volle blad, met een oranje band van 270 px
+onderaan die het logo en één bronregel droeg, en daar bovenop een wit paneel. Drie oppervlakken,
+en de tekst hoorde bij geen van drieën meer thuis. Het blad had geen rust en de band had geen
+inhoud — die was zo hoog omdat er ruimte over was, niet omdat er iets in stond.
+`qa_document.py` meldt dit als `kleurveld-stapeling` en het is `critical`.
+
+Wat telt als een aflopend veld: een vlak dat over de volle bladbreedte loopt, aan minstens één
+rand raakt, en een andere kleur heeft dan het papier. De pagina zelf telt mee zodra hij niet wit
+is. Een paneel dat binnen de marge blijft telt niet — dat is precies het alternatief.
+
+**Het alternatief is het kader, en dat is bijna altijd beter.** Zet de kleur op een `.paneel` en
+laat het blad wit. Dan doet de kleur wat kleur hoort te doen — hij wijst iets aan — in plaats van
+de achtergrond te zijn waar alles op ligt. Een pagina kan meerdere gekleurde panelen dragen zonder
+dat het luid wordt, want ze staan náást elkaar in plaats van óver elkaar.
+
+De volgorde waarin je het overweegt:
+
+1. **Wit blad, gekleurd paneel.** De gewone vorm. De kleur wijst aan.
+2. **Wit blad, meerdere panelen.** Ook prima, zolang de kleuren iets coderen (§8).
+3. **Gekleurd blad, geen tweede veld.** De opening, een scheidingsblad, een pagina die apart
+   staat. Eén keer per document, hooguit.
+4. **Gekleurd blad met een band erover.** Nooit.
+
+### De titel die half over de kaderrand hangt
+
+Een titel die half in en half boven zijn paneel staat, is een echt merkteken en het drukwerk doet
+het — het rapport zet zijn portret zo, half buiten het vlak. Het werkt om dezelfde reden als daar:
+het bindt twee dingen aan elkaar die anders los zouden staan.
+
+**Maar het is een nadrukmiddel en geen opmaak.** Gebruik het alleen wanneer het kader zelf de
+nadruk draagt: één paneel op de pagina dat de kern van het stuk bevat, met de titel eraan
+vastgeklonken. Twee overhangende titels op één pagina is er één te veel, en op een pagina met drie
+panelen is het ruis. De klasse is `.paneel--overhang` en de titel erin is `.paneel__overhangtitel`;
+`stijl.css` §8.10a heeft de maten.
+
 ## 12. De weigerlijst
 
 Veertien dingen die maken dat een document eruitziet alsof een model het heeft gemaakt. Ze staan

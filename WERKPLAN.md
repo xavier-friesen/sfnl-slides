@@ -1,4 +1,4 @@
-# Werkplan — sfnl-slides visueel aantrekkelijker maken
+# Werkplan — slides visueel aantrekkelijker maken
 
 Status: **in uitvoering, go gegeven.** Stap 0 tot en met 6 zijn uitgevoerd (commits `25f099e`
 tot `313dc1b`), inclusief de vier reconstructies in `assets/maatstaf/`, het nieuwe

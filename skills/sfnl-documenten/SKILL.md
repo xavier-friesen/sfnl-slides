@@ -1,5 +1,5 @@
 ---
-name: sfnl-design-documents
+name: sfnl-documenten
 description: >
   Ontwerp en bouw een drukklaar document in de huisstijl van Social Finance NL — een uitnodiging,
   een samenvatting, een executive summary, een proposal, een programmaboekje of een
@@ -11,7 +11,7 @@ description: >
   combineert met een document dat pagina's heeft en er goed uit moet zien. Werkt alleen in
   Claude Code, want hij leunt op scripts, een browser en de `design`-skill. Voor een PowerPoint
   ga je naar `sfnl-slides`, voor één los beeld naar `sfnl-infographic`, voor een
-  Affinity-rapportspread naar `sfnl-rapport`.
+  Affinity-rapportspread naar `sfnl-affinity`.
 ---
 
 # SFNL-design-documents
@@ -466,7 +466,7 @@ elke pagina opnieuw jouw beslissing.
 
 **Op één pagina geldt dat niet, en dat is het voorblad.** `.omslag` is het enige paginatype met
 een eigen klasse, want elk document heeft er precies één en het zegt elke keer dezelfde vier
-dingen. Het is hetzelfde merkteken waarmee `sfnl-rapport-opmaak` zijn omslag zet — één component
+dingen. Het is hetzelfde merkteken waarmee `sfnl-rapport-deliverable` zijn omslag zet — één component
 in `stijl.css` §8.16, niet twee handgecomponeerde voorbladen die uit elkaar lopen. Zie
 *Het voorblad* hieronder. `documenten-stramien.md` heeft de volledige lijst met per stuk
 wat het codeert.
@@ -481,7 +481,7 @@ nooit als variabele, anders kan de gebruiker hem niet ter plekke overtypen.
 
 Dit is de enige pagina die je niet vrij componeert, en dat is opzet. Elk document heeft precies
 één voorblad, elk voorblad zegt dezelfde vier dingen, en de rangorde daartussen hoort niet per
-document opnieuw verzonnen te worden. `sfnl-rapport-opmaak` had dat al opgelost; hier gaat het
+document opnieuw verzonnen te worden. `sfnl-rapport-deliverable` had dat al opgelost; hier gaat het
 langs precies dezelfde weg, met hetzelfde merkteken uit dezelfde `stijl.css`. Twee gerenderde
 voorbeelden: `assets/documenten/maatstaf/01-omslag.png` op het huisverloop, met de markup in
 `assets/documenten/voorbeeld/Main.dc.html`, en `maatstaf/07-voorblad-navy.png` in het
@@ -735,9 +735,36 @@ en wat eraan veranderen kost, staat in `reference/documenten-stramien.md`, §1a 
 zit als het naar de drukker gaat*; neem de katernsom uit het verslag van `bouw.py` in dezelfde
 adem mee.
 
+### Kleur een kader, niet het blad
+
+Een heel blad in een kleur is de zwaarste vorm die dit drukwerk kent. Het mag — een executive
+summary opent op navy en dat is een vaste regel — maar het is een besluit dat je hooguit één keer
+per document neemt, en meestal helemaal niet.
+
+**Twee aflopende kleurvelden op één pagina blokkeert**, en dat komt uit een gemeten geval: een
+slotpagina die navy was over het volle blad, met een oranje band van 270 px onderaan waar alleen
+het logo en een bronregel in stonden, en daarboven nog een wit paneel. Drie oppervlakken. De band
+was zo hoog omdat er ruimte over was en niet omdat er iets in stond.
+
+De volgorde waarin je het overweegt:
+
+1. **Wit blad, gekleurd paneel** (`.paneel` met `data-veld`). De gewone vorm; de kleur wijst iets
+   aan in plaats van de ondergrond te zijn.
+2. **Wit blad, meerdere panelen.** Ook goed, zolang de kleuren iets coderen.
+3. **Gekleurd blad zonder tweede veld.** De opening, een scheidingsblad, één pagina die apart
+   staat.
+4. **Gekleurd blad met een band erover.** Nooit.
+
+**En er is één nadrukmiddel bij het kader: de titel die half over de rand hangt.** `.paneel--overhang`
+met `.paneel__overhangtitel` erin zet de titel half in en half boven het vlak — hetzelfde
+mechanisme als de ronde foto die het drukwerk half buiten zijn paneel zet, en het bindt de titel
+aan het kader vast. Gebruik het alleen wanneer dat kader de nadruk dráágt: één paneel op de
+pagina, met de kern van het stuk erin. Twee overhangende titels op één blad is er één te veel, en
+op een pagina met drie panelen is het ruis.
+
 ## Wat blokkeert
 
-Zeven dingen. De eerste twee zijn van de soort "het bestand is stuk", de rest is een `critical`
+Acht dingen. De eerste twee zijn van de soort "het bestand is stuk", de rest is een `critical`
 uit `qa_document.py`. Verder blokkeert er niets op vormgeving; dat oordeel komt van de
 render.
 
@@ -750,6 +777,10 @@ render.
 6. **titelbalk** — een balk van nul px hoog, doordat `--balk` op de balk staat in plaats van op
    de `.pagina`. De titel staat er dan wel en de band niet.
 7. **emoji** — een tweede lettertype op de pagina dat als chatbericht leest.
+8. **kleurveld-stapeling** — twee of meer aflopende kleurvelden op één pagina. Een heel blad in
+   een kleur plus een band eroverheen is drie oppervlakken, en de tekst hoort dan bij geen van
+   drieën. Kleur één ding: het blad, of een kader. Zie *Kleur een kader, niet het blad*
+   hieronder, en `documenten-vormentaal.md` §11b.
 
 ## Zonder renderer
 
@@ -783,10 +814,10 @@ naar het contactblad, want de paren zijn dan andere paren.
   `sfnl-slides`.
 - **Geen los beeld.** Eén infographic die in een deck of een mail wordt geplakt, is
   `sfnl-infographic`.
-- **Geen Affinity.** Moet het drukwerk in Affinity worden opgemaakt, dan is dat `sfnl-rapport`.
-- **Geen Word.** Een brief of een document dat de klant zelf verder typt, is de `docx`-route van
-  `sfnl-design`.
-- **Geen dashboard.** Iets interactiefs dat in de browser blijft, is `sfnl-design`.
+- **Geen Affinity.** Moet het drukwerk in Affinity worden opgemaakt, dan is dat `sfnl-affinity`.
+- **Geen Word.** Een brief of een document dat de klant zelf verder typt, is `sfnl-word`.
+- **Geen dashboard.** Iets interactiefs dat in de browser blijft en meegroeit met het venster, is
+  `sfnl-online-design`.
 - **Geen schrijfopdracht.** Is er nog geen tekst — alleen een idee, of een stapel losse notities
   — dan is het schrijven de opdracht en niet de opmaak. Dat is `sfnl-writer`, en die levert de
   tekst waar deze skill de vorm omheen zet. Een document opmaken uit niets betekent dat het model

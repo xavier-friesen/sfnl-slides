@@ -16,7 +16,7 @@ en is met `scripts/rapport/qa_rapport.py --alles` te herhalen.
 
 ## 1. Het kader
 
-Anders dan bij `sfnl-design-documents`, en dat is een besluit: een
+Anders dan bij `sfnl-documenten`, en dat is een besluit: een
 document van vier pagina's ligt plat, een rapport van tachtig zit in een
 rug.
 
@@ -220,6 +220,54 @@ Lopende tekst 8 pt; apparaat — noten, bronregels, kopregel, bijschrift —
 7 pt, en dat is de gemeten norm (MGI zet voetnoten op 7 pt, Bain op 6,2);
 een gespatieerd kapitaallabel 6 pt.
 
+### 4a. De interlinies, en waar ze staan
+
+De maatladder hierboven geeft zes corpsen en geen enkele interlinie, en dat was een gat: een
+zetmotor die niet in HTML werkt — de Affinity-route — heeft per rol een regelafstand nodig en kan
+die niet uit een `line-height` van een browser halen. Ze staan hieronder zoals `rapport.css` ze
+werkelijk zet, gemeten en niet gekozen.
+
+| rol | corps px | interlinie px | factor | waar het staat in `rapport.css` |
+|---|---|---|---|---|
+| display | 56 | 57,1 | 1,02 | `.omslag__titel` |
+| titel | 26,67 | 28,8 | 1,08 | `.opener__titel` |
+| kop | 16 | 19,5 | 1,22 | `.sectiekop` |
+| brood | 13,33 | **17,33** | 1,30 | `--r-body` in de modellen `kantlijn` en `dubbel` |
+| brood in `breed` | 14,67 | **22** | 1,50 | `--r-body` in `breed` |
+| klein | 10,67 | 14 | 1,31 | `--r-klein` |
+| noot | 9,33 | 12,5 | 1,34 | `.voetnoot`, `.kantnoot`, `.exhibit__noot`, `.exhibit__bron` |
+
+Twee dingen om te weten. De **factor loopt op naarmate het corps kleiner wordt** — 1,02 op de
+omslagtitel tegen 1,34 op de noot — en dat is geen inconsistentie maar de gewone typografische
+regel: een grote letter heeft relatief minder lucht nodig dan een kleine. En de interlinie van het
+brood is de enige die aan het **model** hangt en niet aan de rol, want de zetspiegelhoogte is een
+geheel aantal broodregels; verzet je die, dan verschuift het aantal regels per pagina mee.
+
+`.hoofdstuktitel` staat op 1,14 en niet op 1,08, en dat is met opzet: die staat op een heel blad
+met veel lucht eromheen, waar een strakkere interlinie de titel als een blok laat lezen in plaats
+van als een regelval.
+
+### 4b. De folio en de rasterdichtheid
+
+Twee getallen die de Affinity-route nodig heeft en die nergens stonden.
+
+| wat | waarde | herkomst |
+|---|---|---|
+| folio, hoogte boven de snijlijn | `marge-onder − 46 px` | `.rapport-folio` in `rapport.css`; op `sfnl`/`dubbel` is dat 94 − 46 = **48 px**, ofwel 12,7 mm |
+| kopregel, hoogte onder de snijlijn | **42 px** (11 mm) | `--r-kopregel-top`, en die is vast over alle formaten |
+| rasterdichtheid van het document | **300 dpi** | besluit, geen meting — zie hieronder |
+
+De folio hangt dus aan de **ondermarge** en niet aan de snijlijn, en die ondermarge is uitgerekend
+en verschilt per formaat en model. Op `sfnl`/`breed` is hij 107 − 46 = 61 px. Wie hem op een vaste
+afstand van de snijlijn zet, laat hem op twee modellen naast elkaar op verschillende hoogte staan.
+
+**De 300 dpi is een besluit en staat hier zodat het één keer genomen is.** Voor de HTML-route doet
+het niets: die levert vectorPDF en de dichtheid is dan niet gedefinieerd. Voor de Affinity-route
+wél, want daar bepaalt hij de pixelmaat van het documentcanvas en dus de schaalfactor waarmee elke
+maat uit dit stramien wordt omgerekend. 300 is de dichtheid waarop offsetdrukwerk wordt aangeleverd
+en waarop een geplaatst rasterbeeld nog scherp is; 150 haalt dat niet en 600 verdubbelt de
+bestandsgrootte zonder dat een drukker het verschil kan afdrukken.
+
 ---
 
 ## 5. De klassen
@@ -290,7 +338,7 @@ Wat er bovenop `stijl.css` bij komt. Elk tekent één ding.
 | `.scheiding__streep` | de streep op het scheidingsblad van de bijlagen, vier rasterkolommen breed |
 | `.opener-band` | de aflopende band; `--balk` op de `.pagina` |
 | `.inhoud`, `.inhoud__regel`, `.inhoud__nr`, `.inhoud__naam`, `.inhoud__leader`, `.inhoud__folio` | de inhoudsopgave. De puntenlijn is een lijnelement en geen reeks punten, want punten zouden als toegevoegde tekst opduiken |
-| `.omslag`, `.omslag__boven/__midden/__onder`, `.omslag__titel`, `.omslag__onderschrift`, `.omslag__regel` | de omslag. Het component staat in `stijl.css` §8.16, want `sfnl-design-documents` bouwt zijn voorblad met hetzelfde merkteken; `rapport.css` §14 zet er alleen de rapportmaat op — `--m-omslag-onderschrift` op 22 px en `--omslag-maat` op acht kolommen |
+| `.omslag`, `.omslag__boven/__midden/__onder`, `.omslag__titel`, `.omslag__onderschrift`, `.omslag__regel` | de omslag. Het component staat in `stijl.css` §8.16, want `sfnl-documenten` bouwt zijn voorblad met hetzelfde merkteken; `rapport.css` §14 zet er alleen de rapportmaat op — `--m-omslag-onderschrift` op 22 px en `--omslag-maat` op acht kolommen |
 | `.kantnoot` | een kanttekening in de kantlijn, met een streepje erboven |
 | `.voetnoot` | een noot aan de voet, of in de kantlijn in het kantlijnmodel |
 | `.paneel--rapport` | een gekleurd vlak met een blok tekst |
@@ -358,10 +406,21 @@ al het andere leest die vijf.
 
 | register | `--r-accent` | `--r-accent-2` | `--r-tint` | `--r-watermerk` | de opener |
 |---|---|---|---|---|---|
-| `helder` | oranje `#F87F4F` | navy | navy-tint `#F4F3F7` | oranje-tint `#FFDFD0` | wit |
+| `helder` | oranje | navy | navy-tint | oranje-tint | wit |
 | `diep` | oranje | navy | navy-tint | oranje-tint | navy blad, witte inkt |
-| `zacht` | emerald `#6AC6BA` | navy | mint-tint `#E0F4F1` | `#CDEBE5` | mint blad |
-| `contrast` | violet `#6B5DAE` | oranje | `#EEEBF6` | `#DCD5EE` | violet blad, witte inkt |
+| `zacht` | emerald | navy | mint-tint | `#CDEBE5` | mint blad |
+| `contrast` | violet | oranje | `#EEEBF6` | `#DCD5EE` | violet blad, witte inkt |
+
+De namen zijn die van `reference/merk.md` §1 en de waarden staan daar. Ze
+stonden hier ook, en dat is precies hoe twee ervan konden verouderen: het
+oranje en het emerald in deze tabel waren op 27 augustus 2026 nog de
+plugin-waarden en niet die van het Word-sjabloon. Wat een register met die
+kleuren dóet is wél van dit bestand — dat is een regel per medium.
+
+De drie waarden die er nog wél staan zijn geen merkkleuren maar tinten van
+dít register, en ze staan alleen in `rapport.css`: `#CDEBE5` is de mint-vlek
+onder het hoofdstukcijfer in `zacht`, `#EEEBF6` en `#DCD5EE` zijn de
+violet-tinten van `contrast`.
 
 De vijfde is `--r-watermerk-lijn`: de contourkleur van het open
 hoofdstukcijfer. `--r-watermerk` is de dichte vlek van de eerste
@@ -681,7 +740,7 @@ Twee sleutels: `drukklaar` (standaard `false`) en `katern` (standaard
 `4`). Op de opdrachtregel is `drukklaar` de vlag `--drukklaar`.
 
 De rekensom zelf staat niet hier maar in `scripts/gedeeld/drukwerk.py`,
-en die module is **van beide drukskills tegelijk**: `sfnl-design-documents`
+en die module is **van beide drukskills tegelijk**: `sfnl-documenten`
 stelt bij kort drukwerk dezelfde vraag en krijgt hetzelfde antwoord. Een
 gebonden of geniet drukwerk wordt per vel gedrukt en een dubbelgevouwen
 vel is vier pagina's, dus een rapport van 49 pagina's wordt hoe dan ook
@@ -719,6 +778,81 @@ staat één keer, in `documenten-stramien.md` §1a, en geldt voor beide
 drukroutes.
 
 ---
+
+## 7f. Het paginatype casespread
+
+Dit stond in de Affinity-bronskill en viel bij het herschrijven weg, en dat was het grootste
+inhoudelijke verlies van die operatie: het is een **contract** en geen opmaak. Twee agents vonden
+het onafhankelijk terug als gat. Het staat hier omdat het aan de maten hangt en niet aan de
+uitvoeringslaag — of je de spread in Affinity of in HTML zet, dit blijft gelijk.
+
+**De vijf blokken staan in een vaste volgorde en op een vaste plek.** Dat is de hele reden dat
+cases naast elkaar te leggen zijn: een lezer die drie cases doorbladert, vindt hetzelfde antwoord
+op dezelfde plek. Kop in kapitalen, het nummer hangt links in een kolom van 30 breed, geen lijn
+eronder. Welke vijf het zijn hangt aan het rapport — in het Civitates-rapport waren het
+fondsopzet, waarom pooled funding, governancekeuzes, wat het bracht, en lessen — maar dát het vijf
+zijn en dat ze niet van volgorde wisselen, is het contract.
+
+**Het fondspaspoort is zeven regels en die blijven staan, ook leeg.**
+
+| | veld |
+|---|---|
+| 1 | thema |
+| 2 | geografische scope |
+| 3 | oprichtingsjaar |
+| 4 | type financiers |
+| 5 | besluitvorming |
+| 6 | fondsmanagement |
+| 7 | beheerkosten |
+
+Bij beheerkosten vul je alleen wat openbaar is. Ontbreekt het cijfer, dan blijft het veld staan met
+**"Niet openbaar"** erin. Dat is geen invuloefening maar de kern van het paspoort: zo blijft het
+raster over de cases heel, en ziet de lezer dat de vraag is gesteld en niet dat hij is overgeslagen.
+
+**Drie kerncijfers**, en dat zijn jaarlijks budget, ticketgrootte en aantal financiers. Het derde
+draagt geen eenheidslabel.
+
+**De regelopbouw van het paspoort is een rekensom en geen tabel.** Label op `ry`, waarde op
+`ry + 16`, en de rijhoogte volgt de tekst: `pitch = 16 + regels × 16 + 6`. Twee regels geeft 54,
+drie regels 70. Reken het aantal regels uit de tekstlengte en niet uit een vaste tabel, anders
+schuift een lange waarde over het volgende label.
+
+**En de strook is een doorlopende kolom.** Loopt hij tegen de folio aan, verklein dan eerst de
+tussenruimte tussen de feitenregels van 6 naar 4, en pas daarna de bronregel. De folio verschuift
+niet: beide folio's van een spread horen op dezelfde hoogte, en dat is §4b.
+
+### Capaciteit, en de tekenbudgetten
+
+Ongeveer **700 tot 750 woorden gesprek per spread**, verdeeld over vier antwoorden van drie tot
+vier alinea's. Loopt een interview daar ruim over, dan krijgt die case **drie pagina's**: een
+paspoortpagina plus twee gesprekspagina's, met de lessenband op de laatste.
+
+De tekstkaders kappen te lange kopij af **zonder waarschuwing**, en dat is de reden dat hier
+tekenaantallen staan in plaats van "houd het kort". Als vertrekpunt, en te controleren op de
+render:
+
+| veld | tekens |
+|---|---|
+| fondsnaam | max 28 per regel |
+| intro | 180–240 |
+| contextregel | 120–160 |
+| antwoord per kolom | 850–1000 |
+| lessenkop | 30–45 |
+| lessentekst | 180–230 |
+
+### Twee dingen die hier met opzet niet staan
+
+**De coördinatentabel niet.** Die is gemeten op één spread — de Civitates-casespread op
+420 × 275 mm — en hij is de opmaak van dat ene paginatype en niet een feit over het stramien. Hij
+hoort in het bouwscript van de route die hem zet, met de maten uit dit bestand erin. Zou hij hier
+staan, dan was hij binnen één rapport verouderd.
+
+**De archetypetabel niet, nog niet.** Vijf fondsarchetypes met elk een kleur en een verplichte
+tekstkleur erbij. De paring is het punt en niet de kleur: op royal en violet komt **wit**, want
+navy haalt daar 2,70 en 2,86. Die regel staat nu generiek in `merk.md` §1 en is uitgerekend door
+`merk.inkt_op()`, dus de veiligheid zit er al in. Welke vijf archetypes er zijn en welke kleur elk
+draagt, is een besluit over het rapport en niet over het stramien; wie ze weer nodig heeft, legt ze
+vast in de projectmap van dat rapport.
 
 ## 8. Wat de zetmotor toevoegt aan de markup
 
@@ -832,7 +966,7 @@ bepalen of de skill iets mág vragen. `herindelen: false` betekent dat
 stap 3 van de skill overgeslagen wordt; `beeldtekst: false` betekent dat
 de tekst in een figuur blijft staan zoals hij staat. In deze route is
 beeld een rasterbestand uit de docx en is die tekst praktisch
-onbereikbaar, dus het is vooral een afspraak — in `sfnl-design-documents`
+onbereikbaar, dus het is vooral een afspraak — in `sfnl-documenten`
 bijt dezelfde regel harder, want daar staat de SVG inline in de markup.
 Dezelfde twee woorden in beide skills, met opzet.
 
@@ -1030,7 +1164,7 @@ En één script dat hier niet staat maar wel meedoet:
 | `scripts/gedeeld/drukwerk.py` | de katernsom: komt dit aantal pagina's uit op de pers, en zo niet, hoeveel erbij of eraf. `bouw.py` leest hem via `vul_aan_tot_katern` |
 
 Die staat in `gedeeld/` en niet in `rapport/` omdat hij **van beide
-drukskills tegelijk** is: `sfnl-design-documents` stelt dezelfde vraag
+drukskills tegelijk** is: `sfnl-documenten` stelt dezelfde vraag
 over kort drukwerk en hoort hetzelfde antwoord te krijgen. Hij rekent en
 hij beslist niet; los te draaien met `python drukwerk.py 45`.
 
@@ -1053,11 +1187,14 @@ levert iets op wat de opdrachtgever niet kan openen op de manier waarop
 hij het gaat lezen; wie het oplevert zonder artboards, levert iets op
 waar niemand meer iets aan kan verschuiven.
 
-Twee van de drie modules staan in `scripts/gedeeld` omdat de
-documentenroute ze net zo hard nodig heeft:
+Twee van die drie opleveringen komen uit een module in `scripts/gedeeld`,
+omdat de documentenroute er dezelfde vraag over stelt. De merklaag staat
+er om een andere reden: die is van álle routes, en een kleurwaarde hoort
+op één plek te staan.
 
 | module | wat | van wie |
 |---|---|---|
+| `gedeeld/merk.py` | de kleuren, de letters en `contrast()`; `--css` schrijft `assets/gedeeld/merk.css` en stempelt §1 van `stijl.css` | alle routes |
 | `gedeeld/drukwerk.py` | de katernsom: komt dit aantal pagina's uit op de pers | beide drukroutes |
 | `gedeeld/naar_pdf.py` | het document printen op de bladmaat die het zelf zegt | beide drukroutes |
 | `gedeeld/canvas.py` | de artboards in spreads neerleggen: 1 alleen, dan 2-3, 4-5 | beide drukroutes |

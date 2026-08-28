@@ -51,6 +51,13 @@ HIER = Path(__file__).resolve().parent
 WORTEL = HIER.parent.parent
 FONTS = WORTEL / "assets" / "documenten" / "fonts" / "fonts.css"
 
+# De merkwaarden komen uit de merklaag en staan hier niet. De widget is een
+# HTML-pagina en geen document, dus hij kan `stijl.css` niet gebruiken — maar
+# het oranje in de schets hoort wél hetzelfde te zijn als op het blad, anders
+# kiest de gebruiker een kleur die hij niet krijgt.
+sys.path.insert(0, str(WORTEL / "scripts" / "gedeeld"))
+from merk import css_variabelen  # noqa: E402
+
 
 def _esc(t) -> str:
     return html.escape(str(t or ""), quote=True)
@@ -85,13 +92,15 @@ SJABLOON = """<!doctype html>
 <title>Opdracht — {titel}</title>
 <style>
 {fonts}
+{merk}
+/* Wat alleen de widget nodig heeft. De kleuren, het verloop en de letters
+   staan in het merkblok hierboven; dit zijn de drie waarden die van dit
+   formulier zijn en van niets anders: navy op alpha voor een haarlijn en
+   voor een stille regel, en de tafel waarop de kaarten liggen. */
 :root {{
-  --navy: #201B5C; --oranje: #F87F4F; --emerald: #6AC6BA; --violet: #6B5DAE;
-  --periwinkel: #8E9BF0;
-  --mint: #E0F4F1; --tint: #F4F3F7; --lijn: rgba(32,27,92,.16);
-  --zacht: rgba(32,27,92,.70);
-  --display: 'Montserrat', system-ui, sans-serif;
-  --brood: 'Lato', system-ui, sans-serif;
+  --lijn:  rgba(var(--navy-rgb), .16);
+  --zacht: rgba(var(--navy-rgb), .70);
+  --tafel: #EFEEF2;
 }}
 * {{ box-sizing: border-box; }}
 /* `[hidden]` uit de browserstijl heeft de laagste soortelijkheid die er
@@ -101,7 +110,7 @@ SJABLOON = """<!doctype html>
    bovenaan is goedkoper dan hem per klasse herhalen. */
 [hidden] {{ display: none !important; }}
 body {{
-  margin: 0; padding: 28px 30px 60px; background: #EFEEF2; color: var(--navy);
+  margin: 0; padding: 28px 30px 60px; background: var(--tafel); color: var(--navy);
   font-family: var(--brood); font-weight: 300; font-size: 15px; line-height: 1.5;
 }}
 h1 {{ font-family: var(--display); font-weight: 800; font-size: 27px;
@@ -115,7 +124,7 @@ h2 {{ font-family: var(--display); font-weight: 800; font-size: 13px;
 .blad {{ display: grid; grid-template-columns: minmax(0,1fr) 330px; gap: 34px;
         align-items: start; max-width: 1180px; }}
 .kaart {{ background: #fff; padding: 20px 22px 22px; margin-bottom: 16px;
-         box-shadow: 0 1px 3px rgba(32,27,92,.10); }}
+         box-shadow: 0 1px 3px rgba(var(--navy-rgb),.10); }}
 .toelicht {{ margin: 0 0 16px; font-size: 12.5px; line-height: 1.5;
             color: var(--zacht); max-width: 74ch; }}
 .rij {{ display: grid; grid-template-columns: 178px minmax(0,1fr); gap: 12px 16px;
@@ -141,7 +150,7 @@ textarea, input[type=text] {{
 textarea {{ min-height: 62px; resize: vertical; line-height: 1.45; }}
 .slot {{ margin: 16px 0 0; font-size: 12px; color: var(--zacht); line-height: 1.5; }}
 .zij {{ position: sticky; top: 28px; }}
-.schets {{ background: #fff; padding: 18px; box-shadow: 0 1px 3px rgba(32,27,92,.10); }}
+.schets {{ background: #fff; padding: 18px; box-shadow: 0 1px 3px rgba(var(--navy-rgb),.10); }}
 .blaadje {{ position: relative; margin: 0 auto 12px; background: #fff;
            box-shadow: inset 0 0 0 1px var(--lijn); overflow: hidden;
            width: 190px; height: 249px; transition: width .15s, height .15s; }}
@@ -156,7 +165,7 @@ textarea {{ min-height: 62px; resize: vertical; line-height: 1.45; }}
          flex-direction: column; gap: 6px; }}
 .b-vlak {{ flex: 1 1 auto; min-height: 0; display: grid; gap: 7px; }}
 .b-kolom {{ background: repeating-linear-gradient(
-   to bottom, rgba(32,27,92,.30) 0 1px, transparent 1px 4px); height: 100%; }}
+   to bottom, rgba(var(--navy-rgb),.30) 0 1px, transparent 1px 4px); height: 100%; }}
 .b-titel {{ font-family: var(--display); font-weight: 800; font-size: 10px;
            line-height: 1.15; margin: 0 0 4px; }}
 .b-streep {{ width: 34px; height: 3px; background: var(--oranje); margin: 0 0 5px; }}
@@ -165,10 +174,10 @@ textarea {{ min-height: 62px; resize: vertical; line-height: 1.45; }}
 .meting {{ font-size: 11.5px; line-height: 1.5; color: var(--zacht); margin: 0; }}
 .meting b {{ color: var(--navy); font-weight: 700; }}
 .uitvoer {{ margin-top: 16px; background: #fff; padding: 16px 18px 18px;
-           box-shadow: 0 1px 3px rgba(32,27,92,.10); }}
+           box-shadow: 0 1px 3px rgba(var(--navy-rgb),.10); }}
 .uitvoer h3 {{ font-family: var(--display); font-weight: 800; font-size: 13px;
               letter-spacing: .1em; text-transform: uppercase; margin: 0 0 8px; }}
-pre {{ background: var(--tint); padding: 12px; margin: 0; overflow: auto;
+pre {{ background: var(--navy-tint); padding: 12px; margin: 0; overflow: auto;
       max-height: 300px; font-size: 11.5px; line-height: 1.45; }}
 button {{ margin-top: 12px; font-family: var(--display); font-weight: 700;
          font-size: 13px; padding: 9px 16px; border: 0; background: var(--navy);
@@ -298,7 +307,7 @@ function ververs() {{
     // de laatste kolom als vlak en niet als regels.
     if (i === f.kolommen - 1 && o.beeldregister === 'beeld') {{
       k.className = '';
-      k.style.background = 'var(--mint)';
+      k.style.background = 'var(--mint-tint)';
       k.style.height = Math.round(ruimte) + 'px';
     }}
     wrap.appendChild(k);
@@ -308,8 +317,8 @@ function ververs() {{
     const vlak = document.createElement('div');
     vlak.style.flex = '0 0 auto';
     vlak.style.height = Math.round(hoog * 0.16) + 'px';
-    vlak.style.background = {{mint: 'var(--mint)', violet: 'var(--violet)',
-      periwinkel: 'var(--periwinkel)'}}[o.accent] || 'var(--mint)';
+    vlak.style.background = {{mint: 'var(--mint-tint)', violet: 'var(--violet)',
+      periwinkel: 'var(--periwinkel)'}}[o.accent] || 'var(--mint-tint)';
     zet.appendChild(vlak);
   }}
 
@@ -601,6 +610,7 @@ def main() -> int:
     secties = bouw_secties(a.titel)
     doel.write_text(SJABLOON.format(
         titel=_esc(a.titel or "nieuw document"),
+        merk=css_variabelen(),
         fonts=fonts,
         secties=secties,
         formaten=json.dumps(FORMATEN, ensure_ascii=False),

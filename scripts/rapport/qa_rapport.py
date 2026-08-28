@@ -135,7 +135,7 @@ FIGUUR_DETAIL = 0.005
 KLIP_LUCHT = 1.0
 
 METING = r"""(cfg) => {
-  const uit = {paginas: [], klip: [], klipMarge: [], overloop: [], teKlein: [],
+  const uit = {paginas: [], klip: [], klipMarge: [], overloop: [], teKlein: [], chroomAf: [],
                leegKader: [], wees: [], losseKop: [], kopAlleen: [],
                beeld: [],
                beeldOngemeten: [], contrast: [], maten: {}, inhoud: [],
@@ -143,6 +143,29 @@ METING = r"""(cfg) => {
                accentmerken: [], vreemdTeken: []};
 
   const paginas = Array.from(document.querySelectorAll('.pagina'));
+
+  // Chroom dat van het blad valt. De folio en de kopregel hangen aan een
+  // uitgerekende marge, en die kan bij een dichte zetting zo klein worden dat
+  // `marge-onder - 46px` onder nul komt. Dan staat de folio ónder de bladrand
+  // -- gemeten: 5 px, op álle pagina's van een rapport van 47 -- en geen van de
+  // zestien andere metingen ziet het, want binnen het DOM is er niets
+  // weggevallen en er is geen kader dat klipt. Dit is de meting die dat gat
+  // dicht, en hij kijkt naar alle vier de randen.
+  paginas.forEach((p, i) => {
+    const pb = p.getBoundingClientRect();
+    ['.rapport-folio', '.rapport-kopregel'].forEach(sel => {
+      const el = p.querySelector(sel);
+      if (!el) return;
+      const b = el.getBoundingClientRect();
+      if (b.width === 0 && b.height === 0) return;
+      const buiten = Math.max(pb.top - b.top, b.bottom - pb.bottom,
+                              pb.left - b.left, b.right - pb.right);
+      if (buiten > 0.5) {
+        uit.chroomAf.push({pagina: i + 1, element: sel,
+                           over: Math.round(buiten * 10) / 10});
+      }
+    });
+  });
 
   // De drie getallen die van buiten komen; ze staan met hun reden
   // bovenaan dit bestand.
@@ -507,7 +530,7 @@ METING = r"""(cfg) => {
 
       // Onder de drempel, en dan is de vraag wát het is.
       //
-      // Oranje op wit haalt 2,58 en emerald 2,1. Dat is te weinig voor
+      // Oranje op wit haalt 2,51 en emerald 1,98. Dat is te weinig voor
       // een regel tekst en ruim genoeg voor een merkteken van één of
       // twee tekens dat je moet kunnen vínden, niet lezen: een
       // lijstnummer, een nootcijfer, een gespatieerd kapitaallabel. Die
@@ -651,6 +674,15 @@ def beoordeel(m: dict) -> dict:
         kritiek.append({"soort": "te-klein", "aantal": len(m["teKlein"]),
                         "waar": m["teKlein"][:6],
                         "wat": "tekst onder de leesvloer"})
+    if m.get("chroomAf"):
+        kritiek.append({"soort": "chroom-van-het-blad", "aantal": len(m["chroomAf"]),
+                        "waar": m["chroomAf"][:6],
+                        "wat": "de folio of de kopregel staat buiten het blad en "
+                               "wordt bij het drukken afgesneden. `over` is hoeveel "
+                               "px erbuiten. Komt van een uitgerekende marge die bij "
+                               "een dichte zetting te klein wordt; geen enkele andere "
+                               "meting ziet dit, want er valt binnen het DOM niets weg "
+                               "en er is geen kader dat klipt"})
     if m["leegKader"]:
         kritiek.append({"soort": "leeg-kader", "aantal": len(m["leegKader"]),
                         "waar": m["leegKader"][:6],
@@ -765,7 +797,7 @@ def beoordeel(m: dict) -> dict:
         klein.append({"soort": "accentmerken", "aantal": len(m["accentmerken"]),
                       "waar": m["accentmerken"][:4],
                       "wat": "merktekens in het accent onder de tekstdrempel. Dat is "
-                             "een keuze en geen fout — oranje op wit haalt 2,58 — "
+                             "een keuze en geen fout — oranje op wit haalt 2,51 — "
                              "maar het staat hier zodat het een keuze blijft"})
 
     maten = sorted(float(k) for k in m["maten"])

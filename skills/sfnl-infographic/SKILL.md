@@ -12,17 +12,18 @@ description: >
   van deze cijfers", "zet dit in een plaatje", "visualiseer dit", "svg in onze stijl", of
   wanneer iemand een los beeld wil dat in een deck, rapport, Word-document of mail wordt
   geplakt. Het beeld gaat ook rechtstreeks de zusterskills in: als exhibit in een
-  HTML-document van `sfnl-design-documents`, als figuur in een gezet rapport van
-  `sfnl-rapport-opmaak`, of op een slide van `sfnl-slides`. Voor een hele presentatie
-  gebruik je `sfnl-slides`, voor kort drukwerk `sfnl-design-documents`, voor een lang
-  rapport `sfnl-rapport-opmaak`, voor een rapportspread in Affinity `sfnl-rapport`, en
-  voor een HTML-dashboard of Word-document `sfnl-design`.
+  HTML-document van `sfnl-documenten`, als figuur in een gezet rapport van
+  `sfnl-rapport-deliverable`, of op een slide van `sfnl-slides`. Voor een hele presentatie
+  gebruik je `sfnl-slides`, voor kort drukwerk `sfnl-documenten`, voor een lang
+  rapport `sfnl-rapport-deliverable`, voor een rapportspread in Affinity `sfnl-affinity`, en
+  voor een dashboard in de browser `sfnl-online-design` en voor een werkdocument in Word
+  `sfnl-word`.
 ---
 
 # SFNL-infographic
 
 Een losse visual bouwen die ergens ánders in komt te staan. Dat is de hele opdracht, en het is
-wat deze skill onderscheidt van sfnl-slides: er is geen titel, geen oranje dash en geen kader,
+wat deze skill onderscheidt van slides: er is geen titel, geen oranje dash en geen kader,
 want die draagt de container. Wat er overblijft is de compositie, en die is elke keer opnieuw
 een ontwerpbeslissing.
 
@@ -74,10 +75,11 @@ Lees dit één keer voor de hele opdracht, niet per infographic:
    `schets.py` staan twee routes: `schets_vrij()` met zes figuurhelpers, en `schets()` met
    rijen en kolommen. De eerste is de gewone. Onderaan staat hoe de schetsen als canvas
    worden voorgelegd.
-5. `assets/infographic/maatstaf/` — vijf afgemaakte infographics. Dit **is** de norm voor het eindresultaat:
+5. `assets/infographic/maatstaf/` — zes afgemaakte infographics. Dit **is** de norm voor het eindresultaat:
    zo ziet een opgeleverde SFNL-infographic eruit. **Kijk naar één of twee**, en kies op vorm en
    register: `m1` sankey op wit, `m2` tijdlijn op schaal, `m3` divergerende staaf met twee
-   coderende hues, `m4` rasterplot op vierkant, `m5` waterval op een PowerPoint-slide. Lees ook
+   coderende hues, `m4` rasterplot op vierkant, `m5` waterval op een PowerPoint-slide, `m6`
+   verdeelde band met een tinttrap binnen één hue. Lees ook
    `assets/infographic/maatstaf/LEESMIJ.md` — daar staat in één alinea wat ze gemeen hebben.
 6. `assets/infographic/voorbeeld/*.py` — de bouwscripts. In elke docstring staat wat er in de eerste
    versie misging en waarom de tweede anders is. Lees er één, van het voorbeeld dat je bekeek.
@@ -118,7 +120,7 @@ Weet je een antwoord al uit de opdracht, sla die vraag over. Vraag nooit iets wa
   (vormentaal §1).
 
   **En vraag dóór als die plek een van de zusterskills is.** Komt het beeld in een document van
-  `sfnl-design-documents` of in een rapport van `sfnl-rapport-opmaak`, dan is dit niet alleen
+  `sfnl-documenten` of in een rapport van `sfnl-rapport-deliverable`, dan is dit niet alleen
   een vraag over de titel maar over het **canvas en de maatladder**: het kader daar is 680, 537
   of 325 px breed, en een beeld dat op 960 pt is getekend krimpt daarin met factor 1,9 — zijn
   labels van 11 pt komen op 5,9 pt uit, onder de leesvloer, zonder dat er iets in de markup
@@ -155,7 +157,7 @@ plattegrond.
      PowerPoint zelf te bewerken. Welk vlak dat wordt, staat in vraag 2: het blanco canvas is
      niet de enige plek waar een infographic op een slide past, en het is vaak de slechtste.
    - *Exhibit in een document of rapport* — het beeld komt in een HTML-document van
-     `sfnl-design-documents` of in een gezet rapport van `sfnl-rapport-opmaak`. Dat is nog steeds
+     `sfnl-documenten` of in een gezet rapport van `sfnl-rapport-deliverable`. Dat is nog steeds
      een SVG, maar op het canvas van die route en met hún maatladder, en de oplevering is een
      fragment of een figuren-regel in plaats van een los bestand. Kies dit zodra de gebruiker
      zegt dat het beeld in zo'n stuk komt te staan; de rest van de keten staat in
@@ -250,8 +252,8 @@ verschil met wat de gebruiker in gedachten had pas op de render.
    met een haarlijn krijgt, niet dat de compositie een rij kaarten wordt. Een sankey met een
    gevulde kaart eronder is nog steeds een sankey. De plattegrond kies je in stap 2.
    - *Bijna helemaal wit* — geen vulling, alleen gekleurde koppen, haarlijnen en tekst. Het
-     lichte register, en waar SFNL-werk het sterkst in staat. Alle vijf de maatstaven staan
-     hierin en geen van de vijf heeft één containervulling. Dit is de default op papier en op
+     lichte register, en waar SFNL-werk het sterkst in staat. Alle zes de maatstaven staan
+     hierin en geen van de zes heeft één containervulling. Dit is de default op papier en op
      scherm.
    - *Kaarten* — containervullingen van 7 tot 12 procent met een haarlijn in de eigen hue. Op
      een slide met een projector achter je werkt dit beter dan het lichte register. Er is geen
@@ -596,6 +598,15 @@ kan zien waarom.
 4. **Het accent, en of er meer dan één is.** Volgt uit widget 2 vraag 2. Koos de gebruiker
    "kleur codeert categorieën", schrijf dan hier per hue in één woord op wat hij betekent, en
    beslis er daarna niet meer over.
+
+   **Zijn het geen categorieën maar items van dezelfde soort** — vier uitvoerders, zes
+   gemeenten, vijf fasen — dan hoort daar geen tweede hue bij maar een **tinttrap** binnen één
+   hue: `trap()` en `tint()` in `svg.py`, met `m6` als voorbeeld. Twee dingen om nu te
+   beslissen en niet later. Ten eerste: zeg in één woord wat *donkerder* betekent. Kun je dat
+   niet, dan liegt de trap, want hij suggereert een volgorde — vier uitvoerders op alfabet in
+   vier tinten is de valkuil. Ten tweede: hoeveel stappen. Het zijn er drie en alleen in navy
+   of zwartblauw, twee in royal en violet, geen in oranje, sky en emerald;
+   `svg.trap_draagt(hue)` rekent het uit en weigert er meer. Zie §6b van de vormentaal.
 5. **Wat de compositie afsluit.** Een volle band tegen de onderrand, een haarlijn boven een
    sluitregel, of niets omdat de laatste rij zelf de conclusie is. Een kader is het niet.
 
@@ -733,7 +744,7 @@ hun logo en paginanummer te houden; een infographic die tussen andere slides kom
 als enige geen nummer draagt, valt op om de verkeerde reden. Daar geldt de contentzone als
 werkvlak, en boven `y = 1,93` blijf je weg — daar staat de geërfde header.
 
-Deze route gebruikt de scripts van de **sfnl-slides** plugin; `preflight.py` zegt waar die
+Deze route gebruikt de scripts van de **sfnl-design** plugin; `preflight.py` zegt waar die
 staan. Ontbreekt de plugin, meld dat en bied de SVG-route aan.
 
 ```bash
@@ -1004,7 +1015,7 @@ plaatsen:
 
 | doel | oplevering | waarom |
 |---|---|---|
-| `document` | een `.beeldkader` met de SVG **inline** | de artboards van `sfnl-design-documents` zijn met de hand gecomponeerde HTML; tekst blijft tekst en de PDF houdt hem selecteerbaar |
+| `document` | een `.beeldkader` met de SVG **inline** | de artboards van `sfnl-documenten` zijn met de hand gecomponeerde HTML; tekst blijft tekst en de PDF houdt hem selecteerbaar |
 | `rapport` | een **PNG op 2×** plus de regel voor de `figuren`-JSON | `bouw.py` plaatst beeld als `<img src>` uit die JSON; factor 2 is bedoeld voor 192 dpi en blijft onder de krimpgrens van 2,5 |
 | `slide` | een **PNG op 2×** met de breedte in inches erbij | om te plakken. Wil je een slide die in PowerPoint bewerkbaar blijft, dan is dat route 4B en niet dit |
 
@@ -1286,8 +1297,8 @@ past. Bouw je op `CANVAS["breed"]` en plaats je het achteraf, dan gaat er een le
 vloer en ziet niemand het tot het gedrukt is.
 
 **Een deck of document dat een figuur nodig heeft**, komt de andere kant op. `sfnl-slides`
-escaleert naar deze skill boven twaalf onderdelen op een slide, `sfnl-design-documents` bij een
-beeld dat rekent (§11 van zijn vormentaal), en `sfnl-rapport-opmaak` bij een figuur die
+escaleert naar deze skill boven twaalf onderdelen op een slide, `sfnl-documenten` bij een
+beeld dat rekent (§11 van zijn vormentaal), en `sfnl-rapport-deliverable` bij een figuur die
 uitgerekend moet worden. In alle drie de gevallen begin je hier bij stap 1, met één verschil:
 **de bewering ligt al vast.** Die staat in de titel van de slide of in de kop van de pagina, dus
 de vraag uit de intake is al beantwoord en er komt geen tweede bewering op het beeld — geen
@@ -1297,11 +1308,11 @@ drager en geen sluitregel, tenzij de figuur zonder echt niets zegt.
 
 Voor een hele presentatie gebruik je **sfnl-slides**: dat is de skill met het sjabloon, de
 layouts, de titelmodus en de deck-brede besluiten. Voor kort drukwerk in HTML —
-een uitnodiging, een executive summary, een spread — **sfnl-design-documents**, en voor een
-afgerond Word-rapport dat drukklaar moet **sfnl-rapport-opmaak**; dat zijn de twee zusterskills
-in deze plugin. Voor een rapportspread in Affinity gebruik je **sfnl-rapport**, en voor een
-HTML-dashboard, een one-pager of een Word-document **sfnl-design**. Deze skill is voor het losse
-beeld dat in een van die vijf komt te staan.
+een uitnodiging, een executive summary, een spread — **sfnl-documenten**, en voor een
+afgerond Word-rapport dat drukklaar moet **sfnl-rapport-deliverable**; dat zijn de twee zusterskills
+in deze plugin. Voor een rapportspread in Affinity gebruik je **sfnl-affinity**, en voor een
+dashboard of een interactief overzicht in de browser **sfnl-online-design**, en voor een werkdocument
+in Word **sfnl-word**. Deze skill is voor het losse beeld dat in een van die zes komt te staan.
 
 Gaat het om een echte reeks over tijd, een verdeling van meer dan zes categorieën of een
 vergelijking die je zou willen kunnen bijwerken, overweeg dan een native grafiek in PowerPoint

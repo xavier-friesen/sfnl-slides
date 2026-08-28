@@ -720,7 +720,7 @@ class BaseSchemaValidator:
         1. Resolve on the TOP-LEVEL folder of the path relative to the unpacked dir,
            not on `xml_file.parent.name`. The parts that get hand-edited live one level
            deeper than the DOCX case this was written for: ppt/slides/slide1.xml has
-           parent `slides`, ppt/slideLayouts/... has `slideLayouts`. Matching on the
+           parent `sfnl-slides`, ppt/slideLayouts/... has `slideLayouts`. Matching on the
            parent meant no slide, layout or master was EVER validated against pml.xsd,
            so element-order errors — the class that makes PowerPoint refuse to open a
            file — passed validation.

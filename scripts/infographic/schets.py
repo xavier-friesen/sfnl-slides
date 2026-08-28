@@ -112,8 +112,8 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from svg import (Canvas, Vorm, blok, cirkel, kop, label, lijn, op_schaal,  # noqa: E402
-                 pad as svg_pad, schrijf, tekst, vlak)
+from svg import (HEX, Canvas, Vorm, blok, cirkel, kop, label, lijn,  # noqa: E402
+                 op_schaal, pad as svg_pad, schrijf, tekst, vlak)
 
 STIJLEN = ("vol", "tint", "lijn", "leeg")
 
@@ -443,11 +443,11 @@ DC_ROMP = """<!doctype html>
 <helmet>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600&amp;family=Lato:wght@300&amp;display=swap">
   <style>
-    body { margin: 0; background: #FFFFFF; }
-    a { color: #F87F4F; } a:hover { color: #D9603A; }
+    body { margin: 0; background: WITKLEUR; }
+    a { color: ORANJEKLEUR; } a:hover { color: HOVERKLEUR; }
   </style>
 </helmet>
-<div style="position: relative; width: WIDTHpt; height: HEIGHTpt; background: #FFFFFF">
+<div style="position: relative; width: WIDTHpt; height: HEIGHTpt; background: WITKLEUR">
 SVG
 </div>
 </x-dc>
@@ -459,6 +459,19 @@ class Component extends DCLogic {
 </body>
 </html>
 """
+
+#: De hovertint van de link in de romp hierboven. Geen merkkleur: het is oranje
+#: een stap donkerder, en hij staat hier omdat een link in een schetsartboard
+#: zichtbaar moet reageren. Wat er niet gebeurt is oranje donkerder maken tot het
+#: contrast haalt -- dan is het geen huisstijloranje meer.
+HOVER = "#D9603A"
+
+# De merkwaarden in de romp komen uit `scripts/gedeeld/merk.py` via `svg.HEX`.
+# De placeholders zijn dezelfde vorm als WIDTH, HEIGHT en SVG hieronder, en ze
+# worden hier al ingevuld: de kleur hangt niet van het artboard af.
+DC_ROMP = (DC_ROMP.replace("WITKLEUR", HEX["wit"])
+                  .replace("ORANJEKLEUR", HEX["oranje"])
+                  .replace("HOVERKLEUR", HOVER))
 
 
 def artboard(pad: str | Path, c: Canvas, vormen: list[Vorm], *,
