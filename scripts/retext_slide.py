@@ -23,7 +23,7 @@ kleur komen uit de layout, en dat is de kern van layout-first. Het bouwt de alin
 opnieuw op, met een kale `rPr`.
 
 Een compositie in de contentzone werkt precies andersom. Daar staat de opmaak wél op de
-run — `Montserrat SemiBold 32pt` op het getal, `Lato Light 14pt` op de toelichting — omdat
+run — `Montserrat Light 32pt` op het getal, `Lato Light 14pt` op de toelichting — omdat
 een eigen tekstvak niets te erven heeft. Wie zo'n vorm met `set_text.py` opnieuw vult,
 houdt de goede geometrie over met de verkeerde typografie: het getal komt terug op 18pt
 Lato en de kaart valt uit elkaar. Dit script kopieert daarom de bestaande `rPr` van de

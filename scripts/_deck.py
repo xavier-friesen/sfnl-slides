@@ -47,8 +47,17 @@ NEUTRAL_HEX = {"FFFFFF", "FEFFFF", "000000"}
 # `Lato Semibold` staat erbij sinds de aanhef binnen een doorlopende regel Lato is en niet
 # Montserrat (`vormentaal.md` §9): één familie per regel, en dan hoort er een echt zwaarder
 # Lato-gewicht te bestaan in plaats van `b="1"` op Lato Light.
-BRAND_FONTS = {"Gotham Bold", "Montserrat", "Montserrat Light", "Montserrat SemiBold",
-               "Montserrat Bold", "Lato Light", "Lato", "Lato Semibold", "Lato Bold"}
+#: De letters die in een deck mogen staan, en dat zijn er DRIE (eigenaarsbesluit
+#: 2026-08-28). Gotham Bold staat in de titel en komt uit de layout; op de slide zelf is het
+#: Montserrat Light voor wat lósstaat en Lato Light voor lopende tekst. Gewicht komt uit
+#: `b="1"` op die light snede en nooit uit een tweede familienaam -- zie
+#: `VET_IS_HET_GEWICHT` in `shapes.py` voor het besluit en de prijs.
+#:
+#: Hier stonden er negen: ook Montserrat, Montserrat SemiBold, Montserrat Bold, Lato, Lato
+#: Semibold en Lato Bold. Vijf daarvan werden werkelijk geschreven, drie ervan zijn snedes
+#: die niet met de plugin meereizen, en samen lazen ze als vijf letters in een huisstijl die
+#: er drie heeft. `qa_text.py` meldt elke naam die hier niet in staat nu als `critical`.
+BRAND_FONTS = {"Gotham Bold", "Montserrat Light", "Lato Light"}
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 

@@ -45,7 +45,7 @@ getallen die al in `vormentaal.md` staan:
 
 | telling | niveau | drempel | gemeten op de twee fixtures |
 |---|---|---|---|
-| maten per rol | deck | één maat per rol | de body op 14pt in beide decks (§2 zegt 16); de Montserrat SemiBold-rollen op vijf maten in het spreekdeck — label 13 en 14pt, kop 15, 16 en 18pt |
+| maten per rol | deck | één maat per rol | de body op 14pt in beide decks (§2 zegt 16); de vette Montserrat-rollen op vijf maten in het spreekdeck — label 13 en 14pt, kop 15, 16 en 18pt (die fixtures dragen nog de SemiBold-snede; sinds 2026-08-28 is dat Montserrat Light met `b="1"` en telt het gewicht in plaats van de naam) |
 | bandfrequentie | deck | ten hoogste één per vier slides (§10) | 14 van de 17 en 12 van de 13 contentslides, tegen een ruimte van 4 en 3 |
 | exhibits bij cijfers | deck | minstens één grafiek, tabel, schema of verdeling (§12) | nul grafieken en nul tabellen bij 162 en 85 cijferfeiten |
 | maatsprong | slide | grootste eigen maat / kleinste >= 2 (§1) | 1,00 tot 2,91 (13 van 17 slides eronder) en 1,15 tot 3,64 (9 van 13); de afgekeurde deck uit §1 haalde 1,36, de referentie 3 tot 5 |
@@ -114,9 +114,9 @@ CIJFER = re.compile(
 VOETNOOT_PLAFOND = 11.5
 DICHT_PLAFOND = 12.5
 
-#: Hetzelfde plafond, maar voor de Montserrat SemiBold-kant. Dit stond er niet en dat was
-#: een fout: de drie maatbanden hierboven golden alleen voor Lato, en élke Montserrat
-#: SemiBold tot en met 14pt viel in één rol `label`. Nagemeten op `werk-b/build/maatstaf`,
+#: Hetzelfde plafond, maar voor de vette Montserrat-kant. Dit stond er niet en dat was
+#: een fout: de drie maatbanden hierboven golden alleen voor Lato, en élke vette
+#: Montserrat tot en met 14pt viel in één rol `label`. Nagemeten op `werk-b/build/maatstaf`,
 #: de vier voorbeeldslides uit `assets/maatstaf/11`-`14`: daar staat een kapitaallabel van
 #: 11pt boven een tabelkolom (`Kolomkop 1..3` op `12`, `Askop links` en `As 1..4` op `13`),
 #: een rijkop en een kaartlabel van 12pt (`Rij 1 rol` op `12`, `Kaart 1 label` op `11`) en
@@ -266,7 +266,7 @@ def is_badge(shape) -> bool:
     aangrijpingspunt dat niet te misbruiken is. "Alles wat kort is" zou de verkeerde regel
     zijn: een kolomkop van twee letters is nog steeds een kop.
 
-    Waarom dit nodig is: `rol_van()` zag Montserrat SemiBold op 16pt in een badge en telde
+    Waarom dit nodig is: `rol_van()` zag een vette Montserrat van 16pt in een badge en telde
     hem als tweede koprol naast de koppen van 18pt. De bouwer van een testdeck heeft
     daarop álle badges naar 18pt gezet om de telling te halen — op een badge van 0,44 in
     is dat aan de grote kant. Een badge codeert een rangnummer en leest als vorm, niet als
@@ -295,21 +295,31 @@ def is_badge(shape) -> bool:
     return bool(tekst) and bool(BADGE_TEKST.match(tekst))
 
 
-def rol_van(font: str | None, pt: float | None, in_tabel: bool) -> str | None:
+def rol_van(font: str | None, pt: float | None, in_tabel: bool,
+            vet: bool = False) -> str | None:
     """De rol waar deze run in valt, of None als er niets over te zeggen is.
 
-    De rol volgt uit familie plus maat, want dat is wat §2 vastlegt: drager in
-    Montserrat Light van 28 tot 40pt, kop in Montserrat SemiBold op 18pt, body in Lato
-    Light op 14pt, voetnoot op 11pt. Erft de run zijn font of zijn maat, dan staat er
-    niets in de XML en wordt er niets geteld — een geërfde placeholderrun is geen
-    besluit van de bouwer.
+    De rol volgt uit familie plus GEWICHT plus maat, want dat is wat §2 vastlegt: drager in
+    Montserrat Light van 28 tot 40pt, kop in Montserrat op 18pt, body in Lato Light op 14pt,
+    voetnoot op 11pt. Erft de run zijn font of zijn maat, dan staat er niets in de XML en
+    wordt er niets geteld — een geërfde placeholderrun is geen besluit van de bouwer.
+
+    **Het gewicht staat sinds 2026-08-28 in `b="1"` en niet meer in de familienaam.** Een
+    deck heeft drie letters (Gotham Bold in de titel, Montserrat Light, Lato Light) en het
+    gewicht van een kop of een label komt uit `vet=True` op die light snede. Dat raakt deze
+    functie recht in het hart: hij las de rol uit de naam, en `"light" in familie` was de
+    toets die drager en citaat van kop en label scheidde. Met alleen light snedes zou élke
+    Montserrat-run "drager" of "citaat" worden en zouden de kop- en labelbanden dood zijn —
+    een kop van 18pt viel dan onder "citaat" en de toets "dezelfde rol op twee maten" zou op
+    de verkeerde verzameling kijken. Daarom is `vet` er nu, en het is de scheiding die de
+    familienaam eerst maakte.
 
     Tabelcellen en de dichte 12pt-variant krijgen hun eigen rol. Zonder die splitsing
     meldt dit script een kaartenrij van drie op 12pt naast een prozakolom op 14pt als
     "twee bodymaten", en dat is precies wat §2 toestaat.
 
     **En de Montserrat-kant krijgt dezelfde drie banden als de Lato-kant, want dat stond
-    er niet en het heeft een ontwerpbesluit gekost.** Élke Montserrat SemiBold tot en met
+    er niet en het heeft een ontwerpbesluit gekost.** Élke vette Montserrat tot en met
     14pt viel in één rol `label`, terwijl §2 en §11 die maten elk hun eigen werk geven:
     11pt is de bronregel, 12pt is de dichte variant voor een kaartenrij van drie of meer
     en voor een tabelcel, 14pt is het kapitaallabel. Op de lat zelf — de vier
@@ -328,8 +338,10 @@ def rol_van(font: str | None, pt: float | None, in_tabel: bool) -> str | None:
     if in_tabel:
         return "tabelcel"
     if familie.startswith("montserrat"):
-        if "light" in familie:
-            return "drager" if pt >= DRAGER_VLOER else "citaat"
+        if pt >= DRAGER_VLOER:
+            return "drager"
+        if not vet:
+            return "citaat"
         if pt > LABEL_PLAFOND:
             return "kop"
         if pt <= VOETNOOT_PLAFOND:
@@ -338,6 +350,8 @@ def rol_van(font: str | None, pt: float | None, in_tabel: bool) -> str | None:
             return "labeldicht"
         return "label"
     if familie.startswith("lato"):
+        if vet:
+            return "aanhef"
         if pt <= VOETNOOT_PLAFOND:
             return "voetnoot"
         if pt <= DICHT_PLAFOND:
@@ -358,7 +372,7 @@ def band_shapes(slide) -> list[str]:
     aangestuurd.** De eerdere versie telde ook "een tekstblok met een volle-breedte lijn
     er direct boven", op de gedachte dat dat hetzelfde leest. Maar §10 biedt juist dát
     aan als uitweg uit de band: "de sluitregel op wit: één regel zonder vulling, aanhef
-    in Lato Semibold, hooguit een streep erboven". Het aanbevolen alternatief was dus
+    in vette Lato Light, hooguit een streep erboven". Het aanbevolen alternatief was dus
     zelf een band volgens de teller. Nagemeten gevolg op een deck dat net met deze skill
     was gebouwd: 12 van de 17 contentslides "sloten af met een band" terwijl er drie
     gevulde banden op stonden, en de bouwer heeft daarop een merkstreepje van 12,52 naar
@@ -563,7 +577,7 @@ def analyse(deck: Path, renders: Path | None = None) -> dict:
                             if schemeclr(run) in ACCENTSLOTS:
                                 accent_in_letter = True
                             cijfers += len(CIJFER.findall(tekst))
-                            rol = rol_van(font, pt, in_tabel)
+                            rol = rol_van(font, pt, in_tabel, bool(run.font.bold))
                             if rol and tekst.strip() and not badge:
                                 maten_per_rol[rol][pt].append(nummer)
                             if pt is not None and tekst.strip():
@@ -574,7 +588,7 @@ def analyse(deck: Path, renders: Path | None = None) -> dict:
                             "Montserrat en Lato staan in dezelfde alinea: "
                             f'"{regel.strip()[:60]}". Eén regel is één familie '
                             "(vormentaal §9) — de aanhef binnen een doorlopende regel is "
-                            "Lato Semibold, en Montserrat SemiBold staat op wat lósstaat "
+                            "Lato Light met b=\"1\", en Montserrat staat op wat lósstaat "
                             "en op zijn eigen regel begint. `para()` in shapes.py weigert "
                             "deze mix bij het bouwen; komt hij hier langs, dan is deze "
                             "slide op een andere manier gemaakt.", "critical")

@@ -792,6 +792,14 @@ vormen = [vlak("Rij 1", 0.55, 0.80, 12.23, 1.45, vulling="container:emerald",
 write("unpacked/ppt/slides/slide1.xml", vormen)
 ```
 
+**In deze route gelden de drie letters van de deck.** `run()` uit `shapes.py` neemt alleen
+`"Montserrat Light"` en `"Lato Light"`; gewicht komt uit `vet=True` op die light snede en niet
+uit een SemiBold-naam (`reference/vormentaal.md` §9). Dat wijkt af van de SVG-route hierboven,
+die zijn snedes zelf insluit en Montserrat 600 wél als echte instantie zet — een beeld dat als
+PNG in een document belandt, houdt dus de SemiBold van `svg.py`, en een beeld dat je als vormen
+op een slide zet, krijgt het gesynthetiseerde gewicht van de deck. `label()` en `aanhef()`
+regelen het voor je.
+
 **`Deck` heeft geen `sluit`, en wél een `kop`.** De velden zijn `body, kop, label, display,
 voetnoot`, plus `hoek` en `rol_kleur`. Hier stond eerder het omgekeerde — "geen `kop`, wel
 `sluit`" — en dat is een `TypeError` op de eerste regel van het bouwscript, dus nagemeten op de

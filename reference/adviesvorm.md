@@ -77,7 +77,7 @@ overal gelijk, en datalabels staan aan zolang er acht of minder punten zijn.
 
 **Tabellen zijn zetting, geen vlakken.** Getallen rechts uitgelijnd op de cijfers,
 tekst links, de kopregel als enige rij met een volle vulling, een totaalregel zwaarder
-gezet (SemiBold of een streep erboven) in plaats van gekleurd. Om en om inkleuren van
+gezet (`b="1"` op de light snede, of een streep erboven) in plaats van gekleurd. Om en om inkleuren van
 rijen is Word; een tabel in dit systeem scheidt met witruimte en één haarlijn onder de
 kop. Negatieve bedragen krijgen een minteken, geen rood — rood-groen zonder betekenislaag
 is precies de decoratie die `vormentaal.md` §3 verbiedt.
@@ -146,10 +146,11 @@ mooier maken.
   monitor 2024 · n = 118 · peildatum 1 juli` is drie feiten en dus geen bronregel. Het
   middenpunt is het teken waar de lezer het werk moet doen dat de bouwer heeft
   overgeslagen (`vormentaal.md` §9).
-- **Twee letterfamilies in één tekstregel.** Montserrat SemiBold als aanhef midden in een
-  Lato Light-alinea zet twee letterbouwen en twee x-hoogtes op dezelfde maat naast elkaar.
-  Eén regel is één familie: de aanhef in `Lato Semibold`, of het label op zijn eigen regel
-  in Montserrat SemiBold (`vormentaal.md` §9). `para()` in `shapes.py` weigert de mix.
+- **Twee letterfamilies in één tekstregel.** Montserrat als aanhef midden in een Lato
+  Light-alinea zet twee letterbouwen en twee x-hoogtes op dezelfde maat naast elkaar.
+  Eén regel is één familie: de aanhef in Lato Light met `vet=True`, of het label op zijn
+  eigen regel in vette Montserrat Light (`vormentaal.md` §9). `para()` in `shapes.py`
+  weigert de mix, en `run()` weigert elke familienaam buiten die twee.
 
 ## 5. De beslistoets op de render
 

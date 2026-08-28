@@ -30,7 +30,7 @@ comparison the reader came for. Below that, a sentence or a KPI card is usually 
 a two-by-two table is a table pretending to carry weight.
 
 Style, all of it inherited from the theme and none of it configurable by accident:
-header row navy (schemeClr accent6) with white Montserrat SemiBold, body Lato Light
+header row navy (schemeClr accent6) with white bold Montserrat Light, body Lato Light
 12pt, figures right-aligned, `--zebra` for a light navy tint on alternate rows. Only
 schemeClr is written, never an srgbClr, so the table follows the theme. Autofit is off on
 every cell: PowerPoint shrinking one cell's text makes the row look broken.
@@ -70,7 +70,11 @@ from pptx.util import Inches, Pt
 
 from _deck import emit
 
-HEADER_FONT = "Montserrat SemiBold"
+# Montserrat Light, met `bold=True` erop in `style_cell()`. Er zijn drie letters in een deck
+# en de SemiBold-snede is er geen van (`BRAND_FONTS` in `_deck.py`, eigenaarsbesluit
+# 2026-08-28): het gewicht van een kopregel komt uit `b="1"` op de light snede. De kopcellen
+# stonden hier op SemiBold ÉN op bold, dus dit haalt tegelijk een dubbel gewicht weg.
+HEADER_FONT = "Montserrat Light"
 BODY_FONT = "Lato Light"
 
 HEADER_PT = 12

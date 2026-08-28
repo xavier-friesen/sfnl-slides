@@ -53,8 +53,10 @@ De aanhefjes op `04` (`Vaste contactpersoon.`, `Twee loketten.`) zijn nagemeten 
 De regel in §9 overruled hier dus een gemeten patroon uit een winnende deck, en niet een
 verkeerde meting. Dat is een besluit, met de reden erbij: twee families binnen één
 tekstregel zetten twee letterbouwen en twee x-hoogtes op dezelfde maat naast elkaar, en dat
-leest als een zetfout in plaats van als hiërarchie. De aanhef staat sindsdien in
-`Lato Semibold`, en `para()` in `scripts/shapes.py` weigert de mix.
+leest als een zetfout in plaats van als hiërarchie. De aanhef stond sindsdien in
+`Lato Semibold`, en sinds 28 augustus 2026 in Lato Light met `b="1"`: een deck heeft drie
+letters en gewicht komt niet meer uit een tweede familienaam (`vormentaal.md` §9). `para()` in
+`scripts/shapes.py` weigert de mix en `run()` weigert de naam.
 
 
 ## Twee dingen die in `11` tot `14` openstonden, en hoe ze beslecht zijn

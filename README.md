@@ -527,7 +527,7 @@ keer in- en uitpakt, waar de huisstijlfonts staan.
 | `office/pack.py`, `unpack.py`, `validate.py` | in- en uitpakken met schemavalidatie |
 | `add_chart.py`, `add_table.py` | native grafiek en tabel, ná het inpakken |
 | `render.py`, `thumbnail.py` | slides naar PNG en een contactblad |
-| `qa_text.py` | hygiëne: restplaceholders, Calibri, harde hex, rechte apostrof |
+| `qa_text.py` | hygiëne: restplaceholders, een letter buiten de drie (Calibri, een SemiBold-snede), harde hex, rechte apostrof |
 | `qa_chrome.py` | chrome-integriteit: dekt een eigen vorm het logo of het paginanummer af |
 | `chrome.py` | de meetlaag eronder, ook gebruikt door `shapes.write()` |
 | `keuzekaart.py` | onderhoud: bouwt de keuzekaart voor het vragenvuur uit de renders in `assets/` |

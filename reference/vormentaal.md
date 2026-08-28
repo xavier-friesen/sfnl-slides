@@ -45,10 +45,10 @@ contentzone, want dat is de titelletter en die erf je uit de layout.
 
 **Op de andere slides is de drager niet groot maar zwaar en gekleurd.** Dit is waar het in de
 praktijk misgaat, want de neiging is om te denken dat een slide zonder groot getal geen drager
-kán hebben. Dat kan wel: een kolomkop van 18pt Montserrat SemiBold in een accentkleur op wit
+kán hebben. Dat kan wel: een kolomkop van 18pt vette Montserrat Light in een accentkleur op wit
 terwijl de rest navy is, één rij die als enige een volle kleur draagt, een rangnummer, of de
 compositie zelf. Op de sterkste referentieslide zonder cijfers is de drager 18pt Montserrat
-SemiBold in emerald tegenover 18pt in grapefruit, op wit — verder niets.
+vette Montserrat in emerald tegenover 18pt in grapefruit, op wit — verder niets.
 
 De toets die overal geldt: is de drager minstens **tweeënhalf keer de bodymaat** op diezelfde
 slide, of onderscheidt hij zich in gewicht en kleur? Op een body van 14pt is dat 35pt, dus
@@ -65,21 +65,33 @@ Leg vóór de eerste slide vier getallen vast en gebruik overal die vier:
 | rol | richting | waarvoor |
 |---|---|---|
 | **drager** | 28 tot 40pt Montserrat Light | het getal of begrip dat de slide draagt, op ten hoogste één slide op drie |
-| **kop** | 18pt Montserrat SemiBold | kolomkop, kaartkop, rolnaam |
+| **kop** | 18pt Montserrat Light, vet | kolomkop, kaartkop, rolnaam |
 | **body** | 14pt Lato Light | alles wat gelezen wordt, en de sluitregel |
 | **voetnoot** | 11pt | bron, eenheid, peildatum |
 
-De letter op de slide is licht: Lato Light voor wat gelezen wordt, Montserrat Light voor een
-drager of een citaat, en Montserrat SemiBold voor een kop, een label, een rolnaam of een
-kolomkop — dus voor wat lósstaat en op zijn eigen regel begint. Een aanhef bínnen een
-doorlopende regel is `Lato Semibold`, want één regel is één familie (§9). Gotham Bold
-staat alleen in de titel, en die schrijf je niet zelf — hij komt uit de layout. Schrijf je hem
-toch in de contentzone, dan weigert `run()` het en blokkeert `qa_text.py` de deck.
+**Er zijn drie letters in een deck, en gewicht komt uit `b="1"`.** Gotham Bold in de titel,
+Montserrat Light voor wat lósstaat en op zijn eigen regel begint — een kop, een label, een
+rolnaam, een kolomkop, de drager — en Lato Light voor wat gelezen wordt. Meer familienamen
+bestaan hier niet: een kop is Montserrat Light met `vet=True`, een aanhef binnen een
+doorlopende regel is Lato Light met `vet=True` op een rest zonder. `run()` in `shapes.py`
+weigert elke andere naam en `qa_text.py` meldt hem als `critical`.
+
+Dat is een besluit van de eigenaar van 28 augustus 2026 en het draait de vorige regel om, die
+`Montserrat SemiBold` en `Lato Semibold` als echte gewichten voorschreef en `b="1"` op een
+light snede "nepvet" noemde. Wat er tegenover staat: in het bestand stonden vijf familienamen
+voor een huisstijl die drie letters heeft, en drie van die vijf snedes reizen niet met de
+plugin mee, dus ze werden op elke andere machine gesubstitueerd — de meting van `fit_title.py`
+en `hoogte_van()` kon ze niet vinden en de render zette iets anders dan de naam beloofde. Wat
+je inlevert: het gewicht is nu gesynthetiseerd en geen eigen snede. Beoordeel een
+gewichtsverschil op de render dus niet als vormfout; wat je daar ziet is wat PowerPoint van
+een light snede maakt. Gotham Bold staat alleen in de titel, en die schrijf je niet zelf — hij
+komt uit de layout. Schrijf je hem toch in de contentzone, dan weigert `run()` het en
+blokkeert `qa_text.py` de deck.
 
 **Vier is het aantal, en de rest is afgeleid en geen keuze.** 12pt is de dichte variant voor
 een kaartenrij van drie of meer of een tabelcel, en het is de vloer voor alles wat gelezen wordt.
 De voetnoot van 11pt valt daarbuiten: dat is een eigen rol met een eigen maat, geen kleinere body.
-14pt is het kapitaallabel — dezelfde maat als de body, maar in Montserrat SemiBold en in
+14pt is het kapitaallabel — dezelfde maat als de body, maar in vette Montserrat Light en in
 kapitalen, dus een andere rol en geen tweede bodymaat. En een sluitregel is bodymaat: een eigen
 maat voor de laatste regel is precies het defect uit de afgekeurde deck, die drie
 sluitregelmaten over vier slides had. 10pt gebruik je niet meer.
@@ -426,21 +438,27 @@ Een eigen vorm erft geen regelafstand en geen alinea-afstand. Zet beide, en deck
   niet breder dan ongeveer 10 in; de volle 12,52 is voor één regel. De banden in de afgekeurde
   deck liepen 111 tot 121 tekens, en dat is de belangrijkste reden dat ze lezen als tekst die
   over was in plaats van als een uitspraak.
-- **Eén familie per regel, en twee gewichten binnen die familie.** Een aanhef van twee tot
-  vier woorden haalt twee hiërarchieniveaus binnen één tekstregel, zonder tweede kolom en
-  zonder tweede vak. Staat die aanhef binnen een doorlopende regel, dan is hij **Lato
-  Semibold** op een rest in Lato Light, op dezelfde maat. Niet Lato Light met `b="1"`, want
-  dat is nepvet en de renderer kiest zelf wat hij ervan maakt; `Lato Semibold` bestaat als
-  eigen familienaam in de fontlijst en is een echt gewicht. Nagemeten op de render, dezelfde
-  zin op 16pt met elk Lato-gewicht als aanhef naast Lato Light: `Lato` regular en `Lato
-  Medium` zetten een verschil dat je pas ziet als je het weet, `Lato Heavy` gaat met de kop
-  erboven concurreren, `Lato Semibold` zet de sprong die je wil. `aanhef()` in `shapes.py`
-  doet dit; `para()` weigert een alinea met een Montserrat- én een Lato-run.
-  Montserrat SemiBold blijft voor wat **lósstaat en op zijn eigen regel begint**: een kop, een
-  kapitaallabel, een rolnaam, een kolomkop. Montserrat Light is de dragerletter en staat
-  altijd alleen.
+- **Eén familie per regel, en het gewicht komt uit `b="1"`.** Een aanhef van twee tot vier
+  woorden haalt twee hiërarchieniveaus binnen één tekstregel, zonder tweede kolom en zonder
+  tweede vak. Staat die aanhef binnen een doorlopende regel, dan is hij **Lato Light met
+  `vet=True`** op een rest in Lato Light zonder, op dezelfde maat. Montserrat blijft voor wat
+  **lósstaat en op zijn eigen regel begint**: een kop, een kapitaallabel, een rolnaam, een
+  kolomkop — ook daar Montserrat Light met `vet=True`, en de drager is dezelfde snede zonder
+  gewicht. `aanhef()` en `label()` in `shapes.py` doen dit; `para()` weigert een alinea met
+  een Montserrat- én een Lato-run, en `run()` weigert elke familienaam die geen van de twee
+  is.
 
-  **De verkeerde lezing, en die kwam uit dit document.** Hier stond tot nu toe dat de aanhef
+  **Hier stonden eerst echte snedes, en dat is per 28 augustus 2026 omgedraaid.** De regel
+  was: de aanhef is `Lato Semibold`, de kop is `Montserrat SemiBold`, en `b="1"` op een light
+  snede is nepvet omdat de renderer zelf kiest wat hij ervan maakt. Die redenering is niet
+  fout — het gewicht ís nu gesynthetiseerd — maar ze leverde vijf familienamen op in een
+  huisstijl die drie letters heeft, en drie van die vijf snedes reizen niet met de plugin mee.
+  Nagemeten in `merk.md` §2: `assets/documenten/fonts/` draagt Lato Semibold niet, dus de
+  meting kon hem niet vinden en de render substitueerde hem. Het besluit van de eigenaar is
+  drie letters, en de prijs is het gesynthetiseerde gewicht. Gevolg voor de beoordeling: een
+  aanhef die "niet echt zwaarder" wordt is geen bevinding meer maar de bedoelde uitkomst.
+
+  **De verkeerde lezing, en die kwam uit dit document.** Hier stond eerder dat de aanhef
   Montserrat SemiBold moest zijn, en `shapes.py` beriep zich daarvoor op een meting in
   `maatstaf/04`. Die meting is nagerekend en ze is juist — `04` zet werkelijk Montserrat
   SemiBold in een Lato Light-alinea. Op de PNG van die slide, 1920 px bij 144 dpi: `Vaste` in
@@ -523,7 +541,7 @@ de vier andere afsluiters hier uitgeschreven, want dit is de plek waar je er een
 - **Eén cel of kaart draagt de volle kleur.** In een rij gelijke elementen krijgt het element
   waar het om gaat de volle vulling of de gestreepte nadruk (`maatstaf/11`); het oog eindigt
   daar en de conclusie staat al op de slide.
-- **De sluitregel op wit.** Eén regel zonder vulling, aanhef in Lato Semibold, hooguit een
+- **De sluitregel op wit.** Eén regel zonder vulling, aanhef in vette Lato Light, hooguit een
   streep erboven (§8). Zegt precies wat de band zegt, zonder het vlak.
 - **Er valt niets af te sluiten.** In titelmodus A draagt de titel de bewering al; een slide
   die zijn boodschap boven heeft staan hoeft haar onderaan niet te herhalen. De compositie

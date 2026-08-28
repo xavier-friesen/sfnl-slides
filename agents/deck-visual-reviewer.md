@@ -132,7 +132,7 @@ dat is wat hieronder staat.
 
 | toets | vloer | wat het is als hij faalt |
 |---|---|---|
-| **drager** | per slide één element dat eruit springt: 28 tot 40pt in Montserrat Light, óf 18pt SemiBold in een accentkleur waar de rest navy is | de geërfde titel telt niet mee; is er niets, dan is de slide een verzameling en geen argument |
+| **drager** | per slide één element dat eruit springt: 28 tot 40pt in Montserrat Light, óf 18pt vette Montserrat Light in een accentkleur waar de rest navy is | de geërfde titel telt niet mee; is er niets, dan is de slide een verzameling en geen argument |
 | **drager niet te vaak** | ten hoogste één contentslide op drie draagt letter van 28pt of groter, en geen enkele slide gaat boven 40pt | staat er op elke slide een groot getal, dan trekt die maat geen aandacht meer en leest de deck als tien keer dezelfde nadruk. Meld het deckbreed met de slidenummers |
 | **drie gevuldheden** | de deck wisselt van gevuldheid: weinig accent als grondtoon (`proeven/03`, 92/3), kaal waar de inhoud erom vraagt (`proeven/01`, 94/1), met kleur waar een set categorieën apart moet blijven (`proeven/02`, 80/14) | ligt élke slide in hetzelfde middengrijs, dan is dat de deckbrede bevinding, niet een slidedefect. Let op de andere kant: één gevuldheid over de hele deck is hetzelfde defect, en "er staat nergens veel kleur" is géén bevinding |
 | **een vol vlak draagt iets** | een volle vulling die merkbaar groter is dan een chip draagt een drager of een besluit, niet vier woorden. De twee gemeten uitersten: de chip op `proeven/03` is 1,4 vierkante inch en draagt zijn nadruk, de band op `proeven/04` is 23,8 en draagt vier woorden | `proeven/04` is op de render afgekeurd: een band van 23,8 vierkante inch met vier woorden erin maakt de vulling het luidste element van de slide. Meld dit als bevinding, met de vorm uit `proeven/03` als alternatief — nadruk in een chip, niet in een band |
@@ -252,9 +252,17 @@ Waar je per slide naar kijkt:
 - **Twee families binnen één regel.** Kijk naar de vetgezette aanhef midden in een alinea. Is
   hij merkbaar breder, ronder en met een grotere x-hoogte dan de woorden erachter, dan staat er
   Montserrat in een Lato-regel. Dat is een bevinding, ook al ziet het er los best uit. Zo ziet
-  het goede eruit: dezelfde letterbouw, alleen zwaarder — `Lato Semibold` op Lato Light. Let ook
-  op nepvet: een aanhef die alleen wat donkerder is zonder echt zwaarder te worden is `b="1"` op
-  een light gewicht.
+  het goede eruit: dezelfde letterbouw, alleen zwaarder — Lato Light met `b="1"` op Lato Light
+  zonder.
+
+  **Nepvet is hier géén bevinding meer.** Tot 28 augustus 2026 stond in deze brief dat een
+  aanhef die alleen wat donkerder is zonder echt zwaarder te worden `b="1"` op een light snede
+  verraadt, en dat dat fout was. Sinds het eigenaarsbesluit van die dag is dat juist de weg:
+  een deck heeft drie letters — Gotham Bold in de titel, Montserrat Light, Lato Light — en
+  gewicht komt uit `b="1"` op de light snede. Een aanhef of kop die op de render "niet echt
+  zwaarder" wordt is dus de bedoelde uitkomst, niet een defect. Wat je wél meldt is een letter
+  die er als een víerde familie uitziet, en `qa_text.py` telt dat hard: elke naam buiten de
+  drie is een `critical`.
 - **De hoge punt.** Zoek `·` in de contentzone, in labels en in bronregels. Elke vondst is een
   bevinding met de fix erbij: twee regels, twee cellen of twee elementen.
 - **Kleur die niets codeert.** Stel per hue de vraag: wat codeert deze kleur, in één woord? Kun

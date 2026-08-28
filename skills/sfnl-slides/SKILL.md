@@ -489,7 +489,7 @@ from shapes import (ZONE, Deck, aanhef, binnen, cols, contour, drager, gat_onder
 
 D = Deck(body=14, kop=18, label=14, display=32)       # de vier maten, één keer
 xs, w = cols(3, 0.24)                                 # raster
-h = hoogte_van([(kop, D.kop, "Montserrat SemiBold"),  # hoe hoog moet dit blok zijn
+h = hoogte_van([(kop, D.kop, "Montserrat Light"),     # hoe hoog moet dit blok zijn
                 (txt, D.body, "Lato Light")], w)
 vormen = [
     vlak("Kop 62", xs[0], ZONE["y"], w, 1.35, vulling="emerald",
@@ -498,7 +498,7 @@ vormen = [
     vlak("Kaart A", xs[0], 3.28, w, h, vulling="container:emerald", lijn=("emerald", 1),
          tekst=[para(label(kop)), para(run(txt, "Lato Light", D.body), spc_voor=600)]),
     tekst("Regel", xs[1], 3.28, w, 0.9,
-          [para(*aanhef("Twee loketten.",                # Lato Semibold + Lato Light
+          [para(*aanhef("Twee loketten.",                # Lato Light, vet + niet-vet
                         "De doorlooptijd blijft op 41 dagen steken.", D.body))]),
     punt("Badge 1", xs[2], 3.28, 0.50, "emerald", tekst="1"),   # merkteken, geen XML
     vlak("Halve punt", xs[2] + 0.7, 3.28, 0.16, 0.16,           # élke preset via adj
@@ -547,12 +547,23 @@ Wat de laag voor je regelt: alpha in plaats van `lumMod`, de `adj` van een `roun
 absolute radius, een lijn in dezelfde hue als de vulling, de expliciete `<a:latin/>` op elke run,
 `noAutofit`, de juiste elementvolgorde, `lnSpc` op 112 procent, en de tekstkleur die bij een
 vulling en een puntgrootte hoort. `Deck(display=...)` weigert een drager buiten 28 tot 40pt, en
-`run()` weigert Gotham Bold: die letter staat in de titel en komt uit de layout.
+`run()` weigert elke letter buiten de twee die je zelf mag schrijven.
+
+**Er zijn drie letters in een deck, en gewicht komt uit `vet=True`.** Gotham Bold in de titel
+(geërfd uit de layout, nooit zelf geschreven), `"Montserrat Light"` voor wat lósstaat — een kop,
+een label, een rolnaam, een kolomkop, de drager — en `"Lato Light"` voor lopende tekst. Een
+zwaarder gewicht is `vet=True` op diezelfde light snede en nooit een andere familienaam:
+`"Montserrat SemiBold"` en `"Lato Semibold"` bestaan hier niet meer en `run()` weigert ze met
+de vervanger in de melding. `label()` zet Montserrat Light vet in kapitalen en `aanhef()` zet
+Lato Light vet vóór de rest, dus in de praktijk typ je die twee namen zelden zelf. De prijs is
+dat het gewicht gesynthetiseerd is en geen eigen snede — beoordeel op de render dus geen
+"echt zwaarder"; `vormentaal.md` §9 heeft het besluit en de reden.
 
 `Deck(display=...)`, `run()` en `para()` zijn de drie plekken waar de laag nee zegt: een drager
-buiten 28 tot 40pt, Gotham Bold in de contentzone, en een alinea met een Montserrat- én een
-Lato-run. Die laatste is de regel 'één familie per regel': is het een kop of een label, zet het
-dan op zijn eigen regel met `label()`; is het een aanhef binnen de regel, gebruik `aanhef()`.
+buiten 28 tot 40pt, een letter die geen van de twee is (Gotham Bold in de contentzone
+inbegrepen), en een alinea met een Montserrat- én een Lato-run. Die laatste is de regel 'één
+familie per regel': is het een kop of een label, zet het dan op zijn eigen regel met `label()`;
+is het een aanhef binnen de regel, gebruik `aanhef()`.
 
 `hoogte_van` en `vulgraad` zijn er om de val uit `vormentaal.md` §6 te vermijden: eerst meten hoe
 hoog de inhoud is, dan pas beslissen hoe je de restruimte verdeelt. Ruimte tussen de blokken is
@@ -798,7 +809,8 @@ komt van de render.
 3. De grafieken zijn verdwenen na de laatste `pack`. Vergelijk `charts` in de JSON van
    `qa_text.py` met wat je hebt toegevoegd.
 4. `qa_text.py` meldt een `critical`: een restplaceholder, een `{{MARKER}}` uit het concept,
-   een sjabloonprompt, een slide zonder inhoud, of Gotham Bold in de contentzone.
+   een sjabloonprompt, een slide zonder inhoud, Gotham Bold in de contentzone, of een letter
+   buiten de drie die een deck kent.
 5. `fit_title.py` meldt een `critical`: een titel van twee regels boven een gevulde subtitel,
    waar de gegroeide titelbox over de subregel heen loopt.
 6. `qa_tellingen.py` meldt een `critical`: dezelfde rol op twee maten, Montserrat en Lato in

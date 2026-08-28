@@ -148,6 +148,23 @@ hem substitueert. Wie een aanhef beoordeelt op een render uit deze plugin, beoor
 vervangende snede; `preflight.py` meldt per familie welk bestand het heeft gevonden, en dat is de
 plek om te kijken voordat je een gewichtsverschil een vormoordeel geeft.
 
+**In de deckroute bestaan drie letters, en gewicht komt uit `b="1"`.** Dat is een
+eigenaarsbesluit van 28 augustus 2026 en het geldt per medium, zoals de kleurregels dat doen:
+in een `.pptx` staat Gotham Bold in de titel (geërfd uit de layout), Montserrat Light voor wat
+lósstaat en Lato Light voor lopende tekst, en een tweede familienaam voor een zwaarder gewicht
+bestaat daar niet — een kop is Montserrat Light met `b="1"`, een aanhef is Lato Light met
+`b="1"`. `run()` in `scripts/shapes.py` weigert elke andere naam, `BRAND_FONTS` in
+`scripts/_deck.py` noemt de drie, en `qa_text.py` meldt een vierde als `critical`.
+
+De reden staat hierboven al: `Lato Semibold` wordt gevraagd en niet meegeleverd, dus de meting
+vindt hem niet en de renderer substitueert hem. Vijf familienamen in een huisstijl die drie
+letters heeft, waarvan drie snedes gesubstitueerd worden, is één naam te veel op elke plek waar
+iemand kan kiezen. De prijs is dat het gewicht in een deck gesynthetiseerd is en geen eigen
+snede; dat staat in `vormentaal.md` §9 en in de brief van `deck-visual-reviewer`, zodat een
+"niet echt zwaardere" aanhef daar geen bevinding meer is. **De HTML- en Word-routes vallen
+hier niet onder** en houden de snedes uit de tabel hierboven: die sluiten hun letters zelf in
+(`fonts.css`) respectievelijk leunen op wat er in Word geïnstalleerd staat.
+
 **Gotham is de merkletter en reist nooit mee.** Op een SFNL-machine staat hij; in een sandbox, in
 een browser en op de machine van een klant niet. Elke route die hem zou willen gebruiken, neemt
 in plaats daarvan een expliciet besluit met **Montserrat SemiBold** als terugval — expliciet, want

@@ -172,22 +172,51 @@ DISPLAY_VLOER = 40.0
 DRAGER_VLOER = 28.0
 DRAGER_PLAFOND = 40.0
 
-#: Gotham Bold is de titelletter en die erf je uit de layout -- je schrijft hem nooit zelf.
-#: Op de slide zelf is de letter licht: Montserrat Light of Lato Light. De drager staat in
-#: Montserrat Light, want een groot getal in een licht gewicht is stiller dan hetzelfde
-#: getal in een vet gewicht en zegt precies hetzelfde.
+#: In een deck bestaan DRIE letters en niet één meer: Gotham Bold in de titel, Montserrat
+#: Light voor wat lósstaat, Lato Light voor lopende tekst. Gotham Bold erf je uit de layout
+#: en schrijf je nooit zelf, dus de bouwer heeft twee families. De drager staat in Montserrat
+#: Light, want een groot getal in een licht gewicht is stiller dan hetzelfde getal in een vet
+#: gewicht en zegt precies hetzelfde.
 TITELFONT = "Gotham Bold"
 DRAGERFONT = "Montserrat Light"
+BODYFONT = "Lato Light"
 
-#: De aanhef binnen een doorlopende regel. Eén familie per regel: staat de aanhef midden in
-#: een alinea Lato Light, dan is de aanhef een zwaarder Lato en niet Montserrat SemiBold.
-#: `Lato Semibold` bestaat als eigen familienaam in de fontlijst -- geen `b="1"`-nepvet.
-#: Nagemeten op de render (LibreOffice 24.2.7.2, fonts-lato 2.015-1), dezelfde zin op 16pt
-#: met elk Lato-gewicht als aanhef naast Lato Light als rest: `Lato` regular en `Lato Medium`
-#: zetten een verschil dat je pas ziet als je het weet, `Lato Heavy` gaat met de kop erboven
-#: concurreren. `Lato Semibold` zet dezelfde gewichtssprong als Montserrat SemiBold deed,
-#: binnen dezelfde letterbouw en dezelfde x-hoogte.
-AANHEFFONT = "Lato Semibold"
+#: Wat de bouwer zelf mag schrijven. `run()` weigert al het andere.
+EIGEN_FONTS = (DRAGERFONT, BODYFONT)
+
+#: **Gewicht komt uit `vet=True` en nooit uit een andere familienaam.** Dit is een
+#: eigenaarsbesluit (2026-08-28) en het draait een eerdere regel in deze laag om.
+#:
+#: Wat er stond: een aanhef binnen een Lato-alinea was `Lato Semibold`, een kop of een
+#: kapitaallabel was `Montserrat SemiBold`, en `b="1"` op een light snede heette hier
+#: "nepvet". Dat leverde vijf familienamen in één deck op -- Montserrat Light, Montserrat
+#: SemiBold, Lato Light, Lato Semibold, Gotham Bold -- en drie ervan zijn snedes die niet met
+#: de plugin meereizen en dus door de renderer worden gesubstitueerd (`merk.md` §2 noemt
+#: Lato Semibold met naam). Vijf namen die als drie letters moeten lezen, is één naam te veel
+#: op elke plek waar iemand kan kiezen.
+#:
+#: De prijs is bekend en aanvaard: `b="1"` op een light snede laat de renderer het gewicht
+#: zelf maken, en dat is geen echte SemiBold. Wat je terugkrijgt is dat er in het bestand
+#: precies drie letters staan, dat elke naam een snede is die op de machine staat, en dat de
+#: MEETLAAG (`hoogte_van`, `fit_title.py`) altijd het bestand vindt waar de tekst mee gezet
+#: is. Wie het gewichtsverschil op de render beoordeelt, beoordeelt dus een gesynthetiseerd
+#: gewicht -- dat staat zo in `vormentaal.md` §9 en in de reviewerbrief.
+VET_IS_HET_GEWICHT = True
+
+#: Wat er in de plaats komt van een snede die niet meer mag. Alleen voor de melding.
+_VERVANGEN = {
+    "montserrat": DRAGERFONT,
+    "montserrat light": DRAGERFONT,
+    "montserrat semibold": DRAGERFONT,
+    "montserrat bold": DRAGERFONT,
+    "montserrat extrabold": DRAGERFONT,
+    "lato": BODYFONT,
+    "lato light": BODYFONT,
+    "lato semibold": BODYFONT,
+    "lato bold": BODYFONT,
+    "lato heavy": BODYFONT,
+    "lato medium": BODYFONT,
+}
 
 #: De families die niet in dezelfde alinea mogen staan. Zie `para()`.
 _MONTSERRAT = "montserrat"
@@ -347,6 +376,37 @@ GRIJS = ("navy", 70000)
 CURSIEF_MAX = 48
 
 
+def _toets_font(font: str, vet: bool) -> None:
+    """Alleen Montserrat Light en Lato Light, met `vet=True` voor gewicht.
+
+    De weigering staat hier en niet in `qa_text.py` alleen: een fout die pas bij de QA
+    opduikt is een deck opnieuw bouwen, en de bouwer heeft op dit punt de naam letterlijk in
+    zijn hand. `qa_text.py` telt hem daarnaast alsnog, want een deck kan ook anders gemaakt
+    zijn dan met deze laag.
+    """
+    kleine = font.strip().lower()
+    if kleine in (f.lower() for f in EIGEN_FONTS):
+        return
+    vervanger = _VERVANGEN.get(kleine)
+    if vervanger:
+        raise ValueError(
+            f'"{font}" bestaat in een deck niet. In een deck staan drie letters: '
+            f"{TITELFONT} in de titel (geërfd), {DRAGERFONT} voor wat lósstaat en "
+            f"{BODYFONT} voor lopende tekst. Gewicht komt uit `vet=True` op de light "
+            f'snede en nooit uit een andere familienaam: schrijf `run(..., "{vervanger}", '
+            f"..., vet=True)`"
+            + ("" if vet else ", of laat het gewicht weg als de nadruk uit kleur of maat kan"
+                              " komen")
+            + f". `label()` en `aanhef()` doen dit al voor je."
+        )
+    raise ValueError(
+        f'"{font}" is geen huisstijlletter. In een deck staan drie letters: {TITELFONT} in '
+        f"de titel (geërfd), {DRAGERFONT} en {BODYFONT} op de slide. Zonder expliciete "
+        "`<a:latin/>` valt een eigen vorm terug op Calibri, en dat is de fout die deze "
+        "weigering vangt."
+    )
+
+
 def run(tekst: str, font: str, pt: float, kleur="navy", *,
         vet: bool = False, spc: int | None = None, caps: bool = False,
         cursief: bool = False) -> str:
@@ -394,17 +454,19 @@ def run(tekst: str, font: str, pt: float, kleur="navy", *,
     wordt. Voor lopende tekst blijft cursief verboden (`vormentaal.md` §9): een cursieve
     alinea leest langzamer en er is een goedkoper middel voor nadruk, namelijk kleur.
 
-    Gotham Bold weigert deze functie. Die letter staat in de titel en komt uit de layout;
-    op de slide zelf is het Montserrat Light of Lato Light, met Montserrat SemiBold voor wat
-    lósstaat en op zijn eigen regel begint: een kop, een kapitaallabel, een rolnaam, een
-    kolomkop. Een aanhef binnen een doorlopende regel is dus géén Montserrat: die zet je met
-    `aanhef()`, in `Lato Semibold` op een Lato Light-alinea. `para()` weigert een alinea die
-    beide families bevat.
+    **Twee familienamen, en geen derde.** Deze functie neemt alleen `Montserrat Light` en
+    `Lato Light`. Montserrat is voor wat lósstaat en op zijn eigen regel begint -- een kop,
+    een kapitaallabel, een rolnaam, een kolomkop, de drager. Lato is lopende tekst. Gotham
+    Bold weigert hij: die letter staat in de titel en komt uit de layout. En elke andere
+    snede weigert hij ook, `Montserrat SemiBold` en `Lato Semibold` inbegrepen -- zie
+    `VET_IS_HET_GEWICHT` hierboven voor het besluit en de prijs. `para()` weigert daarnaast
+    een alinea die Montserrat én Lato bevat.
 
-    `vet=True` is er voor het geval dat een echt gewicht niet bestaat. Zet het niet op een
-    Lato Light- of Montserrat Light-run om nadruk te maken: dat is nepvet, en de renderer
-    kiest zelf wat hij ervan maakt. Er is een echt gewicht: `Lato Semibold`,
-    `Montserrat SemiBold`.
+    `vet=True` is dus DE weg naar gewicht, niet een noodgreep: een kop is Montserrat Light
+    met `vet=True`, een aanhef binnen een regel is Lato Light met `vet=True`. `label()` en
+    `aanhef()` doen dat al voor je. Wat je ervoor inlevert is dat de renderer het gewicht
+    zelf synthetiseert; wat je ervoor terugkrijgt is dat er in het bestand drie letters staan
+    in plaats van vijf, en dat elke naam een snede is die werkelijk op de machine staat.
 
     **Geen hoge punt als scheiding binnen een regel.** `tekst tekst · meer tekst` is de vorm
     die ontstaat als twee feiten op één regel worden geperst -- en twee feiten zijn twee
@@ -429,8 +491,9 @@ def run(tekst: str, font: str, pt: float, kleur="navy", *,
         raise ValueError(
             f"{TITELFONT} schrijf je nooit zelf: dat is de titelletter en die erf je uit de "
             f"layout. Op de slide is de letter licht -- {DRAGERFONT} voor een drager of een "
-            "kop, Lato Light voor lopende tekst."
+            f"kop, {BODYFONT} voor lopende tekst."
         )
+    _toets_font(font, vet)
     b = ' b="1"' if vet else ""
     i = ' i="1"' if cursief else ""
     s = f' spc="{spc}"' if spc is not None else ""
@@ -451,7 +514,7 @@ def run(tekst: str, font: str, pt: float, kleur="navy", *,
 
 def label(tekst: str, pt: float = 14, kleur="navy", *,
           spc: int | float | None = -1) -> str:
-    """Kapitaallabel in Montserrat SemiBold met de juiste spatiëring.
+    """Kapitaallabel in Montserrat Light met `vet=True` en de juiste spatiëring.
 
     Wil je het label grijs -- een kolomkop boven een tabel, een rolnaam die de rij niet moet
     overstemmen -- dan is de kleur `"grijs"`: het voetnootgrijs `tx1` met lumMod/lumOff dat
@@ -488,7 +551,7 @@ def label(tekst: str, pt: float = 14, kleur="navy", *,
             "wilt opgeven, maar dan leest caps als geschreeuw. Op een gewone regel zonder "
             "spatiëring -- een bronregel, een eenheid -- is `GRIJS` gewoon goed."
         )
-    return run(tekst, "Montserrat SemiBold", pt, kleur, spc=spc, caps=True)
+    return run(tekst, DRAGERFONT, pt, kleur, spc=spc, caps=True, vet=True)
 
 
 def drager(tekst: str, pt: float, kleur: str = "navy", *, spc: int | None = None) -> str:
@@ -514,8 +577,9 @@ def drager(tekst: str, pt: float, kleur: str = "navy", *, spc: int | None = None
 
     Dat zet een cijfer van 32pt en een label van 14pt op één baseline zonder twee vakken en
     zonder ze met de hand uit te lijnen -- de rangnummerkop van `maatstaf/14`. Twee
-    Montserrat-gewichten, dus `para()` laat het door: dit is geen familiemix. De twee spaties
-    achter het cijfer zijn de tussenruimte; op displaymaat is één spatie te smal.
+    Montserrat-runs, dus `para()` laat het door: dit is geen familiemix -- het label is
+    dezelfde light snede met `vet=True` erop. De twee spaties achter het cijfer zijn de
+    tussenruimte; op displaymaat is één spatie te smal.
 
     Dit patroon neemt de plek in van het verboden recept met een Montserrat-aanhef in een
     Lato-alinea (§9). Het verschil is dat de twee runs hier niet één doorlopende regel vormen
@@ -530,12 +594,13 @@ def drager(tekst: str, pt: float, kleur: str = "navy", *, spc: int | None = None
 
 
 def aanhef(kop: str, rest: str, pt: float, kleur: str = "navy") -> list[str]:
-    """Twee runs in één alinea: `Lato Semibold` als aanhef, Lato Light voor de rest.
+    """Twee runs in één alinea: Lato Light met `vet=True` als aanhef, Lato Light voor de rest.
 
     Dit is het middel waarmee je twee hiërarchieniveaus binnen één tekstregel haalt, zonder
     een tweede kolom en zonder een tweede vak. **Eén familie per regel**: de aanhef staat
-    binnen een doorlopende Lato-alinea, dus is hij Lato -- in een echt zwaarder gewicht, niet
-    met `b="1"` erop. Montserrat SemiBold blijft voor wat lósstaat en op zijn eigen regel
+    binnen een doorlopende Lato-alinea, dus is hij Lato -- en het gewicht komt uit `vet=True`
+    op diezelfde light snede, want een tweede familienaam bestaat in een deck niet
+    (`VET_IS_HET_GEWICHT`). Montserrat blijft voor wat lósstaat en op zijn eigen regel
     begint: een kop, een kapitaallabel (`label()`), een rolnaam, een kolomkop.
 
     Wat hier eerder stond, en waarom het is omgezet
@@ -559,9 +624,15 @@ def aanhef(kop: str, rest: str, pt: float, kleur: str = "navy") -> list[str]:
     zetfout in plaats van als hiërarchie. `assets/maatstaf/04` is voor dít aspect geen lat
     meer; voor de rest van die slide -- twee hues voor een tegenstelling, proza als exhibit
     -- blijft hij dat wel. Zie `reference/vormentaal.md` §9.
+
+    De tweede omzetting, van `Lato Semibold` naar Lato Light met `vet=True`, is van
+    2026-08-28 en staat bij `VET_IS_HET_GEWICHT`. De gewichtssprong is daarmee
+    gesynthetiseerd in plaats van een eigen snede; de meting hierboven (14 procent korter dan
+    Montserrat SemiBold) gold voor de échte Lato Semibold en is dus niet meer de maat van wat
+    er nu uit komt.
     """
-    return [run(kop.rstrip() + " ", AANHEFFONT, pt, kleur),
-            run(rest, "Lato Light", pt, kleur)]
+    return [run(kop.rstrip() + " ", BODYFONT, pt, kleur, vet=True),
+            run(rest, BODYFONT, pt, kleur)]
 
 
 _LATIN = re.compile(r'<a:latin typeface="([^"]*)"')
@@ -589,9 +660,9 @@ def _een_familie(runs: tuple[str, ...]) -> None:
             "twee families op dezelfde maat zetten daar twee letterbouwen en twee x-hoogtes "
             "naast elkaar. Twee wegen eruit: (1) is het een kop, een kapitaallabel, een "
             "rolnaam of een kolomkop, zet hem dan als eigen alinea of eigen vak in "
-            f"Montserrat SemiBold -- `label()` doet dat; (2) is het een aanhef binnen de "
-            f"regel, gebruik dan `aanhef()`, die zet hem in {AANHEFFONT} met Lato Light "
-            "voor de rest."
+            f"{DRAGERFONT} met `vet=True` -- `label()` doet dat; (2) is het een aanhef "
+            f"binnen de regel, gebruik dan `aanhef()`, die zet hem in {BODYFONT} met "
+            "`vet=True` en de rest zonder."
         )
 
 
@@ -918,7 +989,7 @@ LEEG = ("navy", 25000)
 
 def punt(naam: str, x: float, y: float, d: float, hue="navy", *,
          tekst: str | None = None, pt: float = 16, kleur=None,
-         font: str = "Montserrat SemiBold", deel: float = 1.0, leeg=LEEG) -> str:
+         font: str = DRAGERFONT, vet: bool = True, deel: float = 1.0, leeg=LEEG) -> str:
     """Eén ronde punt van `d` inch, met een optioneel gecentreerd cijfer erin.
 
     Wat dit codeert: één ding uit een reeks. De genummerde badge in de hue van zijn kaart
@@ -950,7 +1021,8 @@ def punt(naam: str, x: float, y: float, d: float, hue="navy", *,
         raise ValueError(f"deel={deel} valt buiten 0.0 tot 1.0: het is een fractie van de punt.")
     paras = None
     if tekst is not None:
-        paras = [para(run(tekst, font, pt, tekst_op(hue, pt) if kleur is None else kleur),
+        paras = [para(run(tekst, font, pt, tekst_op(hue, pt) if kleur is None else kleur,
+                          vet=vet),
                       algn="ctr", regelafstand=None)]
     if deel >= 1.0:
         return vlak(naam, x, y, d, d, prst="ellipse", vulling=hue, tekst=paras,
@@ -1632,7 +1704,7 @@ class Deck:
     slides, waardoor de zetting per slide verspringt zonder dat iemand kan zien waarom.
 
     `label` is de vijfde en is geen keuze: 14pt is het kapitaallabel (§2), dezelfde maat als de
-    body maar in Montserrat SemiBold en in kapitalen. Er is geen veld voor een sluitregel, en
+    body maar in Montserrat Light met `vet=True` en in kapitalen. Er is geen veld voor een sluitregel, en
     dat is opzet: een sluitregel staat op bodymaat, want een eigen maat voor de laatste regel is
     het defect waar dit vak tegen bestaat.
 

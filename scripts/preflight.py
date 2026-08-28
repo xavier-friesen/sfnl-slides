@@ -170,14 +170,17 @@ OPTIONAL = {
 # pdf->png ladder, same order render.py uses.
 RASTER_TOOLS = ("pdftoppm", "pdftocairo", "mutool")
 
-# De families die de meting nodig heeft. Titelmaten hangen aan Gotham Bold, body aan Lato
-# Light, KPI's aan Montserrat SemiBold, de aanhef binnen een regel aan Lato Semibold.
-MEASURED_FAMILIES = ("Gotham Bold", "Montserrat", "Montserrat SemiBold",
-                     "Montserrat Light", "Lato Light", "Lato Semibold")
+# De families die de meting nodig heeft, en dat zijn precies de drie die een deck kent
+# (`BRAND_FONTS` in `_deck.py`, eigenaarsbesluit 2026-08-28): titelmaten hangen aan Gotham
+# Bold, koppen en labels aan Montserrat Light, body en aanhef aan Lato Light. Hier stonden er
+# zes, met Montserrat, Montserrat SemiBold en Lato Semibold erbij — drie snedes die sinds dat
+# besluit niet meer geschreven worden, want gewicht komt uit `b="1"` op de light snede. Dat
+# maakt dit rapport ook eerlijker: elke naam die hier ontbreekt, ontbreekt écht in de meting.
+MEASURED_FAMILIES = ("Gotham Bold", "Montserrat Light", "Lato Light")
 
 FONTCONFIG_SNIPPET = (
     "~/.config/fontconfig/fonts.conf met een <alias> per merkfont "
-    "(Gotham Bold -> Montserrat SemiBold, Montserrat -> een geïnstalleerde sans, "
+    "(Gotham Bold -> Montserrat SemiBold, Montserrat Light -> een geïnstalleerde sans, "
     "Lato Light -> Lato of Open Sans), daarna `fc-cache -f`. Dat maakt de "
     "LibreOffice-render dichter bij het echte deck; de meting van fit_title.py blijft "
     "een schatting zolang de échte bestanden ontbreken."

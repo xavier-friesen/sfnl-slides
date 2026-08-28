@@ -101,7 +101,8 @@ sys.path.insert(0, str(WORTEL / "scripts" / "infographic"))
 from blanco import blanco  # noqa: E402
 blanco(BOUW / "unpacked")
 
-from shapes import Deck, drager, label, para, run, streep, tekst, vlak, write  # noqa: E402
+from shapes import (Deck, aanhef, drager, label, para, run, streep, tekst, vlak,  # noqa: E402
+                    write)
 
 SLIDE_B, SLIDE_H = 13.333, 7.5
 D = Deck(body=14, label=11, sluit=15, display=40)
@@ -157,7 +158,7 @@ for i, (waarde, hue, naam) in enumerate(STAPPEN):
                        tekst=[para(run(("+ " if (waarde or 0) > 0 else
                                         ("\u2212 " if (waarde or 0) < 0 else "")) +
                                        f"€ {abs(toon) / 1000:.2f}".replace(".", ",") + " mln",
-                                       "Montserrat SemiBold", D.body,
+                                       "Montserrat Light", D.body, vet=True,
                                        kleur=hue if hue != "emerald" else "navy"),
                                    algn="ctr")]))
     # de naam onder de nullijn
@@ -175,10 +176,12 @@ vormen += [
     # onderste 0,6 in zich stil.
     streep("Slotstreep", MARGE, 6.42, SLIDE_B - 2 * MARGE, "navy", 0.75),
     vlak("Sluitregel", MARGE, 6.54, SLIDE_B - 2 * MARGE, 0.34,
-         tekst=[para(run("De opbrengst valt bij de gemeente", "Montserrat SemiBold",
-                         D.sluit, kleur="navy"),
-                     run(", de kosten bij de uitvoerder.", "Lato Light", D.sluit,
-                         kleur="navy"))]),
+         # Eén familie per regel: de aanhef is Lato Light met `vet=True` en niet een
+         # SemiBold-snede -- er zijn drie letters in een deck (vormentaal.md §9). Hier
+         # stond Montserrat SemiBold naast Lato Light in één alinea, en `para()` weigerde
+         # die mix al.
+         tekst=[para(*aanhef("De opbrengst valt bij de gemeente",
+                             ", de kosten bij de uitvoerder.", D.sluit))]),
 ]
 write(str(BOUW / "unpacked/ppt/slides/slide1.xml"), vormen)
 

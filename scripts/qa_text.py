@@ -6,8 +6,10 @@ Usage:
 
 Wat dit script wél doet: kijken of er iets in de deck staat wat er niet in mag omdat het
 een restje, een fout of een leesbaarheidsprobleem is. Een placeholder die nooit gevuld is.
-Een `{{MARKER}}` uit het concept. Calibri, omdat iemand een `<a:latin/>` vergat. Een
-hardgecodeerde hex in plaats van `schemeClr`. Een rechte apostrof. Een titel in
+Een `{{MARKER}}` uit het concept. Calibri, omdat iemand een `<a:latin/>` vergat. Een letter
+die geen van de drie is (`BRAND_FONTS` in `_deck.py`) — sinds 2026-08-28 is dat een
+`critical`, want een SemiBold-snede bestaat in een deck niet meer en gewicht komt uit
+`b="1"`. Een hardgecodeerde hex in plaats van `schemeClr`. Een rechte apostrof. Een titel in
 onderkast.
 
 Wat dit script NIET doet: beoordelen of de slide mooi is, of de vakken vol genoeg staan,
@@ -153,8 +155,25 @@ def walk(shapes):
 
 
 def runs_of(slide):
-    """(shape, run) voor elke tekstrun op de slide, groepen doorlopen."""
+    """(shape, run) voor elke tekstrun op de slide, groepen én tabelcellen doorlopen.
+
+    **De tabelcellen stonden er niet in, en dat was een gat precies op de plek waar het
+    misging.** `add_table.py` schreef zijn kopregel in `Montserrat SemiBold`, en toen de
+    letterlijst naar drie namen ging (2026-08-28) meldde dit script dat niet: een tabel heeft
+    geen `text_frame` op de vorm maar één per cel, dus de lus liep eroverheen. Nagemeten op
+    een deck met een tabel: `"fonts"` gaf `Montserrat Light` en `Lato Light` en `"verdict"`
+    stond op `clean`, terwijl er in de XML van diezelfde slide een derde naam stond. Elke
+    toets die op een run kijkt -- de letter, de harde hex, de rechte apostrof, de
+    restplaceholder -- keek dus langs elke tabel heen.
+    """
     for shape in walk(slide.shapes):
+        if getattr(shape, "has_table", False):
+            for row in shape.table.rows:
+                for cell in row.cells:
+                    for paragraph in cell.text_frame.paragraphs:
+                        for run in paragraph.runs:
+                            yield shape, run
+            continue
         if not getattr(shape, "has_text_frame", False) or is_chrome(shape):
             continue
         for paragraph in shape.text_frame.paragraphs:
@@ -261,8 +280,14 @@ def analyse(deck: Path) -> dict:
                 if font not in BRAND_FONTS and ("font", font) not in reported:
                     reported.add(("font", font))
                     add(findings, number, "off-brand-font",
-                        f'"{font}" is geen huisstijlfont. Meestal betekent dit dat een '
-                        "eigen vorm geen expliciete <a:latin/> heeft en Calibri erft.")
+                        f'"{font}" hoort niet in een deck. Er zijn drie letters: '
+                        f"{', '.join(sorted(BRAND_FONTS))} — Gotham Bold in de titel "
+                        "(geërfd), Montserrat Light voor wat lósstaat, Lato Light voor "
+                        "lopende tekst. Gewicht komt uit b=\"1\" op de light snede en "
+                        "nooit uit een tweede familienaam. Twee oorzaken: een eigen vorm "
+                        "zonder expliciete <a:latin/> erft Calibri, of er staat een "
+                        "SemiBold-snede die sinds 2026-08-28 niet meer bestaat.",
+                        "critical")
 
             try:
                 rgb = run.font.color.rgb
