@@ -1407,6 +1407,28 @@ a:hover { text-decoration-color: var(--inkt); }
 .trap-licht { background: rgba(var(--trap-rgb), .25); color: var(--trap-inkt);
               --inkt: var(--trap-inkt);       --inkt-stil: var(--trap-inkt); }
 
+/* De twee lichtste treden dragen altijd een haarlijn, en dat is de plek waar
+   deze route en `sfnl-infographic` uit elkaar lopen — met opzet, en met de
+   meting erbij in `online-vormentaal.md` §5.
+
+   `svg.trap_draagt()` van die route weigert een trede die zelf onder 2,0 tegen
+   het papier zakt, en op die vloer draagt royal er twee: `half` haalt 1,99 en
+   `licht` 1,44. Daar klopt dat, want een infographic is een los gedrukt beeld
+   en een staaf staat er alleen op wit. Hier staat een trede nooit alleen: hij
+   raakt aan zijn buurtrede (ΔL 0,096 op licht en 0,101 op donker, tegen de
+   vloer van 0,06 die diezelfde route hanteert), hij draagt een direct label, en
+   hij krijgt deze rand — 4,43 op licht en 3,80 op donker, boven de 3,0 die WCAG
+   1.4.11 voor de rand van een grafisch object vraagt.
+
+   Een outline en geen border: die tekent binnen de doos, dus hij verandert
+   niets aan de maat van een segment met een breedte in procenten. En geen
+   `box-shadow`, want dat is in dit huis een schaduw, ook als hij `inset` heet. */
+.trap-half,
+.trap-licht {
+  outline: var(--haarlijn) solid var(--rand);
+  outline-offset: calc(-1 * var(--haarlijn));
+}
+
 /* De trap in een andere hue, op de houder van de vier treden.
 
    Er verandert precies één inkt mee, en dat is nagemeten. Op donker is
@@ -1423,9 +1445,10 @@ a:hover { text-decoration-color: var(--inkt); }
    je zelf na met `merk.tinttrap()` en `merk.inkt_op_tint()`. */
 /* Het trapvlakje — de trede als merkteken vóór een naam, zodat dezelfde
    kleur op twee plekken hetzelfde item aanwijst: in de balk en in de
-   tabel. Twaalf px en niet acht zoals `.stip`, met een rand in `--rand`
-   (4,43 op licht, 3,80 op donker), want de onderste trede haalt 1,44
-   tegen de grond en dan is een vlakje van die maat er niet. Dat is de
+   tabel. Twaalf px en niet acht zoals `.stip`, en de rand krijgt hier
+   élke trede en niet alleen de twee lichtste: op 12 px is ook `sterk`
+   (3,16 tegen wit) een klein vlak, en vier vlakjes in een legenda
+   waarvan er twee een rand hebben leest als een fout. Dat is de
    reparatie die het proefdashboard met de hand vond, hier als regel. */
 .trapstip {
   display: inline-block;

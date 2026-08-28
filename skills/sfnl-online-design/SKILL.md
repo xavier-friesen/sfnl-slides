@@ -203,12 +203,48 @@ zit geen `.kpi-rij` in en geen `.sidebar`. Wat er wel is:
 | §4 | focus, hover, `prefers-reduced-motion` |
 | §5 | `.raster` met `--kolom-min`, `.tweeluik`, `.stapel`, `.rij` |
 | §6 | de zetting: `.tekst`, `.display`, `.titel`, `.kop`, `.label`, `.klein`, `.bron`, `.chapeau` |
-| §7 | zestien merktekens, elk met wat hij codeert en waar hij vandaan komt |
+| §7 | achttien merktekens, elk met wat hij codeert en waar hij vandaan komt. §7.17 is de structuurlaag, §7.18 de tinttrap |
 | §8 | het drukblok, voor als iemand de pagina naar PDF stuurt |
 
 **Klassen voor het systeem, inline styles voor het geval.** Het kader, het raster en de maatrollen
 doe je met klassen; een specifieke breedte, kleur of afstand zet je inline met een `var(--…)`.
 Tekst zet je letterlijk in de markup.
+
+**Structuur geef je met vlakken en lijnen en niet met méér kaarten.** Dat is `stijl.css` §7.17 en
+`online-vormentaal.md` §6, en het komt uit twee gebouwde dashboards die allebei als een stapel losse
+kaarten lazen. Vier middelen:
+
+- **`.vlak`** — een veld waar meerdere kaarten in liggen, zodat een sectie als één ding leest.
+  Binnen een vlak keert een paneel terug naar de grond van de pagina; een kaart heeft niets nodig.
+  Twee velden per pagina, hooguit drie, en de derde is `.vlak--kaal`.
+- **`.scheiding`** — de sectiekop met een haarlijn die naar rechts doorloopt. Het goedkoopste
+  middel dat er is. Onder 560 px gaat de lijn onder de kop staan in plaats van ernaast.
+- **`.rail`** — een streep van 3 px langs een blok, in het accent. Dit is het werk dat oranje op een
+  scherm wél mag doen: hij markeert een begin en draagt geen letter. Draagt hij informatie, dan
+  `.rail--inkt`.
+- **`.gescheiden`** op een `.stapel` of een `.tweeluik` — een lijn tussen de blokken die horizontaal
+  wordt zodra ze stapelen. **Niet op een `.raster`**: dat is `auto-fit` en niemand weet waar het
+  kantelt.
+
+En in een tabel: `<tr class="sectie">` met een `th colspan` maakt van twee tabellen één tabel.
+
+**De tinttrap is de vierde categorie die geen categorie is.** `.trap-vol`, `.trap-sterk`,
+`.trap-half`, `.trap-licht` — vier treden van één hue, voor items van dezelfde soort. Vier
+uitvoerders, zes gemeenten. Drie dingen die je moet weten en die in `online-vormentaal.md` §5
+gemeten staan: de hue verschilt per thema (royal op licht, periwinkel op donker, want de rangorde
+klapt om); op de trede `sterk` staat op donker géén tekst, want navy haalt er 4,20 en wit 3,76; en
+een trede die maar op één plek voorkomt is versiering — gebruik hem als dezelfde kleur op twee
+plekken hetzelfde item aanwijst.
+
+**En één ding dat je moet weten voordat je die trap naar een ander medium meeneemt.**
+`sfnl-infographic` heeft dezelfde `merk.TINTTRAP` gemeten en er een weigering van gemaakt:
+`svg.trap_draagt()` laat royal er twee dragen, want daar is de vloer 2,0 contrast van een trede
+tegen het papier en `half` haalt 1,99. Deze route zet er vier, want op een scherm staat een trede
+nooit alleen: hij raakt aan zijn buurtrede (ΔL 0,096, tegen de vloer van 0,06 die diezelfde route
+hanteert), de twee lichtste dragen verplicht een haarlijn in `--rand`, en elk segment heeft een
+direct label. Het verschil is één getal en het staat met de meting erbij in `online-vormentaal.md`
+§5 en `infographic-vormentaal.md` §6b. **Gaat de trap in een SVG die gedrukt wordt, dan geldt
+`trap_draagt()` en niet dit hoofdstuk.**
 
 **Drie dingen die je niet zelf hoeft uit te vinden en die vaak misgaan.**
 
@@ -237,6 +273,8 @@ Wat je erbij meegeeft in plaats van hem te overschrijven, zijn de parameters. Di
   ΔE 15 mee (royal↔violet 6,9 · oranje↔grapefruit 8,7 · sky↔emerald 9,4). Een vierde categorie
   valt in "overig", wordt kleine veelvouden, of is een andere vorm.
 - **De ordinale trap staat in `--trap-1` t/m `--trap-3`** en loopt op donker de andere kant op.
+  Dat is de trap voor een *grootheid*. Voor items van dezelfde soort — vier uitvoerders, zes
+  gemeenten — is er de tinttrap met vier treden, hierboven.
 - **Elke reeks draagt een direct label of staat in de tabel eronder.** Dat is niet stijl maar de
   verplichting die de contrast-WARN van de validator oplegt: emerald haalt 1,98 op wit.
 - **De houder is `.grafiek`**, met de plot in SVG en de tekst in HTML. Een SVG schaalt zijn
@@ -264,7 +302,10 @@ ze:
 
 - **Een haarlijn die verdwijnt.** Dezelfde verhouding is bij lage luminantie minder goed te zien.
 - **Een tint die met zijn grond samenvalt.** Op de maatstaf was een tintpaneel van 16 procent op
-  donker onzichtbaar; het staat nu op 32.
+  donker onzichtbaar; het staat nu op 32. `qa_online.py` meet dit sinds kort als `vlak-thema`,
+  maar of het vlak om de góede dingen heen staat, zie je alleen hier.
+- **Een tinttrap waarvan de treden in één thema samenvallen.** Een donkere hue draagt op licht een
+  trap en op donker niet, en een lichte hue precies andersom.
 - **Een SVG met een vaste kleur**, die navy blijft terwijl de grond navy wordt.
 - **Een rasterlijn die op donker luider is dan de tabelregel op licht.** Dat was op de maatstaf zo,
   en het is de reden dat er twee lijntokens zijn.
@@ -312,6 +353,14 @@ De overige aanwijzingen: `donkerblokken` (de twee donkere blokken uit de pas), `
 literale kleur in een SVG), `focus` (`outline` weggehaald zonder vervanging), `aanraakdoel` (onder
 24 × 24 px), `te-klein`, `leesmaat`, `maten`, `letterfamilies`, `palet`, `schaduw`, `emoji`,
 `extern` (een bron buiten dit bestand), `taal`, `koppen`, `alt`, `tabelkop`, `grond-onzeker`.
+
+Drie ervan gaan over de structuurlaag en zijn nieuw, en ze bestaan omdat een vlak geen tekst van
+zichzelf draagt — de contrasttoets ziet het dus niet, en of het zichtbaar is hangt aan een grond die
+met het thema omklapt. **`vlak-thema`**: een veld dat zich in het ene thema van zijn grond scheidt
+en in het andere niet; de vloeren zijn niet gelijk (1,07 op licht, 1,25 op donker) en dat verschil
+is gemeten. **`vlak-stil`**: een veld dat zich in geen van beide thema's scheidt — dan staat er een
+vlak in de markup dat op de pagina niet bestaat. **`trapstap`**: twee opeenvolgende treden van een
+tinttrap die minder dan 1,30 verschillen; dan staan er vier vlakken en leest de lezer er twee.
 
 ## Stap 5 — Opleveren
 

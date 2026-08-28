@@ -304,6 +304,14 @@ te veranderen. Twee uitzonderingen, en het zijn er echt twee: op `vol` dragen ro
 wit, en **navy als hue draagt wit tot en met `sterk`** (zwartblauw net zo) en pas vanaf `half`
 navy. Gebruik `merk.inkt_op_tint()` of `svg.tekst_op(tint(...))` en gok het niet.
 
+**En deze vloer geldt hier, niet overal.** `sfnl-online-design` zet vier treden royal waar
+`trap_draagt()` er twee toestaat, en dat is geen divergentie die is blijven liggen maar een ander
+meetpunt: op een scherm raakt elk segment aan zijn buurman, de twee lichtste treden dragen
+verplicht een haarlijn, en de sprong tussen twee treden wordt gemeten in plaats van de trede tegen
+de grond. Die route rekent het na met dezelfde functies — de kleinste sprong is ΔL 0,096 tegen de
+vloer van 0,06 hierboven. Zie `reference/online-vormentaal.md` §5. Andersom geldt dit hoofdstuk
+zodra zo'n trap in een los beeld of in drukwerk belandt.
+
 Uitgewerkt in `assets/infographic/maatstaf/m6-tinttrap`: vier uitvoerders in één navytrap van
 drie stappen, waar de breedte het deelnemersaantal draagt en de tint het plaatsingspercentage.
 

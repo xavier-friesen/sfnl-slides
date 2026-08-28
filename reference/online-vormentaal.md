@@ -454,6 +454,60 @@ al deed.
 > **De hue van een trap is een themabesluit en geen ontwerpbesluit.** Wie één hue voor beide
 > thema's kiest, kiest er een die in één van de twee geen trap is.
 
+#### De vloer is hier een andere dan bij een infographic, en dat is een besluit
+
+`sfnl-infographic` heeft dezelfde `merk.TINTTRAP` gemeten en er een **weigering** van gemaakt:
+`trap_draagt()` in `scripts/infographic/svg.py` rekent per hue uit hoeveel treden er overblijven en
+`trap()` weigert er meer. De uitkomst is navy en zwartblauw 3, royal en violet 2, oranje en sky 1,
+emerald 0. Die route zet dus **twee** treden royal en deze route zet er **vier**. Dat is geen
+divergentie die is blijven liggen; het is een verschil in wat er gemeten wordt, en hier staat het
+met de getallen erbij. `infographic-vormentaal.md` §6b heeft de andere kant van hetzelfde verhaal.
+
+De infographicvloer is `TRAP_VLOER = 2,0` **contrast van een trede tegen het papier**. Op die vloer
+valt royal `half` af met 1,99 — een honderdste — en `licht` met 1,44. De motivering daar is dat een
+infographic een los beeld is: één staaf staat alleen op wit, hij wordt gedrukt, en er is geen
+buurman en geen rand om hem terug te brengen.
+
+Op een scherm staat een trede nooit alleen, en daarom meet deze route de **sprong tussen twee
+treden** in plaats van de trede tegen de grond. Drie dingen die hier wél gelden en daar niet:
+
+- Elk segment van een band raakt aan minstens één ander segment van dezelfde trap.
+- De twee lichtste treden dragen verplicht een haarlijn in `--rand` — 4,43 op licht en 3,80 op
+  donker, ruim boven de 3,0 die WCAG 1.4.11 voor de rand van een grafisch object vraagt. Dat staat
+  in `stijl.css` §7.18 en het is geen aanwijzing maar een regel in de klasse zelf.
+- Elke trede draagt een direct label, want dat was op deze route toch al verplicht (§5, kleur is
+  nooit de enige codering).
+
+En dan de meting, want zonder meting is dit een uitvlucht. Nagerekend met dezelfde functies als de
+infographicroute — `svg._oklab()` en `svg.deltaE()`, die op hun beurt uit de `dataviz`-validator
+komen:
+
+| sprong | ΔL (OKLab) licht | ΔE ×100 licht | ΔL donker | ΔE ×100 donker |
+|---|---|---|---|---|
+| `vol` → `sterk` | 0,145 | 15,6 | 0,140 | 14,1 |
+| `sterk` → `half` | 0,123 | 13,1 | 0,121 | 12,2 |
+| `half` → `licht` | **0,096** | **10,1** | **0,101** | **10,2** |
+
+**De kleinste sprong is 0,096 in ΔL, en de vloer daarvoor is 0,06 — `TRAP_STAP_DL` uit diezelfde
+infographicroute.** De twee routes zijn het dus eens over de vraag of twee treden uit elkaar te
+houden zijn; ze verschillen alleen over de vraag of een trede alléén nog een vlak is. Dat is
+precies het verschil tussen een los gedrukt beeld en een gelabeld segment op een scherm.
+
+De onlinevloeren, en ze staan alle drie in `qa_online.py`:
+
+| vloer | waarde | wat hij toetst |
+|---|---|---|
+| `trapstap` | 1,30 contrast | tussen twee opeenvolgende treden; §2's band waarin een tintpaneel onzichtbaar bleek |
+| `VLOER_VLAK["licht"]` | 1,07 | een trede tegen de grond, licht thema |
+| `VLOER_VLAK["donker"]` | 1,25 | idem, donker thema |
+
+De onderste trede haalt 1,44 op licht en 1,61 op donker, dus ruim boven de vlakvloer maar ruim
+ónder de 2,0 van de infographic. Dát is het hele verschil, en het is één getal.
+
+> **Neem deze vloer niet mee naar een los beeld.** Zodra de trap in een SVG belandt die als
+> infographic of in drukwerk wordt gebruikt, geldt `trap_draagt()` en niet dit hoofdstuk: daar is er
+> geen buurman, geen rand en geen thema dat de grond meebrengt.
+
 #### De dode band: één trede draagt geen tekst
 
 Op donker haalt de trede `sterk` navy 4,20 en wit 3,76. **Geen van beide inkten haalt 4,5**, en dat
